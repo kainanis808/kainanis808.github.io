@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crystal Structures Animation - FCC, BCC, HCP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(0,0,0,0.3);
+        }
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #00d9ff, #a855f7, #00d9ff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+        .subtitle {
+            color: #94a3b8;
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+            flex-wrap: wrap;
+            background: rgba(0,0,0,0.2);
+        }
+        .crystal-btn {
+            padding: 12px 30px;
+            font-size: 1rem;
+            border: 2px solid;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        .crystal-btn.fcc {
+            border-color: #00d9ff;
+            color: #00d9ff;
+        }
+        .crystal-btn.fcc:hover, .crystal-btn.fcc.active {
+            background: #00d9ff;
+            color: #1a1a2e;
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.5);
+        }
+        .crystal-btn.bcc {
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .crystal-btn.bcc:hover, .crystal-btn.bcc.active {
+            background: #a855f7;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
+        }
+        .crystal-btn.hcp {
+            border-color: #22c55e;
+            color: #22c55e;
+        }
+        .crystal-btn.hcp:hover, .crystal-btn.hcp.active {
+            background: #22c55e;
+            color: #1a1a2e;
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.5);
+        }
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            min-height: 60vh;
+        }
+        canvas {
+            border-radius: 15px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+        }
+        .info-panel {
+            max-width: 800px;
+            margin: 0 auto 30px;
+            padding: 25px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .info-panel h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        .info-panel.fcc h2 { color: #00d9ff; }
+        .info-panel.bcc h2 { color: #a855f7; }
+        .info-panel.hcp h2 { color: #22c55e; }
+        .info-panel p {
+            line-height: 1.7;
+            color: #cbd5e1;
+        }
+        .lattice-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .lattice-info div {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid;
+        }
+        .fcc .lattice-info div { border-color: #00d9ff; }
+        .bcc .lattice-info div { border-color: #a855f7; }
+        .hcp .lattice-info div { border-color: #22c55e; }
+        .lattice-info strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+        }
+        .legend-dot.atom { background: #00d9ff; }
+        .legend-dot.center { background: #ff6b6b; }
+        .legend-dot.layer { background: #ffd93d; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Crystal Structures Animation</h1>
+        <p class="subtitle">Face-Centered Cubic (FCC) • Body-Centered Cubic (BCC) • Hexagonal Close-Packed (HCP)</p>
+    </header>
+    
+    <div class="controls">
+        <button class="crystal-btn fcc active" onclick="showCrystal('fcc')">FCC</button>
+        <button class="crystal-btn bcc" onclick="showCrystal('bcc')">BCC</button>
+        <button class="crystal-btn hcp" onclick="showCrystal('hcp')">HCP</button>
+    </div>
+    
+    <div class="canvas-container">
+        <canvas id="crystalCanvas" width="800" height="500"></canvas>
+    </div>
+    
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-dot atom"></div>
+            <span>Corner Atoms</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot center"></div>
+            <span>Center/Body Atoms</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot layer"></div>
+            <span>Layer Differentiation</span>
+        </div>
+    </div>
+    
+    <div class="info-panel fcc" id="infoPanel">
+        <h2>Face-Centered Cubic (FCC)</h2>
+        <p>In FCC structure, atoms are located at each of the eight corners and at the center of each face. This arrangement is also known as cubic close-packed (CCP). The coordination number is 12, meaning each atom touches 12 neighbors.</p>
+        <div class="lattice-info">
+            <div><strong>Coordination Number</strong>12</div>
+            <div><strong>Atomic Packing Factor</strong>0.74 (74%)</div>
+            <div><strong>Examples</strong>Al, Cu, Ni, Au, Ag, Pt</div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        let scene, camera, renderer, crystal, currentType = 'fcc';
+        let isAnimating = true;
+        
+        function init() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a1a);
+            
+            camera = new THREE.PerspectiveCamera(60, 800/500, 0.1, 1000);
+            camera.position.set(4, 3, 4);
+            camera.lookAt(0, 0, 0);
+            
+            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('crystalCanvas'), antialias: true });
+            renderer.setSize(800, 500);
+            
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambientLight);
+            
+            const pointLight1 = new THREE.PointLight(0x00d9ff, 1, 100);
+            pointLight1.position.set(5, 5, 5);
+            scene.add(pointLight1);
+            
+            const pointLight2 = new THREE.PointLight(0xa855f7, 0.8, 100);
+            pointLight2.position.set(-5, 3, -5);
+            scene.add(pointLight2);
+            
+            createCrystal('fcc');
+            animate();
+        }
+        
+        function createCrystal(type) {
+            if (crystal) {
+                scene.remove(crystal);
+                crystal.traverse(child => {
+                    if (child.geometry) child.geometry.dispose();
+                    if (child.material) child.material.dispose();
+                });
+            }
+            
+            crystal = new THREE.Group();
+            
+            const colors = {
+                fcc: 0x00d9ff,
+                bcc: 0xa855f7,
+                hcp: 0x22c55e
+            };
+            
+            const centerColor = 0xff6b6b;
+            
+            switch(type) {
+                case 'fcc':
+                    createFCC(colors.fcc, centerColor);
+                    break;
+                case 'bcc':
+                    createBCC(colors.bcc, centerColor);
+                    break;
+                case 'hcp':
+                    createHCP(colors.hcp, centerColor);
+                    break;
+            }
+            
+            scene.add(crystal);
+        }
+        
+        function createAtom(x, y, z, color, size = 0.15) {
+            const geometry = new THREE.SphereGeometry(size, 32, 32);
+            const material = new THREE.MeshPhongMaterial({
+                color: color,
+                shininess: 100,
+                emissive: color,
+                emissiveIntensity: 0.2
+            });
+            const sphere = new THREE.Mesh(geometry, material);
+            sphere.position.set(x, y, z);
+            return sphere;
+        }
+        
+        function createConnection(pos1, pos2, color) {
+            const direction = new THREE.Vector3().subVectors(pos2, pos1);
+            const length = direction.length();
+            const geometry = new THREE.CylinderGeometry(0.02, 0.02, length, 8);
+            const material = new THREE.MeshPhongMaterial({ color: color, transparent: true, opacity: 0.5 });
+            const cylinder = new THREE.Mesh(geometry, material);
+            
+            cylinder.position.copy(pos1).add(direction.multiplyScalar(0.5));
+            cylinder.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.clone().normalize());
+            
+            return cylinder;
+        }
+        
+        function createFCC(mainColor, centerColor) {
+            const positions = [];
+            const unitSize = 1.2;
+            
+            // Corner atoms (8 corners of cube)
+            for (let x = -1; x <= 1; x += 2) {
+                for (let y = -1; y <= 1; y += 2) {
+                    for (let z = -1; z <= 1; z += 2) {
+                        positions.push(new THREE.Vector3(x * unitSize/2, y * unitSize/2, z * unitSize/2));
+                    }
+                }
+            }
+            
+            // Face centers (6 faces)
+            positions.push(new THREE.Vector3(unitSize/2, 0, 0));
+            positions.push(new THREE.Vector3(-unitSize/2, 0, 0));
+            positions.push(new THREE.Vector3(0, unitSize/2, 0));
+            positions.push(new THREE.Vector3(0, -unitSize/2, 0));
+            positions.push(new THREE.Vector3(0, 0, unitSize/2));
+            positions.push(new THREE.Vector3(0, 0, -unitSize/2));
+            
+            positions.forEach((pos, i) => {
+                const color = i < 8 ? mainColor : centerColor;
+                crystal.add(createAtom(pos.x, pos.y, pos.z, color));
+            });
+            
+            // Add unit cell box
+            const boxGeo = new THREE.BoxGeometry(unitSize, unitSize, unitSize);
+            const boxMat = new THREE.MeshBasicMaterial({ color: mainColor, wireframe: true, transparent: true, opacity: 0.3 });
+            const box = new THREE.Mesh(boxGeo, boxMat);
+            crystal.add(box);
+        }
+        
+        function createBCC(mainColor, centerColor) {
+            const unitSize = 1.2;
+            
+            // Corner atoms (8 corners)
+            for (let x = -1; x <= 1; x += 2) {
+                for (let y = -1; y <= 1; y += 2) {
+                    for (let z = -1; z <= 1; z += 2) {
+                        crystal.add(createAtom(x * unitSize/2, y * unitSize/2, z * unitSize/2, mainColor));
+                    }
+                }
+            }
+            
+            // Body center atom
+            crystal.add(createAtom(0, 0, 0, centerColor, 0.18));
+            
+            // Add unit cell box
+            const boxGeo = new THREE.BoxGeometry(unitSize, unitSize, unitSize);
+            const boxMat = new THREE.MeshBasicMaterial({ color: mainColor, wireframe: true, transparent: true, opacity: 0.3 });
+            const box = new THREE.Mesh(boxGeo, boxMat);
+            crystal.add(box);
+        }
+        
+        function createHCP(mainColor, centerColor) {
+            const a = 1.0; // basal plane lattice constant
+            const c = 1.633; // ideal c/a ratio
+            
+            // Generate HCP structure
+            const layers = 3;
+            const atomsPerLayer = 7;
+            
+            for (let layer = 0; layer < layers; layer++) {
+                const y = (layer - 1) * c * 0.75;
+                const offset = layer % 2 === 0 ? 0 : a / 2;
+                
+                // Center atom of each layer
+                crystal.add(createAtom(0, y, 0, layer % 2 === 0 ? mainColor : centerColor, 0.15));
+                
+                // Hexagonal arrangement
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i / 6) * Math.PI * 2;
+                    const x = Math.cos(angle) * a;
+                    const z = Math.sin(angle) * a;
+                    crystal.add(createAtom(x, y, z, layer % 2 === 0 ? mainColor : centerColor, 0.15));
+                }
+            }
+            
+            // Add reference frame
+            const frameGeo = new THREE.CylinderGeometry(0.01, 0.01, 2.5, 8);
+            const frameMat = new THREE.MeshBasicMaterial({ color: mainColor, transparent: true, opacity: 0.3 });
+            
+            const frame1 = new THREE.Mesh(frameGeo, frameMat);
+            frame1.rotation.z = Math.PI / 2;
+            crystal.add(frame1);
+            
+            const frame2 = new THREE.Mesh(frameGeo, frameMat);
+            crystal.add(frame2);
+        }
+        
+        function showCrystal(type) {
+            currentType = type;
+            
+            document.querySelectorAll('.crystal-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.crystal-btn.${type}`).classList.add('active');
+            
+            const infoPanel = document.getElementById('infoPanel');
+            infoPanel.className = `info-panel ${type}`;
+            
+            const info = {
+                fcc: {
+                    title: 'Face-Centered Cubic (FCC)',
+                    desc: 'In FCC structure, atoms are located at each of the eight corners and at the center of each face. This arrangement is also known as cubic close-packed (CCP). The coordination number is 12, meaning each atom touches 12 neighbors.',
+                    stats: ['Coordination Number: 12', 'Atomic Packing Factor: 0.74 (74%)', 'Examples: Al, Cu, Ni, Au, Ag, Pt']
+                },
+                bcc: {
+                    title: 'Body-Centered Cubic (BCC)',
+                    desc: 'BCC has atoms at all eight corners of the cube and a single atom at the center of the cube. The coordination number is 8, with each atom having 8 nearest neighbors. It is less densely packed than FCC.',
+                    stats: ['Coordination Number: 8', 'Atomic Packing Factor: 0.68 (68%)', 'Examples: Fe, Cr, W, Na, K, Cs']
+                },
+                hcp: {
+                    title: 'Hexagonal Close-Packed (HCP)',
+                    desc: 'HCP consists of alternating layers of atoms arranged in a hexagonal pattern. The stacking sequence is ABAB..., where B-layer atoms sit in the hollows of the A-layer. It has a coordination number of 12.',
+                    stats: ['Coordination Number: 12', 'Atomic Packing Factor: 0.74 (74%)', 'Examples: Mg, Zn, Ti, Co, Cd']
+                }
+            };
+            
+            infoPanel.innerHTML = `
+                <h2>${info[type].title}</h2>
+                <p>${info[type].desc}</p>
+                <div class="lattice-info">
+                    ${info[type].stats.map(s => {
+                        const [key, val] = s.split(': ');
+                        return `<div><strong>${key}</strong>${val}</div>`;
+                    }).join('')}
+                </div>
+            `;
+            
+            createCrystal(type);
+        }
+        
+        function animate() {
+            if (isAnimating && crystal) {
+                crystal.rotation.y += 0.005;
+                crystal.rotation.x = Math.sin(Date.now() * 0.001) * 0.1;
+            }
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        }
+        
+        // Mouse interaction
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        
+        const canvas = document.getElementById('crystalCanvas');
+        
+        canvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+        
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDragging && crystal) {
+                const deltaX = e.clientX - previousMousePosition.x;
+                const deltaY = e.clientY - previousMousePosition.y;
+                crystal.rotation.y += deltaX * 0.01;
+                crystal.rotation.x += deltaY * 0.01;
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            }
+        });
+        
+        canvas.addEventListener('mouseup', () => isDragging = false);
+        canvas.addEventListener('mouseleave', () => isDragging = false);
+        
+        // Touch support
+        canvas.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        });
+        
+        canvas.addEventListener('touchmove', (e) => {
+            if (isDragging && crystal) {
+                const deltaX = e.touches[0].clientX - previousMousePosition.x;
+                const deltaY = e.touches[0].clientY - previousMousePosition.y;
+                crystal.rotation.y += deltaX * 0.01;
+                crystal.rotation.x += deltaY * 0.01;
+                previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            }
+        });
+        
+        canvas.addEventListener('touchend', () => isDragging = false);
+        
+        // Initialize
+        init();
+    </script>
+</body>
+</html>
