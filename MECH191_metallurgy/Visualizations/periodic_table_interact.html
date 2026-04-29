@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Periodic Table for Students</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .controls button {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .controls button:hover {
+            background: #333;
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .filter-btn {
+            background: white;
+            color: #555;
+            border: 1px solid #ddd;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            background: #eee;
+        }
+
+        .filter-btn.active {
+            background: #333;
+            color: white;
+            border-color: #333;
+        }
+
+        .periodic-table {
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .period {
+            display: grid;
+            grid-template-columns: repeat(18, 1fr);
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .element {
+            aspect-ratio: 1;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.75em;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #fff;
+            min-height: 40px;
+            position: relative;
+        }
+
+        /* Category colors from legend */
+        .element.alkali-metal { background: #ff9999; }
+        .element.alkaline-earth { background: #ffcc99; }
+        .element.transition-metal { background: #99ccff; }
+        .element.post-transition { background: #cc99ff; }
+        .element.metalloid { background: #99ff99; }
+        .element.nonmetal { background: #ffff99; }
+        .element.halogen { background: #ffcccc; }
+        .element.noble-gas { background: #ccffff; }
+        .element.lanthanide { background: #e6ccff; }
+        .element.actinide { background: #ffd9cc; }
+
+        .element .symbol {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .element .atomic-num {
+            font-size: 0.65em;
+            color: #888;
+        }
+
+        .element:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+        }
+
+        .element.dimmed {
+            opacity: 0.2;
+        }
+
+        .element.highlighted {
+            border-width: 2px;
+            border-color: #333;
+            background: #e8f4ff;
+        }
+
+        .element.selected {
+            border-width: 2px;
+            border-color: #333;
+            background: #e8f4ff;
+        }
+
+        .series-label {
+            font-weight: bold;
+            color: #666;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-size: 0.85em;
+        }
+
+        .lanthanides, .actinides {
+            display: grid;
+            grid-template-columns: auto repeat(15, 1fr);
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .element.active {
+            border-width: 2px;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .element.highlight {
+            animation: pulse 0.6s ease;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            flex-shrink: 0;
+        }
+
+        .legend-text {
+            font-size: 0.8em;
+            color: #333;
+        }
+
+        .info-box {
+            background: #f0f4ff;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-text {
+            color: #333;
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+
+        /* Side Panel */
+        .side-panel {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            width: 320px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            padding: 25px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .side-panel.visible {
+            display: block;
+        }
+
+        .side-panel h2 {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .side-panel .element-symbol-large {
+            font-size: 3em;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .side-panel .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .side-panel .detail-label {
+            font-weight: bold;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .side-panel .detail-value {
+            color: #333;
+            font-size: 0.9em;
+        }
+
+        .side-panel .category-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #e8f4ff;
+            color: #333;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-top: 15px;
+        }
+
+        .side-panel .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .side-panel .close-btn:hover {
+            color: #333;
+        }
+
+        @media (max-width: 1100px) {
+            .container {
+                flex-direction: column;
+            }
+            .side-panel {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive Periodic Table</h1>
+            
+            <div class="filters">
+                <button class="filter-btn active" data-category="all">All Elements</button>
+                <button class="filter-btn" data-category="alkali-metal">Alkali Metals</button>
+                <button class="filter-btn" data-category="alkaline-earth">Alkaline Earth</button>
+                <button class="filter-btn" data-category="transition-metal">Transition Metals</button>
+                <button class="filter-btn" data-category="post-transition">Post-Transition</button>
+                <button class="filter-btn" data-category="metalloid">Metalloids</button>
+                <button class="filter-btn" data-category="nonmetal">Nonmetals</button>
+                <button class="filter-btn" data-category="halogen">Halogens</button>
+                <button class="filter-btn" data-category="noble-gas">Noble Gases</button>
+                <button class="filter-btn" data-category="lanthanide">Lanthanides</button>
+                <button class="filter-btn" data-category="actinide">Actinides</button>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ff9999;"></div>
+                    <div class="legend-text">Alkali Metals</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ffcc99;"></div>
+                    <div class="legend-text">Alkaline Earth</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #99ccff;"></div>
+                    <div class="legend-text">Transition Metals</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #cc99ff;"></div>
+                    <div class="legend-text">Post-Transition</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #99ff99;"></div>
+                    <div class="legend-text">Metalloids</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ffff99;"></div>
+                    <div class="legend-text">Nonmetals</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ffcccc;"></div>
+                    <div class="legend-text">Halogens</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ccffff;"></div>
+                    <div class="legend-text">Noble Gases</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e6ccff;"></div>
+                    <div class="legend-text">Lanthanides</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ffd9cc;"></div>
+                    <div class="legend-text">Actinides</div>
+                </div>
+            </div>
+
+            <div class="periodic-table" id="table"></div>
+
+            <div class="series-label">Lanthanides (Period 6, f-block)</div>
+            <div class="lanthanides" id="lanthanides"></div>
+
+            <div class="series-label">Actinides (Period 7, f-block)</div>
+            <div class="actinides" id="actinides"></div>
+
+            <div class="info-box">
+                <div class="info-text">
+                    <strong>Click on any element</strong> to view its details including name, atomic mass, and number of valence electrons. Use the filter buttons above to highlight elements by category.
+                </div>
+            </div>
+        </div>
+
+        <div class="side-panel" id="sidePanel">
+            <button class="close-btn" onclick="closePanel()">&times;</button>
+            <div class="element-symbol-large" id="panelSymbol">-</div>
+            <h2 id="panelName">-</h2>
+            <div class="detail-row">
+                <span class="detail-label">Atomic Number</span>
+                <span class="detail-value" id="panelAtomicNum">-</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Atomic Mass</span>
+                <span class="detail-value" id="panelMass">-</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Valence Electrons</span>
+                <span class="detail-value" id="panelValence">-</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Group</span>
+                <span class="detail-value" id="panelGroup">-</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Period</span>
+                <span class="detail-value" id="panelPeriod">-</span>
+            </div>
+            <span class="category-badge" id="panelCategory">-</span>
+        </div>
+    </div>
+
+    <script>
+        // Complete periodic table data with all properties
+        const elementsData = [
+            { num: 1, symbol: 'H', name: 'Hydrogen', atomicMass: 1.008, valence: 1, category: 'nonmetal', group: 1, period: 1 },
+            { num: 2, symbol: 'He', name: 'Helium', atomicMass: 4.003, valence: 2, category: 'noble-gas', group: 18, period: 1 },
+            { num: 3, symbol: 'Li', name: 'Lithium', atomicMass: 6.941, valence: 1, category: 'alkali-metal', group: 1, period: 2 },
+            { num: 4, symbol: 'Be', name: 'Beryllium', atomicMass: 9.012, valence: 2, category: 'alkaline-earth', group: 2, period: 2 },
+            { num: 5, symbol: 'B', name: 'Boron', atomicMass: 10.81, valence: 3, category: 'metalloid', group: 13, period: 2 },
+            { num: 6, symbol: 'C', name: 'Carbon', atomicMass: 12.01, valence: 4, category: 'nonmetal', group: 14, period: 2 },
+            { num: 7, symbol: 'N', name: 'Nitrogen', atomicMass: 14.01, valence: 5, category: 'nonmetal', group: 15, period: 2 },
+            { num: 8, symbol: 'O', name: 'Oxygen', atomicMass: 16.00, valence: 6, category: 'nonmetal', group: 16, period: 2 },
+            { num: 9, symbol: 'F', name: 'Fluorine', atomicMass: 19.00, valence: 7, category: 'halogen', group: 17, period: 2 },
+            { num: 10, symbol: 'Ne', name: 'Neon', atomicMass: 20.18, valence: 8, category: 'noble-gas', group: 18, period: 2 },
+            { num: 11, symbol: 'Na', name: 'Sodium', atomicMass: 22.99, valence: 1, category: 'alkali-metal', group: 1, period: 3 },
+            { num: 12, symbol: 'Mg', name: 'Magnesium', atomicMass: 24.31, valence: 2, category: 'alkaline-earth', group: 2, period: 3 },
+            { num: 13, symbol: 'Al', name: 'Aluminum', atomicMass: 26.98, valence: 3, category: 'post-transition', group: 13, period: 3 },
+            { num: 14, symbol: 'Si', name: 'Silicon', atomicMass: 28.09, valence: 4, category: 'metalloid', group: 14, period: 3 },
+            { num: 15, symbol: 'P', name: 'Phosphorus', atomicMass: 30.97, valence: 5, category: 'nonmetal', group: 15, period: 3 },
+            { num: 16, symbol: 'S', name: 'Sulfur', atomicMass: 32.07, valence: 6, category: 'nonmetal', group: 16, period: 3 },
+            { num: 17, symbol: 'Cl', name: 'Chlorine', atomicMass: 35.45, valence: 7, category: 'halogen', group: 17, period: 3 },
+            { num: 18, symbol: 'Ar', name: 'Argon', atomicMass: 39.95, valence: 8, category: 'noble-gas', group: 18, period: 3 },
+            { num: 19, symbol: 'K', name: 'Potassium', atomicMass: 39.10, valence: 1, category: 'alkali-metal', group: 1, period: 4 },
+            { num: 20, symbol: 'Ca', name: 'Calcium', atomicMass: 40.08, valence: 2, category: 'alkaline-earth', group: 2, period: 4 },
+            { num: 21, symbol: 'Sc', name: 'Scandium', atomicMass: 44.96, valence: 3, category: 'transition-metal', group: 3, period: 4 },
+            { num: 22, symbol: 'Ti', name: 'Titanium', atomicMass: 47.87, valence: 4, category: 'transition-metal', group: 4, period: 4 },
+            { num: 23, symbol: 'V', name: 'Vanadium', atomicMass: 50.94, valence: 5, category: 'transition-metal', group: 5, period: 4 },
+            { num: 24, symbol: 'Cr', name: 'Chromium', atomicMass: 52.00, valence: 6, category: 'transition-metal', group: 6, period: 4 },
+            { num: 25, symbol: 'Mn', name: 'Manganese', atomicMass: 54.94, valence: 7, category: 'transition-metal', group: 7, period: 4 },
+            { num: 26, symbol: 'Fe', name: 'Iron', atomicMass: 55.85, valence: 8, category: 'transition-metal', group: 8, period: 4 },
+            { num: 27, symbol: 'Co', name: 'Cobalt', atomicMass: 58.93, valence: 9, category: 'transition-metal', group: 9, period: 4 },
+            { num: 28, symbol: 'Ni', name: 'Nickel', atomicMass: 58.69, valence: 10, category: 'transition-metal', group: 10, period: 4 },
+            { num: 29, symbol: 'Cu', name: 'Copper', atomicMass: 63.55, valence: 11, category: 'transition-metal', group: 11, period: 4 },
+            { num: 30, symbol: 'Zn', name: 'Zinc', atomicMass: 65.38, valence: 2, category: 'transition-metal', group: 12, period: 4 },
+            { num: 31, symbol: 'Ga', name: 'Gallium', atomicMass: 69.72, valence: 3, category: 'post-transition', group: 13, period: 4 },
+            { num: 32, symbol: 'Ge', name: 'Germanium', atomicMass: 72.63, valence: 4, category: 'metalloid', group: 14, period: 4 },
+            { num: 33, symbol: 'As', name: 'Arsenic', atomicMass: 74.92, valence: 5, category: 'metalloid', group: 15, period: 4 },
+            { num: 34, symbol: 'Se', name: 'Selenium', atomicMass: 78.97, valence: 6, category: 'nonmetal', group: 16, period: 4 },
+            { num: 35, symbol: 'Br', name: 'Bromine', atomicMass: 79.90, valence: 7, category: 'halogen', group: 17, period: 4 },
+            { num: 36, symbol: 'Kr', name: 'Krypton', atomicMass: 83.80, valence: 8, category: 'noble-gas', group: 18, period: 4 },
+            { num: 37, symbol: 'Rb', name: 'Rubidium', atomicMass: 85.47, valence: 1, category: 'alkali-metal', group: 1, period: 5 },
+            { num: 38, symbol: 'Sr', name: 'Strontium', atomicMass: 87.62, valence: 2, category: 'alkaline-earth', group: 2, period: 5 },
+            { num: 39, symbol: 'Y', name: 'Yttrium', atomicMass: 88.91, valence: 3, category: 'transition-metal', group: 3, period: 5 },
+            { num: 40, symbol: 'Zr', name: 'Zirconium', atomicMass: 91.22, valence: 4, category: 'transition-metal', group: 4, period: 5 },
+            { num: 41, symbol: 'Nb', name: 'Niobium', atomicMass: 92.91, valence: 5, category: 'transition-metal', group: 5, period: 5 },
+            { num: 42, symbol: 'Mo', name: 'Molybdenum', atomicMass: 95.95, valence: 6, category: 'transition-metal', group: 6, period: 5 },
+            { num: 43, symbol: 'Tc', name: 'Technetium', atomicMass: 98, valence: 7, category: 'transition-metal', group: 7, period: 5 },
+            { num: 44, symbol: 'Ru', name: 'Ruthenium', atomicMass: 101.1, valence: 8, category: 'transition-metal', group: 8, period: 5 },
+            { num: 45, symbol: 'Rh', name: 'Rhodium', atomicMass: 102.9, valence: 9, category: 'transition-metal', group: 9, period: 5 },
+            { num: 46, symbol: 'Pd', name: 'Palladium', atomicMass: 106.4, valence: 10, category: 'transition-metal', group: 10, period: 5 },
+            { num: 47, symbol: 'Ag', name: 'Silver', atomicMass: 107.9, valence: 11, category: 'transition-metal', group: 11, period: 5 },
+            { num: 48, symbol: 'Cd', name: 'Cadmium', atomicMass: 112.4, valence: 2, category: 'transition-metal', group: 12, period: 5 },
+            { num: 49, symbol: 'In', name: 'Indium', atomicMass: 114.8, valence: 3, category: 'post-transition', group: 13, period: 5 },
+            { num: 50, symbol: 'Sn', name: 'Tin', atomicMass: 118.7, valence: 4, category: 'post-transition', group: 14, period: 5 },
+            { num: 51, symbol: 'Sb', name: 'Antimony', atomicMass: 121.8, valence: 5, category: 'metalloid', group: 15, period: 5 },
+            { num: 52, symbol: 'Te', name: 'Tellurium', atomicMass: 127.6, valence: 6, category: 'metalloid', group: 16, period: 5 },
+            { num: 53, symbol: 'I', name: 'Iodine', atomicMass: 126.9, valence: 7, category: 'halogen', group: 17, period: 5 },
+            { num: 54, symbol: 'Xe', name: 'Xenon', atomicMass: 131.3, valence: 8, category: 'noble-gas', group: 18, period: 5 },
+            { num: 55, symbol: 'Cs', name: 'Cesium', atomicMass: 132.9, valence: 1, category: 'alkali-metal', group: 1, period: 6 },
+            { num: 56, symbol: 'Ba', name: 'Barium', atomicMass: 137.3, valence: 2, category: 'alkaline-earth', group: 2, period: 6 },
+            { num: 57, symbol: 'La', name: 'Lanthanum', atomicMass: 138.9, valence: 3, category: 'lanthanide', group: 3, period: 6 },
+            { num: 58, symbol: 'Ce', name: 'Cerium', atomicMass: 140.1, valence: 4, category: 'lanthanide', group: 3, period: 6 },
+            { num: 59, symbol: 'Pr', name: 'Praseodymium', atomicMass: 140.9, valence: 5, category: 'lanthanide', group: 3, period: 6 },
+            { num: 60, symbol: 'Nd', name: 'Neodymium', atomicMass: 144.2, valence: 6, category: 'lanthanide', group: 3, period: 6 },
+            { num: 61, symbol: 'Pm', name: 'Promethium', atomicMass: 145, valence: 7, category: 'lanthanide', group: 3, period: 6 },
+            { num: 62, symbol: 'Sm', name: 'Samarium', atomicMass: 150.4, valence: 8, category: 'lanthanide', group: 3, period: 6 },
+            { num: 63, symbol: 'Eu', name: 'Europium', atomicMass: 152.0, valence: 9, category: 'lanthanide', group: 3, period: 6 },
+            { num: 64, symbol: 'Gd', name: 'Gadolinium', atomicMass: 157.3, valence: 10, category: 'lanthanide', group: 3, period: 6 },
+            { num: 65, symbol: 'Tb', name: 'Terbium', atomicMass: 158.9, valence: 11, category: 'lanthanide', group: 3, period: 6 },
+            { num: 66, symbol: 'Dy', name: 'Dysprosium', atomicMass: 162.5, valence: 12, category: 'lanthanide', group: 3, period: 6 },
+            { num: 67, symbol: 'Ho', name: 'Holmium', atomicMass: 164.9, valence: 13, category: 'lanthanide', group: 3, period: 6 },
+            { num: 68, symbol: 'Er', name: 'Erbium', atomicMass: 167.3, valence: 14, category: 'lanthanide', group: 3, period: 6 },
+            { num: 69, symbol: 'Tm', name: 'Thulium', atomicMass: 168.9, valence: 15, category: 'lanthanide', group: 3, period: 6 },
+            { num: 70, symbol: 'Yb', name: 'Ytterbium', atomicMass: 173.0, valence: 16, category: 'lanthanide', group: 3, period: 6 },
+            { num: 71, symbol: 'Lu', name: 'Lutetium', atomicMass: 175.0, valence: 3, category: 'lanthanide', group: 3, period: 6 },
+            { num: 72, symbol: 'Hf', name: 'Hafnium', atomicMass: 178.5, valence: 4, category: 'transition-metal', group: 4, period: 6 },
+            { num: 73, symbol: 'Ta', name: 'Tantalum', atomicMass: 180.9, valence: 5, category: 'transition-metal', group: 5, period: 6 },
+            { num: 74, symbol: 'W', name: 'Tungsten', atomicMass: 183.8, valence: 6, category: 'transition-metal', group: 6, period: 6 },
+            { num: 75, symbol: 'Re', name: 'Rhenium', atomicMass: 186.2, valence: 7, category: 'transition-metal', group: 7, period: 6 },
+            { num: 76, symbol: 'Os', name: 'Osmium', atomicMass: 190.2, valence: 8, category: 'transition-metal', group: 8, period: 6 },
+            { num: 77, symbol: 'Ir', name: 'Iridium', atomicMass: 192.2, valence: 9, category: 'transition-metal', group: 9, period: 6 },
+            { num: 78, symbol: 'Pt', name: 'Platinum', atomicMass: 195.1, valence: 10, category: 'transition-metal', group: 10, period: 6 },
+            { num: 79, symbol: 'Au', name: 'Gold', atomicMass: 197.0, valence: 11, category: 'transition-metal', group: 11, period: 6 },
+            { num: 80, symbol: 'Hg', name: 'Mercury', atomicMass: 200.6, valence: 2, category: 'transition-metal', group: 12, period: 6 },
+            { num: 81, symbol: 'Tl', name: 'Thallium', atomicMass: 204.4, valence: 3, category: 'post-transition', group: 13, period: 6 },
+            { num: 82, symbol: 'Pb', name: 'Lead', atomicMass: 207.2, valence: 4, category: 'post-transition', group: 14, period: 6 },
+            { num: 83, symbol: 'Bi', name: 'Bismuth', atomicMass: 209.0, valence: 5, category: 'post-transition', group: 15, period: 6 },
+            { num: 84, symbol: 'Po', name: 'Polonium', atomicMass: 209, valence: 6, category: 'metalloid', group: 16, period: 6 },
+            { num: 85, symbol: 'At', name: 'Astatine', atomicMass: 210, valence: 7, category: 'halogen', group: 17, period: 6 },
+            { num: 86, symbol: 'Rn', name: 'Radon', atomicMass: 222, valence: 8, category: 'noble-gas', group: 18, period: 6 },
+            { num: 87, symbol: 'Fr', name: 'Francium', atomicMass: 223, valence: 1, category: 'alkali-metal', group: 1, period: 7 },
+            { num: 88, symbol: 'Ra', name: 'Radium', atomicMass: 226, valence: 2, category: 'alkaline-earth', group: 2, period: 7 },
+            { num: 89, symbol: 'Ac', name: 'Actinium', atomicMass: 227, valence: 3, category: 'actinide', group: 3, period: 7 },
+            { num: 90, symbol: 'Th', name: 'Thorium', atomicMass: 232.0, valence: 4, category: 'actinide', group: 3, period: 7 },
+            { num: 91, symbol: 'Pa', name: 'Protactinium', atomicMass: 231.0, valence: 5, category: 'actinide', group: 3, period: 7 },
+            { num: 92, symbol: 'U', name: 'Uranium', atomicMass: 238.0, valence: 6, category: 'actinide', group: 3, period: 7 },
+            { num: 93, symbol: 'Np', name: 'Neptunium', atomicMass: 237, valence: 7, category: 'actinide', group: 3, period: 7 },
+            { num: 94, symbol: 'Pu', name: 'Plutonium', atomicMass: 244, valence: 8, category: 'actinide', group: 3, period: 7 },
+            { num: 95, symbol: 'Am', name: 'Americium', atomicMass: 243, valence: 9, category: 'actinide', group: 3, period: 7 },
+            { num: 96, symbol: 'Cm', name: 'Curium', atomicMass: 247, valence: 10, category: 'actinide', group: 3, period: 7 },
+            { num: 97, symbol: 'Bk', name: 'Berkelium', atomicMass: 247, valence: 11, category: 'actinide', group: 3, period: 7 },
+            { num: 98, symbol: 'Cf', name: 'Californium', atomicMass: 251, valence: 12, category: 'actinide', group: 3, period: 7 },
+            { num: 99, symbol: 'Es', name: 'Einsteinium', atomicMass: 252, valence: 13, category: 'actinide', group: 3, period: 7 },
+            { num: 100, symbol: 'Fm', name: 'Fermium', atomicMass: 257, valence: 14, category: 'actinide', group: 3, period: 7 },
+            { num: 101, symbol: 'Md', name: 'Mendelevium', atomicMass: 258, valence: 15, category: 'actinide', group: 3, period: 7 },
+            { num: 102, symbol: 'No', name: 'Nobelium', atomicMass: 259, valence: 16, category: 'actinide', group: 3, period: 7 },
+            { num: 103, symbol: 'Lr', name: 'Lawrencium', atomicMass: 266, valence: 3, category: 'actinide', group: 3, period: 7 },
+            { num: 104, symbol: 'Rf', name: 'Rutherfordium', atomicMass: 267, valence: 4, category: 'transition-metal', group: 4, period: 7 },
+            { num: 105, symbol: 'Db', name: 'Dubnium', atomicMass: 268, valence: 5, category: 'transition-metal', group: 5, period: 7 },
+            { num: 106, symbol: 'Sg', name: 'Seaborgium', atomicMass: 269, valence: 6, category: 'transition-metal', group: 6, period: 7 },
+            { num: 107, symbol: 'Bh', name: 'Bohrium', atomicMass: 270, valence: 7, category: 'transition-metal', group: 7, period: 7 },
+            { num: 108, symbol: 'Hs', name: 'Hassium', atomicMass: 277, valence: 8, category: 'transition-metal', group: 8, period: 7 },
+            { num: 109, symbol: 'Mt', name: 'Meitnerium', atomicMass: 278, valence: 9, category: 'transition-metal', group: 9, period: 7 },
+            { num: 110, symbol: 'Ds', name: 'Darmstadtium', atomicMass: 281, valence: 10, category: 'transition-metal', group: 10, period: 7 },
+            { num: 111, symbol: 'Rg', name: 'Roentgenium', atomicMass: 282, valence: 11, category: 'transition-metal', group: 11, period: 7 },
+            { num: 112, symbol: 'Cn', name: 'Copernicium', atomicMass: 285, valence: 2, category: 'transition-metal', group: 12, period: 7 },
+            { num: 113, symbol: 'Nh', name: 'Nihonium', atomicMass: 286, valence: 3, category: 'post-transition', group: 13, period: 7 },
+            { num: 114, symbol: 'Fl', name: 'Flerovium', atomicMass: 289, valence: 4, category: 'post-transition', group: 14, period: 7 },
+            { num: 115, symbol: 'Mc', name: 'Moscovium', atomicMass: 290, valence: 5, category: 'post-transition', group: 15, period: 7 },
+            { num: 116, symbol: 'Lv', name: 'Livermorium', atomicMass: 293, valence: 6, category: 'post-transition', group: 16, period: 7 },
+            { num: 117, symbol: 'Ts', name: 'Tennessine', atomicMass: 294, valence: 7, category: 'halogen', group: 17, period: 7 },
+            { num: 118, symbol: 'Og', name: 'Oganesson', atomicMass: 294, valence: 8, category: 'noble-gas', group: 18, period: 7 },
+        ];
+
+        // Map atomic number to position in table (period, column)
+        const elementPositions = {
+            1: {period: 1, col: 1}, 2: {period: 1, col: 18},
+            3: {period: 2, col: 1}, 4: {period: 2, col: 2}, 5: {period: 2, col: 13}, 6: {period: 2, col: 14},
+            7: {period: 2, col: 15}, 8: {period: 2, col: 16}, 9: {period: 2, col: 17}, 10: {period: 2, col: 18},
+            11: {period: 3, col: 1}, 12: {period: 3, col: 2}, 13: {period: 3, col: 13}, 14: {period: 3, col: 14},
+            15: {period: 3, col: 15}, 16: {period: 3, col: 16}, 17: {period: 3, col: 17}, 18: {period: 3, col: 18},
+            19: {period: 4, col: 1}, 20: {period: 4, col: 2}, 21: {period: 4, col: 3}, 22: {period: 4, col: 4},
+            23: {period: 4, col: 5}, 24: {period: 4, col: 6}, 25: {period: 4, col: 7}, 26: {period: 4, col: 8},
+            27: {period: 4, col: 9}, 28: {period: 4, col: 10}, 29: {period: 4, col: 11}, 30: {period: 4, col: 12},
+            31: {period: 4, col: 13}, 32: {period: 4, col: 14}, 33: {period: 4, col: 15}, 34: {period: 4, col: 16},
+            35: {period: 4, col: 17}, 36: {period: 4, col: 18},
+            37: {period: 5, col: 1}, 38: {period: 5, col: 2}, 39: {period: 5, col: 3}, 40: {period: 5, col: 4},
+            41: {period: 5, col: 5}, 42: {period: 5, col: 6}, 43: {period: 5, col: 7}, 44: {period: 5, col: 8},
+            45: {period: 5, col: 9}, 46: {period: 5, col: 10}, 47: {period: 5, col: 11}, 48: {period: 5, col: 12},
+            49: {period: 5, col: 13}, 50: {period: 5, col: 14}, 51: {period: 5, col: 15}, 52: {period: 5, col: 16},
+            53: {period: 5, col: 17}, 54: {period: 5, col: 18},
+            55: {period: 6, col: 1}, 56: {period: 6, col: 2}, 72: {period: 6, col: 4}, 73: {period: 6, col: 5},
+            74: {period: 6, col: 6}, 75: {period: 6, col: 7}, 76: {period: 6, col: 8}, 77: {period: 6, col: 9},
+            78: {period: 6, col: 10}, 79: {period: 6, col: 11}, 80: {period: 6, col: 12}, 81: {period: 6, col: 13},
+            82: {period: 6, col: 14}, 83: {period: 6, col: 15}, 84: {period: 6, col: 16}, 85: {period: 6, col: 17},
+            86: {period: 6, col: 18},
+            87: {period: 7, col: 1}, 88: {period: 7, col: 2}, 104: {period: 7, col: 4}, 105: {period: 7, col: 5},
+            106: {period: 7, col: 6}, 107: {period: 7, col: 7}, 108: {period: 7, col: 8}, 109: {period: 7, col: 9},
+            110: {period: 7, col: 10}, 111: {period: 7, col: 11}, 112: {period: 7, col: 12}, 113: {period: 7, col: 13},
+            114: {period: 7, col: 14}, 115: {period: 7, col: 15}, 116: {period: 7, col: 16}, 117: {period: 7, col: 17},
+            118: {period: 7, col: 18},
+        };
+
+        let isAnimating = false;
+        let currentFilter = 'all';
+
+        function createTable() {
+            const table = document.getElementById('table');
+            const lanthanidesContainer = document.getElementById('lanthanides');
+            const actinidesContainer = document.getElementById('actinides');
+            table.innerHTML = '';
+            lanthanidesContainer.innerHTML = '';
+            actinidesContainer.innerHTML = '';
+
+            // Create 7 periods
+            for (let period = 1; period <= 7; period++) {
+                const periodDiv = document.createElement('div');
+                periodDiv.className = 'period';
+
+                for (let col = 1; col <= 18; col++) {
+                    const elementDiv = document.createElement('div');
+                    elementDiv.className = 'element';
+
+                    // Find element at this position
+                    let element = null;
+                    for (const [num, pos] of Object.entries(elementPositions)) {
+                        if (pos.period === period && pos.col === col) {
+                            element = elementsData.find(e => e.num === parseInt(num));
+                            break;
+                        }
+                    }
+
+                    if (element) {
+                        elementDiv.className = 'element ' + element.category;
+                        elementDiv.innerHTML = `<span class="symbol">${element.symbol}</span><span class="atomic-num">${element.num}</span>`;
+                        elementDiv.dataset.num = element.num;
+                        elementDiv.dataset.category = element.category;
+                        elementDiv.onclick = () => showElementDetails(element);
+                    } else {
+                        elementDiv.style.visibility = 'hidden';
+                    }
+
+                    periodDiv.appendChild(elementDiv);
+                }
+                table.appendChild(periodDiv);
+            }
+
+            // Lanthanides (57-71)
+            const lanLabel = document.createElement('div');
+            lanLabel.className = 'element';
+            lanLabel.style.visibility = 'hidden';
+            lanthanidesContainer.appendChild(lanLabel);
+
+            for (let i = 57; i <= 71; i++) {
+                const element = elementsData.find(e => e.num === i);
+                if (element) {
+                    const elementDiv = document.createElement('div');
+                    elementDiv.className = 'element ' + element.category;
+                    elementDiv.innerHTML = `<span class="symbol">${element.symbol}</span><span class="atomic-num">${element.num}</span>`;
+                    elementDiv.dataset.num = element.num;
+                    elementDiv.dataset.category = element.category;
+                    elementDiv.onclick = () => showElementDetails(element);
+                    lanthanidesContainer.appendChild(elementDiv);
+                }
+            }
+
+            // Actinides (89-103)
+            const actLabel = document.createElement('div');
+            actLabel.className = 'element';
+            actLabel.style.visibility = 'hidden';
+            actinidesContainer.appendChild(actLabel);
+
+            for (let i = 89; i <= 103; i++) {
+                const element = elementsData.find(e => e.num === i);
+                if (element) {
+                    const elementDiv = document.createElement('div');
+                    elementDiv.className = 'element ' + element.category;
+                    elementDiv.innerHTML = `<span class="symbol">${element.symbol}</span><span class="atomic-num">${element.num}</span>`;
+                    elementDiv.dataset.num = element.num;
+                    elementDiv.dataset.category = element.category;
+                    elementDiv.onclick = () => showElementDetails(element);
+                    actinidesContainer.appendChild(elementDiv);
+                }
+            }
+        }
+
+        function showElementDetails(element) {
+            const panel = document.getElementById('sidePanel');
+            document.getElementById('panelSymbol').textContent = element.symbol;
+            document.getElementById('panelName').textContent = element.name;
+            document.getElementById('panelAtomicNum').textContent = element.num;
+            document.getElementById('panelMass').textContent = element.atomicMass + ' u';
+            document.getElementById('panelValence').textContent = element.valence;
+            document.getElementById('panelGroup').textContent = element.group;
+            document.getElementById('panelPeriod').textContent = element.period;
+            document.getElementById('panelCategory').textContent = formatCategory(element.category);
+            panel.classList.add('visible');
+
+            // Highlight selected element
+            document.querySelectorAll('.element').forEach(el => el.classList.remove('selected'));
+            document.querySelector(`[data-num="${element.num}"]`)?.classList.add('selected');
+        }
+
+        function closePanel() {
+            document.getElementById('sidePanel').classList.remove('visible');
+            document.querySelectorAll('.element').forEach(el => el.classList.remove('selected'));
+        }
+
+        function formatCategory(cat) {
+            return cat.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.category;
+
+                document.querySelectorAll('.element').forEach(el => {
+                    if (currentFilter === 'all') {
+                        el.classList.remove('dimmed', 'highlighted');
+                    } else if (el.dataset.category === currentFilter) {
+                        el.classList.remove('dimmed');
+                        el.classList.add('highlighted');
+                    } else {
+                        el.classList.add('dimmed');
+                        el.classList.remove('highlighted');
+                    }
+                });
+            });
+        });
+
+        // Initialize
+        createTable();
+    </script>
+
+    <p style="text-align: center;"><a href="/MECH191_metallurgy/Visualizations/index.html">Back to Main Visualization Page</a></p>
+</body>
+</html>
