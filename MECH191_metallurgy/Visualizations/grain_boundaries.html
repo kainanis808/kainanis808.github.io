@@ -240,9 +240,12 @@
             </div>
 
             <div class="diagram-box">
-                <!-- Face-on view of boundary: two colored screw dislocation families with b arrows -->
-                <svg width="260" height="260" viewBox="0 0 260 260">
+                <!-- Face-on view: two rotated lattices + screw dislocation network -->
+                <svg width="260" height="278" viewBox="0 0 260 278">
                     <defs>
+                        <clipPath id="latClip">
+                            <rect x="5" y="22" width="250" height="215"/>
+                        </clipPath>
                         <marker id="arrowH" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
                             <path d="M0,0.5 L7,3.5 L0,6.5 Z" fill="#1d4ed8"/>
                         </marker>
@@ -250,10 +253,50 @@
                             <path d="M0,1 L7,3.5 L0,6 Z" fill="#ea580c"/>
                         </marker>
                     </defs>
-                    <rect width="260" height="260" fill="#fafafa" rx="8" stroke="#e2e8f0" stroke-width="1"/>
+                    <rect width="260" height="278" fill="#fafafa" rx="8" stroke="#e2e8f0" stroke-width="1"/>
                     <text x="130" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#374151">Face-on: Boundary Plane</text>
 
-                    <!-- Family 1: horizontal screw dislocations (blue), b points right -->
+                    <!-- Grain A lattice: axis-aligned blue grid (faint) -->
+                    <g clip-path="url(#latClip)" stroke="#3b82f6" stroke-width="0.8" opacity="0.25">
+                        <line x1="5" y1="28"  x2="255" y2="28"/><line x1="5" y1="52"  x2="255" y2="52"/>
+                        <line x1="5" y1="76"  x2="255" y2="76"/><line x1="5" y1="100" x2="255" y2="100"/>
+                        <line x1="5" y1="124" x2="255" y2="124"/><line x1="5" y1="148" x2="255" y2="148"/>
+                        <line x1="5" y1="172" x2="255" y2="172"/><line x1="5" y1="196" x2="255" y2="196"/>
+                        <line x1="5" y1="220" x2="255" y2="220"/>
+                        <line x1="10"  y1="22" x2="10"  y2="237"/><line x1="34"  y1="22" x2="34"  y2="237"/>
+                        <line x1="58"  y1="22" x2="58"  y2="237"/><line x1="82"  y1="22" x2="82"  y2="237"/>
+                        <line x1="106" y1="22" x2="106" y2="237"/><line x1="130" y1="22" x2="130" y2="237"/>
+                        <line x1="154" y1="22" x2="154" y2="237"/><line x1="178" y1="22" x2="178" y2="237"/>
+                        <line x1="202" y1="22" x2="202" y2="237"/><line x1="226" y1="22" x2="226" y2="237"/>
+                        <line x1="250" y1="22" x2="250" y2="237"/>
+                    </g>
+
+                    <!-- Grain B lattice: same grid rotated 10° about diagram center (130,128) (faint orange) -->
+                    <g clip-path="url(#latClip)" stroke="#f97316" stroke-width="0.8" opacity="0.25" transform="rotate(10, 130, 128)">
+                        <line x1="5" y1="28"  x2="255" y2="28"/><line x1="5" y1="52"  x2="255" y2="52"/>
+                        <line x1="5" y1="76"  x2="255" y2="76"/><line x1="5" y1="100" x2="255" y2="100"/>
+                        <line x1="5" y1="124" x2="255" y2="124"/><line x1="5" y1="148" x2="255" y2="148"/>
+                        <line x1="5" y1="172" x2="255" y2="172"/><line x1="5" y1="196" x2="255" y2="196"/>
+                        <line x1="5" y1="220" x2="255" y2="220"/>
+                        <line x1="10"  y1="22" x2="10"  y2="237"/><line x1="34"  y1="22" x2="34"  y2="237"/>
+                        <line x1="58"  y1="22" x2="58"  y2="237"/><line x1="82"  y1="22" x2="82"  y2="237"/>
+                        <line x1="106" y1="22" x2="106" y2="237"/><line x1="130" y1="22" x2="130" y2="237"/>
+                        <line x1="154" y1="22" x2="154" y2="237"/><line x1="178" y1="22" x2="178" y2="237"/>
+                        <line x1="202" y1="22" x2="202" y2="237"/><line x1="226" y1="22" x2="226" y2="237"/>
+                        <line x1="250" y1="22" x2="250" y2="237"/>
+                    </g>
+
+                    <!-- θ angle indicator in open cell (bottom-left, between nodes at x=10-60, y=160-210) -->
+                    <circle cx="20" cy="185" r="2" fill="#374151"/>
+                    <!-- Grain A row direction: horizontal blue -->
+                    <line x1="20" y1="185" x2="52" y2="185" stroke="#3b82f6" stroke-width="2"/>
+                    <!-- Grain B row direction: 10° CW (end = (20+32·cos10°, 185+32·sin10°) = (51.5, 190.6)) -->
+                    <line x1="20" y1="185" x2="52" y2="191" stroke="#f97316" stroke-width="2"/>
+                    <!-- Arc from A end to B end, sweeping clockwise -->
+                    <path d="M 52,185 A 32,32 0 0,1 52,191" stroke="#7c3aed" stroke-width="1.5" fill="none"/>
+                    <text x="55" y="190" font-size="11" fill="#7c3aed" font-style="italic" font-weight="bold">θ</text>
+
+                    <!-- Family 1: horizontal screw dislocations (blue) -->
                     <g stroke="#1d4ed8" stroke-width="2.5">
                         <line x1="14" y1="60"  x2="235" y2="60"  marker-end="url(#arrowH)"/>
                         <line x1="14" y1="110" x2="235" y2="110" marker-end="url(#arrowH)"/>
@@ -261,44 +304,40 @@
                         <line x1="14" y1="210" x2="235" y2="210" marker-end="url(#arrowH)"/>
                     </g>
 
-                    <!-- Family 2: vertical screw dislocations (orange), b points down -->
+                    <!-- Family 2: vertical screw dislocations (orange) -->
                     <g stroke="#ea580c" stroke-width="2.5">
-                        <line x1="60"  y1="24" x2="60"  y2="245" marker-end="url(#arrowV)"/>
-                        <line x1="110" y1="24" x2="110" y2="245" marker-end="url(#arrowV)"/>
-                        <line x1="160" y1="24" x2="160" y2="245" marker-end="url(#arrowV)"/>
-                        <line x1="210" y1="24" x2="210" y2="245" marker-end="url(#arrowV)"/>
+                        <line x1="60"  y1="24" x2="60"  y2="230" marker-end="url(#arrowV)"/>
+                        <line x1="110" y1="24" x2="110" y2="230" marker-end="url(#arrowV)"/>
+                        <line x1="160" y1="24" x2="160" y2="230" marker-end="url(#arrowV)"/>
+                        <line x1="210" y1="24" x2="210" y2="230" marker-end="url(#arrowV)"/>
                     </g>
 
-                    <!-- Dislocation nodes at intersections (white circle with dark outline) -->
+                    <!-- Nodes at intersections -->
                     <g fill="white" stroke="#374151" stroke-width="1.8">
-                        <circle cx="60"  cy="60"  r="7"/>
-                        <circle cx="110" cy="60"  r="7"/>
-                        <circle cx="160" cy="60"  r="7"/>
-                        <circle cx="210" cy="60"  r="7"/>
-                        <circle cx="60"  cy="110" r="7"/>
-                        <circle cx="110" cy="110" r="7"/>
-                        <circle cx="160" cy="110" r="7"/>
-                        <circle cx="210" cy="110" r="7"/>
-                        <circle cx="60"  cy="160" r="7"/>
-                        <circle cx="110" cy="160" r="7"/>
-                        <circle cx="160" cy="160" r="7"/>
-                        <circle cx="210" cy="160" r="7"/>
-                        <circle cx="60"  cy="210" r="7"/>
-                        <circle cx="110" cy="210" r="7"/>
-                        <circle cx="160" cy="210" r="7"/>
-                        <circle cx="210" cy="210" r="7"/>
+                        <circle cx="60"  cy="60"  r="7"/><circle cx="110" cy="60"  r="7"/>
+                        <circle cx="160" cy="60"  r="7"/><circle cx="210" cy="60"  r="7"/>
+                        <circle cx="60"  cy="110" r="7"/><circle cx="110" cy="110" r="7"/>
+                        <circle cx="160" cy="110" r="7"/><circle cx="210" cy="110" r="7"/>
+                        <circle cx="60"  cy="160" r="7"/><circle cx="110" cy="160" r="7"/>
+                        <circle cx="160" cy="160" r="7"/><circle cx="210" cy="160" r="7"/>
+                        <circle cx="60"  cy="210" r="7"/><circle cx="110" cy="210" r="7"/>
+                        <circle cx="160" cy="210" r="7"/><circle cx="210" cy="210" r="7"/>
                     </g>
 
-                    <!-- Legend box -->
-                    <rect x="6" y="228" width="248" height="28" fill="#f1f5f9" rx="4" stroke="#e2e8f0" stroke-width="1"/>
-                    <line x1="14" y1="243" x2="38" y2="243" stroke="#1d4ed8" stroke-width="2.5" marker-end="url(#arrowH)"/>
-                    <text x="44" y="247" font-size="10" fill="#1d4ed8">b₁ ∥ line</text>
-                    <line x1="110" y1="235" x2="110" y2="251" stroke="#ea580c" stroke-width="2.5" marker-end="url(#arrowV)"/>
-                    <text x="116" y="247" font-size="10" fill="#ea580c">b₂ ∥ line</text>
-                    <circle cx="192" cy="243" r="5" fill="white" stroke="#374151" stroke-width="1.8"/>
-                    <text x="200" y="247" font-size="10" fill="#374151">node</text>
+                    <!-- Legend -->
+                    <rect x="6" y="246" width="248" height="28" fill="#f1f5f9" rx="4" stroke="#e2e8f0" stroke-width="1"/>
+                    <line x1="12" y1="260" x2="22" y2="260" stroke="#3b82f6" stroke-width="1.5"/>
+                    <text x="26" y="264" font-size="9" fill="#3b82f6">Grain A</text>
+                    <line x1="64" y1="262" x2="76" y2="258" stroke="#f97316" stroke-width="1.5"/>
+                    <text x="80" y="264" font-size="9" fill="#f97316">Grain B (rot. θ)</text>
+                    <line x1="148" y1="260" x2="164" y2="260" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arrowH)"/>
+                    <text x="168" y="264" font-size="9" fill="#1d4ed8">b₁</text>
+                    <line x1="190" y1="253" x2="190" y2="267" stroke="#ea580c" stroke-width="2" marker-end="url(#arrowV)"/>
+                    <text x="195" y="264" font-size="9" fill="#ea580c">b₂</text>
+                    <circle cx="228" cy="260" r="5" fill="white" stroke="#374151" stroke-width="1.5"/>
+                    <text x="236" y="264" font-size="9" fill="#374151">node</text>
                 </svg>
-                <figcaption>Two families of screw dislocations crossing — each family's Burgers vector is parallel to its own line</figcaption>
+                <figcaption>Two grain lattices rotated by θ — the screw dislocation network (lines + nodes) accommodates the misorientation</figcaption>
             </div>
         </div>
     </div>
