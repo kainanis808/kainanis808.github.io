@@ -18,23 +18,25 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            padding: 20px;
+            padding: 10px;
+            overflow-x: auto;
         }
 
         .container {
             background: white;
-            padding: 30px;
+            padding: 15px;
             border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            max-width: 1400px;
+            max-width: 100%;
+            min-width: 600px;
             width: 100%;
         }
 
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 20px;
-            font-size: 2em;
+            margin-bottom: 12px;
+            font-size: clamp(1em, 2.5vw, 2em);
         }
 
         .controls {
@@ -65,9 +67,9 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 8px;
-            margin-bottom: 20px;
-            padding: 15px;
+            gap: 6px;
+            margin-bottom: 12px;
+            padding: 10px;
             background: #f9f9f9;
             border-radius: 8px;
         }
@@ -94,15 +96,14 @@
         }
 
         .periodic-table {
-            margin-bottom: 30px;
-            overflow-x: auto;
+            margin-bottom: 12px;
         }
 
         .period {
             display: grid;
             grid-template-columns: repeat(18, 1fr);
-            gap: 4px;
-            margin-bottom: 8px;
+            gap: 2px;
+            margin-bottom: 3px;
         }
 
         .element {
@@ -113,12 +114,11 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-size: 0.75em;
+            font-size: clamp(5px, 0.62vw, 10px);
             text-align: center;
             cursor: pointer;
             transition: all 0.2s ease;
             background: #fff;
-            min-height: 40px;
             position: relative;
         }
 
@@ -178,8 +178,8 @@
         .lanthanides, .actinides {
             display: grid;
             grid-template-columns: auto repeat(15, 1fr);
-            gap: 4px;
-            margin-bottom: 8px;
+            gap: 2px;
+            margin-bottom: 3px;
         }
 
         .element.active {
@@ -199,10 +199,10 @@
 
         .legend {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
-            margin-top: 20px;
-            padding: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px;
+            margin-top: 12px;
+            padding: 10px;
             background: #f9f9f9;
             border-radius: 8px;
         }

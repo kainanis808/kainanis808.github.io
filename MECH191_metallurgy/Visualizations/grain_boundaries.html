@@ -67,6 +67,20 @@
             font-size: 0.95rem;
         }
         .back-link:hover { text-decoration: underline; }
+        #screw-play-btn, #twin-play-btn {
+            padding: 6px 18px;
+            background: #1e3a5f;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        #screw-play-btn:hover:not(:disabled),
+        #twin-play-btn:hover:not(:disabled) { background: #2d5a9e; }
+        #screw-play-btn:disabled,
+        #twin-play-btn:disabled { opacity: 0.6; cursor: default; }
     </style>
 </head>
 <body>
@@ -141,7 +155,6 @@
                     <!-- Labels -->
                     <text x="80"  y="215" text-anchor="middle" font-size="11" fill="#6b7280">Grain A</text>
                     <text x="240" y="215" text-anchor="middle" font-size="11" fill="#6b7280">Grain B</text>
-                    <text x="160" y="215" text-anchor="middle" font-size="9"  fill="#dc2626" dy="0"> </text>
                 </svg>
                 <figcaption>Edge dislocations (⊥) spaced along the boundary</figcaption>
             </div>
@@ -160,83 +173,13 @@
         </p>
         <div class="diagrams-row">
             <div class="diagram-box">
-                <!-- Single screw dislocation: spiral ramp view from the side -->
-                <svg width="220" height="230" viewBox="0 0 220 230">
-                    <defs>
-                        <marker id="arrowB" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
-                            <path d="M0,1 L8,4 L0,7 Z" fill="#dc2626"/>
-                        </marker>
-                        <marker id="arrowLine" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto">
-                            <path d="M0,1 L7,3.5 L0,6 Z" fill="#1d4ed8"/>
-                        </marker>
-                    </defs>
-                    <rect width="220" height="230" fill="#f8fafc" rx="8"/>
-                    <text x="110" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#374151">Single Screw Dislocation</text>
-
-                    <!-- Draw a "spiral ramp" top-down view: atoms at ~8 positions around a circle,
-                         but each successive atom is drawn shifted so it looks like a helix.
-                         We show 3 "turns" projecting from top.
-                         Represent as a distorted grid that wraps around the core. -->
-
-                    <!-- Lattice planes rendered as a ramp: left side is plane 1 (below), right side plane 2 (above) -->
-                    <!-- Show in oblique projection: two planes offset by b (one lattice spacing) -->
-
-                    <!-- Bottom plane (plane 1) — pale blue parallelogram -->
-                    <polygon points="20,150 100,120 200,140 120,170" fill="#dbeafe" stroke="#93c5fd" stroke-width="1.5"/>
-                    <!-- Atom grid on bottom plane -->
-                    <g fill="#60a5fa" stroke="#2563eb" stroke-width="0.8">
-                        <circle cx="45"  cy="150" r="6"/>
-                        <circle cx="75"  cy="140" r="6"/>
-                        <circle cx="105" cy="131" r="6"/>
-                        <circle cx="135" cy="135" r="6"/>
-                        <circle cx="165" cy="140" r="6"/>
-                        <circle cx="55"  cy="162" r="6"/>
-                        <circle cx="85"  cy="153" r="6"/>
-                        <circle cx="115" cy="145" r="6"/>
-                        <circle cx="145" cy="149" r="6"/>
-                        <circle cx="175" cy="154" r="6"/>
-                    </g>
-
-                    <!-- Top plane (plane 2) — pale green parallelogram, offset left by ~b -->
-                    <polygon points="20,110 100,80 200,100 120,130" fill="#dcfce7" stroke="#86efac" stroke-width="1.5"/>
-                    <!-- Atom grid on top plane -->
-                    <g fill="#4ade80" stroke="#16a34a" stroke-width="0.8">
-                        <circle cx="45"  cy="110" r="6"/>
-                        <circle cx="75"  cy="100" r="6"/>
-                        <circle cx="105" cy="91"  r="6"/>
-                        <circle cx="135" cy="95"  r="6"/>
-                        <circle cx="165" cy="100" r="6"/>
-                        <circle cx="55"  cy="122" r="6"/>
-                        <circle cx="85"  cy="113" r="6"/>
-                        <circle cx="115" cy="105" r="6"/>
-                        <circle cx="145" cy="109" r="6"/>
-                        <circle cx="175" cy="114" r="6"/>
-                    </g>
-
-                    <!-- Step / ramp face at the cut — left edge of top plane connects to right edge of bottom plane -->
-                    <!-- This is the "Volterra cut" surface, where the two planes join seamlessly except at the dislocation line -->
-                    <polygon points="20,110 20,150 55,162 55,122" fill="#fde68a" stroke="#f59e0b" stroke-width="1.5" opacity="0.8"/>
-
-                    <!-- Dislocation line: runs left-to-right at the step edge -->
-                    <line x1="20" y1="130" x2="200" y2="120" stroke="#1d4ed8" stroke-width="3" stroke-dasharray="none" marker-end="url(#arrowLine)"/>
-                    <text x="205" y="118" font-size="10" fill="#1d4ed8" font-weight="bold">line</text>
-
-                    <!-- Burgers vector b: arrow pointing along the line (parallel — screw!) -->
-                    <line x1="108" y1="185" x2="155" y2="185" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arrowB)"/>
-                    <text x="85" y="189" font-size="11" fill="#dc2626" font-weight="bold">b</text>
-                    <text x="160" y="189" font-size="10" fill="#dc2626">(∥ line)</text>
-
-                    <!-- Label the step -->
-                    <text x="8" y="128" font-size="9" fill="#92400e">step</text>
-                    <text x="8" y="138" font-size="9" fill="#92400e">= b</text>
-
-                    <!-- Plane labels -->
-                    <text x="22" y="107" font-size="10" fill="#166534">plane 2</text>
-                    <text x="22" y="167" font-size="10" fill="#1e40af">plane 1</text>
-
-                    <text x="110" y="218" text-anchor="middle" font-size="10" fill="#6b7280" font-style="italic">b ∥ dislocation line → screw character</text>
-                </svg>
-                <figcaption>A screw dislocation: the step between planes equals <strong>b</strong>, which runs <em>parallel</em> to the line</figcaption>
+                <!-- Single screw dislocation: rotating 3-D helix -->
+                <canvas id="screw-canvas" width="220" height="230"
+                        style="border-radius:8px; display:block; margin:0 auto;"></canvas>
+                <div style="text-align:center; margin-top:6px;">
+                    <button id="screw-play-btn">⏸ Pause</button>
+                </div>
+                <figcaption>Rotating helix: one loop around the core rises exactly <strong>b</strong> — like a screw thread. <strong>b</strong> is parallel to the core.</figcaption>
             </div>
 
             <div class="diagram-box">
@@ -464,15 +407,15 @@
         </p>
         <div class="diagrams-row">
             <div class="diagram-box">
-                <svg width="320" height="200" viewBox="0 0 320 200">
+                <svg id="twin-svg" width="320" height="200" viewBox="0 0 320 200">
                     <!-- Draw a 2D hexagonal-like close-packed layer to show mirror symmetry -->
                     <!-- Left grain: rows slope upward left-to-right -->
                     <clipPath id="twinLeft">
                         <rect x="0" y="0" width="160" height="200"/>
                     </clipPath>
-                    <!-- Right grain: mirror of left -->
+                    <!-- Right grain: animatable reveal rect (width animated 0→160) -->
                     <clipPath id="twinRight">
-                        <rect x="160" y="0" width="160" height="200"/>
+                        <rect id="twin-reveal-rect" x="160" y="0" width="0" height="200"/>
                     </clipPath>
 
                     <!-- Left grain atoms: zigzag rows -->
@@ -532,17 +475,24 @@
                     </g>
 
                     <!-- Boundary line -->
-                    <line x1="160" y1="0" x2="160" y2="200" stroke="#1e3a5f" stroke-width="2.5"/>
+                    <g id="twin-boundary-line" opacity="0">
+                        <line x1="160" y1="0" x2="160" y2="200" stroke="#1e3a5f" stroke-width="2.5"/>
+                    </g>
 
-                    <!-- Mirror arrow -->
-                    <g fill="#1e3a5f" font-size="18" text-anchor="middle">
+                    <!-- Mirror arrows -->
+                    <g id="twin-arrows" fill="#1e3a5f" font-size="18" text-anchor="middle" opacity="0">
                         <text x="140" y="15">↔</text>
                         <text x="180" y="15">↔</text>
                     </g>
 
                     <text x="80"  y="198" text-anchor="middle" font-size="11" fill="#6b7280">Grain A</text>
-                    <text x="240" y="198" text-anchor="middle" font-size="11" fill="#6b7280">Grain B (mirror)</text>
+                    <g id="twin-label-b" opacity="0">
+                        <text x="240" y="198" text-anchor="middle" font-size="11" fill="#6b7280">Grain B (mirror)</text>
+                    </g>
                 </svg>
+                <div style="text-align:center; margin-top:8px;">
+                    <button id="twin-play-btn" onclick="animateTwinBoundary()">▶ Play</button>
+                </div>
                 <figcaption>Mirror symmetry across the boundary — atoms align perfectly at interface</figcaption>
             </div>
         </div>
@@ -550,5 +500,219 @@
 
     <a class="back-link" href="index.html">← Back to Visualizations</a>
 </main>
+<script>
+// Screw dislocation — rotating 3-D helix
+(function () {
+    var canvas = document.getElementById('screw-canvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var W = canvas.width, H = canvas.height;
+
+    var R     = 36;   // helix radius
+    var PITCH = 40;   // height per full turn = b
+    var TURNS = 2;
+    var N     = 60;   // segments per turn
+    var TOTAL = PITCH * TURNS;
+
+    var CX = 100, CY = 128;  // 3-D origin → screen
+
+    var angle   = Math.PI / 5;
+    var playing = true;
+
+    function proj(x, y, z) {
+        var ca = Math.cos(angle), sa = Math.sin(angle);
+        var rx = x * ca + z * sa;
+        var rz = -x * sa + z * ca;
+        return { sx: CX + rx + rz * 0.22,
+                 sy: CY - y  - rz * 0.14,
+                 d:  rz };
+    }
+
+    function drawQuad(cs, fill, stroke) {
+        ctx.beginPath();
+        ctx.moveTo(cs[0].sx, cs[0].sy);
+        for (var i = 1; i < cs.length; i++) ctx.lineTo(cs[i].sx, cs[i].sy);
+        ctx.closePath();
+        ctx.fillStyle = fill;   ctx.fill();
+        ctx.strokeStyle = stroke; ctx.lineWidth = 1; ctx.stroke();
+    }
+
+    function render() {
+        ctx.clearRect(0, 0, W, H);
+        ctx.fillStyle = '#f8fafc'; ctx.fillRect(0, 0, W, H);
+
+        // Title
+        ctx.font = 'bold 11px Segoe UI, sans-serif';
+        ctx.fillStyle = '#374151'; ctx.textAlign = 'center';
+        ctx.fillText('Single Screw Dislocation', W / 2, 16);
+
+        var PR = R + 16;
+        var prims = [];
+
+        // Bottom plane
+        var bc = [ proj(-PR,-TOTAL/2,-PR), proj(PR,-TOTAL/2,-PR),
+                   proj( PR,-TOTAL/2, PR), proj(-PR,-TOTAL/2, PR) ];
+        prims.push({ type:'plane', cs:bc,
+            ad: bc.reduce(function(s,c){return s+c.d;},0)/4,
+            fill:'rgba(219,234,254,0.82)', stroke:'#93c5fd',
+            lbl:'plane 1', lc:bc[0], lcol:'#1e40af' });
+
+        // Top plane
+        var tc = [ proj(-PR, TOTAL/2,-PR), proj(PR, TOTAL/2,-PR),
+                   proj( PR, TOTAL/2, PR), proj(-PR, TOTAL/2, PR) ];
+        prims.push({ type:'plane', cs:tc,
+            ad: tc.reduce(function(s,c){return s+c.d;},0)/4,
+            fill:'rgba(220,252,231,0.82)', stroke:'#86efac',
+            lbl:'plane 2', lc:tc[0], lcol:'#166534' });
+
+        // Helix segments
+        for (var t = 0; t < TURNS * N; t++) {
+            var th0 = (t / N) * 2 * Math.PI, th1 = ((t+1)/N) * 2 * Math.PI;
+            var f0  = t / (TURNS*N), f1 = (t+1)/(TURNS*N);
+            var p0  = proj(R*Math.cos(th0), f0*TOTAL - TOTAL/2, R*Math.sin(th0));
+            var p1  = proj(R*Math.cos(th1), f1*TOTAL - TOTAL/2, R*Math.sin(th1));
+            var f   = (f0+f1)/2;
+            var ri  = Math.round(96  - 22*f);
+            var gi  = Math.round(165 + 57*f);
+            var bi  = Math.round(250 - 122*f);
+            prims.push({ type:'seg', p0:p0, p1:p1, ad:(p0.d+p1.d)/2,
+                col:'rgb('+ri+','+gi+','+bi+')' });
+        }
+
+        // Core — always draw first (deepest)
+        var cB = proj(0,-TOTAL/2,0), cT = proj(0, TOTAL/2,0);
+        prims.push({ type:'core', p0:cB, p1:cT, ad:-9999 });
+
+        // Painter's sort (back → front)
+        prims.sort(function(a,b){ return b.ad - a.ad; });
+
+        ctx.lineCap = 'round';
+        prims.forEach(function(p) {
+            if (p.type === 'plane') {
+                drawQuad(p.cs, p.fill, p.stroke);
+                ctx.font = '10px Segoe UI, sans-serif';
+                ctx.fillStyle = p.lcol; ctx.textAlign = 'left';
+                ctx.fillText(p.lbl, p.lc.sx + 3, p.lc.sy - 3);
+            } else if (p.type === 'seg') {
+                ctx.beginPath();
+                ctx.moveTo(p.p0.sx, p.p0.sy); ctx.lineTo(p.p1.sx, p.p1.sy);
+                ctx.strokeStyle = p.col; ctx.lineWidth = 4.5; ctx.stroke();
+            } else if (p.type === 'core') {
+                ctx.setLineDash([5,3]);
+                ctx.strokeStyle = '#1d4ed8'; ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(p.p0.sx, p.p0.sy); ctx.lineTo(p.p1.sx, p.p1.sy);
+                ctx.stroke(); ctx.setLineDash([]);
+                ctx.font = '10px Segoe UI, sans-serif';
+                ctx.fillStyle = '#1d4ed8'; ctx.textAlign = 'center';
+                ctx.fillText('core', p.p1.sx, p.p1.sy - 5);
+            }
+        });
+
+        // b bracket — fixed screen position (y-axis points don't move with rotation)
+        var bx   = CX + R + 28;
+        var byB  = CY + TOTAL / 2;          // bottom of helix  (sy when y = -TOTAL/2)
+        var byT  = CY + TOTAL / 2 - PITCH;  // one pitch up
+        var byM  = (byB + byT) / 2;
+        ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 1.5; ctx.setLineDash([]);
+        ctx.beginPath();
+        ctx.moveTo(bx-4, byB); ctx.lineTo(bx+4, byB);   // bottom tick
+        ctx.moveTo(bx,   byB); ctx.lineTo(bx,   byT);   // vertical
+        ctx.moveTo(bx-4, byT); ctx.lineTo(bx+4, byT);   // top tick
+        ctx.stroke();
+        ctx.font = 'bold 13px serif'; ctx.fillStyle = '#dc2626';
+        ctx.textAlign = 'left';
+        ctx.fillText('b', bx + 6, byM + 4);
+        ctx.font = '10px Segoe UI, sans-serif';
+        ctx.fillText('∥ core', bx + 4, byM + 17);
+
+        // Bottom caption
+        ctx.font = 'italic 9px Segoe UI, sans-serif';
+        ctx.fillStyle = '#6b7280'; ctx.textAlign = 'center';
+        ctx.fillText('b ∥ dislocation line → screw character', W/2, H - 5);
+    }
+
+    function loop() {
+        if (playing) angle += 0.008;
+        render();
+        requestAnimationFrame(loop);
+    }
+    loop();
+
+    document.getElementById('screw-play-btn').addEventListener('click', function () {
+        playing = !playing;
+        this.textContent = playing ? '⏸ Pause' : '▶ Play';
+    });
+}());
+
+// Twin boundary — mirror reveal
+(function () {
+    function resetTwin() {
+        document.getElementById('twin-reveal-rect').setAttribute('width', '0');
+        document.getElementById('twin-boundary-line').setAttribute('opacity', '0');
+        document.getElementById('twin-arrows').setAttribute('opacity', '0');
+        document.getElementById('twin-label-b').setAttribute('opacity', '0');
+    }
+
+    window.animateTwinBoundary = function () {
+        var btn        = document.getElementById('twin-play-btn');
+        var revRect    = document.getElementById('twin-reveal-rect');
+        var boundLine  = document.getElementById('twin-boundary-line');
+        var arrows     = document.getElementById('twin-arrows');
+        var labelB     = document.getElementById('twin-label-b');
+
+        btn.disabled = true;
+        btn.textContent = '…';
+        resetTwin();
+
+        var T_BOUND  = 450;   // boundary line fade
+        var T_ARROW  = 350;   // arrows fade
+        var T_REVEAL = 1000;  // grain B wipe
+        var T_LABEL  = 300;   // label fade
+
+        var S1 = T_BOUND;
+        var S2 = S1 + T_ARROW;
+        var S3 = S2 + T_REVEAL;
+        var S4 = S3 + T_LABEL;
+
+        function ease(t) { return 1 - Math.pow(1 - t, 3); }
+
+        var start = null;
+        function tick(ts) {
+            if (!start) start = ts;
+            var el = ts - start;
+
+            // Phase 1: boundary line fades in
+            boundLine.setAttribute('opacity', Math.min(1, el / T_BOUND));
+
+            // Phase 2: mirror arrows fade in
+            if (el >= S1) arrows.setAttribute('opacity', Math.min(1, (el - S1) / T_ARROW));
+
+            // Phase 3: Grain B wipes outward from boundary
+            if (el >= S2) {
+                var w = ease(Math.min(1, (el - S2) / T_REVEAL)) * 160;
+                revRect.setAttribute('width', w.toFixed(1));
+            }
+
+            // Phase 4: label fades in
+            if (el >= S3) labelB.setAttribute('opacity', Math.min(1, (el - S3) / T_LABEL));
+
+            if (el < S4) {
+                requestAnimationFrame(tick);
+            } else {
+                revRect.setAttribute('width', '160');
+                boundLine.setAttribute('opacity', '1');
+                arrows.setAttribute('opacity', '1');
+                labelB.setAttribute('opacity', '1');
+                btn.disabled = false;
+                btn.textContent = '↺ Replay';
+            }
+        }
+        requestAnimationFrame(tick);
+    };
+
+    document.addEventListener('DOMContentLoaded', resetTwin);
+}());
+</script>
 </body>
 </html>
