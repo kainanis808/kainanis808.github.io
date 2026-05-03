@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AISI/SAE Steel Designation Codes</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.2rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 960px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 30px; font-size: 1rem; }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section h2 {
+            font-size: 1.3rem;
+            color: #1e3a5f;
+            margin-bottom: 10px;
+        }
+        .section p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
+
+        /* Digit breakdown */
+        .digit-diagram {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin: 18px 0 8px;
+            flex-wrap: wrap;
+        }
+        .digit-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .digit-box .d {
+            width: 54px;
+            height: 54px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        .digit-box .lbl {
+            font-size: 0.72rem;
+            color: #6b7280;
+            text-align: center;
+            max-width: 60px;
+            line-height: 1.3;
+        }
+        .d1 { background: #1e3a5f; }
+        .d2 { background: #2563eb; }
+        .d3 { background: #16a34a; }
+        .d4 { background: #16a34a; }
+        .digit-sep { font-size: 1.6rem; color: #9ca3af; align-self: center; padding-bottom: 22px; }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+        thead tr {
+            background: #1e3a5f;
+            color: #fff;
+        }
+        thead th {
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        tbody tr:nth-child(even) { background: #f1f5f9; }
+        tbody tr:hover { background: #e0f2fe; }
+        tbody td {
+            padding: 9px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #374151;
+            vertical-align: top;
+        }
+        .code { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #1e3a5f; }
+        .tag {
+            display: inline-block;
+            padding: 1px 7px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+        .tag-carbon   { background: #dbeafe; color: #1d4ed8; }
+        .tag-alloy    { background: #dcfce7; color: #15803d; }
+        .tag-stainless{ background: #fef9c3; color: #854d0e; }
+        .tag-tool     { background: #fce7f3; color: #9d174d; }
+
+        /* Prefix table */
+        .prefix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .prefix-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+        .prefix-card .pcode {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: #1e3a5f;
+        }
+        .prefix-card .pdesc {
+            font-size: 0.85rem;
+            color: #4b5563;
+            margin-top: 3px;
+            line-height: 1.4;
+        }
+
+        .note {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #0284c7;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>AISI/SAE Steel Designation Codes</h1>
+    <p class="subtitle">How to read and decode standard steel grade numbers</p>
+</header>
+<main>
+    <p class="intro">
+        The AISI (American Iron and Steel Institute) and SAE (Society of Automotive Engineers)
+        jointly developed a four-digit numbering system for carbon and alloy steels. The digits
+        encode both the alloy type and the nominal carbon content, giving engineers a quick way
+        to identify a steel's composition from its grade number alone.
+    </p>
+
+    <!-- HOW TO READ A GRADE NUMBER -->
+    <div class="section">
+        <h2>How to Read a Four-Digit Grade</h2>
+        <p>
+            Each digit position carries specific information. The first two digits identify the
+            alloy series (the primary and secondary alloying elements), while the last two digits
+            give the carbon content in hundredths of a percent (points of carbon).
+        </p>
+        <div class="digit-diagram">
+            <div class="digit-box">
+                <div class="d d1">1</div>
+                <div class="lbl">Alloy series (major element)</div>
+            </div>
+            <div class="digit-sep">×</div>
+            <div class="digit-box">
+                <div class="d d2">0</div>
+                <div class="lbl">Alloy modifier or subgroup</div>
+            </div>
+            <div class="digit-sep">×</div>
+            <div class="digit-box">
+                <div class="d d3">4</div>
+                <div class="lbl" style="max-width:70px;">Carbon content (hundredths %)</div>
+            </div>
+            <div class="digit-box">
+                <div class="d d4">5</div>
+                <div class="lbl" style="max-width:70px;"> </div>
+            </div>
+        </div>
+        <p class="note" style="text-align:center;">
+            Example: <strong>1045</strong> — Series 10 (plain carbon), 0.45% C<br>
+            Example: <strong>4140</strong> — Series 41 (Cr-Mo alloy), 0.40% C
+        </p>
+    </div>
+
+    <!-- MAIN SERIES TABLE -->
+    <div class="section">
+        <h2>Complete Carbon &amp; Alloy Steel Series (AISI/SAE)</h2>
+        <p>All standard AISI/SAE series, grouped by alloy family. The last two digits (xx) always represent carbon content in hundredths of a percent.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Series</th>
+                    <th>Family</th>
+                    <th>Principal Alloying Elements &amp; Nominal Composition</th>
+                    <th>Typical Uses</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 1xxx Carbon Steels -->
+                <tr style="background:#dbeafe;">
+                    <td colspan="4" style="font-weight:700; color:#1e3a5f; font-size:0.9rem; padding:7px 12px;">
+                        1xxx — Carbon Steels
+                    </td>
+                </tr>
+                <tr>
+                    <td class="code">10xx</td>
+                    <td><span class="tag tag-carbon">Carbon</span></td>
+                    <td>Plain carbon — Mn ≤ 1.00%</td>
+                    <td>General structural, shafts, fasteners</td>
+                </tr>
+                <tr>
+                    <td class="code">11xx</td>
+                    <td><span class="tag tag-carbon">Carbon</span></td>
+                    <td>Resulfurized — S added for free-machining</td>
+                    <td>High-speed machined parts, screws</td>
+                </tr>
+                <tr>
+                    <td class="code">12xx</td>
+                    <td><span class="tag tag-carbon">Carbon</span></td>
+                    <td>Resulfurized &amp; rephosphorized — S + P for machinability</td>
+                    <td>Automatic screw machine products</td>
+                </tr>
+                <tr>
+                    <td class="code">13xx</td>
+                    <td><span class="tag tag-carbon">Carbon</span></td>
+                    <td>Manganese — Mn 1.75%</td>
+                    <td>Springs, rail, structural applications requiring extra strength</td>
+                </tr>
+                <tr>
+                    <td class="code">15xx</td>
+                    <td><span class="tag tag-carbon">Carbon</span></td>
+                    <td>Plain carbon — Mn 1.00–1.65%</td>
+                    <td>Higher-strength structural applications</td>
+                </tr>
+
+                <!-- 2xxx Nickel Steels -->
+                <tr style="background:#dcfce7;">
+                    <td colspan="4" style="font-weight:700; color:#166534; font-size:0.9rem; padding:7px 12px;">
+                        2xxx — Nickel Steels
+                    </td>
+                </tr>
+                <tr>
+                    <td class="code">23xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 3.50%</td>
+                    <td>Carburized gears, case-hardened parts</td>
+                </tr>
+                <tr>
+                    <td class="code">25xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 5.00%</td>
+                    <td>High-toughness applications, cryogenic use</td>
+                </tr>
+
+                <!-- 3xxx Nickel-Chromium Steels -->
+                <tr style="background:#dcfce7;">
+                    <td colspan="4" style="font-weight:700; color:#166534; font-size:0.9rem; padding:7px 12px;">
+                        3xxx — Nickel-Chromium Steels
+                    </td>
+                </tr>
+                <tr>
+                    <td class="code">31xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 1.25%, Cr 0.65–0.80%</td>
+                    <td>Gears, cams, shafts</td>
+                </tr>
+                <tr>
+                    <td class="code">32xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 1.75%, Cr 1.07%</td>
+                    <td>Heavy-duty gears</td>
+                </tr>
+                <tr>
+                    <td class="code">33xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 3.50%, Cr 1.50–1.57%</td>
+                    <td>High-strength machinery parts</td>
+                </tr>
+                <tr>
+                    <td class="code">34xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 3.00%, Cr 0.77%</td>
+                    <td>Heavy-duty case-hardened parts</td>
+                </tr>
+
+                <!-- 4xxx Molybdenum Steels -->
+                <tr style="background:#dcfce7;">
+                    <td colspan="4" style="font-weight:700; color:#166534; font-size:0.9rem; padding:7px 12px;">
+                        4xxx — Molybdenum Steels
+                    </td>
+                </tr>
+                <tr>
+                    <td class="code">40xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Mo 0.20–0.30%</td>
+                    <td>Oil-hardening tool steel, axles</td>
+                </tr>
+                <tr>
+                    <td class="code">41xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Cr 0.50–1.10%, Mo 0.12–0.30%</td>
+                    <td>Gears, shafts, bolts — one of the most widely used alloy steels</td>
+                </tr>
+                <tr>
+                    <td class="code">43xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 1.65–2.00%, Cr 0.40–0.90%, Mo 0.20–0.30%</td>
+                    <td>Aircraft parts, heavy-duty gears</td>
+                </tr>
+                <tr>
+                    <td class="code">44xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Mo 0.53%</td>
+                    <td>Bearings, rolls</td>
+                </tr>
+                <tr>
+                    <td class="code">46xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 1.65–2.00%, Mo 0.20–0.30%</td>
+                    <td>Gears, carburized parts</td>
+                </tr>
+                <tr>
+                    <td class="code">47xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 1.05%, Cr 0.45%, Mo 0.20–0.35%</td>
+                    <td>Heavy-duty gears, case-hardened parts</td>
+                </tr>
+                <tr>
+                    <td class="code">48xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 3.25–3.75%, Mo 0.20–0.30%</td>
+                    <td>High-strength carburized parts</td>
+                </tr>
+
+                <!-- 5xxx Chromium Steels -->
+                <tr style="background:#dcfce7;">
+                    <td colspan="4" style="font-weight:700; color:#166534; font-size:0.9rem; padding:7px 12px;">
+                        5xxx — Chromium Steels
+                    </td>
+                </tr>
+                <tr>
+                    <td class="code">50xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Cr 0.27–0.65%</td>
+                    <td>Ball &amp; roller bearings (low Cr), gears</td>
+                </tr>
+                <tr>
+                    <td class="code">51xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Cr 0.70–1.10%</td>
+                    <td>Springs, bearings, gears</td>
+                </tr>
+                <tr>
+                    <td class="code">52xxx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Cr 1.45%, C ≈ 1.00% — 5-digit grade for high-carbon bearing steel</td>
+                    <td>Ball &amp; roller bearings (e.g., 52100)</td>
+                </tr>
+
+                <!-- 6xxx Chromium-Vanadium Steels -->
+                <tr style="background:#dcfce7;">
+                    <td colspan="4" style="font-weight:700; color:#166534; font-size:0.9rem; padding:7px 12px;">
+                        6xxx — Chromium-Vanadium Steels
+                    </td>
+                </tr>
+                <tr>
+                    <td class="code">61xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Cr 0.60–0.95%, V ≥ 0.10%</td>
+                    <td>Springs, axles, high-fatigue parts</td>
+                </tr>
+
+                <!-- 7xxx Tungsten-Chromium Steels -->
+                <tr style="background:#dcfce7;">
+                    <td colspan="4" style="font-weight:700; color:#166534; font-size:0.9rem; padding:7px 12px;">
+                        7xxx — Tungsten-Chromium Steels
+                    </td>
+                </tr>
+                <tr>
+                    <td class="code">71xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>W 13–19%, Cr varies</td>
+                    <td>High-speed tool steels (largely obsolete as AISI/SAE grade)</td>
+                </tr>
+                <tr>
+                    <td class="code">72xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>W 1.75%, Cr 0.75%</td>
+                    <td>Tool and die steels requiring wear resistance</td>
+                </tr>
+
+                <!-- 8xxx Ni-Cr-Mo Steels -->
+                <tr style="background:#dcfce7;">
+                    <td colspan="4" style="font-weight:700; color:#166534; font-size:0.9rem; padding:7px 12px;">
+                        8xxx — Nickel-Chromium-Molybdenum Steels
+                    </td>
+                </tr>
+                <tr>
+                    <td class="code">81xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 0.30%, Cr 0.40%, Mo 0.12%</td>
+                    <td>Automotive transmission parts</td>
+                </tr>
+                <tr>
+                    <td class="code">86xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 0.55%, Cr 0.50%, Mo 0.20%</td>
+                    <td>Gears, shafts — very widely used alloy series</td>
+                </tr>
+                <tr>
+                    <td class="code">87xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 0.55%, Cr 0.50%, Mo 0.25%</td>
+                    <td>Higher hardenability than 86xx</td>
+                </tr>
+                <tr>
+                    <td class="code">88xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 0.55%, Cr 0.50%, Mo 0.35%</td>
+                    <td>Heavy-duty gears and shafts requiring deep hardening</td>
+                </tr>
+
+                <!-- 9xxx Multiple Alloy Steels -->
+                <tr style="background:#dcfce7;">
+                    <td colspan="4" style="font-weight:700; color:#166534; font-size:0.9rem; padding:7px 12px;">
+                        9xxx — Multiple Alloy Steels
+                    </td>
+                </tr>
+                <tr>
+                    <td class="code">92xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Si 1.80–2.20%, Mn 0.65–0.85%</td>
+                    <td>Spring steels (e.g., 9260)</td>
+                </tr>
+                <tr>
+                    <td class="code">93xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 3.25%, Cr 1.20%, Mo 0.12%</td>
+                    <td>Heavy-duty aircraft gears</td>
+                </tr>
+                <tr>
+                    <td class="code">94xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 0.45%, Cr 0.40%, Mo 0.12%</td>
+                    <td>General-purpose alloy steel, gears</td>
+                </tr>
+                <tr>
+                    <td class="code">97xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 0.55%, Cr 0.20%, Mo 0.20%</td>
+                    <td>Case-hardened parts, gears</td>
+                </tr>
+                <tr>
+                    <td class="code">98xx</td>
+                    <td><span class="tag tag-alloy">Alloy</span></td>
+                    <td>Ni 1.00%, Cr 0.80%, Mo 0.25%</td>
+                    <td>High-strength gears and structural parts</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="note">xx = carbon content in hundredths of % (e.g., 4140 = 41xx series, 0.40% C). Series with no active grades (e.g., 2xxx) are largely obsolete in modern production but retained for reference.</p>
+    </div>
+
+    <!-- STAINLESS STEELS -->
+    <div class="section">
+        <h2>Stainless Steel Series (AISI)</h2>
+        <p>
+            Stainless steels use a three-digit AISI system. The first digit indicates the series
+            (austenitic, ferritic, or martensitic), and the last two digits distinguish grades within
+            the series. Minimum 10.5% Cr is required for the passive oxide layer that provides corrosion resistance.
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Series</th>
+                    <th>Crystal Structure</th>
+                    <th>Principal Alloying Elements</th>
+                    <th>Key Characteristics</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="code">2xx</td>
+                    <td>Austenitic (FCC)</td>
+                    <td>Cr (16–19%), Mn (5–10%), N — low Ni</td>
+                    <td>Non-magnetic, weldable, lower cost than 3xx</td>
+                </tr>
+                <tr>
+                    <td class="code">3xx</td>
+                    <td>Austenitic (FCC)</td>
+                    <td>Cr (16–26%), Ni (6–22%)</td>
+                    <td>Non-magnetic, excellent corrosion resistance, most common stainless</td>
+                </tr>
+                <tr>
+                    <td class="code">4xx</td>
+                    <td>Ferritic or Martensitic (BCC)</td>
+                    <td>Cr (10.5–18%), low Ni</td>
+                    <td>Magnetic; ferritic grades not hardenable, martensitic grades hardenable by heat treatment</td>
+                </tr>
+                <tr>
+                    <td class="code">5xx</td>
+                    <td>Martensitic (BCC)</td>
+                    <td>Cr (12%), higher C</td>
+                    <td>Heat-treatable, high strength, limited corrosion resistance</td>
+                </tr>
+                <tr>
+                    <td class="code">6xx</td>
+                    <td>Precipitation Hardening</td>
+                    <td>Cr, Ni + Cu or Al or Nb</td>
+                    <td>Very high strength via aging; 17-4 PH (630) most common</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p style="margin-top:18px; margin-bottom:6px; font-weight:600; color:#1e3a5f; font-size:0.95rem;">Common Austenitic Grades (300 Series)</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Grade</th>
+                    <th>C (%)</th>
+                    <th>Cr (%)</th>
+                    <th>Ni (%)</th>
+                    <th>Other</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="code">304</td>
+                    <td>≤ 0.08</td>
+                    <td>18–20</td>
+                    <td>8–10.5</td>
+                    <td>—</td>
+                    <td>Most widely used stainless; 18-8</td>
+                </tr>
+                <tr>
+                    <td class="code">304L</td>
+                    <td>≤ 0.03</td>
+                    <td>18–20</td>
+                    <td>8–12</td>
+                    <td>—</td>
+                    <td>Low C — reduced sensitization risk when welding</td>
+                </tr>
+                <tr>
+                    <td class="code">316</td>
+                    <td>≤ 0.08</td>
+                    <td>16–18</td>
+                    <td>10–14</td>
+                    <td>Mo 2–3%</td>
+                    <td>Mo improves pitting/crevice corrosion resistance</td>
+                </tr>
+                <tr>
+                    <td class="code">316L</td>
+                    <td>≤ 0.03</td>
+                    <td>16–18</td>
+                    <td>10–14</td>
+                    <td>Mo 2–3%</td>
+                    <td>Low C version of 316; preferred for welded structures</td>
+                </tr>
+                <tr>
+                    <td class="code">321</td>
+                    <td>≤ 0.08</td>
+                    <td>17–19</td>
+                    <td>9–12</td>
+                    <td>Ti ≥ 5×C</td>
+                    <td>Ti stabilized — resistant to sensitization at high temp</td>
+                </tr>
+                <tr>
+                    <td class="code">347</td>
+                    <td>≤ 0.08</td>
+                    <td>17–19</td>
+                    <td>9–13</td>
+                    <td>Nb+Ta ≥ 10×C</td>
+                    <td>Nb stabilized — high-temperature service</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p style="margin-top:18px; margin-bottom:6px; font-weight:600; color:#1e3a5f; font-size:0.95rem;">Common Ferritic &amp; Martensitic Grades (400 Series)</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Grade</th>
+                    <th>Structure</th>
+                    <th>C (%)</th>
+                    <th>Cr (%)</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="code">409</td>
+                    <td>Ferritic</td>
+                    <td>≤ 0.08</td>
+                    <td>10.5–11.75</td>
+                    <td>Automotive exhaust systems; lowest-cost stainless</td>
+                </tr>
+                <tr>
+                    <td class="code">430</td>
+                    <td>Ferritic</td>
+                    <td>≤ 0.12</td>
+                    <td>16–18</td>
+                    <td>Trim, appliances; not hardenable by heat treatment</td>
+                </tr>
+                <tr>
+                    <td class="code">410</td>
+                    <td>Martensitic</td>
+                    <td>0.08–0.15</td>
+                    <td>11.5–13.5</td>
+                    <td>General-purpose; hardened by quench &amp; temper</td>
+                </tr>
+                <tr>
+                    <td class="code">420</td>
+                    <td>Martensitic</td>
+                    <td>≥ 0.15</td>
+                    <td>12–14</td>
+                    <td>Cutlery, surgical instruments; higher hardness than 410</td>
+                </tr>
+                <tr>
+                    <td class="code">440C</td>
+                    <td>Martensitic</td>
+                    <td>0.95–1.20</td>
+                    <td>16–18</td>
+                    <td>High-hardness bearings and blades; highest hardness of 440 series</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PREFIX / SUFFIX MODIFIERS -->
+    <div class="section">
+        <h2>Letter Prefixes &amp; Suffixes</h2>
+        <p>
+            Single letters placed before or after the four-digit code modify the grade designation
+            to indicate a process, addition, or specification type.
+        </p>
+        <div class="prefix-grid">
+            <div class="prefix-card">
+                <div class="pcode">E____</div>
+                <div class="pdesc">Electric furnace steel — tighter chemistry control, fewer inclusions</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">____B</div>
+                <div class="pdesc">Boron added (0.0005–0.003%) to increase hardenability</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">____L</div>
+                <div class="pdesc">Leaded (0.15–0.35% Pb) for improved machinability</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">____H</div>
+                <div class="pdesc">Hardenability band — chemistry adjusted to guarantee a Jominy hardenability range</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">____L (stainless)</div>
+                <div class="pdesc">Low carbon (≤ 0.03%) — reduces carbide precipitation during welding (sensitization)</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">____F</div>
+                <div class="pdesc">Free-machining version of a grade (added S or Pb)</div>
+            </div>
+        </div>
+    </div>
+
+    <a class="back-link" href="index.html">← Back to Reference Tables</a>
+</main>
+</body>
+</html>
