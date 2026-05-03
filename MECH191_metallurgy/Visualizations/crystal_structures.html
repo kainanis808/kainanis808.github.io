@@ -12,23 +12,23 @@
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #ffffff;
+            background: #0f172a;
             min-height: 100vh;
-            color: #1a1a1a;
+            color: #e2e8f0;
             overflow-x: hidden;
         }
         header {
             text-align: center;
             padding: 30px 20px;
-            background: #f1f5f9;
-            border-bottom: 1px solid #e2e8f0;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
         }
         h1 {
             font-size: 2.5rem;
-            color: #1a1a2e;
+            color: #f1f5f9;
         }
         .subtitle {
-            color: #475569;
+            color: #94a3b8;
             margin-top: 10px;
             font-size: 1.1rem;
         }
@@ -38,42 +38,42 @@
             gap: 15px;
             padding: 20px;
             flex-wrap: wrap;
-            background: #f8fafc;
-            border-bottom: 1px solid #e2e8f0;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
         }
         .crystal-btn {
             padding: 12px 30px;
             font-size: 1rem;
             border: 2px solid;
-            background: #fff;
+            background: transparent;
             cursor: pointer;
             border-radius: 25px;
             transition: all 0.3s ease;
             font-weight: 600;
         }
         .crystal-btn.fcc {
-            border-color: #0284c7;
-            color: #0284c7;
+            border-color: #38bdf8;
+            color: #38bdf8;
         }
         .crystal-btn.fcc:hover, .crystal-btn.fcc.active {
-            background: #0284c7;
-            color: #fff;
+            background: #38bdf8;
+            color: #0f172a;
         }
         .crystal-btn.bcc {
-            border-color: #7c3aed;
-            color: #7c3aed;
+            border-color: #a78bfa;
+            color: #a78bfa;
         }
         .crystal-btn.bcc:hover, .crystal-btn.bcc.active {
-            background: #7c3aed;
-            color: #fff;
+            background: #a78bfa;
+            color: #0f172a;
         }
         .crystal-btn.hcp {
-            border-color: #16a34a;
-            color: #16a34a;
+            border-color: #4ade80;
+            color: #4ade80;
         }
         .crystal-btn.hcp:hover, .crystal-btn.hcp.active {
-            background: #16a34a;
-            color: #fff;
+            background: #4ade80;
+            color: #0f172a;
         }
         .canvas-container {
             display: flex;
@@ -81,31 +81,31 @@
             align-items: center;
             padding: 20px;
             min-height: 60vh;
-            background: #f8fafc;
+            background: #0f172a;
         }
         canvas {
             border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+            border: 1px solid #334155;
         }
         .info-panel {
             max-width: 800px;
             margin: 30px auto;
             padding: 25px;
-            background: #f8fafc;
+            background: #1e293b;
             border-radius: 15px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #334155;
         }
         .info-panel h2 {
             font-size: 1.8rem;
             margin-bottom: 15px;
         }
-        .info-panel.fcc h2 { color: #0284c7; }
-        .info-panel.bcc h2 { color: #7c3aed; }
-        .info-panel.hcp h2 { color: #16a34a; }
+        .info-panel.fcc h2 { color: #38bdf8; }
+        .info-panel.bcc h2 { color: #a78bfa; }
+        .info-panel.hcp h2 { color: #4ade80; }
         .info-panel p {
             line-height: 1.7;
-            color: #334155;
+            color: #cbd5e1;
         }
         .lattice-info {
             display: grid;
@@ -114,15 +114,15 @@
             margin-top: 20px;
         }
         .lattice-info div {
-            background: #fff;
+            background: #0f172a;
             padding: 15px;
             border-radius: 10px;
             border-left: 3px solid;
-            color: #1a1a1a;
+            color: #e2e8f0;
         }
-        .fcc .lattice-info div { border-color: #0284c7; }
-        .bcc .lattice-info div { border-color: #7c3aed; }
-        .hcp .lattice-info div { border-color: #16a34a; }
+        .fcc .lattice-info div { border-color: #38bdf8; }
+        .bcc .lattice-info div { border-color: #a78bfa; }
+        .hcp .lattice-info div { border-color: #4ade80; }
         .lattice-info strong {
             display: block;
             margin-bottom: 5px;
@@ -134,24 +134,21 @@
             justify-content: center;
             gap: 30px;
             padding: 15px;
-            background: #f1f5f9;
-            border-top: 1px solid #e2e8f0;
+            background: #1e293b;
+            border-top: 1px solid #334155;
             flex-wrap: wrap;
         }
         .legend-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #334155;
+            color: #cbd5e1;
         }
         .legend-dot {
             width: 15px;
             height: 15px;
             border-radius: 50%;
         }
-        .legend-dot.atom { background: #0284c7; }
-        .legend-dot.center { background: #dc2626; }
-        .legend-dot.layer { background: #f59e0b; }
     </style>
 </head>
 <body>
@@ -170,20 +167,7 @@
         <canvas id="crystalCanvas" width="800" height="500"></canvas>
     </div>
     
-    <div class="legend">
-        <div class="legend-item">
-            <div class="legend-dot atom"></div>
-            <span>Corner Atoms</span>
-        </div>
-        <div class="legend-item">
-            <div class="legend-dot center"></div>
-            <span>Center/Body Atoms</span>
-        </div>
-        <div class="legend-item">
-            <div class="legend-dot layer"></div>
-            <span>Layer Differentiation</span>
-        </div>
-    </div>
+    <div class="legend" id="legend"></div>
     
     <div class="info-panel fcc" id="infoPanel">
         <h2>Face-Centered Cubic (FCC)</h2>
@@ -202,7 +186,7 @@
         
         function init() {
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xf8fafc);
+            scene.background = new THREE.Color(0x0f172a);
             
             camera = new THREE.PerspectiveCamera(60, 800/500, 0.1, 1000);
             camera.position.set(4, 3, 4);
@@ -223,6 +207,7 @@
             scene.add(pointLight2);
             
             createCrystal('fcc');
+            updateLegend('fcc');
             animate();
         }
         
@@ -238,13 +223,13 @@
             crystal = new THREE.Group();
             
             const colors = {
-                fcc: 0x0284c7,
-                bcc: 0x7c3aed,
-                hcp: 0x16a34a
+                fcc: 0x38bdf8,
+                bcc: 0xa78bfa,
+                hcp: 0x4ade80
             };
 
-            const centerColor = 0xdc2626;
-            const layerColor = 0xf59e0b;
+            const centerColor = 0xf87171;
+            const layerColor = 0xfbbf24;
             
             switch(type) {
                 case 'fcc':
@@ -415,8 +400,34 @@
             `;
             
             createCrystal(type);
+            updateLegend(type);
         }
-        
+
+        const legendDefs = {
+            fcc: [
+                { color: '#38bdf8', label: 'Corner Atoms' },
+                { color: '#f87171', label: 'Face-Center Atoms' }
+            ],
+            bcc: [
+                { color: '#a78bfa', label: 'Corner Atoms' },
+                { color: '#f87171', label: 'Body-Center Atom' }
+            ],
+            hcp: [
+                { color: '#4ade80', label: 'Layer A Atoms' },
+                { color: '#fbbf24', label: 'Layer B Atoms' }
+            ]
+        };
+
+        function updateLegend(type) {
+            const legend = document.getElementById('legend');
+            legend.innerHTML = legendDefs[type].map(item => `
+                <div class="legend-item">
+                    <div class="legend-dot" style="background:${item.color}"></div>
+                    <span>${item.label}</span>
+                </div>
+            `).join('');
+        }
+
         function animate() {
             if (isAnimating && crystal) {
                 crystal.rotation.y += 0.005;
@@ -471,7 +482,7 @@
         // Initialize
         init();
     </script>
-    <p style="text-align: center;"><a href="/MECH191_metallurgy/Visualizations/index.html">Back to Main Visualization Page</a></p>
+    <p style="text-align: center; padding: 20px;"><a href="/MECH191_metallurgy/Visualizations/index.html" style="color: #94a3b8;">Back to Main Visualization Page</a></p>
 
 </body>
 </html>

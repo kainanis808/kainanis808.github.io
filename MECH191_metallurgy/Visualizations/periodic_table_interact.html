@@ -19,7 +19,7 @@
             justify-content: center;
             align-items: flex-start;
             padding: 10px;
-            overflow-x: auto;
+            overflow-x: hidden;
         }
 
         .container {
@@ -28,8 +28,12 @@
             border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             max-width: 100%;
-            min-width: 600px;
             width: 100%;
+        }
+
+        #table-scale-wrapper {
+            width: 100%;
+            transform-origin: top left;
         }
 
         h1 {
@@ -141,8 +145,9 @@
         }
 
         .element .atomic-num {
-            font-size: 0.65em;
-            color: #888;
+            font-size: 0.85em;
+            color: #444;
+            font-weight: 600;
         }
 
         .element:hover {
@@ -198,32 +203,38 @@
         }
 
         .legend {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 8px;
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 4px;
             margin-top: 12px;
-            padding: 10px;
+            padding: 8px;
             background: #f9f9f9;
             border-radius: 8px;
+            overflow: hidden;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
+            flex: 1 1 0;
+            min-width: 0;
         }
 
         .legend-color {
-            width: 24px;
-            height: 24px;
-            border-radius: 4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
             border: 1px solid #ddd;
             flex-shrink: 0;
         }
 
         .legend-text {
-            font-size: 0.8em;
+            font-size: clamp(0.45em, 0.7vw, 0.75em);
             color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .info-box {
@@ -391,13 +402,15 @@
                 </div>
             </div>
 
-            <div class="periodic-table" id="table"></div>
+            <div id="table-scale-wrapper">
+                <div class="periodic-table" id="table"></div>
 
-            <div class="series-label">Lanthanides (Period 6, f-block)</div>
-            <div class="lanthanides" id="lanthanides"></div>
+                <div class="series-label">Lanthanides (Period 6, f-block)</div>
+                <div class="lanthanides" id="lanthanides"></div>
 
-            <div class="series-label">Actinides (Period 7, f-block)</div>
-            <div class="actinides" id="actinides"></div>
+                <div class="series-label">Actinides (Period 7, f-block)</div>
+                <div class="actinides" id="actinides"></div>
+            </div>
 
             <div class="info-box">
                 <div class="info-text">
@@ -716,8 +729,25 @@
             });
         });
 
+        function scaleTable() {
+            const wrapper = document.getElementById('table-scale-wrapper');
+            const container = wrapper.parentElement;
+            wrapper.style.transform = '';
+            wrapper.style.height = '';
+            const available = container.clientWidth - 30;
+            const natural = wrapper.scrollWidth;
+            if (natural > available) {
+                const scale = available / natural;
+                wrapper.style.transform = `scale(${scale})`;
+                wrapper.style.height = (wrapper.scrollHeight * scale) + 'px';
+            }
+        }
+
+        window.addEventListener('resize', scaleTable);
+
         // Initialize
         createTable();
+        scaleTable();
     </script>
 
 
