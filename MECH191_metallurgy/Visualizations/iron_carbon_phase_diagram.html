@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iron-Carbon Phase Diagram</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            min-height: 100vh;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+        }
+        h1 { font-size: 2.2rem; color: #f1f5f9; }
+        .subtitle { color: #94a3b8; margin-top: 8px; font-size: 1rem; }
+
+        .main-layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            justify-content: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .diagram-wrapper {
+            position: relative;
+            flex: 0 0 auto;
+        }
+
+        #diagramCanvas {
+            display: block;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            cursor: crosshair;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(15,23,42,0.95);
+            border: 1px solid #475569;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.82rem;
+            color: #cbd5e1;
+            pointer-events: none;
+            white-space: nowrap;
+            display: none;
+            z-index: 10;
+        }
+
+        .info-panel {
+            flex: 1 1 320px;
+            max-width: 420px;
+            background: #1e293b;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .info-panel h2 {
+            font-size: 1.4rem;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 10px;
+        }
+
+        .phase-placeholder {
+            color: #64748b;
+            font-style: italic;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .phase-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .prop-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .prop-card {
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 12px;
+            border-left: 3px solid #475569;
+        }
+        .prop-card .label {
+            font-size: 0.72rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+        .prop-card .value {
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+
+        .description {
+            font-size: 0.9rem;
+            line-height: 1.65;
+            color: #cbd5e1;
+        }
+
+        .uses-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .uses-list li {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .legend-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            padding: 14px 20px;
+            background: #1e293b;
+            border-top: 1px solid #334155;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            color: #94a3b8;
+        }
+        .legend-swatch {
+            width: 22px;
+            height: 14px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .back-link {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        .back-link a { color: #94a3b8; text-decoration: none; }
+        .back-link a:hover { color: #cbd5e1; }
+
+        .cursor-coords {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #475569;
+            padding: 4px 0 0;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Iron-Carbon Phase Diagram</h1>
+    <p class="subtitle">Click or hover any region to explore phases and their properties</p>
+</header>
+
+<div class="main-layout">
+    <div class="diagram-wrapper">
+        <canvas id="diagramCanvas" width="740" height="520"></canvas>
+        <div class="tooltip" id="tooltip"></div>
+        <div class="cursor-coords" id="coords"></div>
+    </div>
+
+    <div class="info-panel" id="infoPanel">
+        <h2 id="phaseTitle" style="color:#94a3b8;">Phase Information</h2>
+        <p class="phase-placeholder">Click a region on the diagram to see details about that phase or region.</p>
+    </div>
+</div>
+
+<div class="legend-row" id="legendRow"></div>
+
+<div class="back-link">
+    <a href="/MECH191_metallurgy/Visualizations/index.html">&#8592; Back to Visualizations</a>
+</div>
+
+<script>
+// ─── Phase data ───────────────────────────────────────────────────────────────
+const PHASES = {
+    liquid: {
+        name: 'Liquid (L)',
+        color: '#ef4444',
+        tag: '#ef4444',
+        description: 'Molten iron-carbon alloy. All solid phases have dissolved. Atoms are mobile and randomly arranged. Solidification begins as temperature drops below the liquidus line.',
+        props: { Structure: 'Amorphous', 'C Range': '0 – 6.67 wt%', 'T Range': '>1148 °C (varies)', Density: '~7.0 g/cm³' },
+        uses: ['Casting', 'Ingot production', 'Continuous casting']
+    },
+    delta: {
+        name: 'δ-Ferrite',
+        color: '#f97316',
+        tag: '#f97316',
+        description: 'High-temperature BCC iron phase. Stable between ~1394 °C and 1538 °C. Exists only during initial solidification. Transforms to austenite on cooling via the peritectic reaction at 1495 °C.',
+        props: { Structure: 'BCC', 'C Range': '0 – 0.09 wt%', 'T Range': '1394 – 1538 °C', Hardness: 'Soft' },
+        uses: ['Intermediate solidification phase', 'High-temperature processing']
+    },
+    austenite: {
+        name: 'Austenite (γ)',
+        color: '#eab308',
+        tag: '#eab308',
+        description: 'FCC iron phase (γ-iron). Can dissolve up to 2.14 wt% carbon — much more than ferrite — because FCC has larger interstitial sites. Non-magnetic. Foundation for most heat treatments.',
+        props: { Structure: 'FCC', 'C Range': '0 – 2.14 wt%', 'T Range': '727 – 1394 °C', Hardness: 'Moderate' },
+        uses: ['Quenching precursor', 'Normalizing', 'Carburizing base', 'Stainless steels']
+    },
+    ferrite: {
+        name: 'α-Ferrite',
+        color: '#22c55e',
+        tag: '#22c55e',
+        description: 'Low-temperature BCC iron phase. Very limited carbon solubility (max 0.022 wt% at 727 °C). Soft, ductile, and magnetic below 768 °C (Curie temperature). Most common phase in low-carbon steels at room temperature.',
+        props: { Structure: 'BCC', 'C Range': '0 – 0.022 wt%', 'T Range': '<912 °C', Hardness: '~80 HB' },
+        uses: ['Low-carbon structural steel', 'Electrical laminations', 'Deep-drawing sheet']
+    },
+    cementite: {
+        name: 'Cementite (Fe₃C)',
+        color: '#6366f1',
+        tag: '#6366f1',
+        description: 'Iron carbide intermetallic compound. Extremely hard and brittle. Contains exactly 6.67 wt% C. Appears as the rightmost boundary of the diagram. Nucleates from austenite or liquid to form lamellar or spheroidal microstructures.',
+        props: { Structure: 'Orthorhombic', 'C Content': '6.67 wt%', 'T Range': 'Stable to 1227 °C', Hardness: '~800 HB' },
+        uses: ['Strengthening phase in pearlite', 'White cast iron matrix', 'Wear-resistant coatings']
+    },
+    pearlite: {
+        name: 'Pearlite (α + Fe₃C)',
+        color: '#06b6d4',
+        tag: '#06b6d4',
+        description: 'Lamellar eutectoid mixture of ferrite and cementite. Forms at 727 °C from 0.76 wt% C austenite via the eutectoid reaction. Fine alternating plates give it moderate strength and hardness with good toughness.',
+        props: { Structure: 'Lamellar α+Fe₃C', 'C Content': '0.76 wt%', 'Forms at': '727 °C', Hardness: '~200 HB' },
+        uses: ['Structural steels', 'Rail steel', 'Wire rods', 'Machine parts']
+    },
+    bainite: {
+        name: 'Bainite (metastable)',
+        color: '#8b5cf6',
+        tag: '#8b5cf6',
+        description: 'Metastable phase formed by isothermal transformation of austenite between ~250–550 °C (below pearlite nose, above martensite start). Not shown as a region on the equilibrium diagram — it requires TTT/CCT diagrams. Finer than pearlite, tougher than martensite.',
+        props: { Structure: 'Acicular α+Fe₃C', 'Transforms': '250–550 °C', Hardness: '300–500 HB', Toughness: 'High' },
+        uses: ['High-strength steels', 'Springs', 'Gears', 'Austempered castings']
+    },
+    martensite: {
+        name: 'Martensite (metastable)',
+        color: '#ec4899',
+        tag: '#ec4899',
+        description: 'Metastable BCT phase formed by rapid quenching of austenite. Carbon is trapped in a supersaturated solid solution, distorting the BCC lattice to BCT. Extremely hard and brittle. Not on equilibrium diagram — formed by diffusionless shear transformation.',
+        props: { Structure: 'BCT (distorted BCC)', 'Ms temp': '~230 °C (0.76%C)', Hardness: '600–700 HB', Toughness: 'Low (brittle)' },
+        uses: ['Cutting tools', 'Bearings', 'Hardened shafts', 'Die steels (tempered)']
+    },
+    ledeburite: {
+        name: 'Ledeburite (eutectic)',
+        color: '#f43f5e',
+        tag: '#f43f5e',
+        description: 'Eutectic mixture of austenite and cementite that forms at 1148 °C from 4.30 wt% C liquid. Found in white cast irons. On further cooling the austenite transforms to pearlite, leaving a mixture called "transformed ledeburite".',
+        props: { Structure: 'γ + Fe₃C eutectic', 'C Content': '4.30 wt%', 'Forms at': '1148 °C', Hardness: 'Very high' },
+        uses: ['White cast iron', 'Wear plates', 'Chilled cast iron rolls']
+    },
+    'two-phase-alpha-pearlite': {
+        name: 'α-Ferrite + Pearlite',
+        color: '#34d399',
+        tag: '#34d399',
+        description: 'Two-phase region for hypoeutectoid steels (0.022–0.76 wt% C). On cooling through this region, proeutectoid ferrite nucleates at prior austenite grain boundaries while remaining austenite transforms to pearlite at 727 °C.',
+        props: { 'C Range': '0.022 – 0.76 wt%', Structure: 'α + Pearlite', Ductility: 'Good', Weldability: 'Good' },
+        uses: ['Structural beams', 'Rebar', 'Pipe', 'Automotive body panels']
+    },
+    'two-phase-pearlite-cementite': {
+        name: 'Pearlite + Cementite',
+        color: '#a78bfa',
+        tag: '#a78bfa',
+        description: 'Two-phase region for hypereutectoid steels (0.76–2.14 wt% C). Proeutectoid cementite precipitates at grain boundaries as temperature drops, and remaining austenite transforms to pearlite at 727 °C. Hard and wear-resistant but less ductile.',
+        props: { 'C Range': '0.76 – 2.14 wt%', Structure: 'Pearlite + Fe₃C', Hardness: 'High', Ductility: 'Reduced' },
+        uses: ['High-carbon tool steel', 'Rail steel', 'Ball bearings precursor', 'Files and drills']
+    }
+};
+
+// ─── Canvas setup ─────────────────────────────────────────────────────────────
+const canvas = document.getElementById('diagramCanvas');
+const ctx = canvas.getContext('2d');
+const W = canvas.width, H = canvas.height;
+
+// Diagram margins
+const ML = 68, MR = 30, MT = 40, MB = 55;
+const PW = W - ML - MR, PH = H - MT - MB;
+
+// Axis ranges
+const T_MIN = 0, T_MAX = 1600;   // °C  (y)
+const C_MIN = 0, C_MAX = 6.67;   // wt% C (x)
+
+function toX(c) { return ML + (c / C_MAX) * PW; }
+function toY(t) { return MT + ((T_MAX - t) / (T_MAX - T_MIN)) * PH; }
+
+// ─── Key coordinates ─────────────────────────────────────────────────────────
+// Eutectoid point E: 0.76 wt%, 727 °C
+// Eutectic  point C: 4.30 wt%, 1148 °C
+// Peritectic point P: 0.16 wt%, 1495 °C
+// A3 line (γ→α+γ): 0 at 912°C to 0.76 at 727°C
+// Acm line (γ→γ+Fe3C): 0.76 at 727°C to 2.14 at 1148°C
+// Upper solidus of austenite from peritectic 0.16@1495 to eutectic 2.14@1148
+
+const KEY = {
+    eutectoid: { c: 0.76, t: 727 },
+    eutectic:  { c: 4.30, t: 1148 },
+    peritectic:{ c: 0.16, t: 1495 },
+    deltaMax:  { c: 0.09, t: 1495 },
+    gammaMax:  { c: 2.14, t: 1148 },
+    A3zero:    { c: 0,    t: 912 },
+    meltFe:    { c: 0,    t: 1538 },
+    meltFe3C:  { c: 6.67, t: 1227 },
+    Fe3C_room: { c: 6.67, t: 0 },
+    Fe_room:   { c: 0,    t: 0 },
+};
+
+// ─── Region hit-map (pixel polygons) ─────────────────────────────────────────
+// Each region defined as array of [c, t] points
+const REGIONS = [
+    {
+        id: 'liquid',
+        points: [
+            [0, 1538],[0.09, 1495],[0.16, 1495],[0.53, 1495],
+            [2.14, 1148],[4.30, 1148],[6.67, 1227],[6.67, 1600],[0, 1600]
+        ]
+    },
+    {
+        id: 'delta',
+        points: [
+            [0, 1394],[0, 1538],[0.09, 1495],[0.16, 1495],[0.09, 1394]
+        ]
+    },
+    {
+        id: 'austenite',
+        points: [
+            [0.09, 1394],[0.16, 1495],[0.53, 1495],[2.14, 1148],
+            [0.76, 727],[0, 727],[0, 912]
+        ]
+    },
+    {
+        id: 'two-phase-alpha-pearlite',
+        points: [
+            [0, 727],[0.76, 727],[0.022, 727],[0, 600],[0, 727]
+        ]
+    },
+    {
+        id: 'ferrite',
+        points: [
+            [0, 0],[0, 727],[0.022, 727],[0.022, 0]
+        ]
+    },
+    {
+        id: 'two-phase-alpha-pearlite',
+        points: [
+            [0.022, 0],[0.022, 727],[0.76, 727],[0.76, 0]
+        ]
+    },
+    {
+        id: 'two-phase-pearlite-cementite',
+        points: [
+            [0.76, 0],[0.76, 727],[2.14, 1148],[2.14, 0]
+        ]
+    },
+    {
+        id: 'ledeburite',
+        points: [
+            [2.14, 0],[2.14, 1148],[4.30, 1148],[6.67, 1148],[6.67, 0]
+        ]
+    },
+    {
+        id: 'cementite',
+        points: [
+            [6.67, 0],[6.67, 1227],[6.67, 1600]
+        ]
+    }
+];
+
+// ─── Draw diagram ─────────────────────────────────────────────────────────────
+const REGION_COLORS = {
+    liquid:                        { fill: 'rgba(239,68,68,0.22)',   stroke: '#ef4444' },
+    delta:                         { fill: 'rgba(249,115,22,0.28)',  stroke: '#f97316' },
+    austenite:                     { fill: 'rgba(234,179,8,0.22)',   stroke: '#eab308' },
+    ferrite:                       { fill: 'rgba(34,197,94,0.25)',   stroke: '#22c55e' },
+    'two-phase-alpha-pearlite':    { fill: 'rgba(6,182,212,0.18)',   stroke: '#06b6d4' },
+    'two-phase-pearlite-cementite':{ fill: 'rgba(167,139,250,0.22)', stroke: '#a78bfa' },
+    ledeburite:                    { fill: 'rgba(244,63,94,0.18)',   stroke: '#f43f5e' },
+    cementite:                     { fill: 'rgba(99,102,241,0.22)',  stroke: '#6366f1' },
+};
+
+function drawDiagram() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Background
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, W, H);
+
+    // Fill regions
+    REGIONS.forEach(region => {
+        const col = REGION_COLORS[region.id];
+        if (!col) return;
+        ctx.beginPath();
+        region.points.forEach(([c, t], i) => {
+            const x = toX(c), y = toY(t);
+            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        });
+        ctx.closePath();
+        ctx.fillStyle = col.fill;
+        ctx.fill();
+    });
+
+    // Phase boundary lines
+    ctx.lineWidth = 1.8;
+
+    // Helper
+    function line(pts, color) {
+        ctx.strokeStyle = color;
+        ctx.beginPath();
+        pts.forEach(([c, t], i) => {
+            const x = toX(c), y = toY(t);
+            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+    }
+
+    // Liquidus lines
+    line([[0, 1538],[0.09, 1495]], '#f97316');
+    line([[0.16, 1495],[2.14, 1148]], '#eab308');
+    line([[2.14, 1148],[4.30, 1148]], '#ef4444');
+    line([[4.30, 1148],[6.67, 1227]], '#ef4444');
+
+    // Peritectic horizontal
+    ctx.setLineDash([5, 3]);
+    line([[0.09, 1495],[0.53, 1495]], '#94a3b8');
+    ctx.setLineDash([]);
+
+    // Solidus (delta / austenite)
+    line([[0, 1538],[0, 1394]], '#f97316');
+    line([[0.09, 1495],[0.16, 1495]], '#f97316');
+
+    // A3 line (austenite to ferrite+austenite)
+    line([[0, 912],[0.76, 727]], '#22c55e');
+
+    // Acm line (austenite to austenite+cementite)
+    line([[0.76, 727],[2.14, 1148]], '#a78bfa');
+
+    // Eutectoid horizontal (A1) — drawn solid and brighter to mark pearlite formation
+    ctx.setLineDash([]);
+    ctx.lineWidth = 2.2;
+    line([[0, 727],[6.67, 727]], '#06b6d4');
+    ctx.lineWidth = 1.8;
+
+    // Eutectic horizontal
+    ctx.setLineDash([4, 3]);
+    line([[2.14, 1148],[6.67, 1148]], '#f43f5e');
+    ctx.setLineDash([]);
+
+    // Fe3C vertical
+    line([[6.67, 0],[6.67, 1227]], '#6366f1');
+
+    // α-ferrite left boundary
+    ctx.setLineDash([3, 3]);
+    line([[0.022, 0],[0.022, 727]], '#22c55e');
+    ctx.setLineDash([]);
+
+    // Axes
+    ctx.strokeStyle = '#475569';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(ML, MT); ctx.lineTo(ML, MT + PH);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(ML, MT + PH); ctx.lineTo(ML + PW, MT + PH);
+    ctx.stroke();
+
+    // Y axis ticks & labels
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '11px Segoe UI, sans-serif';
+    ctx.textAlign = 'right';
+    [0, 200, 400, 600, 727, 912, 1148, 1394, 1495].forEach(t => {
+        const y = toY(t);
+        ctx.beginPath();
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 0.5;
+        ctx.moveTo(ML, y); ctx.lineTo(ML + PW, y);
+        ctx.stroke();
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(ML - 4, y); ctx.lineTo(ML, y);
+        ctx.stroke();
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillText(t + '°C', ML - 7, y + 4);
+    });
+
+    // X axis ticks & labels
+    ctx.textAlign = 'center';
+    [0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.30, 5.0, 5.5, 6.0, 6.67].forEach(c => {
+        const x = toX(c);
+        ctx.beginPath();
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 0.5;
+        ctx.moveTo(x, MT); ctx.lineTo(x, MT + PH);
+        ctx.stroke();
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x, MT + PH); ctx.lineTo(x, MT + PH + 4);
+        ctx.stroke();
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillText(c, x, MT + PH + 16);
+    });
+
+    // Axis titles
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = 'bold 12px Segoe UI, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Carbon Content (wt% C)', ML + PW / 2, H - 8);
+
+    ctx.save();
+    ctx.translate(14, MT + PH / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText('Temperature (°C)', 0, 0);
+    ctx.restore();
+
+    // Helper: draw text with a dark semi-transparent background for legibility at phase junctions
+    function drawLabel(text, x, y, col, align = 'center', fs = 11) {
+        const lines = text.split('\n');
+        const lh = fs + 4;
+        ctx.font = `bold ${fs}px 'Segoe UI', sans-serif`;
+        ctx.textAlign = align;
+        const maxW = Math.max(...lines.map(l => ctx.measureText(l).width));
+        const totalH = lines.length * lh;
+        const ox = align === 'center' ? -maxW / 2 - 4 : align === 'right' ? -maxW - 4 : -4;
+        ctx.fillStyle = 'rgba(15,23,42,0.78)';
+        ctx.fillRect(x + ox, y - totalH + 2, maxW + 8, totalH + 5);
+        ctx.fillStyle = col;
+        lines.forEach((l, i) => ctx.fillText(l, x, y - (lines.length - 1 - i) * lh));
+    }
+
+    // Key point dots + short labels (hover/click gives full info)
+    const kpts = [
+        { label: 'E', c: 0.76, t: 727,  align: 'left', dx:  7, dy: -10 },
+        { label: 'C', c: 4.30, t: 1148, align: 'left', dx:  7, dy: -10 },
+        { label: 'P', c: 0.16, t: 1495, align: 'left', dx:  8, dy:  -8 },
+    ];
+    kpts.forEach(({ label, c, t, align, dx, dy }) => {
+        const x = toX(c), y = toY(t);
+        ctx.beginPath();
+        ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#fbbf24';
+        ctx.fill();
+        drawLabel(label, x + dx, y + dy, '#fde68a', align, 9);
+    });
+
+    // Region labels — all drawn with background boxes for legibility
+    const rLabels = [
+        { text: 'Liquid',          c: 3.0,  t: 1420, col: '#ef4444' },
+        { text: 'Austenite (γ)',   c: 0.65, t: 1060, col: '#eab308' },
+        // c=0.5 keeps background box from bleeding left of the y-axis
+        { text: 'α + Pearlite',    c: 0.50, t: 400,  col: '#06b6d4', fs: 10 },
+        { text: 'Pearlite\n+Fe₃C', c: 1.45, t: 460,  col: '#a78bfa' },
+        { text: 'Ledeburite',      c: 4.4,  t: 560,  col: '#f43f5e' },
+    ];
+    rLabels.forEach(({ text, c, t, col, fs = 11 }) => drawLabel(text, toX(c), toY(t), col, 'center', fs));
+
+    // δ-Ferrite: strip is ~9px wide — pin label to left edge with small font
+    drawLabel('δ', ML + 5, toY(1450), '#f97316', 'left', 10);
+
+    // α-Ferrite: strip is ~2px wide — draw a single rotated character inside the strip
+    ctx.save();
+    ctx.translate(ML + 5, toY(380));
+    ctx.rotate(-Math.PI / 2);
+    ctx.font = 'bold 9px Segoe UI, sans-serif';
+    ctx.fillStyle = '#22c55e';
+    ctx.textAlign = 'center';
+    ctx.fillText('α', 0, 0);
+    ctx.restore();
+
+    // Fe₃C (Cementite): right edge — center label slightly inside canvas
+    drawLabel('Fe₃C', toX(6.45), toY(580), '#6366f1', 'center', 10);
+
+    // Line annotations — positioned away from dense junctions
+    drawAnnotation();
+}
+
+function drawAnnotation() {
+    // Phase line labels — small, sitting just above each boundary line
+    ctx.font = '10px Segoe UI, sans-serif';
+    ctx.fillStyle = '#475569';
+    // A1: far-right end of the eutectoid line, away from the E dot and pearlite badge
+    ctx.textAlign = 'left';
+    ctx.fillText('A1', toX(5.0), toY(740));
+    // A3: inside the austenite field, just above the A3 line
+    ctx.fillText('A3', toX(0.25), toY(872));
+    // Acm: inside the austenite field, near the Acm boundary
+    ctx.fillText('Acm', toX(1.55), toY(1038));
+
+    // ── Pearlite: arrow + badge at the eutectoid composition ─────────────────
+    const ex = toX(0.76), ey = toY(727);
+
+    ctx.strokeStyle = '#06b6d4';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(ex, ey + 6);
+    ctx.lineTo(ex, ey + 26);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(ex - 4, ey + 19);
+    ctx.lineTo(ex, ey + 26);
+    ctx.lineTo(ex + 4, ey + 19);
+    ctx.stroke();
+
+    ctx.font = 'bold 9px Segoe UI, sans-serif';
+    ctx.textAlign = 'center';
+    const badge = '100% Pearlite';
+    const bw = ctx.measureText(badge).width + 10;
+    const by = ey + 50;
+    ctx.fillStyle = 'rgba(6,182,212,0.15)';
+    ctx.strokeStyle = '#06b6d4';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.roundRect(ex - bw / 2, by - 13, bw, 16, 4);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#06b6d4';
+    ctx.fillText(badge, ex, by);
+
+    // ── Martensite: Ms ≈ 539 − 423·%C ────────────────────────────────────────
+    const msPoints = [
+        [0, 539], [0.2, 454], [0.4, 370], [0.6, 285],
+        [0.76, 217], [1.0, 116], [1.2, 30]
+    ];
+
+    // Shaded martensite zone
+    ctx.beginPath();
+    msPoints.forEach(([c, t], i) =>
+        i === 0 ? ctx.moveTo(toX(c), toY(t)) : ctx.lineTo(toX(c), toY(t))
+    );
+    ctx.lineTo(toX(1.2), toY(0));
+    ctx.lineTo(toX(0),   toY(0));
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(236,72,153,0.11)';
+    ctx.fill();
+
+    // Dashed Ms line
+    ctx.setLineDash([5, 3]);
+    ctx.strokeStyle = '#ec4899';
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    msPoints.forEach(([c, t], i) =>
+        i === 0 ? ctx.moveTo(toX(c), toY(t)) : ctx.lineTo(toX(c), toY(t))
+    );
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // "Ms" label — left axis, below Bs
+    ctx.font = 'bold 9px Segoe UI, sans-serif';
+    ctx.fillStyle = '#ec4899';
+    ctx.textAlign = 'left';
+    ctx.fillText('Ms', toX(0) + 3, toY(520));
+
+    // Martensite badge — centered in the shaded zone, well below the Bs line
+    const mx = toX(0.45), my = toY(150);
+    ctx.font = 'bold 9px Segoe UI, sans-serif';
+    ctx.textAlign = 'center';
+    const ml1 = 'Martensite', ml2 = '(rapid quench only)';
+    const mw = Math.max(ctx.measureText(ml1).width, ctx.measureText(ml2).width) + 10;
+    ctx.fillStyle = 'rgba(236,72,153,0.15)';
+    ctx.strokeStyle = '#ec4899';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.roundRect(mx - mw / 2, my - 26, mw, 30, 4);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#ec4899';
+    ctx.fillText(ml1, mx, my - 13);
+    ctx.fillText(ml2, mx, my);
+
+    // ── Bainite: Bs ≈ 650 − 270·%C ───────────────────────────────────────────
+    const bsPoints = [
+        [0, 650], [0.2, 596], [0.4, 542], [0.6, 488],
+        [0.76, 455], [1.0, 380], [1.2, 326]
+    ];
+
+    // Shaded bainite zone between Bs and Ms
+    ctx.beginPath();
+    bsPoints.forEach(([c, t], i) =>
+        i === 0 ? ctx.moveTo(toX(c), toY(t)) : ctx.lineTo(toX(c), toY(t))
+    );
+    [...msPoints].reverse().forEach(([c, t]) => ctx.lineTo(toX(c), toY(t)));
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(245,158,11,0.11)';
+    ctx.fill();
+
+    // Dashed Bs line
+    ctx.setLineDash([5, 3]);
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    bsPoints.forEach(([c, t], i) =>
+        i === 0 ? ctx.moveTo(toX(c), toY(t)) : ctx.lineTo(toX(c), toY(t))
+    );
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // "Bs" label — left axis, above Ms
+    ctx.font = 'bold 9px Segoe UI, sans-serif';
+    ctx.fillStyle = '#f59e0b';
+    ctx.textAlign = 'left';
+    ctx.fillText('Bs', toX(0) + 3, toY(638));
+}
+
+drawDiagram();
+
+// ─── Hit detection ────────────────────────────────────────────────────────────
+function pointInPolygon(px, py, polygon) {
+    let inside = false;
+    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        const xi = polygon[i][0], yi = polygon[i][1];
+        const xj = polygon[j][0], yj = polygon[j][1];
+        if (((yi > py) !== (yj > py)) && (px < (xj - xi) * (py - yi) / (yj - yi) + xi)) {
+            inside = !inside;
+        }
+    }
+    return inside;
+}
+
+function getPhaseAt(c, t) {
+    for (let i = REGIONS.length - 1; i >= 0; i--) {
+        const region = REGIONS[i];
+        if (pointInPolygon(c, t, region.points)) {
+            return region.id;
+        }
+    }
+    return null;
+}
+
+function canvasToData(cx, cy) {
+    const c = ((cx - ML) / PW) * C_MAX;
+    const t = T_MAX - ((cy - MT) / PH) * (T_MAX - T_MIN);
+    return { c, t };
+}
+
+// ─── UI updates ───────────────────────────────────────────────────────────────
+let lastHighlight = null;
+
+function showPhaseInfo(phaseId) {
+    const data = PHASES[phaseId];
+    if (!data) return;
+
+    const panel = document.getElementById('infoPanel');
+    const title = document.getElementById('phaseTitle');
+    title.style.color = data.tag;
+    title.textContent = data.name;
+
+    const propsHtml = Object.entries(data.props).map(([k, v]) => `
+        <div class="prop-card" style="border-color:${data.tag}33">
+            <div class="label">${k}</div>
+            <div class="value">${v}</div>
+        </div>`).join('');
+
+    const usesHtml = data.uses.map(u => `<li>${u}</li>`).join('');
+
+    panel.innerHTML = `
+        <h2 id="phaseTitle" style="color:${data.tag}; border-bottom:2px solid #334155; padding-bottom:10px;">${data.name}</h2>
+        <span class="phase-tag" style="background:${data.tag}22; color:${data.tag}; border:1px solid ${data.tag}66;">
+            ${phaseId.replace(/-/g,' ')}
+        </span>
+        <p class="description">${data.description}</p>
+        <div class="prop-grid">${propsHtml}</div>
+        <div>
+            <div class="label" style="font-size:0.72rem;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Typical Applications</div>
+            <ul class="uses-list">${usesHtml}</ul>
+        </div>
+    `;
+}
+
+// ─── Events ───────────────────────────────────────────────────────────────────
+const tooltip = document.getElementById('tooltip');
+const coords = document.getElementById('coords');
+
+canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    const cx = e.clientX - rect.left;
+    const cy = e.clientY - rect.top;
+    const { c, t } = canvasToData(cx, cy);
+
+    if (c < 0 || c > C_MAX || t < T_MIN || t > T_MAX) {
+        tooltip.style.display = 'none';
+        coords.textContent = '';
+        return;
+    }
+
+    coords.textContent = `C: ${c.toFixed(2)} wt%    T: ${Math.round(t)} °C`;
+
+    const phaseId = getPhaseAt(c, t);
+    const phaseName = phaseId && PHASES[phaseId] ? PHASES[phaseId].name : '—';
+
+    tooltip.style.display = 'block';
+    tooltip.style.left = (cx + 14) + 'px';
+    tooltip.style.top  = (cy - 10) + 'px';
+    tooltip.textContent = phaseName !== '—' ? `${phaseName}` : `${c.toFixed(2)} wt% C, ${Math.round(t)} °C`;
+
+    if (phaseId && phaseId !== lastHighlight) {
+        lastHighlight = phaseId;
+        canvas.style.cursor = 'pointer';
+    } else if (!phaseId) {
+        canvas.style.cursor = 'crosshair';
+        lastHighlight = null;
+    }
+});
+
+canvas.addEventListener('mouseleave', () => {
+    tooltip.style.display = 'none';
+    coords.textContent = '';
+});
+
+canvas.addEventListener('click', e => {
+    const rect = canvas.getBoundingClientRect();
+    const cx = e.clientX - rect.left;
+    const cy = e.clientY - rect.top;
+    const { c, t } = canvasToData(cx, cy);
+    if (c < 0 || c > C_MAX || t < T_MIN || t > T_MAX) return;
+
+    const phaseId = getPhaseAt(c, t);
+    if (phaseId && PHASES[phaseId]) {
+        showPhaseInfo(phaseId);
+    }
+});
+
+// ─── Legend ───────────────────────────────────────────────────────────────────
+const legendItems = [
+    { id: 'liquid',                         label: 'Liquid' },
+    { id: 'delta',                          label: 'δ-Ferrite' },
+    { id: 'austenite',                      label: 'Austenite (γ)' },
+    { id: 'ferrite',                        label: 'α-Ferrite' },
+    { id: 'two-phase-alpha-pearlite',       label: 'α + Pearlite' },
+    { id: 'two-phase-pearlite-cementite',   label: 'Pearlite + Fe₃C' },
+    { id: 'ledeburite',                     label: 'Ledeburite' },
+    { id: 'cementite',                      label: 'Cementite (Fe₃C)' },
+    { id: 'pearlite',                       label: 'Pearlite (click info)' },
+    { id: 'martensite',                     label: 'Martensite (click info)' },
+    { id: 'bainite',                        label: 'Bainite (click info)' },
+];
+
+const legendRow = document.getElementById('legendRow');
+legendItems.forEach(item => {
+    const color = PHASES[item.id]?.tag || '#94a3b8';
+    const div = document.createElement('div');
+    div.className = 'legend-item';
+    div.style.cursor = 'pointer';
+    div.innerHTML = `<div class="legend-swatch" style="background:${color}44;border:2px solid ${color}"></div><span>${item.label}</span>`;
+    div.addEventListener('click', () => {
+        if (PHASES[item.id]) showPhaseInfo(item.id);
+    });
+    legendRow.appendChild(div);
+});
+</script>
+</body>
+</html>
