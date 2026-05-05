@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardness Testing Scales — Rockwell, Brinell, Vickers</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.2rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 980px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 30px; font-size: 1rem; }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section h2 {
+            font-size: 1.3rem;
+            color: #1e3a5f;
+            margin-bottom: 10px;
+        }
+        .section p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 14px;
+            font-size: 0.95rem;
+        }
+
+        /* Method cards */
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+            margin: 16px 0;
+        }
+        .method-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+        }
+        .method-card .mc-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-bottom: 6px;
+        }
+        .method-card .mc-symbol {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+        .method-card ul {
+            padding-left: 16px;
+            color: #4b5563;
+            font-size: 0.87rem;
+            line-height: 1.7;
+        }
+
+        /* Formula box */
+        .formula-box {
+            background: #1e3a5f;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 14px 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            margin: 14px 0;
+            text-align: center;
+        }
+        .formula-box .f-label {
+            font-size: 0.8rem;
+            color: #93c5fd;
+            margin-bottom: 4px;
+            font-family: 'Segoe UI', sans-serif;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            margin-top: 10px;
+        }
+        thead tr {
+            background: #1e3a5f;
+            color: #fff;
+        }
+        thead th {
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        tbody tr:nth-child(even) { background: #f1f5f9; }
+        tbody tr:hover { background: #e0f2fe; }
+        tbody td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #374151;
+            vertical-align: middle;
+        }
+        .code { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #1e3a5f; }
+
+        /* Scale badges */
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .badge-rockwell  { background: #dbeafe; color: #1d4ed8; }
+        .badge-brinell   { background: #dcfce7; color: #15803d; }
+        .badge-vickers   { background: #fce7f3; color: #9d174d; }
+        .badge-knoop     { background: #fef9c3; color: #854d0e; }
+        .badge-common    { background: #f3e8ff; color: #6b21a8; }
+
+        /* Indenter diagram labels */
+        .indenter-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 14px 0;
+        }
+        .indenter-card {
+            flex: 1;
+            min-width: 180px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 14px;
+            text-align: center;
+        }
+        .indenter-icon {
+            font-size: 2.2rem;
+            margin-bottom: 6px;
+        }
+        .indenter-name {
+            font-weight: 700;
+            color: #1e3a5f;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+        .indenter-desc {
+            font-size: 0.8rem;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+
+        .note {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-style: italic;
+            margin-top: 10px;
+        }
+        .section-label {
+            font-weight: 700;
+            color: #1e3a5f;
+            font-size: 0.95rem;
+            margin: 18px 0 6px;
+        }
+
+        .highlight-row td { background: #fffbeb !important; font-weight: 600; }
+        .group-header td {
+            background: #dbeafe !important;
+            font-weight: 700;
+            color: #1e3a5f;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+        }
+        .group-header-green td { background: #dcfce7 !important; color: #166534 !important; }
+        .group-header-pink td  { background: #fce7f3 !important; color: #9d174d !important; }
+
+        .tip-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            margin: 14px 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .tip-box strong { color: #92400e; }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #0284c7;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Hardness Testing Scales</h1>
+    <p class="subtitle">Rockwell · Brinell · Vickers — methods, scales, and cross-reference</p>
+</header>
+<main>
+    <p class="intro">
+        Hardness is a material's resistance to permanent surface deformation. It is one of the most
+        commonly measured mechanical properties because it is fast, inexpensive, and non-destructive
+        (leaving only a small indentation). The three dominant industrial scales — Rockwell, Brinell,
+        and Vickers — each use a different indenter geometry and measurement principle, making them
+        suited to different materials and applications.
+    </p>
+
+    <!-- OVERVIEW OF INDENTERS -->
+    <div class="section">
+        <h2>Indenter Types</h2>
+        <p>Each method uses a standardized indenter pressed into the surface under a controlled load. The indenter geometry determines what you measure — depth of penetration or the size of the residual impression.</p>
+        <div class="indenter-row">
+            <div class="indenter-card">
+                <div class="indenter-icon">💎</div>
+                <div class="indenter-name">Brale (Diamond Cone)</div>
+                <div class="indenter-desc">120° sphero-conical diamond tip. Used in Rockwell scales A, C, D. Suited for hard steels and carbides.</div>
+            </div>
+            <div class="indenter-card">
+                <div class="indenter-icon">⚪</div>
+                <div class="indenter-name">Steel / Carbide Ball</div>
+                <div class="indenter-desc">1/16″ (1.588 mm) ball for Rockwell B/F/G. 10 mm ball for Brinell. Suited for softer metals.</div>
+            </div>
+            <div class="indenter-card">
+                <div class="indenter-icon">🔷</div>
+                <div class="indenter-name">Vickers Pyramid</div>
+                <div class="indenter-desc">Square-based diamond pyramid, 136° included face angle. Leaves a square indentation — diagonal length is measured optically.</div>
+            </div>
+            <div class="indenter-card">
+                <div class="indenter-icon">🔹</div>
+                <div class="indenter-name">Knoop Pyramid</div>
+                <div class="indenter-desc">Elongated diamond pyramid. Used for microhardness of thin coatings or brittle materials. Elongated impression reduces cracking risk.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ROCKWELL -->
+    <div class="section">
+        <h2>Rockwell Hardness (HR)</h2>
+        <p>
+            Rockwell measures the <strong>depth of penetration</strong> under a major load relative
+            to a baseline set by a minor (preload) force. The result is read directly from the machine
+            dial — no optical measurement is needed, making it the fastest and most common shop-floor test.
+        </p>
+        <div class="formula-box">
+            <div class="f-label">Rockwell Number (all scales)</div>
+            HR = N &minus; (h / s)
+            <div style="margin-top:6px; font-size:0.8rem; color:#93c5fd;">
+                N = scale constant &nbsp;|&nbsp; h = permanent depth increase (mm) after removing major load &nbsp;|&nbsp; s = scale factor (0.002 mm/division)
+            </div>
+        </div>
+        <p>
+            In practice: a <em>minor load</em> of 10 kgf sets the zero reference, the <em>major load</em>
+            is applied and removed, and the machine reads the residual depth as a hardness number. Higher
+            number = shallower indent = harder material.
+        </p>
+
+        <div class="tip-box">
+            <strong>HRC is the most commonly referenced scale for steels.</strong> Carburized gears,
+            tool steels, and heat-treated shafts are almost always reported in HRC. HRB covers soft
+            steels and non-ferrous alloys that would be too soft for HRC (indenter would bottom out).
+        </div>
+
+        <p class="section-label">Common Rockwell Scales</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Scale</th>
+                    <th>Symbol</th>
+                    <th>Indenter</th>
+                    <th>Major Load (kgf)</th>
+                    <th>Range</th>
+                    <th>Typical Applications</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="highlight-row">
+                    <td><strong>A</strong></td>
+                    <td class="code">HRA</td>
+                    <td>Diamond Brale</td>
+                    <td>60</td>
+                    <td>20–88</td>
+                    <td>Cemented carbides, thin hard coatings, shallow case-hardened steel</td>
+                </tr>
+                <tr class="highlight-row">
+                    <td><strong>B</strong></td>
+                    <td class="code">HRB</td>
+                    <td>1/16″ ball</td>
+                    <td>100</td>
+                    <td>20–100</td>
+                    <td>Copper alloys, soft steels, aluminum, malleable iron</td>
+                </tr>
+                <tr class="highlight-row">
+                    <td><strong>C</strong></td>
+                    <td class="code">HRC</td>
+                    <td>Diamond Brale</td>
+                    <td>150</td>
+                    <td>20–70</td>
+                    <td>Hard steels, titanium, deep case-hardened steel — most common scale</td>
+                </tr>
+                <tr>
+                    <td>D</td>
+                    <td class="code">HRD</td>
+                    <td>Diamond Brale</td>
+                    <td>100</td>
+                    <td>40–77</td>
+                    <td>Thin steel, medium case-hardened steel</td>
+                </tr>
+                <tr>
+                    <td>E</td>
+                    <td class="code">HRE</td>
+                    <td>1/8″ ball</td>
+                    <td>100</td>
+                    <td>70–100</td>
+                    <td>Cast iron, aluminum, magnesium alloys</td>
+                </tr>
+                <tr>
+                    <td>F</td>
+                    <td class="code">HRF</td>
+                    <td>1/16″ ball</td>
+                    <td>60</td>
+                    <td>60–100</td>
+                    <td>Annealed copper, thin soft sheet metal</td>
+                </tr>
+                <tr>
+                    <td>G</td>
+                    <td class="code">HRG</td>
+                    <td>1/16″ ball</td>
+                    <td>150</td>
+                    <td>30–94</td>
+                    <td>Phosphor bronze, beryllium copper</td>
+                </tr>
+                <tr>
+                    <td>15N</td>
+                    <td class="code">HR15N</td>
+                    <td>Diamond Brale</td>
+                    <td>15</td>
+                    <td>70–94</td>
+                    <td>Superficial — very thin case-hardened parts, nitrided surfaces</td>
+                </tr>
+                <tr>
+                    <td>30N</td>
+                    <td class="code">HR30N</td>
+                    <td>Diamond Brale</td>
+                    <td>30</td>
+                    <td>42–86</td>
+                    <td>Superficial — thin hard parts, sheet metal</td>
+                </tr>
+                <tr>
+                    <td>45N</td>
+                    <td class="code">HR45N</td>
+                    <td>Diamond Brale</td>
+                    <td>45</td>
+                    <td>20–77</td>
+                    <td>Superficial — moderately thin parts</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="note">Superficial Rockwell scales (15N, 30N, 45N) use a 3 kgf minor load instead of 10 kgf and are intended for thin sections and coatings where standard loads would punch through.</p>
+    </div>
+
+    <!-- BRINELL -->
+    <div class="section">
+        <h2>Brinell Hardness (HB)</h2>
+        <p>
+            Brinell uses a large hardened steel or tungsten carbide ball pressed into the surface under
+            a specified load. The diameter of the resulting circular indentation is measured optically
+            with a calibrated microscope, and hardness is calculated from the load and contact area.
+            Because the indentation is large, Brinell averages over a bigger volume of material — making
+            it ideal for coarse-grained materials like cast iron and forgings.
+        </p>
+        <div class="formula-box">
+            <div class="f-label">Brinell Hardness Number (HB)</div>
+            HB = 2F / [ &pi; D ( D &minus; &radic;(D&sup2; &minus; d&sup2;) ) ]
+            <div style="margin-top:6px; font-size:0.8rem; color:#93c5fd;">
+                F = applied load (kgf) &nbsp;|&nbsp; D = ball diameter (mm) &nbsp;|&nbsp; d = indentation diameter (mm)
+            </div>
+        </div>
+        <p>
+            The standard test uses a <strong>10 mm ball</strong>. Load is chosen based on expected
+            hardness — harder materials need higher loads to produce a measurable indent. The ratio
+            F/D² should be kept constant to maintain geometric similarity.
+        </p>
+
+        <p class="section-label">Standard Brinell Test Conditions</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Material Class</th>
+                    <th>Load F (kgf)</th>
+                    <th>F/D² Ratio</th>
+                    <th>Ball Diameter D (mm)</th>
+                    <th>Typical HB Range</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Steel, cast iron</td>
+                    <td>3000</td>
+                    <td>30</td>
+                    <td>10</td>
+                    <td>100–650</td>
+                </tr>
+                <tr>
+                    <td>Copper &amp; copper alloys</td>
+                    <td>500</td>
+                    <td>5</td>
+                    <td>10</td>
+                    <td>35–200</td>
+                </tr>
+                <tr>
+                    <td>Aluminum &amp; alloys</td>
+                    <td>500</td>
+                    <td>5</td>
+                    <td>10</td>
+                    <td>20–150</td>
+                </tr>
+                <tr>
+                    <td>Lead, tin, soft metals</td>
+                    <td>25–62.5</td>
+                    <td>1</td>
+                    <td>5 or 10</td>
+                    <td>2–30</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="note">Upper limit ~650 HB — above this, the ball deforms and results are unreliable. Use Rockwell or Vickers for very hard materials.</p>
+
+        <div class="tip-box">
+            <strong>Brinell is widely used for castings and forgings</strong> because its large indentation
+            averages out local microstructural variation (e.g., graphite flakes in grey cast iron). It
+            is also commonly used for incoming material inspection of steel bar stock.
+        </div>
+
+        <p class="section-label">Brinell ↔ Tensile Strength Approximation (Steel)</p>
+        <p>For carbon and low-alloy steels, ultimate tensile strength (UTS) correlates approximately with Brinell hardness:</p>
+        <div class="formula-box" style="font-size:0.95rem;">
+            <div class="f-label">Empirical approximation — steels only</div>
+            UTS (MPa) &approx; 3.45 &times; HB &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp; UTS (psi) &approx; 500 &times; HB
+        </div>
+        <p class="note">This approximation works reasonably well for HB 100–400. Do not use for stainless steels, non-ferrous alloys, or very high-hardness steels.</p>
+    </div>
+
+    <!-- VICKERS -->
+    <div class="section">
+        <h2>Vickers Hardness (HV)</h2>
+        <p>
+            Vickers uses a square-based diamond pyramid (136° included angle between opposite faces) pressed
+            into the surface. The test leaves a small square indentation; both diagonals are measured
+            optically and averaged. Because the pyramid geometry is self-similar at all scales, the
+            Vickers scale is <em>continuous</em> — one scale covers everything from pure lead to
+            diamond-like coatings without switching indenters or scales.
+        </p>
+        <div class="formula-box">
+            <div class="f-label">Vickers Hardness Number (HV)</div>
+            HV = 1.854 &times; F / d&sup2;
+            <div style="margin-top:6px; font-size:0.8rem; color:#93c5fd;">
+                F = applied load (kgf) &nbsp;|&nbsp; d = mean diagonal of indentation (mm)
+            </div>
+        </div>
+
+        <p class="section-label">Load Ranges</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Load Range (gf)</th>
+                    <th>Designation Example</th>
+                    <th>Typical Use</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Macro Vickers</td>
+                    <td>1 – 120 kgf</td>
+                    <td class="code">HV 10, HV 30</td>
+                    <td>Bulk hardness of metals, large cross-sections</td>
+                </tr>
+                <tr>
+                    <td>Low-force Vickers</td>
+                    <td>200 – 1000 gf</td>
+                    <td class="code">HV 0.2, HV 1</td>
+                    <td>Case-hardening depth profiles, weld HAZ mapping</td>
+                </tr>
+                <tr>
+                    <td>Microhardness</td>
+                    <td>1 – 200 gf</td>
+                    <td class="code">HV 0.01, HV 0.1</td>
+                    <td>Individual grains, thin coatings, PVD/CVD films</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="note">Load must be reported with the result (e.g., "650 HV 10" means 650 HV at a 10 kgf load). Values obtained at different loads may not be identical — always specify the load.</p>
+
+        <div class="tip-box">
+            <strong>Vickers is the preferred scale for case depth measurement.</strong> A series of
+            indentations at increasing depths from the surface reveals the hardness gradient through
+            a carburized or nitrided case, down into the soft core. This is not practical with Rockwell
+            due to the larger indentation footprint.
+        </div>
+    </div>
+
+    <!-- COMPARISON TABLE -->
+    <div class="section">
+        <h2>Approximate Hardness Scale Conversions</h2>
+        <p>
+            There is no universal mathematical conversion between scales — relationships are empirical and
+            <strong>material-dependent</strong>. The table below applies to <em>carbon and low-alloy steels only</em>.
+            Do not use these values for stainless steels, aluminum, copper, or other non-ferrous alloys.
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>HRC</th>
+                    <th>HRB</th>
+                    <th>HRA</th>
+                    <th>HB (3000 kgf)</th>
+                    <th>HV</th>
+                    <th>Approx. UTS (MPa)</th>
+                    <th>General Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>—</td>
+                    <td>60</td>
+                    <td>—</td>
+                    <td>116</td>
+                    <td>122</td>
+                    <td>~400</td>
+                    <td>Very soft steel / annealed</td>
+                </tr>
+                <tr>
+                    <td>—</td>
+                    <td>75</td>
+                    <td>—</td>
+                    <td>150</td>
+                    <td>158</td>
+                    <td>~517</td>
+                    <td>Soft (e.g., 1020 HR)</td>
+                </tr>
+                <tr>
+                    <td>—</td>
+                    <td>90</td>
+                    <td>—</td>
+                    <td>196</td>
+                    <td>207</td>
+                    <td>~676</td>
+                    <td>Medium-soft (e.g., 1045 annealed)</td>
+                </tr>
+                <tr>
+                    <td>—</td>
+                    <td>99</td>
+                    <td>—</td>
+                    <td>240</td>
+                    <td>251</td>
+                    <td>~841</td>
+                    <td>HRB scale upper limit</td>
+                </tr>
+                <tr class="highlight-row">
+                    <td>20</td>
+                    <td>—</td>
+                    <td>60.5</td>
+                    <td>226</td>
+                    <td>238</td>
+                    <td>~793</td>
+                    <td>HRC lower limit / normalized alloy steel</td>
+                </tr>
+                <tr>
+                    <td>25</td>
+                    <td>—</td>
+                    <td>62.8</td>
+                    <td>253</td>
+                    <td>266</td>
+                    <td>~876</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>30</td>
+                    <td>—</td>
+                    <td>65.3</td>
+                    <td>286</td>
+                    <td>301</td>
+                    <td>~1000</td>
+                    <td>Q&amp;T alloy steel (e.g., 4140 @ ~450°C temper)</td>
+                </tr>
+                <tr>
+                    <td>35</td>
+                    <td>—</td>
+                    <td>67.6</td>
+                    <td>327</td>
+                    <td>345</td>
+                    <td>~1130</td>
+                    <td></td>
+                </tr>
+                <tr class="highlight-row">
+                    <td>40</td>
+                    <td>—</td>
+                    <td>69.9</td>
+                    <td>370</td>
+                    <td>392</td>
+                    <td>~1290</td>
+                    <td>Typical min. spec for hardened shafts/gears</td>
+                </tr>
+                <tr>
+                    <td>45</td>
+                    <td>—</td>
+                    <td>72.3</td>
+                    <td>421</td>
+                    <td>450</td>
+                    <td>~1460</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>50</td>
+                    <td>—</td>
+                    <td>75.9</td>
+                    <td>481</td>
+                    <td>513</td>
+                    <td>~1750</td>
+                    <td>Hard tool steel / carburized case</td>
+                </tr>
+                <tr>
+                    <td>55</td>
+                    <td>—</td>
+                    <td>78.0</td>
+                    <td>543</td>
+                    <td>587</td>
+                    <td>—</td>
+                    <td></td>
+                </tr>
+                <tr class="highlight-row">
+                    <td>60</td>
+                    <td>—</td>
+                    <td>81.2</td>
+                    <td>614</td>
+                    <td>674</td>
+                    <td>—</td>
+                    <td>High-speed tool steels, bearing steel (e.g., 52100)</td>
+                </tr>
+                <tr>
+                    <td>63</td>
+                    <td>—</td>
+                    <td>82.8</td>
+                    <td>650*</td>
+                    <td>746</td>
+                    <td>—</td>
+                    <td>~Brinell upper practical limit</td>
+                </tr>
+                <tr>
+                    <td>68</td>
+                    <td>—</td>
+                    <td>85.6</td>
+                    <td>—</td>
+                    <td>940</td>
+                    <td>—</td>
+                    <td>HRC upper limit / very hard tool steel</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="note">* Brinell values above ~650 HB are not reliable with a steel ball — use a carbide ball or switch to Vickers/Rockwell. All conversions per ASTM E140. Adapted for steels only.</p>
+    </div>
+
+    <!-- COMMON MATERIALS -->
+    <div class="section">
+        <h2>Typical Hardness Values for Common Engineering Materials</h2>
+        <p>Representative values — actual hardness depends on heat treatment, cold work, and alloy composition.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Material / Condition</th>
+                    <th>HRC</th>
+                    <th>HRB</th>
+                    <th>HB</th>
+                    <th>HV</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="group-header"><td colspan="5">Non-Ferrous Metals</td></tr>
+                <tr>
+                    <td>Pure aluminum (1100-O)</td>
+                    <td>—</td>
+                    <td>23</td>
+                    <td>23</td>
+                    <td>25</td>
+                </tr>
+                <tr>
+                    <td>Aluminum 6061-T6</td>
+                    <td>—</td>
+                    <td>60</td>
+                    <td>107</td>
+                    <td>107</td>
+                </tr>
+                <tr>
+                    <td>Copper, annealed</td>
+                    <td>—</td>
+                    <td>40</td>
+                    <td>80</td>
+                    <td>83</td>
+                </tr>
+                <tr>
+                    <td>Brass 70/30, annealed</td>
+                    <td>—</td>
+                    <td>55</td>
+                    <td>107</td>
+                    <td>110</td>
+                </tr>
+                <tr>
+                    <td>Titanium Grade 2 (cp)</td>
+                    <td>—</td>
+                    <td>80</td>
+                    <td>145</td>
+                    <td>152</td>
+                </tr>
+                <tr>
+                    <td>Ti-6Al-4V (annealed)</td>
+                    <td>36</td>
+                    <td>—</td>
+                    <td>334</td>
+                    <td>349</td>
+                </tr>
+
+                <tr class="group-header"><td colspan="5">Carbon Steels</td></tr>
+                <tr>
+                    <td>1018 steel, hot-rolled</td>
+                    <td>—</td>
+                    <td>71</td>
+                    <td>126</td>
+                    <td>133</td>
+                </tr>
+                <tr>
+                    <td>1045 steel, annealed</td>
+                    <td>—</td>
+                    <td>82</td>
+                    <td>163</td>
+                    <td>170</td>
+                </tr>
+                <tr>
+                    <td>1045 steel, Q&amp;T (315°C)</td>
+                    <td>55</td>
+                    <td>—</td>
+                    <td>534</td>
+                    <td>560</td>
+                </tr>
+
+                <tr class="group-header"><td colspan="5">Alloy Steels</td></tr>
+                <tr>
+                    <td>4140 steel, annealed</td>
+                    <td>—</td>
+                    <td>92</td>
+                    <td>197</td>
+                    <td>207</td>
+                </tr>
+                <tr>
+                    <td>4140 steel, normalized</td>
+                    <td>26</td>
+                    <td>—</td>
+                    <td>269</td>
+                    <td>283</td>
+                </tr>
+                <tr>
+                    <td>4140 steel, Q&amp;T (315°C)</td>
+                    <td>54</td>
+                    <td>—</td>
+                    <td>534</td>
+                    <td>560</td>
+                </tr>
+                <tr>
+                    <td>4340 steel, normalized</td>
+                    <td>36</td>
+                    <td>—</td>
+                    <td>352</td>
+                    <td>370</td>
+                </tr>
+                <tr>
+                    <td>52100 bearing steel, hardened</td>
+                    <td>62–64</td>
+                    <td>—</td>
+                    <td>~627</td>
+                    <td>~740</td>
+                </tr>
+
+                <tr class="group-header"><td colspan="5">Stainless Steels &amp; Cast Iron</td></tr>
+                <tr>
+                    <td>304 stainless, annealed</td>
+                    <td>—</td>
+                    <td>80</td>
+                    <td>160</td>
+                    <td>165</td>
+                </tr>
+                <tr>
+                    <td>316 stainless, annealed</td>
+                    <td>—</td>
+                    <td>79</td>
+                    <td>155</td>
+                    <td>161</td>
+                </tr>
+                <tr>
+                    <td>440C stainless, hardened</td>
+                    <td>58–60</td>
+                    <td>—</td>
+                    <td>~600</td>
+                    <td>~650</td>
+                </tr>
+                <tr>
+                    <td>Grey cast iron (Class 30)</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>180–230</td>
+                    <td>190–242</td>
+                </tr>
+                <tr>
+                    <td>Ductile iron (Grade 65-45-12)</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>143–187</td>
+                    <td>151–197</td>
+                </tr>
+
+                <tr class="group-header"><td colspan="5">Tool Steels &amp; Specialty</td></tr>
+                <tr>
+                    <td>D2 tool steel, hardened</td>
+                    <td>60–62</td>
+                    <td>—</td>
+                    <td>~614</td>
+                    <td>~700</td>
+                </tr>
+                <tr>
+                    <td>M2 high-speed steel, hardened</td>
+                    <td>63–65</td>
+                    <td>—</td>
+                    <td>~650</td>
+                    <td>~832</td>
+                </tr>
+                <tr>
+                    <td>WC cemented carbide</td>
+                    <td>~80 HRA</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>1400–1800</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- CHOOSING A SCALE -->
+    <div class="section">
+        <h2>Choosing the Right Scale</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Situation</th>
+                    <th>Recommended Scale</th>
+                    <th>Reason</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Hardened steel part (shafts, gears, dies)</td>
+                    <td><span class="badge badge-rockwell">HRC</span></td>
+                    <td>Fast, no optical measurement, industry standard for hard steels</td>
+                </tr>
+                <tr>
+                    <td>Soft steel, copper, aluminum</td>
+                    <td><span class="badge badge-rockwell">HRB</span></td>
+                    <td>HRC indenter would bottom out; HRB uses a ball at lower load</td>
+                </tr>
+                <tr>
+                    <td>Casting or forging (coarse grain)</td>
+                    <td><span class="badge badge-brinell">HB</span></td>
+                    <td>Large indent averages over microstructural variation</td>
+                </tr>
+                <tr>
+                    <td>Carburized / nitrided case depth profile</td>
+                    <td><span class="badge badge-vickers">HV</span></td>
+                    <td>Small indent allows measurements at known depths from surface</td>
+                </tr>
+                <tr>
+                    <td>Thin coating or PVD film</td>
+                    <td><span class="badge badge-vickers">HV (microhardness)</span></td>
+                    <td>Ultra-low loads (&lt;100 gf) avoid substrate influence</td>
+                </tr>
+                <tr>
+                    <td>Very hard material (carbide, ceramic)</td>
+                    <td><span class="badge badge-rockwell">HRA</span> or <span class="badge badge-vickers">HV</span></td>
+                    <td>HRB/HRC balls deform; diamond indenters are needed</td>
+                </tr>
+                <tr>
+                    <td>Brittle material or thin cross-section</td>
+                    <td><span class="badge badge-knoop">Knoop (HK)</span></td>
+                    <td>Elongated impression reduces cracking and allows shallow depths</td>
+                </tr>
+                <tr>
+                    <td>Research / universal comparison</td>
+                    <td><span class="badge badge-vickers">HV</span></td>
+                    <td>Single continuous scale; no scale-switch artifacts for cross-material comparison</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a class="back-link" href="index.html">← Back to Reference Pages</a>
+</main>
+</body>
+</html>

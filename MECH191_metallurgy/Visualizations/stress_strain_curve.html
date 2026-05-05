@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stress-Strain Curve – MECH191</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            height: 100vh;
+            overflow: hidden;
+            color: #e2e8f0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            text-align: center;
+            padding: 10px 24px;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+            flex-shrink: 0;
+        }
+        .header-title h1 { font-size: 1.4rem; color: #f1f5f9; line-height: 1.2; }
+        .header-title p  { font-size: 0.78rem; color: #94a3b8; margin-top: 2px; }
+
+        footer {
+            text-align: center;
+            padding: 8px 24px;
+            background: #1e293b;
+            border-top: 1px solid #334155;
+            flex-shrink: 0;
+            font-size: 0.78rem;
+            color: #475569;
+        }
+        footer a { color: #7dd3fc; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        .main-layout {
+            display: flex;
+            gap: 14px;
+            padding: 12px 16px;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        /* ── Main canvas ─────────────────────────────── */
+        .canvas-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 0;
+            min-height: 0;
+        }
+
+        #curveCanvas {
+            display: block;
+            border-radius: 10px;
+            border: 1px solid #334155;
+            cursor: crosshair;
+            background: #1e293b;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(15,23,42,0.95);
+            border: 1px solid #475569;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 0.78rem;
+            color: #cbd5e1;
+            pointer-events: none;
+            white-space: nowrap;
+            display: none;
+            z-index: 10;
+        }
+
+        /* ── Info panel ──────────────────────────────── */
+        .info-panel {
+            width: 310px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-height: 0;
+            overflow-y: auto;
+        }
+
+        .info-card {
+            background: #1e293b;
+            border-radius: 10px;
+            border: 1px solid #334155;
+            padding: 14px 16px;
+            flex-shrink: 0;
+        }
+
+        .info-card h2 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #64748b;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        /* ── Material mini-plot grid ─────────────────── */
+        .mat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .mat-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: #cbd5e1;
+            cursor: pointer;
+            overflow: hidden;
+            transition: border-color 0.15s;
+            padding: 0;
+        }
+
+        .mat-btn:hover { border-color: #475569; }
+
+        .mat-btn.active {
+            border-color: var(--mat-color);
+            box-shadow: 0 0 0 1px var(--mat-color);
+        }
+
+        .mat-mini-wrap {
+            background: #050d1a;
+            padding: 4px 6px 2px;
+            line-height: 0;
+        }
+
+        .mini-canvas {
+            display: block;
+            width: 100%;
+            height: 38px;
+        }
+
+        .mat-info {
+            padding: 5px 7px 6px;
+        }
+
+        .mat-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            line-height: 1.2;
+        }
+
+        .mat-sub {
+            font-size: 0.64rem;
+            color: #64748b;
+            margin-top: 1px;
+        }
+
+        /* ── Property details ────────────────────────── */
+        .property-placeholder {
+            color: #64748b;
+            font-size: 0.84rem;
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        .property-name {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .property-for {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .property-value {
+            font-size: 0.82rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .property-desc {
+            font-size: 0.82rem;
+            color: #cbd5e1;
+            line-height: 1.55;
+        }
+
+        .property-formula {
+            margin-top: 8px;
+            background: #0f172a;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.78rem;
+            color: #7dd3fc;
+            border-left: 3px solid #3b82f6;
+        }
+
+        /* ── Legend ──────────────────────────────────── */
+        .legend {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: border-color 0.15s, background 0.15s;
+            font-size: 0.8rem;
+        }
+
+        .legend-item:hover { background: #0f172a; border-color: #475569; }
+
+        .legend-item.active {
+            border-color: var(--accent);
+            background: rgba(255,255,255,0.04);
+        }
+
+        .legend-dot {
+            width: 11px; height: 11px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 2px solid;
+        }
+
+        .instruction-text {
+            font-size: 0.74rem;
+            color: #64748b;
+            text-align: center;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-title">
+        <h1>Stress-Strain Curves</h1>
+        <p>Choose a material below, then click a labeled point on the curve to explore its mechanical properties</p>
+    </div>
+</header>
+
+<div class="main-layout">
+    <div class="canvas-wrapper">
+        <canvas id="curveCanvas" width="1" height="1"></canvas>
+        <div class="tooltip" id="tooltip"></div>
+    </div>
+
+    <div class="info-panel">
+
+        <div class="info-card">
+            <h2>Select Material</h2>
+            <div class="mat-grid" id="mat-grid"></div>
+            <p class="instruction-text">Click a labeled point or legend item to learn more</p>
+        </div>
+
+        <div class="info-card" id="info-box">
+            <h2>Property Details</h2>
+            <p class="property-placeholder">Click a labeled point on the curve to learn about that mechanical property.</p>
+        </div>
+
+        <div class="info-card">
+            <h2>Key Points</h2>
+            <div class="legend" id="legend"></div>
+        </div>
+
+    </div>
+</div>
+
+<footer>
+    <a href="index.html">&#8592; Back to Visualizations</a>
+</footer>
+
+<script>
+// ─── Material Definitions ───────────────────────────────────────────────────
+// kp = key points; sd = schematic display strain (elastic region is exaggerated for visibility)
+const MATERIALS = {
+    steel_mild: {
+        name: '1020 Steel', sub: 'Low Carbon',
+        color: '#60a5fa', E_GPa: 200, brittle: false, hasUpperYield: true,
+        kp: {
+            proportional: { sd: 0.030, stress: 210, displayStress: 210 },
+            yield:         { sd: 0.044, stress: 260, displayStress: 260 },
+            uts:           { sd: 0.270, stress: 410, displayStress: 410 },
+            fracture:      { sd: 0.360, stress: 370, displayStress: 370 },
+            elongation:    { sd: 0.360, stress: null, displayVal: 36 },
+            reduction:     { displayVal: 40 }
+        }
+    },
+    steel_high: {
+        name: '4340 Steel', sub: 'High-Strength Alloy',
+        color: '#818cf8', E_GPa: 200, brittle: false, hasUpperYield: false,
+        kp: {
+            proportional: { sd: 0.031, stress: 440, displayStress: 440 },
+            yield:         { sd: 0.038, stress: 470, displayStress: 470 },
+            uts:           { sd: 0.182, stress: 745, displayStress: 745 },
+            fracture:      { sd: 0.212, stress: 650, displayStress: 650 },
+            elongation:    { sd: 0.212, stress: null, displayVal: 22 },
+            reduction:     { displayVal: 38 }
+        }
+    },
+    aluminum: {
+        name: 'Al 6061-T6', sub: 'Aluminum Alloy',
+        color: '#34d399', E_GPa: 69, brittle: false, hasUpperYield: false,
+        kp: {
+            proportional: { sd: 0.044, stress: 255, displayStress: 255 },
+            yield:         { sd: 0.053, stress: 276, displayStress: 276 },
+            uts:           { sd: 0.135, stress: 310, displayStress: 310 },
+            fracture:      { sd: 0.158, stress: 285, displayStress: 285 },
+            elongation:    { sd: 0.158, stress: null, displayVal: 12 },
+            reduction:     { displayVal: 12 }
+        }
+    },
+    copper: {
+        name: 'Copper', sub: 'Annealed',
+        color: '#fb923c', E_GPa: 110, brittle: false, hasUpperYield: false,
+        kp: {
+            proportional: { sd: 0.020, stress: 45, displayStress: 45 },
+            yield:         { sd: 0.038, stress: 70, displayStress: 70 },
+            uts:           { sd: 0.385, stress: 220, displayStress: 220 },
+            fracture:      { sd: 0.452, stress: 195, displayStress: 195 },
+            elongation:    { sd: 0.452, stress: null, displayVal: 45 },
+            reduction:     { displayVal: 65 }
+        }
+    },
+    titanium: {
+        name: 'Ti-6Al-4V', sub: 'Titanium Alloy',
+        color: '#f472b6', E_GPa: 114, brittle: false, hasUpperYield: false,
+        kp: {
+            proportional: { sd: 0.047, stress: 830, displayStress: 830 },
+            yield:         { sd: 0.057, stress: 880, displayStress: 880 },
+            uts:           { sd: 0.148, stress: 950, displayStress: 950 },
+            fracture:      { sd: 0.170, stress: 915, displayStress: 915 },
+            elongation:    { sd: 0.170, stress: null, displayVal: 14 },
+            reduction:     { displayVal: 25 }
+        }
+    },
+    cast_iron: {
+        name: 'Gray Cast Iron', sub: 'Brittle',
+        color: '#94a3b8', E_GPa: 100, brittle: true,
+        kp: {
+            proportional: { sd: 0.022, stress: 170, displayStress: 170 },
+            fracture:      { sd: 0.034, stress: 200, displayStress: 200 },
+            elongation:    { sd: 0.034, stress: null, displayVal: 0.6 },
+            reduction:     { displayVal: 0 }
+        }
+    }
+};
+
+// ─── Property Descriptions ───────────────────────────────────────────────────
+const PROPERTIES = {
+    proportional: {
+        label: 'Proportional Limit',
+        short: 'P', color: '#22d3ee',
+        desc: 'The highest stress at which stress is directly proportional to strain (Hooke\'s Law holds). Below this point the material behaves as a perfectly linear elastic solid.',
+        formula: 'σ = E·ε   (linear elastic region)',
+        unit: (v) => `σ_p ≈ ${v} MPa`
+    },
+    yield: {
+        label: 'Yield Strength (0.2% offset)',
+        short: 'Y', color: '#a78bfa',
+        desc: 'The stress at which a material begins to deform plastically. Defined by the 0.2% offset method: draw a line parallel to the elastic slope from ε = 0.002; its intersection with the curve is the yield strength.',
+        formula: '0.2% offset: εₒ = 0.002',
+        unit: (v) => `σ_y ≈ ${v} MPa`
+    },
+    uts: {
+        label: 'Ultimate Tensile Strength',
+        short: 'U', color: '#fb923c',
+        desc: 'The maximum engineering stress the material can withstand. Beyond this point necking begins — a local reduction in cross-sectional area causes the apparent engineering stress to drop even as true stress continues to rise.',
+        formula: 'σ_UTS = F_max / A₀',
+        unit: (v) => `σ_UTS ≈ ${v} MPa`
+    },
+    fracture: {
+        label: 'Fracture Strength',
+        short: 'F', color: '#f87171',
+        desc: 'The engineering stress at which the material finally separates. In ductile materials this is lower than UTS due to necking. In brittle materials fracture occurs near or at the UTS with almost no plastic deformation.',
+        formula: 'σ_f = F_fracture / A₀',
+        unit: (v) => `σ_f ≈ ${v} MPa`
+    },
+    elongation: {
+        label: 'Elongation at Fracture',
+        short: 'EL', color: '#4ade80',
+        desc: 'A measure of ductility — the percent increase in gauge length from initial length to fracture. Values above ~5% are typically considered ductile. Cast iron at 0.6% is a classic brittle example.',
+        formula: '%EL = (L_f − L₀)/L₀ × 100%',
+        unit: (v) => `%EL ≈ ${v}%`
+    },
+    reduction: {
+        label: 'Reduction in Area',
+        short: 'RA', color: '#fbbf24',
+        desc: 'Percent decrease in cross-sectional area at the fracture point relative to the original area. Correlates well with toughness and resistance to sudden fracture.',
+        formula: '%RA = (A₀ − A_f)/A₀ × 100%',
+        unit: (v) => `%RA ≈ ${v}%`
+    }
+};
+
+const VISIBLE = {
+    ductile: ['proportional','yield','uts','fracture','elongation','reduction'],
+    brittle: ['proportional','fracture','elongation','reduction']
+};
+
+// ─── Curve Generation ────────────────────────────────────────────────────────
+function generateCurve(matKey) {
+    const mat = MATERIALS[matKey];
+    const kp  = mat.kp;
+    const pts = [];
+
+    if (mat.brittle) {
+        const ep = kp.proportional.sd, sp = kp.proportional.stress;
+        const ef = kp.fracture.sd,     sf = kp.fracture.stress;
+        for (let i = 0; i <= 20; i++) {
+            const t = i / 20;
+            pts.push([t * ep, t * sp]);
+        }
+        // Slight concavity from micro-cracking, then sudden fracture
+        for (let i = 1; i <= 25; i++) {
+            const t = i / 25;
+            const e = ep + t * (ef - ep);
+            const s = sp + (sf - sp) * t - 0.04 * sf * Math.sin(Math.PI * t);
+            pts.push([e, Math.max(0, s)]);
+        }
+        return pts;
+    }
+
+    const ep = kp.proportional.sd, sp = kp.proportional.stress;
+    const ey = kp.yield.sd,         sy = kp.yield.stress;
+    const eu = kp.uts.sd,           su = kp.uts.stress;
+    const ef = kp.fracture.sd,      sf = kp.fracture.stress;
+
+    // 1. Linear elastic
+    for (let i = 0; i <= 25; i++) {
+        const t = i / 25;
+        pts.push([t * ep, t * sp]);
+    }
+
+    // 2. Proportional → yield (smooth transition)
+    for (let i = 1; i <= 12; i++) {
+        const t = i / 12;
+        const tc = 3*t*t - 2*t*t*t; // smoothstep
+        pts.push([ep + t*(ey - ep), sp + tc*(sy - sp)]);
+    }
+
+    // 3. Upper/lower yield point (1020 steel only)
+    if (mat.hasUpperYield) {
+        pts.push([ey + 0.003, sy + 9]);   // upper yield spike
+        pts.push([ey + 0.010, sy - 22]);  // drop to lower yield
+        pts.push([ey + 0.018, sy - 21]);
+        // Lüders band plateau
+        for (let i = 1; i <= 8; i++) {
+            pts.push([ey + 0.018 + i * 0.006, sy - 20 + i * 0.5]);
+        }
+    }
+
+    // 4. Work hardening (yield → UTS)
+    const ewh = mat.hasUpperYield ? ey + 0.066 : ey;
+    const swh = mat.hasUpperYield ? sy - 18    : sy;
+    for (let i = 1; i <= 60; i++) {
+        const t = i / 60;
+        const e = ewh + t * (eu - ewh);
+        const s = swh + (su - swh) * (1 - Math.exp(-4.5 * t));
+        pts.push([e, Math.min(s, su)]);
+    }
+
+    // 5. Necking (UTS → fracture)
+    for (let i = 1; i <= 30; i++) {
+        const t = i / 30;
+        const e = eu + t * (ef - eu);
+        const s = su - (su - sf) * (t + 0.35 * t * t) / 1.35;
+        pts.push([e, Math.max(s, sf)]);
+    }
+
+    return pts;
+}
+
+const CURVES = {};
+Object.keys(MATERIALS).forEach(k => { CURVES[k] = generateCurve(k); });
+
+// ─── Main Canvas Setup ───────────────────────────────────────────────────────
+const canvas   = document.getElementById('curveCanvas');
+const ctx      = canvas.getContext('2d');
+const tooltip  = document.getElementById('tooltip');
+const wrapper  = document.querySelector('.canvas-wrapper');
+
+const PAD = { top: 32, right: 32, bottom: 60, left: 68 };
+let W, H, PW, PH;
+
+const STRESS_MAX = 1100; // MPa
+const STRAIN_MAX = 0.50; // schematic display
+
+function sx(s) { return PAD.left + (s / STRAIN_MAX) * PW; }
+function sy(s) { return PAD.top  + (1 - s / STRESS_MAX) * PH; }
+
+function resize() {
+    W = wrapper.clientWidth;
+    H = wrapper.clientHeight;
+    canvas.width  = W;
+    canvas.height = H;
+    PW = W - PAD.left - PAD.right;
+    PH = H - PAD.top  - PAD.bottom;
+    draw();
+}
+
+window.addEventListener('resize', resize);
+
+// ─── State ───────────────────────────────────────────────────────────────────
+let selectedMat = 'steel_mild';
+let activeKey   = null;
+
+// ─── Main Draw ───────────────────────────────────────────────────────────────
+function draw() {
+    ctx.clearRect(0, 0, W, H);
+    drawGrid();
+    drawAxes();
+    drawCurve();
+    drawOffsetLine();
+    drawAnnotations();
+    drawKeyPoints();
+    if (activeKey) highlightPoint(activeKey);
+    buildLegend();
+}
+
+function drawGrid() {
+    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    ctx.lineWidth = 1;
+    for (let i = 1; i <= 10; i++) {
+        const x = PAD.left + (i / 10) * PW;
+        ctx.beginPath(); ctx.moveTo(x, PAD.top); ctx.lineTo(x, PAD.top + PH); ctx.stroke();
+        const y = PAD.top + (i / 10) * PH;
+        ctx.beginPath(); ctx.moveTo(PAD.left, y); ctx.lineTo(PAD.left + PW, y); ctx.stroke();
+    }
+}
+
+function drawAxes() {
+    const mat = MATERIALS[selectedMat];
+
+    ctx.strokeStyle = '#475569'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(PAD.left, PAD.top + PH); ctx.lineTo(PAD.left + PW, PAD.top + PH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(PAD.left, PAD.top);      ctx.lineTo(PAD.left, PAD.top + PH);       ctx.stroke();
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '11px Segoe UI, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Engineering Strain, ε  (elastic region schematic)', PAD.left + PW / 2, H - 10);
+
+    ctx.save();
+    ctx.translate(14, PAD.top + PH / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText('Engineering Stress, σ (MPa)', 0, 0);
+    ctx.restore();
+
+    // Y ticks: 0, 200, 400, 600, 800, 1000
+    ctx.textAlign = 'right';
+    ctx.font = '10px Segoe UI, sans-serif';
+    for (let v = 0; v <= 1000; v += 200) {
+        const y = sy(v);
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillText(v, PAD.left - 6, y + 4);
+        ctx.beginPath(); ctx.moveTo(PAD.left - 3, y); ctx.lineTo(PAD.left, y);
+        ctx.strokeStyle = '#475569'; ctx.lineWidth = 1; ctx.stroke();
+    }
+
+    // X: just label elastic / plastic zones
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#334155';
+    ctx.font = 'italic 9px Segoe UI, sans-serif';
+    const elasticEnd = sx(mat.kp.proportional.sd * 1.8);
+    ctx.fillText('← elastic', (PAD.left + elasticEnd) / 2, PAD.top + PH + 28);
+    ctx.fillText('←— plastic deformation —→', (elasticEnd + PAD.left + PW) / 2, PAD.top + PH + 28);
+
+    // Vertical divider hint
+    ctx.save();
+    ctx.setLineDash([3, 4]);
+    ctx.strokeStyle = '#1e3a5a';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(elasticEnd, PAD.top); ctx.lineTo(elasticEnd, PAD.top + PH); ctx.stroke();
+    ctx.restore();
+}
+
+function drawCurve() {
+    const mat   = MATERIALS[selectedMat];
+    const curve = CURVES[selectedMat];
+    const col   = mat.color;
+
+    // Tinted fill under curve
+    ctx.beginPath();
+    ctx.moveTo(sx(curve[0][0]), sy(0));
+    curve.forEach(([e, s]) => ctx.lineTo(sx(e), sy(s)));
+    ctx.lineTo(sx(curve[curve.length - 1][0]), sy(0));
+    ctx.closePath();
+    ctx.fillStyle = col + '10';
+    ctx.fill();
+
+    // Curve line
+    ctx.beginPath();
+    ctx.moveTo(sx(curve[0][0]), sy(curve[0][1]));
+    curve.forEach(([e, s]) => ctx.lineTo(sx(e), sy(s)));
+    ctx.strokeStyle = col;
+    ctx.lineWidth = 2.8;
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+}
+
+function drawOffsetLine() {
+    const mat = MATERIALS[selectedMat];
+    if (mat.brittle) return;
+    const ep = mat.kp.proportional.sd;
+    const sp = mat.kp.proportional.stress;
+    // small visual offset along x
+    const off = ep * 0.15;
+    ctx.save();
+    ctx.setLineDash([5, 4]);
+    ctx.strokeStyle = 'rgba(167,139,250,0.45)';
+    ctx.lineWidth = 1.4;
+    const x0 = sx(off), y0 = sy(0);
+    const x1 = sx(off + ep * 1.2), y1 = sy(sp * 1.2);
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+    ctx.restore();
+    ctx.fillStyle = 'rgba(167,139,250,0.65)';
+    ctx.font = 'italic 9px Segoe UI, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('0.2% offset', x0 + 3, y0 - 4);
+}
+
+function drawAnnotations() {
+    const mat = MATERIALS[selectedMat];
+    if (mat.brittle) return;
+
+    const ep = mat.kp.proportional.sd;
+    const sp = mat.kp.proportional.stress;
+
+    // Slope label in elastic region
+    const midE = ep * 0.42, midS = sp * 0.42;
+    ctx.fillStyle = 'rgba(34,211,238,0.65)';
+    ctx.font = 'italic 10px Segoe UI, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(`slope = E = ${mat.E_GPa} GPa`, sx(midE) + 8, sy(midS));
+
+    // Elongation arrow below x-axis
+    const kp = mat.kp;
+    const vis = VISIBLE.ductile;
+    if (vis.includes('elongation') && kp.fracture) {
+        const fx   = sx(kp.fracture.sd);
+        const boty = sy(0) + 18;
+        const pEl  = PROPERTIES.elongation;
+        ctx.strokeStyle = pEl.color; ctx.lineWidth = 1.2; ctx.setLineDash([]);
+        ctx.beginPath(); ctx.moveTo(sx(0), sy(0) + 5); ctx.lineTo(sx(0), boty + 4); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(fx,    sy(0) + 5); ctx.lineTo(fx,    boty + 4); ctx.stroke();
+        drawArrow(sx(0), boty, fx, boty, pEl.color);
+        ctx.fillStyle = pEl.color;
+        ctx.font = 'bold 9px Segoe UI, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('%EL = ' + kp.elongation.displayVal + '%', (sx(0) + fx) / 2, boty + 12);
+    }
+}
+
+function drawArrow(x1, y1, x2, y2, color) {
+    const hs = 6;
+    ctx.strokeStyle = color; ctx.fillStyle = color;
+    ctx.lineWidth = 1.2; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x1+hs, y1-3); ctx.lineTo(x1+hs, y1+3); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x2, y2); ctx.lineTo(x2-hs, y2-3); ctx.lineTo(x2-hs, y2+3); ctx.closePath(); ctx.fill();
+}
+
+function drawKeyPoints() {
+    const mat = MATERIALS[selectedMat];
+    const kp  = mat.kp;
+    const vis = mat.brittle ? VISIBLE.brittle : VISIBLE.ductile;
+
+    vis.forEach(key => {
+        const p  = PROPERTIES[key];
+        const pt = kp[key];
+        if (!pt || pt.sd == null || pt.stress == null) return;
+        const x = sx(pt.sd), y = sy(pt.stress);
+
+        // Dashed crosshairs
+        ctx.save();
+        ctx.setLineDash([4, 4]);
+        ctx.strokeStyle = p.color + '55'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, sy(0)); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(sx(0), y); ctx.stroke();
+        ctx.restore();
+
+        // Dot
+        ctx.beginPath(); ctx.arc(x, y, 9, 0, Math.PI*2);
+        ctx.fillStyle = p.color + '22'; ctx.fill();
+        ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI*2);
+        ctx.fillStyle = p.color; ctx.fill();
+        ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 2; ctx.setLineDash([]); ctx.stroke();
+
+        // Short label
+        ctx.fillStyle = p.color;
+        ctx.font = 'bold 10px Segoe UI, sans-serif';
+        const rightSide = x > PAD.left + PW * 0.75;
+        ctx.textAlign = rightSide ? 'right' : 'left';
+        ctx.fillText(p.short, rightSide ? x - 12 : x + 12, y - 9);
+    });
+}
+
+function highlightPoint(key) {
+    const kp = MATERIALS[selectedMat].kp[key];
+    if (!kp || kp.sd == null || kp.stress == null) return;
+    ctx.beginPath();
+    ctx.arc(sx(kp.sd), sy(kp.stress), 14, 0, Math.PI*2);
+    ctx.strokeStyle = PROPERTIES[key].color;
+    ctx.lineWidth = 2.5; ctx.setLineDash([]);
+    ctx.stroke();
+}
+
+// ─── Mini-Plot Drawing ───────────────────────────────────────────────────────
+function drawMiniCurve(canvasEl, matKey) {
+    const mat   = MATERIALS[matKey];
+    const curve = CURVES[matKey];
+    const c2    = canvasEl.getContext('2d');
+    const w = canvasEl.width, h = canvasEl.height;
+    const pad = 4;
+    const pw = w - pad * 2, ph = h - pad * 2;
+
+    c2.clearRect(0, 0, w, h);
+    c2.fillStyle = '#050d1a';
+    c2.fillRect(0, 0, w, h);
+
+    const maxE = curve[curve.length - 1][0];
+    const maxS = Math.max(...curve.map(p => p[1])) * 1.05;
+
+    const mx = (e) => pad + (e / maxE) * pw;
+    const my = (s) => h - pad - (s / maxS) * ph;
+
+    // Tinted fill
+    c2.beginPath();
+    c2.moveTo(mx(curve[0][0]), h - pad);
+    curve.forEach(([e, s]) => c2.lineTo(mx(e), my(s)));
+    c2.lineTo(mx(curve[curve.length-1][0]), h - pad);
+    c2.closePath();
+    c2.fillStyle = mat.color + '18';
+    c2.fill();
+
+    // Line
+    c2.beginPath();
+    c2.moveTo(mx(curve[0][0]), my(curve[0][1]));
+    curve.forEach(([e, s]) => c2.lineTo(mx(e), my(s)));
+    c2.strokeStyle = mat.color;
+    c2.lineWidth = 1.5;
+    c2.lineJoin = 'round';
+    c2.stroke();
+}
+
+// ─── UI Building ─────────────────────────────────────────────────────────────
+function buildMatGrid() {
+    const grid = document.getElementById('mat-grid');
+    grid.innerHTML = '';
+
+    Object.keys(MATERIALS).forEach(k => {
+        const mat = MATERIALS[k];
+
+        const btn = document.createElement('div');
+        btn.className = 'mat-btn' + (k === selectedMat ? ' active' : '');
+        btn.style.setProperty('--mat-color', mat.color);
+        btn.id = 'matbtn-' + k;
+
+        const miniWrap = document.createElement('div');
+        miniWrap.className = 'mat-mini-wrap';
+
+        const c = document.createElement('canvas');
+        c.className = 'mini-canvas';
+        c.id = 'mini-' + k;
+        c.width  = 120;
+        c.height = 46;
+        miniWrap.appendChild(c);
+
+        const info = document.createElement('div');
+        info.className = 'mat-info';
+        info.innerHTML = `<div class="mat-name" style="color:${mat.color}">${mat.name}</div><div class="mat-sub">${mat.sub} · E = ${mat.E_GPa} GPa</div>`;
+
+        btn.appendChild(miniWrap);
+        btn.appendChild(info);
+        btn.addEventListener('click', () => selectMat(k));
+        grid.appendChild(btn);
+    });
+
+    // Draw all mini-curves after they're in DOM
+    Object.keys(MATERIALS).forEach(k => {
+        const c = document.getElementById('mini-' + k);
+        if (c) drawMiniCurve(c, k);
+    });
+}
+
+function buildLegend() {
+    const container = document.getElementById('legend');
+    container.innerHTML = '';
+    const mat = MATERIALS[selectedMat];
+    const vis = mat.brittle ? VISIBLE.brittle : VISIBLE.ductile;
+
+    vis.forEach(key => {
+        const p    = PROPERTIES[key];
+        const item = document.createElement('div');
+        item.className = 'legend-item' + (key === activeKey ? ' active' : '');
+        item.style.setProperty('--accent', p.color);
+        item.id = 'leg-' + key;
+        item.innerHTML = `<div class="legend-dot" style="background:${p.color};border-color:${p.color}"></div><span>${p.label}</span>`;
+        item.addEventListener('click', () => showInfo(key));
+        container.appendChild(item);
+    });
+}
+
+// ─── Interaction ─────────────────────────────────────────────────────────────
+function selectMat(matKey) {
+    selectedMat = matKey;
+    activeKey   = null;
+
+    document.querySelectorAll('.mat-btn').forEach(b => {
+        b.classList.toggle('active', b.id === 'matbtn-' + matKey);
+    });
+
+    document.getElementById('info-box').innerHTML = `
+        <h2>Property Details</h2>
+        <p class="property-placeholder">Click a labeled point on the curve to learn about that mechanical property.</p>
+    `;
+
+    draw();
+}
+
+function showInfo(key) {
+    const mat = MATERIALS[selectedMat];
+    const vis = mat.brittle ? VISIBLE.brittle : VISIBLE.ductile;
+    if (!vis.includes(key)) return;
+
+    activeKey = key;
+    const p  = PROPERTIES[key];
+    const kp = mat.kp[key];
+
+    document.querySelectorAll('.legend-item').forEach(el => el.classList.remove('active'));
+    const legEl = document.getElementById('leg-' + key);
+    if (legEl) legEl.classList.add('active');
+
+    let valLine = '';
+    if (kp) {
+        if (kp.displayVal != null)
+            valLine = `<div class="property-value">${p.unit(kp.displayVal)}</div>`;
+        else if (kp.displayStress != null)
+            valLine = `<div class="property-value">${p.unit(kp.displayStress)}</div>`;
+    }
+
+    document.getElementById('info-box').innerHTML = `
+        <h2>Property Details</h2>
+        <div class="property-name" style="color:${p.color}">${p.label}</div>
+        <div class="property-for">for ${mat.name} · ${mat.sub}</div>
+        ${valLine}
+        <div class="property-desc">${p.desc}</div>
+        <div class="property-formula">${p.formula}</div>
+    `;
+
+    draw();
+}
+
+function hitTest(mx, my) {
+    const mat = MATERIALS[selectedMat];
+    const vis = mat.brittle ? VISIBLE.brittle : VISIBLE.ductile;
+    for (const key of vis) {
+        const pt = mat.kp[key];
+        if (!pt || pt.sd == null || pt.stress == null) continue;
+        if (Math.hypot(mx - sx(pt.sd), my - sy(pt.stress)) < 16) return key;
+    }
+    return null;
+}
+
+canvas.addEventListener('mousemove', (e) => {
+    const r   = canvas.getBoundingClientRect();
+    const mx  = e.clientX - r.left;
+    const my  = e.clientY - r.top;
+    const key = hitTest(mx, my);
+    if (key) {
+        canvas.style.cursor = 'pointer';
+        tooltip.style.display = 'block';
+        tooltip.textContent = PROPERTIES[key].label;
+        tooltip.style.left = (mx + 14) + 'px';
+        tooltip.style.top  = (my - 10) + 'px';
+    } else {
+        canvas.style.cursor = 'crosshair';
+        tooltip.style.display = 'none';
+    }
+});
+
+canvas.addEventListener('click', (e) => {
+    const r   = canvas.getBoundingClientRect();
+    const key = hitTest(e.clientX - r.left, e.clientY - r.top);
+    if (key) showInfo(key);
+});
+
+canvas.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+buildMatGrid();
+resize();
+</script>
+</body>
+</html>

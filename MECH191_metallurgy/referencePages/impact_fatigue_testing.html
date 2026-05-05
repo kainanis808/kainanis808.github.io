@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impact &amp; Fatigue Testing — Charpy, Izod, DBTT, S-N Curve</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.2rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 980px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 30px; font-size: 1rem; }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section h2 {
+            font-size: 1.3rem;
+            color: #1e3a5f;
+            margin-bottom: 10px;
+        }
+        .section p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 14px;
+            font-size: 0.95rem;
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
+            margin: 16px 0;
+        }
+        .method-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+        }
+        .method-card .mc-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-bottom: 6px;
+        }
+        .method-card .mc-symbol {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+        .method-card ul {
+            padding-left: 16px;
+            color: #4b5563;
+            font-size: 0.87rem;
+            line-height: 1.7;
+        }
+        .method-card p {
+            color: #4b5563;
+            font-size: 0.87rem;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        .formula-box {
+            background: #1e3a5f;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 14px 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            margin: 14px 0;
+            text-align: center;
+        }
+        .formula-box .f-label {
+            font-size: 0.8rem;
+            color: #93c5fd;
+            margin-bottom: 4px;
+            font-family: 'Segoe UI', sans-serif;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            margin-top: 10px;
+        }
+        thead tr { background: #1e3a5f; color: #fff; }
+        thead th { padding: 10px 12px; text-align: left; font-weight: 600; }
+        tbody tr:nth-child(even) { background: #f1f5f9; }
+        tbody tr:hover { background: #e0f2fe; }
+        tbody td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #374151;
+            vertical-align: middle;
+        }
+        .code { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #1e3a5f; }
+
+        .note {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-style: italic;
+            margin-top: 10px;
+        }
+        .section-label {
+            font-weight: 700;
+            color: #1e3a5f;
+            font-size: 0.95rem;
+            margin: 18px 0 6px;
+        }
+
+        .tip-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            margin: 14px 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .tip-box strong { color: #92400e; }
+
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            margin: 14px 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .info-box strong { color: #1e3a5f; }
+
+        .warn-box {
+            background: #fff1f2;
+            border-left: 4px solid #e11d48;
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            margin: 14px 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .warn-box strong { color: #9f1239; }
+
+        .group-header td {
+            background: #dbeafe !important;
+            font-weight: 700;
+            color: #1e3a5f;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+        }
+        .highlight-row td { background: #fffbeb !important; font-weight: 600; }
+
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 16px 0;
+        }
+        @media (max-width: 600px) { .compare-grid { grid-template-columns: 1fr; } }
+        .compare-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+        }
+        .compare-card .cc-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .compare-card ul {
+            padding-left: 16px;
+            color: #4b5563;
+            font-size: 0.87rem;
+            line-height: 1.8;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .badge-green  { background: #dcfce7; color: #15803d; }
+        .badge-red    { background: #fee2e2; color: #b91c1c; }
+        .badge-yellow { background: #fef9c3; color: #854d0e; }
+
+        .diagram-container {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+            text-align: center;
+        }
+        .diagram-container svg { max-width: 100%; height: auto; }
+        .diagram-caption {
+            font-size: 0.82rem;
+            color: #6b7280;
+            font-style: italic;
+            margin-top: 8px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #0284c7;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Impact &amp; Fatigue Testing</h1>
+    <p class="subtitle">Charpy · Izod · Ductile-Brittle Transition Temperature · S-N Curve</p>
+</header>
+<main>
+    <p class="intro">
+        Impact and fatigue testing reveal how materials behave under dynamic and cyclic loading —
+        failure modes that static tensile tests cannot predict. Impact tests quantify a material's
+        <strong>toughness</strong> (energy absorbed before fracture under a sudden blow), while fatigue
+        tests characterize the stress levels at which repeated cyclic loading causes eventual
+        fracture — often at stresses far below the yield strength.
+    </p>
+
+    <!-- IMPACT TESTING OVERVIEW -->
+    <div class="section">
+        <h2>Impact Testing — Overview</h2>
+        <p>
+            Impact tests measure the <strong>energy absorbed</strong> when a notched specimen is
+            fractured by a swinging pendulum hammer. The height difference of the pendulum before and
+            after the strike gives the energy consumed — a direct measure of toughness under dynamic,
+            high-strain-rate conditions. The notch artificially concentrates stress, ensuring fracture
+            at a defined location and making the test sensitive to material embrittlement.
+        </p>
+
+        <div class="formula-box">
+            <div class="f-label">Energy absorbed (both Charpy and Izod)</div>
+            E = mg(h&#x2080; &minus; h&#x2081;)
+            <div style="margin-top:6px; font-size:0.8rem; color:#93c5fd;">
+                m = hammer mass (kg) &nbsp;|&nbsp; g = 9.81 m/s&sup2; &nbsp;|&nbsp;
+                h&#x2080; = initial release height (m) &nbsp;|&nbsp; h&#x2081; = height reached after fracture (m)
+            </div>
+        </div>
+
+        <p>
+            The result is reported in <strong>joules (J)</strong> (SI) or foot-pounds (ft&middot;lb) (imperial).
+            Higher energy = tougher material. The test is especially sensitive to embrittlement caused
+            by low temperature, hydrogen, radiation damage, or certain heat treatments.
+        </p>
+
+        <div class="method-grid">
+            <div class="method-card">
+                <div class="mc-symbol">C</div>
+                <div class="mc-title">Charpy Test</div>
+                <ul>
+                    <li>Specimen supported at <strong>both ends</strong> (simply supported beam)</li>
+                    <li>Hammer strikes the face <em>opposite</em> the notch</li>
+                    <li>Specimen: 10 &times; 10 &times; 55 mm, 2 mm deep V-notch</li>
+                    <li>Standard: ASTM E23 / ISO 148</li>
+                    <li>Most common industrial impact test for metals</li>
+                    <li>Used for steel qualification and DBTT characterization</li>
+                </ul>
+            </div>
+            <div class="method-card">
+                <div class="mc-symbol">I</div>
+                <div class="mc-title">Izod Test</div>
+                <ul>
+                    <li>Specimen <strong>clamped at one end</strong> (cantilever beam)</li>
+                    <li>Hammer strikes the notch face (notch faces the hammer)</li>
+                    <li>Specimen: 10 &times; 10 &times; 75 mm; notch 28 mm from clamped end</li>
+                    <li>Standard: ASTM E23 / ISO 180</li>
+                    <li>Common for plastics; less common for metals in modern practice</li>
+                    <li>Low-temperature testing is more difficult than Charpy</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHARPY TEST -->
+    <div class="section">
+        <h2>Charpy Impact Test</h2>
+        <p>
+            A standardized notched bar is placed horizontally across two anvil supports, and a pendulum
+            hammer is released from a fixed height. The hammer strikes the center of the specimen on
+            the side <em>opposite</em> the notch. After fracture the height the pendulum reaches on the
+            far side is recorded, and absorbed energy is calculated from the height difference.
+        </p>
+
+        <p class="section-label">Standard Charpy V-Notch Specimen Geometry</p>
+        <table>
+            <thead>
+                <tr><th>Dimension</th><th>Value</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Overall length</td><td>55 mm</td><td>Spans the two anvil supports</td></tr>
+                <tr><td>Cross-section</td><td>10 &times; 10 mm</td><td>Sub-size specimens (7.5, 5, 2.5 mm thick) are allowed when material is limited</td></tr>
+                <tr><td>Notch type</td><td>V-notch (most common)</td><td>Keyhole (U) notch also used — V-notch is more sensitive to embrittlement</td></tr>
+                <tr><td>Notch depth</td><td>2 mm</td><td>Leaving 8 mm of remaining net section</td></tr>
+                <tr><td>Notch angle</td><td>45&deg;</td><td>Root radius 0.25 mm</td></tr>
+                <tr><td>Support span</td><td>40 mm</td><td>Specimen centered; hammer strikes at mid-span</td></tr>
+                <tr><td>Striker radius</td><td>8 mm (ASTM) / 2 mm (ISO)</td><td>Verify correct striker for the applicable standard — values are not equivalent</td></tr>
+            </tbody>
+        </table>
+
+        <p class="section-label">Fracture Surface Appearance</p>
+        <div class="compare-grid">
+            <div class="compare-card">
+                <div class="cc-title" style="color:#15803d;">Ductile Fracture</div>
+                <ul>
+                    <li>Dull, fibrous, grey appearance</li>
+                    <li>Significant plastic deformation; visible shear lips at edges</li>
+                    <li><strong>High</strong> absorbed energy</li>
+                    <li>Fracture surface inclined ~45&deg; (shear mode)</li>
+                    <li>Occurs at temperatures <em>above</em> the DBTT</li>
+                </ul>
+            </div>
+            <div class="compare-card">
+                <div class="cc-title" style="color:#b91c1c;">Brittle Fracture</div>
+                <ul>
+                    <li>Bright, crystalline, shiny appearance (cleavage facets)</li>
+                    <li>Little or no visible plastic deformation</li>
+                    <li><strong>Low</strong> absorbed energy</li>
+                    <li>Flat fracture surface perpendicular to loading axis</li>
+                    <li>Occurs at temperatures <em>below</em> the DBTT</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tip-box">
+            <strong>Percent shear fracture (%SF)</strong> is often reported alongside absorbed energy.
+            It estimates the fraction of the fracture surface that appears ductile (fibrous). 100%SF = fully
+            ductile; 0%SF = fully brittle. For structural steels, minimum %SF is often specified in
+            design codes (e.g., &ge; 70% for pipeline steels at the design temperature).
+        </div>
+    </div>
+
+    <!-- IZOD TEST -->
+    <div class="section">
+        <h2>Izod Impact Test</h2>
+        <p>
+            In the Izod test the specimen is clamped vertically at its base, acting as a cantilever
+            beam. The notch faces the incoming hammer, which strikes 22 mm above the notch on the
+            free end of the specimen. Because the specimen is clamped rather than simply supported,
+            the stress state differs from Charpy — results from the two methods
+            <em>cannot be directly compared</em>.
+        </p>
+
+        <div class="compare-grid">
+            <div class="compare-card" style="grid-column: 1 / -1;">
+                <div class="cc-title">Charpy vs. Izod — Key Differences</div>
+                <table style="margin-top:0; font-size:0.85rem;">
+                    <thead>
+                        <tr><th>Feature</th><th>Charpy</th><th>Izod</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Specimen support</td><td>Simply supported — both ends</td><td>Cantilevered — one end clamped</td></tr>
+                        <tr><td>Notch faces</td><td>Away from hammer</td><td>Toward hammer</td></tr>
+                        <tr><td>Primary use today</td><td>Metals (all temperatures)</td><td>Plastics; metals less common</td></tr>
+                        <tr><td>Sub-zero testing</td><td>Easy (cool in bath, transfer quickly)</td><td>Harder (clamping complicates cooling)</td></tr>
+                        <tr><td>Standard</td><td>ASTM E23 / ISO 148</td><td>ASTM E23 / ISO 180</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <p class="note">Results from Charpy and Izod tests are not interchangeable. Always specify which test method was used when reporting impact energy values.</p>
+    </div>
+
+    <!-- DBTT -->
+    <div class="section">
+        <h2>Ductile-Brittle Transition Temperature (DBTT)</h2>
+        <p>
+            Many metals — particularly <strong>BCC (body-centered cubic) metals</strong> such as
+            carbon steels and ferritic stainless steels — exhibit a dramatic drop in impact energy
+            over a relatively narrow temperature range called the <em>ductile-brittle transition</em>.
+            Above this range the material fractures by ductile mechanisms and absorbs large amounts
+            of energy (<strong>upper shelf</strong>). Below it fracture is dominated by cleavage and
+            the absorbed energy drops to a low plateau (<strong>lower shelf</strong>). The temperature
+            at the midpoint of this transition is the <strong>DBTT</strong>.
+        </p>
+
+        <div class="diagram-container">
+            <svg viewBox="0 0 560 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;">
+                <!-- Light grid -->
+                <line x1="70" y1="80"  x2="510" y2="80"  stroke="#f1f5f9" stroke-width="1" stroke-dasharray="4,4"/>
+                <line x1="70" y1="150" x2="510" y2="150" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="4,4"/>
+                <line x1="70" y1="220" x2="510" y2="220" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="4,4"/>
+                <!-- Axes -->
+                <line x1="70" y1="40"  x2="70"  y2="268" stroke="#374151" stroke-width="2"/>
+                <line x1="62" y1="260" x2="518" y2="260" stroke="#374151" stroke-width="2"/>
+                <polygon points="70,36 66,46 74,46" fill="#374151"/>
+                <polygon points="522,260 512,256 512,264" fill="#374151"/>
+                <!-- Axis labels -->
+                <text x="36" y="155" font-family="Segoe UI,sans-serif" font-size="13" fill="#374151" transform="rotate(-90,36,155)">Impact Energy (J)</text>
+                <text x="290" y="300" font-family="Segoe UI,sans-serif" font-size="13" fill="#374151" text-anchor="middle">Temperature (increasing &rarr;)</text>
+                <!-- Sigmoidal DBTT curve -->
+                <path d="M 90,237 C 150,237 185,236 210,234 C 230,232 248,226 262,218 C 275,210 285,197 297,180 C 309,162 320,140 334,120 C 348,100 368,83 395,76 C 420,70 445,70 505,70"
+                      fill="none" stroke="#1e3a5f" stroke-width="3" stroke-linecap="round"/>
+                <!-- Upper shelf annotation -->
+                <text x="438" y="65" font-family="Segoe UI,sans-serif" font-size="11" fill="#15803d" text-anchor="middle" font-weight="700">Upper Shelf</text>
+                <text x="438" y="77" font-family="Segoe UI,sans-serif" font-size="10" fill="#15803d" text-anchor="middle">(ductile, high energy)</text>
+                <!-- Lower shelf annotation -->
+                <text x="148" y="228" font-family="Segoe UI,sans-serif" font-size="11" fill="#b91c1c" font-weight="700">Lower Shelf</text>
+                <text x="148" y="240" font-family="Segoe UI,sans-serif" font-size="10" fill="#b91c1c">(brittle, low energy)</text>
+                <!-- DBTT vertical dashed line -->
+                <line x1="297" y1="40" x2="297" y2="260" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6,4"/>
+                <text x="297" y="35" font-family="Segoe UI,sans-serif" font-size="12" fill="#92400e" text-anchor="middle" font-weight="700">DBTT</text>
+                <!-- Mid-energy horizontal dashed line -->
+                <line x1="70" y1="153" x2="297" y2="153" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4,3"/>
+                <text x="73" y="148" font-family="Segoe UI,sans-serif" font-size="10" fill="#92400e">&#189;(Upper + Lower shelf)</text>
+                <!-- Transition zone bracket -->
+                <line x1="235" y1="50" x2="375" y2="50" stroke="#6b7280" stroke-width="1"/>
+                <line x1="235" y1="45" x2="235" y2="55" stroke="#6b7280" stroke-width="1"/>
+                <line x1="375" y1="45" x2="375" y2="55" stroke="#6b7280" stroke-width="1"/>
+                <text x="305" y="46" font-family="Segoe UI,sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">Transition Zone</text>
+                <!-- Temp axis labels -->
+                <text x="110" y="278" font-family="Segoe UI,sans-serif" font-size="11" fill="#6b7280" text-anchor="middle">Cold</text>
+                <text x="297" y="278" font-family="Segoe UI,sans-serif" font-size="11" fill="#6b7280" text-anchor="middle">DBTT</text>
+                <text x="480" y="278" font-family="Segoe UI,sans-serif" font-size="11" fill="#6b7280" text-anchor="middle">Warm</text>
+            </svg>
+            <div class="diagram-caption">Fig. 1 — Charpy absorbed energy vs. temperature for a typical BCC steel. The DBTT is conventionally defined at the midpoint energy between the upper and lower shelf values.</div>
+        </div>
+
+        <div class="tip-box">
+            <strong>Why does BCC exhibit a DBTT?</strong> In BCC metals, the Peierls-Nabarro stress
+            (lattice friction on dislocations) rises steeply with decreasing temperature, and the number
+            of active slip systems is limited. Below the DBTT, dislocations cannot move fast enough to
+            relieve stress, so fracture proceeds by cleavage along {100} planes — a low-energy, brittle
+            mechanism. FCC metals have many more active slip systems and lower lattice friction, so they
+            remain ductile even at cryogenic temperatures.
+        </div>
+
+        <p class="section-label">Crystal Structure and Transition Behavior</p>
+        <table>
+            <thead>
+                <tr><th>Crystal Structure</th><th>Examples</th><th>DBTT?</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+                <tr class="highlight-row">
+                    <td>BCC</td>
+                    <td>Carbon steels, ferritic stainless steels, tungsten, molybdenum</td>
+                    <td><span class="badge badge-red">YES</span></td>
+                    <td>Clear transition; DBTT is a primary design concern for low-temperature service</td>
+                </tr>
+                <tr>
+                    <td>FCC</td>
+                    <td>Austenitic stainless (304, 316), aluminum alloys, copper, nickel</td>
+                    <td><span class="badge badge-green">NO</span></td>
+                    <td>Remain tough at cryogenic temperatures; preferred for LNG tanks and aerospace cryogenics</td>
+                </tr>
+                <tr>
+                    <td>HCP</td>
+                    <td>Zinc, magnesium, titanium</td>
+                    <td><span class="badge badge-yellow">Partial</span></td>
+                    <td>Mg and Zn can show a transition; Ti alloys generally retain good toughness to low temperature</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="warn-box">
+            <strong>Engineering significance:</strong> The Liberty Ships in WWII and the RMS Titanic
+            are famous examples of catastrophic brittle fracture linked to operating below the DBTT of the
+            hull steel. Cold ocean temperatures pushed the material below its transition temperature,
+            enabling cleavage fracture to propagate from small notches or defects at stress levels well
+            below the yield strength.
+        </div>
+
+        <p class="section-label">Factors That Shift the DBTT</p>
+        <table>
+            <thead>
+                <tr><th>Factor</th><th>Effect on DBTT</th><th>Explanation</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Increasing carbon content</td><td>Raises DBTT &uarr;</td><td>Higher C promotes pearlite and carbides that act as cleavage crack initiators</td></tr>
+                <tr><td>Manganese (Mn) addition</td><td>Lowers DBTT &darr;</td><td>Refines grain size and ties up sulfur as MnS (less harmful morphology); improves toughness</td></tr>
+                <tr><td>Smaller grain size</td><td>Lowers DBTT &darr;</td><td>More grain boundaries block cleavage crack propagation (Hall-Petch toughening)</td></tr>
+                <tr><td>Sulfur and phosphorus (impurities)</td><td>Raises DBTT &uarr;</td><td>Form brittle inclusions and grain boundary films that serve as crack nucleation sites</td></tr>
+                <tr><td>Nickel (Ni) addition</td><td>Lowers DBTT &darr;</td><td>Increases active slip systems in BCC; 9% Ni steel used for &minus;196&deg;C LNG service</td></tr>
+                <tr><td>Radiation exposure</td><td>Raises DBTT &uarr;</td><td>Radiation damage creates defect clusters that pin dislocations — embrittlement of nuclear reactor pressure vessel steel is a key safety concern</td></tr>
+                <tr><td>Hydrogen embrittlement</td><td>Raises DBTT &uarr;</td><td>Dissolved hydrogen reduces cohesive strength and assists crack propagation</td></tr>
+                <tr><td>Higher strain rate (faster loading)</td><td>Raises DBTT &uarr;</td><td>Less time for plastic deformation; the material behaves more brittly at a given temperature</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- UPPER / LOWER SHELF -->
+    <div class="section">
+        <h2>Upper Shelf vs. Lower Shelf Energy</h2>
+        <p>
+            The impact energy vs. temperature curve for BCC steels has two horizontal plateaus connected
+            by an S-shaped transition. These plateaus define the upper and lower shelf.
+        </p>
+        <div class="compare-grid">
+            <div class="compare-card">
+                <div class="cc-title" style="color:#15803d;">Upper Shelf Energy (USE)</div>
+                <ul>
+                    <li>Energy absorbed at <strong>high temperatures</strong> (above DBTT)</li>
+                    <li>Fracture dominated by <strong>ductile mechanisms</strong> — microvoid coalescence (dimple fracture)</li>
+                    <li>High absorbed energy; often &gt;100 J for structural steels</li>
+                    <li>Fracture surface appears dull, fibrous, grey</li>
+                    <li>Visible shear lips at specimen edges</li>
+                    <li>Represents the material's maximum available toughness</li>
+                </ul>
+            </div>
+            <div class="compare-card">
+                <div class="cc-title" style="color:#b91c1c;">Lower Shelf Energy (LSE)</div>
+                <ul>
+                    <li>Energy absorbed at <strong>low temperatures</strong> (below DBTT)</li>
+                    <li>Fracture dominated by <strong>cleavage</strong> — brittle transgranular fracture along {100} planes</li>
+                    <li>Low absorbed energy; may be as low as 2–7 J</li>
+                    <li>Fracture surface appears bright, crystalline, mirror-like</li>
+                    <li>No shear lips; flat fracture plane</li>
+                    <li>Represents the worst-case toughness for that material</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <strong>Design codes and minimum energy requirements:</strong> Structural steel specifications
+            (e.g., ASTM A709 for bridges) specify a <em>minimum Charpy energy at a specified test
+            temperature</em>. For example, A709 Grade 50W Zones 2 and 3 requires &ge; 27 J (20 ft&middot;lb)
+            at &minus;18&deg;C (0&deg;F). This ensures the material is operating in or above its transition
+            zone — not on the lower shelf — at service temperatures.
+        </div>
+
+        <p class="section-label">Typical Upper Shelf Energies and Approximate DBTTs for Common Steels</p>
+        <table>
+            <thead>
+                <tr><th>Material / Condition</th><th>Upper Shelf CVN (J)</th><th>Approx. DBTT (&deg;C)</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>1020 plain carbon steel, HR</td><td>~100–120</td><td>0 to +20</td><td>Low carbon, relatively tough; DBTT higher than alloyed steels</td></tr>
+                <tr><td>A36 structural steel</td><td>~80–120</td><td>0 to &minus;10</td><td>Common structural grade; transition varies across heats</td></tr>
+                <tr class="highlight-row"><td>4340 alloy steel, Q&amp;T (260&deg;C temper)</td><td>~20–40</td><td>+20 to +40</td><td>High strength but reduced toughness; watch for temper embrittlement</td></tr>
+                <tr><td>4340 alloy steel, Q&amp;T (480&deg;C temper)</td><td>~100–150</td><td>&minus;40 to &minus;20</td><td>Higher temper temp &rarr; more ductile, lower DBTT</td></tr>
+                <tr><td>9% Ni steel (ASTM A553)</td><td>&gt;100</td><td>&lt;&minus;100</td><td>Designed for LNG service; remains ductile to &minus;196&deg;C</td></tr>
+                <tr><td>304 austenitic stainless (FCC)</td><td>&gt;200</td><td>No transition</td><td>FCC — stays tough at cryogenic temperatures; no lower shelf in engineering range</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- FATIGUE -->
+    <div class="section">
+        <h2>Fatigue and the S-N Curve</h2>
+        <p>
+            <strong>Fatigue</strong> is the progressive, localized structural damage that occurs when a
+            material is subjected to cyclic (repeated) loading. Failure can occur at stresses far below
+            the static yield strength after a sufficient number of cycles — making fatigue the cause of
+            the majority of mechanical failures in engineering practice (rotating shafts, connecting rods,
+            aircraft structures, bridges, biomedical implants).
+        </p>
+        <p>Fatigue failure occurs in three distinct stages:</p>
+        <div class="method-grid">
+            <div class="method-card">
+                <div class="mc-symbol" style="color:#b91c1c;">&#9312;</div>
+                <div class="mc-title">Stage I — Crack Initiation</div>
+                <p>A microcrack nucleates at a stress concentration — typically a surface defect,
+                machining mark, inclusion, or geometric discontinuity (notch, hole, fillet, keyway).
+                The crack grows slowly along persistent slip bands oriented ~45&deg; to the loading axis.</p>
+            </div>
+            <div class="method-card">
+                <div class="mc-symbol" style="color:#d97706;">&#9313;</div>
+                <div class="mc-title">Stage II — Crack Propagation</div>
+                <p>The crack reorients to grow perpendicular to the maximum tensile stress. Each load
+                cycle advances the crack by a small increment, leaving <em>beach marks</em> (fatigue
+                striations) on the fracture surface — one striation per cycle. Growth rate is described
+                by Paris' Law: da/dN = C(&Delta;K)<sup>m</sup>.</p>
+            </div>
+            <div class="method-card">
+                <div class="mc-symbol" style="color:#15803d;">&#9314;</div>
+                <div class="mc-title">Stage III — Final Fracture</div>
+                <p>When the remaining cross-section can no longer support the peak load, sudden final
+                fracture occurs — either ductile overload (dimples) or brittle cleavage depending on
+                material and temperature. The final fracture zone shows a rough, irregular surface
+                distinctly different from the fatigue region.</p>
+            </div>
+        </div>
+
+        <p class="section-label">The S-N Curve (Wöhler Curve)</p>
+        <p>
+            An S-N curve is generated by testing multiple identical specimens at different stress
+            amplitudes and recording the cycles to failure. The x-axis is plotted on a log scale.
+            Each data point represents one specimen; scatter is significant, so multiple specimens
+            per stress level are required for statistical reliability.
+        </p>
+
+        <div class="diagram-container">
+            <svg viewBox="0 0 580 330" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:580px;">
+                <!-- Axes -->
+                <line x1="70" y1="30" x2="70"  y2="268" stroke="#374151" stroke-width="2"/>
+                <line x1="62" y1="260" x2="548" y2="260" stroke="#374151" stroke-width="2"/>
+                <polygon points="70,26 66,36 74,36" fill="#374151"/>
+                <polygon points="552,260 542,256 542,264" fill="#374151"/>
+                <!-- Axis labels -->
+                <text x="28" y="155" font-family="Segoe UI,sans-serif" font-size="13" fill="#374151" transform="rotate(-90,28,155)">Stress Amplitude, S (MPa)</text>
+                <text x="310" y="318" font-family="Segoe UI,sans-serif" font-size="13" fill="#374151" text-anchor="middle">Number of Cycles to Failure, N (log scale)</text>
+                <!-- Vertical grid lines -->
+                <line x1="105" y1="260" x2="105" y2="30" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3,3"/>
+                <line x1="178" y1="260" x2="178" y2="30" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3,3"/>
+                <line x1="251" y1="260" x2="251" y2="30" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3,3"/>
+                <line x1="324" y1="260" x2="324" y2="30" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3,3"/>
+                <line x1="397" y1="260" x2="397" y2="30" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3,3"/>
+                <line x1="470" y1="260" x2="470" y2="30" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3,3"/>
+                <line x1="538" y1="260" x2="538" y2="30" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3,3"/>
+                <!-- X-axis tick marks -->
+                <line x1="105" y1="260" x2="105" y2="266" stroke="#6b7280" stroke-width="1"/>
+                <line x1="178" y1="260" x2="178" y2="266" stroke="#6b7280" stroke-width="1"/>
+                <line x1="251" y1="260" x2="251" y2="266" stroke="#6b7280" stroke-width="1"/>
+                <line x1="324" y1="260" x2="324" y2="266" stroke="#6b7280" stroke-width="1"/>
+                <line x1="397" y1="260" x2="397" y2="266" stroke="#6b7280" stroke-width="1"/>
+                <line x1="470" y1="260" x2="470" y2="266" stroke="#6b7280" stroke-width="1"/>
+                <line x1="538" y1="260" x2="538" y2="266" stroke="#6b7280" stroke-width="1"/>
+                <!-- X-axis tick labels -->
+                <text x="105" y="280" font-family="Segoe UI,sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">10&#x00B3;</text>
+                <text x="178" y="280" font-family="Segoe UI,sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">10&#x2074;</text>
+                <text x="251" y="280" font-family="Segoe UI,sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">10&#x2075;</text>
+                <text x="324" y="280" font-family="Segoe UI,sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">10&#x2076;</text>
+                <text x="397" y="280" font-family="Segoe UI,sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">10&#x2077;</text>
+                <text x="470" y="280" font-family="Segoe UI,sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">10&#x2078;</text>
+                <text x="538" y="280" font-family="Segoe UI,sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">10&#x2079;</text>
+                <!-- STEEL curve: decreases then flattens at endurance limit (y=196) -->
+                <path d="M 105,52 C 145,58 170,78 205,105 C 238,130 262,158 295,177 C 318,190 348,196 540,196"
+                      fill="none" stroke="#1e3a5f" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- ALUMINUM curve: continuously decreasing, no plateau -->
+                <path d="M 105,76 C 145,88 170,105 205,128 C 238,152 268,178 305,202 C 342,224 378,238 435,247 C 470,252 510,255 540,257"
+                      fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="8,4"/>
+                <!-- Endurance limit horizontal dashed line at y=196 -->
+                <line x1="70" y1="196" x2="540" y2="196" stroke="#15803d" stroke-width="1.5" stroke-dasharray="6,4"/>
+                <!-- Endurance limit label — white background rect keeps text readable over the dashed line -->
+                <rect x="72" y="181" width="172" height="13" rx="2" fill="white" fill-opacity="0.92"/>
+                <text x="75" y="192" font-family="Segoe UI,sans-serif" font-size="10" fill="#15803d" font-weight="700">Endurance Limit S&#x2091; (ferrous only)</text>
+                <!-- Aluminum fatigue strength at 10^7:
+                     The aluminum curve is at approximately y=240 when x=397 (10^7 cycles).
+                     Horizontal reference at y=240, vertical drop to x-axis. -->
+                <line x1="70"  y1="240" x2="397" y2="240" stroke="#dc2626" stroke-width="1" stroke-dasharray="4,3"/>
+                <line x1="397" y1="240" x2="397" y2="260" stroke="#dc2626" stroke-width="1.2" stroke-dasharray="4,3"/>
+                <!-- Aluminum label — white background, sits above the y=240 reference line -->
+                <rect x="72" y="226" width="172" height="13" rx="2" fill="white" fill-opacity="0.92"/>
+                <text x="75" y="237" font-family="Segoe UI,sans-serif" font-size="10" fill="#dc2626" font-weight="600">S&#x2091; at 10&#x2077; cycles (non-ferrous)</text>
+                <!-- Legend box (top-right, above both curves in that region) -->
+                <rect x="388" y="46" width="158" height="64" rx="6" fill="#fff" stroke="#e2e8f0"/>
+                <line x1="398" y1="66" x2="426" y2="66" stroke="#1e3a5f" stroke-width="2.5"/>
+                <text x="433" y="70" font-family="Segoe UI,sans-serif" font-size="11" fill="#1e3a5f">Steel (ferrous)</text>
+                <line x1="398" y1="90" x2="426" y2="90" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="8,4"/>
+                <text x="433" y="94" font-family="Segoe UI,sans-serif" font-size="11" fill="#dc2626">Aluminum (non-ferrous)</text>
+            </svg>
+            <div class="diagram-caption">Fig. 2 — S-N curves for steel (solid line) and aluminum (dashed line). Steel exhibits a true endurance limit S&#x2091; — a stress below which fatigue failure does not occur regardless of the number of cycles. Aluminum shows no endurance limit; fatigue strength must be reported at a specified life (typically 10&#x2077; cycles).</div>
+        </div>
+
+        <div class="formula-box">
+            <div class="f-label">Cyclic stress parameters</div>
+            S&#x2090; = (S&#x2098;&#x2090;&#x2093; &minus; S&#x2098;&#x1D62;&#x2099;) / 2 &nbsp;&nbsp;&nbsp; S&#x2098; = (S&#x2098;&#x2090;&#x2093; + S&#x2098;&#x1D62;&#x2099;) / 2 &nbsp;&nbsp;&nbsp; R = S&#x2098;&#x1D62;&#x2099; / S&#x2098;&#x2090;&#x2093;
+            <div style="margin-top:8px; font-size:0.82rem;">
+                S&#x2090; = stress amplitude &nbsp;|&nbsp; S&#x2098; = mean stress &nbsp;|&nbsp; R = stress ratio
+            </div>
+            <div style="margin-top:6px; font-size:0.78rem; color:#93c5fd;">
+                R = &minus;1 &rarr; fully reversed (S&#x2098; = 0, zero mean stress) &nbsp;|&nbsp;
+                R = 0 &rarr; pulsating tension (min = 0) &nbsp;|&nbsp;
+                R = +1 &rarr; static load (no fatigue)
+            </div>
+        </div>
+    </div>
+
+    <!-- ENDURANCE LIMIT -->
+    <div class="section">
+        <h2>Endurance Limit vs. Fatigue Strength</h2>
+        <p>A key distinction exists between materials that have a true endurance limit and those that do not:</p>
+        <div class="compare-grid">
+            <div class="compare-card">
+                <div class="cc-title" style="color:#1e3a5f;">Endurance Limit (S&#x2091;) — Ferrous Metals</div>
+                <ul>
+                    <li>Steels exhibit a <strong>horizontal plateau</strong> in the S-N curve</li>
+                    <li>Below S&#x2091; the material can endure <em>infinite cycles</em> without failure</li>
+                    <li>Approximation for polished, unnotched steel specimens:<br>S&#x2091; &asymp; 0.5 &times; UTS &nbsp;for UTS &lt; ~1400 MPa</li>
+                    <li>Above ~1400 MPa UTS, S&#x2091; no longer scales with UTS (inclusions dominate)</li>
+                    <li>S&#x2091; is a laboratory value — real components require knockdown factors for surface finish, size, notches, and reliability</li>
+                </ul>
+            </div>
+            <div class="compare-card">
+                <div class="cc-title" style="color:#dc2626;">Fatigue Strength (S&#x2091;) — Non-Ferrous Metals</div>
+                <ul>
+                    <li>Aluminum, copper, and most non-ferrous alloys show <strong>no endurance limit</strong> — the S-N curve keeps declining</li>
+                    <li>Fatigue strength must be reported at a <strong>specified life</strong> (typically 10&#x2077; or 5&times;10&#x2078; cycles)</li>
+                    <li>Example: 6061-T6 aluminum &asymp; 96 MPa at 5&times;10&#x2078; cycles (~31% of UTS)</li>
+                    <li>Designs must account for expected service life — infinite-life design is not valid</li>
+                </ul>
+            </div>
+        </div>
+
+        <p class="section-label">Approximate Endurance Limit / Fatigue Strength for Common Materials</p>
+        <table>
+            <thead>
+                <tr><th>Material</th><th>UTS (MPa)</th><th>S&#x2091; or S&#x2091; at N</th><th>Life for S&#x2091;</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+                <tr class="group-header"><td colspan="5">Ferrous Metals — True Endurance Limit</td></tr>
+                <tr><td>1020 plain carbon steel, HR</td><td>~380</td><td>~190 MPa</td><td>&infin;</td><td>S&#x2091; &asymp; 0.5 UTS rule</td></tr>
+                <tr><td>1045 steel, Q&amp;T</td><td>~827</td><td>~415 MPa</td><td>&infin;</td><td></td></tr>
+                <tr><td>4140 steel, Q&amp;T (315&deg;C)</td><td>~1570</td><td>~620 MPa</td><td>&infin;</td><td>Above ~1400 MPa UTS, S&#x2091; saturates; inclusion cleanliness critical</td></tr>
+                <tr><td>Grey cast iron</td><td>~200</td><td>~70–90 MPa</td><td>&infin;</td><td>Graphite flakes act as built-in stress concentrators; low S&#x2091; relative to UTS</td></tr>
+                <tr class="group-header"><td colspan="5">Non-Ferrous Metals — Fatigue Strength at Specified Life</td></tr>
+                <tr><td>6061-T6 aluminum</td><td>310</td><td>~96 MPa</td><td>5&times;10&#x2078;</td><td>~31% of UTS; no endurance limit</td></tr>
+                <tr><td>2024-T4 aluminum</td><td>469</td><td>~138 MPa</td><td>5&times;10&#x2078;</td><td>Common aerospace alloy</td></tr>
+                <tr><td>Ti-6Al-4V (annealed)</td><td>~930</td><td>~510 MPa</td><td>10&#x2077;</td><td>Titanium alloys show near-flat S-N curves; excellent fatigue performance</td></tr>
+                <tr><td>Copper, annealed</td><td>~220</td><td>~70 MPa</td><td>10&#x2078;</td><td>No true endurance limit</td></tr>
+            </tbody>
+        </table>
+
+        <div class="tip-box">
+            <strong>Endurance limit knockdown factors:</strong> The textbook S&#x2091; value assumes a
+            mirror-polished, unnotched laboratory specimen under fully reversed bending (R = &minus;1).
+            Real components require correction factors for: surface finish (rough machining can reduce S&#x2091;
+            by 40–60%), stress concentrations (K&#x2091;), component size, environmental effects, and
+            reliability. A heavily notched steel shaft operating in a corrosive environment may have an
+            effective endurance limit only 15–25% of the material's laboratory S&#x2091;.
+        </div>
+    </div>
+
+    <!-- QUICK REFERENCE SUMMARY -->
+    <div class="section">
+        <h2>Quick Reference Summary</h2>
+        <table>
+            <thead>
+                <tr><th>Test / Concept</th><th>What It Measures</th><th>Key Result</th><th>Standard</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Charpy Impact (CVN)</strong></td>
+                    <td>Energy absorbed by simply-supported notched specimen struck by pendulum</td>
+                    <td>Absorbed energy (J or ft&middot;lb); %SF; DBTT</td>
+                    <td>ASTM E23 / ISO 148</td>
+                </tr>
+                <tr>
+                    <td><strong>Izod Impact</strong></td>
+                    <td>Energy absorbed by cantilevered notched specimen struck by pendulum</td>
+                    <td>Absorbed energy (J or ft&middot;lb)</td>
+                    <td>ASTM E23 / ISO 180</td>
+                </tr>
+                <tr>
+                    <td><strong>DBTT</strong></td>
+                    <td>Temperature at which impact energy transitions from high to low in BCC metals</td>
+                    <td>Transition temperature (&deg;C); upper and lower shelf energies (J)</td>
+                    <td>Derived from CVN vs. T curve</td>
+                </tr>
+                <tr>
+                    <td><strong>S-N Testing</strong></td>
+                    <td>Stress amplitude that causes fatigue failure at N cycles under cyclic loading</td>
+                    <td>S-N curve; endurance limit S&#x2091; (steel) or fatigue strength at N (aluminum)</td>
+                    <td>ASTM E466 / E468</td>
+                </tr>
+                <tr>
+                    <td><strong>Stress Ratio R</strong></td>
+                    <td>Characterizes the loading cycle in fatigue</td>
+                    <td>R = &sigma;&#x2098;&#x1D62;&#x2099; / &sigma;&#x2098;&#x2090;&#x2093;; R = &minus;1 fully reversed; R = 0 pulsating tension</td>
+                    <td>—</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a class="back-link" href="index.html">← Back to Reference Pages</a>
+</main>
+</body>
+</html>
