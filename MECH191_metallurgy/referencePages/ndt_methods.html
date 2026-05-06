@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NDT Methods — Physics, Techniques &amp; Limitations</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.2rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 30px; font-size: 1rem; }
+
+        /* ---- Method sections get a left-border accent color ---- */
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section h2 { font-size: 1.3rem; color: #1e3a5f; margin-bottom: 10px; }
+        .section p  { color: #4b5563; line-height: 1.6; margin-bottom: 12px; font-size: 0.95rem; }
+        .section-label { font-weight: 700; color: #1e3a5f; font-size: 0.93rem; margin: 16px 0 6px; }
+
+        .method-accent { border-left: 5px solid var(--accent); padding-left: 19px; }
+        .vt-section  { --accent: #0284c7; }
+        .rt-section  { --accent: #7c3aed; }
+        .ut-section  { --accent: #0891b2; }
+        .mt-section  { --accent: #b45309; }
+        .pt-section  { --accent: #c026d3; }
+        .et-section  { --accent: #059669; }
+
+        /* Method badge in the header */
+        .method-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        .mb-vt { background: #e0f2fe; color: #0369a1; }
+        .mb-rt { background: #ede9fe; color: #5b21b6; }
+        .mb-ut { background: #cffafe; color: #0e7490; }
+        .mb-mt { background: #fef9c3; color: #92400e; }
+        .mb-pt { background: #fae8ff; color: #a21caf; }
+        .mb-et { background: #d1fae5; color: #065f46; }
+
+        /* Physics principle boxes */
+        .physics-box {
+            background: #1e3a5f;
+            color: #e2e8f0;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 14px 0;
+        }
+        .physics-box .ph-title {
+            font-size: 0.78rem;
+            color: #93c5fd;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            margin-bottom: 8px;
+        }
+        .physics-box .formula {
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            text-align: center;
+            margin: 8px 0;
+            line-height: 1.7;
+        }
+        .physics-box .vars {
+            font-size: 0.79rem;
+            color: #93c5fd;
+            line-height: 1.6;
+            margin-top: 8px;
+        }
+        .physics-box .vars span { display: block; }
+
+        /* Worked example boxes */
+        .example-box {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 14px 0;
+        }
+        .example-box .ex-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        .example-box p  { color: #374151; font-size: 0.9rem; margin-bottom: 8px; }
+        .example-box .ex-calc {
+            background: #fff;
+            border: 1px solid #fde68a;
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.88rem;
+            color: #1e3a5f;
+            line-height: 1.8;
+            margin: 8px 0;
+        }
+        .example-box .ex-result {
+            font-weight: 700;
+            color: #15803d;
+        }
+        .example-box .ex-fail {
+            font-weight: 700;
+            color: #b91c1c;
+        }
+
+        /* Limitation boxes */
+        .limit-box {
+            background: #fff1f2;
+            border-left: 4px solid #e11d48;
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            margin: 14px 0;
+        }
+        .limit-box .lim-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: #be123c;
+            margin-bottom: 8px;
+        }
+        .limit-box ul {
+            padding-left: 16px;
+            color: #4b5563;
+            font-size: 0.88rem;
+            line-height: 1.7;
+        }
+
+        /* Tip boxes */
+        .tip-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            margin: 14px 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .tip-box strong { color: #92400e; }
+
+        /* 2-column layout for procedure + diagram */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin: 14px 0;
+            align-items: start;
+        }
+        @media (max-width: 680px) { .two-col { grid-template-columns: 1fr; } }
+
+        /* Procedure steps */
+        .steps {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 14px 16px;
+        }
+        .steps .step {
+            display: flex;
+            gap: 10px;
+            padding: 6px 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.87rem;
+            color: #374151;
+            line-height: 1.5;
+        }
+        .steps .step:last-child { border-bottom: none; }
+        .step-num {
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #1e3a5f;
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* SVG diagram containers */
+        .diagram-wrap {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+        .diagram-wrap figcaption {
+            font-size: 0.78rem;
+            color: #6b7280;
+            margin-top: 8px;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; font-size: 0.87rem; margin-top: 10px; }
+        thead tr { background: #1e3a5f; color: #fff; }
+        thead th { padding: 9px 12px; text-align: left; font-weight: 600; }
+        tbody tr:nth-child(even) { background: #f1f5f9; }
+        tbody tr:hover { background: #e0f2fe; }
+        tbody td { padding: 8px 12px; border-bottom: 1px solid #e2e8f0; color: #374151; vertical-align: top; }
+        .code { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #1e3a5f; }
+        .tg td { background: #dbeafe !important; font-weight: 700; color: #1e3a5f; font-size: 0.84rem; padding: 5px 12px; }
+
+        .note { font-size: 0.84rem; color: #6b7280; font-style: italic; margin-top: 10px; }
+        .source-note {
+            font-size: 0.8rem; color: #6b7280; border-top: 1px solid #e2e8f0;
+            margin-top: 20px; padding-top: 10px; font-style: italic;
+        }
+
+        .back-link {
+            display: block; text-align: center; margin-top: 30px;
+            color: #0284c7; text-decoration: none; font-size: 0.95rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        /* ---- Industrial Case Studies ---- */
+        .case-studies-intro {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+        .case-studies-intro h3 { color: #7dd3fc; font-size: 1.05rem; margin-bottom: 8px; }
+        .case-studies-intro p { font-size: 0.88rem; color: #94a3b8; line-height: 1.6; }
+
+        .case-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 28px;
+        }
+        .case-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .case-header .case-title { font-weight: 700; color: #1e3a5f; font-size: 1rem; }
+        .case-header .case-industry { font-size: 0.8rem; color: #64748b; margin-top: 2px; }
+        .case-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+        @media (max-width: 680px) { .case-body { grid-template-columns: 1fr; } }
+        .case-image {
+            padding: 16px;
+            border-right: 1px solid #e2e8f0;
+            background: #0a0a0a;
+        }
+        .case-image figcaption {
+            font-size: 0.73rem;
+            color: #94a3b8;
+            margin-top: 8px;
+            font-style: italic;
+            line-height: 1.4;
+            text-align: center;
+        }
+        .case-detail { padding: 16px 20px; }
+        .case-detail .cd-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: #94a3b8;
+            margin: 12px 0 4px;
+        }
+        .case-detail .cd-label:first-child { margin-top: 0; }
+        .case-detail p { font-size: 0.87rem; color: #374151; line-height: 1.6; }
+        .case-detail ul { padding-left: 16px; font-size: 0.87rem; color: #374151; line-height: 1.7; }
+        .disp-reject {
+            display: inline-block;
+            background: #fee2e2;
+            color: #991b1b;
+            font-weight: 700;
+            font-size: 0.82rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-top: 4px;
+        }
+        .disp-accept {
+            display: inline-block;
+            background: #dcfce7;
+            color: #166534;
+            font-weight: 700;
+            font-size: 0.82rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-top: 4px;
+        }
+        .disp-monitor {
+            display: inline-block;
+            background: #fef9c3;
+            color: #713f12;
+            font-weight: 700;
+            font-size: 0.82rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-top: 4px;
+        }
+        .lesson-banner {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            color: #1e40af;
+            margin-top: 12px;
+            border-radius: 0 6px 6px 0;
+            line-height: 1.5;
+        }
+        .lesson-banner strong { color: #1e3a5f; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>NDT Methods — Physics, Techniques &amp; Limitations</h1>
+    <p class="subtitle">VT &nbsp;&middot;&nbsp; RT &nbsp;&middot;&nbsp; UT &nbsp;&middot;&nbsp; MT &nbsp;&middot;&nbsp; PT &nbsp;&middot;&nbsp; ET &nbsp;&mdash;&nbsp; how each method works and why it has blind spots</p>
+</header>
+<main>
+    <p class="intro">
+        Every NDT method works by detecting a physical contrast between a sound region and a region with a
+        discontinuity. That contrast is governed by physics — and the physics directly determines what each
+        method can and cannot find. A method that works excellently for a surface crack may completely miss
+        a subsurface planar defect; a method that finds volumetric voids effortlessly may produce no signal
+        from a tight crack with touching faces. Understanding the underlying physics lets you predict a
+        method's limitations before you ever pick up the equipment — and it is the basis for all
+        competent inspector decision-making. Content below follows the educational framework of the
+        <strong>ISU Center for Nondestructive Evaluation (CNDE)</strong> NDT Resource Center.
+    </p>
+
+    <!-- ==================== VT ==================== -->
+    <div class="section method-accent vt-section">
+        <h2>Visual Testing <span class="method-badge mb-vt">VT</span></h2>
+        <p>
+            Visual testing is the oldest and most fundamental NDT method and is <strong>required before any
+            other NDT method</strong> by both AWS D1.1 (Clause 6.5) and ASME Section V. It detects
+            surface-breaking discontinuities by direct or aided observation and remains the fastest, least
+            expensive, and most versatile method when properly executed.
+        </p>
+
+        <div class="section-label">Physics — Optics and Resolution</div>
+        <div class="physics-box">
+            <div class="ph-title">Human Eye Resolution Limit</div>
+            <div class="formula">d<sub>min</sub> &asymp; 0.1 mm &nbsp;at &nbsp;250 mm (10&Prime;) viewing distance</div>
+            <div class="vars">
+                <span>This is the <em>photopic</em> (bright-light) resolution limit of a normal eye.</span>
+                <span>Below this size, discontinuities cannot be reliably distinguished without optical aids.</span>
+                <span>At typical inspection distances (12–24&Prime;), the resolution degrades further — emphasizing why adequate lighting and inspection distance matter.</span>
+            </div>
+        </div>
+
+        <div class="two-col">
+            <div class="steps">
+                <div class="step"><div class="step-num">1</div><div>Ensure adequate illumination: minimum 100 fc (1075 lux) at the inspection surface per ASME Section V Article 9; AWS D1.1 allows less but recommends this minimum.</div></div>
+                <div class="step"><div class="step-num">2</div><div>Inspect at no more than 24&Prime; (600 mm) from the surface; angle of incidence should be no less than 30° to the surface.</div></div>
+                <div class="step"><div class="step-num">3</div><div>Use aids as needed: magnifier (up to 10&times; before requiring "enhanced VT"), borescope, remote camera for inaccessible areas.</div></div>
+                <div class="step"><div class="step-num">4</div><div>Measure indications with calibrated weld gauges (undercut depth, fillet leg size, crown height, weld width).</div></div>
+                <div class="step"><div class="step-num">5</div><div>Document all findings; sign and date report. VT must be completed before any other NDT begins.</div></div>
+            </div>
+            <div class="diagram-wrap">
+                <svg viewBox="0 0 360 200" width="100%" xmlns="http://www.w3.org/2000/svg" aria-label="VT inspection geometry diagram">
+                    <!-- Light source -->
+                    <circle cx="60" cy="30" r="18" fill="#fef08a" stroke="#d97706" stroke-width="2"/>
+                    <text x="60" y="34" text-anchor="middle" font-size="9" fill="#92400e" font-weight="700">LIGHT</text>
+                    <!-- Light rays -->
+                    <line x1="75" y1="40" x2="160" y2="110" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <line x1="78" y1="45" x2="180" y2="110" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <!-- Inspector eye -->
+                    <ellipse cx="300" cy="40" rx="20" ry="13" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+                    <circle cx="300" cy="40" r="6" fill="#0284c7"/>
+                    <text x="300" y="64" text-anchor="middle" font-size="9" fill="#374151">Inspector</text>
+                    <!-- Viewing ray -->
+                    <line x1="285" y1="47" x2="195" y2="110" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <!-- Weld surface -->
+                    <rect x="80" y="110" width="200" height="30" fill="#94a3b8" rx="2"/>
+                    <text x="180" y="130" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">WELD SURFACE</text>
+                    <!-- Undercut indicator -->
+                    <path d="M155,110 Q160,118 165,110" stroke="#dc2626" stroke-width="2" fill="none"/>
+                    <text x="155" y="107" font-size="8" fill="#dc2626" font-weight="700">Undercut</text>
+                    <!-- Base metal -->
+                    <rect x="80" y="140" width="90" height="20" fill="#cbd5e1" rx="2"/>
+                    <rect x="210" y="140" width="70" height="20" fill="#cbd5e1" rx="2"/>
+                    <!-- Dimension arrows -->
+                    <line x1="300" y1="50" x2="300" y2="108" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
+                    <text x="312" y="85" font-size="8" fill="#6b7280">&le;600mm</text>
+                    <!-- Angle indicator -->
+                    <path d="M260,110 A40,40 0 0,0 285,75" stroke="#0284c7" stroke-width="1.2" fill="none"/>
+                    <text x="255" y="90" font-size="8" fill="#0284c7">&ge;30°</text>
+                    <defs>
+                        <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                            <path d="M0,0 L6,3 L0,6 Z" fill="#9ca3af"/>
+                        </marker>
+                    </defs>
+                </svg>
+                <figcaption>VT geometry: maximum 600 mm viewing distance, minimum 30° angle of incidence, adequate lighting. Undercut at the weld toe is the most common VT finding.</figcaption>
+            </div>
+        </div>
+
+        <div class="limit-box">
+            <div class="lim-title">Key Limitations of VT</div>
+            <ul>
+                <li><strong>Surface only</strong> — no information about the weld interior whatsoever; subsurface defects (HAC, LOP, LOF, slag) are completely invisible</li>
+                <li><strong>Access required</strong> — both sides of the joint must be accessible; weld roots in pipes are often inaccessible from outside</li>
+                <li><strong>Lighting critical</strong> — inadequate or single-direction lighting hides shallow undercut and cracks; shadows must be used to reveal depth</li>
+                <li><strong>Inspector fatigue</strong> — resolution degrades with fatigue; rotation of inspectors on long production runs required</li>
+                <li><strong>Tight cracks</strong> — a cold crack whose faces are closed under compressive stress may produce no visual contrast even at the surface</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ==================== RT ==================== -->
+    <div class="section method-accent rt-section">
+        <h2>Radiographic Testing <span class="method-badge mb-rt">RT</span></h2>
+        <p>
+            RT uses ionizing radiation (X-rays or gamma rays) to create a two-dimensional shadowgraph of
+            the internal structure of a component. It is uniquely suited to detecting volumetric defects
+            (porosity, slag) and the most reliable method for evaluating root conditions (LOP). The
+            physics of attenuation and image formation directly determine what RT can and cannot reveal.
+        </p>
+
+        <div class="section-label">Physics — Beer-Lambert Attenuation Law</div>
+        <div class="physics-box">
+            <div class="ph-title">Intensity of Radiation After Passing Through Thickness x</div>
+            <div class="formula">I = I&#8320; &times; e<sup>&minus;&mu;x</sup></div>
+            <div class="vars">
+                <span><strong>I&#8320;</strong> = initial beam intensity &nbsp;|&nbsp; <strong>I</strong> = transmitted intensity at film/detector</span>
+                <span><strong>&mu;</strong> = linear attenuation coefficient (cm<sup>&minus;1</sup>) — depends on material density and photon energy</span>
+                <span><strong>x</strong> = material thickness in the beam path (cm)</span>
+                <span style="margin-top:6px; color:#bfdbfe;">A void (&mu; &asymp; 0) transmits more radiation &rarr; more photons reach the film &rarr; <strong>darker area</strong> on the radiograph.</span>
+                <span style="color:#bfdbfe;">A tungsten inclusion (&mu; very high, high density) transmits fewer photons &rarr; <strong>lighter (brighter) area</strong> — the only inclusion that appears bright.</span>
+            </div>
+        </div>
+
+        <div class="section-label">Geometric Unsharpness (U<sub>g</sub>) — Setup Quality Limit</div>
+        <div class="physics-box">
+            <div class="ph-title">Geometric Unsharpness Formula (ASME Article 2 / AWS D1.1 Annex K)</div>
+            <div class="formula">U<sub>g</sub> = f &times; b / F</div>
+            <div class="vars">
+                <span><strong>f</strong> = focal spot (source) size &nbsp;|&nbsp; <strong>b</strong> = object-to-film distance (OFD) &nbsp;|&nbsp; <strong>F</strong> = source-to-object distance (SOD = SFD &minus; b)</span>
+                <span style="color:#bfdbfe;">Limit: U<sub>g</sub> &le; 0.020&Prime; (0.51 mm) per AWS D1.1. ASME uses tables in Article 2, App. B.</span>
+                <span style="color:#bfdbfe;">To reduce U<sub>g</sub>: increase SFD, decrease focal spot size, or minimize OFD (film tight against part).</span>
+            </div>
+        </div>
+
+        <div class="two-col">
+            <div class="steps">
+                <div class="step"><div class="step-num">1</div><div>Select radiation source: X-ray tube (adjustable kV, controlled energy) or isotope (Ir-192 for 12–75 mm steel; Se-75 for thin pipe; Co-60 for very thick sections).</div></div>
+                <div class="step"><div class="step-num">2</div><div>Set up geometry: source-to-film distance (SFD), object-to-film distance minimized, single-wall or double-wall technique depending on access.</div></div>
+                <div class="step"><div class="step-num">3</div><div>Place IQI (Image Quality Indicator): wire IQI or plaque IQI on source side; essential wire must be visible on processed film to verify 2% sensitivity.</div></div>
+                <div class="step"><div class="step-num">4</div><div>Expose and process film (or acquire digital image); verify density in the area of interest: 1.8–4.0 H&amp;D units per ASME; 1.8–3.5 per AWS D1.1.</div></div>
+                <div class="step"><div class="step-num">5</div><div>Interpret on a calibrated light box in a darkened room; characterize, measure, and disposition each indication against code acceptance criteria.</div></div>
+            </div>
+            <div class="diagram-wrap">
+                <svg viewBox="0 0 340 230" width="100%" xmlns="http://www.w3.org/2000/svg" aria-label="RT physics and setup diagram">
+                    <!-- Source -->
+                    <polygon points="170,10 155,35 185,35" fill="#7c3aed" stroke="#5b21b6" stroke-width="1.5"/>
+                    <text x="170" y="8" text-anchor="middle" font-size="8" fill="#5b21b6" font-weight="700">X-ray / &gamma; Source</text>
+                    <!-- Beam edges -->
+                    <line x1="170" y1="35" x2="60" y2="140" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3,2" opacity="0.6"/>
+                    <line x1="170" y1="35" x2="280" y2="140" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3,2" opacity="0.6"/>
+                    <!-- Central beam ray -->
+                    <line x1="170" y1="35" x2="170" y2="145" stroke="#7c3aed" stroke-width="1.5"/>
+                    <!-- Steel plate -->
+                    <rect x="60" y="80" width="220" height="60" fill="#94a3b8" rx="3"/>
+                    <text x="170" y="95" text-anchor="middle" font-size="8.5" fill="#fff" font-weight="700">STEEL WELD SECTION</text>
+                    <!-- Void (porosity) -->
+                    <ellipse cx="140" cy="112" rx="12" ry="9" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+                    <text x="140" y="116" text-anchor="middle" font-size="7" fill="#374151">void</text>
+                    <!-- Slag inclusion (irregular) -->
+                    <ellipse cx="205" cy="112" rx="14" ry="7" fill="#78716c" stroke="#57534e" stroke-width="1"/>
+                    <text x="205" y="116" text-anchor="middle" font-size="7" fill="#e2e8f0">slag</text>
+                    <!-- Dimension: OFD -->
+                    <line x1="290" y1="140" x2="290" y2="200" stroke="#9ca3af" stroke-width="1"/>
+                    <line x1="285" y1="140" x2="295" y2="140" stroke="#9ca3af" stroke-width="1"/>
+                    <line x1="285" y1="200" x2="295" y2="200" stroke="#9ca3af" stroke-width="1"/>
+                    <text x="305" y="174" font-size="7.5" fill="#6b7280">OFD</text>
+                    <!-- Film -->
+                    <rect x="60" y="200" width="220" height="14" fill="#1c1917" rx="2"/>
+                    <!-- Film density variation -->
+                    <rect x="127" y="200" width="26" height="14" fill="#111827" rx="1" opacity="0.9"/>
+                    <rect x="190" y="200" width="30" height="14" fill="#292524" rx="1" opacity="0.7"/>
+                    <text x="140" y="222" text-anchor="middle" font-size="7.5" fill="#374151">dark (void)</text>
+                    <text x="205" y="222" text-anchor="middle" font-size="7.5" fill="#374151">dark (slag)</text>
+                    <text x="90" y="222" text-anchor="middle" font-size="7.5" fill="#374151">normal density</text>
+                    <text x="170" y="195" text-anchor="middle" font-size="7" fill="#6b7280" font-style="italic">FILM / DETECTOR</text>
+                    <!-- IQI indicator -->
+                    <rect x="68" y="82" width="18" height="8" fill="#fbbf24" stroke="#d97706" stroke-width="1"/>
+                    <text x="77" y="89" text-anchor="middle" font-size="6.5" fill="#92400e" font-weight="700">IQI</text>
+                </svg>
+                <figcaption>Beer-Lambert attenuation: voids transmit more radiation (darker film); high-density slag also appears darker. The IQI (source-side) verifies minimum 2% sensitivity. OFD should be minimized to reduce U<sub>g</sub>.</figcaption>
+            </div>
+        </div>
+
+        <div class="section-label">Worked Example — Geometric Unsharpness Verification</div>
+        <div class="example-box">
+            <div class="ex-title">Example: Is this RT setup acceptable per AWS D1.1?</div>
+            <p><strong>Setup A</strong> — Small industrial X-ray tube, close source-to-film distance:</p>
+            <div class="ex-calc">
+f (focal spot) = 2.0 mm
+SFD (source-to-film distance) = 600 mm
+Plate thickness = 25 mm &rarr; worst-case OFD = 25 mm (film on far side)
+SOD = SFD &minus; OFD = 600 &minus; 25 = 575 mm
+
+U<sub>g</sub> = f &times; OFD / SOD = 2.0 &times; 25 / 575 = <span class="ex-result">0.087 mm (0.0034&Prime;)</span>
+Limit: 0.51 mm (0.020&Prime;) &rarr; <span class="ex-result">ACCEPTABLE &#10003;</span>
+            </div>
+            <p><strong>Setup B</strong> — Same tube, source moved much closer (production shortcut):</p>
+            <div class="ex-calc">
+f = 2.0 mm, SFD reduced to 150 mm, plate = 25 mm, OFD = 25 mm
+SOD = 150 &minus; 25 = 125 mm
+
+U<sub>g</sub> = 2.0 &times; 25 / 125 = <span class="ex-fail">0.40 mm (0.016&Prime;)</span>
+Limit: 0.51 mm &rarr; <span class="ex-result">ACCEPTABLE — but barely; now imagine f = 4.0 mm (worn tube):</span>
+U<sub>g</sub> = 4.0 &times; 25 / 125 = <span class="ex-fail">0.80 mm (0.031&Prime;) &rarr; REJECT setup &#10007;</span>
+            </div>
+            <p><strong>Lesson:</strong> Moving the source closer OR using a worn tube with a larger focal spot both increase U<sub>g</sub>. Blurred images miss fine cracks and produce false-negative results. Always verify U<sub>g</sub> before each exposure setup.</p>
+        </div>
+
+        <div class="limit-box">
+            <div class="lim-title">Key Limitations of RT</div>
+            <ul>
+                <li><strong>Orientation-dependent</strong> — planar defects (LOF, tight cracks) aligned parallel to the radiation beam produce little or no contrast; they can be completely missed. The beam must pass through the defect thickness, not along it.</li>
+                <li><strong>Radiation safety</strong> — requires exclusion zones, dosimetry, licensed procedures; often requires night-shift shooting to clear the work area.</li>
+                <li><strong>No depth information</strong> — RT is a 2D projection; you see an indication but cannot determine at what depth in the section it sits. Two exposures from different angles (stereoradiography) can triangulate depth but are rarely practical.</li>
+                <li><strong>Double-wall limitations</strong> — small-diameter pipe requires double-wall technique; superimposition of images complicates interpretation.</li>
+                <li><strong>Material density</strong> — very thick sections absorb too much radiation for useful images; Co-60 extends range but creates hazard.</li>
+                <li><strong>Film storage and aging</strong> — ASME requires film retention for minimum 3 years; digital detectors avoid this but require calibration management.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ==================== UT ==================== -->
+    <div class="section method-accent ut-section">
+        <h2>Ultrasonic Testing <span class="method-badge mb-ut">UT</span></h2>
+        <p>
+            UT uses high-frequency sound waves (typically 1–10 MHz in weld inspection) to probe the
+            interior of a material. It is the preferred method for detecting planar defects (cracks, LOF)
+            — which RT routinely misses — and is the primary inspection method for thick plate, pressure
+            vessel nozzle welds, and HAZ cracking. Understanding acoustic impedance and Snell's law
+            explains both the power and the geometry of UT.
+        </p>
+
+        <div class="section-label">Physics — Acoustic Impedance and Reflection</div>
+        <div class="physics-box">
+            <div class="ph-title">Acoustic Impedance &amp; Reflection Coefficient</div>
+            <div class="formula">Z = &rho; &times; v &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; R = &left;(Z&#8322; &minus; Z&#8321;) / (Z&#8322; + Z&#8321;)&right;&sup2;</div>
+            <div class="vars">
+                <span><strong>Z</strong> = acoustic impedance (kg/m&sup2;&middot;s = MRayl) &nbsp;|&nbsp; <strong>&rho;</strong> = density &nbsp;|&nbsp; <strong>v</strong> = sound velocity</span>
+                <span><strong>R</strong> = fraction of incident energy reflected at an interface</span>
+                <span style="margin-top:6px; color:#a5f3fc;">Steel: Z &asymp; 45.7 MRayl &nbsp;|&nbsp; Air: Z &asymp; 0.0004 MRayl &nbsp;&rarr;&nbsp; R &asymp; (45.7/45.7)&sup2; &asymp; <strong>100%</strong></span>
+                <span style="color:#a5f3fc;">A steel-air interface (crack face) reflects essentially all of the incident energy — this is why even a tight, closed crack produces a strong UT signal.</span>
+            </div>
+        </div>
+
+        <div class="physics-box">
+            <div class="ph-title">Snell's Law — Angle Beam Probe Geometry</div>
+            <div class="formula">sin(&theta;&#8321;) / v&#8321; = sin(&theta;&#8322;) / v&#8322;</div>
+            <div class="vars">
+                <span>Used to calculate the refraction angle of sound when it crosses from the wedge material into steel.</span>
+                <span>v<sub>L</sub> in steel &asymp; 5,960 m/s (longitudinal) &nbsp;|&nbsp; v<sub>S</sub> in steel &asymp; 3,230 m/s (shear)</span>
+                <span>First critical angle: incident angle at which refracted L-wave reaches 90° &rarr; only shear wave propagates in steel.</span>
+                <span style="color:#a5f3fc;">70°, 60°, and 45° shear wave probes are the standard for weld inspection. The probe angle (in steel) is labeled on the probe.</span>
+            </div>
+        </div>
+
+        <div class="section-label">Pulse-Echo Depth Calculation</div>
+        <div class="physics-box">
+            <div class="ph-title">Defect Location from Angle Beam UT</div>
+            <div class="formula">
+                Slant path: L = v<sub>S</sub> &times; t / 2<br>
+                Depth: d = L &times; cos(&theta;)<br>
+                Surface distance: s = L &times; sin(&theta;)
+            </div>
+            <div class="vars">
+                <span><strong>t</strong> = round-trip travel time (time on A-scan display) &nbsp;|&nbsp; <strong>&theta;</strong> = probe refraction angle in steel</span>
+                <span style="color:#a5f3fc;">Divide by 2 because the pulse travels out and back.</span>
+            </div>
+        </div>
+
+        <div class="two-col">
+            <div class="diagram-wrap">
+                <svg viewBox="0 0 360 260" width="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Angle beam UT geometry diagram">
+                    <!-- Steel plate -->
+                    <rect x="30" y="80" width="300" height="90" fill="#94a3b8" rx="3"/>
+                    <!-- Weld centerline -->
+                    <line x1="180" y1="80" x2="180" y2="170" stroke="#64748b" stroke-width="1" stroke-dasharray="4,3"/>
+                    <!-- Weld outline (trapezoid) -->
+                    <polygon points="155,80 205,80 215,100 145,100" fill="#7f8ea0" stroke="#64748b" stroke-width="1"/>
+                    <!-- Probe body -->
+                    <rect x="30" y="55" width="55" height="28" fill="#0891b2" rx="4"/>
+                    <text x="57" y="74" text-anchor="middle" font-size="8.5" fill="#fff" font-weight="700">PROBE</text>
+                    <!-- Wedge -->
+                    <polygon points="30,83 85,83 75,83" fill="#0284c7"/>
+                    <polygon points="30,83 85,83 30,72" fill="#0891b2" opacity="0.5"/>
+                    <!-- θ label on wedge -->
+                    <path d="M45,83 A15,15 0 0,0 42,70" stroke="#fff" stroke-width="1" fill="none"/>
+                    <text x="52" y="79" font-size="7.5" fill="#fff">&theta;</text>
+                    <!-- Sound beam (angled) -->
+                    <line x1="70" y1="83" x2="155" y2="150" stroke="#06b6d4" stroke-width="2"/>
+                    <!-- Reflected beam back to probe -->
+                    <line x1="155" y1="150" x2="70" y2="83" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.6"/>
+                    <!-- Skip beam path (alternate half-skip) -->
+                    <line x1="155" y1="150" x2="200" y2="170" stroke="#0891b2" stroke-width="1.5" opacity="0.4"/>
+                    <line x1="200" y1="170" x2="238" y2="118" stroke="#0891b2" stroke-width="1.5" opacity="0.4" stroke-dasharray="4,3"/>
+                    <!-- Defect (LOF at fusion line) -->
+                    <line x1="152" y1="100" x2="158" y2="155" stroke="#dc2626" stroke-width="3"/>
+                    <text x="165" y="130" font-size="8" fill="#dc2626" font-weight="700">LOF</text>
+                    <!-- Depth label -->
+                    <line x1="270" y1="83" x2="270" y2="150" stroke="#9ca3af" stroke-width="1"/>
+                    <line x1="265" y1="83" x2="275" y2="83" stroke="#9ca3af" stroke-width="1"/>
+                    <line x1="265" y1="150" x2="275" y2="150" stroke="#9ca3af" stroke-width="1"/>
+                    <text x="283" y="122" font-size="8" fill="#374151">depth d</text>
+                    <!-- Surface distance label -->
+                    <line x1="70" y1="173" x2="155" y2="173" stroke="#9ca3af" stroke-width="1"/>
+                    <line x1="70" y1="169" x2="70" y2="177" stroke="#9ca3af" stroke-width="1"/>
+                    <line x1="155" y1="169" x2="155" y2="177" stroke="#9ca3af" stroke-width="1"/>
+                    <text x="112" y="185" text-anchor="middle" font-size="8" fill="#374151">surface dist s</text>
+                    <!-- Slant path label -->
+                    <text x="95" y="125" font-size="8" fill="#0891b2" transform="rotate(-33,95,125)">slant path L</text>
+                    <!-- A-scan display -->
+                    <rect x="280" y="10" width="65" height="55" fill="#0a0a0a" rx="4"/>
+                    <text x="312" y="23" text-anchor="middle" font-size="7" fill="#94a3b8">A-scan</text>
+                    <polyline points="285,50 295,50 300,50 305,45 310,58 315,50 325,50 330,32 335,50 340,50 342,50" stroke="#22d3ee" stroke-width="1.5" fill="none"/>
+                    <text x="330" y="44" font-size="6.5" fill="#f59e0b">echo</text>
+                    <text x="295" y="63" font-size="6.5" fill="#6b7280">t (time)</text>
+                </svg>
+                <figcaption>Angle beam UT: shear waves travel at angle &theta; through the weld, reflecting from the fusion-line LOF back to the probe. The A-scan echo time gives depth and surface distance via the geometry equations above.</figcaption>
+            </div>
+            <div class="steps">
+                <div class="step"><div class="step-num">1</div><div>Calibrate instrument on IIW (V1) or ASTM E164 reference block: set range, velocity, and gain. Establish DAC (Distance Amplitude Correction) curve from side-drilled holes per D1.1 or ASME.</div></div>
+                <div class="step"><div class="step-num">2</div><div>Apply couplant (gel, glycerin, water) to ensure acoustic coupling between probe and part surface; without couplant, air gap causes 100% reflection at surface.</div></div>
+                <div class="step"><div class="step-num">3</div><div>Scan the weld with the probe at the calculated index point, moving at no more than 6 in/s (150 mm/s) with 10% overlapping passes.</div></div>
+                <div class="step"><div class="step-num">4</div><div>Record any indication with amplitude ≥ 20% DAC (AWS D1.1 reporting threshold). Characterize: measure amplitude vs. DAC, determine beam path length, calculate depth and location.</div></div>
+                <div class="step"><div class="step-num">5</div><div>Classify per D1.1 Table 6.3 (Class A, B, C, D) or ASME Article 5 acceptance criteria. Document all results.</div></div>
+            </div>
+        </div>
+
+        <div class="section-label">Worked Example — Calculating Defect Depth from Angle Beam UT</div>
+        <div class="example-box">
+            <div class="ex-title">Example: Locate a defect using a 70° shear wave probe on steel</div>
+            <p><strong>Given:</strong> A signal echo appears on the A-scan at <em>t = 18.5 μs</em> after the initial pulse.
+            The probe is a 70° shear wave transducer. Steel shear wave velocity v<sub>S</sub> = 3,230 m/s = 3.23 mm/μs.</p>
+            <div class="ex-calc">
+Slant path:  L = v<sub>S</sub> &times; t / 2 = 3.23 mm/&mu;s &times; 18.5 &mu;s / 2 = <span class="ex-result">29.9 mm</span>
+
+Depth:       d = L &times; cos(70°) = 29.9 &times; 0.342 = <span class="ex-result">10.2 mm from surface</span>
+
+Surface dist: s = L &times; sin(70°) = 29.9 &times; 0.940 = <span class="ex-result">28.1 mm from probe index point</span>
+            </div>
+            <p>The indication is located <strong>10.2 mm below the surface</strong> and <strong>28.1 mm ahead of the probe</strong>. For a 20 mm thick plate, this depth places the defect approximately mid-thickness — consistent with a sidewall LOF indication in the weld pass region.</p>
+            <p><strong>Check for second leg (skip):</strong> If the beam has already bounced off the bottom surface, the true depth is 2T &minus; d = 40 &minus; 10.2 = 29.8 mm — but since T = 20 mm and d &lt; T, this is a first-leg indication, no correction needed.</p>
+        </div>
+
+        <div class="limit-box">
+            <div class="lim-title">Key Limitations of UT</div>
+            <ul>
+                <li><strong>Requires couplant</strong> — no acoustic signal without a liquid coupling medium; dry contact probes have much lower sensitivity; rough surfaces degrade coupling.</li>
+                <li><strong>Near-surface dead zone</strong> — the initial pulse and probe ringing create a dead zone of 2–5 mm from the surface where defects cannot be detected with conventional probes. Near-surface defects require TOFD or creeping wave probes.</li>
+                <li><strong>Orientation-dependent</strong> — a planar defect must be oriented to reflect energy back toward the probe. Defects at an unfavorable angle (e.g., 45° LOF in a V-groove weld with a 70° probe) may produce weak signals that go unrecorded.</li>
+                <li><strong>Coarse grain noise</strong> — austenitic stainless steels and nickel alloys have coarse, anisotropic grain structures that scatter sound waves, creating "grass" noise on the A-scan that masks real indications. Specialized low-frequency probes and TOFD techniques are required.</li>
+                <li><strong>Calibration block match</strong> — calibration must be performed on a block of the same material and geometry as the test piece. Using a mild steel block to calibrate for stainless inspection is not valid (different velocity and attenuation).</li>
+                <li><strong>Sizing accuracy</strong> — the 6 dB drop method and DAC methods provide approximate sizing. Phased array UT (PAUT) and TOFD improve sizing accuracy but require more complex equipment and procedures.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ==================== MT ==================== -->
+    <div class="section method-accent mt-section">
+        <h2>Magnetic Particle Testing <span class="method-badge mb-mt">MT</span></h2>
+        <p>
+            MT detects surface and near-surface discontinuities in ferromagnetic materials by revealing
+            leakage of the magnetic flux at cracks and other discontinuities. It is fast, inexpensive,
+            and highly sensitive to surface cracks — making it the primary method for post-weld inspection
+            of arc strikes, weld toe cracks, and HAC on carbon and low-alloy steels. Understanding
+            the magnetic circuit explains why field direction is so critical.
+        </p>
+
+        <div class="section-label">Physics — Flux Leakage at a Discontinuity</div>
+        <div class="physics-box">
+            <div class="ph-title">Magnetic Flux and Leakage Field — Why Cracks Are Visible</div>
+            <div class="formula">B = &mu;<sub>r</sub> &mu;<sub>0</sub> H &nbsp;&nbsp;&nbsp;&nbsp; &oint; B &middot; dA = 0 (flux is conserved)</div>
+            <div class="vars">
+                <span><strong>B</strong> = magnetic flux density (Tesla) &nbsp;|&nbsp; <strong>H</strong> = applied field intensity (A/m) &nbsp;|&nbsp; <strong>&mu;<sub>r</sub></strong> = relative permeability of the material</span>
+                <span>Ferromagnetic steel: &mu;<sub>r</sub> &asymp; 100–1000 (highly permeable — field prefers to travel inside steel)</span>
+                <span style="color:#fde68a; margin-top:6px;">A crack interrupts the flux path. Since flux cannot easily cross the air gap (&mu;<sub>r,air</sub> = 1), it bulges out above the crack surface — creating a <strong>leakage field</strong>.</span>
+                <span style="color:#fde68a;">Fine iron particles in the MT bath are drawn to this leakage field, forming a visible indication that is <em>wider</em> than the actual crack opening.</span>
+            </div>
+        </div>
+
+        <div class="section-label">Critical Principle: Field Direction vs. Crack Orientation</div>
+        <p style="color:#4b5563; font-size:0.9rem;">
+            Leakage field intensity is maximum when the crack is <strong>perpendicular (90°)</strong> to the
+            applied magnetic field. Detection falls off rapidly as the angle decreases below 45°. A crack
+            running exactly <em>parallel</em> to the field produces no leakage and may not be detected at all.
+            This is why AWS D1.1 and ASME Section V both require MT to be performed in <strong>two
+            perpendicular field directions</strong> to ensure all crack orientations are covered.
+        </p>
+
+        <div class="two-col">
+            <div class="diagram-wrap">
+                <svg viewBox="0 0 360 200" width="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Magnetic flux leakage diagram">
+                    <!-- Steel bar -->
+                    <rect x="30" y="70" width="300" height="70" fill="#94a3b8" rx="4"/>
+                    <text x="180" y="112" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">FERROMAGNETIC STEEL</text>
+                    <!-- Magnetic field lines inside bar (left region) -->
+                    <path d="M50,105 Q80,95 110,105" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.7"/>
+                    <path d="M50,115 Q80,107 110,115" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.7"/>
+                    <path d="M50,125 Q80,118 110,125" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.5"/>
+                    <!-- Surface crack -->
+                    <path d="M155,70 L158,95 L162,120 L160,140" stroke="#dc2626" stroke-width="3" fill="none"/>
+                    <text x="155" y="65" font-size="9" fill="#dc2626" font-weight="700">surface crack</text>
+                    <!-- Flux leakage above crack -->
+                    <path d="M148,72 Q135,45 155,40 Q175,35 168,72" stroke="#3b82f6" stroke-width="1.8" fill="none" stroke-dasharray="3,2"/>
+                    <path d="M152,72 Q140,55 155,50 Q170,46 163,72" stroke="#3b82f6" stroke-width="1.5" fill="none" stroke-dasharray="3,2" opacity="0.7"/>
+                    <text x="155" y="32" text-anchor="middle" font-size="8" fill="#3b82f6">flux leakage</text>
+                    <!-- Magnetic particles accumulating -->
+                    <ellipse cx="155" cy="72" rx="12" ry="4" fill="#78350f" opacity="0.8"/>
+                    <text x="155" y="83" text-anchor="middle" font-size="7.5" fill="#92400e">MT indication</text>
+                    <!-- Field lines right of crack (continuing through steel) -->
+                    <path d="M175,105 Q210,97 240,105" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.7"/>
+                    <path d="M175,115 Q210,108 240,115" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.7"/>
+                    <!-- Applied field direction arrow -->
+                    <line x1="30" y1="155" x2="325" y2="155" stroke="#1d4ed8" stroke-width="2" marker-end="url(#blue-arr)"/>
+                    <text x="180" y="170" text-anchor="middle" font-size="8.5" fill="#1d4ed8" font-weight="700">Applied magnetic field H (longitudinal — detects transverse cracks)</text>
+                    <!-- Subsurface indication (dashed) -->
+                    <path d="M230,90 L232,110" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3,2"/>
+                    <text x="245" y="105" font-size="7.5" fill="#d97706">sub-surface</text>
+                    <text x="245" y="114" font-size="7.5" fill="#d97706">crack (weaker)</text>
+                    <defs>
+                        <marker id="blue-arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                            <path d="M0,0 L6,3 L0,6 Z" fill="#1d4ed8"/>
+                        </marker>
+                    </defs>
+                </svg>
+                <figcaption>Flux leakage at a surface crack: the magnetic field prefers the high-permeability steel path. At the crack, it must cross air, so it bulges above the surface — particles accumulate in the leakage field, making the crack visible. Subsurface cracks produce weaker leakage (shown dashed).</figcaption>
+            </div>
+            <div class="steps">
+                <div class="step"><div class="step-num">1</div><div>Select magnetization method: AC yoke (best for surface cracks, allows demagnetization), DC yoke or prod (deeper penetration, detects subsurface), or cable wrap (for complex shapes).</div></div>
+                <div class="step"><div class="step-num">2</div><div>Verify yoke lift test: AC yoke ≥ 4.5 kg (10 lb); DC yoke ≥ 18 kg (40 lb) lift on a steel plate before each inspection day (ASME Article 7).</div></div>
+                <div class="step"><div class="step-num">3</div><div>Apply wet fluorescent particles (bath concentration 0.1–0.4 mL/100 mL) or dry powder while the field is applied or immediately after (residual method for high-coercivity materials).</div></div>
+                <div class="step"><div class="step-num">4</div><div>Inspect under UV-A (365 nm) black light at ≥ 1000 μW/cm² for fluorescent MT in a darkened area; ambient light ≤ 2 fc.</div></div>
+                <div class="step"><div class="step-num">5</div><div>Rotate field 90° and repeat steps 3–4 to detect cracks in the perpendicular orientation. Two field directions ensure coverage of all crack orientations 0°–90°.</div></div>
+            </div>
+        </div>
+
+        <div class="section-label">Worked Example — Field Direction Selection for a Weld Inspection</div>
+        <div class="example-box">
+            <div class="ex-title">Example: Determine required yoke positions for a butt weld</div>
+            <p>A horizontal butt weld runs along the <strong>X-axis</strong>. The primary failure modes are:</p>
+            <div class="ex-calc">
+Concern 1: Longitudinal (centerline) cracks &mdash; run parallel to weld (along X-axis)
+  &rarr; To detect, field must be perpendicular to X = field in Y-direction
+  &rarr; Yoke position: yoke legs straddle the weld (field across the weld)
+
+Concern 2: Transverse cracks &mdash; run perpendicular to weld (along Y-axis)
+  &rarr; To detect, field must be perpendicular to Y = field in X-direction
+  &rarr; Yoke position: yoke legs along the weld (field along the weld)
+
+Concern 3: Weld toe HAC &mdash; often at 45° to the weld axis
+  &rarr; Detected by both field directions above (45° is &gt; 30° from each field &rarr; adequate leakage)
+
+Result: <span class="ex-result">Two yoke positions required, perpendicular to each other, both along the weld</span>
+Move yoke in 20% overlapping passes; effective field zone extends ~25–50 mm from each leg contact.
+            </div>
+        </div>
+
+        <div class="limit-box">
+            <div class="lim-title">Key Limitations of MT</div>
+            <ul>
+                <li><strong>Ferromagnetic materials only</strong> — completely ineffective on austenitic stainless steels, aluminum, copper, titanium, and most non-ferrous alloys. Use PT on these materials.</li>
+                <li><strong>Surface and near-surface only</strong> — sensitivity decreases rapidly with depth. Reliable detection typically within ~3 mm of the surface (wet method); deeper subsurface cracks require UT.</li>
+                <li><strong>Field direction</strong> — cracks parallel to the field may not be detected; two perpendicular directions are always required.</li>
+                <li><strong>Paint and coatings</strong> — thick coatings (over ~0.5 mm) reduce field intensity and mask indications; usually must be removed. Thin primer is sometimes acceptable if lift test passes.</li>
+                <li><strong>Residual magnetism</strong> — AC yoke self-demagnetizes; DC prod magnetization leaves residual field that must be removed (risk of accelerating corrosion or interfering with machining operations).</li>
+                <li><strong>Geometric false indications</strong> — abrupt changes in section, weld toes, and material boundaries create local flux concentrations that can mimic crack indications ("geometric indications"). Inspector experience is required to distinguish these.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ==================== PT ==================== -->
+    <div class="section method-accent pt-section">
+        <h2>Liquid Penetrant Testing <span class="method-badge mb-pt">PT</span></h2>
+        <p>
+            PT detects open surface-breaking discontinuities in any non-porous solid material by exploiting
+            capillary action to draw a colored or fluorescent dye into cracks. Because it has <strong>no
+            material restriction</strong> (unlike MT), it is the universal surface inspection method for
+            non-ferromagnetic materials — austenitic stainless steel, aluminum, titanium, and nickel alloys.
+            Understanding capillary physics explains both how it works and what it cannot detect.
+        </p>
+
+        <div class="section-label">Physics — Capillary Action and Surface Tension</div>
+        <div class="physics-box">
+            <div class="ph-title">Capillary Pressure Driving Penetrant into a Crack</div>
+            <div class="formula">&Delta;P = 4&gamma; cos(&theta;) / d</div>
+            <div class="vars">
+                <span><strong>&Delta;P</strong> = capillary pressure (Pa) driving penetrant into the crack</span>
+                <span><strong>&gamma;</strong> = surface tension of the penetrant liquid (N/m) — lower &gamma; means better wetting</span>
+                <span><strong>&theta;</strong> = contact angle between the penetrant and the crack wall — smaller &theta; means better wetting (PT penetrants are formulated with &theta; near 0°)</span>
+                <span><strong>d</strong> = crack opening width (m) — <em>narrower cracks actually have higher capillary pressure</em> — penetrant wicks deeper</span>
+                <span style="color:#f0abfc; margin-top:6px;">The developer reverses this process: its fine powder particles create capillary channels that draw penetrant back out of the crack and spread it laterally, making the indication visible against the white developer background.</span>
+            </div>
+        </div>
+
+        <div class="two-col">
+            <div class="diagram-wrap">
+                <svg viewBox="0 0 360 210" width="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Liquid penetrant testing process diagram">
+                    <!-- Labels for 4 steps -->
+                    <text x="0" y="12" font-size="8.5" fill="#374151" font-weight="700">1. Apply penetrant</text>
+                    <text x="95" y="12" font-size="8.5" fill="#374151" font-weight="700">2. Dwell &amp; remove</text>
+                    <text x="210" y="12" font-size="8.5" fill="#374151" font-weight="700">3. Developer</text>
+                    <text x="295" y="12" font-size="8.5" fill="#374151" font-weight="700">4. Indication</text>
+
+                    <!-- Step 1: surface flooded with penetrant -->
+                    <rect x="5" y="55" width="80" height="25" fill="#94a3b8" rx="2"/>
+                    <path d="M35,55 L38,70" stroke="#9f1239" stroke-width="2.5"/>
+                    <rect x="5" y="30" width="80" height="28" fill="#fca5a5" rx="2" opacity="0.6"/>
+                    <text x="45" y="44" text-anchor="middle" font-size="7.5" fill="#9f1239">red penetrant on surface</text>
+                    <text x="45" y="88" text-anchor="middle" font-size="7" fill="#fff">metal surface</text>
+
+                    <!-- Step 2: excess removed, penetrant in crack -->
+                    <rect x="100" y="55" width="80" height="25" fill="#94a3b8" rx="2"/>
+                    <path d="M130,55 L133,75" stroke="#9f1239" stroke-width="2.5"/>
+                    <rect x="100" y="30" width="80" height="26" fill="#f1f5f9" rx="2" opacity="0.9"/>
+                    <text x="140" y="44" text-anchor="middle" font-size="7.5" fill="#374151">excess removed (cleaned)</text>
+                    <text x="140" y="88" text-anchor="middle" font-size="7" fill="#fff">penetrant trapped in crack</text>
+
+                    <!-- Step 3: developer applied -->
+                    <rect x="210" y="55" width="80" height="25" fill="#94a3b8" rx="2"/>
+                    <path d="M240,55 L243,75" stroke="#9f1239" stroke-width="2.5"/>
+                    <rect x="210" y="30" width="80" height="26" fill="#f8fafc" rx="2" stroke="#e2e8f0" stroke-width="1"/>
+                    <text x="250" y="42" text-anchor="middle" font-size="7.5" fill="#374151">white developer</text>
+                    <text x="250" y="51" text-anchor="middle" font-size="7.5" fill="#374151">coat applied</text>
+                    <text x="250" y="88" text-anchor="middle" font-size="7" fill="#fff">developer draws penetrant out</text>
+
+                    <!-- Step 4: indication visible -->
+                    <rect x="295" y="55" width="60" height="25" fill="#94a3b8" rx="2"/>
+                    <path d="M320,55 L323,75" stroke="#9f1239" stroke-width="2.5"/>
+                    <rect x="295" y="30" width="60" height="26" fill="#f8fafc" rx="2" stroke="#e2e8f0" stroke-width="1"/>
+                    <ellipse cx="325" cy="40" rx="12" ry="5" fill="#dc2626" opacity="0.85"/>
+                    <text x="325" y="44" text-anchor="middle" font-size="6.5" fill="#fff" font-weight="700">indication</text>
+                    <text x="325" y="88" text-anchor="middle" font-size="7" fill="#fff">indication wider than crack</text>
+
+                    <!-- Arrows between steps -->
+                    <text x="88" y="45" font-size="14" fill="#6b7280">&rarr;</text>
+                    <text x="194" y="45" font-size="14" fill="#6b7280">&rarr;</text>
+                    <text x="285" y="45" font-size="14" fill="#6b7280">&rarr;</text>
+
+                    <!-- Physics annotation: capillary pressure -->
+                    <line x1="40" y1="110" x2="40" y2="150" stroke="#9f1239" stroke-width="1.5" stroke-dasharray="3,2"/>
+                    <text x="10" y="140" font-size="7.5" fill="#9f1239">&Delta;P = 4&gamma;cos(&theta;)/d</text>
+                    <text x="10" y="150" font-size="7.5" fill="#9f1239">Narrower crack &rarr; deeper fill</text>
+
+                    <!-- Crack detail -->
+                    <path d="M130,55 Q131,63 133,72 Q134,78 133,80" stroke="#6b7280" stroke-width="1.5" fill="none"/>
+                    <text x="108" y="110" font-size="7" fill="#374151">crack width d</text>
+                    <line x1="130" y1="104" x2="133" y2="76" stroke="#9ca3af" stroke-width="0.8" stroke-dasharray="2,2"/>
+
+                    <!-- Dwell time note -->
+                    <rect x="5" y="160" width="350" height="40" fill="#fae8ff" rx="6" stroke="#d946ef" stroke-width="0.8"/>
+                    <text x="180" y="175" text-anchor="middle" font-size="8.5" fill="#701a75" font-weight="700">Temperature &amp; Dwell Time Requirements (ASME Section V Article 6)</text>
+                    <text x="180" y="190" text-anchor="middle" font-size="8" fill="#374151">Standard range: 50–125°F (10–52°C). Below 50°F: increase dwell 1.5&times; or use low-temp penetrant. Minimum dwell: 5 min (metals). Developer contact: 7–60 min.</text>
+                </svg>
+                <figcaption>Four-step PT process: penetrant floods surface and wicks into cracks via capillary action; excess is removed; developer draws penetrant back out; indication appears wider than the actual crack opening (magnification effect).</figcaption>
+            </div>
+            <div class="steps">
+                <div class="step"><div class="step-num">1</div><div><strong>Pre-clean:</strong> Remove all contaminants (oil, grease, paint, rust, scale) from the surface and inside the crack. Contamination coats the crack walls and prevents penetrant entry — the most common cause of missed indications.</div></div>
+                <div class="step"><div class="step-num">2</div><div><strong>Apply penetrant:</strong> Spray, brush, or dip. Ensure the surface is uniformly wet. Time the dwell from when application is complete — not from when it was started.</div></div>
+                <div class="step"><div class="step-num">3</div><div><strong>Dwell (soak) time:</strong> 5–60 minutes depending on material, crack type, and temperature. Tighter cracks and lower temperatures require longer dwell. Do not allow penetrant to dry.</div></div>
+                <div class="step"><div class="step-num">4</div><div><strong>Remove excess:</strong> Water-washable (Type I) with water spray; solvent-removable (Type II) with dry cloth then solvent-dampened cloth; emulsifiable (Type III/IV) with emulsifier + water rinse. Never flush surface directly with solvent.</div></div>
+                <div class="step"><div class="step-num">5</div><div><strong>Apply developer, inspect, post-clean:</strong> Apply thin, uniform developer coat; wait developer dwell time; inspect under UV-A (fluorescent) or white light (visible dye); document and classify indications; clean developer and penetrant after inspection.</div></div>
+            </div>
+        </div>
+
+        <div class="section-label">Worked Example — Temperature Adjustment for Cold-Weather Inspection</div>
+        <div class="example-box">
+            <div class="ex-title">Example: Adjusting PT procedure for cold conditions</div>
+            <p>A 304L stainless steel pressure vessel weld is to be inspected outdoors at <strong>45°F (7°C)</strong>.
+            Standard penetrant instructions specify a 10-minute dwell at 50–125°F.</p>
+            <div class="ex-calc">
+Issue: 45°F is below the 50°F minimum temperature for the standard procedure.
+
+Options per ASME Section V Article 6:
+
+Option A &mdash; Heat the part:
+  Heat inspection area to &ge;50°F and maintain throughout the inspection.
+  Use heat gun or portable heater; verify with contact thermometer.
+  <span class="ex-result">Most straightforward approach.</span>
+
+Option B &mdash; Cold-temperature qualified procedure:
+  Qualify the procedure specifically for the low-temperature range using
+  a cracked reference specimen (PSM-5 or equivalent block with documented cracks).
+  Verify the procedure detects all known cracks on the reference specimen at 45°F.
+  Increase dwell time per qualification (typically 1.5&times; &rarr; 15 min minimum).
+  <span class="ex-result">Acceptable if procedure is qualified and documented.</span>
+
+Option C &mdash; Abandon PT, use MT or UT instead:
+  304L stainless is non-ferromagnetic &rarr; MT not applicable.
+  UT can detect the defect but has different sensitivity to surface cracks.
+  <span class="ex-fail">PT remains preferred for surface cracks on stainless &mdash; heat the part (Option A).</span>
+            </div>
+        </div>
+
+        <div class="limit-box">
+            <div class="lim-title">Key Limitations of PT</div>
+            <ul>
+                <li><strong>Open surface discontinuities only</strong> — cracks that are closed under residual compressive stress, filled with corrosion products, paint, scale, or grease will not accept penetrant. Surface preparation is everything.</li>
+                <li><strong>Porous materials</strong> — porous castings, sintered metals, and coatings absorb penetrant uniformly and produce a broad background bleed-out that masks real indications. PT is impractical on such materials without masking.</li>
+                <li><strong>Temperature sensitive</strong> — penetrant viscosity changes with temperature; below ~50°F (10°C) penetrant becomes too viscous to enter tight cracks. Above ~125°F (52°C) penetrant evaporates, leaving the crack empty.</li>
+                <li><strong>Subsurface defects undetectable</strong> — PT is strictly a surface method; internal porosity, LOP, LOF, and subsurface cracks are completely invisible.</li>
+                <li><strong>Cleaning requirement</strong> — pre-cleaning and post-cleaning are essential; inadequate pre-cleaning is the leading cause of missed indications. Post-cleaning must remove all developer and penetrant residue to avoid contamination in service (especially in food, medical, or high-purity applications).</li>
+                <li><strong>Material compatibility</strong> — some penetrants are not compatible with certain materials (e.g., chloride-containing penetrants can cause chloride SCC in austenitic stainless; sulfur-containing penetrants can attack nickel alloys). Always verify material compatibility from the manufacturer's data sheet.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ==================== ET ==================== -->
+    <div class="section method-accent et-section">
+        <h2>Eddy Current Testing <span class="method-badge mb-et">ET</span></h2>
+        <p>
+            ET induces circulating electrical currents (eddy currents) in a conductive material by
+            applying an alternating magnetic field from a coil. Cracks, corrosion, or material property
+            changes disturb the eddy current pattern, altering the coil's electrical impedance in a
+            detectable way. ET is non-contact, fast, and particularly powerful for tubing inspection,
+            coating thickness measurement, and surface crack detection. The skin depth equation is
+            the key to understanding ET's depth limitation.
+        </p>
+
+        <div class="section-label">Physics — Electromagnetic Induction and Skin Depth</div>
+        <div class="physics-box">
+            <div class="ph-title">Skin Depth &delta; — How Deep Eddy Currents Penetrate</div>
+            <div class="formula">&delta; = 503 / &radic;(f &times; &mu;<sub>r</sub> &times; &sigma;)</div>
+            <div class="vars">
+                <span><strong>&delta;</strong> = standard depth of penetration (mm) — depth at which eddy current density is 1/e (&asymp;37%) of surface value</span>
+                <span><strong>f</strong> = frequency (Hz) &nbsp;|&nbsp; <strong>&mu;<sub>r</sub></strong> = relative magnetic permeability (1 for non-ferromagnetic; 50–500 for steel) &nbsp;|&nbsp; <strong>&sigma;</strong> = electrical conductivity (MS/m)</span>
+                <span style="color:#6ee7b7; margin-top:6px;"><strong>Key relationship:</strong> Higher frequency &rarr; shallower skin depth &rarr; more sensitive to surface, but less to subsurface. Lower frequency &rarr; deeper penetration but weaker signal from surface defects.</span>
+                <span style="color:#6ee7b7;">High permeability (ferromagnetic steel) &rarr; very shallow skin depth at any frequency — ET is barely practical on ferromagnetic materials without special techniques.</span>
+            </div>
+        </div>
+
+        <div class="two-col">
+            <div class="diagram-wrap">
+                <svg viewBox="0 0 360 220" width="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Eddy current testing physics diagram">
+                    <!-- Coil -->
+                    <ellipse cx="140" cy="40" rx="35" ry="18" fill="none" stroke="#065f46" stroke-width="3"/>
+                    <ellipse cx="140" cy="45" rx="35" ry="18" fill="none" stroke="#059669" stroke-width="2"/>
+                    <ellipse cx="140" cy="50" rx="35" ry="18" fill="none" stroke="#10b981" stroke-width="1.5"/>
+                    <text x="140" y="44" text-anchor="middle" font-size="8.5" fill="#059669" font-weight="700">AC COIL</text>
+                    <text x="140" y="55" text-anchor="middle" font-size="7.5" fill="#374151">alternating current</text>
+                    <!-- Primary field lines -->
+                    <path d="M110,50 Q90,70 95,90 Q100,115 110,120" stroke="#6ee7b7" stroke-width="1.5" fill="none" stroke-dasharray="4,2"/>
+                    <path d="M170,50 Q190,70 185,90 Q180,115 170,120" stroke="#6ee7b7" stroke-width="1.5" fill="none" stroke-dasharray="4,2"/>
+                    <text x="65" y="85" font-size="7.5" fill="#059669">primary</text>
+                    <text x="65" y="94" font-size="7.5" fill="#059669">B-field</text>
+                    <!-- Conductive material -->
+                    <rect x="60" y="120" width="240" height="70" fill="#94a3b8" rx="3"/>
+                    <text x="220" y="145" text-anchor="middle" font-size="8.5" fill="#fff" font-weight="700">CONDUCTIVE MATERIAL</text>
+                    <!-- Eddy current loops -->
+                    <ellipse cx="140" cy="138" rx="28" ry="10" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                    <ellipse cx="140" cy="150" rx="22" ry="8" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.7"/>
+                    <ellipse cx="140" cy="160" rx="16" ry="6" fill="none" stroke="#f59e0b" stroke-width="1" opacity="0.5"/>
+                    <text x="105" y="136" font-size="7.5" fill="#f59e0b">eddy</text>
+                    <text x="105" y="145" font-size="7.5" fill="#f59e0b">currents</text>
+                    <!-- Crack disturbing eddy currents -->
+                    <line x1="225" y1="120" x2="228" y2="150" stroke="#dc2626" stroke-width="3"/>
+                    <text x="235" y="135" font-size="8" fill="#dc2626" font-weight="700">crack</text>
+                    <!-- Eddy current distortion near crack -->
+                    <path d="M200,138 Q215,130 222,122" stroke="#f59e0b" stroke-width="1.5" fill="none" stroke-dasharray="3,2" opacity="0.8"/>
+                    <path d="M200,148 Q214,140 222,130" stroke="#f59e0b" stroke-width="1.5" fill="none" stroke-dasharray="3,2" opacity="0.6"/>
+                    <text x="235" y="165" font-size="7.5" fill="#f59e0b">distorted pattern</text>
+                    <!-- Skin depth arrow -->
+                    <line x1="30" y1="120" x2="30" y2="175" stroke="#6ee7b7" stroke-width="2"/>
+                    <line x1="27" y1="120" x2="33" y2="120" stroke="#6ee7b7" stroke-width="1.5"/>
+                    <line x1="27" y1="175" x2="33" y2="175" stroke="#6ee7b7" stroke-width="1.5"/>
+                    <text x="5" y="152" font-size="7" fill="#059669" font-weight="700">skin</text>
+                    <text x="5" y="161" font-size="7" fill="#059669" font-weight="700">depth</text>
+                    <text x="5" y="170" font-size="7" fill="#059669">&delta;</text>
+                    <!-- Impedance meter -->
+                    <rect x="280" y="25" width="70" height="50" fill="#0a0a0a" rx="5"/>
+                    <text x="315" y="40" text-anchor="middle" font-size="7" fill="#94a3b8">Impedance</text>
+                    <text x="315" y="50" text-anchor="middle" font-size="7" fill="#94a3b8">Plane Display</text>
+                    <circle cx="315" cy="63" r="14" fill="#0f172a" stroke="#059669" stroke-width="1"/>
+                    <line x1="315" y1="55" x2="315" y2="71" stroke="#22d3ee" stroke-width="1" stroke-dasharray="2,1"/>
+                    <line x1="307" y1="63" x2="323" y2="63" stroke="#22d3ee" stroke-width="1" stroke-dasharray="2,1"/>
+                    <circle cx="318" cy="60" r="2" fill="#22d3ee"/>
+                    <text x="315" y="88" text-anchor="middle" font-size="7" fill="#6b7280">crack signal</text>
+                    <text x="315" y="96" text-anchor="middle" font-size="7" fill="#6b7280">shifts vector</text>
+                </svg>
+                <figcaption>Eddy current physics: AC coil induces primary magnetic field; eddy currents (loops) are induced in the conductor and create a secondary opposing field. A crack interrupts eddy current flow, changing coil impedance — visible as a vector shift on the impedance plane display.</figcaption>
+            </div>
+            <div class="steps">
+                <div class="step"><div class="step-num">1</div><div>Select frequency based on required depth of penetration: high frequency (100 kHz–1 MHz) for surface crack detection; low frequency (1–50 kHz) for subsurface or through-wall testing in tubing.</div></div>
+                <div class="step"><div class="step-num">2</div><div>Choose probe type: absolute (single coil, sensitive to gradual changes); differential (two coils, rejects gradual property variation, excellent for cracks); encircling (for tube inspection).</div></div>
+                <div class="step"><div class="step-num">3</div><div>Calibrate on reference notch standards (ASTM E2338 for weld inspection; ASME Section V Article 8 for tubing) at the test frequency. Set null balance and gain.</div></div>
+                <div class="step"><div class="step-num">4</div><div>Scan at controlled speed and lift-off (distance from coil to surface must be constant); maintain consistent probe orientation relative to expected crack direction.</div></div>
+                <div class="step"><div class="step-num">5</div><div>Interpret impedance plane signals: characterize signal phase angle and amplitude to distinguish crack from lift-off, coating thickness variation, or corrosion.</div></div>
+            </div>
+        </div>
+
+        <div class="section-label">Worked Example — Skin Depth at Different Frequencies and Materials</div>
+        <div class="example-box">
+            <div class="ex-title">Example: Calculate skin depth for carbon steel and aluminum at two frequencies</div>
+            <p>Use &delta; = 503 / &radic;(f &times; &mu;<sub>r</sub> &times; &sigma;) where &sigma; is in MS/m and f is in Hz.</p>
+            <div class="ex-calc">
+Material A: Carbon steel — &sigma; = 6.6 MS/m, &mu;<sub>r</sub> = 100 (ferromagnetic)
+Material B: Aluminum 6061 — &sigma; = 24.5 MS/m, &mu;<sub>r</sub> = 1 (non-magnetic)
+
+At f = 1,000 Hz (1 kHz):
+  Steel:  &delta; = 503 / &radic;(1000 &times; 100 &times; 6.6)  = 503 / 812  = <span class="ex-result">0.62 mm</span>
+  Alum.:  &delta; = 503 / &radic;(1000 &times; 1   &times; 24.5) = 503 / 156.5 = <span class="ex-result">3.2 mm</span>
+
+At f = 10,000 Hz (10 kHz):
+  Steel:  &delta; = 503 / &radic;(10000 &times; 100 &times; 6.6) = 503 / 2570 = <span class="ex-result">0.20 mm</span>
+  Alum.:  &delta; = 503 / &radic;(10000 &times; 1   &times; 24.5) = 503 / 495  = <span class="ex-result">1.0 mm</span>
+
+Conclusion:
+  &bull; At 10 kHz, ET in carbon steel only sees the top 0.2 mm &mdash; surface-only method.
+  &bull; High permeability (&mu;<sub>r</sub> = 100) severely limits depth even at low frequency.
+  &bull; Aluminum has 5&times; deeper penetration than steel at the same frequency.
+  &bull; To inspect a 1.0 mm deep subsurface crack in steel, you would need ~100 Hz, but at
+    that frequency sensitivity to small cracks is much reduced. <span class="ex-fail">ET on ferromagnetic steel
+    is rarely used for deep inspection &mdash; UT is more appropriate.</span>
+            </div>
+        </div>
+
+        <div class="limit-box">
+            <div class="lim-title">Key Limitations of ET</div>
+            <ul>
+                <li><strong>Conductive materials only</strong> — requires electrical conductivity; cannot be used on plastics, ceramics, concrete, or other non-conductors.</li>
+                <li><strong>Shallow depth in ferromagnetic materials</strong> — as shown above, high permeability limits penetration to &lt;1 mm at practical frequencies. ET is most valuable on non-ferromagnetic materials (aluminum, stainless, titanium, copper alloys, Inconel).</li>
+                <li><strong>Lift-off effect</strong> — any variation in the distance between the probe and the surface creates a large impedance change that can mask defect signals. Surfaces must be smooth and consistent; probes must be spring-loaded or guided.</li>
+                <li><strong>Edge and geometry effects</strong> — coil response changes near the edges of a part, at welds (composition and hardness change), and at geometry transitions. These are "benign" indications that can obscure real defects and require experienced interpretation.</li>
+                <li><strong>Defect orientation</strong> — ET is most sensitive to cracks perpendicular to the eddy current flow direction. A crack parallel to the current (parallel to the coil scan direction) may produce a weak or no signal. Rotating the probe or using rotating field techniques helps.</li>
+                <li><strong>Requires interpretation experience</strong> — unlike PT (visible indication) or VT, ET output is an abstract impedance vector signal. Distinguishing crack signals from coating thickness, conductivity variation, and geometry requires trained personnel with a strong understanding of the physics.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ==================== COMPARISON TABLE ==================== -->
+    <div class="section">
+        <h2>Method Comparison &amp; Selection Guide</h2>
+        <p>Use this table to select the appropriate NDT method(s) for a given inspection scenario.
+        No single method covers all defect types and materials — most code-required inspections specify
+        multiple complementary methods.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Criterion</th>
+                    <th><span style="color:#7dd3fc;">VT</span></th>
+                    <th><span style="color:#c4b5fd;">RT</span></th>
+                    <th><span style="color:#67e8f9;">UT</span></th>
+                    <th><span style="color:#fde68a;">MT</span></th>
+                    <th><span style="color:#f0abfc;">PT</span></th>
+                    <th><span style="color:#6ee7b7;">ET</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Detection zone</td>
+                    <td>Surface only</td>
+                    <td>Volume (2D projection)</td>
+                    <td>Full volume</td>
+                    <td>Surface + near-surface (&lt;3 mm)</td>
+                    <td>Open surface only</td>
+                    <td>Surface + shallow subsurface</td>
+                </tr>
+                <tr>
+                    <td>Planar cracks (LOF, HAC)</td>
+                    <td class="code" style="color:#15803d;">Good (surface)</td>
+                    <td class="code" style="color:#d97706;">Poor–Fair</td>
+                    <td class="code" style="color:#15803d;">Excellent</td>
+                    <td class="code" style="color:#15803d;">Excellent (surface)</td>
+                    <td class="code" style="color:#15803d;">Excellent (surface)</td>
+                    <td class="code" style="color:#d97706;">Fair (surface)</td>
+                </tr>
+                <tr>
+                    <td>Volumetric defects (porosity, slag)</td>
+                    <td class="code" style="color:#d97706;">Fair (surface pores only)</td>
+                    <td class="code" style="color:#15803d;">Excellent</td>
+                    <td class="code" style="color:#d97706;">Fair</td>
+                    <td class="code" style="color:#9ca3af;">Poor</td>
+                    <td class="code" style="color:#d97706;">Fair (surface pores)</td>
+                    <td class="code" style="color:#9ca3af;">Poor</td>
+                </tr>
+                <tr>
+                    <td>Requires access to both sides</td>
+                    <td>Yes</td>
+                    <td>Both sides OR double-wall technique</td>
+                    <td>One side only (angle beam)</td>
+                    <td>One side</td>
+                    <td>One side</td>
+                    <td>One side</td>
+                </tr>
+                <tr>
+                    <td>Material restriction</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>Needs couplant surface</td>
+                    <td><strong>Ferromagnetic only</strong></td>
+                    <td>Non-porous solids</td>
+                    <td><strong>Conductors only</strong></td>
+                </tr>
+                <tr>
+                    <td>Gives depth information?</td>
+                    <td>No</td>
+                    <td>No (2D projection)</td>
+                    <td>Yes — precise</td>
+                    <td>No</td>
+                    <td>No</td>
+                    <td>Approximate</td>
+                </tr>
+                <tr>
+                    <td>Radiation / safety hazard</td>
+                    <td>None</td>
+                    <td><strong>Yes — ionizing radiation exclusion zone</strong></td>
+                    <td>None</td>
+                    <td>None (demagnetize after)</td>
+                    <td>None (chemical handling)</td>
+                    <td>None</td>
+                </tr>
+                <tr>
+                    <td>Speed</td>
+                    <td>Fast</td>
+                    <td>Slow (setup + film processing)</td>
+                    <td>Moderate</td>
+                    <td>Fast</td>
+                    <td>Moderate (dwell time)</td>
+                    <td>Very fast (automated scanning)</td>
+                </tr>
+                <tr>
+                    <td>Key applications</td>
+                    <td>All welds — always first; profile, dimensions, weld toe</td>
+                    <td>Root conditions, LOP, porosity, slag; pipe welds</td>
+                    <td>Thick plate, LOF, HAC, CGHAZ, nozzle welds, pressure vessels</td>
+                    <td>Weld toe cracks, arc strikes, HAC, post-PWHT inspection on carbon steel</td>
+                    <td>Austenitic SS, Ti, Al surface cracks; post-PWHT inspection of non-ferrous</td>
+                    <td>Heat exchanger tubing, weld overlay, coating thickness, aerospace skin cracks</td>
+                </tr>
+                <tr>
+                    <td>AWS D1.1 / ASME Code reference</td>
+                    <td>D1.1 Cl. 6.5; ASME Sec. V Art. 9</td>
+                    <td>D1.1 Cl. 6.10; ASME Sec. V Art. 2</td>
+                    <td>D1.1 Cl. 6.13; ASME Sec. V Art. 4</td>
+                    <td>D1.1 Cl. 6.14; ASME Sec. V Art. 7</td>
+                    <td>D1.1 Cl. 6.15; ASME Sec. V Art. 6</td>
+                    <td>ASME Sec. V Art. 8; no specific D1.1 clause</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="tip-box">
+            <strong>Why RT misses what UT finds — and vice versa (the fundamental reason):</strong><br>
+            RT creates contrast from <em>thickness/density differences</em>: a void has less material in the beam path, so more radiation gets through, making the film darker. A tight planar crack (faces nearly touching) has almost no thickness reduction in the beam direction — so it produces almost no contrast. UT, however, detects <em>acoustic impedance interfaces</em>: even a crack with touching faces has an air-filled gap at the tip, and Z<sub>air</sub>/Z<sub>steel</sub> ≈ 0 &rarr; 100% reflection regardless of how thin the gap is. This is why UT finds cracks that RT completely misses, and why RT finds porosity clusters that UT may not register reliably.
+        </div>
+
+        <p class="source-note">
+            Physics framework: Iowa State University Center for Nondestructive Evaluation (CNDE) NDT Resource Center
+            educational materials; ASME BPVC Section V (Nondestructive Examination) Articles 2, 4, 6, 7, 8, 9;
+            AWS D1.1:2020 Structural Welding Code — Steel, Clause 6 and Annex K; Olympus NDT training materials
+            for UT angle beam geometry; ASTM E1208, E1209, E1210 (PT), E709 (MT), E2338 (ET weld inspection).
+            Skin depth formula per NDT Handbook Vol. 5 (Electromagnetic Testing), American Society for
+            Nondestructive Testing (ASNT).
+        </p>
+    </div>
+
+    <!-- ==================== INDUSTRIAL CASE STUDIES ==================== -->
+    <div class="section">
+        <h2>Industrial Case Studies</h2>
+        <p>
+            The following case studies are representative of real-world NDT findings drawn from
+            pipeline, pressure vessel, structural, and process industry practice. Each case shows
+            the <em>appearance</em> of the indication as it actually appears to the inspector —
+            simulated radiograph film, A-scan display, UV fluorescent image, visible dye bleed-out,
+            and impedance plane signal — alongside the interpretation, code disposition, and the
+            key lesson the case illustrates.
+        </p>
+
+        <div class="case-studies-intro">
+            <h3>How to read these case studies</h3>
+            <p>
+                The left panel of each card shows the <strong>simulated instrument output</strong>:
+                what the inspector actually sees — not a sketch of the defect, but a representation
+                of the NDT image or signal. The right panel provides the scenario, what was found,
+                and the code-based disposition. Reading instrument output is a learned skill; these
+                illustrations develop that visual recognition before you see the real thing.
+            </p>
+        </div>
+
+        <!-- CASE 1: RT — Pipeline Girth Weld -->
+        <div class="case-card">
+            <div class="case-header">
+                <span class="method-badge mb-rt">RT</span>
+                <div>
+                    <div class="case-title">Case 1 — API 5L X65 Pipeline Girth Weld: Root Porosity + IRP</div>
+                    <div class="case-industry">Oil &amp; gas — onshore natural gas transmission pipeline, 24&Prime; diameter, 0.500&Prime; wall</div>
+                </div>
+            </div>
+            <div class="case-body">
+                <div class="case-image">
+                    <svg viewBox="0 0 320 170" width="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Simulated radiograph of pipeline girth weld showing porosity cluster and IRP">
+                        <!-- Film base — very dark background -->
+                        <rect width="320" height="170" fill="#111"/>
+                        <!-- Weld region — slightly lighter band running horizontally -->
+                        <rect x="0" y="55" width="320" height="60" fill="#2a2a2a" rx="0"/>
+                        <!-- Weld cap width tapers at edges — trapezoid-ish gradient effect with overlay rects -->
+                        <rect x="0" y="55" width="320" height="8" fill="#1a1a1a" opacity="0.5"/>
+                        <rect x="0" y="107" width="320" height="8" fill="#1a1a1a" opacity="0.5"/>
+                        <!-- Heat affected zone — slight density line at weld toes -->
+                        <line x1="0" y1="57" x2="320" y2="57" stroke="#383838" stroke-width="1.2"/>
+                        <line x1="0" y1="113" x2="320" y2="113" stroke="#383838" stroke-width="1.2"/>
+                        <!-- IQI wires on left side — fine lines of increasing thickness -->
+                        <rect x="14" y="60" width="0.8" height="50" fill="#555"/>
+                        <rect x="17" y="60" width="1.1" height="50" fill="#555"/>
+                        <rect x="21" y="60" width="1.4" height="50" fill="#555"/>
+                        <rect x="26" y="60" width="1.8" height="50" fill="#555"/>
+                        <rect x="32" y="60" width="2.2" height="50" fill="#555"/>
+                        <text x="22" y="125" text-anchor="middle" font-size="7" fill="#666" font-family="monospace">IQI 10</text>
+                        <!-- Weld crown outline — slightly brighter because more material = less radiation -->
+                        <rect x="0" y="63" width="320" height="44" fill="#333" rx="0"/>
+                        <!-- Weld bead ripples — subtle lighter horizontal streaks -->
+                        <rect x="50" y="68" width="60" height="3" fill="#3a3a3a" opacity="0.6" rx="1"/>
+                        <rect x="130" y="66" width="80" height="3" fill="#3a3a3a" opacity="0.6" rx="1"/>
+                        <rect x="220" y="69" width="70" height="3" fill="#3a3a3a" opacity="0.6" rx="1"/>
+                        <!-- Root region — slightly different shade -->
+                        <rect x="0" y="95" width="320" height="12" fill="#2c2c2c" rx="0"/>
+                        <!-- CLUSTER POROSITY — group of dark spots (more radiation through voids) -->
+                        <ellipse cx="110" cy="80" rx="5" ry="4" fill="#060606"/>
+                        <ellipse cx="120" cy="76" rx="4" ry="3" fill="#050505"/>
+                        <ellipse cx="128" cy="82" rx="6" ry="5" fill="#050505"/>
+                        <ellipse cx="138" cy="77" rx="4" ry="3" fill="#060606"/>
+                        <ellipse cx="122" cy="86" rx="3" ry="2.5" fill="#070707"/>
+                        <ellipse cx="133" cy="88" rx="5" ry="4" fill="#060606"/>
+                        <ellipse cx="116" cy="90" rx="3.5" ry="3" fill="#070707"/>
+                        <!-- Label: porosity cluster -->
+                        <line x1="124" y1="55" x2="124" y2="68" stroke="#f59e0b" stroke-width="0.8"/>
+                        <text x="124" y="52" text-anchor="middle" font-size="8" fill="#f59e0b" font-weight="700">Porosity cluster</text>
+                        <!-- IRP — incomplete root penetration: thin, continuous dark line at root centerline -->
+                        <line x1="200" y1="99" x2="290" y2="100" stroke="#030303" stroke-width="2.5"/>
+                        <!-- make it slightly irregular -->
+                        <path d="M200,100 Q220,98 240,101 Q260,100 290,99" stroke="#020202" stroke-width="2" fill="none"/>
+                        <!-- Label: IRP -->
+                        <line x1="245" y1="115" x2="245" y2="105" stroke="#ef4444" stroke-width="0.8"/>
+                        <text x="245" y="123" text-anchor="middle" font-size="8" fill="#ef4444" font-weight="700">IRP — root</text>
+                        <!-- Density patches — background weld texture -->
+                        <rect x="60" y="78" width="20" height="10" fill="#2e2e2e" rx="2" opacity="0.3"/>
+                        <rect x="165" y="72" width="25" height="15" fill="#313131" rx="2" opacity="0.3"/>
+                        <!-- Film density scale indicator -->
+                        <rect x="295" y="58" width="18" height="54" fill="none" stroke="#444" stroke-width="0.8"/>
+                        <rect x="295" y="58" width="18" height="12" fill="#555"/>
+                        <rect x="295" y="70" width="18" height="12" fill="#444"/>
+                        <rect x="295" y="82" width="18" height="12" fill="#333"/>
+                        <rect x="295" y="94" width="18" height="12" fill="#222"/>
+                        <rect x="295" y="106" width="18" height="6" fill="#111"/>
+                        <text x="304" y="125" text-anchor="middle" font-size="6.5" fill="#555" font-family="monospace">density</text>
+                    </svg>
+                    <figcaption>Simulated radiograph — dark film. Weld crown appears as the slightly lighter central band. The cluster of black spots (center-left) is porosity. The dark continuous line at the root bead (right) is incomplete root penetration (IRP). IQI wires visible at left edge confirm 2% sensitivity.</figcaption>
+                </div>
+                <div class="case-detail">
+                    <div class="cd-label">Scenario</div>
+                    <p>New construction, cross-country gas pipeline. Cellulosic E6010 root + E8010 fill and cap. Production weld #47 selected for mandatory RT per API 1104 (100% RT on first 100 welds for each welder qualification). Film density 2.3 H&amp;D in the area of interest.</p>
+                    <div class="cd-label">What the RT revealed</div>
+                    <ul>
+                        <li><strong>Cluster porosity</strong> — 7 individual pores over a 32 mm length; largest pore 6 mm diameter. Measured against API 1104 Table 9.6.2.</li>
+                        <li><strong>Incomplete root penetration (IRP)</strong> — a continuous linear dark line at the root bead centerline running 90 mm. Indicates the root bead did not fuse fully across the land.</li>
+                    </ul>
+                    <div class="cd-label">Code Evaluation — API 1104 §9.3 &amp; §9.6</div>
+                    <ul>
+                        <li>Cluster porosity: aggregate area exceeds 1 in² per any 12 in of weld — <span class="disp-reject">REJECT</span></li>
+                        <li>IRP: any length of IRP is cause for rejection on a gas transmission line — <span class="disp-reject">REJECT</span></li>
+                    </ul>
+                    <div class="cd-label">Disposition &amp; Corrective Action</div>
+                    <p>Weld cut out and re-made. Root cause: welder transitioned from downhill to uphill progression midway through; IRP formed at transition point; porosity from trapped shielding gas from damp electrode coating. Welder requalification on root pass technique required.</p>
+                    <div class="lesson-banner">
+                        <strong>Key lesson:</strong> RT is the standard method for pipeline girth weld root inspection because it shows the full 360° root profile in a single shot. IRP produces a <em>continuous linear dark line at the exact centerline</em> — it cannot be confused with a crack (which is irregular) or porosity (which is rounded). Recognizing the difference between a geometric linear indication and a volumetric one is fundamental RT interpretation skill.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CASE 2: UT — Pressure Vessel Nozzle -->
+        <div class="case-card">
+            <div class="case-header">
+                <span class="method-badge mb-ut">UT</span>
+                <div>
+                    <div class="case-title">Case 2 — ASME VIII Pressure Vessel Nozzle: HAZ Hydrogen Cracking</div>
+                    <div class="case-industry">Petrochemical — hydrocracker reactor vessel, 2.25Cr-1Mo (P5 group), 100 mm wall thickness</div>
+                </div>
+            </div>
+            <div class="case-body">
+                <div class="case-image">
+                    <svg viewBox="0 0 320 170" width="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Simulated UT A-scan showing HAZ crack indication above DAC">
+                        <!-- Display background -->
+                        <rect width="320" height="170" fill="#0a0f1a"/>
+                        <!-- Grid lines (oscilloscope graticule) -->
+                        <line x1="32" y1="20" x2="32" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
+                        <line x1="64" y1="20" x2="64" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
+                        <line x1="96" y1="20" x2="96" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
+                        <line x1="128" y1="20" x2="128" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
+                        <line x1="160" y1="20" x2="160" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
+                        <line x1="192" y1="20" x2="192" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
+                        <line x1="224" y1="20" x2="224" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
+                        <line x1="256" y1="20" x2="256" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
+                        <line x1="288" y1="20" x2="288" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
+                        <line x1="32" y1="47" x2="310" y2="47" stroke="#1e2d40" stroke-width="0.7"/>
+                        <line x1="32" y1="74" x2="310" y2="74" stroke="#1e2d40" stroke-width="0.7"/>
+                        <line x1="32" y1="101" x2="310" y2="101" stroke="#1e2d40" stroke-width="0.7"/>
+                        <line x1="32" y1="128" x2="310" y2="128" stroke="#1e2d40" stroke-width="0.7"/>
+                        <!-- Axis labels -->
+                        <text x="170" y="165" text-anchor="middle" font-size="8" fill="#4a6a8a" font-family="monospace">Beam path (mm)  →  200 mm full scale</text>
+                        <text x="18" y="88" text-anchor="middle" font-size="8" fill="#4a6a8a" font-family="monospace" transform="rotate(-90,18,88)">Amplitude (%FSH)</text>
+                        <!-- 100% line label -->
+                        <text x="310" y="23" font-size="7" fill="#4a6a8a" font-family="monospace">100%</text>
+                        <text x="310" y="50" font-size="7" fill="#4a6a8a" font-family="monospace">75%</text>
+                        <text x="310" y="77" font-size="7" fill="#4a6a8a" font-family="monospace">50%</text>
+                        <text x="310" y="104" font-size="7" fill="#4a6a8a" font-family="monospace">25%</text>
+                        <!-- DAC curve — orange dashed line representing Distance Amplitude Correction -->
+                        <path d="M32,47 Q80,52 128,58 Q180,65 224,72 Q260,78 300,84" stroke="#f97316" stroke-width="1.8" fill="none" stroke-dasharray="6,3"/>
+                        <text x="245" y="69" font-size="8" fill="#f97316" font-weight="700">DAC</text>
+                        <!-- 20% DAC reporting threshold line (dashed, lower) -->
+                        <path d="M32,110 Q80,115 128,120 Q180,126 224,131 Q260,135 300,139" stroke="#f97316" stroke-width="1" fill="none" stroke-dasharray="3,3" opacity="0.5"/>
+                        <text x="240" y="144" font-size="7" fill="#f97316" opacity="0.7">20% DAC</text>
+                        <!-- Initial pulse -->
+                        <line x1="32" y1="155" x2="32" y2="21" stroke="#22d3ee" stroke-width="2.5"/>
+                        <text x="32" y="17" text-anchor="middle" font-size="7" fill="#22d3ee">T</text>
+                        <!-- Baseline noise -->
+                        <polyline points="32,155 40,153 45,154 50,152 55,154 60,153 65,154 70,152 75,154 80,153 85,152 90,154 95,153 100,154 105,152 110,153 115,154 120,153 125,154 130,152 135,154 140,153" stroke="#22d3ee" stroke-width="0.8" fill="none" opacity="0.4"/>
+                        <!-- DEFECT ECHO — large peak well above DAC, around 95mm beam path -->
+                        <path d="M140,155 L140,154 L141,153 L142,150 L143,145 L144,135 L145,110 L146,80 L147,45 L148,28 L149,21 L150,26 L151,36 L152,55 L153,82 L154,112 L155,135 L156,148 L157,153 L158,154 L159,155" stroke="#22d3ee" stroke-width="2" fill="none"/>
+                        <!-- Fill under defect echo -->
+                        <polygon points="148,21 149,21 149,155 148,155" fill="#22d3ee" opacity="0.15"/>
+                        <!-- Annotation: defect echo -->
+                        <line x1="149" y1="21" x2="195" y2="15" stroke="#ef4444" stroke-width="0.8"/>
+                        <text x="197" y="14" font-size="8" fill="#ef4444" font-weight="700">Defect echo</text>
+                        <text x="197" y="24" font-size="7.5" fill="#ef4444">138% DAC (REJECT)</text>
+                        <!-- beam path cursor line at defect -->
+                        <line x1="149" y1="21" x2="149" y2="155" stroke="#ef4444" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.5"/>
+                        <!-- Back wall echo — smaller peak at ~200mm full scale -->
+                        <path d="M286,155 L286,154 L287,149 L288,130 L289,100 L290,85 L291,97 L292,120 L293,145 L294,153 L295,155" stroke="#22d3ee" stroke-width="1.5" fill="none" opacity="0.7"/>
+                        <text x="290" y="80" text-anchor="middle" font-size="7" fill="#6b9c7d">BW</text>
+                        <!-- Depth annotation at bottom -->
+                        <text x="149" y="162" text-anchor="middle" font-size="7" fill="#94a3b8" font-family="monospace">L=95mm → d=32mm</text>
+                    </svg>
+                    <figcaption>Simulated UT A-scan (angle beam, 45° shear wave probe). The defect echo at 95 mm beam path reaches 138% DAC — well above the rejection threshold. Back wall echo (BW) confirms adequate sound transmission. DAC curve (orange dashed) corrects for beam spreading with depth.</figcaption>
+                </div>
+                <div class="case-detail">
+                    <div class="cd-label">Scenario</div>
+                    <p>Hydrocracker reactor vessel in post-weld heat treatment (PWHT) inspection. Nozzle-to-shell weld on 2.25Cr-1Mo steel, P-Number 5A, 100 mm wall. Mandatory UT per ASME Section VIII Div. 1 UW-11(a) on all full-penetration welds. 45° and 60° shear wave probes used.</p>
+                    <div class="cd-label">What the UT revealed</div>
+                    <ul>
+                        <li>45° probe, scanning from shell OD: strong echo at 95 mm beam path, amplitude <strong>138% DAC</strong>. Calculated depth: L×cos45° = 67 mm from surface (33 mm from ID — mid-thickness to ID).</li>
+                        <li>60° probe confirms same location, amplitude 115% DAC from perpendicular incidence. Defect length by 6 dB drop method: <strong>38 mm</strong>.</li>
+                        <li>Characteristic: planar indication at fusion line, parallel to weld axis. No back-scatter at 70°. Consistent with <strong>HAZ hydrogen cracking</strong> (cold cracking).</li>
+                    </ul>
+                    <div class="cd-label">Code Evaluation — ASME VIII Div. 1 Appendix 12</div>
+                    <p>Any planar (crack-like) indication exceeding DAC is automatically cause for rejection regardless of length. <span class="disp-reject">REJECT — all amplitudes &gt;100% DAC are unacceptable</span></p>
+                    <div class="cd-label">Disposition &amp; Root Cause</div>
+                    <p>Weld excavated by grinding; metallographic section confirmed untempered martensite + hydrogen micro-cracks in the coarse-grain HAZ. Root cause: preheat dropped below 300°F (149°C) during interruption; hydrogen from cellulosic electrode moisture. Repair required 400°F minimum preheat, low-hydrogen E9016 electrodes with bake-out, and PWHT immediately after welding.</p>
+                    <div class="lesson-banner">
+                        <strong>Key lesson:</strong> RT would likely have missed this crack — it was a tight, planar LOF-type crack with faces nearly touching. The A-scan amplitude tells you <em>how reflective the interface is</em>; a near-100% reflection coefficient (crack faces + air) gives strong echoes even from cracks too tight for RT. This is the canonical example for why thick-wall pressure vessels use UT, not RT.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CASE 3: MT — Bridge Weld Toe Fatigue Crack -->
+        <div class="case-card">
+            <div class="case-header">
+                <span class="method-badge mb-mt">MT</span>
+                <div>
+                    <div class="case-title">Case 3 — Highway Bridge Girder: Weld Toe Fatigue Crack</div>
+                    <div class="case-industry">Structural — highway bridge, A572 Gr.50 steel, transverse stiffener-to-web fillet weld, 15-year in-service inspection</div>
+                </div>
+            </div>
+            <div class="case-body">
+                <div class="case-image">
+                    <svg viewBox="0 0 320 170" width="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Simulated fluorescent MT image showing weld toe fatigue crack under UV light">
+                        <!-- Dark field (UV black light environment) -->
+                        <rect width="320" height="170" fill="#09090f"/>
+                        <!-- Substrate steel surface — very dark blue-gray -->
+                        <rect x="20" y="30" width="280" height="120" fill="#0d0d1a" rx="2"/>
+                        <!-- Weld toes — slightly brighter, texture -->
+                        <rect x="20" y="88" width="280" height="12" fill="#111122" rx="0"/>
+                        <!-- Weld face — slightly lighter band running horizontally across -->
+                        <rect x="20" y="78" width="280" height="22" fill="#13132a" rx="0"/>
+                        <!-- Stiffener plate (vertical) -->
+                        <rect x="135" y="30" width="50" height="48" fill="#111122" rx="1"/>
+                        <!-- Weld ripple texture (barely visible under UV) -->
+                        <path d="M30,82 Q60,80 90,83 Q120,81 135,82" stroke="#161630" stroke-width="1" fill="none"/>
+                        <path d="M185,82 Q210,80 240,83 Q265,81 300,82" stroke="#161630" stroke-width="1" fill="none"/>
+                        <!-- MAIN FINDING: glowing fluorescent crack indication at left weld toe -->
+                        <!-- Fatigue crack — bright yellow-green fluorescent line emanating from weld toe, perpendicular/angular into base metal -->
+                        <path d="M132,100 Q126,110 120,122 Q115,130 112,140" stroke="#c8ff00" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                        <!-- Crack tip fades out -->
+                        <path d="M112,140 Q109,148 107,155" stroke="#c8ff00" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.4"/>
+                        <!-- Glow effect — wider, lower opacity line behind crack -->
+                        <path d="M132,100 Q126,110 120,122 Q115,130 112,140" stroke="#c8ff00" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.15"/>
+                        <path d="M132,100 Q126,110 120,122 Q115,130 112,140" stroke="#a3e635" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.2"/>
+                        <!-- Weld toe point where crack originates (bright node) -->
+                        <circle cx="132" cy="100" r="4" fill="#c8ff00" opacity="0.9"/>
+                        <!-- Scattered particles (background fluorescence — low level) -->
+                        <circle cx="50" cy="55" r="1" fill="#c8ff00" opacity="0.07"/>
+                        <circle cx="200" cy="120" r="1.2" fill="#c8ff00" opacity="0.06"/>
+                        <circle cx="270" cy="65" r="0.8" fill="#c8ff00" opacity="0.08"/>
+                        <circle cx="80" cy="140" r="1" fill="#c8ff00" opacity="0.06"/>
+                        <!-- Measurement scale bar -->
+                        <line x1="200" y1="150" x2="240" y2="150" stroke="#c8ff00" stroke-width="1" opacity="0.5"/>
+                        <line x1="200" y1="147" x2="200" y2="153" stroke="#c8ff00" stroke-width="1" opacity="0.5"/>
+                        <line x1="240" y1="147" x2="240" y2="153" stroke="#c8ff00" stroke-width="1" opacity="0.5"/>
+                        <text x="220" y="146" text-anchor="middle" font-size="8" fill="#c8ff00" opacity="0.6">25 mm</text>
+                        <!-- Label arrows -->
+                        <line x1="120" y1="118" x2="80" y2="105" stroke="#f59e0b" stroke-width="0.8" opacity="0.8"/>
+                        <text x="60" y="103" font-size="8" fill="#f59e0b">Crack ~52 mm</text>
+                        <line x1="132" y1="96" x2="165" y2="75" stroke="#f59e0b" stroke-width="0.8" opacity="0.8"/>
+                        <text x="167" y="73" font-size="8" fill="#f59e0b">Weld toe origin</text>
+                        <!-- UV wavelength note -->
+                        <text x="295" y="163" text-anchor="end" font-size="7" fill="#4a3a7a">UV-A 365 nm / 1200 μW/cm²</text>
+                    </svg>
+                    <figcaption>Simulated fluorescent MT image under UV-A (365 nm) illumination in a darkened enclosure. The bright yellow-green indication originates at the weld toe (top) and propagates ~52 mm into the web. Glow width wider than actual crack — typical particle accumulation in the leakage field.</figcaption>
+                </div>
+                <div class="case-detail">
+                    <div class="cd-label">Scenario</div>
+                    <p>Routine in-service inspection of a plate girder highway bridge per AASHTO MBE and AWS D1.5 Bridge Welding Code. Transverse stiffener-to-web fillet weld on a high-traffic (Category C fatigue detail) zone. AC electromagnetic yoke, wet fluorescent MT (ASTM E709). Two yoke passes: field along weld axis, then perpendicular.</p>
+                    <div class="cd-label">What the MT revealed</div>
+                    <ul>
+                        <li>Sharp, well-defined fluorescent line originating at the <strong>weld toe</strong> at the tension flange end of the stiffener, propagating diagonally into the web.</li>
+                        <li>Indication length: <strong>52 mm</strong> measured along the crack path. Width of particle accumulation ~3 mm (indication width, not crack width).</li>
+                        <li>Fatigue crack morphology: single, clean, relatively straight — consistent with fatigue rather than HAC (which branches) or SCC (which shows branching tree pattern).</li>
+                    </ul>
+                    <div class="cd-label">Code Evaluation — AWS D1.5 / AASHTO</div>
+                    <p>Any crack indication is cause for rejection and repair. Fatigue cracks at Category C details require engineering evaluation of remaining life. <span class="disp-reject">REJECT — crack, any length</span></p>
+                    <div class="cd-label">Disposition &amp; Corrective Action</div>
+                    <p>Crack arrested by drilling a 12 mm stop hole at the crack tip (confirmed by MT after drilling). Weld toe ground and re-welded per AWS D1.5 repair procedure. Bridge downgraded from Category C to Category E' detail pending re-evaluation. Inspection frequency increased to 2-year cycle.</p>
+                    <div class="lesson-banner">
+                        <strong>Key lesson:</strong> Weld toes are stress concentration points — fatigue cracks almost always start there in cyclically loaded structures. The fluorescent indication is <em>wider</em> than the physical crack because particles accumulate in the leakage field halo. This magnification effect actually makes small cracks easier to see — it is part of what makes fluorescent MT more sensitive than visible MT.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CASE 4: PT — Stainless Steel SCC -->
+        <div class="case-card">
+            <div class="case-header">
+                <span class="method-badge mb-pt">PT</span>
+                <div>
+                    <div class="case-title">Case 4 — 316L Stainless Pipe Weld: Service-Induced Stress Corrosion Cracking</div>
+                    <div class="case-industry">Process — pharmaceutical plant, 316L SS process piping, Cl⁻ environment, post-service inspection at 3-year turnaround</div>
+                </div>
+            </div>
+            <div class="case-body">
+                <div class="case-image">
+                    <svg viewBox="0 0 320 170" width="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Simulated visible dye PT indication showing SCC in stainless weld HAZ">
+                        <!-- White developer background — the developer coat makes the surface white/off-white -->
+                        <rect width="320" height="170" fill="#f9fafb"/>
+                        <!-- Developer coat texture (subtle) -->
+                        <rect x="20" y="20" width="280" height="130" fill="#f4f4f0" rx="4"/>
+                        <!-- Weld cap outline — slight raised bead, visible as subtle off-white band -->
+                        <ellipse cx="160" cy="85" rx="115" ry="22" fill="#eeeee8" stroke="#ddd" stroke-width="0.5"/>
+                        <text x="160" y="60" text-anchor="middle" font-size="8.5" fill="#9ca3af">Weld cap</text>
+                        <!-- HAZ line — subtle boundary where developer is slightly different shade -->
+                        <path d="M45,65 Q90,63 160,63 Q230,63 275,65" stroke="#e5e5df" stroke-width="2" fill="none"/>
+                        <path d="M45,105 Q90,107 160,107 Q230,107 275,105" stroke="#e5e5df" stroke-width="2" fill="none"/>
+                        <!-- MAIN FINDING: red/crimson SCC indications — branching, tight cracks bleeding penetrant -->
+                        <!-- SCC pattern: multiple branching cracks typical of SCC (versus single straight fatigue crack) -->
+                        <!-- Main crack branch 1 -->
+                        <path d="M100,65 Q105,72 108,82 Q110,90 108,98 Q106,105 103,110" stroke="#dc2626" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <!-- Branch from main at 75mm depth -->
+                        <path d="M108,82 Q114,85 119,90 Q123,95 121,102" stroke="#dc2626" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                        <!-- Sub-branch -->
+                        <path d="M119,90 Q124,93 127,97" stroke="#dc2626" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.8"/>
+                        <!-- Main crack branch 2 (adjacent) -->
+                        <path d="M120,65 Q123,74 124,84 Q125,93 122,100" stroke="#dc2626" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        <!-- Branch from branch 2 -->
+                        <path d="M124,84 Q130,87 135,92 Q138,97 136,104" stroke="#dc2626" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+                        <!-- Third thinner crack -->
+                        <path d="M138,66 Q140,75 139,86 Q138,94 135,100" stroke="#dc2626" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.8"/>
+                        <!-- Bleed-out halos — soft pink area around cracks (penetrant bleeding wider in developer) -->
+                        <path d="M100,65 Q105,72 108,82 Q110,90 108,98 Q106,105 103,110" stroke="#fca5a5" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.3"/>
+                        <path d="M120,65 Q123,74 124,84 Q125,93 122,100" stroke="#fca5a5" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.25"/>
+                        <path d="M108,82 Q114,85 119,90 Q123,95 121,102" stroke="#fca5a5" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.2"/>
+                        <!-- HAZ boundary label -->
+                        <line x1="45" y1="65" x2="40" y2="50" stroke="#9ca3af" stroke-width="0.8"/>
+                        <text x="30" y="47" font-size="7.5" fill="#9ca3af" text-anchor="middle">HAZ</text>
+                        <!-- Indication labels -->
+                        <line x1="103" y1="88" x2="60" y2="100" stroke="#b91c1c" stroke-width="0.8"/>
+                        <text x="20" y="103" font-size="8" fill="#b91c1c" font-weight="700">SCC</text>
+                        <text x="20" y="113" font-size="7.5" fill="#b91c1c">branching</text>
+                        <text x="20" y="122" font-size="7.5" fill="#b91c1c">pattern</text>
+                        <!-- Bleed-out label -->
+                        <line x1="130" y1="84" x2="175" y2="75" stroke="#9ca3af" stroke-width="0.8"/>
+                        <text x="177" y="73" font-size="7.5" fill="#9ca3af">Bleed-out</text>
+                        <text x="177" y="82" font-size="7.5" fill="#9ca3af">(wider than crack)</text>
+                        <!-- Developer time stamp -->
+                        <text x="260" y="160" text-anchor="end" font-size="7" fill="#9ca3af">Developer contact 15 min | Visible dye, Type II solvent removable</text>
+                        <!-- Scale bar -->
+                        <line x1="215" y1="140" x2="265" y2="140" stroke="#6b7280" stroke-width="1"/>
+                        <line x1="215" y1="137" x2="215" y2="143" stroke="#6b7280" stroke-width="1"/>
+                        <line x1="265" y1="137" x2="265" y2="143" stroke="#6b7280" stroke-width="1"/>
+                        <text x="240" y="135" text-anchor="middle" font-size="8" fill="#6b7280">50 mm</text>
+                    </svg>
+                    <figcaption>Simulated visible dye PT image on white developer background. The branching, tree-like red indications in the HAZ are characteristic of stress corrosion cracking — distinct from the single straight line of a fatigue crack. Bleed-out (pink halo) is wider than the physical crack width.</figcaption>
+                </div>
+                <div class="case-detail">
+                    <div class="cd-label">Scenario</div>
+                    <p>Turnaround inspection at a pharmaceutical plant. 316L SS process piping (2&Prime; Sch.40), service fluid contains trace chlorides from cleaning-in-place (CIP) solutions. Visible dye PT (Type II solvent removable, Form D non-aqueous developer), per ASME Section V Article 6 and ASTM E165.</p>
+                    <div class="cd-label">What the PT revealed</div>
+                    <ul>
+                        <li>Multiple branching red indications in the <strong>HAZ immediately adjacent to the weld toe</strong> — the sensitized zone where carbide precipitation reduces corrosion resistance.</li>
+                        <li>Indication pattern: branching, tree-like structure over a 35 mm region. Branching morphology is the hallmark of SCC (versus a single straight fatigue crack or a sharp linear weld crack).</li>
+                        <li>Bleed-out took approximately 8 minutes to fully develop — indicating tight cracks requiring longer developer dwell. No indications on the weld cap itself.</li>
+                    </ul>
+                    <div class="cd-label">Code Evaluation — ASME B31.3 / Client Spec</div>
+                    <p>Any crack indication is rejectable. Branching SCC in process piping requires root cause analysis before repair. <span class="disp-reject">REJECT — crack, any length</span></p>
+                    <div class="cd-label">Disposition &amp; Root Cause</div>
+                    <p>Section cut out; metallographic examination confirmed transgranular SCC in the sensitized HAZ. Root cause: concentrated chloride residues from CIP bleach solution not fully flushed before drying. Repair used 316L with controlled heat input (max 65 kJ/in) to minimize sensitization. Process change: mandatory DI water rinse with conductivity verification after CIP before drying.</p>
+                    <div class="lesson-banner">
+                        <strong>Key lesson:</strong> PT cannot be used on this material with MT (austenitic SS is non-ferromagnetic). It also cannot be performed blind — surface <em>must</em> be free of all CIP residues before PT or the penetrant will not enter the cracks. The branching pattern that distinguishes SCC from fatigue or hydrogen cracking is visible to PT but only if interpreted correctly — the morphology of the bleed-out is diagnostic.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CASE 5: ET — Heat Exchanger Tube Corrosion -->
+        <div class="case-card">
+            <div class="case-header">
+                <span class="method-badge mb-et">ET</span>
+                <div>
+                    <div class="case-title">Case 5 — Power Plant Condenser: OD Pitting at Tube Support Plate</div>
+                    <div class="case-industry">Power generation — steam surface condenser, 90/10 Cu-Ni tubing, 25 mm OD × 1.2 mm wall, 20,000-tube bundle</div>
+                </div>
+            </div>
+            <div class="case-body">
+                <div class="case-image">
+                    <svg viewBox="0 0 320 170" width="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Simulated eddy current impedance plane display showing tube pitting signal">
+                        <!-- Display background -->
+                        <rect width="320" height="170" fill="#05101a"/>
+                        <!-- Polar grid lines -->
+                        <circle cx="100" cy="85" r="60" fill="none" stroke="#0f2a3a" stroke-width="0.8"/>
+                        <circle cx="100" cy="85" r="40" fill="none" stroke="#0f2a3a" stroke-width="0.6"/>
+                        <circle cx="100" cy="85" r="20" fill="none" stroke="#0f2a3a" stroke-width="0.5"/>
+                        <!-- Axes -->
+                        <line x1="40" y1="85" x2="160" y2="85" stroke="#1a3a4a" stroke-width="0.8"/>
+                        <line x1="100" y1="25" x2="100" y2="145" stroke="#1a3a4a" stroke-width="0.8"/>
+                        <!-- Axis labels -->
+                        <text x="165" y="88" font-size="7.5" fill="#2e6a7a" font-family="monospace">R</text>
+                        <text x="102" y="22" font-size="7.5" fill="#2e6a7a" font-family="monospace">+X</text>
+                        <!-- Calibration signal: OD reference notch (20% depth) -->
+                        <circle cx="128" cy="57" r="4" fill="#22d3ee" opacity="0.9"/>
+                        <text x="136" y="55" font-size="7.5" fill="#22d3ee">OD 20% ref</text>
+                        <!-- Calibration signal: OD 40% depth notch -->
+                        <circle cx="140" cy="42" r="4" fill="#22d3ee" opacity="0.9"/>
+                        <text x="148" y="40" font-size="7.5" fill="#22d3ee">OD 40% ref</text>
+                        <!-- Calibration signal: OD 60% depth notch -->
+                        <circle cx="148" cy="30" r="4" fill="#22d3ee" opacity="0.9"/>
+                        <text x="156" y="28" font-size="7.5" fill="#22d3ee">OD 60% ref</text>
+                        <!-- Line connecting calibration points (OD phase angle line) -->
+                        <path d="M100,85 L128,57 L140,42 L148,30" stroke="#22d3ee" stroke-width="0.8" fill="none" stroke-dasharray="4,2" opacity="0.5"/>
+                        <!-- Phase angle label for OD -->
+                        <path d="M115,85 A20,20 0 0,0 112,71" stroke="#22d3ee" stroke-width="1" fill="none"/>
+                        <text x="122" y="75" font-size="7.5" fill="#22d3ee">~50° OD</text>
+                        <!-- DEFECT SIGNAL: pitting at tube support plate — signal phase angle similar to OD reference -->
+                        <!-- Trail showing probe pull-through signal path -->
+                        <path d="M100,85 Q108,82 118,76 Q128,68 133,60" stroke="#f97316" stroke-width="1.5" fill="none" opacity="0.4"/>
+                        <!-- Defect indication dot -->
+                        <circle cx="133" cy="60" r="5.5" fill="#f97316" opacity="0.95"/>
+                        <!-- Glow -->
+                        <circle cx="133" cy="60" r="9" fill="#f97316" opacity="0.15"/>
+                        <text x="143" y="60" font-size="8" fill="#f97316" font-weight="700">DEFECT</text>
+                        <text x="143" y="70" font-size="7.5" fill="#f97316">~46% wall loss</text>
+                        <text x="143" y="80" font-size="7.5" fill="#f97316">phase 52°</text>
+                        <!-- ID signal reference (for comparison) -->
+                        <circle cx="88" cy="42" r="3.5" fill="#a78bfa" opacity="0.7"/>
+                        <text x="74" y="38" font-size="7" fill="#a78bfa">ID ref 20%</text>
+                        <path d="M100,85 A20,20 0 0,1 88,67" stroke="#a78bfa" stroke-width="1" fill="none" stroke-dasharray="3,2"/>
+                        <text x="68" y="70" font-size="7" fill="#a78bfa">~130° ID</text>
+                        <!-- Divider line -->
+                        <line x1="175" y1="15" x2="175" y2="155" stroke="#1a3a4a" stroke-width="0.8"/>
+                        <!-- Lissajous time-domain display (right side) -->
+                        <text x="248" y="25" text-anchor="middle" font-size="8" fill="#4a8a9a">Channel 1 — time base</text>
+                        <!-- Time base x axis -->
+                        <line x1="185" y1="90" x2="310" y2="90" stroke="#1a3a4a" stroke-width="0.7"/>
+                        <line x1="185" y1="50" x2="185" y2="130" stroke="#1a3a4a" stroke-width="0.7"/>
+                        <!-- Normal signal (flat baseline) -->
+                        <polyline points="185,90 200,90 205,90 210,91 215,90 220,90 225,90 230,90" stroke="#22d3ee" stroke-width="1.2" fill="none" opacity="0.5"/>
+                        <!-- Support plate signal: gradual rise/fall -->
+                        <path d="M230,90 Q238,88 244,82 Q248,78 250,76 Q252,74 256,76 Q260,80 264,86 Q268,90 275,90" stroke="#22d3ee" stroke-width="1.2" fill="none" opacity="0.5"/>
+                        <!-- Defect signal: sharp peak ON TOP of support plate signal -->
+                        <path d="M244,76 Q246,68 248,52 Q249,42 250,42 Q251,43 252,56 Q253,70 256,76" stroke="#f97316" stroke-width="2" fill="none"/>
+                        <!-- Fill -->
+                        <polygon points="249,42 250,42 250,76 249,76" fill="#f97316" opacity="0.2"/>
+                        <text x="250" y="38" text-anchor="middle" font-size="7.5" fill="#f97316">pitting signal</text>
+                        <!-- Baseline labels -->
+                        <text x="248" y="160" text-anchor="middle" font-size="7" fill="#4a8a9a" font-family="monospace">← Probe travel direction →</text>
+                    </svg>
+                    <figcaption>Simulated ET impedance plane display (left) and time-base signal (right). The defect signal (orange dot, 52° phase angle) plots between the 40% and 60% OD calibration references, indicating ~46% wall loss OD pitting. Phase angle differentiates OD (~50°) from ID (~130°) defects. The time-base shows the pitting signal superimposed on the support plate signal.</figcaption>
+                </div>
+                <div class="case-detail">
+                    <div class="cd-label">Scenario</div>
+                    <p>Planned outage inspection of a 20,000-tube condenser bundle in a 500 MW coal plant. 90/10 Cu-Ni tubing (25 mm OD, 1.2 mm wall), 15 years service. Absolute + differential probe combination at 300 kHz, automated data acquisition at 1 m/s pull speed. ASME PCC-2 Article 2.2 acceptance criteria (plug tubes &gt;40% wall loss).</p>
+                    <div class="cd-label">What the ET revealed</div>
+                    <ul>
+                        <li><strong>Phase angle 52°</strong> — matching the OD calibration reference sector (~50°). This identifies the defect as originating on the <em>outside diameter</em> surface, at a tube support plate location (high turbulence zone).</li>
+                        <li>Signal amplitude plots between the 40% and 60% OD notch calibration signals → interpolated at approximately <strong>46% wall loss</strong>.</li>
+                        <li>Scan identified <strong>847 tubes</strong> with OD indications &gt;40% wall loss at the same support plate elevation — systematic attack from under-deposit corrosion (biofouling) in cooling water.</li>
+                    </ul>
+                    <div class="cd-label">Code Evaluation — ASME PCC-2 / EPRI</div>
+                    <p>Tubes with &gt;40% wall loss plugged per plant guidelines. Tubes 30–40% wall loss scheduled for re-inspection next outage. <span class="disp-reject">PLUG — 847 tubes (&gt;40% wall loss)</span> <span class="disp-monitor">MONITOR — 623 tubes (30–40%)</span></p>
+                    <div class="cd-label">Disposition &amp; Root Cause</div>
+                    <p>847 tubes plugged with titanium plugs. Root cause analysis: biofouling colonization at support plate baffle gaps creating stagnant zones; microbially influenced corrosion (MIC) progressed to under-deposit OD pitting. Corrective action: enhanced biocide program (continuous chlorination 0.5 ppm residual), support plate geometry modification on next bundle replacement.</p>
+                    <div class="lesson-banner">
+                        <strong>Key lesson:</strong> The <em>phase angle</em> of the ET signal is as important as its amplitude — it tells you whether the defect is on the ID or OD surface, which determines the root cause and the repair strategy. A signal at 50° (OD) means the problem is in the cooling water side; at 130° (ID) it means the process fluid side. Without phase discrimination, you know there is a defect but not where it is — amplitude alone is insufficient for tube inspection diagnosis.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- end case studies section -->
+
+    <a class="back-link" href="index.html">← Back to Reference Pages</a>
+</main>
+</body>
+</html>
