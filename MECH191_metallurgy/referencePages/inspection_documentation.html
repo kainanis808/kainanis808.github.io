@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Inspection Documentation — MTRs, Weld Records, NDT Reports</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.2rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 980px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 30px; font-size: 1rem; }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section h2 { font-size: 1.3rem; color: #1e3a5f; margin-bottom: 10px; }
+        .section p { color: #4b5563; line-height: 1.6; margin-bottom: 14px; font-size: 0.95rem; }
+
+        .section-label {
+            font-weight: 700;
+            color: #1e3a5f;
+            font-size: 0.95rem;
+            margin: 18px 0 6px;
+        }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 10px; }
+        thead tr { background: #1e3a5f; color: #fff; }
+        thead th { padding: 10px 12px; text-align: left; font-weight: 600; }
+        tbody tr:nth-child(even) { background: #f1f5f9; }
+        tbody tr:hover { background: #e0f2fe; }
+        tbody td { padding: 8px 12px; border-bottom: 1px solid #e2e8f0; color: #374151; vertical-align: top; }
+        .code { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #1e3a5f; }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .badge-pass   { background: #dcfce7; color: #15803d; }
+        .badge-fail   { background: #fee2e2; color: #b91c1c; }
+        .badge-hold   { background: #fef9c3; color: #854d0e; }
+        .badge-ndt    { background: #ede9fe; color: #6d28d9; }
+        .badge-aws    { background: #fed7aa; color: #c2410c; }
+        .badge-asme   { background: #bfdbfe; color: #1d4ed8; }
+
+        /* Formula box */
+        .formula-box {
+            background: #1e3a5f;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 14px 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            margin: 14px 0;
+            text-align: center;
+        }
+        .formula-box .f-label {
+            font-size: 0.8rem;
+            color: #93c5fd;
+            margin-bottom: 6px;
+            font-family: 'Segoe UI', sans-serif;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .formula-box .f-note {
+            margin-top: 8px;
+            font-size: 0.78rem;
+            color: #93c5fd;
+            font-family: 'Segoe UI', sans-serif;
+            line-height: 1.5;
+        }
+
+        /* MTR mock document layout */
+        .mtr-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px;
+            background: #cbd5e1;
+            border: 2px solid #1e3a5f;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 16px 0;
+            font-size: 0.84rem;
+        }
+        .mtr-header {
+            grid-column: 1 / -1;
+            background: #1e3a5f;
+            color: #fff;
+            padding: 10px 14px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .mtr-section-bar {
+            grid-column: 1 / -1;
+            background: #dbeafe;
+            color: #1e3a5f;
+            padding: 5px 12px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .mtr-cell {
+            background: #fff;
+            padding: 9px 13px;
+        }
+        .mtr-cell.span2 { grid-column: 1 / -1; }
+        .mtr-cell.highlight { background: #eff6ff; }
+        .mtr-cell.critical  { background: #fff7ed; }
+        .mtr-cell.verify    { background: #f0fdf4; }
+        .mtr-field {
+            font-size: 0.69rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #9ca3af;
+            margin-bottom: 3px;
+        }
+        .mtr-value {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            color: #1e3a5f;
+            font-size: 0.88rem;
+        }
+        .mtr-annotation {
+            font-size: 0.72rem;
+            color: #c2410c;
+            font-style: italic;
+            margin-top: 3px;
+        }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 7px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.88rem;
+            color: #374151;
+            line-height: 1.5;
+        }
+        .checklist li:last-child { border-bottom: none; }
+        .checklist li:nth-child(even) { background: #f8fafc; }
+        .check-icon {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            margin-top: 1px;
+            background: #fff;
+        }
+        .check-icon.must { border-color: #c2410c; background: #fff7ed; }
+
+        /* Phase / step flow for inspection stages */
+        .stage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 14px 0;
+        }
+        .stage-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .stage-header {
+            padding: 9px 14px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #fff;
+        }
+        .stage-header-pre    { background: #1d4ed8; }
+        .stage-header-inproc { background: #c2410c; }
+        .stage-header-post   { background: #15803d; }
+        .stage-body {
+            padding: 10px 14px;
+        }
+        .stage-body ul {
+            padding-left: 16px;
+            color: #4b5563;
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        /* NDT report mock */
+        .report-block {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 12px 0;
+            font-size: 0.85rem;
+        }
+        .report-block-header {
+            background: #4c1d95;
+            color: #fff;
+            padding: 8px 14px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .report-row {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .report-row:last-child { border-bottom: none; }
+        .report-row:nth-child(even) .report-key,
+        .report-row:nth-child(even) .report-val { background: #faf5ff; }
+        .report-key {
+            background: #f3f4f6;
+            padding: 7px 12px;
+            font-weight: 600;
+            color: #374151;
+            border-right: 1px solid #e2e8f0;
+        }
+        .report-val {
+            padding: 7px 12px;
+            color: #1e3a5f;
+            font-family: 'Courier New', monospace;
+        }
+        .report-val.accept { color: #15803d; font-weight: 700; }
+        .report-val.reject { color: #b91c1c; font-weight: 700; }
+
+        /* Indication code cards */
+        .code-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 10px;
+            margin: 12px 0;
+        }
+        .code-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px 12px;
+        }
+        .code-card .sym {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #6d28d9;
+        }
+        .code-card .sym-desc {
+            font-size: 0.82rem;
+            color: #4b5563;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+
+        /* Tip / note boxes */
+        .tip-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            margin: 14px 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .tip-box strong { color: #92400e; }
+
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            margin: 14px 0;
+            font-size: 0.9rem;
+            color: #1e3a5f;
+            line-height: 1.6;
+        }
+
+        .note { font-size: 0.85rem; color: #6b7280; font-style: italic; margin-top: 10px; }
+
+        /* Table group headers */
+        .group-header td { background: #dbeafe !important; font-weight: 700; color: #1e3a5f; font-size: 0.85rem; padding: 6px 12px; }
+
+        /* Source callout */
+        .source-note {
+            font-size: 0.8rem;
+            color: #6b7280;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 20px;
+            padding-top: 10px;
+            font-style: italic;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #0284c7;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Reading Inspection Documentation</h1>
+    <p class="subtitle">Material Test Reports &nbsp;&middot;&nbsp; Weld Inspection Records &nbsp;&middot;&nbsp; NDT Reports</p>
+</header>
+<main>
+    <p class="intro">
+        Every fabricated structure or pressure component that leaves a shop carries a paper trail — a set
+        of documents that prove the material was what it claimed to be, the welder was qualified, the
+        procedure was followed, and the finished product met the acceptance criteria. Learning to read
+        these documents is a core skill for welding inspectors (AWS CWI), quality engineers, and anyone
+        involved in materials procurement or structural fabrication. This reference covers the three
+        major document types: <strong>Material Test Reports (MTRs)</strong>, <strong>weld inspection
+        and procedure records</strong>, and <strong>nondestructive testing (NDT) reports</strong>.
+    </p>
+
+    <!-- ==================== MTR ==================== -->
+    <div class="section">
+        <h2>Material Test Reports (MTRs)</h2>
+        <p>
+            A <strong>Material Test Report</strong> (also called a Mill Test Report or Mill Certificate)
+            is a document issued by the steel producer certifying that the material shipped meets the
+            requirements of the specified standard. It is the primary traceability document for
+            engineering materials. Every piece of material used in ASME Code or AWS D1.1 work must
+            be accompanied by a valid MTR, and the heat number on the MTR must be traceable to the
+            marking on the actual material.
+        </p>
+
+        <p class="section-label">Annotated MTR Layout — Key Fields</p>
+        <p>The sections below represent the major blocks on a typical mill test report. Fields
+        highlighted in orange require <em>active verification</em> against the purchase specification.</p>
+
+        <div class="mtr-layout">
+            <!-- Header -->
+            <div class="mtr-header">
+                <span>MILL TEST REPORT / MATERIAL TEST REPORT (MTR)</span>
+                <span style="font-size:0.8rem; font-weight:400; color:#93c5fd;">Read the document top-to-bottom in this order</span>
+            </div>
+
+            <!-- Producer / Identification block -->
+            <div class="mtr-section-bar">1 &nbsp;— Producer &amp; Order Identification</div>
+            <div class="mtr-cell">
+                <div class="mtr-field">Mill / Producer</div>
+                <div class="mtr-value">ACME STEEL CO., Pittsburgh PA</div>
+            </div>
+            <div class="mtr-cell">
+                <div class="mtr-field">Purchase Order No.</div>
+                <div class="mtr-value">PO-2024-00417</div>
+            </div>
+            <div class="mtr-cell highlight">
+                <div class="mtr-field">Heat Number &nbsp;&#9654; trace this to the physical marking on the material</div>
+                <div class="mtr-value">H-482931</div>
+                <div class="mtr-annotation">Every piece must carry this number via stencil, tag, or paint mark</div>
+            </div>
+            <div class="mtr-cell highlight">
+                <div class="mtr-field">Lot / Piece Number</div>
+                <div class="mtr-value">Plate 2 of 6</div>
+                <div class="mtr-annotation">Identifies specific pieces within a heat</div>
+            </div>
+
+            <!-- Specification block -->
+            <div class="mtr-section-bar">2 &nbsp;— Specification &amp; Product Form</div>
+            <div class="mtr-cell critical">
+                <div class="mtr-field">Material Specification &nbsp;&#9654; must match the purchase order exactly</div>
+                <div class="mtr-value">SA-516 / SA-516M</div>
+                <div class="mtr-annotation">For ASME Code work verify "SA-" prefix, not just "A-"</div>
+            </div>
+            <div class="mtr-cell critical">
+                <div class="mtr-field">Grade / Class</div>
+                <div class="mtr-value">Grade 70</div>
+                <div class="mtr-annotation">Must match drawing callout; Gr. 70 &ne; Gr. 60</div>
+            </div>
+            <div class="mtr-cell">
+                <div class="mtr-field">Product Form</div>
+                <div class="mtr-value">Plate</div>
+            </div>
+            <div class="mtr-cell">
+                <div class="mtr-field">Thickness &times; Width &times; Length</div>
+                <div class="mtr-value">1.000&Prime; &times; 96&Prime; &times; 240&Prime;</div>
+            </div>
+            <div class="mtr-cell">
+                <div class="mtr-field">Heat Treatment</div>
+                <div class="mtr-value">Normalized</div>
+                <div class="mtr-annotation">A516 Gr. 70 requires normalization for t &gt; 1.5&Prime;</div>
+            </div>
+            <div class="mtr-cell">
+                <div class="mtr-field">Test Specimen Orientation</div>
+                <div class="mtr-value">Transverse</div>
+            </div>
+
+            <!-- Chemistry block -->
+            <div class="mtr-section-bar">3 &nbsp;— Chemical Composition (Heat / Ladle Analysis)</div>
+            <div class="mtr-cell critical">
+                <div class="mtr-field">Carbon (C) % &nbsp;&mdash;&nbsp; Spec max: 0.27%</div>
+                <div class="mtr-value">0.21</div>
+                <div class="mtr-annotation">Carbon most affects weldability and hardenability — verify against spec max</div>
+            </div>
+            <div class="mtr-cell">
+                <div class="mtr-field">Manganese (Mn) % &nbsp;&mdash;&nbsp; Spec: 0.79–1.30%</div>
+                <div class="mtr-value">1.14</div>
+            </div>
+            <div class="mtr-cell">
+                <div class="mtr-field">Phosphorus (P) % &nbsp;&mdash;&nbsp; Spec max: 0.035%</div>
+                <div class="mtr-value">0.012</div>
+            </div>
+            <div class="mtr-cell">
+                <div class="mtr-field">Sulfur (S) % &nbsp;&mdash;&nbsp; Spec max: 0.035%</div>
+                <div class="mtr-value">0.018</div>
+            </div>
+            <div class="mtr-cell">
+                <div class="mtr-field">Silicon (Si) %</div>
+                <div class="mtr-value">0.24</div>
+            </div>
+            <div class="mtr-cell">
+                <div class="mtr-field">Other (Cr, Ni, Mo, V, Cu, Nb…)</div>
+                <div class="mtr-value">See supplemental report</div>
+            </div>
+
+            <!-- Mechanical block -->
+            <div class="mtr-section-bar">4 &nbsp;— Mechanical Test Results</div>
+            <div class="mtr-cell critical">
+                <div class="mtr-field">Ultimate Tensile Strength (UTS) &nbsp;&mdash;&nbsp; Spec: 70–90 ksi</div>
+                <div class="mtr-value">77.4 ksi &nbsp;(534 MPa)</div>
+                <div class="mtr-annotation">Must fall within both the minimum AND maximum limits where specified</div>
+            </div>
+            <div class="mtr-cell critical">
+                <div class="mtr-field">Yield Strength (0.2% offset) &nbsp;&mdash;&nbsp; Spec min: 38 ksi</div>
+                <div class="mtr-value">44.1 ksi &nbsp;(304 MPa)</div>
+                <div class="mtr-annotation">Report method: "0.2% offset" or "0.5% extension" — verify method matches spec</div>
+            </div>
+            <div class="mtr-cell">
+                <div class="mtr-field">Elongation % (2&Prime; gauge) &nbsp;&mdash;&nbsp; Spec min: 17%</div>
+                <div class="mtr-value">29%</div>
+            </div>
+            <div class="mtr-cell">
+                <div class="mtr-field">Reduction of Area % (optional)</div>
+                <div class="mtr-value">61%</div>
+            </div>
+            <div class="mtr-cell highlight">
+                <div class="mtr-field">Charpy V-Notch Impact (CVN) &nbsp;&mdash;&nbsp; if required by spec or purchaser</div>
+                <div class="mtr-value">3 specimens @ &minus;20&deg;F: 62 / 68 / 71 ft&middot;lbf</div>
+                <div class="mtr-annotation">Verify test temperature AND minimum energy against the supplemental requirement</div>
+            </div>
+            <div class="mtr-cell highlight">
+                <div class="mtr-field">Hardness (if required)</div>
+                <div class="mtr-value">HB 159</div>
+            </div>
+
+            <!-- Certification block -->
+            <div class="mtr-section-bar">5 &nbsp;— Certification Statement</div>
+            <div class="mtr-cell verify span2">
+                <div class="mtr-field">Certification / Signature</div>
+                <div class="mtr-value">"We certify that the material described above was manufactured and tested in
+                    accordance with the requirements of SA-516/SA-516M, Grade 70, and that the test
+                    results shown are correct." &nbsp;&mdash; Authorized Representative, ACME STEEL CO.</div>
+                <div class="mtr-annotation">Must include the specification designation, grade, authorized signature, and date. Electronic signatures are accepted by most codes.</div>
+            </div>
+        </div>
+
+        <p class="section-label">Heat (Ladle) Analysis vs. Product Analysis</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Analysis Type</th>
+                    <th>When Taken</th>
+                    <th>How Reported</th>
+                    <th>What It Means</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Heat (Ladle) Analysis</strong></td>
+                    <td>From a sample of molten steel in the ladle, before casting</td>
+                    <td>Always reported on the MTR — it is the primary chemistry record</td>
+                    <td>Represents the average composition of the entire heat; small variations across the cast product are normal</td>
+                </tr>
+                <tr>
+                    <td><strong>Product Analysis</strong></td>
+                    <td>From a sample taken from the finished product (plate, bar, pipe)</td>
+                    <td>Only reported when required by the specification or purchaser</td>
+                    <td>More representative of actual local composition; specification limits are slightly wider than ladle limits to account for normal segregation</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="note">ASTM product analysis tolerances (the allowable deviation from ladle analysis limits) are defined in ASTM A29 for bars and A6 for structural shapes and plate.</p>
+
+        <p class="section-label">Carbon Equivalent — Weldability Assessment</p>
+        <p>
+            Carbon equivalent (CE) is calculated from the MTR chemistry to estimate how susceptible
+            a steel is to hydrogen-induced cracking (HAC) in the heat-affected zone. It is the primary
+            tool for determining preheat requirements when the WPS does not specify them by heat.
+            Two formulas are in common use:
+        </p>
+        <div class="formula-box">
+            <div class="f-label">IIW Carbon Equivalent (CE<sub>IIW</sub>) — best for C &gt; 0.18%</div>
+            CE = C + Mn/6 + (Cr+Mo+V)/5 + (Ni+Cu)/15
+            <div class="f-note">All values in weight percent from the MTR chemistry section.<br>
+            Elements not listed on the MTR are taken as zero.</div>
+        </div>
+        <div class="formula-box">
+            <div class="f-label">Pcm (Ito&ndash;Bessyo) — better for low-carbon steels (C &le; 0.18%)</div>
+            Pcm = C + Si/30 + (Mn+Cu+Cr)/20 + Ni/60 + Mo/15 + V/10 + 5B
+            <div class="f-note">B = boron content in weight percent (often 0 for structural steels).</div>
+        </div>
+
+        <p class="section-label">CE Thresholds and Preheat Guidance (AWS D1.1 Annex I basis)</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>CE<sub>IIW</sub> Range</th>
+                    <th>Weldability</th>
+                    <th>Typical Min. Preheat (°F / °C)</th>
+                    <th>Practical Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>&lt; 0.35</td>
+                    <td>Excellent</td>
+                    <td>None required (normal conditions)</td>
+                    <td>Most A36 and A53 Gr. B steels fall here; preheat still required in cold weather</td>
+                </tr>
+                <tr>
+                    <td>0.35 – 0.45</td>
+                    <td>Good</td>
+                    <td>Typically 50 – 125 °F &nbsp;/ &nbsp;10 – 50 °C</td>
+                    <td>Most A572 Gr. 50 and A516 Gr. 70 steels; low-hydrogen electrodes recommended</td>
+                </tr>
+                <tr>
+                    <td>0.45 – 0.60</td>
+                    <td>Fair — increased HAC risk</td>
+                    <td>150 – 400 °F &nbsp;/ &nbsp;65 – 200 °C</td>
+                    <td>A514, higher-carbon alloy steels; low-hydrogen process (H4 or H8) required; preheat verified by contact thermometer or Tempilstik</td>
+                </tr>
+                <tr>
+                    <td>&gt; 0.60</td>
+                    <td>Poor — high HAC risk</td>
+                    <td>400 °F+ &nbsp;/ &nbsp;200 °C+</td>
+                    <td>Requires careful WPS development; possibly PWHT; consult D1.1 Annex I or qualified engineer</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="tip-box">
+            <strong>MTR verification checklist — minimum steps before accepting material:</strong>
+            (1) Confirm the specification and grade on the MTR match the drawing requirement exactly.
+            (2) Confirm the heat number on the MTR matches the physical marking stamped or stenciled on the material.
+            (3) Confirm every reported chemistry value is within the specification limits.
+            (4) Confirm all mechanical test results meet specification minimums (and maximums, where applicable).
+            (5) Confirm the certification statement cites the correct specification and bears an authorized signature.
+            (6) If ASME Code work, confirm "SA-" prefix — not just "A-."
+        </div>
+    </div>
+
+    <!-- ==================== WELD INSPECTION RECORDS ==================== -->
+    <div class="section">
+        <h2>Welding Inspection Records (AWS CWI Documentation)</h2>
+        <p>
+            A Certified Welding Inspector (CWI) is responsible for generating and reviewing a set of
+            records that collectively prove a weld was made correctly from start to finish. AWS D1.1 and
+            ASME Section IX both require that these records be maintained. Together they form the
+            <em>quality record package</em> for a weld joint.
+        </p>
+
+        <p class="section-label">Pre-Weld, In-Process, and Post-Weld Inspection Stages</p>
+        <div class="stage-grid">
+            <div class="stage-card">
+                <div class="stage-header stage-header-pre">Pre-Weld Inspection</div>
+                <div class="stage-body">
+                    <ul>
+                        <li>Verify WPS is applicable to the joint</li>
+                        <li>Verify welder is qualified (check WPQ/WQT)</li>
+                        <li>Review MTR — material matches WPS base metal</li>
+                        <li>Inspect joint fit-up (root opening, bevel angle, root face, alignment)</li>
+                        <li>Verify preheat is applied and measured</li>
+                        <li>Verify correct filler metal is staged (check AWS classification)</li>
+                        <li>Verify filler metal storage / electrode oven temperature (for LH electrodes)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="stage-card">
+                <div class="stage-header stage-header-inproc">In-Process Inspection</div>
+                <div class="stage-body">
+                    <ul>
+                        <li>Monitor preheat and interpass temperature continuously</li>
+                        <li>Verify arc parameters (amperage, voltage, travel speed) match WPS range</li>
+                        <li>Calculate and record heat input per pass if required</li>
+                        <li>Inspect each pass for slag removal and visual quality</li>
+                        <li>Verify pass sequence matches WPS</li>
+                        <li>Document any deviations — do not allow unauthorized changes to WPS variables</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="stage-card">
+                <div class="stage-header stage-header-post">Post-Weld Inspection</div>
+                <div class="stage-body">
+                    <ul>
+                        <li>Visual inspection (VT) — required before any NDT</li>
+                        <li>NDT as required by code and contract (RT, UT, MT, PT)</li>
+                        <li>Dimensional inspection of finished weld</li>
+                        <li>PWHT chart review (if required)</li>
+                        <li>Final accept / reject disposition and signature</li>
+                        <li>Compile and file complete quality record package</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <p class="section-label">WPS Review — Essential Variables to Verify Before Welding</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Essential Variable</th>
+                    <th>What the Inspector Checks</th>
+                    <th>Why It Matters</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Welding process</td>
+                    <td>Process on WPS (e.g., SMAW, FCAW) matches process actually being used</td>
+                    <td>Changing process invalidates the WPS; requires separate qualification</td>
+                </tr>
+                <tr>
+                    <td>Base metal P-number / group</td>
+                    <td>Material MTR spec matches the P-number listed on the WPS</td>
+                    <td>Different P-numbers have different preheat, heat input, and HAZ behavior</td>
+                </tr>
+                <tr>
+                    <td>Filler metal F-number &amp; A-number</td>
+                    <td>Electrode or wire AWS classification matches WPS filler metal entry</td>
+                    <td>Wrong filler metal can result in under-strength or cracking-susceptible welds</td>
+                </tr>
+                <tr>
+                    <td>Thickness range qualified</td>
+                    <td>Actual base metal thickness &le; maximum qualified thickness on WPS</td>
+                    <td>WPS is only valid for the thickness range proven in the PQR test coupon</td>
+                </tr>
+                <tr>
+                    <td>Welding position</td>
+                    <td>Actual joint orientation (1G, 2G, 3G, 4G, etc.) is covered by WPS</td>
+                    <td>Gravity affects weld pool; a WPS qualified in flat position does not cover overhead</td>
+                </tr>
+                <tr>
+                    <td>Preheat / interpass temperature</td>
+                    <td>Minimum preheat is met; maximum interpass is not exceeded</td>
+                    <td>Inadequate preheat → HAC; excessive interpass can reduce toughness</td>
+                </tr>
+                <tr>
+                    <td>Heat input range</td>
+                    <td>Calculated HI per pass is within the WPS-qualified range</td>
+                    <td>High HI → coarse grain, reduced toughness; low HI → rapid cooling, HAC risk</td>
+                </tr>
+                <tr>
+                    <td>Post-weld heat treatment</td>
+                    <td>PWHT required by code or WPS is performed and charted</td>
+                    <td>PWHT relieves residual stress and reduces HAZ hardness; omitting it voids the WPS</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="section-label">Heat Input Calculation</p>
+        <p>Heat input is an essential variable on many WPSs and must be calculated from recorded arc parameters:</p>
+        <div class="formula-box">
+            <div class="f-label">Arc Heat Input (kJ/in) — GMAW, SMAW, FCAW, SAW</div>
+            HI (kJ/in) = [ Volts &times; Amps &times; 60 ] &divide; [ Travel Speed (in/min) &times; 1,000 ]
+            <div class="f-note">
+                Example: 26 V &times; 180 A &times; 60 &divide; (8 in/min &times; 1,000) = <strong>35.1 kJ/in</strong><br>
+                Some codes (e.g., AWS D1.1 2020+) use a thermal efficiency factor &eta; for processes such as GTAW (&eta; &approx; 0.60) and SAW (&eta; &approx; 1.0).
+            </div>
+        </div>
+
+        <p class="section-label">Welder Qualification (WPQ / WQT) — What to Verify</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Field on the WPQ</th>
+                    <th>What to Check</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Welder name and stamp / ID</td>
+                    <td>Must match the individual actually performing the work; stamps must be applied to production welds per code</td>
+                </tr>
+                <tr>
+                    <td>Process qualified</td>
+                    <td>Process on WPQ matches process to be used (e.g., SMAW qualification does not cover FCAW)</td>
+                </tr>
+                <tr>
+                    <td>Position(s) qualified</td>
+                    <td>Per AWS D1.1 Table 4.12: a 3G qualification qualifies 1G and 3G; a 4G qualifies 1G and 4G; 3G+4G qualifies all groove positions</td>
+                </tr>
+                <tr>
+                    <td>Thickness range</td>
+                    <td>Actual weld joint thickness falls within the welder's qualified range</td>
+                </tr>
+                <tr>
+                    <td>Qualification date</td>
+                    <td>Under D1.1: qualification expires if the welder has not used the process for more than 6 months. Confirm currency.</td>
+                </tr>
+                <tr>
+                    <td>Test results</td>
+                    <td>Bend test results (root bend, face bend, side bend) all accepted; no cracks &gt; 1/8&Prime; in any direction</td>
+                </tr>
+                <tr>
+                    <td>Authorizing signature</td>
+                    <td>Signed by an authorized company representative or CWI; unsigned WPQs are not valid</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="section-label">Fit-Up Inspection — Key Measurements</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>What It Is</th>
+                    <th>Typical D1.1 Tolerance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Root opening (gap)</td>
+                    <td>Distance between the root faces of the two members before welding</td>
+                    <td>Per joint detail on WPS; excessive gap requires backing or reduced groove angle</td>
+                </tr>
+                <tr>
+                    <td>Root face (land)</td>
+                    <td>Thickness of the ungrooved portion at the base of the joint</td>
+                    <td>Typically 1/16&Prime; &plusmn; 1/16&Prime; for prequalified CJP groove welds</td>
+                </tr>
+                <tr>
+                    <td>Groove angle (included)</td>
+                    <td>Total included angle of the groove between the two bevel faces</td>
+                    <td>Varies by joint type; e.g., V-groove min. 45° for prequalified single-V</td>
+                </tr>
+                <tr>
+                    <td>Joint mismatch (hi-lo)</td>
+                    <td>Offset between the faces of two members being joined end-to-end (butt joint)</td>
+                    <td>Max. 1/10 of the thinner member thickness, not to exceed 1/8&Prime; (D1.1 5.22.1)</td>
+                </tr>
+                <tr>
+                    <td>Straightness / distortion</td>
+                    <td>Deviation of the joint from its specified geometry before welding begins</td>
+                    <td>Must be within drawing tolerances; pre-cambering is often used to compensate for weld shrinkage</td>
+                </tr>
+                <tr>
+                    <td>Cleanliness</td>
+                    <td>Joint surfaces free of mill scale (within 2&Prime;), rust, moisture, paint, oil, and other contaminants</td>
+                    <td>D1.1 5.15: surfaces must be free of injurious material; mill scale is acceptable if proven not to impair weld quality for the WPS used</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ==================== NDT REPORTS ==================== -->
+    <div class="section">
+        <h2>Reading NDT Reports</h2>
+        <p>
+            Each NDT method produces a written report that a CWI or Level II examiner must be able
+            to interpret. Reports contain standardized fields for setup parameters, indication
+            descriptions, and accept/reject dispositions. Understanding the terminology and how
+            indications are characterized is essential for both writing and reviewing these records.
+        </p>
+
+        <p class="section-label">Visual Inspection Report (VT) — Common Fields and Acceptance Criteria</p>
+        <div class="report-block">
+            <div class="report-block-header">
+                <span>VISUAL INSPECTION REPORT &nbsp;&mdash;&nbsp; AWS D1.1 Cl. 6.9 (Static) / Cl. 6.12 (Cyclic)</span>
+                <span class="badge badge-ndt">VT</span>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Joint / Weld ID</div>
+                <div class="report-val">W-14 &nbsp;|&nbsp; Beam-to-Column, Grid C-4, Elev. +32&prime;</div>
+            </div>
+            <div class="report-row">
+                <div class="report-key">WPS Reference</div>
+                <div class="report-val">WPS-SMAW-PQ-001, Rev. 2</div>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Welder ID</div>
+                <div class="report-val">JT-07 (stamp matches WPQ on file)</div>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Visual Result</div>
+                <div class="report-val accept">ACCEPT — No rejectable indications observed</div>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Observations</div>
+                <div class="report-val">Minor surface porosity at station 14+06: max. diameter 1/16&Prime; — within D1.1 6.9.2 limit of 3/8&Prime;</div>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Weld Size (measured)</div>
+                <div class="report-val">Fillet leg: 3/8&Prime; required, 7/16&Prime; measured — conforming</div>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Inspector Signature</div>
+                <div class="report-val">R. Santos, CWI &nbsp;|&nbsp; AWS CWI Cert. No. 23040567 &nbsp;|&nbsp; Date: 2024-11-14</div>
+            </div>
+        </div>
+
+        <p class="section-label">Key Visual Acceptance Criteria — AWS D1.1 Cl. 6.9 (Statically Loaded)</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Discontinuity Type</th>
+                    <th>Rejection Criterion</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Cracks</td>
+                    <td>Any crack of any size — <strong>reject</strong></td>
+                    <td>No minimum size; all cracks are rejectable by VT</td>
+                </tr>
+                <tr>
+                    <td>Surface porosity (individual)</td>
+                    <td>Diameter &gt; 3/8&Prime; — reject</td>
+                    <td>Porosity &lt; 3/8&Prime; is acceptable in static loading</td>
+                </tr>
+                <tr>
+                    <td>Undercut</td>
+                    <td>Depth &gt; 1/32&Prime; parallel to primary stress; &gt; 1/16&Prime; transverse to primary stress</td>
+                    <td>Cyclic loading: max. 1/32&Prime; regardless of direction</td>
+                </tr>
+                <tr>
+                    <td>Overlap</td>
+                    <td>Any overlap — reject</td>
+                    <td>Overlap creates a notch that initiates fatigue cracks</td>
+                </tr>
+                <tr>
+                    <td>Fillet weld size deficiency</td>
+                    <td>More than 2&Prime; in any 12&Prime;, or any deficiency &gt; 1/16&Prime;</td>
+                    <td>Undersized fillet is the most common VT finding on structural work</td>
+                </tr>
+                <tr>
+                    <td>Weld profile (convexity)</td>
+                    <td>Convexity exceeding 1/16&Prime; + 0.1 &times; face width</td>
+                    <td>Excessive reinforcement does not increase weld strength and creates stress risers</td>
+                </tr>
+                <tr>
+                    <td>Arc strikes</td>
+                    <td>Any arc strike outside the weld area — reject &amp; repair</td>
+                    <td>Arc strikes create localized hardened HAZ; grind flush and MT/PT to verify no cracks</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="section-label">Radiographic Testing (RT) Report — Reading Film Records</p>
+        <div class="report-block">
+            <div class="report-block-header">
+                <span>RADIOGRAPHIC EXAMINATION REPORT &nbsp;&mdash;&nbsp; ASME Sec. V Art. 2 / AWS D1.1 Cl. 6</span>
+                <span class="badge badge-ndt">RT</span>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Joint / Film ID</div>
+                <div class="report-val">Weld W-22 &nbsp;|&nbsp; Film set: W22-01 through W22-06</div>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Technique</div>
+                <div class="report-val">X-ray, 200 kV &nbsp;|&nbsp; SFD: 36&Prime; &nbsp;|&nbsp; Geometric unsharpness Ug = 0.015&Prime; &le; 0.020&Prime; limit</div>
+            </div>
+            <div class="report-row">
+                <div class="report-key">IQI (penetrameter)</div>
+                <div class="report-val">Wire IQI Set B, Essential wire #10 visible — sensitivity 2% achieved</div>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Indication #1</div>
+                <div class="report-val">Type: IP (isolated porosity) &nbsp;|&nbsp; Location: W22-03, 4&Prime; from A-end &nbsp;|&nbsp; Length: 0.10&Prime; &nbsp;|&nbsp; Disposition: <span class="accept">ACCEPT</span></div>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Indication #2</div>
+                <div class="report-val">Type: LF (lack of fusion) &nbsp;|&nbsp; Location: W22-05, 9&Prime; from A-end &nbsp;|&nbsp; Length: 0.65&Prime; &nbsp;|&nbsp; Disposition: <span class="reject">REJECT — exceeds 3/4 T limit</span></div>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Overall Disposition</div>
+                <div class="report-val reject">REJECT — repair required at W22-05; re-radiograph after repair</div>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Examiner / Level</div>
+                <div class="report-val">M. Kahananui, RT Level II &nbsp;|&nbsp; Cert. No. RT-2024-0088 &nbsp;|&nbsp; Reviewed by: Level III</div>
+            </div>
+        </div>
+
+        <p class="section-label">RT Indication Abbreviations (AWS D1.1 / ASME)</p>
+        <div class="code-grid">
+            <div class="code-card">
+                <div class="sym">P &nbsp;/ IP</div>
+                <div class="sym-desc">Porosity / Isolated Porosity — gas pockets trapped in the weld metal</div>
+            </div>
+            <div class="code-card">
+                <div class="sym">CP</div>
+                <div class="sym-desc">Cluster Porosity — group of gas pores in close proximity</div>
+            </div>
+            <div class="code-card">
+                <div class="sym">WP</div>
+                <div class="sym-desc">Wormhole Porosity — elongated tubular gas void (also "piping porosity")</div>
+            </div>
+            <div class="code-card">
+                <div class="sym">SI</div>
+                <div class="sym-desc">Slag Inclusion — non-metallic trapped slag from flux or electrode coating</div>
+            </div>
+            <div class="code-card">
+                <div class="sym">LF</div>
+                <div class="sym-desc">Lack of Fusion — incomplete bonding between weld passes or between weld and base metal</div>
+            </div>
+            <div class="code-card">
+                <div class="sym">LP</div>
+                <div class="sym-desc">Lack of Penetration — incomplete joint penetration at the root of a CJP weld</div>
+            </div>
+            <div class="code-card">
+                <div class="sym">C</div>
+                <div class="sym-desc">Crack — any linear discontinuity with a high length-to-width ratio; always rejectable</div>
+            </div>
+            <div class="code-card">
+                <div class="sym">UC</div>
+                <div class="sym-desc">Undercut — groove melted into the base metal adjacent to the weld toe</div>
+            </div>
+            <div class="code-card">
+                <div class="sym">HB</div>
+                <div class="sym-desc">Hollow Bead — elongated linear porosity along the weld root (root pass, pipe)</div>
+            </div>
+            <div class="code-card">
+                <div class="sym">IC</div>
+                <div class="sym-desc">Internal Concavity — root surface below the outside pipe surface (suck-back)</div>
+            </div>
+        </div>
+
+        <p class="section-label">Ultrasonic Testing (UT) Report — Reading the Record</p>
+        <div class="report-block">
+            <div class="report-block-header">
+                <span>ULTRASONIC EXAMINATION REPORT &nbsp;&mdash;&nbsp; AWS D1.1 Cl. 6 / ASME Sec. V Art. 4</span>
+                <span class="badge badge-ndt">UT</span>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Joint / Weld ID</div>
+                <div class="report-val">Weld W-31 &nbsp;|&nbsp; CJP groove weld, plate 1&Prime; thick</div>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Instrument / Probe</div>
+                <div class="report-val">Olympus EPOCH 650 &nbsp;|&nbsp; 70° shear wave, 2.25 MHz, 0.375&Prime; crystal</div>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Reference Calibration</div>
+                <div class="report-val">IIW block, 1&Prime; SDH at 6 dB above background — DAC established</div>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Indication #1</div>
+                <div class="report-val">
+                    Amplitude: +2 dB above DAC &nbsp;|&nbsp;
+                    Location: 4.2&Prime; from A-end &nbsp;|&nbsp;
+                    Depth from surface: 0.55&Prime; &nbsp;|&nbsp;
+                    Length: 0.8&Prime; &nbsp;|&nbsp;
+                    Class: D (linear) &nbsp;|&nbsp;
+                    <span class="reject">REJECT</span>
+                </div>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Indication #2</div>
+                <div class="report-val">
+                    Amplitude: &minus;6 dB below DAC &nbsp;|&nbsp;
+                    Location: 11&Prime; from A-end &nbsp;|&nbsp;
+                    Length: 0.3&Prime; &nbsp;|&nbsp;
+                    Class: B (porosity) &nbsp;|&nbsp;
+                    <span class="accept">ACCEPT</span>
+                </div>
+            </div>
+            <div class="report-row">
+                <div class="report-key">Overall Disposition</div>
+                <div class="report-val reject">REJECT — Indication #1 exceeds D1.1 Table 6.3 acceptance criteria</div>
+            </div>
+        </div>
+
+        <p class="section-label">AWS D1.1 UT Indication Classification (Table 6.3 Summary)</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Indication Characteristics</th>
+                    <th>Typical Flaw Type</th>
+                    <th>Acceptance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="code">A</td>
+                    <td>Amplitude &ge; DAC with length &le; 3/4&Prime;</td>
+                    <td>Porosity, small inclusions</td>
+                    <td><span class="badge badge-pass">Accept (static loading only)</span></td>
+                </tr>
+                <tr>
+                    <td class="code">B</td>
+                    <td>Amplitude &ge; DAC with length &le; 3/4&Prime;, at specific depth zones</td>
+                    <td>Inclusions, minor LF</td>
+                    <td><span class="badge badge-pass">Accept — depends on depth zone</span></td>
+                </tr>
+                <tr>
+                    <td class="code">C</td>
+                    <td>Amplitude &ge; DAC, length between 3/4&Prime; and 2&Prime;, or at any critical depth</td>
+                    <td>Larger LF, elongated inclusions</td>
+                    <td><span class="badge badge-hold">Reject for cyclically loaded; conditional for static</span></td>
+                </tr>
+                <tr>
+                    <td class="code">D</td>
+                    <td>Amplitude &ge; DAC, length &gt; 2&Prime;, or any linear indication</td>
+                    <td>Cracks, large planar LF</td>
+                    <td><span class="badge badge-fail">Reject — all loading types</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="note">DAC = Distance Amplitude Correction curve, established during calibration. Amplitude above DAC = strong reflector / large or planar flaw. The depth zones (2T/3 rule) account for the fact that flaws near the root and near the cap are more harmful than mid-thickness flaws.</p>
+
+        <div class="tip-box">
+            <strong>UT vs. RT — which record to expect:</strong> AWS D1.1 allows UT to substitute for RT
+            on plate thickness &ge; 5/16&Prime; (8 mm). RT is preferred for thin sections and for detecting
+            volumetric flaws (porosity, inclusions). UT is superior for detecting planar flaws (cracks,
+            LF) in thick plate. The examination method required is specified in the contract documents
+            or by the Engineer — check the project quality plan before assuming which report will be generated.
+        </div>
+    </div>
+
+    <!-- ==================== NCR ==================== -->
+    <div class="section">
+        <h2>Nonconformance Reports (NCRs) and Repair Documentation</h2>
+        <p>
+            When an inspection reveals that a material, weld, or process does not meet the specified
+            requirement, a <strong>Nonconformance Report (NCR)</strong> must be issued before any
+            repair or disposition takes place. The NCR is the formal record that a problem was
+            identified, evaluated, dispositioned, and closed — it protects both the fabricator and
+            the owner from undocumented repairs.
+        </p>
+
+        <p class="section-label">NCR Required Fields</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Content</th>
+                    <th>Why It Is Required</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>NCR number</td>
+                    <td>Unique sequential identifier</td>
+                    <td>Enables traceability; NCRs must be logged and tracked to closure</td>
+                </tr>
+                <tr>
+                    <td>Date issued</td>
+                    <td>Date the nonconformance was discovered</td>
+                    <td>Establishes timeline; required for quality trend analysis</td>
+                </tr>
+                <tr>
+                    <td>Description of nonconformance</td>
+                    <td>Objective statement of what was found, where, and how (e.g., "UT indication Class D at weld W-31, 4.2&Prime; from A-end, 0.8&Prime; length")</td>
+                    <td>Must be specific enough that the repair welder and re-inspector can locate the exact defect</td>
+                </tr>
+                <tr>
+                    <td>Reference specification and clause</td>
+                    <td>The code requirement that was not met (e.g., "AWS D1.1:2020 Table 6.3, Class D linear indication")</td>
+                    <td>Identifies the applicable acceptance standard; dispositions must be against the same standard</td>
+                </tr>
+                <tr>
+                    <td>Disposition</td>
+                    <td>One of: <strong>Use-As-Is</strong> (engineering evaluation required), <strong>Rework / Repair</strong>, <strong>Reject / Scrap</strong></td>
+                    <td>Disposition must be authorized by qualified personnel (Engineer of Record for Use-As-Is)</td>
+                </tr>
+                <tr>
+                    <td>Repair WPS reference</td>
+                    <td>WPS number used for the repair weld</td>
+                    <td>Repair welds require a qualified WPS — often a separate "repair WPS" — and a qualified welder</td>
+                </tr>
+                <tr>
+                    <td>Re-inspection results</td>
+                    <td>Results of the repeat inspection (VT + applicable NDT) after repair</td>
+                    <td>The same method that originally found the defect must be repeated to confirm repair success</td>
+                </tr>
+                <tr>
+                    <td>Closure signature</td>
+                    <td>CWI or authorized inspector signature confirming re-inspection acceptance</td>
+                    <td>Open NCRs block final acceptance of the component</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="info-box">
+            <strong>Repair weld documentation chain:</strong> NCR issued &rarr; disposition approved &rarr;
+            repair WPS selected and reviewed &rarr; qualified welder assigned &rarr; repair performed &rarr;
+            VT of repair &rarr; NDT of repair (same method as original rejection) &rarr; results
+            recorded on NCR closure &rarr; NCR signed closed. Every step must be documented; verbal
+            approvals are not acceptable on code work.
+        </div>
+
+        <p class="section-label">Use-As-Is Disposition — When It Is Permitted</p>
+        <p>
+            A "Use-As-Is" disposition allows a nonconforming item to remain in service without repair.
+            This is only permitted when an engineering evaluation demonstrates that the nonconformance
+            does not affect the structural or pressure integrity of the component. Key requirements:
+        </p>
+        <ul style="padding-left: 24px; color: #4b5563; font-size: 0.9rem; line-height: 1.8; margin-bottom: 12px;">
+            <li>Must be authorized in writing by the Engineer of Record (or the Authorized Inspector for ASME Code work)</li>
+            <li>Cannot be used to accept cracks under AWS D1.1 — cracks are never acceptable Use-As-Is</li>
+            <li>Engineering evaluation must document the analysis basis (stress level, fatigue category, flaw size vs. fracture toughness)</li>
+            <li>The disposition is permanently recorded on the NCR and in the quality record package</li>
+        </ul>
+
+        <p class="section-label">Complete Quality Record Package — Documents to Retain</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Document</th>
+                    <th>Retained By</th>
+                    <th>Minimum Retention (typical)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="group-header"><td colspan="3">Material Traceability</td></tr>
+                <tr>
+                    <td>Material Test Reports (MTRs)</td>
+                    <td>Fabricator / Owner</td>
+                    <td>Life of structure (ASME) or per contract (AWS)</td>
+                </tr>
+                <tr>
+                    <td>Material heat number trace log</td>
+                    <td>Fabricator</td>
+                    <td>Life of structure</td>
+                </tr>
+                <tr class="group-header"><td colspan="3">Welding Records</td></tr>
+                <tr>
+                    <td>Welding Procedure Specifications (WPS)</td>
+                    <td>Fabricator</td>
+                    <td>Life of the WPS (maintained as long as procedures are active)</td>
+                </tr>
+                <tr>
+                    <td>Procedure Qualification Records (PQRs)</td>
+                    <td>Fabricator</td>
+                    <td>Life of the supporting WPS</td>
+                </tr>
+                <tr>
+                    <td>Welder Performance Qualifications (WPQ/WQT)</td>
+                    <td>Fabricator</td>
+                    <td>Active + 6 months after last use of process</td>
+                </tr>
+                <tr>
+                    <td>Preheat / interpass temperature logs</td>
+                    <td>Fabricator</td>
+                    <td>Per contract or code (typically 3–10 years)</td>
+                </tr>
+                <tr>
+                    <td>PWHT charts and records</td>
+                    <td>Fabricator / Owner</td>
+                    <td>Life of component (ASME Code requirement)</td>
+                </tr>
+                <tr class="group-header"><td colspan="3">Inspection Records</td></tr>
+                <tr>
+                    <td>Visual inspection reports</td>
+                    <td>Fabricator / Owner</td>
+                    <td>Per contract (typically 3–10 years minimum)</td>
+                </tr>
+                <tr>
+                    <td>RT film and written reports</td>
+                    <td>Fabricator / Owner</td>
+                    <td>ASME: minimum 3 years for film; AWS: per contract</td>
+                </tr>
+                <tr>
+                    <td>UT calibration records and examination reports</td>
+                    <td>Fabricator / Owner</td>
+                    <td>Per contract or code (typically 3–5 years)</td>
+                </tr>
+                <tr>
+                    <td>MT / PT reports</td>
+                    <td>Fabricator / Owner</td>
+                    <td>Per contract</td>
+                </tr>
+                <tr>
+                    <td>Nonconformance Reports (NCRs) and closures</td>
+                    <td>Fabricator / Owner</td>
+                    <td>Life of component</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="source-note">
+            Content informed by: Lincoln Electric <em>Welding Inspection</em> and MTR interpretation
+            guidance; AWS <em>CWI Study Guide</em> (AWS B5.1); AWS D1.1:2020 Structural Welding Code
+            — Steel (Clauses 4, 5, and 6); ASME BPVC Section IX and Section V. For examination
+            preparation, students should also reference the current AWS CWI Part B (Practical Exam)
+            and Part C (Code Book) materials.
+        </p>
+    </div>
+
+    <a class="back-link" href="index.html">← Back to Reference Pages</a>
+</main>
+</body>
+</html>

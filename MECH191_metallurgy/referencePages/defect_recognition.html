@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Defect Recognition — Weld Discontinuities &amp; Microstructural Defects</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.2rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 1020px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 30px; font-size: 1rem; }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section h2 { font-size: 1.3rem; color: #1e3a5f; margin-bottom: 10px; }
+        .section p { color: #4b5563; line-height: 1.6; margin-bottom: 14px; font-size: 0.95rem; }
+        .section-label { font-weight: 700; color: #1e3a5f; font-size: 0.95rem; margin: 18px 0 8px; }
+
+        /* ---- Severity & Location Badges ---- */
+        .badge {
+            display: inline-block;
+            padding: 2px 9px;
+            border-radius: 4px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .sev-critical  { background: #fee2e2; color: #b91c1c; }
+        .sev-high      { background: #ffedd5; color: #c2410c; }
+        .sev-moderate  { background: #fef9c3; color: #854d0e; }
+        .sev-micro     { background: #ede9fe; color: #6d28d9; }
+
+        .loc-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.74rem;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+        .loc-weld    { background: #dbeafe; color: #1d4ed8; }
+        .loc-fusion  { background: #dcfce7; color: #15803d; }
+        .loc-root    { background: #fce7f3; color: #9d174d; }
+        .loc-haz     { background: #fef9c3; color: #854d0e; }
+        .loc-base    { background: #f3f4f6; color: #374151; }
+        .loc-surface { background: #e0f2fe; color: #0369a1; }
+
+        /* ---- Defect Cards ---- */
+        .defect-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        .defect-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 10px 16px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .defect-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e3a5f;
+        }
+        .defect-aka {
+            font-size: 0.78rem;
+            color: #6b7280;
+            font-style: italic;
+            margin-top: 2px;
+        }
+        .defect-card-body {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr;
+            gap: 0;
+        }
+        @media (max-width: 700px) {
+            .defect-card-body { grid-template-columns: 1fr; }
+        }
+        .d-col {
+            padding: 11px 14px;
+            border-right: 1px solid #e2e8f0;
+            font-size: 0.86rem;
+            color: #374151;
+            line-height: 1.55;
+        }
+        .d-col:last-child { border-right: none; }
+        .d-col-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #9ca3af;
+            margin-bottom: 6px;
+        }
+        .d-col ul {
+            padding-left: 14px;
+            color: #4b5563;
+        }
+        .d-col ul li { margin-bottom: 3px; }
+        .d-col p { color: #4b5563; margin-bottom: 6px; }
+
+        /* RT signature pill */
+        .rt-sig {
+            display: inline-block;
+            background: #18181b;
+            color: #e4e4e7;
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin: 2px 0;
+        }
+        .rt-sig.bright { background: #f5f5f4; color: #18181b; border: 1px solid #a8a29e; }
+
+        /* NDT mini-table */
+        .ndt-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            padding: 3px 0;
+            font-size: 0.82rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .ndt-row:last-child { border-bottom: none; }
+        .ndt-method {
+            font-weight: 700;
+            color: #1e3a5f;
+            min-width: 28px;
+            font-size: 0.78rem;
+        }
+        .ndt-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .dot-excel { background: #16a34a; }
+        .dot-fair  { background: #d97706; }
+        .dot-poor  { background: #9ca3af; }
+        .ndt-desc { color: #4b5563; font-size: 0.8rem; line-height: 1.3; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 10px; }
+        thead tr { background: #1e3a5f; color: #fff; }
+        thead th { padding: 10px 12px; text-align: left; font-weight: 600; }
+        tbody tr:nth-child(even) { background: #f1f5f9; }
+        tbody tr:hover { background: #e0f2fe; }
+        tbody td { padding: 8px 12px; border-bottom: 1px solid #e2e8f0; color: #374151; vertical-align: top; }
+        .code { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #1e3a5f; }
+
+        /* Group headers in tables */
+        .tg td { background: #dbeafe !important; font-weight: 700; color: #1e3a5f; font-size: 0.85rem; padding: 6px 12px; }
+        .tg-red td  { background: #fee2e2 !important; color: #991b1b !important; }
+        .tg-green td { background: #dcfce7 !important; color: #166534 !important; }
+        .tg-purple td { background: #ede9fe !important; color: #5b21b6 !important; }
+
+        /* Detectability matrix cells */
+        .det-cell { text-align: center; font-size: 0.8rem; }
+        .det-e { color: #15803d; font-weight: 700; }
+        .det-f { color: #d97706; font-weight: 700; }
+        .det-p { color: #9ca3af; }
+        .det-n { color: #e5e7eb; }
+
+        /* Tip / note boxes */
+        .tip-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            margin: 14px 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .tip-box strong { color: #92400e; }
+
+        .note { font-size: 0.85rem; color: #6b7280; font-style: italic; margin-top: 10px; }
+
+        .source-note {
+            font-size: 0.8rem;
+            color: #6b7280;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 20px;
+            padding-top: 10px;
+            font-style: italic;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #0284c7;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Defect Recognition</h1>
+    <p class="subtitle">Weld Discontinuities &nbsp;&middot;&nbsp; Microstructural Defects &nbsp;&middot;&nbsp; NDT Signatures</p>
+</header>
+<main>
+    <p class="intro">
+        Recognizing defects — knowing what they look like, where they form, what causes them, and how each
+        NDT method reveals them — is a foundational skill for welding inspectors, quality engineers, and
+        metallurgists. This reference is organized around the defect libraries from The Welding Institute
+        (TWI), the Lincoln Electric weld defect library, and microstructural defect examples from the ASM
+        Micrograph Center. Defects are classified by type: <strong>planar</strong> (crack-like, most
+        structurally severe), <strong>volumetric</strong> (three-dimensional voids or inclusions), and
+        <strong>geometric</strong> (profile and surface defects). Microstructural defects in base metal
+        and HAZ are covered separately in Section 4.
+    </p>
+
+    <!-- ==================== CLASSIFICATION OVERVIEW ==================== -->
+    <div class="section">
+        <h2>Defect Classification Overview</h2>
+        <p>
+            Not all discontinuities are equally serious. Code acceptance criteria reflect this hierarchy:
+            planar defects are universally rejectable at any length because their sharp tips concentrate
+            stress and propagate as cracks; volumetric defects are evaluated against size and distribution
+            limits; geometric defects are assessed by their effect on cross-sectional area and stress
+            concentration at the weld toe.
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Type</th>
+                    <th>Examples</th>
+                    <th>Structural Concern</th>
+                    <th>Code Treatment</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="badge sev-critical">Critical — Planar</span></td>
+                    <td>Crack-like — sharp tip, high stress intensity</td>
+                    <td>All cracks, lack of fusion, lack of penetration (CJP)</td>
+                    <td>Stress intensity at tip drives crack extension; catastrophic fracture risk</td>
+                    <td>Zero tolerance — always reject regardless of size (D1.1, ASME Sec. VIII)</td>
+                </tr>
+                <tr>
+                    <td><span class="badge sev-high">High — Volumetric</span></td>
+                    <td>Three-dimensional void or inclusion</td>
+                    <td>Porosity, slag inclusions, tungsten inclusions</td>
+                    <td>Reduces effective weld throat; fatigue initiation at surface-connected pores</td>
+                    <td>Evaluated against size and aggregate area limits; distribution matters</td>
+                </tr>
+                <tr>
+                    <td><span class="badge sev-moderate">Moderate — Geometric</span></td>
+                    <td>Profile or surface deviation</td>
+                    <td>Undercut, overlap, excessive convexity, arc strikes, burn-through</td>
+                    <td>Stress concentration at weld toe; undercut reduces effective base metal thickness</td>
+                    <td>Depth and length limits; cyclically loaded structures use tighter criteria</td>
+                </tr>
+                <tr>
+                    <td><span class="badge sev-micro">Microstructural</span></td>
+                    <td>Phase, inclusion, or grain boundary anomaly</td>
+                    <td>Sensitization, martensite in HAZ, MnS stringers, decarburization</td>
+                    <td>Reduced toughness, corrosion susceptibility, or brittle fracture path</td>
+                    <td>Controlled by material spec, heat treatment requirements, and ASME/AWS material qualification</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ==================== SECTION 1: PLANAR DEFECTS ==================== -->
+    <div class="section">
+        <h2>1 &nbsp;— Planar / Crack-Like Defects <span class="badge sev-critical" style="font-size:0.8rem; margin-left:8px;">Always Reject</span></h2>
+
+        <!-- HOT CRACKING -->
+        <div class="defect-card">
+            <div class="defect-card-header">
+                <div>
+                    <div class="defect-name">Hot Cracking &nbsp;(Solidification Cracking)</div>
+                    <div class="defect-aka">aka: Centerline crack, hot tear, solidification crack — TWI designation: Type C-s</div>
+                </div>
+                <div>
+                    <span class="badge sev-critical">Critical</span>
+                    <span class="loc-tag loc-weld">Weld Metal</span>
+                    <span class="loc-tag loc-surface">Often visible at cap</span>
+                </div>
+            </div>
+            <div class="defect-card-body">
+                <div class="d-col">
+                    <div class="d-col-label">Description &amp; Appearance</div>
+                    <p>Forms during the final stages of weld pool solidification when columnar grains
+                    growing from opposite fusion walls meet at the centerline. Low-melting-point liquid
+                    films (sulfides, phosphides, silicates) become trapped between grains and tear under
+                    solidification shrinkage stress before they can solidify. The crack runs longitudinally
+                    along the weld centerline, often breaking the cap surface. Branching patterns and
+                    hot-torn, oxidized fracture surfaces are characteristic (TWI fractographic signature).
+                    Crater cracks are a localized form that appear as star-shaped cracks at the weld end.</p>
+                    <p>Risk increases when the weld bead width-to-depth ratio is less than ~1.0
+                    (finger bead), concentrating harmful segregants at the centerline.</p>
+                </div>
+                <div class="d-col">
+                    <div class="d-col-label">Root Causes</div>
+                    <ul>
+                        <li>High S, P content — low Mn/S ratio (&lt;20) allows MnS to be replaced by harmful FeS films</li>
+                        <li>High heat input → coarse columnar grains with thin liquid films</li>
+                        <li>Concave (finger) bead profile — bead width &lt; bead depth</li>
+                        <li>High restraint across the joint</li>
+                        <li>Austenitic stainless with low ferrite number (&lt;3 FN)</li>
+                        <li>Abrupt arc extinction without crater fill</li>
+                    </ul>
+                    <br>
+                    <div class="d-col-label">Prevention</div>
+                    <ul>
+                        <li>Keep Mn/S ≥ 20 (verify on MTR)</li>
+                        <li>Maintain convex bead profile; limit bead depth</li>
+                        <li>Use crater fill; backstep at weld ends</li>
+                        <li>Reduce heat input; lower restraint where possible</li>
+                        <li>For SS: maintain FN 4–8; use ER308L, ER316L</li>
+                    </ul>
+                </div>
+                <div class="d-col">
+                    <div class="d-col-label">NDT Detection</div>
+                    <div class="ndt-row"><span class="ndt-method">VT</span><div class="ndt-dot dot-excel"></div><div class="ndt-desc">Excellent — centerline crack visible at cap surface; oxidized appearance</div></div>
+                    <div class="ndt-row"><span class="ndt-method">RT</span><div class="ndt-dot dot-excel"></div><div class="ndt-desc">Excellent — <span class="rt-sig">dark linear / branching</span> at weld centerline; may be wavy or branching</div></div>
+                    <div class="ndt-row"><span class="ndt-method">UT</span><div class="ndt-dot dot-fair"></div><div class="ndt-desc">Fair — reflects well if oriented perpendicular to beam; may be missed if parallel</div></div>
+                    <div class="ndt-row"><span class="ndt-method">MT</span><div class="ndt-dot dot-excel"></div><div class="ndt-desc">Excellent for surface-breaking; wet fluorescent MT preferred for fine cracks</div></div>
+                    <div class="ndt-row"><span class="ndt-method">PT</span><div class="ndt-dot dot-excel"></div><div class="ndt-desc">Excellent for surface cracks; use on austenitic SS where MT is impractical</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLD CRACKING / HAC -->
+        <div class="defect-card">
+            <div class="defect-card-header">
+                <div>
+                    <div class="defect-name">Cold Cracking &nbsp;(Hydrogen-Induced Cracking / HAC)</div>
+                    <div class="defect-aka">aka: Underbead crack, toe crack, delayed cracking, HACC, HIC — TWI designation: Type C-h</div>
+                </div>
+                <div>
+                    <span class="badge sev-critical">Critical</span>
+                    <span class="loc-tag loc-haz">HAZ</span>
+                    <span class="loc-tag loc-weld">Weld Metal</span>
+                </div>
+            </div>
+            <div class="defect-card-body">
+                <div class="d-col">
+                    <div class="d-col-label">Description &amp; Appearance</div>
+                    <p>Unlike hot cracks, cold cracks form <em>after</em> the weld has cooled — sometimes
+                    minutes, sometimes hours or even days later. Three conditions must simultaneously be
+                    present (the "hydrogen cracking triangle"): <strong>(1) diffusible hydrogen</strong>
+                    in the weld/HAZ, <strong>(2) a susceptible microstructure</strong> (untempered martensite
+                    or high-hardness HAZ), and <strong>(3) tensile residual stress</strong>. Remove any one
+                    condition and cracking cannot occur.</p>
+                    <p>Underbead cracks run parallel to the fusion line in the CGHAZ. Toe cracks initiate at
+                    weld toe stress concentrations and propagate into the base metal. Transverse weld metal
+                    cracks can also form in high-strength weld deposits. Cold cracks have tight, smooth
+                    fracture faces (no oxidation) — distinguishing them from hot cracks on fractography.</p>
+                </div>
+                <div class="d-col">
+                    <div class="d-col-label">Root Causes</div>
+                    <ul>
+                        <li>Moisture on electrode coating, flux, or base metal surface</li>
+                        <li>High CE steel (CE &gt; 0.45) → martensitic or high-hardness HAZ</li>
+                        <li>Inadequate preheat or interpass temperature → fast cooling, hydrogen doesn't diffuse out</li>
+                        <li>High restraint → high residual tensile stress</li>
+                        <li>Cellulosic (high-hydrogen) electrodes on restrained joints</li>
+                    </ul>
+                    <br>
+                    <div class="d-col-label">Prevention</div>
+                    <ul>
+                        <li>Use low-hydrogen electrodes (H4 or H8 classification)</li>
+                        <li>Store and redry electrodes per manufacturer (typically 300–350°C / 1 hr)</li>
+                        <li>Apply and maintain preheat (see CE table)</li>
+                        <li>PWHT immediately after welding if high restraint</li>
+                        <li>Hydrogen bake-out: hold at 200–300°C for 1–4 hr after welding</li>
+                    </ul>
+                </div>
+                <div class="d-col">
+                    <div class="d-col-label">NDT Detection</div>
+                    <div class="ndt-row"><span class="ndt-method">VT</span><div class="ndt-dot dot-poor"></div><div class="ndt-desc">Poor — underbead cracks are subsurface; only toe cracks may be visible</div></div>
+                    <div class="ndt-row"><span class="ndt-method">RT</span><div class="ndt-dot dot-poor"></div><div class="ndt-desc">Often missed — tight crack faces give low contrast; <span class="rt-sig">thin dark line</span> if favorably oriented</div></div>
+                    <div class="ndt-row"><span class="ndt-method">UT</span><div class="ndt-dot dot-excel"></div><div class="ndt-desc">Excellent — planar reflector gives strong signal; angle beam UT standard method for HAZ cracks</div></div>
+                    <div class="ndt-row"><span class="ndt-method">MT</span><div class="ndt-dot dot-excel"></div><div class="ndt-desc">Excellent for surface/near-surface toe cracks; inspect 24–48 h after welding (delayed cracking)</div></div>
+                    <div class="ndt-row"><span class="ndt-method">PT</span><div class="ndt-dot dot-fair"></div><div class="ndt-desc">Fair — detects surface cracks; MT preferred on ferromagnetic steels</div></div>
+                    <p class="note" style="margin-top:6px;">Key: UT inspection of HAZ for cold cracks should be performed <em>after</em> the joint has fully cooled (min. 24–48 h for high-restraint joints on high CE steels).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- LAMELLAR TEARING -->
+        <div class="defect-card">
+            <div class="defect-card-header">
+                <div>
+                    <div class="defect-name">Lamellar Tearing</div>
+                    <div class="defect-aka">aka: Step cracking, through-thickness cracking — occurs in BASE METAL, not the weld</div>
+                </div>
+                <div>
+                    <span class="badge sev-critical">Critical</span>
+                    <span class="loc-tag loc-base">Base Metal (beneath HAZ)</span>
+                </div>
+            </div>
+            <div class="defect-card-body">
+                <div class="d-col">
+                    <div class="d-col-label">Description &amp; Appearance</div>
+                    <p>Lamellar tearing is a base metal failure — it occurs in the plate beneath the
+                    HAZ, not in the weld or HAZ itself. The "staircase" or terraced fracture appearance
+                    (terraces parallel to the plate surface connected by shear steps) is diagnostic.
+                    It is driven by through-thickness (short-transverse) tensile stresses from weld
+                    shrinkage pulling on a plate with low through-thickness ductility caused by elongated
+                    MnS inclusions aligned parallel to the plate surface by hot-rolling.</p>
+                    <p>Most susceptible joint types: T-joints, corner joints, and cruciform joints where
+                    weld shrinkage acts perpendicular to the plate rolling direction (through-thickness loading).</p>
+                    <p>TWI research: Z-test (ASTM A770) measures short-transverse reduction of area (RA%);
+                    RA &lt; 15% is susceptible; RA &gt; 35% (Z35 steel) provides good resistance.</p>
+                </div>
+                <div class="d-col">
+                    <div class="d-col-label">Root Causes</div>
+                    <ul>
+                        <li>Elongated MnS inclusions — stringers reduce short-transverse ductility</li>
+                        <li>Joint geometry requiring through-thickness loading (T, corner, cruciform)</li>
+                        <li>High restraint + high heat input → large shrinkage force</li>
+                        <li>No Z-direction ductility specified on the purchase order</li>
+                    </ul>
+                    <br>
+                    <div class="d-col-label">Prevention</div>
+                    <ul>
+                        <li>Specify Z-grade plate (ASTM A770; EN 10164 Z15/Z25/Z35) for through-thickness loading</li>
+                        <li>Butter (overlay) the plate face before assembly to allow strain to distribute</li>
+                        <li>Redesign joint to reduce through-thickness restraint</li>
+                        <li>Use lower-strength, higher-ductility filler metal</li>
+                        <li>Reduce heat input; use smaller passes</li>
+                    </ul>
+                </div>
+                <div class="d-col">
+                    <div class="d-col-label">NDT Detection</div>
+                    <div class="ndt-row"><span class="ndt-method">VT</span><div class="ndt-dot dot-poor"></div><div class="ndt-desc">Poor — subsurface; only surface-breaking steps visible (late stage)</div></div>
+                    <div class="ndt-row"><span class="ndt-method">RT</span><div class="ndt-dot dot-poor"></div><div class="ndt-desc">Poor — terraces are parallel to radiation beam; very low contrast</div></div>
+                    <div class="ndt-row"><span class="ndt-method">UT</span><div class="ndt-dot dot-excel"></div><div class="ndt-desc">Excellent — primary detection method; terraces and shear steps give multiple strong reflections beneath the weld</div></div>
+                    <div class="ndt-row"><span class="ndt-method">MT</span><div class="ndt-dot dot-fair"></div><div class="ndt-desc">Fair — only if tearing breaks the plate surface; detects surface steps</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REHEAT CRACKING -->
+        <div class="defect-card">
+            <div class="defect-card-header">
+                <div>
+                    <div class="defect-name">Reheat Cracking &nbsp;(Stress Relief Cracking)</div>
+                    <div class="defect-aka">aka: SR cracking, PWHT cracking, stress relaxation cracking — TWI research area: Cr-Mo-V steels, Grade 91</div>
+                </div>
+                <div>
+                    <span class="badge sev-critical">Critical</span>
+                    <span class="loc-tag loc-haz">Coarse-Grained HAZ</span>
+                </div>
+            </div>
+            <div class="defect-card-body">
+                <div class="d-col">
+                    <div class="d-col-label">Description &amp; Appearance</div>
+                    <p>Reheat cracking forms in the coarse-grained HAZ (CGHAZ) during post-weld heat
+                    treatment or during high-temperature service. It is driven by creep — the CGHAZ
+                    must relax residual stresses at elevated temperature, but if the grain interior is
+                    strengthened by carbide precipitation (from alloying elements Cr, Mo, V, Nb) and
+                    the grain boundaries are weaker, creep deformation concentrates at grain boundaries
+                    and intergranular cracks form.</p>
+                    <p>Characteristic location: CGHAZ immediately adjacent to the fusion line. Fracture
+                    is intergranular (follows prior austenite grain boundaries) — distinguishable from
+                    cold cracks (transgranular) by metallographic examination. Particularly prevalent
+                    in Cr-Mo steels (P4, P5), Grade 91 (9Cr-1Mo-V, P5B), and some low-alloy structural
+                    steels with V additions.</p>
+                </div>
+                <div class="d-col">
+                    <div class="d-col-label">Root Causes</div>
+                    <ul>
+                        <li>Alloying elements (Cr, Mo, V, Nb, Ti) that precipitate carbides and strengthen grain interiors during PWHT</li>
+                        <li>Coarse prior austenite grain size in CGHAZ (from high peak HAZ temperature)</li>
+                        <li>High weld toe stress concentration (sharp weld profile)</li>
+                        <li>Rapid heating to PWHT temperature — insufficient time for stress relief at boundaries</li>
+                        <li>Residual stress exceeding creep strength of the grain boundary</li>
+                    </ul>
+                    <br>
+                    <div class="d-col-label">Prevention</div>
+                    <ul>
+                        <li>Dress weld toes to reduce stress concentration before PWHT</li>
+                        <li>Control heat input to minimize CGHAZ width</li>
+                        <li>Temper bead technique (for in-service repairs without PWHT)</li>
+                        <li>Select steels/filler metals with low reheat crack susceptibility (low V+Nb+Ti)</li>
+                        <li>Slow heat-up rate to PWHT temperature to allow early stress relaxation</li>
+                    </ul>
+                </div>
+                <div class="d-col">
+                    <div class="d-col-label">NDT Detection</div>
+                    <div class="ndt-row"><span class="ndt-method">VT</span><div class="ndt-dot dot-poor"></div><div class="ndt-desc">Poor — subsurface; only detectable if weld toe cracks reach surface</div></div>
+                    <div class="ndt-row"><span class="ndt-method">RT</span><div class="ndt-dot dot-poor"></div><div class="ndt-desc">Poor — intergranular cracks often too fine and tortuous for good RT contrast</div></div>
+                    <div class="ndt-row"><span class="ndt-method">UT</span><div class="ndt-dot dot-fair"></div><div class="ndt-desc">Fair — detect after PWHT using angle beam UT focused on CGHAZ region</div></div>
+                    <div class="ndt-row"><span class="ndt-method">MT</span><div class="ndt-dot dot-excel"></div><div class="ndt-desc">Excellent — inspect immediately after PWHT cool-down; wet fluorescent MT recommended</div></div>
+                    <div class="ndt-row"><span class="ndt-method">PT</span><div class="ndt-dot dot-excel"></div><div class="ndt-desc">Excellent — use on austenitic or high-alloy materials post-PWHT</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LACK OF FUSION -->
+        <div class="defect-card">
+            <div class="defect-card-header">
+                <div>
+                    <div class="defect-name">Lack of Fusion &nbsp;(LOF)</div>
+                    <div class="defect-aka">aka: Cold lap (surface), sidewall LOF, interbead LOF — TWI designation: Imperfection type 401–403</div>
+                </div>
+                <div>
+                    <span class="badge sev-critical">Critical</span>
+                    <span class="loc-tag loc-fusion">Fusion Line</span>
+                    <span class="loc-tag loc-weld">Inter-bead</span>
+                </div>
+            </div>
+            <div class="defect-card-body">
+                <div class="d-col">
+                    <div class="d-col-label">Description &amp; Appearance</div>
+                    <p>Lack of fusion is a planar discontinuity where the weld metal fails to bond to
+                    the base metal (sidewall LOF) or to a previously deposited pass (interbead LOF).
+                    The weld metal is present, but there is no metallurgical bond across the interface.
+                    On cross-section (macro), LOF appears as a sharp crack-like interface with the
+                    weld metal lying against but not fused to the base metal.</p>
+                    <p>Sidewall LOF is most common in narrow-groove joints, GMAW (especially short-circuit
+                    transfer), and when arc energy is directed away from the groove walls. Interbead
+                    LOF occurs when inadequate heat or poor technique prevents remelting the previous pass.</p>
+                </div>
+                <div class="d-col">
+                    <div class="d-col-label">Root Causes</div>
+                    <ul>
+                        <li>Insufficient amperage or heat input for the joint thickness and base metal</li>
+                        <li>Arc directed at the weld pool rather than the groove wall</li>
+                        <li>Excessive travel speed — pool solidifies before fusion boundary forms</li>
+                        <li>Contamination (mill scale, oxide, moisture) on groove walls</li>
+                        <li>Too wide a weld pool that "bridges" the groove without fusing walls</li>
+                        <li>Short-circuit GMAW (low spatter mode — low heat input)</li>
+                    </ul>
+                    <br>
+                    <div class="d-col-label">Prevention</div>
+                    <ul>
+                        <li>Correct amperage and travel speed per WPS</li>
+                        <li>Direct the arc at the groove wall, not the pool</li>
+                        <li>Preheat to raise base metal temperature</li>
+                        <li>Clean groove walls thoroughly before welding</li>
+                        <li>Use spray or pulse GMAW instead of short-circuit for structural welds</li>
+                    </ul>
+                </div>
+                <div class="d-col">
+                    <div class="d-col-label">NDT Detection</div>
+                    <div class="ndt-row"><span class="ndt-method">VT</span><div class="ndt-dot dot-poor"></div><div class="ndt-desc">Poor — internal; cold lap (surface LOF) may be visible at weld toe as a rolled edge</div></div>
+                    <div class="ndt-row"><span class="ndt-method">RT</span><div class="ndt-dot dot-fair"></div><div class="ndt-desc">Fair — <span class="rt-sig">thin dark line</span> at fusion boundary; often missed if planar interface is parallel to radiation beam (LOF parallel to beam = low contrast)</div></div>
+                    <div class="ndt-row"><span class="ndt-method">UT</span><div class="ndt-dot dot-excel"></div><div class="ndt-desc">Excellent — planar reflector gives strong, sharp signal; preferred method; angle beam UT clearly locates sidewall LOF depth</div></div>
+                    <div class="ndt-row"><span class="ndt-method">MT</span><div class="ndt-dot dot-poor"></div><div class="ndt-desc">Poor for internal LOF; only detects cold lap that breaks the surface</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LACK OF PENETRATION -->
+        <div class="defect-card">
+            <div class="defect-card-header">
+                <div>
+                    <div class="defect-name">Lack of Penetration &nbsp;(Incomplete Joint Penetration — IJP / LOP)</div>
+                    <div class="defect-aka">aka: Incomplete root fusion, root pass defect — Lincoln Electric: one of the most common root defects</div>
+                </div>
+                <div>
+                    <span class="badge sev-critical">Critical (in CJP welds)</span>
+                    <span class="loc-tag loc-root">Root</span>
+                </div>
+            </div>
+            <div class="defect-card-body">
+                <div class="d-col">
+                    <div class="d-col-label">Description &amp; Appearance</div>
+                    <p>In a complete joint penetration (CJP) weld, LOP means the root of the joint was
+                    not fully fused — weld metal does not extend through the full joint thickness. A
+                    planar gap or unfused interface remains at the root, typically appearing as a
+                    continuous linear defect along the weld centerline at the root level.</p>
+                    <p>LOP differs from LOF: LOP is specifically at the root of the joint; LOF can
+                    occur anywhere along the sidewall or between passes.</p>
+                    <p>In partial joint penetration (PJP) welds, insufficient throat dimension is
+                    evaluated differently — the specified throat size must be achieved, but the
+                    root is not required to fully penetrate.</p>
+                </div>
+                <div class="d-col">
+                    <div class="d-col-label">Root Causes</div>
+                    <ul>
+                        <li>Insufficient heat input on root pass</li>
+                        <li>Root gap too small to allow electrode access</li>
+                        <li>Root land (face) too large</li>
+                        <li>Wrong process parameters: travel speed too fast, amperage too low</li>
+                        <li>Electrode too large for the root pass</li>
+                        <li>Lack of back-gouging before the back-weld on double-sided joints</li>
+                    </ul>
+                    <br>
+                    <div class="d-col-label">Prevention</div>
+                    <ul>
+                        <li>Correct root gap and root face dimensions per WPS joint detail</li>
+                        <li>Keyhole technique for GTAW root passes</li>
+                        <li>Back-gouge to sound metal before depositing back-weld</li>
+                        <li>RT or UT of root pass before filling — repair before burying the defect</li>
+                        <li>Use backing (ceramic, steel, flux) to support root pass</li>
+                    </ul>
+                </div>
+                <div class="d-col">
+                    <div class="d-col-label">NDT Detection</div>
+                    <div class="ndt-row"><span class="ndt-method">VT</span><div class="ndt-dot dot-poor"></div><div class="ndt-desc">Poor — internal; visible only if root is accessible and unfused gap is open</div></div>
+                    <div class="ndt-row"><span class="ndt-method">RT</span><div class="ndt-dot dot-excel"></div><div class="ndt-desc">Excellent — <span class="rt-sig">dark continuous linear indication</span> at weld centerline; most reliable RT indication; easily recognized</div></div>
+                    <div class="ndt-row"><span class="ndt-method">UT</span><div class="ndt-dot dot-excel"></div><div class="ndt-desc">Excellent — strong signal from root reflector; TOFD and phased array provide precise sizing</div></div>
+                    <div class="ndt-row"><span class="ndt-method">MT</span><div class="ndt-dot dot-poor"></div><div class="ndt-desc">Not applicable for internal root defect</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SECTION 2: VOLUMETRIC DEFECTS ==================== -->
+    <div class="section">
+        <h2>2 &nbsp;— Volumetric Defects</h2>
+
+        <!-- POROSITY -->
+        <div class="defect-card">
+            <div class="defect-card-header">
+                <div>
+                    <div class="defect-name">Porosity &nbsp;(Gas Porosity)</div>
+                    <div class="defect-aka">Types: Scattered / Isolated (IP), Cluster (CP), Wormhole / Piping, Crater Pipe, Surface Porosity</div>
+                </div>
+                <div>
+                    <span class="badge sev-high">High</span>
+                    <span class="loc-tag loc-weld">Weld Metal</span>
+                </div>
+            </div>
+            <div class="defect-card-body">
+                <div class="d-col">
+                    <div class="d-col-label">Description &amp; Appearance by Type</div>
+                    <p><strong>Scattered / Isolated Porosity:</strong> Individual spherical or slightly elongated
+                    gas pockets distributed randomly through the weld metal. Formed when shielding gas,
+                    moisture decomposition products (H, O, N), or base metal contamination outgasses
+                    from the pool faster than the weld can solidify around the bubbles.</p>
+                    <p><strong>Cluster Porosity:</strong> Multiple pores in close proximity — typically from
+                    a burst of contamination (restart porosity, loss of shielding). More harmful than
+                    scattered porosity at the same total area because of pore interaction.</p>
+                    <p><strong>Wormhole / Piping Porosity:</strong> Elongated, tubular pores oriented
+                    perpendicular or at an angle to the weld surface — caused by continuous gas evolution
+                    from a persistent contamination source (trapped moisture in joint, rusted plate).
+                    Appear as elongated dark spots on RT, often in a herringbone pattern.</p>
+                    <p><strong>Crater Pipe:</strong> A cone-shaped void that forms at the weld crater
+                    when the arc is broken abruptly — solidification shrinkage draws liquid metal
+                    inward creating a pipe. Highly rejectable as it combines a void with the shape
+                    of a stress concentrator.</p>
+                </div>
+                <div class="d-col">
+                    <div class="d-col-label">Root Causes (by source gas)</div>
+                    <ul>
+                        <li><em>Hydrogen:</em> Moisture on electrode coating or base metal; wet flux; damp shielding gas lines; condensation in cold conditions</li>
+                        <li><em>Nitrogen:</em> Loss of shielding gas coverage (wind, too long an arc, incorrect flow rate)</li>
+                        <li><em>Carbon monoxide:</em> High oxygen in weld pool reacting with carbon; insufficient deoxidants in filler</li>
+                        <li><em>Other:</em> Organic contamination (grease, paint, primer); galvanizing zinc; mill scale</li>
+                    </ul>
+                    <br>
+                    <div class="d-col-label">Prevention</div>
+                    <ul>
+                        <li>Dry and store electrodes per manufacturer (LH electrodes: 300–350°C)</li>
+                        <li>Clean base metal within 2&Prime; of weld: grind, degrease, brush</li>
+                        <li>Correct shielding gas flow (15–25 CFH typical for GMAW); use wind screens outdoors</li>
+                        <li>Correct arc length (not too long — extends shielding coverage)</li>
+                        <li>Use correct polarity; verify deoxidant filler selection for rusty plate</li>
+                        <li>Crater fill at weld end</li>
+                    </ul>
+                </div>
+                <div class="d-col">
+                    <div class="d-col-label">NDT Detection</div>
+                    <div class="ndt-row"><span class="ndt-method">VT</span><div class="ndt-dot dot-fair"></div><div class="ndt-desc">Fair — surface-breaking porosity visible; internal porosity not detectable by VT</div></div>
+                    <div class="ndt-row"><span class="ndt-method">RT</span><div class="ndt-dot dot-excel"></div><div class="ndt-desc">Excellent — <span class="rt-sig">dark rounded spots</span>; spherical pores are the most recognizable RT indication. Wormholes appear as elongated dark streaks. Easily quantified by count and diameter.</div></div>
+                    <div class="ndt-row"><span class="ndt-method">UT</span><div class="ndt-dot dot-fair"></div><div class="ndt-desc">Fair — spherical reflectors scatter energy; pores &lt; 1.5 mm often missed; cluster porosity may register as increased scatter</div></div>
+                    <div class="ndt-row"><span class="ndt-method">MT</span><div class="ndt-dot dot-fair"></div><div class="ndt-desc">Fair — surface porosity shows as leakage field; subsurface porosity near-surface may be detected with high-sensitivity wet MT</div></div>
+                    <div class="ndt-row"><span class="ndt-method">PT</span><div class="ndt-dot dot-excel"></div><div class="ndt-desc">Excellent for surface-breaking pores — pulls penetrant out of open pores clearly</div></div>
+                    <p class="note" style="margin-top:6px;">RT is the preferred method for porosity quantification. Acceptance criteria (D1.1 Fig. 6.1; ASME Sec. VIII Appendix 4) evaluate maximum individual pore size, aggregate area per length, and spacing rules.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLAG INCLUSIONS -->
+        <div class="defect-card">
+            <div class="defect-card-header">
+                <div>
+                    <div class="defect-name">Slag Inclusions</div>
+                    <div class="defect-aka">Includes: Flux inclusions (SMAW, SAW, FCAW), oxide inclusions, elongated slag lines — Lincoln Electric: most common in SMAW multipass</div>
+                </div>
+                <div>
+                    <span class="badge sev-high">High</span>
+                    <span class="loc-tag loc-weld">Weld Metal</span>
+                </div>
+            </div>
+            <div class="defect-card-body">
+                <div class="d-col">
+                    <div class="d-col-label">Description &amp; Appearance</div>
+                    <p>Non-metallic material (flux slag from electrode coating or submerged arc flux)
+                    trapped inside the solidified weld metal. Slag forms naturally on top of the weld
+                    pool during flux-shielded processes (SMAW, SAW, FCAW-S) and must float to the
+                    surface and be completely removed between passes. Trapped slag is irregular in
+                    shape — elongated along the weld axis if trapped in a groove, or globular if
+                    trapped in a pocket created by an undercut or rolled bead edge.</p>
+                    <p>Elongated slag inclusions (ESI) are particularly harmful because their length
+                    makes them behave as planar defects at certain orientations, giving them higher
+                    stress intensity than their cross-sectional area alone would suggest.</p>
+                </div>
+                <div class="d-col">
+                    <div class="d-col-label">Root Causes</div>
+                    <ul>
+                        <li>Inadequate or incomplete slag removal between passes — including slag buried at the toe of a pass</li>
+                        <li>Incorrect electrode angle allowing slag to roll ahead of the arc</li>
+                        <li>Undercut or groove geometry trapping slag before it can float out</li>
+                        <li>Excessive weld pool width that allows cool edges to trap slag</li>
+                        <li>Restarting the arc on unremoved slag</li>
+                    </ul>
+                    <br>
+                    <div class="d-col-label">Prevention</div>
+                    <ul>
+                        <li>Remove all slag completely with chipping hammer and wire brush between every pass</li>
+                        <li>Use correct electrode angle (10–15° drag for SMAW)</li>
+                        <li>Maintain convex bead profile; avoid sharp bead-to-bead valleys</li>
+                        <li>Grind out slag traps at toes before depositing the next pass</li>
+                        <li>Use higher-fluidity slag systems (EXX18 low-hydrogen vs. E6013)</li>
+                    </ul>
+                </div>
+                <div class="d-col">
+                    <div class="d-col-label">NDT Detection</div>
+                    <div class="ndt-row"><span class="ndt-method">VT</span><div class="ndt-dot dot-poor"></div><div class="ndt-desc">Poor — internal; surface slag visible but must be removed anyway before VT acceptance</div></div>
+                    <div class="ndt-row"><span class="ndt-method">RT</span><div class="ndt-dot dot-excel"></div><div class="ndt-desc">Excellent — <span class="rt-sig">dark irregular / elongated shapes</span>; less uniform than porosity; often seen as worm-like dark lines with irregular edges. Tungsten inclusions: <span class="rt-sig bright">bright (white) spots</span> — opposite contrast to all other inclusions.</div></div>
+                    <div class="ndt-row"><span class="ndt-method">UT</span><div class="ndt-dot dot-fair"></div><div class="ndt-desc">Fair to good — irregular shape gives variable reflectivity; large elongated slag may show strong signal; small globular slag often missed</div></div>
+                    <div class="ndt-row"><span class="ndt-method">MT</span><div class="ndt-dot dot-poor"></div><div class="ndt-desc">Not effective — internal inclusions do not cause leakage flux to surface unless very near-surface</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SECTION 3: GEOMETRIC DEFECTS ==================== -->
+    <div class="section">
+        <h2>3 &nbsp;— Geometric / Profile Defects</h2>
+        <p>Geometric defects are visible by VT and measured with weld gauges. They are caused primarily
+        by incorrect welding parameters or technique. While less immediately dangerous than planar defects,
+        undercut and overlap are particularly significant in cyclic loading because they act as stress
+        concentration notches at the weld toe — the primary fatigue crack initiation site.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Defect</th>
+                    <th>Location &amp; Description</th>
+                    <th>Primary Causes</th>
+                    <th>RT Signature</th>
+                    <th>Best Detection</th>
+                    <th>Key Prevention</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Undercut</strong><br><span class="badge sev-moderate">Moderate</span></td>
+                    <td><span class="loc-tag loc-surface">Weld toe</span> — groove melted into base metal at the weld toe that is not refilled; reduces effective base metal section and creates a notch; most common geometric defect</td>
+                    <td>Excessive amperage; arc voltage too high; incorrect electrode angle; excessive travel speed; wide weaving</td>
+                    <td><span class="rt-sig">Dark line</span> at weld toe, parallel to weld axis; depth measurable with undercut gauge</td>
+                    <td>VT + depth gauge; MT for HAC cracks initiating from undercut</td>
+                    <td>Reduce amperage and arc length; correct electrode angle; stringer beads; final cosmetic pass at toes</td>
+                </tr>
+                <tr>
+                    <td><strong>Overlap / Cold Lap</strong><br><span class="badge sev-moderate">Moderate</span></td>
+                    <td><span class="loc-tag loc-surface">Weld toe / face</span> — weld metal rolls over onto the base metal surface without fusing; creates a crack-like notch at the overlap edge; effectively a surface LOF</td>
+                    <td>Excessive weld metal deposition; slow travel speed; incorrect electrode angle; insufficient heat for fusion at the toe</td>
+                    <td>Not typically visible on RT; weld appears wider than actual fused width</td>
+                    <td>VT (rolled edge visible); MT / PT (detects the unfused notch)</td>
+                    <td>Reduce deposition rate; increase travel speed; correct electrode angle; do not weave past the groove walls</td>
+                </tr>
+                <tr>
+                    <td><strong>Excessive Convexity</strong><br><span class="badge sev-moderate">Moderate</span></td>
+                    <td><span class="loc-tag loc-surface">Cap surface</span> — weld crown too high; creates a steep angle at the weld toe and stress concentration; does not add strength</td>
+                    <td>Slow travel speed; excessive wire feed; low heat input; flat or downhill welding position</td>
+                    <td><span class="rt-sig">Lighter (brighter) center</span> on RT due to extra thickness — not a defect signature in itself</td>
+                    <td>VT + weld gauge (convexity = crown height above base metal plane); D1.1 limit: 1/16&Prime; + 0.1 × face width</td>
+                    <td>Increase travel speed; reduce wire feed; correct heat input; grind flush if required</td>
+                </tr>
+                <tr>
+                    <td><strong>Root Concavity (Suck-Back)</strong><br><span class="badge sev-moderate">Moderate</span></td>
+                    <td><span class="loc-tag loc-root">Root surface</span> — root of the weld is concave below the base metal inside surface; reduces effective throat; particularly significant in pipe</td>
+                    <td>Excessive root pass heat or arc force; insufficient backing support; incorrect root gap; wrong polarity</td>
+                    <td><span class="rt-sig">Dark concave shadow</span> at root centerline; distinguishable from LOP by smooth concave profile vs. sharp LOP line</td>
+                    <td>VT from root side (pipe inside); RT clearly shows suck-back profile</td>
+                    <td>Correct root gap and heat input; use ceramic or copper backing; correct polarity and arc length</td>
+                </tr>
+                <tr>
+                    <td><strong>Burn-Through / Melt-Through</strong><br><span class="badge sev-high">High</span></td>
+                    <td><span class="loc-tag loc-root">Root</span> — excessive heat perforates or collapses the root of a thin-section joint; weld metal expelled or a through-hole formed</td>
+                    <td>Excessive amperage or heat input; root gap too large; root land too thin; wrong polarity</td>
+                    <td><span class="rt-sig">Irregular dark blotch</span> at root; may appear as a dark spot or irregular void with bright metal splatter around it</td>
+                    <td>VT (visible on root side); RT confirms shape and extent</td>
+                    <td>Reduce amperage; use backing; correct joint fit-up; keyhole technique with controlled heat input</td>
+                </tr>
+                <tr>
+                    <td><strong>Arc Strikes</strong><br><span class="badge sev-high">High</span></td>
+                    <td><span class="loc-tag loc-base">Base Metal (outside weld zone)</span> — accidental arc discharge creates localized hardened spot (untempered martensite in HAZ) on the base metal surface; crack initiation site</td>
+                    <td>Careless electrode handling; arc initiated on base metal outside the joint; welder error; ground clamp too far from the joint</td>
+                    <td>Not typically visible on RT; may show as a small bright spot if metal was expelled</td>
+                    <td>VT (metallic spatter spot or discoloration); MT (critical — HAC cracks radiate from arc strike)</td>
+                    <td>Proper electrode technique; grind flush and MT/PT to verify no cracks; D1.1: must grind flush and re-inspect any arc strike</td>
+                </tr>
+                <tr>
+                    <td><strong>Crater Cracks</strong><br><span class="badge sev-critical">Critical</span></td>
+                    <td><span class="loc-tag loc-surface">Weld end (cap)</span> — star-shaped hot cracks at the weld crater formed by abrupt arc termination; solidification shrinkage of the last liquid pool with no filler addition</td>
+                    <td>Arc broken abruptly without crater fill; wrong termination technique; high S/P weld metal</td>
+                    <td><span class="rt-sig">Star-shaped dark indication</span> at weld end; short radiating arms from central void</td>
+                    <td>VT (visible at cap); RT (star pattern at weld end); MT/PT</td>
+                    <td>Backstep to refill crater; programmable crater fill on power source; run-off tabs on structural welds</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ==================== SECTION 4: MICROSTRUCTURAL DEFECTS ==================== -->
+    <div class="section">
+        <h2>4 &nbsp;— Microstructural Defects <span class="badge sev-micro" style="font-size:0.8rem; margin-left:8px;">ASM Micrograph Center</span></h2>
+        <p>
+            Microstructural defects are identified by optical or electron microscopy of polished and etched
+            cross-sections. They are not detected by conventional weld NDT; their presence is inferred from
+            material specification compliance (chemistry, mechanical testing, heat treatment records) and confirmed
+            by metallographic examination. The ASM Micrograph Center provides reference micrographs for each
+            condition below; the descriptions here follow ASM metallographic conventions.
+        </p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Defect</th>
+                    <th>Location</th>
+                    <th>Appearance (Micrograph)</th>
+                    <th>Causes &amp; Effects</th>
+                    <th>Detection / Confirmation</th>
+                    <th>Prevention / Remedy</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="tg-purple"><td colspan="6">Inclusion Defects</td></tr>
+                <tr>
+                    <td><strong>MnS Inclusions / Sulfide Stringers</strong></td>
+                    <td>Base metal (throughout; elongated parallel to rolling direction)</td>
+                    <td>Longitudinal section (nital or picral etch): dark grey elongated streaks ("stringers") at 50–200&times;. Transverse section: small grey ellipses or dots uniformly distributed.</td>
+                    <td>Naturally present in all steel; content controlled by S spec limit. High S (&#62;0.035%) produces coarse stringers. <em>Effect:</em> reduced short-transverse (through-thickness) ductility and fatigue life; lamellar tearing susceptibility; stress corrosion cracking initiation sites.</td>
+                    <td>Metallographic cross-section — longitudinal orientation shows stringer morphology most clearly. ASTM A295 / E45 for inclusion rating. UT from the plate face can detect stringer planes as a "grass" pattern.</td>
+                    <td>Specify Ca-treated steel (Ca deoxidation converts stringers to globular inclusions); specify Z-grade for through-thickness loading; control S ≤ 0.010% for critical applications.</td>
+                </tr>
+                <tr>
+                    <td><strong>Oxide Inclusions</strong></td>
+                    <td>Weld metal and HAZ</td>
+                    <td>Nital etch, 100–500&times;: small dark spherical or irregular particles; often at grain boundaries or associated with fine acicular ferrite nucleation sites. GTAW welds may contain larger isolated oxide particles if shielding is inadequate.</td>
+                    <td>Form from dissolved oxygen in the weld pool reacting with deoxidants or base metal. Fine, well-distributed oxides are beneficial (nucleation sites for acicular ferrite which improves toughness); coarse oxide clusters reduce ductility.</td>
+                    <td>Metallographic section + SEM/EDS for compositional identification; ASTM E45 inclusion chart for severity rating.</td>
+                    <td>Adequate deoxidant in filler metal (Si, Mn, Ti, Al); correct shielding gas coverage; control oxygen potential of weld pool.</td>
+                </tr>
+
+                <tr class="tg-purple"><td colspan="6">HAZ Microstructural Defects</td></tr>
+                <tr>
+                    <td><strong>Untempered Martensite in HAZ</strong></td>
+                    <td>Coarse-grained HAZ (CGHAZ) — immediately adjacent to the fusion line in carbon and alloy steels</td>
+                    <td>2% nital etch, 200–500&times;: white or very lightly etched acicular (needle-like or lath) structure against a darker background; no resolved internal structure (untempered). Microhardness HV &#62;350 in CGHAZ is diagnostic.</td>
+                    <td><em>Cause:</em> rapid cooling from above Ac<sub>3</sub> in a hardenable steel (CE &#62;0.35). <em>Effect:</em> very high hardness (HRC 40–65); low toughness; hydrogen cracking susceptibility — HAC initiates preferentially in untempered martensite.</td>
+                    <td>Microhardness traverse from fusion line across HAZ into base metal (ASTM E384). Metallographic section + nital etch. D1.1 Annex I limits HAZ hardness to HV10 325 max for most structural applications.</td>
+                    <td>Preheat to slow the cooling rate (reduce martensite fraction); PWHT to temper existing martensite; use lower CE base metal; use temper bead technique for repair without PWHT.</td>
+                </tr>
+                <tr>
+                    <td><strong>Widmanst&auml;tten Ferrite</strong></td>
+                    <td>Weld metal and overheated HAZ — grain interiors and prior austenite grain boundaries</td>
+                    <td>Nital etch, 50–200&times;: plate-like or "feather" ferrite growing from prior austenite grain boundaries into grain interiors at ~45° angles; "basket-weave" pattern when plates from multiple boundaries intersect. Characteristic low-magnification (<50&times;) macro-appearance.</td>
+                    <td><em>Cause:</em> slow cooling through the ferrite transformation range combined with a coarse prior austenite grain size (from high heat input or overheating above ~1100°C). <em>Effect:</em> lower toughness than equiaxed ferrite + pearlite microstructure; raises ductile-to-brittle transition temperature (DBTT); reduced CVN energy.</td>
+                    <td>Metallographic cross-section (transverse to weld), nital etch, optical microscopy at 50–100&times;. CVN impact testing reveals toughness reduction compared to normalized base metal.</td>
+                    <td>Control heat input per WPS; grain-refining alloy additions (Nb, V, Ti) restrict austenite grain growth; normalize weld metal or HAZ if required by specification (e.g., some ASME pressure vessel requirements).</td>
+                </tr>
+
+                <tr class="tg-purple"><td colspan="6">Stainless Steel &amp; Corrosion-Related Defects</td></tr>
+                <tr>
+                    <td><strong>Sensitization (Intergranular Cr Carbide Precipitation)</strong></td>
+                    <td>HAZ of austenitic stainless steel — occurs 425–870°C exposure range ("sensitization range")</td>
+                    <td>Oxalic acid etch (ASTM A262 Practice A), 200&times;: grain boundaries decorated with dark Cr<sub>23</sub>C<sub>6</sub> carbide films; "ditched" grain boundary structure in severely sensitized material. In practice, a "step" structure at low mag indicates partial sensitization; "ditch" indicates full sensitization.</td>
+                    <td><em>Cause:</em> C diffuses to grain boundaries and precipitates as Cr<sub>23</sub>C<sub>6</sub>, depleting Cr below ~12% in adjacent zones — making those zones susceptible to intergranular corrosion in oxidizing acid environments. Weld HAZ always passes through sensitization range during cooling. <em>Effect:</em> susceptibility to intergranular corrosion (IGA), stress corrosion cracking (IGSCC in BWR environments), and sensitization-assisted cracking.</td>
+                    <td>ASTM A262 Practice A (oxalic acid screen) and Practice E (Huey test — 65% HNO<sub>3</sub>) for corrosion rate confirmation. Electrochemical potentiodynamic reactivation (EPR) is a quantitative laboratory method.</td>
+                    <td>Use L-grade (304L, 316L) with C ≤ 0.03%; use stabilized grades (321-Ti, 347-Nb); rapid cooling through sensitization range; solution anneal + water quench to redissolve carbides; cannot be reversed by PWHT below solution anneal temperature.</td>
+                </tr>
+
+                <tr class="tg-purple"><td colspan="6">Surface &amp; Through-Thickness Defects</td></tr>
+                <tr>
+                    <td><strong>Decarburization</strong></td>
+                    <td>Surface layer of base metal (or weld cap) — extends inward from 0.1 to several mm depending on exposure</td>
+                    <td>Nital or picral etch, 50–200&times;: white (ferritic) surface layer versus darker microstructure (pearlite + ferrite, or martensite) in the unaffected interior. Layer thickness measured by image analysis or hardness traverse.</td>
+                    <td><em>Cause:</em> oxidizing atmosphere (air, CO<sub>2</sub>, steam) at elevated temperature reacts with surface carbon; carbon diffuses out leaving a low-carbon (ferritic) surface. Common in hot-rolling, forging, and heat treatment without protective atmosphere. <em>Effect:</em> soft surface with reduced fatigue and wear resistance; reduces case depth after subsequent carburizing; reduces surface hardness by HRC 10–20 in severe cases.</td>
+                    <td>Metallographic cross-section; nital etch; measure decarburized layer depth. Microhardness traverse from surface confirms hardness gradient. ASTM E1077 for decarburization depth measurement.</td>
+                    <td>Controlled atmosphere heat treatment (N<sub>2</sub>, endothermic gas, vacuum); salt bath; remove decarburized layer by machining; minimize over-heating during hot working.</td>
+                </tr>
+                <tr>
+                    <td><strong>Hydrogen Flakes / Fisheyes</strong></td>
+                    <td>Base metal — internal; visible on fracture surfaces or polished cross-sections of thick sections (forgings, heavy plate)</td>
+                    <td>Fracture surface: bright, smooth-faceted circular or elliptical areas ("fish eyes") surrounded by fibrous ductile fracture. Cross-section: small cracks or voids centered on inclusions or prior grain boundaries. Optical microscopy at fracture: intergranular flat facets.</td>
+                    <td><em>Cause:</em> hydrogen dissolved during steelmaking (from moisture in scrap/fluxes) precipitates into voids during slow cooling of heavy sections; internal pressure from molecular H<sub>2</sub> causes internal cracking. Most prevalent in large forgings and thick plate. <em>Effect:</em> internal cracking that significantly reduces through-thickness tensile ductility and toughness; potential catastrophic fracture initiation sites.</td>
+                    <td>Ultrasonic testing during mill inspection (ASTM A388 for forgings). Visible on tensile fracture surfaces (fish-eye appearance). Etched macro-section reveals cracking pattern.</td>
+                    <td>Vacuum degassing during steelmaking; slow controlled cooling after forging or rolling; hydrogen-removal anneal (hold at 200–250°C for extended time before cooling); specification of low-H content steel (e.g., via ASTM A435 UT requirements for pressure vessel plate).</td>
+                </tr>
+                <tr>
+                    <td><strong>Banding (Microstructural Segregation Banding)</strong></td>
+                    <td>Base metal — throughout rolled plate and bar; oriented parallel to rolling direction</td>
+                    <td>Nital etch, 25–100&times;: alternating light bands (ferrite-rich, low Mn/Cr) and dark bands (pearlite-rich or martensite-rich, high Mn/Cr) parallel to the rolling direction. Severity rated per ASTM E1268 (banding severity rating 0–5).</td>
+                    <td><em>Cause:</em> solidification microsegregation of Mn, Cr, Mo, and other substitutional alloying elements in the as-cast structure; hot rolling elongates the segregated regions into bands. <em>Effect:</em> anisotropic properties (reduced through-thickness toughness); promotes lamellar tearing along ferrite bands; hardenability varies between bands causing mixed microstructures after heat treatment; banded martensite in quench-hardened parts.</td>
+                    <td>Metallographic cross-section perpendicular to rolling direction; nital etch; ASTM E1268 for banding severity rating. Hardness traverse across bands reveals local property variation.</td>
+                    <td>Homogenization anneal at high temperature (rarely practical); select low-segregation heats; normalize twice to partially redistribute; specify maximum banding severity per ASTM E1268 on critical purchase orders.</td>
+                </tr>
+                <tr>
+                    <td><strong>Grain Boundary Oxidation (Overheating / Burning)</strong></td>
+                    <td>Base metal surface and sub-surface — result of excessive hot-working temperature</td>
+                    <td>Nital etch, 100–500&times;: dark, oxidized (squiggly or decorated) grain boundaries; in severe "burning," grain boundary liquation visible as voids or rounded features at grain corners and along boundaries. Grains are coarse and irregular.</td>
+                    <td><em>Cause:</em> exposure above the steel's solidus temperature range during forging or rolling — grain boundaries melt (liquate) and oxidize. Even if solidified, the oxide films remain as irreversible grain boundary damage. <em>Effect:</em> severely reduced ductility and impact toughness; grain boundary fracture in service; cannot be reversed by heat treatment — material must be scrapped.</td>
+                    <td>Metallographic section; nital etch; look for rounded grain boundary voids and oxide decoration at high magnification (500&times;). No conventional NDT method reliably detects burning; sampling and metallographic examination required for suspect lots.</td>
+                    <td>Strict furnace temperature control; thermocouple calibration; defined soak time limits; material rejected by inspection — no recovery possible. Prevention is the only option.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="source-note">
+            Micrograph reference basis: ASM Handbook Vol. 9 (Metallography and Microstructures), ASM Micrograph Center
+            digital database, ASTM E3 (metallographic specimen preparation), and ASTM E407 (microetching). Etchant
+            concentrations: 2% nital (2 mL HNO<sub>3</sub> in 98 mL ethanol) for carbon and alloy steels;
+            10% oxalic acid electrolytic etch for austenitic stainless steel (ASTM A262 Practice A).
+        </p>
+    </div>
+
+    <!-- ==================== NDT DETECTABILITY MATRIX ==================== -->
+    <div class="section">
+        <h2>5 &nbsp;— NDT Detectability Matrix</h2>
+        <p>
+            The matrix below summarizes how reliably each NDT method detects each defect type.
+            Ratings reflect orientation effects, defect geometry, and typical field conditions —
+            not laboratory best-case performance. Always consider which methods are specified by
+            the governing code (D1.1 Clause 6; ASME Section V) for the joint being examined.
+        </p>
+        <p style="font-size:0.85rem; color:#6b7280; margin-bottom:6px;">
+            <strong style="color:#15803d;">E</strong> = Excellent &nbsp;|&nbsp;
+            <strong style="color:#d97706;">F</strong> = Fair (detects, but may miss some orientations/sizes) &nbsp;|&nbsp;
+            <strong style="color:#9ca3af;">P</strong> = Poor (usually ineffective) &nbsp;|&nbsp;
+            <strong style="color:#e5e7eb;">—</strong> = Not applicable
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Defect</th>
+                    <th style="text-align:center;">VT</th>
+                    <th style="text-align:center;">RT</th>
+                    <th style="text-align:center;">UT</th>
+                    <th style="text-align:center;">MT</th>
+                    <th style="text-align:center;">PT</th>
+                    <th>Best Method(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="tg-red"><td colspan="7">Planar / Crack-Like</td></tr>
+                <tr>
+                    <td>Hot crack (solidification)</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-f">F</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-e">E</td>
+                    <td>VT, RT, MT/PT</td>
+                </tr>
+                <tr>
+                    <td>Cold crack / HAC — underbead</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-e">E*</td>
+                    <td class="det-cell det-f">F</td>
+                    <td>UT, MT (surface) — inspect after 24–48 h</td>
+                </tr>
+                <tr>
+                    <td>Cold crack — toe crack</td>
+                    <td class="det-cell det-f">F</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-e">E</td>
+                    <td>MT, UT</td>
+                </tr>
+                <tr>
+                    <td>Lamellar tearing</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-f">F</td>
+                    <td class="det-cell det-p">P</td>
+                    <td>UT (primary)</td>
+                </tr>
+                <tr>
+                    <td>Reheat / SR cracking</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-f">F</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-e">E</td>
+                    <td>MT or PT (after PWHT)</td>
+                </tr>
+                <tr>
+                    <td>Lack of fusion (sidewall)</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-f">F</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-p">P</td>
+                    <td>UT (preferred over RT for LOF)</td>
+                </tr>
+                <tr>
+                    <td>Lack of penetration (root)</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-p">P</td>
+                    <td>RT (classic method), UT</td>
+                </tr>
+
+                <tr class="tg"><td colspan="7">Volumetric</td></tr>
+                <tr>
+                    <td>Porosity — scattered / isolated</td>
+                    <td class="det-cell det-f">F*</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-f">F</td>
+                    <td class="det-cell det-f">F*</td>
+                    <td class="det-cell det-e">E*</td>
+                    <td>RT (best for quantification); PT for surface pores</td>
+                </tr>
+                <tr>
+                    <td>Wormhole / piping porosity</td>
+                    <td class="det-cell det-f">F*</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-f">F</td>
+                    <td class="det-cell det-f">F*</td>
+                    <td class="det-cell det-f">F*</td>
+                    <td>RT (herringbone pattern diagnostic)</td>
+                </tr>
+                <tr>
+                    <td>Slag inclusions</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-f">F</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-p">P</td>
+                    <td>RT (irregular dark shapes)</td>
+                </tr>
+                <tr>
+                    <td>Tungsten inclusions (GTAW)</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-p">P</td>
+                    <td>RT (bright/white spot — unique signature)</td>
+                </tr>
+
+                <tr class="tg-green"><td colspan="7">Geometric / Profile</td></tr>
+                <tr>
+                    <td>Undercut</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-f">F</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-e">E</td>
+                    <td>VT + depth gauge (primary)</td>
+                </tr>
+                <tr>
+                    <td>Overlap / cold lap</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-e">E</td>
+                    <td>VT, MT / PT</td>
+                </tr>
+                <tr>
+                    <td>Arc strikes</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-e">E</td>
+                    <td>VT then MT (to detect HAC cracks from strike)</td>
+                </tr>
+                <tr>
+                    <td>Crater cracks</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-f">F</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-e">E</td>
+                    <td>VT, MT/PT, RT</td>
+                </tr>
+                <tr>
+                    <td>Burn-through / melt-through</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-e">E</td>
+                    <td class="det-cell det-f">F</td>
+                    <td class="det-cell det-p">P</td>
+                    <td class="det-cell det-p">P</td>
+                    <td>VT (root side), RT</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="note">* Surface-breaking only (VT and PT detect surface pores; MT detects surface and near-surface on ferromagnetic materials). MT not applicable to austenitic stainless steel, aluminum, or other non-ferromagnetic materials — use PT instead. "E" ratings assume competent Level II examiner following a qualified written procedure under ASME Section V or equivalent.</p>
+
+        <div class="tip-box">
+            <strong>RT vs. UT for planar defects:</strong> RT is excellent for volumetric flaws (porosity, slag)
+            and for root conditions (LOP). It frequently misses planar flaws (LOF, cracks) when the defect
+            plane is not perpendicular to the radiation beam — a classic failure mode. UT using angle beam
+            probes is specifically designed to interrogate planar flaws at the fusion line and root, making
+            it the preferred method for detecting LOF and HAC cracks in thick plate. When both methods
+            are required by the code, they are complementary, not redundant.
+        </div>
+
+        <p class="source-note">
+            Defect classification and descriptions: The Welding Institute (TWI) Defect Classification System
+            (ISO 6520-1); Lincoln Electric <em>Weld Defect Library</em> and <em>Welding Inspection</em>
+            training materials; ASM Handbook Vol. 9 (Metallography and Microstructures) and ASM Micrograph
+            Center digital reference atlas; AWS <em>CWI Study Guide</em> (AWS B5.1); ASME BPVC Section V
+            (NDE procedures). NDT detectability ratings are qualitative and reflect typical field performance;
+            actual sensitivity depends on procedure, equipment calibration, examiner qualification, and joint geometry.
+        </p>
+    </div>
+
+    <a class="back-link" href="index.html">← Back to Reference Pages</a>
+</main>
+</body>
+</html>

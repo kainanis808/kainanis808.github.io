@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quality Standards &amp; Codes — AWS, ASME, ASTM</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.2rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 980px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 30px; font-size: 1rem; }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section h2 { font-size: 1.3rem; color: #1e3a5f; margin-bottom: 10px; }
+        .section p { color: #4b5563; line-height: 1.6; margin-bottom: 14px; font-size: 0.95rem; }
+
+        /* Org banners */
+        .org-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+        }
+        .org-banner-aws  { background: #fff7ed; border: 1px solid #fed7aa; }
+        .org-banner-asme { background: #eff6ff; border: 1px solid #bfdbfe; }
+        .org-banner-astm { background: #f0fdf4; border: 1px solid #bbf7d0; }
+        .org-name { font-size: 1.05rem; font-weight: 700; }
+        .org-name-aws  { color: #c2410c; }
+        .org-name-asme { color: #1d4ed8; }
+        .org-name-astm { color: #15803d; }
+        .org-full { font-size: 0.85rem; color: #6b7280; margin-top: 2px; }
+
+        .section-label {
+            font-weight: 700;
+            color: #1e3a5f;
+            font-size: 0.95rem;
+            margin: 18px 0 6px;
+        }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 10px; }
+        thead tr { background: #1e3a5f; color: #fff; }
+        thead th { padding: 10px 12px; text-align: left; font-weight: 600; }
+        tbody tr:nth-child(even) { background: #f1f5f9; }
+        tbody tr:hover { background: #e0f2fe; }
+        tbody td { padding: 8px 12px; border-bottom: 1px solid #e2e8f0; color: #374151; vertical-align: top; }
+        .code { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #1e3a5f; }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .badge-aws  { background: #fed7aa; color: #c2410c; }
+        .badge-asme { background: #bfdbfe; color: #1d4ed8; }
+        .badge-astm { background: #bbf7d0; color: #15803d; }
+
+        /* Qualification doc cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 12px;
+            margin: 14px 0;
+        }
+        .info-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px 16px;
+        }
+        .info-card .card-abbr {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #2563eb;
+            margin-bottom: 4px;
+        }
+        .info-card .card-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-bottom: 8px;
+        }
+        .info-card ul {
+            padding-left: 16px;
+            color: #4b5563;
+            font-size: 0.85rem;
+            line-height: 1.65;
+        }
+
+        /* ASTM designation diagram */
+        .digit-diagram {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin: 18px 0 8px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+        .digit-box { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .digit-box .d {
+            min-width: 52px;
+            height: 52px;
+            padding: 0 8px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        .digit-box .lbl {
+            font-size: 0.71rem;
+            color: #6b7280;
+            text-align: center;
+            max-width: 78px;
+            line-height: 1.3;
+        }
+        .d-prefix { background: #c2410c; }
+        .d-num    { background: #1e3a5f; }
+        .d-year   { background: #0369a1; }
+        .d-grade  { background: #16a34a; font-size: 0.95rem; }
+        .digit-sep { font-size: 1.5rem; color: #9ca3af; align-self: center; padding-bottom: 22px; }
+
+        /* Tip boxes */
+        .tip-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            margin: 14px 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .tip-box strong { color: #92400e; }
+
+        .note {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        /* Group-header rows in tables */
+        .group-header td    { background: #dbeafe !important; font-weight: 700; color: #1e3a5f;  font-size: 0.85rem; padding: 6px 12px; }
+        .group-orange   td  { background: #ffedd5 !important; font-weight: 700; color: #9a3412; font-size: 0.85rem; padding: 6px 12px; }
+        .group-green    td  { background: #dcfce7 !important; font-weight: 700; color: #166534; font-size: 0.85rem; padding: 6px 12px; }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #0284c7;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Quality Standards &amp; Codes</h1>
+    <p class="subtitle">AWS D1.1 &nbsp;&middot;&nbsp; ASME Boiler &amp; Pressure Vessel Code &nbsp;&middot;&nbsp; ASTM Standard Numbering</p>
+</header>
+<main>
+    <p class="intro">
+        Engineering materials and fabricated structures must meet defined quality standards to ensure
+        safety, reliability, and interoperability. Three organizations dominate materials and fabrication
+        standards in the United States: the <strong>American Welding Society (AWS)</strong>, which governs
+        structural welding practice; <strong>ASME</strong> (American Society of Mechanical Engineers),
+        whose Boiler and Pressure Vessel Code (BPVC) covers pressure-critical equipment design and
+        fabrication; and <strong>ASTM International</strong>, which defines material specifications
+        used across virtually every engineering discipline. These standards are deeply interlocked —
+        ASTM defines the material, ASME specifies how to build with it under pressure, and AWS governs
+        how it is welded.
+    </p>
+
+    <!-- ==================== AWS D1.1 ==================== -->
+    <div class="section">
+        <div class="org-banner org-banner-aws">
+            <div>
+                <div class="org-name org-name-aws">AWS — American Welding Society</div>
+                <div class="org-full">Founded 1919 &middot; Miami, FL &middot; Publishes AWS D1.1 and the AWS A5.xx filler metal classification standards</div>
+            </div>
+        </div>
+        <h2>AWS D1.1 Structural Welding Code — Steel</h2>
+        <p>
+            AWS D1.1 is the governing code for welded steel structures in the United States. It specifies
+            design, fabrication, qualification, and inspection requirements for statically and cyclically
+            loaded structures — including buildings, bridges, and equipment frames. Compliance is typically
+            required by the International Building Code (IBC) and by contract documents on construction
+            and heavy fabrication projects.
+        </p>
+
+        <p class="section-label">Code Structure — Major Clauses of AWS D1.1</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Clause</th>
+                    <th>Title</th>
+                    <th>Key Content</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="code">1</td>
+                    <td>General Requirements</td>
+                    <td>Scope, definitions, base metal limitations, responsibilities of Engineer and Inspector</td>
+                </tr>
+                <tr>
+                    <td class="code">2</td>
+                    <td>Design of Welded Connections</td>
+                    <td>Joint types, effective weld sizes, allowable stresses, minimum fillet weld sizes by plate thickness</td>
+                </tr>
+                <tr>
+                    <td class="code">3</td>
+                    <td>Prequalification of WPSs</td>
+                    <td>Prequalified joint details and base/filler metal combinations that do not require procedure testing</td>
+                </tr>
+                <tr>
+                    <td class="code">4</td>
+                    <td>Qualification</td>
+                    <td>WPS qualification by testing (PQR); welder and welding operator performance qualification (WQT)</td>
+                </tr>
+                <tr>
+                    <td class="code">5</td>
+                    <td>Fabrication</td>
+                    <td>Base metal preparation, assembly tolerances, preheat and interpass temperature, PWHT, weld repairs, arc strikes</td>
+                </tr>
+                <tr>
+                    <td class="code">6</td>
+                    <td>Inspection</td>
+                    <td>Inspector responsibilities, visual inspection criteria, NDT methods, acceptance/rejection criteria</td>
+                </tr>
+                <tr>
+                    <td class="code">7</td>
+                    <td>Stud Welding</td>
+                    <td>Stud base materials, equipment, qualification testing, and inspection requirements</td>
+                </tr>
+                <tr>
+                    <td class="code">8</td>
+                    <td>Strengthening and Repairing Existing Structures</td>
+                    <td>Requirements for welded modifications and repairs to in-service structures</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="section-label">Welding Procedure and Welder Qualification Documents</p>
+        <div class="card-grid">
+            <div class="info-card">
+                <div class="card-abbr">WPS</div>
+                <div class="card-title">Welding Procedure Specification</div>
+                <ul>
+                    <li>Written document stating all essential variables for a weld (process, position, base metal, filler metal, preheat, heat input, PWHT)</li>
+                    <li>Must be followed by all production welders</li>
+                    <li>Can be <em>prequalified</em> (no test coupon needed) or <em>qualified by testing</em> (requires a PQR)</li>
+                </ul>
+            </div>
+            <div class="info-card">
+                <div class="card-abbr">PQR</div>
+                <div class="card-title">Procedure Qualification Record</div>
+                <ul>
+                    <li>Test record that supports a non-prequalified WPS</li>
+                    <li>Documents actual parameters used when welding a test coupon</li>
+                    <li>Coupon is mechanically tested (bend, tensile, macro) to verify weld soundness</li>
+                    <li>Filed and maintained by the fabricator — not required for prequalified WPSs</li>
+                </ul>
+            </div>
+            <div class="info-card">
+                <div class="card-abbr">WQT</div>
+                <div class="card-title">Welder Qualification Test</div>
+                <ul>
+                    <li>Certifies an individual welder's skill for a specific process and position</li>
+                    <li>Also called Welder Performance Qualification (WPQ)</li>
+                    <li>Test coupon examined by visual inspection and bend testing</li>
+                    <li>Qualification typically expires after 6 months without use of the qualified process</li>
+                </ul>
+            </div>
+        </div>
+
+        <p class="section-label">Prequalified vs. Qualified-by-Testing WPSs</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Criterion</th>
+                    <th>Prequalified WPS (Clause 3)</th>
+                    <th>Qualified by Testing — requires PQR (Clause 4)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Joint geometry</td>
+                    <td>Must exactly match D1.1 prequalified joint details</td>
+                    <td>Any geometry — proven by coupon testing</td>
+                </tr>
+                <tr>
+                    <td>Base metal</td>
+                    <td>D1.1 Table 3.1 approved steels only (e.g., A36, A572, A992)</td>
+                    <td>Any steel, including unlisted or higher-strength grades</td>
+                </tr>
+                <tr>
+                    <td>Process</td>
+                    <td>SMAW, SAW, GMAW (spray/pulse — not short-circuit), FCAW</td>
+                    <td>Any process including GTAW and short-circuit GMAW</td>
+                </tr>
+                <tr>
+                    <td>Testing required</td>
+                    <td>None — but strict parameter limits must be maintained</td>
+                    <td>Mandatory mechanical testing, often radiographic or macro examination</td>
+                </tr>
+                <tr>
+                    <td>Documentation</td>
+                    <td>WPS only (must cite the D1.1 clause being followed)</td>
+                    <td>WPS + one or more supporting PQR(s)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="section-label">NDT Methods Recognized by AWS D1.1 (Clause 6)</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Code</th>
+                    <th>What It Detects</th>
+                    <th>Typical Use in D1.1</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Visual Testing</td>
+                    <td><span class="badge badge-aws">VT</span></td>
+                    <td>Surface cracks, porosity, undercut, overlap, weld size and profile</td>
+                    <td>Required on all welds before any other NDT method is applied</td>
+                </tr>
+                <tr>
+                    <td>Radiographic Testing</td>
+                    <td><span class="badge badge-aws">RT</span></td>
+                    <td>Volumetric — porosity, slag inclusions, lack of fusion, cracks</td>
+                    <td>CJP groove welds in statically and cyclically loaded structures</td>
+                </tr>
+                <tr>
+                    <td>Ultrasonic Testing</td>
+                    <td><span class="badge badge-aws">UT</span></td>
+                    <td>Volumetric — planar flaws (cracks, lack of fusion); superior in thick plate</td>
+                    <td>Preferred for plate thickness &gt; 8 mm (5/16&Prime;); may substitute for RT</td>
+                </tr>
+                <tr>
+                    <td>Magnetic Particle Testing</td>
+                    <td><span class="badge badge-aws">MT</span></td>
+                    <td>Surface and near-surface — cracks, seams, lack of fusion</td>
+                    <td>Ferromagnetic materials only; used for surface crack detection</td>
+                </tr>
+                <tr>
+                    <td>Liquid Penetrant Testing</td>
+                    <td><span class="badge badge-aws">PT</span></td>
+                    <td>Open surface discontinuities — cracks, porosity, laps</td>
+                    <td>Non-ferromagnetic materials (austenitic SS, aluminum) where MT cannot be used</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="tip-box">
+            <strong>Acceptance criteria depend on loading type.</strong> Statically loaded structures (Clause 6.9)
+            use more permissive visual, RT, and UT acceptance limits than cyclically loaded structures (Clause 6.12),
+            which face fatigue risk. Always verify which clause governs before evaluating an indication.
+        </div>
+    </div>
+
+    <!-- ==================== ASME BPVC ==================== -->
+    <div class="section">
+        <div class="org-banner org-banner-asme">
+            <div>
+                <div class="org-name org-name-asme">ASME — American Society of Mechanical Engineers</div>
+                <div class="org-full">Founded 1880 &middot; Boiler and Pressure Vessel Code first issued 1914 &middot; Updated on 2-year revision cycles</div>
+            </div>
+        </div>
+        <h2>ASME Boiler and Pressure Vessel Code (BPVC)</h2>
+        <p>
+            The ASME BPVC is the governing standard for the design, fabrication, inspection, and testing
+            of boilers, pressure vessels, and nuclear components. It is enforceable by law in most U.S.
+            states and Canadian provinces. Compliance is shown by an <strong>ASME Code Stamp</strong>
+            stamped onto the component nameplate (e.g., "U" for an unfired pressure vessel built to
+            Section VIII Division 1).
+        </p>
+
+        <p class="section-label">BPVC Sections Overview</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Section</th>
+                    <th>Title</th>
+                    <th>Scope</th>
+                    <th>Stamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="code">I</td>
+                    <td>Power Boilers</td>
+                    <td>Steam boilers &gt; 15 psi; hot water boilers &gt; 160 psi or &gt; 250 &deg;F</td>
+                    <td><span class="badge badge-asme">S</span></td>
+                </tr>
+                <tr>
+                    <td class="code">II</td>
+                    <td>Materials</td>
+                    <td>Parts A (ferrous), B (non-ferrous), C (filler metals), D (allowable stresses) — referenced by all other sections</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td class="code">III</td>
+                    <td>Nuclear Facility Components</td>
+                    <td>Pressure-retaining components for nuclear power plants; subsections for vessels, piping, core support structures</td>
+                    <td><span class="badge badge-asme">N</span></td>
+                </tr>
+                <tr>
+                    <td class="code">IV</td>
+                    <td>Heating Boilers</td>
+                    <td>Steam boilers &le; 15 psi; hot water boilers &le; 160 psi and &le; 250 &deg;F; residential and commercial heating</td>
+                    <td><span class="badge badge-asme">H</span></td>
+                </tr>
+                <tr>
+                    <td class="code">V</td>
+                    <td>Nondestructive Examination</td>
+                    <td>NDE methods and procedures (RT, UT, MT, PT, VT, ET) referenced by all construction sections</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td class="code">VI</td>
+                    <td>Recommended Rules — Heating Boilers</td>
+                    <td>Care, operation, and maintenance guidelines (informative, not mandatory)</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td class="code">VII</td>
+                    <td>Recommended Guidelines — Power Boilers</td>
+                    <td>Care and operation guidance for power boilers (informative, not mandatory)</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td class="code">VIII</td>
+                    <td>Pressure Vessels</td>
+                    <td>Unfired pressure vessels: Div. 1 (general rules), Div. 2 (alternative/design-by-analysis), Div. 3 (ultra-high pressure)</td>
+                    <td><span class="badge badge-asme">U / U2 / U3</span></td>
+                </tr>
+                <tr>
+                    <td class="code">IX</td>
+                    <td>Welding, Brazing, and Fusing Qualifications</td>
+                    <td>WPS/PQR/WPQ for pressure-retaining welds; defines P-numbers, F-numbers, A-numbers</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td class="code">X</td>
+                    <td>Fiber-Reinforced Plastic Pressure Vessels</td>
+                    <td>FRP vessels fabricated by contact molding or filament winding</td>
+                    <td><span class="badge badge-asme">RP</span></td>
+                </tr>
+                <tr>
+                    <td class="code">XI</td>
+                    <td>Inservice Inspection of Nuclear Power Plant Components</td>
+                    <td>ISI programs, examination categories, and repair/replacement rules for nuclear components</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td class="code">XII</td>
+                    <td>Transport Tanks</td>
+                    <td>DOT-regulated highway and rail tank cars for hazardous materials</td>
+                    <td><span class="badge badge-asme">T</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="section-label">Section II: SA- vs. A- Material Designations</p>
+        <p>
+            ASME Section II adopts ASTM material specifications with an "S" prefix. The SA- designation means
+            the material meets the ASTM standard <em>plus</em> any additional ASME requirements — typically
+            mandatory supplemental requirements for impact testing traceability and heat treatment records.
+            Only SA- (or SB-, SFA-) certified materials may be used in ASME Code construction; an ASTM
+            mill certificate alone is not sufficient.
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ASME Designation</th>
+                    <th>ASTM Equivalent</th>
+                    <th>Material</th>
+                    <th>Typical Application</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="code">SA-36</td>
+                    <td class="code">A36</td>
+                    <td>Carbon structural steel plate and shapes</td>
+                    <td>General structural attachments, support lugs, flanges</td>
+                </tr>
+                <tr>
+                    <td class="code">SA-516 Gr. 70</td>
+                    <td class="code">A516 Gr. 70</td>
+                    <td>C-Mn pressure vessel plate — moderate/low-temperature service</td>
+                    <td>Pressure vessel shells and heads — the most widely used vessel plate</td>
+                </tr>
+                <tr>
+                    <td class="code">SA-240 Tp. 304</td>
+                    <td class="code">A240 Tp. 304</td>
+                    <td>Austenitic stainless steel plate</td>
+                    <td>Corrosive-service vessels, heat exchanger shells</td>
+                </tr>
+                <tr>
+                    <td class="code">SA-106 Gr. B</td>
+                    <td class="code">A106 Gr. B</td>
+                    <td>Seamless carbon steel pipe</td>
+                    <td>High-temperature boiler and process piping</td>
+                </tr>
+                <tr>
+                    <td class="code">SA-387 Gr. 22</td>
+                    <td class="code">A387 Gr. 22</td>
+                    <td>2&frac14;Cr–1Mo alloy steel plate</td>
+                    <td>Elevated-temperature and hydrogen-service reactors (petroleum refining)</td>
+                </tr>
+                <tr>
+                    <td class="code">SB-265</td>
+                    <td class="code">B265</td>
+                    <td>Titanium strip, sheet, and plate (Grades 1–38)</td>
+                    <td>Section II Part B — non-ferrous pressure vessel components</td>
+                </tr>
+                <tr>
+                    <td class="code">SFA-5.1</td>
+                    <td class="code">AWS A5.1</td>
+                    <td>Carbon steel covered arc welding electrodes (SMAW)</td>
+                    <td>Section II Part C — filler metals qualified for Code welding</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="section-label">Section IX: P-Number System — Base Metal Grouping</p>
+        <p>
+            P-numbers group base metals with similar metallurgical properties and weldability. A welding
+            procedure qualified on one material in a P-number group is generally valid for all materials
+            in that group, greatly reducing the number of qualification tests a fabricator must run.
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>P-Number</th>
+                    <th>Material Family</th>
+                    <th>Typical Grades</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="code">P-1</td>
+                    <td>Carbon steel</td>
+                    <td>A36, A516 Gr. 70, A106 Gr. B, A53 Gr. B</td>
+                </tr>
+                <tr>
+                    <td class="code">P-3</td>
+                    <td>Alloy steel — &frac12;Cr–Mo, &frac12;Mo</td>
+                    <td>A335 Gr. P1, A213 Gr. T1, A387 Gr. 2</td>
+                </tr>
+                <tr>
+                    <td class="code">P-4</td>
+                    <td>Alloy steel — 1&frac14;Cr–&frac12;Mo</td>
+                    <td>A335 Gr. P11, A387 Gr. 11</td>
+                </tr>
+                <tr>
+                    <td class="code">P-5A</td>
+                    <td>Alloy steel — 5Cr–&frac12;Mo</td>
+                    <td>A335 Gr. P5, A182 Gr. F5</td>
+                </tr>
+                <tr>
+                    <td class="code">P-5B</td>
+                    <td>Alloy steel — 9Cr–1Mo (Grade 91)</td>
+                    <td>A335 Gr. P91, A182 Gr. F91</td>
+                </tr>
+                <tr>
+                    <td class="code">P-6</td>
+                    <td>Martensitic stainless steel</td>
+                    <td>A182 Gr. F6a, 410 SS (A240 Tp. 410)</td>
+                </tr>
+                <tr>
+                    <td class="code">P-7</td>
+                    <td>Ferritic stainless steel</td>
+                    <td>A240 Tp. 430</td>
+                </tr>
+                <tr>
+                    <td class="code">P-8</td>
+                    <td>Austenitic stainless steel</td>
+                    <td>A240 Tp. 304, 304L, 316, 316L, 321, 347</td>
+                </tr>
+                <tr>
+                    <td class="code">P-10A</td>
+                    <td>Duplex stainless steel</td>
+                    <td>A240 Tp. 2205 (UNS S31803)</td>
+                </tr>
+                <tr>
+                    <td class="code">P-21</td>
+                    <td>Aluminum (commercially pure)</td>
+                    <td>1100, 3003</td>
+                </tr>
+                <tr>
+                    <td class="code">P-22</td>
+                    <td>Aluminum alloys</td>
+                    <td>5052, 5083, 6061-T6</td>
+                </tr>
+                <tr>
+                    <td class="code">P-31</td>
+                    <td>Copper</td>
+                    <td>C11000 (electrolytic tough pitch copper)</td>
+                </tr>
+                <tr>
+                    <td class="code">P-41</td>
+                    <td>Titanium — unalloyed (Grades 1 &amp; 2)</td>
+                    <td>B265 Gr. 1, Gr. 2</td>
+                </tr>
+                <tr>
+                    <td class="code">P-43</td>
+                    <td>Titanium alloys</td>
+                    <td>Ti-6Al-4V (Grade 5, B265 Gr. 5)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="section-label">Section VIII: Pressure Vessel Division Comparison</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Division 1</th>
+                    <th>Division 2</th>
+                    <th>Division 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Typical pressure</td>
+                    <td>15 psi to ~3,000 psi</td>
+                    <td>No fixed limit; often chosen above ~600 psi</td>
+                    <td>Above 10,000 psi (ultra-high pressure)</td>
+                </tr>
+                <tr>
+                    <td>Design approach</td>
+                    <td>Rules-based — prescriptive formulas</td>
+                    <td>Design by Analysis — rigorous stress classification</td>
+                    <td>Fracture mechanics and fatigue analysis required</td>
+                </tr>
+                <tr>
+                    <td>Joint efficiency</td>
+                    <td>Up to 1.0 with full radiography</td>
+                    <td>Always 1.0 — full RT or UT mandatory</td>
+                    <td>Always 1.0</td>
+                </tr>
+                <tr>
+                    <td>Allowable stress basis</td>
+                    <td>Lower: min. of UTS/3.5 or Fy &times; 0.67</td>
+                    <td>Higher: min. of UTS/3.0 or Fy &times; 0.67 — thinner walls</td>
+                    <td>Fracture/fatigue-based — material-specific</td>
+                </tr>
+                <tr>
+                    <td>Fatigue analysis</td>
+                    <td>Not required (use Div. 2 if significant cycling)</td>
+                    <td>Mandatory when cycling is significant</td>
+                    <td>Always required</td>
+                </tr>
+                <tr>
+                    <td>Code stamp</td>
+                    <td><span class="badge badge-asme">U</span></td>
+                    <td><span class="badge badge-asme">U2</span></td>
+                    <td><span class="badge badge-asme">U3</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ==================== ASTM ==================== -->
+    <div class="section">
+        <div class="org-banner org-banner-astm">
+            <div>
+                <div class="org-name org-name-astm">ASTM International</div>
+                <div class="org-full">Founded 1898 &middot; Publishes over 12,000 consensus standards in the Annual Book of ASTM Standards (100+ volumes)</div>
+            </div>
+        </div>
+        <h2>ASTM Standard Numbering System</h2>
+        <p>
+            ASTM International publishes consensus standards for materials, products, systems, and
+            services. In materials engineering, ASTM standards define chemical composition, mechanical
+            property requirements, permissible test methods, and required certifications for metals,
+            polymers, composites, ceramics, and more. ASTM standards are widely adopted by purchase
+            specifications, building codes, and the ASME BPVC.
+        </p>
+
+        <p class="section-label">How to Read an ASTM Designation</p>
+        <div class="digit-diagram">
+            <div class="digit-box">
+                <div class="d d-prefix">A</div>
+                <div class="lbl">Letter prefix (material class)</div>
+            </div>
+            <div class="digit-sep">&middot;</div>
+            <div class="digit-box">
+                <div class="d d-num">572</div>
+                <div class="lbl">Sequential standard number</div>
+            </div>
+            <div class="digit-sep">&ndash;</div>
+            <div class="digit-box">
+                <div class="d d-year">21</div>
+                <div class="lbl">Year of last revision</div>
+            </div>
+            <div class="digit-sep">,</div>
+            <div class="digit-box">
+                <div class="d d-grade" style="font-size:0.9rem;">Gr. 50</div>
+                <div class="lbl">Grade or class within the standard</div>
+            </div>
+        </div>
+        <p class="note" style="text-align:center;">
+            Example: <strong>A572/A572M&ndash;21, Grade 50</strong> — Ferrous (A), standard #572,
+            revised 2021, Grade 50 (F<sub>y</sub> = 345 MPa / 50 ksi minimum yield).
+            A metric companion standard carries the suffix M (e.g., A572M); when both inch-pound and
+            SI editions exist they are combined into one document separated by a slash.
+            A trailing lowercase letter or &ldquo;&epsilon;1&rdquo; (e.g., A36&ndash;19) indicates an
+            editorial revision within the year.
+        </p>
+
+        <p class="section-label">Letter Prefix Codes</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Prefix</th>
+                    <th>Material Category</th>
+                    <th>Representative Examples</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="code">A</td>
+                    <td>Ferrous metals — iron and steel products</td>
+                    <td>A36 (structural steel), A500 (structural tubing), A325 (high-strength bolts)</td>
+                </tr>
+                <tr>
+                    <td class="code">B</td>
+                    <td>Non-ferrous metals</td>
+                    <td>B265 (titanium sheet and plate), B209 (aluminum sheet), B36 (brass plate)</td>
+                </tr>
+                <tr>
+                    <td class="code">C</td>
+                    <td>Cementitious, ceramic, concrete, and masonry materials</td>
+                    <td>C150 (Portland cement), C33 (concrete aggregates), C39 (concrete cylinder test)</td>
+                </tr>
+                <tr>
+                    <td class="code">D</td>
+                    <td>Miscellaneous materials — plastics, rubber, petroleum products, textiles</td>
+                    <td>D638 (tensile test of plastics), D792 (density of plastics by displacement)</td>
+                </tr>
+                <tr>
+                    <td class="code">E</td>
+                    <td>Miscellaneous subjects — test methods, practices, guides</td>
+                    <td>E8 (tension testing of metals), E18 (Rockwell hardness), E23 (Charpy impact)</td>
+                </tr>
+                <tr>
+                    <td class="code">F</td>
+                    <td>Materials and products for specific end use</td>
+                    <td>F3125 (high-strength structural bolts), F593 (stainless steel fasteners)</td>
+                </tr>
+                <tr>
+                    <td class="code">G</td>
+                    <td>Corrosion, deterioration, and degradation of materials</td>
+                    <td>G48 (pitting/crevice corrosion of stainless steels), G5 (anodic polarization)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="section-label">Common ASTM Standards — Structural Steel</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Standard</th>
+                    <th>Material Description</th>
+                    <th>Min. Yield</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="group-orange"><td colspan="4">Plates, Shapes &amp; Bars</td></tr>
+                <tr>
+                    <td class="code">A36</td>
+                    <td>Carbon structural steel — plates, shapes, and bars</td>
+                    <td>36 ksi / 250 MPa</td>
+                    <td>Most widely used structural steel; readily weldable; excellent ductility</td>
+                </tr>
+                <tr>
+                    <td class="code">A572 Gr. 50</td>
+                    <td>High-strength low-alloy Nb–V structural steel</td>
+                    <td>50 ksi / 345 MPa</td>
+                    <td>Grades 42–65 available; Grade 50 dominates; 38% weight savings vs. A36 at equal load</td>
+                </tr>
+                <tr>
+                    <td class="code">A992</td>
+                    <td>W-shape structural steel — wide-flange sections only</td>
+                    <td>50 ksi / 345 MPa</td>
+                    <td>F<sub>y</sub>/F<sub>u</sub> &le; 0.85 and F<sub>y</sub> &le; 65 ksi controlled for seismic ductility; replaced A36/A572 for W-shapes</td>
+                </tr>
+                <tr>
+                    <td class="code">A514</td>
+                    <td>High-strength quenched and tempered alloy structural steel plate</td>
+                    <td>100 ksi / 690 MPa</td>
+                    <td>For t &le; 2&frac12;&Prime;; Grades A–Q; higher preheat required; crane booms, bridges, machinery</td>
+                </tr>
+                <tr>
+                    <td class="code">A588</td>
+                    <td>High-strength low-alloy weathering steel — atmospheric corrosion resistant</td>
+                    <td>50 ksi / 345 MPa</td>
+                    <td>Forms a stable oxide (patina) layer; used in exposed bridges and structures without paint</td>
+                </tr>
+                <tr class="group-header"><td colspan="4">Pipes &amp; Hollow Structural Sections</td></tr>
+                <tr>
+                    <td class="code">A53 Gr. B</td>
+                    <td>Black and hot-dipped galvanized welded and seamless steel pipe</td>
+                    <td>35 ksi / 241 MPa</td>
+                    <td>Most common pipe specification; Grade A (25 ksi) also available</td>
+                </tr>
+                <tr>
+                    <td class="code">A106 Gr. B</td>
+                    <td>Seamless carbon steel pipe for high-temperature service</td>
+                    <td>35 ksi / 241 MPa</td>
+                    <td>Standard for boiler and process piping; adopted as SA-106 in ASME Code construction</td>
+                </tr>
+                <tr>
+                    <td class="code">A500 Gr. C</td>
+                    <td>Cold-formed welded and seamless structural tubing (round, square, rectangular)</td>
+                    <td>50 ksi / 345 MPa</td>
+                    <td>Grades A, B, C; Grade C (50 ksi) is the standard for structural HSS (hollow structural sections)</td>
+                </tr>
+                <tr class="group-green"><td colspan="4">Pressure Vessel Plate</td></tr>
+                <tr>
+                    <td class="code">A516 Gr. 70</td>
+                    <td>C-Mn pressure vessel plate — moderate and low-temperature service</td>
+                    <td>38 ksi / 262 MPa (varies with thickness)</td>
+                    <td>UTS = 70–90 ksi; grade number refers to UTS, not yield; by far the most common vessel plate</td>
+                </tr>
+                <tr>
+                    <td class="code">A387 Gr. 22</td>
+                    <td>2&frac14;Cr–1Mo alloy steel pressure vessel and heat exchanger plate</td>
+                    <td>30 ksi / 205 MPa</td>
+                    <td>Elevated-temperature and hydrogen-service; petroleum refinery reactors; PWHT required</td>
+                </tr>
+                <tr>
+                    <td class="code">A240 Tp. 316L</td>
+                    <td>Austenitic stainless steel plate — low-carbon 316</td>
+                    <td>25 ksi / 170 MPa</td>
+                    <td>Corrosive/chemical service; low C (&le; 0.03%) prevents sensitization during welding</td>
+                </tr>
+                <tr class="group-orange"><td colspan="4">Fasteners</td></tr>
+                <tr>
+                    <td class="code">A307</td>
+                    <td>Carbon steel bolts and studs — low strength</td>
+                    <td>— (min. UTS 60 ksi)</td>
+                    <td>Grades A &amp; B; secondary connections, anchor bolts, non-structural applications</td>
+                </tr>
+                <tr>
+                    <td class="code">F3125 Gr. A325</td>
+                    <td>High-strength structural bolt — medium carbon or alloy steel</td>
+                    <td>92 ksi min. (d &le; 1&Prime;)</td>
+                    <td>Consolidated bolt standard (replaces former A325); standard for slip-critical and bearing connections</td>
+                </tr>
+                <tr>
+                    <td class="code">F3125 Gr. A490</td>
+                    <td>High-strength alloy steel structural bolt</td>
+                    <td>130 ksi min. (d &le; 1&Prime;)</td>
+                    <td>Higher strength than A325; must not be hot-dip galvanized (hydrogen embrittlement risk)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="section-label">Common ASTM Test Method Standards</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Standard</th>
+                    <th>Test</th>
+                    <th>What It Defines</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="code">E8 / E8M</td>
+                    <td>Tension testing of metallic materials</td>
+                    <td>Specimen geometry, strain rate, grip methods, reporting of UTS, yield strength, elongation, and reduction of area</td>
+                </tr>
+                <tr>
+                    <td class="code">E18</td>
+                    <td>Rockwell hardness testing</td>
+                    <td>Test procedure for all Rockwell scales (HRA, HRB, HRC, superficial scales); machine verification intervals</td>
+                </tr>
+                <tr>
+                    <td class="code">E10</td>
+                    <td>Brinell hardness testing</td>
+                    <td>10 mm ball method for metals; indentation measurement and HB calculation</td>
+                </tr>
+                <tr>
+                    <td class="code">E92 / E384</td>
+                    <td>Vickers and Knoop hardness</td>
+                    <td>E92: Vickers macro hardness; E384: microindentation (HV, HK) for case depth profiles and thin coatings</td>
+                </tr>
+                <tr>
+                    <td class="code">E23</td>
+                    <td>Notched-bar impact testing (Charpy &amp; Izod)</td>
+                    <td>Absorbed energy, fracture appearance, lateral expansion; transition temperature testing</td>
+                </tr>
+                <tr>
+                    <td class="code">E112</td>
+                    <td>Average grain size measurement</td>
+                    <td>Intercept and comparison chart methods; reports ASTM grain size number G (higher G = finer grain)</td>
+                </tr>
+                <tr>
+                    <td class="code">A370</td>
+                    <td>Mechanical testing of steel products</td>
+                    <td>Specimen preparation, tension, hardness, impact, and bend tests specifically for steel mill products</td>
+                </tr>
+                <tr>
+                    <td class="code">E140</td>
+                    <td>Hardness conversion tables</td>
+                    <td>Empirical conversions between HRC, HRB, HV, HB, and approximate UTS — material-class specific</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ==================== Cross-Reference ==================== -->
+    <div class="section">
+        <h2>How AWS, ASME, and ASTM Work Together</h2>
+        <p>
+            These three standards bodies form an interlocking framework: ASTM defines <em>what the material is</em>;
+            ASME specifies <em>how to design and build</em> pressure-critical equipment from those materials;
+            AWS governs <em>how to weld</em> structural and pressure-containing components. Understanding
+            how they reference each other is essential for reading engineering drawings, material test
+            reports (MTRs), and inspection records.
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Activity</th>
+                    <th><span class="badge badge-astm">ASTM</span> Role</th>
+                    <th><span class="badge badge-asme">ASME</span> Role</th>
+                    <th><span class="badge badge-aws">AWS</span> Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Material procurement</td>
+                    <td>Defines chemistry, mechanical properties, and test requirements (e.g., A516 Gr. 70)</td>
+                    <td>Adopts as SA-516 Gr. 70 with supplemental ASME requirements; only SA- material may be used in Code construction</td>
+                    <td>Lists approved base metals in D1.1 Table 3.1 for prequalified WPSs</td>
+                </tr>
+                <tr>
+                    <td>Filler metals</td>
+                    <td>No direct filler metal standard (A-prefix is structural steel)</td>
+                    <td>Adopts AWS A5.xx as SFA-5.xx in Section II Part C</td>
+                    <td>Publishes AWS A5.xx classification system (e.g., AWS A5.1 for SMAW electrodes, E7018 classification)</td>
+                </tr>
+                <tr>
+                    <td>Welding qualification</td>
+                    <td>No direct role in welding qualification</td>
+                    <td>Section IX — WPS/PQR/WPQ using P-numbers, F-numbers, and A-numbers</td>
+                    <td>D1.1 Clause 4 — WPS/PQR/WQT for structural steel construction</td>
+                </tr>
+                <tr>
+                    <td>Inspection and NDE</td>
+                    <td>E-series test methods (E709 for MT, E165 for PT, E94 for RT)</td>
+                    <td>Section V — NDE procedures referenced in all BPVC construction sections</td>
+                    <td>D1.1 Clause 6 — VT, RT, UT, MT, PT acceptance criteria for structural welds</td>
+                </tr>
+                <tr>
+                    <td>Hardness testing</td>
+                    <td>E18 (Rockwell), E10 (Brinell), E384 (microhardness), E140 (conversions)</td>
+                    <td>References ASTM E-series for hardness verification of materials and welds</td>
+                    <td>References ASTM E-series; D1.1 limits maximum HAZ hardness for certain steels</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="tip-box">
+            <strong>Key distinction — ASTM vs. SA- certification:</strong> A material certified to ASTM A516 Gr. 70
+            cannot automatically be used in ASME Code pressure vessel construction. The mill must certify the
+            material to SA-516 Gr. 70, which requires compliance with ASME supplemental requirements. Always
+            verify the "SA-" (or "SB-") prefix on the material test report (MTR) before accepting material for
+            Code work.
+        </div>
+    </div>
+
+    <a class="back-link" href="index.html">← Back to Reference Pages</a>
+</main>
+</body>
+</html>
