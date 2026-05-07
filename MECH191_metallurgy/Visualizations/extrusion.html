@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Extrusion – AEC Design Guidelines, Process Animation &amp; Die Design</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#0a1628;color:#e2e8f0;font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;}
+  header{background:linear-gradient(135deg,#0f2040 0%,#1a3a5c 100%);padding:24px 32px 20px;border-bottom:2px solid #38bdf8;}
+  header h1{font-size:1.75rem;color:#38bdf8;letter-spacing:.5px;}
+  header p{color:#94a3b8;font-size:.9rem;margin-top:4px;}
+
+  .tabs{display:flex;gap:0;border-bottom:2px solid #1e3a5c;background:#0d1f38;padding:0 24px;}
+  .tab-btn{padding:14px 22px;background:none;border:none;color:#94a3b8;font-size:.9rem;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s;white-space:nowrap;}
+  .tab-btn:hover{color:#7dd3fc;}
+  .tab-btn.active{color:#38bdf8;border-bottom-color:#38bdf8;font-weight:600;}
+
+  .tab-content{display:none;padding:28px 32px;}
+  .tab-content.active{display:block;}
+  h2{font-size:1.2rem;color:#38bdf8;margin-bottom:16px;}
+  h3{font-size:1rem;color:#7dd3fc;margin-bottom:10px;}
+  canvas{display:block;}
+
+  /* guidelines */
+  .guide-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .guide-card{background:#0f2040;border:1px solid #1e3a5c;border-radius:10px;padding:14px;text-align:center;}
+  .guide-card h3{font-size:.82rem;color:#7dd3fc;margin-bottom:8px;}
+  .guide-card p{font-size:.75rem;color:#94a3b8;margin-top:7px;line-height:1.4;}
+
+  /* tables */
+  .data-table{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:16px;}
+  .data-table th{background:#1a3a5c;color:#38bdf8;padding:8px 10px;text-align:left;border:1px solid #1e3a5c;}
+  .data-table td{padding:7px 10px;border:1px solid #1e3a5c;color:#cbd5e1;}
+  .data-table tr:nth-child(even) td{background:#0f2040;}
+  .data-table tr:nth-child(odd) td{background:#0a1628;}
+  .data-table caption{color:#64748b;font-size:.73rem;caption-side:bottom;padding-top:5px;text-align:left;}
+  .best{color:#4ade80;font-weight:700;}
+
+  /* animation */
+  .anim-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;}
+  .mode-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+  .mode-btn{background:#1a3a5c;color:#94a3b8;border:1px solid #334155;border-radius:6px;padding:7px 16px;font-size:.82rem;cursor:pointer;transition:all .2s;}
+  .mode-btn:hover{border-color:#38bdf8;color:#7dd3fc;}
+  .mode-btn.active{background:#0c4a6e;color:#38bdf8;border-color:#38bdf8;font-weight:600;}
+  .anim-canvas-wrap{background:#0f2040;border:1px solid #1e3a5c;border-radius:10px;padding:10px;}
+  #stage-label{font-size:.95rem;color:#7dd3fc;text-align:center;min-height:20px;}
+  #stage-desc{font-size:.78rem;color:#94a3b8;text-align:center;max-width:680px;min-height:36px;line-height:1.5;}
+  .ctrl-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;}
+  .ctrl-row button{background:#1a3a5c;color:#e2e8f0;border:1px solid #38bdf8;border-radius:6px;padding:7px 16px;font-size:.82rem;cursor:pointer;transition:background .2s;}
+  .ctrl-row button:hover{background:#38bdf8;color:#0a1628;}
+  .ctrl-row button:disabled{opacity:.4;cursor:default;background:#1a3a5c;color:#e2e8f0;}
+  .stage-dots{display:flex;gap:7px;}
+  .stage-dot{width:9px;height:9px;border-radius:50%;background:#1e3a5c;border:1px solid #38bdf8;cursor:pointer;transition:background .2s;}
+  .stage-dot.active{background:#38bdf8;}
+
+  /* complexity */
+  .class-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+  .class-card{background:#0f2040;border:1px solid #1e3a5c;border-radius:10px;padding:12px;text-align:center;}
+  .class-card h3{font-size:.78rem;margin-bottom:7px;}
+
+  /* alloy chart */
+  .alloy-layout{display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:start;}
+
+  .back-link{text-align:center;padding:28px;}
+  .back-link a{color:#38bdf8;text-decoration:none;font-size:.9rem;}
+  .back-link a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Extrusion – AEC Design Guidelines, Process Animation &amp; Die Design</h1>
+  <p>Based on Aluminum Extruders Council (AEC) design guidelines and process capability data</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="guidelines">AEC Design Guidelines</button>
+  <button class="tab-btn" data-tab="animation">Process Animation</button>
+  <button class="tab-btn" data-tab="complexity">Profile Complexity &amp; Die Design</button>
+  <button class="tab-btn" data-tab="alloys">Alloy Selection</button>
+</div>
+
+<!-- ══════════════════════════════════════════ TAB 1 ══ -->
+<div class="tab-content active" id="tab-guidelines">
+  <h2>AEC Design Guidelines for Aluminum Extrusions</h2>
+  <div class="guide-grid">
+    <div class="guide-card">
+      <h3>Minimum Wall Thickness</h3>
+      <canvas id="c-wall" width="220" height="150"></canvas>
+      <p>6063-T6: <b>0.8 mm</b> min (thin wall)<br>6061-T6: <b>1.8 mm</b> min<br>Max wall ratio: <b>3:1</b> thick:thin<br>Uniform walls reduce warping</p>
+    </div>
+    <div class="guide-card">
+      <h3>Corner &amp; Fillet Radii</h3>
+      <canvas id="c-radii" width="220" height="150"></canvas>
+      <p>Outside corner: <b>R ≥ 0.4 mm</b><br>Inside fillet: <b>r ≥ 0.8 mm</b><br>Larger radii improve die life, reduce stress concentration in part</p>
+    </div>
+    <div class="guide-card">
+      <h3>Tongue Ratio (Semi-Hollow)</h3>
+      <canvas id="c-tongue" width="220" height="150"></canvas>
+      <p>TR = A<sub>void</sub> / w<sub>opening</sub>²<br>TR ≤ <b>3.0</b> for semi-hollow die<br>TR &gt; 3.0 requires full hollow (bridge/porthole) die</p>
+    </div>
+    <div class="guide-card">
+      <h3>Circumscribed Circle</h3>
+      <canvas id="c-ccd" width="220" height="150"></canvas>
+      <p>CCD = smallest circle enclosing the profile<br>Determines minimum press size<br>Standard CCDs: <b>5", 7", 8", 10", 12", 14"</b></p>
+    </div>
+    <div class="guide-card">
+      <h3>Symmetry &amp; Balance</h3>
+      <canvas id="c-sym" width="220" height="150"></canvas>
+      <p>Symmetric sections: lower die stress, no twist<br>Asymmetric: die offset needed<br>Balance metal distribution around CG to equalize flow velocity</p>
+    </div>
+    <div class="guide-card">
+      <h3>Draft &amp; Taper</h3>
+      <canvas id="c-draft" width="220" height="150"></canvas>
+      <p>Standard aluminum: <b>0° draft</b> (no taper required)<br>Deep pockets: <b>0.5°–1°</b> taper helps die fill<br>Unlike forging, extrusion requires no draft for part removal</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:26px;">AEC Standard Tolerances (Aluminum, 6xxx Series)</h3>
+  <table class="data-table">
+    <caption>Source: Aluminum Extruders Council "Aluminum Extrusion Design Manual." Precision tolerances require special die design and inspection.</caption>
+    <thead>
+      <tr><th>Dimension</th><th>Standard</th><th>Precision</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Wall thickness ≤ 3 mm</td><td>±0.25 mm</td><td>±0.08 mm</td><td>Across die face</td></tr>
+      <tr><td>Wall thickness 3–6 mm</td><td>±0.38 mm</td><td>±0.13 mm</td><td></td></tr>
+      <tr><td>Width / gap (solid)</td><td>±0.25 mm</td><td>±0.08 mm</td><td>Per 25 mm of dimension</td></tr>
+      <tr><td>Width / gap (hollow)</td><td>±0.50 mm</td><td>±0.13 mm</td><td>Void dimensions add tolerance</td></tr>
+      <tr><td>Angular</td><td>±1.0°</td><td>±0.5°</td><td>Between nominal faces</td></tr>
+      <tr><td>Straightness</td><td>0.5 mm/m</td><td>0.25 mm/m</td><td>After stretching</td></tr>
+      <tr><td>Twist</td><td>1.0°/m</td><td>0.5°/m</td><td>About longitudinal axis</td></tr>
+      <tr><td>Cut length (standard)</td><td>+6.4 / 0 mm</td><td>+3.2 / 0 mm</td><td>Always overcut, never undercut</td></tr>
+      <tr><td>Surface roughness Ra</td><td>1.6–3.2 µm</td><td>0.8–1.6 µm</td><td>As-extruded (die land quality)</td></tr>
+      <tr><td>Flatness (wide flange)</td><td>0.8 mm/300 mm</td><td>0.4 mm/300 mm</td><td>After stretching and aging</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:24px;">Process Capability Data</h3>
+  <table class="data-table">
+    <caption>Typical values for 6063-T6 and 6061-T6 aluminum extrusions, standard production conditions.</caption>
+    <thead>
+      <tr><th>Parameter</th><th>6063-T6 (thin wall)</th><th>6061-T6 (structural)</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Extrusion speed</td><td>15–60 m/min</td><td>3–12 m/min</td><td>6063 flows much more easily</td></tr>
+      <tr><td>Billet temperature</td><td>490–510 °C</td><td>470–500 °C</td><td>Too hot → surface defects; too cool → cracking</td></tr>
+      <tr><td>Press ratio (typical)</td><td>10:1 – 80:1</td><td>8:1 – 40:1</td><td>Billet area ÷ profile area</td></tr>
+      <tr><td>Min wall thickness</td><td>0.8 mm</td><td>1.8 mm</td><td>Practical minimum for quality extrusion</td></tr>
+      <tr><td>Max weight/meter</td><td>10 kg/m</td><td>25 kg/m</td><td>Depends on press capacity</td></tr>
+      <tr><td>Discard length</td><td>15–20% of billet</td><td>15–20% of billet</td><td>Butt end removed to eliminate pipe defect</td></tr>
+      <tr><td>Quench</td><td>Air (T5) or water (T6)</td><td>Water quench (T6)</td><td>6061 must be solution heat treated at die exit</td></tr>
+      <tr><td>Stretch (straightening)</td><td>0.5–3%</td><td>0.5–3%</td><td>Removes bow and sets tolerance</td></tr>
+      <tr><td>Surface finish</td><td>Mill finish (anodizable)</td><td>Mill finish</td><td>6063 preferred for anodizing</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════ TAB 2 ══ -->
+<div class="tab-content" id="tab-animation">
+  <h2>Extrusion Process Animation</h2>
+  <div class="anim-wrap">
+    <div class="mode-bar">
+      <button class="mode-btn active" onclick="setMode('direct')">Direct Extrusion</button>
+      <button class="mode-btn" onclick="setMode('indirect')">Indirect Extrusion</button>
+      <button class="mode-btn" onclick="setMode('pipe')">Pipe Defect Formation</button>
+    </div>
+    <div class="anim-canvas-wrap">
+      <canvas id="c-anim" width="720" height="360" style="width:720px;height:360px;"></canvas>
+    </div>
+    <div id="stage-label"></div>
+    <div id="stage-desc"></div>
+    <div class="ctrl-row">
+      <button id="btn-prev" onclick="animPrev()">◀ Prev</button>
+      <button id="btn-play" onclick="animToggle()">▶ Play</button>
+      <button id="btn-next" onclick="animNext()">Next ▶</button>
+    </div>
+    <div class="stage-dots" id="stage-dots"></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px;">
+    <div style="background:#0f2040;border:1px solid #1e3a5c;border-radius:8px;padding:14px;font-size:.78rem;color:#94a3b8;line-height:1.6;">
+      <b style="color:#7dd3fc;">Direct Extrusion</b><br>
+      Ram pushes billet through a stationary die. Billet slides against container walls, generating friction heat. A dead metal zone (DMZ) forms at the die corners. Accounts for ~85% of all extrusion production. Requires a discard (butt end) to prevent pipe defect contamination.
+    </div>
+    <div style="background:#0f2040;border:1px solid #1e3a5c;border-radius:8px;padding:14px;font-size:.78rem;color:#94a3b8;line-height:1.6;">
+      <b style="color:#7dd3fc;">Indirect Extrusion</b><br>
+      Die is on a hollow stem that advances into a stationary billet and container. No billet-container relative motion → no friction loss → 25–35% less ram force required. Smaller butt discard (no pipe defect). Less flexible for shape changes; tooling more complex.
+    </div>
+    <div style="background:#0f2040;border:1px solid #1e3a5c;border-radius:8px;padding:14px;font-size:.78rem;color:#94a3b8;line-height:1.6;">
+      <b style="color:#7dd3fc;">Pipe Defect</b><br>
+      Near the end of the billet, the dead metal zone (which contains surface oxides and contaminants) is drawn inward through the die by the flow field. This creates a pipe-shaped oxide inclusion inside the extrusion. The butt discard (15–20% of billet) is retained to prevent pipe from entering the finished extrusion.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ TAB 3 ══ -->
+<div class="tab-content" id="tab-complexity">
+  <h2>Profile Complexity Classification &amp; Die Design</h2>
+  <p style="color:#94a3b8;font-size:.82rem;margin-bottom:16px;">The AEC classifies extrusion profiles into five complexity classes based on geometry. Higher complexity demands more sophisticated die design, lower extrusion speeds, and tighter process control.</p>
+  <div class="class-grid">
+    <div class="class-card">
+      <h3 style="color:#4ade80;">Class 1 — Simple Solid</h3>
+      <canvas id="c-cls1" width="160" height="130"></canvas>
+      <p style="font-size:.72rem;color:#94a3b8;margin-top:7px;line-height:1.4;">Rod, bar, flat, simple angle<br>Solid flat die<br>Highest extrusion speed<br>Best tolerance</p>
+    </div>
+    <div class="class-card">
+      <h3 style="color:#a3e635;">Class 2 — Complex Solid</h3>
+      <canvas id="c-cls2" width="160" height="130"></canvas>
+      <p style="font-size:.72rem;color:#94a3b8;margin-top:7px;line-height:1.4;">T, I, H, Z sections, fins<br>Solid flat die (complex)<br>Moderate speed<br>±0.25–0.38 mm</p>
+    </div>
+    <div class="class-card">
+      <h3 style="color:#fbbf24;">Class 3 — Semi-Hollow</h3>
+      <canvas id="c-cls3" width="160" height="130"></canvas>
+      <p style="font-size:.72rem;color:#94a3b8;margin-top:7px;line-height:1.4;">C, U, hat sections (TR ≤ 3)<br>Slotted or semi-hollow die<br>Lower speed<br>±0.38–0.50 mm</p>
+    </div>
+    <div class="class-card">
+      <h3 style="color:#fb923c;">Class 4 — Simple Hollow</h3>
+      <canvas id="c-cls4" width="160" height="130"></canvas>
+      <p style="font-size:.72rem;color:#94a3b8;margin-top:7px;line-height:1.4;">Square/round tube, single void<br>Bridge or porthole die<br>Lower speed (weld seam)<br>±0.50 mm</p>
+    </div>
+    <div class="class-card">
+      <h3 style="color:#f87171;">Class 5 — Complex Hollow</h3>
+      <canvas id="c-cls5" width="160" height="130"></canvas>
+      <p style="font-size:.72rem;color:#94a3b8;margin-top:7px;line-height:1.4;">Multi-void, asymmetric, thin wall<br>Multi-port porthole die<br>Lowest speed; highest die cost<br>±0.50–0.75 mm</p>
+    </div>
+  </div>
+
+  <table class="data-table" style="margin-top:22px;">
+    <caption>Source: AEC Aluminum Extrusion Design Manual. Data for 6063-T6 unless noted. Higher class = more complex = slower and more expensive.</caption>
+    <thead>
+      <tr>
+        <th>Class</th><th>Min Wall (6063)</th><th>Min Wall (6061)</th>
+        <th>Max Speed (rel.)</th><th>Die Type</th><th>Die Cost (rel.)</th>
+        <th>Std Tolerance</th><th>Typical Application</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><b style="color:#4ade80;">1 – Simple solid</b></td><td>0.8 mm</td><td>1.8 mm</td><td class="best">100%</td><td>Flat solid die</td><td class="best">1.0×</td><td>±0.25 mm</td><td>Bars, rods, angles</td></tr>
+      <tr><td><b style="color:#a3e635;">2 – Complex solid</b></td><td>1.0 mm</td><td>2.0 mm</td><td>70%</td><td>Flat solid die</td><td>1.5–2×</td><td>±0.38 mm</td><td>I-beams, fin arrays</td></tr>
+      <tr><td><b style="color:#fbbf24;">3 – Semi-hollow</b></td><td>1.2 mm</td><td>2.5 mm</td><td>50%</td><td>Slotted/semi-hollow</td><td>2–3×</td><td>±0.50 mm</td><td>C/U channels, hat profiles</td></tr>
+      <tr><td><b style="color:#fb923c;">4 – Simple hollow</b></td><td>1.2 mm</td><td>2.5 mm</td><td>40%</td><td>Bridge/porthole</td><td>3–4×</td><td>±0.50 mm</td><td>Square tube, structural tube</td></tr>
+      <tr><td><b style="color:#f87171;">5 – Complex hollow</b></td><td>1.5 mm</td><td>3.0 mm</td><td>25%</td><td>Multi-port porthole</td><td>4–8×</td><td>±0.75 mm</td><td>Window frames, heat sinks, curtain wall</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:24px;">Die Types</h3>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:12px;">
+    <div style="background:#0f2040;border:1px solid #1e3a5c;border-radius:8px;padding:14px;text-align:center;">
+      <h3 style="color:#7dd3fc;font-size:.85rem;margin-bottom:8px;">Flat (Solid) Die</h3>
+      <canvas id="c-die-flat" width="200" height="160"></canvas>
+      <p style="font-size:.75rem;color:#94a3b8;margin-top:8px;line-height:1.4;">Single-piece die for solid profiles. Land (bearing) controls metal flow. Relief angle behind land prevents friction on extruded surface. Used for Classes 1 &amp; 2.</p>
+    </div>
+    <div style="background:#0f2040;border:1px solid #1e3a5c;border-radius:8px;padding:14px;text-align:center;">
+      <h3 style="color:#7dd3fc;font-size:.85rem;margin-bottom:8px;">Bridge / Porthole Die</h3>
+      <canvas id="c-die-porthole" width="200" height="160"></canvas>
+      <p style="font-size:.75rem;color:#94a3b8;margin-top:8px;line-height:1.4;">Two-piece die (cap + die) with ports split around a central mandrel. Metal welds in the weld chamber under pressure and temperature. Creates integral hollow without a seam line. Used for Classes 4 &amp; 5.</p>
+    </div>
+    <div style="background:#0f2040;border:1px solid #1e3a5c;border-radius:8px;padding:14px;text-align:center;">
+      <h3 style="color:#7dd3fc;font-size:.85rem;margin-bottom:8px;">Spider Die</h3>
+      <canvas id="c-die-spider" width="200" height="160"></canvas>
+      <p style="font-size:.75rem;color:#94a3b8;margin-top:8px;line-height:1.4;">Variation of porthole die with arms (spider legs) supporting central mandrel. Used for larger hollow profiles and multi-void sections. More weld seams but better metal distribution for asymmetric sections.</p>
+    </div>
+  </div>
+
+  <div style="background:#0f2040;border:1px solid #1e3a5c;border-radius:8px;padding:14px;margin-top:18px;font-size:.8rem;color:#94a3b8;line-height:1.6;">
+    <b style="color:#7dd3fc;">How geometry affects extrusion speed:</b> Extrusion speed is limited by the maximum allowable metal temperature at the die exit — if too hot, the surface cracks (hot shortness) or tears. Complex, thin-walled profiles generate more frictional heat per unit of material and restrict flow more, requiring slower ram speeds. Multi-void hollows also require the metal to split around multiple mandrel supports and re-weld, requiring more time at temperature. Speed reductions of 75% vs. simple solid profiles are common for complex hollow sections.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ TAB 4 ══ -->
+<div class="tab-content" id="tab-alloys">
+  <h2>Alloy Selection Guide</h2>
+  <div class="alloy-layout">
+    <div>
+      <h3>Extrudability vs. Strength</h3>
+      <canvas id="c-alloy-chart" width="360" height="340"></canvas>
+      <p style="font-size:.73rem;color:#64748b;margin-top:5px;">Extrudability = ease of extrusion (speed, complexity achievable, die life). Higher extrudability → lower strength series.</p>
+    </div>
+    <div>
+      <h3>Alloy Properties (typical, heat-treated temper)</h3>
+      <table class="data-table">
+        <caption>Source: ASM Handbook Vol. 2 (Properties and Selection: Nonferrous Alloys); AEC Alloy Selection Guide. Properties in T5/T6 temper unless noted.</caption>
+        <thead>
+          <tr><th>Alloy</th><th>Temper</th><th>UTS (MPa)</th><th>YS (MPa)</th><th>El (%)</th><th>Extrudability</th><th>Corrosion</th><th>Weldability</th><th>Applications</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>1100</b></td><td>H14</td><td>124</td><td>117</td><td>9</td><td class="best">Excellent</td><td class="best">Excellent</td><td class="best">Excellent</td><td>Decorative trim, heat exchangers</td></tr>
+          <tr><td><b>6063</b></td><td>T6</td><td>207</td><td>172</td><td>12</td><td class="best">Excellent</td><td class="best">Excellent</td><td>Good</td><td>Architecture, window frames, curtain wall</td></tr>
+          <tr><td><b>6005A</b></td><td>T5</td><td>262</td><td>241</td><td>9</td><td>Good</td><td>Good</td><td>Good</td><td>Rail cars, automotive, ladders</td></tr>
+          <tr><td><b>6061</b></td><td>T6</td><td>310</td><td>276</td><td>12</td><td>Good</td><td>Good</td><td class="best">Excellent</td><td>Structural, truck/bus frames, marine</td></tr>
+          <tr><td><b>6082</b></td><td>T6</td><td>310</td><td>260</td><td>10</td><td>Moderate</td><td>Good</td><td>Good</td><td>Bridges, cranes, offshore</td></tr>
+          <tr><td><b>6351</b></td><td>T6</td><td>310</td><td>283</td><td>14</td><td>Moderate</td><td>Good</td><td>Good</td><td>Hydraulic tubing, structural</td></tr>
+          <tr><td><b>7005</b></td><td>T53</td><td>350</td><td>290</td><td>15</td><td>Moderate</td><td>Good</td><td>Good</td><td>Bicycle frames, sports equipment</td></tr>
+          <tr><td><b>7075</b></td><td>T6</td><td>572</td><td>503</td><td>11</td><td>Poor</td><td>Poor</td><td>Poor</td><td>Aerospace, high-strength fittings</td></tr>
+          <tr><td><b>2024</b></td><td>T4</td><td>469</td><td>324</td><td>22</td><td>Poor</td><td>Poor</td><td>Poor</td><td>Aerospace (fuselage skin, spar caps)</td></tr>
+        </tbody>
+      </table>
+      <div style="background:#0f2040;border:1px solid #1e3a5c;border-radius:8px;padding:12px;margin-top:14px;font-size:.78rem;color:#94a3b8;line-height:1.5;">
+        <b style="color:#7dd3fc;">Series overview:</b>
+        <ul style="margin-left:14px;margin-top:5px;">
+          <li><b style="color:#4ade80;">1xxx</b> — Pure Al; best extrudability, corrosion resistance; low strength</li>
+          <li><b style="color:#38bdf8;">6xxx</b> — Al-Mg-Si; dominant extrusion series; heat-treatable; T5 (at press) or T6 (solution HT + age)</li>
+          <li><b style="color:#a78bfa;">7xxx</b> — Al-Zn-Mg; highest strength; difficult to extrude; requires quench, multi-step age</li>
+          <li><b style="color:#f87171;">2xxx</b> — Al-Cu; aerospace; very difficult to extrude; not weldable; requires anodize or clad for corrosion</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="back-link"><a href="index.html">← Back to Visualizations</a></div>
+
+<script>
+// ───────────────────────────── TABS ──────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'complexity') drawComplexityTab();
+    if (btn.dataset.tab === 'alloys') drawAlloyChart();
+    if (btn.dataset.tab === 'animation') { initAnim(); drawAnimFrame(); }
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// TAB 1 – GUIDELINE CANVASES
+// ═══════════════════════════════════════════════════════════════════
+function hiDPI(cv) {
+  const dpr = window.devicePixelRatio || 1;
+  if (cv._dprReady) return dpr;
+  const w = cv.width, h = cv.height;
+  cv.style.width  = w + 'px';
+  cv.style.height = h + 'px';
+  cv.width  = w * dpr;
+  cv.height = h * dpr;
+  cv._dprReady = true;
+  return dpr;
+}
+function getCtx(id) {
+  const cv = document.getElementById(id);
+  const dpr = hiDPI(cv);
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return ctx;
+}
+
+function bg(ctx, w, h) { ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, w, h); }
+
+function drawWall() {
+  const cv = document.getElementById('c-wall'), ctx = getCtx('c-wall');
+  bg(ctx, 220, 150);
+  // Section with uniform and non-uniform walls
+  // Good (uniform):
+  ctx.fillStyle = '#b45309';
+  ctx.fillRect(20, 30, 80, 80);
+  ctx.fillStyle = '#0a1628';
+  ctx.fillRect(30, 40, 60, 60);
+  ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 1.5; ctx.strokeRect(20, 30, 80, 80);
+  ctx.strokeStyle = '#4ade80'; ctx.strokeRect(30, 40, 60, 60);
+  ctx.fillStyle = '#4ade80'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Uniform', 60, 125);
+  ctx.fillText('wall ✓', 60, 136);
+
+  // Bad (non-uniform):
+  ctx.fillStyle = '#b45309';
+  ctx.beginPath();
+  ctx.moveTo(130, 30); ctx.lineTo(210, 30);
+  ctx.lineTo(210, 110); ctx.lineTo(130, 110); ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = '#0a1628';
+  ctx.beginPath();
+  ctx.moveTo(140, 40); ctx.lineTo(200, 40);
+  ctx.lineTo(200, 100); ctx.lineTo(175, 100); ctx.lineTo(175, 55);
+  ctx.lineTo(140, 55); ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = '#f87171'; ctx.lineWidth = 1.5;
+  // highlight thin wall
+  ctx.beginPath(); ctx.moveTo(175, 40); ctx.lineTo(210, 40); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(175, 55); ctx.lineTo(210, 55); ctx.stroke();
+  ctx.fillStyle = '#f87171'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Non-uniform', 170, 125);
+  ctx.fillText('wall ✗', 170, 136);
+
+  // dimension arrow for good wall
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(13, 30); ctx.lineTo(13, 40); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(9,34); ctx.lineTo(13,30); ctx.lineTo(17,34); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(9,36); ctx.lineTo(13,40); ctx.lineTo(17,36); ctx.stroke();
+  ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 8px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('t', 7, 38);
+}
+
+function drawRadii() {
+  const cv = document.getElementById('c-radii'), ctx = getCtx('c-radii');
+  bg(ctx, 220, 150);
+  // L-bracket with radii
+  ctx.fillStyle = '#b45309';
+  const f = 10, c = 5;
+  ctx.beginPath();
+  ctx.moveTo(30, 130);
+  ctx.lineTo(30, 40 + c); ctx.arcTo(30, 40, 30 + c, 40, c);
+  ctx.lineTo(130 - f, 40); ctx.arcTo(130, 40, 130, 40 + f, f);
+  ctx.lineTo(130, 130);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5; ctx.stroke();
+
+  // annotate inside fillet
+  ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 1; ctx.setLineDash([2,2]);
+  ctx.beginPath(); ctx.arc(130 - f, 40 + f, f, 0, Math.PI/2); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#4ade80'; ctx.font = 'bold 9px Arial'; ctx.textAlign = 'left';
+  ctx.fillText('Inside r ≥ 0.8mm', 134, 58);
+
+  // annotate outside corner
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1; ctx.setLineDash([2,2]);
+  ctx.beginPath(); ctx.arc(30 + c, 40 + c, c, Math.PI, 1.5*Math.PI); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 9px Arial'; ctx.textAlign = 'left';
+  ctx.fillText('Outside R ≥ 0.4mm', 38, 36);
+}
+
+function drawTongue() {
+  const cv = document.getElementById('c-tongue'), ctx = getCtx('c-tongue');
+  bg(ctx, 220, 150);
+  // C-channel cross-section showing tongue ratio
+  const cx = 110, cy = 75;
+  // Good semi-hollow (wide opening)
+  ctx.fillStyle = '#b45309';
+  ctx.fillRect(20, 30, 12, 90);  // left wall
+  ctx.fillRect(20, 30, 68, 12);  // top
+  ctx.fillRect(20, 108, 68, 12); // bottom
+  ctx.fillRect(76, 30, 12, 12);  // top right
+  ctx.fillRect(76, 108, 12, 12); // bot right
+  // opening: x=32 to x=88, top=42, bot=108 → opening=28px wide
+  // mark opening
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1; ctx.setLineDash([3,2]);
+  ctx.beginPath(); ctx.moveTo(88, 42); ctx.lineTo(88, 108); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#4ade80'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('TR≈1.5 ✓', 54, 145);
+
+  // Poor (narrow opening = high TR)
+  ctx.fillStyle = '#92400e';
+  ctx.fillRect(125, 30, 12, 90); // left
+  ctx.fillRect(125, 30, 68, 12); // top
+  ctx.fillRect(125, 108, 68, 12);// bottom
+  ctx.fillRect(181, 30, 12, 40); // top right arm
+  ctx.fillRect(181, 80, 12, 40); // bot right arm
+  // narrow gap at x=193, y=70 to y=80 (10px)
+  ctx.strokeStyle = '#f87171'; ctx.lineWidth = 1.5; ctx.setLineDash([2,2]);
+  ctx.beginPath(); ctx.moveTo(193, 70); ctx.lineTo(193, 80); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#f87171'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('TR>3 → porthole', 159, 145);
+
+  ctx.fillStyle = '#94a3b8'; ctx.font = '10px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Tongue Ratio comparison', 110, 16);
+}
+
+function drawCCD() {
+  const cv = document.getElementById('c-ccd'), ctx = getCtx('c-ccd');
+  bg(ctx, 220, 150);
+  // I-beam profile
+  ctx.fillStyle = '#b45309';
+  ctx.fillRect(60, 30, 100, 12);  // top flange
+  ctx.fillRect(104, 42, 12, 66);  // web
+  ctx.fillRect(60, 108, 100, 12); // bot flange
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1; ctx.stroke();
+
+  // CCD circle
+  const r = 65, cx = 110, cy = 75;
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.5; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.stroke();
+  ctx.setLineDash([]);
+  // diameter arrow
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(cx - r, cy); ctx.lineTo(cx + r, cy); ctx.stroke();
+  ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('CCD', cx, cy - 4);
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial';
+  ctx.fillText('Determines press size needed', cx, 145);
+}
+
+function drawSym() {
+  const cv = document.getElementById('c-sym'), ctx = getCtx('c-sym');
+  bg(ctx, 220, 150);
+  // Symmetric (good)
+  ctx.fillStyle = '#b45309';
+  ctx.fillRect(25, 35, 70, 10);  // top flange
+  ctx.fillRect(56, 45, 8, 60);   // web
+  ctx.fillRect(25, 105, 70, 10); // bot flange
+  ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 1; ctx.stroke();
+  // symmetry axis
+  ctx.strokeStyle = '#4ade80'; ctx.setLineDash([3,2]);
+  ctx.beginPath(); ctx.moveTo(60, 20); ctx.lineTo(60, 130); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#4ade80'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Symmetric ✓', 60, 142);
+
+  // Asymmetric (problematic)
+  ctx.fillStyle = '#92400e';
+  ctx.fillRect(125, 35, 70, 10);
+  ctx.fillRect(126, 45, 8, 60);   // web off-center
+  ctx.fillRect(155, 105, 40, 10); // short bot flange
+  ctx.strokeStyle = '#f87171'; ctx.lineWidth = 1; ctx.stroke();
+  // twist arrow
+  ctx.strokeStyle = '#f87171'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(165, 75, 18, -1, 1); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(180, 78); ctx.lineTo(183, 75); ctx.lineTo(179, 72); ctx.stroke();
+  ctx.fillStyle = '#f87171'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Twist risk ✗', 163, 142);
+}
+
+function drawDraftGuideline() {
+  const cv = document.getElementById('c-draft'), ctx = getCtx('c-draft');
+  bg(ctx, 220, 150);
+  // 0° extrusion wall vs forging comparison
+  ctx.fillStyle = '#b45309';
+  ctx.fillRect(40, 30, 60, 90);
+  ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.fillStyle = '#4ade80'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Extrusion', 70, 135);
+  ctx.fillText('0° draft', 70, 145);
+
+  // Forging with draft
+  ctx.fillStyle = '#92400e';
+  ctx.beginPath();
+  ctx.moveTo(130, 120); ctx.lineTo(125, 30); ctx.lineTo(185, 30); ctx.lineTo(180, 120);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.5; ctx.stroke();
+  // angle indicator
+  ctx.strokeStyle = '#fbbf24'; ctx.setLineDash([2,2]);
+  ctx.beginPath(); ctx.moveTo(180, 120); ctx.lineTo(180, 30); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.beginPath(); ctx.arc(180, 120, 16, -Math.PI/2, Math.atan2(-90, -5)); ctx.stroke();
+  ctx.fillStyle = '#fbbf24'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Forging', 155, 135);
+  ctx.fillText('5–7° draft', 155, 145);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// TAB 2 – PROCESS ANIMATION
+// ═══════════════════════════════════════════════════════════════════
+// Container geometry constants
+const CT_L=100, CT_R=510, CT_T=120, CT_B=280, CT_CY=200;
+const WALL=22; // container wall thickness
+const BI_L=CT_L+WALL, BI_R=CT_R-WALL; // billet inner bounds
+const BI_T=CT_T+WALL, BI_B=CT_B-WALL;
+const DIE_X=BI_R, DIE_W=28; // die block
+const DIE_OY=CT_CY, DIE_OH=28; // die orifice center and half-height
+
+const DIRECT_STAGES = [
+  {ramX:BI_L, profileLen:0,  pipe:0,   dmz:false,
+   label:'Stage 0 – Billet Loading',
+   desc:'Hot billet (490–510 °C for 6063-T6) placed in the container. Ram retracted. Dummy block is positioned between the ram and the billet surface.'},
+  {ramX:BI_L+60, profileLen:0,  pipe:0,   dmz:false,
+   label:'Stage 1 – Upsetting',
+   desc:'Ram advances, dummy block contacts the billet. Billet upsets (fills the container) under initial ram pressure. No extrusion yet — die orifice back-pressure must be overcome first.'},
+  {ramX:BI_L+140, profileLen:50, pipe:0, dmz:true,
+   label:'Stage 2 – Extrusion Begins',
+   desc:'Ram force exceeds yield strength at the die orifice. Metal begins flowing through the die and extrusion emerges. Dead metal zones (DMZ) form at the die corners — these regions remain nearly stationary throughout extrusion.'},
+  {ramX:BI_L+220, profileLen:130, pipe:0, dmz:true,
+   label:'Stage 3 – Steady-State Extrusion',
+   desc:'Steady-state flow achieved. Ram force decreases slightly as billet length decreases (less friction surface). Extrusion profile grows at a constant rate. Material flows in a fan-shaped pattern through the die entry.'},
+  {ramX:BI_L+300, profileLen:205, pipe:0.3, dmz:true,
+   label:'Stage 4 – Late Stage (Pipe Initiates)',
+   desc:'Billet is ~30% of original length. Surface oxide on the billet periphery begins to be drawn toward the DMZ/die interface. Pipe defect is initiating at the billet center-rear face. Ram force begins to rise (shorter billet, higher resistance).'},
+  {ramX:BI_L+358, profileLen:255, pipe:0.9, dmz:true,
+   label:'Stage 5 – Pipe Defect / Discard',
+   desc:'Pipe defect is well-developed — surface oxide has piped inward. Ram is stopped. The butt end (discard) is retained and separated from the extrusion by a shear blade before being ejected. Discard = 15–20% of billet weight.'},
+  {ramX:BI_L+358, profileLen:255, pipe:0.9, dmz:false, cut:true,
+   label:'Stage 6 – Discard Separation',
+   desc:'Shear blade severs the extrusion flush with the die face. The butt (containing the pipe defect) is ejected by the dummy block and discarded. A new billet is loaded and the cycle repeats.'},
+];
+
+const INDIRECT_STAGES = [
+  {tipX:BI_R, profileLen:0,
+   label:'Stage 0 – Setup',
+   desc:'Indirect extrusion: the die is mounted on the end of a hollow stem (the hollow ram). The container is sealed at the left. The billet is loaded and the hollow ram advances from the right.'},
+  {tipX:BI_R-90, profileLen:90,
+   label:'Stage 1 – Die Advancing Into Billet',
+   desc:'The hollow stem advances leftward, pushing the die into the billet. Metal flows through the die orifice and backward through the bore of the hollow stem. The billet does NOT move relative to the container — no friction between billet and container walls.'},
+  {tipX:BI_R-200, profileLen:200,
+   label:'Stage 2 – Mid-Extrusion',
+   desc:'Extrusion continues to flow through the die and backward through the hollow stem. Ram force is 25–35% lower than direct extrusion because there is no billet-container friction. Temperature remains more uniform along the billet length.'},
+  {tipX:BI_R-300, profileLen:300,
+   label:'Stage 3 – Near Complete',
+   desc:'Most of the billet has been extruded. Because billet-container friction is eliminated, there is no dead metal zone (or a much smaller one). Pipe defect is greatly reduced or absent, so discard can be smaller (5–10% vs 15–20% for direct).'},
+  {tipX:BI_R-370, profileLen:350,
+   label:'Stage 4 – Process Complete',
+   desc:'Extrusion complete. Smaller butt end than direct extrusion. Key limitation: hollow stem limits press stroke and profile size; changing die requires replacing the full hollow stem assembly. Less common but preferred for high-value alloys (7xxx, 2xxx) where oxide pipe is critical.'},
+];
+
+const PIPE_STAGES = [
+  {pipeDepth:0, oxideIn:0,
+   label:'Pipe Defect – Stage 0: Fresh Billet',
+   desc:'Cross-section view of the billet end near the die. Fresh billet material (orange) fills the container. Surface oxide layer (dark boundary) is present on the billet periphery and at the billet-die interface.'},
+  {pipeDepth:0.15, oxideIn:0.2,
+   label:'Pipe Defect – Stage 1: DMZ Drawing Inward',
+   desc:'As the billet shortens, the dead metal zone (DMZ) material at the container wall begins to fold inward toward the die orifice. Surface oxide is being carried with the DMZ. The billet end face is curving inward at the center.'},
+  {pipeDepth:0.45, oxideIn:0.55,
+   label:'Pipe Defect – Stage 2: Pipe Forming',
+   desc:'A funnel-shaped cavity (the pipe) has formed in the center of the billet rear face. Surface oxide from the billet periphery is now entering the die area — if extrusion continues, this oxide will appear inside the extruded profile.'},
+  {pipeDepth:0.82, oxideIn:0.9,
+   label:'Pipe Defect – Stage 3: Critical — Stop Extrusion',
+   desc:'Severe piping. If the ram continues, the pipe and oxide contamination will penetrate far into the extrusion. The ram must be stopped here. The butt discard contains all pipe-contaminated material and is sheared off before the next billet is loaded.'},
+];
+
+let animMode = 'direct';
+let stageIdx = 0;
+let animTimer = null;
+
+function setMode(mode) {
+  animMode = mode;
+  stageIdx = 0;
+  document.querySelectorAll('.mode-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.toLowerCase().includes(mode === 'direct' ? 'direct' : mode === 'indirect' ? 'indirect' : 'pipe'));
+  });
+  if (animTimer) { clearInterval(animTimer); animTimer = null; document.getElementById('btn-play').textContent = '▶ Play'; }
+  buildDots();
+  drawAnimFrame();
+}
+
+function currentStages() {
+  return animMode === 'direct' ? DIRECT_STAGES : animMode === 'indirect' ? INDIRECT_STAGES : PIPE_STAGES;
+}
+
+function buildDots() {
+  const container = document.getElementById('stage-dots');
+  container.innerHTML = '';
+  currentStages().forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'stage-dot' + (i === stageIdx ? ' active' : '');
+    d.onclick = () => { stageIdx = i; drawAnimFrame(); };
+    container.appendChild(d);
+  });
+}
+
+function updateDots() {
+  document.querySelectorAll('.stage-dot').forEach((d, i) => d.classList.toggle('active', i === stageIdx));
+}
+
+function animPrev() { if (stageIdx > 0) { stageIdx--; drawAnimFrame(); } }
+function animNext() { const s = currentStages(); if (stageIdx < s.length-1) { stageIdx++; drawAnimFrame(); } }
+function animToggle() {
+  if (animTimer) { clearInterval(animTimer); animTimer = null; document.getElementById('btn-play').textContent = '▶ Play'; }
+  else {
+    document.getElementById('btn-play').textContent = '⏸ Pause';
+    animTimer = setInterval(() => {
+      const s = currentStages();
+      stageIdx = (stageIdx + 1) % s.length;
+      drawAnimFrame();
+    }, 2200);
+  }
+}
+
+function initAnim() { buildDots(); }
+
+function drawAnimFrame() {
+  const cv = document.getElementById('c-anim');
+  if (!cv) return;
+  const dpr = window.devicePixelRatio || 1;
+  if (!cv._dprReady) {
+    cv.width  = 720 * dpr;
+    cv.height = 360 * dpr;
+    cv._dprReady = true;
+  }
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const W = 720, H = 360;
+  const stages = currentStages();
+  const stage = stages[stageIdx];
+  document.getElementById('stage-label').textContent = stage.label;
+  document.getElementById('stage-desc').textContent  = stage.desc;
+  document.getElementById('btn-prev').disabled = stageIdx === 0;
+  document.getElementById('btn-next').disabled = stageIdx === stages.length - 1;
+  updateDots();
+
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+
+  if (animMode === 'direct') drawDirect(ctx, W, H, stage);
+  else if (animMode === 'indirect') drawIndirect(ctx, W, H, stage);
+  else drawPipe(ctx, W, H, stage);
+}
+
+// ── Shared draw helpers ─────────────────────────────────────────────
+function drawContainer(ctx) {
+  // outer container (thick walls)
+  ctx.fillStyle = '#1e3a5c';
+  ctx.fillRect(CT_L, CT_T, CT_R - CT_L, CT_B - CT_T);
+  // inner bore
+  ctx.fillStyle = '#0a1628';
+  ctx.fillRect(BI_L, BI_T, BI_R - BI_L, BI_B - BI_T);
+  // container outline
+  ctx.strokeStyle = '#334155'; ctx.lineWidth = 2;
+  ctx.strokeRect(CT_L, CT_T, CT_R - CT_L, CT_B - CT_T);
+}
+
+function drawDieBlock(ctx) {
+  ctx.fillStyle = '#374151';
+  ctx.fillRect(DIE_X, CT_T, DIE_W, CT_B - CT_T);
+  // die orifice (opening)
+  ctx.fillStyle = '#0a1628';
+  ctx.fillRect(DIE_X, CT_CY - DIE_OH, DIE_W, DIE_OH * 2);
+  ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1;
+  ctx.strokeRect(DIE_X, CT_T, DIE_W, CT_B - CT_T);
+  // die land highlight
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(DIE_X, CT_CY - DIE_OH); ctx.lineTo(DIE_X, CT_CY + DIE_OH); ctx.stroke();
+}
+
+function drawBilletFill(ctx, leftX, rightX, pipeDepth, dmz) {
+  if (leftX >= rightX) return;
+  // main billet
+  const g = ctx.createLinearGradient(leftX, 0, rightX, 0);
+  g.addColorStop(0, '#9a3412'); g.addColorStop(0.4, '#ea580c');
+  g.addColorStop(0.6, '#ea580c'); g.addColorStop(1, '#c2410c');
+  ctx.fillStyle = g;
+  ctx.fillRect(leftX, BI_T, rightX - leftX, BI_B - BI_T);
+
+  // pipe defect at right end
+  if (pipeDepth > 0) {
+    const pipeW = (rightX - leftX) * Math.min(pipeDepth, 1) * 0.35;
+    const pipeH = (BI_B - BI_T) * Math.min(pipeDepth, 1) * 0.6;
+    const cx = rightX - pipeW * 0.3;
+    ctx.fillStyle = '#7f1d1d';
+    ctx.beginPath();
+    ctx.moveTo(rightX, CT_CY - pipeH/2);
+    ctx.quadraticCurveTo(cx, CT_CY, rightX, CT_CY + pipeH/2);
+    ctx.fill();
+    // oxide lining (darker)
+    ctx.strokeStyle = '#450a0a'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(rightX, CT_CY - pipeH/2);
+    ctx.quadraticCurveTo(cx, CT_CY, rightX, CT_CY + pipeH/2);
+    ctx.stroke();
+  }
+
+  // DMZ triangles at die corners
+  if (dmz) {
+    ctx.fillStyle = '#7c2d12';
+    // top corner DMZ
+    ctx.beginPath();
+    ctx.moveTo(DIE_X - 28, BI_T);
+    ctx.lineTo(DIE_X, BI_T);
+    ctx.lineTo(DIE_X, CT_CY - DIE_OH);
+    ctx.closePath(); ctx.fill();
+    // bottom corner DMZ
+    ctx.beginPath();
+    ctx.moveTo(DIE_X - 28, BI_B);
+    ctx.lineTo(DIE_X, BI_B);
+    ctx.lineTo(DIE_X, CT_CY + DIE_OH);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#fbbf24'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+    ctx.fillText('DMZ', DIE_X - 14, BI_T + 18);
+  }
+}
+
+function drawRam(ctx, ramX, hollow) {
+  const ramW = 50;
+  // ram body
+  if (!hollow) {
+    ctx.fillStyle = '#475569';
+    ctx.fillRect(CT_L - ramW, CT_T, ramW + (ramX - BI_L) + WALL, CT_B - CT_T);
+    ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1;
+    ctx.strokeRect(CT_L - ramW, CT_T, ramW + (ramX - BI_L) + WALL, CT_B - CT_T);
+  } else {
+    // hollow ram (two bars)
+    ctx.fillStyle = '#475569';
+    ctx.fillRect(CT_L - ramW, CT_T, ramW + (ramX - BI_L) + WALL, WALL);
+    ctx.fillRect(CT_L - ramW, CT_B - WALL, ramW + (ramX - BI_L) + WALL, WALL);
+    ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1;
+    ctx.strokeRect(CT_L - ramW, CT_T, ramW + (ramX - BI_L) + WALL, WALL);
+    ctx.strokeRect(CT_L - ramW, CT_B - WALL, ramW + (ramX - BI_L) + WALL, WALL);
+  }
+  // dummy block face
+  ctx.fillStyle = '#64748b';
+  ctx.fillRect(ramX, BI_T, 8, BI_B - BI_T);
+}
+
+function drawProfileEmerging(ctx, profileLen, W) {
+  if (profileLen <= 0) return;
+  const startX = DIE_X + DIE_W;
+  const endX = Math.min(startX + profileLen, W - 20);
+  if (endX <= startX) return;
+  const g = ctx.createLinearGradient(startX, 0, endX, 0);
+  g.addColorStop(0, '#b45309'); g.addColorStop(0.5, '#d97706'); g.addColorStop(1, '#a16207');
+  ctx.fillStyle = g;
+  // I-beam side profile: two flanges + web
+  const fl = 10, wh = 10, wb = 8;
+  ctx.fillRect(startX, CT_CY - DIE_OH, endX - startX, fl);         // top flange
+  ctx.fillRect(startX, CT_CY - wh, endX - startX, wh * 2);         // web region
+  ctx.fillRect(startX, CT_CY + DIE_OH - fl, endX - startX, fl);    // bot flange
+  ctx.strokeStyle = '#f97316'; ctx.lineWidth = 1;
+  ctx.strokeRect(startX, CT_CY - DIE_OH, endX - startX, DIE_OH * 2);
+  // extrusion label
+  if (endX - startX > 40) {
+    ctx.fillStyle = '#fbbf24'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+    ctx.fillText('Extrusion', (startX + endX) / 2, CT_CY - DIE_OH - 6);
+  }
+}
+
+function drawArrow(ctx, x1, y1, x2, y2, color) {
+  const dx = x2-x1, dy = y2-y1, len = Math.sqrt(dx*dx+dy*dy);
+  const ux = dx/len, uy = dy/len;
+  ctx.strokeStyle = color; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x2 - ux*8 + uy*5, y2 - uy*8 - ux*5);
+  ctx.lineTo(x2, y2);
+  ctx.lineTo(x2 - ux*8 - uy*5, y2 - uy*8 + ux*5);
+  ctx.stroke();
+}
+
+// ── Direct extrusion ────────────────────────────────────────────────
+function drawDirect(ctx, W, H, stage) {
+  drawContainer(ctx);
+  drawBilletFill(ctx, stage.ramX + 8, BI_R, stage.pipe || 0, stage.dmz);
+  drawDieBlock(ctx);
+  drawRam(ctx, stage.ramX, false);
+  drawProfileEmerging(ctx, stage.profileLen, W);
+
+  // cut line for discard stage
+  if (stage.cut) {
+    ctx.strokeStyle = '#f87171'; ctx.lineWidth = 3; ctx.setLineDash([4,2]);
+    ctx.beginPath(); ctx.moveTo(DIE_X + DIE_W, CT_T - 10); ctx.lineTo(DIE_X + DIE_W, CT_B + 10); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#f87171'; ctx.font = 'bold 11px Arial'; ctx.textAlign = 'center';
+    ctx.fillText('SHEAR', DIE_X + DIE_W + 30, CT_T - 14);
+  }
+
+  // ram direction arrow
+  if (stageIdx < DIRECT_STAGES.length - 2) {
+    drawArrow(ctx, CT_L - 30, CT_CY, CT_L - 5, CT_CY, '#60a5fa');
+    ctx.fillStyle = '#60a5fa'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+    ctx.fillText('RAM', CT_L - 30, CT_CY - 10);
+  }
+
+  // labels
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Container', (CT_L + CT_R) / 2, CT_T - 8);
+  ctx.fillText('Die', DIE_X + DIE_W + 14, CT_T - 8);
+
+  // stage progress dots on right
+  drawProgressBar(ctx, H, DIRECT_STAGES.length);
+}
+
+// ── Indirect extrusion ───────────────────────────────────────────────
+function drawIndirect(ctx, W, H, stage) {
+  // Sealed left end
+  ctx.fillStyle = '#374151';
+  ctx.fillRect(CT_L - 30, CT_T, 30, CT_B - CT_T);
+  ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1.5;
+  ctx.strokeRect(CT_L - 30, CT_T, 30, CT_B - CT_T);
+
+  drawContainer(ctx);
+
+  // Billet (against left sealed end)
+  const billetRight = stage.tipX;
+  if (billetRight > BI_L) {
+    const g = ctx.createLinearGradient(BI_L, 0, billetRight, 0);
+    g.addColorStop(0, '#9a3412'); g.addColorStop(0.5, '#ea580c'); g.addColorStop(1, '#c2410c');
+    ctx.fillStyle = g;
+    ctx.fillRect(BI_L, BI_T, billetRight - BI_L, BI_B - BI_T);
+  }
+
+  // Die block at tip of hollow stem
+  const dieAtX = stage.tipX;
+  ctx.fillStyle = '#374151';
+  ctx.fillRect(dieAtX, CT_T, DIE_W, CT_B - CT_T);
+  ctx.fillStyle = '#0a1628';
+  ctx.fillRect(dieAtX, CT_CY - DIE_OH, DIE_W, DIE_OH * 2);
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(dieAtX, CT_CY - DIE_OH); ctx.lineTo(dieAtX, CT_CY + DIE_OH); ctx.stroke();
+
+  // Hollow stem (from die tip to right)
+  const stemRight = W - 10;
+  ctx.fillStyle = '#374151';
+  ctx.fillRect(dieAtX + DIE_W, CT_T, stemRight - dieAtX - DIE_W, WALL);
+  ctx.fillRect(dieAtX + DIE_W, CT_B - WALL, stemRight - dieAtX - DIE_W, WALL);
+  ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1;
+  ctx.strokeRect(dieAtX + DIE_W, CT_T, stemRight - dieAtX - DIE_W, WALL);
+  ctx.strokeRect(dieAtX + DIE_W, CT_B - WALL, stemRight - dieAtX - DIE_W, WALL);
+
+  // Extrusion in hollow stem bore (between stem walls)
+  if (stage.profileLen > 0) {
+    const extStart = dieAtX + DIE_W;
+    const extEnd = Math.min(extStart + stage.profileLen, stemRight - 10);
+    const g = ctx.createLinearGradient(extStart, 0, extEnd, 0);
+    g.addColorStop(0, '#b45309'); g.addColorStop(1, '#a16207');
+    ctx.fillStyle = g;
+    ctx.fillRect(extStart, CT_T + WALL, extEnd - extStart, CT_B - CT_T - WALL*2);
+    ctx.strokeStyle = '#f97316'; ctx.lineWidth = 1;
+    ctx.strokeRect(extStart, CT_T + WALL, extEnd - extStart, CT_B - CT_T - WALL*2);
+    if (extEnd - extStart > 40) {
+      ctx.fillStyle = '#fbbf24'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+      ctx.fillText('Extrusion (inside stem)', (extStart + extEnd)/2, CT_T + WALL + 14);
+    }
+  }
+
+  // Ram arrow (advancing left)
+  drawArrow(ctx, stemRight - 10, CT_CY, dieAtX + DIE_W + 20, CT_CY, '#60a5fa');
+  ctx.fillStyle = '#60a5fa'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('HOLLOW STEM', (stemRight + dieAtX) / 2, CT_CY + 24);
+
+  // No-friction label
+  ctx.fillStyle = '#4ade80'; ctx.font = 'bold 9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('No billet-container friction', (CT_L + (stage.tipX))/2, BI_T + 14);
+
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Sealed end', CT_L - 15, CT_T - 8);
+  ctx.fillText('Die on stem tip', dieAtX + 15, CT_T - 8);
+
+  drawProgressBar(ctx, H, INDIRECT_STAGES.length);
+}
+
+// ── Pipe defect (close-up) ───────────────────────────────────────────
+function drawPipe(ctx, W, H, stage) {
+  ctx.fillStyle = '#0d1f38'; ctx.fillRect(0, 0, W, H);
+  const pd = stage.pipeDepth, oi = stage.oxideIn;
+  const cx = W/2 - 40, cy = H/2, r = 110;
+
+  // Container wall (annular ring)
+  ctx.fillStyle = '#1e3a5c';
+  ctx.beginPath(); ctx.arc(cx, cy, r + 30, 0, Math.PI*2); ctx.fill();
+  // Billet body
+  const bg2 = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+  bg2.addColorStop(0, '#ea580c'); bg2.addColorStop(0.7, '#c2410c'); bg2.addColorStop(1, '#9a3412');
+  ctx.fillStyle = bg2;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.fill();
+
+  // Surface oxide layer
+  ctx.strokeStyle = '#292524'; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.stroke();
+
+  // Die face on the right
+  ctx.fillStyle = '#374151';
+  ctx.fillRect(cx + r + 30, cy - r - 30, 40, (r + 30) * 2);
+  // die orifice
+  ctx.fillStyle = '#0a1628';
+  ctx.fillRect(cx + r + 30, cy - 22, 40, 44);
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(cx + r + 30, cy - 22); ctx.lineTo(cx + r + 30, cy + 22); ctx.stroke();
+
+  // Oxide flowing inward (drawn as streamlines)
+  if (oi > 0) {
+    const numLines = 8;
+    ctx.strokeStyle = '#292524'; ctx.lineWidth = 2;
+    for (let i = 0; i < numLines; i++) {
+      const angle = (i / numLines) * Math.PI * 2;
+      const startX = cx + Math.cos(angle) * r;
+      const startY = cy + Math.sin(angle) * r;
+      const progress = oi;
+      const endX = cx + Math.cos(angle) * r * (1 - progress) + (cx + r) * progress;
+      const endY = cy + Math.sin(angle) * r * (1 - progress) + cy * progress;
+      ctx.beginPath(); ctx.moveTo(startX, startY);
+      ctx.quadraticCurveTo(cx + r * 0.6 * Math.cos(angle), cy + r * 0.6 * Math.sin(angle), endX, endY);
+      ctx.stroke();
+    }
+  }
+
+  // Pipe void
+  if (pd > 0) {
+    const pipeR = r * pd * 0.45;
+    const pipeX = cx + r * (1 - pd * 0.3);
+    ctx.fillStyle = '#1c0404';
+    ctx.beginPath();
+    ctx.moveTo(cx + r, cy - 6);
+    ctx.quadraticCurveTo(pipeX, cy, cx + r, cy + 6);
+    ctx.quadraticCurveTo(cx + r + 5, cy, cx + r, cy - 6);
+    // V-funnel from surface
+    ctx.beginPath();
+    ctx.moveTo(cx + r * 0.95, cy - r * pd * 0.5);
+    ctx.lineTo(cx + r, cy - 6);
+    ctx.lineTo(cx + r, cy + 6);
+    ctx.lineTo(cx + r * 0.95, cy + r * pd * 0.5);
+    ctx.quadraticCurveTo(cx + r * (1 - pd * 0.25), cy, cx + r * 0.95, cy - r * pd * 0.5);
+    ctx.fillStyle = '#1c0404'; ctx.fill();
+    ctx.strokeStyle = '#7f1d1d'; ctx.lineWidth = 1.5; ctx.stroke();
+  }
+
+  // Labels
+  ctx.fillStyle = '#94a3b8'; ctx.font = 'bold 10px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Billet end face (cross-section, looking from die)', cx, 24);
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial';
+  ctx.fillText('Billet', cx, cy + 4);
+  ctx.fillStyle = '#38bdf8'; ctx.font = '9px Arial'; ctx.textAlign = 'left';
+  ctx.fillText('Die', cx + r + 36, cy - 28);
+
+  if (pd > 0.3) {
+    ctx.fillStyle = '#f87171'; ctx.font = 'bold 10px Arial'; ctx.textAlign = 'center';
+    const pipeX = cx + r * (1 - pd * 0.15);
+    ctx.fillText('PIPE', cx + r + 10, cy - 40);
+  }
+
+  if (oi > 0.1) {
+    ctx.fillStyle = '#fbbf24'; ctx.font = '9px Arial'; ctx.textAlign = 'right';
+    ctx.fillText('Oxide folding inward →', cx - 10, cy - r * 0.6);
+  }
+
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Container wall', cx + r + 20, cy + r + 38);
+
+  // Right panel: how to prevent
+  const px = cx + r + 80;
+  ctx.fillStyle = '#0f2040'; ctx.fillRect(px, 40, W - px - 10, H - 60);
+  ctx.strokeStyle = '#1e3a5c'; ctx.lineWidth = 1; ctx.strokeRect(px, 40, W - px - 10, H - 60);
+  ctx.fillStyle = '#7dd3fc'; ctx.font = 'bold 10px Arial'; ctx.textAlign = 'left';
+  ctx.fillText('Prevention:', px + 10, 62);
+  const tips = ['• Stop ram at correct\n  discard length', '• 15–20% discard\n  (direct extrusion)', '• 5–10% discard\n  (indirect extrusion)', '• Use butt detection\n  (load cell monitoring)', '• Ultrasonic inspect\n  end of extrusion'];
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial';
+  tips.forEach((tip, i) => {
+    tip.split('\n').forEach((line, j) => ctx.fillText(line, px + 10, 80 + i*40 + j*14));
+  });
+
+  drawProgressBar(ctx, H, PIPE_STAGES.length);
+}
+
+function drawProgressBar(ctx, H, total) {
+  const bx = 700, by1 = 50, by2 = H - 50;
+  ctx.strokeStyle = '#1e3a5c'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(bx, by1); ctx.lineTo(bx, by2); ctx.stroke();
+  for (let i = 0; i < total; i++) {
+    const y = by1 + (i/(total-1)) * (by2 - by1);
+    ctx.beginPath(); ctx.arc(bx, y, i === stageIdx ? 5 : 3, 0, Math.PI*2);
+    ctx.fillStyle = i === stageIdx ? '#38bdf8' : '#334155'; ctx.fill();
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// TAB 3 – COMPLEXITY CANVASES
+// ═══════════════════════════════════════════════════════════════════
+function drawComplexityTab() {
+  drawClass1(); drawClass2(); drawClass3(); drawClass4(); drawClass5();
+  drawDieFlat(); drawDiePorthole(); drawDieSpider();
+}
+
+function profileBg(ctx, w, h) {
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, w, h);
+}
+
+function drawClass1() {
+  const ctx = getCtx('c-cls1');
+  profileBg(ctx, 160, 130);
+  // Flat bar
+  ctx.fillStyle = '#b45309';
+  ctx.fillRect(20, 55, 120, 22);
+  ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Solid bar / rod / angle', 80, 108);
+  ctx.fillText('Flat solid die', 80, 120);
+}
+
+function drawClass2() {
+  const ctx = getCtx('c-cls2');
+  profileBg(ctx, 160, 130);
+  // I-beam
+  ctx.fillStyle = '#b45309';
+  ctx.fillRect(20, 28, 120, 14); // top flange
+  ctx.fillRect(70, 42, 20, 46);  // web
+  ctx.fillRect(20, 88, 120, 14); // bot flange
+  ctx.strokeStyle = '#a3e635'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('I / T / H / fin array', 80, 118);
+}
+
+function drawClass3() {
+  const ctx = getCtx('c-cls3');
+  profileBg(ctx, 160, 130);
+  // C-channel (wide opening)
+  ctx.fillStyle = '#b45309';
+  ctx.fillRect(20, 22, 14, 86);   // left wall
+  ctx.fillRect(20, 22, 96, 14);   // top
+  ctx.fillRect(20, 94, 96, 14);   // bot
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.5; ctx.stroke();
+  // tongue annotation
+  ctx.strokeStyle = '#fbbf24'; ctx.setLineDash([2,2]);
+  ctx.beginPath(); ctx.moveTo(116, 36); ctx.lineTo(116, 94); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#fbbf24'; ctx.font = '8px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('opening', 130, 66);
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial';
+  ctx.fillText('C / U / hat — TR ≤ 3', 80, 118);
+}
+
+function drawClass4() {
+  const ctx = getCtx('c-cls4');
+  profileBg(ctx, 160, 130);
+  // Square tube
+  ctx.fillStyle = '#b45309';
+  ctx.fillRect(25, 20, 110, 90);
+  ctx.fillStyle = '#0a1628';
+  ctx.fillRect(40, 35, 80, 60);
+  ctx.strokeStyle = '#fb923c'; ctx.lineWidth = 1.5;
+  ctx.strokeRect(25, 20, 110, 90);
+  ctx.strokeRect(40, 35, 80, 60);
+  // weld seam mark
+  ctx.fillStyle = '#fb923c'; ctx.font = '8px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('●', 80, 21);
+  ctx.fillText('weld seam', 80, 118);
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial';
+  ctx.fillText('Square / round tube', 80, 108);
+}
+
+function drawClass5() {
+  const ctx = getCtx('c-cls5');
+  profileBg(ctx, 160, 130);
+  // Multi-void window frame-like section
+  ctx.fillStyle = '#b45309';
+  ctx.fillRect(10, 20, 140, 90);
+  ctx.fillStyle = '#0a1628';
+  ctx.fillRect(22, 32, 36, 30); // void 1
+  ctx.fillRect(62, 32, 36, 30); // void 2
+  ctx.fillRect(22, 68, 36, 30); // void 3
+  ctx.fillRect(62, 68, 36, 30); // void 4
+  ctx.fillRect(102, 32, 36, 66); // void 5 (tall)
+  ctx.strokeStyle = '#f87171'; ctx.lineWidth = 1.5;
+  ctx.strokeRect(10, 20, 140, 90);
+  [ctx.strokeRect(22,32,36,30),ctx.strokeRect(62,32,36,30),ctx.strokeRect(22,68,36,30),ctx.strokeRect(62,68,36,30),ctx.strokeRect(102,32,36,66)];
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Multi-void / window frame', 80, 118);
+}
+
+function drawDieFlat() {
+  const ctx = getCtx('c-die-flat');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, 200, 160);
+  // Die block (front face)
+  ctx.fillStyle = '#374151';
+  ctx.fillRect(20, 20, 160, 120);
+  ctx.fillStyle = '#1a3a5c';
+  ctx.fillRect(30, 30, 140, 100);
+  // Profile orifice (I-beam shape)
+  ctx.fillStyle = '#0a1628';
+  ctx.fillRect(55, 52, 90, 10); // top flange hole
+  ctx.fillRect(92, 62, 16, 36); // web hole
+  ctx.fillRect(55, 98, 90, 10); // bot flange hole
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5;
+  ctx.strokeRect(55, 52, 90, 10);
+  ctx.strokeRect(92, 62, 16, 36);
+  ctx.strokeRect(55, 98, 90, 10);
+  // land / bearing
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1; ctx.setLineDash([2,2]);
+  ctx.beginPath(); ctx.moveTo(20, 65); ctx.lineTo(52, 65); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#fbbf24'; ctx.font = '8px Arial'; ctx.textAlign = 'left';
+  ctx.fillText('Die bearing', 2, 63);
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Front face view', 100, 152);
+}
+
+function drawDiePorthole() {
+  const ctx = getCtx('c-die-porthole');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, 200, 160);
+  const cx = 100, cy = 80, R = 70;
+  // Die cap outer ring
+  ctx.fillStyle = '#374151';
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI*2); ctx.fill();
+  // Porthole openings (4 ports)
+  ctx.fillStyle = '#0a1628';
+  [[cx,cy-40],[cx+40,cy],[cx,cy+40],[cx-40,cy]].forEach(([px,py]) => {
+    ctx.beginPath(); ctx.arc(px, py, 16, 0, Math.PI*2); ctx.fill();
+  });
+  // Central mandrel (supports the hollow)
+  ctx.fillStyle = '#1e3a5c';
+  ctx.beginPath(); ctx.arc(cx, cy, 18, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(cx, cy, 18, 0, Math.PI*2); ctx.stroke();
+  // bridges
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 8;
+  [[0,1],[0,-1],[1,0],[-1,0]].forEach(([dx,dy]) => {
+    ctx.beginPath(); ctx.moveTo(cx+dx*18, cy+dy*18); ctx.lineTo(cx+dx*40, cy+dy*40); ctx.stroke();
+  });
+  ctx.fillStyle = '#fbbf24'; ctx.font = '8px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Port', cx, cy - 38);
+  ctx.fillText('Mandrel', cx + 2, cy + 5);
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial';
+  ctx.fillText('Top view (cap)', cx, 152);
+}
+
+function drawDieSpider() {
+  const ctx = getCtx('c-die-spider');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, 200, 160);
+  const cx = 100, cy = 80, R = 68;
+  ctx.fillStyle = '#374151';
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI*2); ctx.fill();
+  // 6 ports
+  for (let i = 0; i < 6; i++) {
+    const a = i * Math.PI / 3;
+    const px = cx + Math.cos(a) * 44, py = cy + Math.sin(a) * 44;
+    ctx.fillStyle = '#0a1628';
+    ctx.beginPath(); ctx.arc(px, py, 13, 0, Math.PI*2); ctx.fill();
+  }
+  // Spider arms (3 main)
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 10;
+  for (let i = 0; i < 3; i++) {
+    const a = i * Math.PI * 2 / 3;
+    ctx.beginPath(); ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(a) * 62, cy + Math.sin(a) * 62); ctx.stroke();
+  }
+  // Central mandrel
+  ctx.fillStyle = '#1e3a5c';
+  ctx.beginPath(); ctx.arc(cx, cy, 16, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(cx, cy, 16, 0, Math.PI*2); ctx.stroke();
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Top view (spider)', cx, 152);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// TAB 4 – ALLOY CHART
+// ═══════════════════════════════════════════════════════════════════
+const ALLOYS = [
+  {name:'1100', extrud:10, uts:124,  color:'#4ade80'},
+  {name:'6063', extrud:9,  uts:207,  color:'#38bdf8'},
+  {name:'6005A',extrud:7,  uts:262,  color:'#7dd3fc'},
+  {name:'6061', extrud:7,  uts:310,  color:'#60a5fa'},
+  {name:'6082', extrud:5,  uts:310,  color:'#818cf8'},
+  {name:'7005', extrud:4,  uts:350,  color:'#a78bfa'},
+  {name:'7075', extrud:2,  uts:572,  color:'#f87171'},
+  {name:'2024', extrud:2,  uts:469,  color:'#fb923c'},
+];
+
+function drawAlloyChart() {
+  const cv = document.getElementById('c-alloy-chart'), ctx = getCtx('c-alloy-chart');
+  const W = 360, H = 340;
+  ctx.fillStyle = '#0f2040'; ctx.fillRect(0, 0, W, H);
+
+  const padL = 55, padR = 20, padT = 30, padB = 28;
+  const cw = W - padL - padR, ch = H - padT - padB;
+  const n = ALLOYS.length;
+  const bw = cw / n;
+
+  // axes
+  ctx.strokeStyle = '#334155'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, padT + ch); ctx.lineTo(padL + cw, padT + ch); ctx.stroke();
+
+  // grid lines (UTS scale: 0-600)
+  [0, 200, 400, 600].forEach(v => {
+    const y = padT + ch - (v / 600) * ch;
+    ctx.strokeStyle = '#1e3a5c'; ctx.lineWidth = 1; ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + cw, y); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#64748b'; ctx.font = '9px Arial'; ctx.textAlign = 'right';
+    ctx.fillText(v, padL - 4, y + 3);
+  });
+
+  // Extrudability dots (secondary axis)
+  const dotsY = padT + ch + 22;
+
+  ALLOYS.forEach((al, i) => {
+    const x = padL + i * bw + bw / 2;
+    // UTS bar
+    const barH = (al.uts / 600) * ch;
+    const barY = padT + ch - barH;
+    ctx.fillStyle = al.color + 'aa';
+    ctx.fillRect(x - bw * 0.3, barY, bw * 0.6, barH);
+    ctx.strokeStyle = al.color; ctx.lineWidth = 1.5;
+    ctx.strokeRect(x - bw * 0.3, barY, bw * 0.6, barH);
+    // UTS value
+    ctx.fillStyle = al.color; ctx.font = 'bold 9px Arial'; ctx.textAlign = 'center';
+    ctx.fillText(al.uts, x, barY - 3);
+    // Alloy name
+    ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial';
+    ctx.fillText(al.name, x, padT + ch + 12);
+    // Extrudability dots
+    for (let d = 0; d < 10; d++) {
+      ctx.beginPath();
+      ctx.arc(padL + 4 + d * 30, padT + ch + 22 + i * (ch / n / 2), 3, 0, Math.PI*2);
+      // not needed - will use a simpler approach
+    }
+  });
+
+  // Axis labels
+  ctx.fillStyle = '#7dd3fc'; ctx.font = 'bold 10px Arial'; ctx.textAlign = 'center';
+  ctx.save(); ctx.translate(12, padT + ch / 2); ctx.rotate(-Math.PI/2);
+  ctx.fillText('Ultimate Tensile Strength (MPa)', 0, 0); ctx.restore();
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Alloy', padL + cw / 2, H - 4);
+
+  // Extrudability legend bar below
+  ctx.fillStyle = '#4ade80'; ctx.font = '9px Arial'; ctx.textAlign = 'left';
+  ctx.fillText('Extrudability (●=higher)', padL, padT + ch + 22);
+
+  ALLOYS.forEach((al, i) => {
+    const x = padL + i * bw + bw / 2;
+    for (let d = 0; d < al.extrud; d++) {
+      ctx.beginPath(); ctx.arc(x - 18 + d * 4, padT + ch + 35, 1.8, 0, Math.PI*2);
+      ctx.fillStyle = al.color; ctx.fill();
+    }
+  });
+}
+
+// ─────────────────────────────────── INIT ──────────────────────────
+window.addEventListener('load', () => {
+  drawWall(); drawRadii(); drawTongue(); drawCCD(); drawSym(); drawDraftGuideline();
+  initAnim(); drawAnimFrame();
+});
+</script>
+</body>
+</html>

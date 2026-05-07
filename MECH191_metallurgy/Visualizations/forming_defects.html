@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<title>Forming Defects & Process Comparison</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a1628;color:#e2e8f0;font-family:system-ui,sans-serif;min-height:100vh}
+header{background:#0f1f3d;border-bottom:2px solid #ef4444;padding:18px 32px}
+header h1{font-size:1.5rem;color:#ef4444}
+header p{font-size:.85rem;color:#94a3b8;margin-top:4px}
+.tabs{display:flex;background:#0f1f3d;border-bottom:1px solid #1e3a5f;padding:0 24px}
+.tab-btn{padding:12px 20px;cursor:pointer;font-size:.85rem;color:#94a3b8;border:none;background:none;border-bottom:3px solid transparent;transition:all .2s}
+.tab-btn.active{color:#ef4444;border-bottom-color:#ef4444}
+.tab-btn:hover{color:#e2e8f0}
+.tab-content{display:none;padding:28px 32px}
+.tab-content.active{display:block}
+h2{font-size:1.1rem;color:#ef4444;margin-bottom:14px}
+h3{font-size:.9rem;color:#fca5a5;margin-bottom:8px}
+p{font-size:.85rem;color:#94a3b8;line-height:1.6;margin-bottom:10px}
+canvas{display:block;background:#0f1f3d;border-radius:8px;border:1px solid #1e3a5f}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.card{background:#0f1f3d;border:1px solid #1e3a5f;border-radius:10px;padding:16px}
+.dcard{background:#0f1f3d;border:1px solid #1e3a5f;border-radius:10px;overflow:hidden}
+.dcard canvas{border-radius:0;border:none;border-bottom:1px solid #1e3a5f}
+.dcard .info{padding:12px 14px}
+.badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:.7rem;font-weight:600;margin:2px}
+.br{background:rgba(239,68,68,.2);color:#fca5a5;border:1px solid rgba(239,68,68,.3)}
+.bb{background:rgba(56,189,248,.15);color:#7dd3fc;border:1px solid rgba(56,189,248,.3)}
+.bg{background:rgba(74,222,128,.15);color:#86efac;border:1px solid rgba(74,222,128,.3)}
+.bo{background:rgba(251,146,60,.15);color:#fdba74;border:1px solid rgba(251,146,60,.3)}
+table{width:100%;border-collapse:collapse;font-size:.8rem}
+th{background:#1e3a5f;color:#ef4444;padding:9px 12px;text-align:left;font-weight:600}
+td{padding:8px 12px;border-bottom:1px solid #1e3a5f;color:#cbd5e1}
+tr:hover td{background:rgba(239,68,68,.04)}
+.dc{text-align:center}
+.dy{color:#4ade80;font-weight:700}
+.dl{color:#fbbf24}
+.dn{color:#475569}
+.ndtg{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+.ndtc{background:#0f1f3d;border:1px solid #1e3a5f;border-radius:8px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.ndtc h3{text-align:center;font-size:.82rem}
+.ndtc p{text-align:center;font-size:.73rem;color:#64748b;margin:0}
+.legend{display:flex;flex-direction:column;gap:8px}
+.li{display:flex;align-items:center;gap:8px;font-size:.8rem;color:#94a3b8}
+.ls{width:14px;height:14px;border-radius:3px;flex-shrink:0}
+.crow{display:flex;gap:22px;align-items:flex-start;margin-bottom:26px}
+.back{text-align:center;margin-top:28px}
+.back a{color:#ef4444;text-decoration:none;font-size:.875rem}
+</style>
+</head><body>
+<header>
+  <h1>Forming Defects &amp; Process Comparison</h1>
+  <p>TWI defect reference &nbsp;|&nbsp; NDT detection guidance &nbsp;|&nbsp; CustomPartNet process capability data</p>
+</header>
+<div class="tabs">
+  <button class="tab-btn active" data-tab="defects">Defect Types</button>
+  <button class="tab-btn" data-tab="ndt">NDT Detection</button>
+  <button class="tab-btn" data-tab="comparison">Process Comparison</button>
+  <button class="tab-btn" data-tab="capability">Capability Data</button>
+</div>
+
+<!-- TAB 1 -->
+<div class="tab-content active" id="tab-defects">
+  <h2>Forming Defects — TWI Reference</h2>
+  <p>These defects commonly arise during bulk and sheet forming. The interface of a lap or seam contains oxide scale preventing metallurgical bonding; delamination is fully internal. Early detection with appropriate NDT is critical before downstream machining or service.</p>
+  <div class="grid3">
+    <div class="dcard">
+      <canvas id="c-laps" width="340" height="220" style="width:340px;height:220px"></canvas>
+      <div class="info">
+        <h3>Laps</h3>
+        <span class="badge br">Surface</span><span class="badge bo">Forging</span><span class="badge bo">Rolling</span>
+        <p style="margin-top:8px">Metal folds back onto itself during rolling or forging. The fold interface is oxide-filled, so no metallurgical bond forms. Appears as a tight, longitudinal surface crack nearly parallel to the surface — may only become visible after machining.</p>
+        <p><strong style="color:#fca5a5">Causes:</strong> Excessive reduction per pass, flash fold-over in forging, guide misalignment.<br>
+        <strong style="color:#fca5a5">Risk:</strong> Fatigue crack initiator; invisible until the surface material is removed.</p>
+      </div>
+    </div>
+    <div class="dcard">
+      <canvas id="c-seams" width="340" height="220" style="width:340px;height:220px"></canvas>
+      <div class="info">
+        <h3>Seams</h3>
+        <span class="badge br">Surface</span><span class="badge bb">Near-surface</span><span class="badge bo">Rolling</span><span class="badge bo">Drawing</span>
+        <p style="margin-top:8px">Pre-existing defects (ingot pipe, subsurface blowholes, scabs) that elongate and open during rolling or drawing. Run longitudinally, oxide-filled, and typically narrow.</p>
+        <p><strong style="color:#fca5a5">Causes:</strong> Ingot pipe, subsurface porosity, billet conditioning issues.<br>
+        <strong style="color:#fca5a5">Risk:</strong> Can run deep; cause brittle fracture during further cold processing.</p>
+      </div>
+    </div>
+    <div class="dcard">
+      <canvas id="c-delam" width="340" height="220" style="width:340px;height:220px"></canvas>
+      <div class="info">
+        <h3>Delamination</h3>
+        <span class="badge bb">Internal</span><span class="badge bo">Rolling</span><span class="badge bo">Forging</span>
+        <p style="margin-top:8px">Internal separation along planes of weakness — planar non-metallic inclusion stringers or centerline segregation elongated during rolling. Crack is parallel to the rolling plane and invisible externally.</p>
+        <p><strong style="color:#fca5a5">Causes:</strong> Sulfide/oxide stringers, macro-segregation, center porosity.<br>
+        <strong style="color:#fca5a5">Risk:</strong> Severely degrades short-transverse properties; causes lamellar tearing in welds.</p>
+      </div>
+    </div>
+  </div>
+  <h2 style="margin-top:24px">Additional Forming Defects</h2>
+  <div class="grid2">
+    <div class="dcard">
+      <canvas id="c-burst" width="340" height="170" style="width:340px;height:170px"></canvas>
+      <div class="info">
+        <h3>Internal Bursts (Chevron Cracking)</h3>
+        <span class="badge bb">Internal</span><span class="badge bo">Extrusion</span><span class="badge bo">Drawing</span>
+        <p style="margin-top:6px">Periodic V-shaped centerline cracks in drawn or extruded products. High die angle or excessive reduction creates tensile hydrostatic stress at the centerline, causing "cupping" failures in wire drawing.</p>
+      </div>
+    </div>
+    <div class="dcard">
+      <canvas id="c-ear" width="340" height="170" style="width:340px;height:170px"></canvas>
+      <div class="info">
+        <h3>Earring &amp; Orange Peel</h3>
+        <span class="badge br">Surface</span><span class="badge bg">Sheet</span>
+        <p style="margin-top:6px"><strong style="color:#fca5a5">Earring:</strong> Lobes at the top of a deep-drawn cup from planar anisotropy (Δr ≠ 0) due to crystallographic texture. <strong style="color:#fca5a5">Orange peel:</strong> Rough surface caused by large grain size deforming non-uniformly — worsens at strains above ~20%.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2 -->
+<div class="tab-content" id="tab-ndt">
+  <h2>NDT Detection Methods</h2>
+  <p>Choose based on defect location (surface vs. internal), material type (ferromagnetic vs. non-ferromagnetic), and production speed requirements.</p>
+  <div class="ndtg">
+    <div class="ndtc"><canvas id="c-mt" width="180" height="110" style="width:180px;height:110px"></canvas><h3>Magnetic Particle (MT)</h3><p>ASTM E1444 | Ferromagnetic only<br>Surface &amp; near-surface to ~3 mm</p></div>
+    <div class="ndtc"><canvas id="c-pt" width="180" height="110" style="width:180px;height:110px"></canvas><h3>Liquid Penetrant (PT)</h3><p>ASTM E165 | All materials<br>Surface-open defects only</p></div>
+    <div class="ndtc"><canvas id="c-ut" width="180" height="110" style="width:180px;height:110px"></canvas><h3>Ultrasonic (UT)</h3><p>ASTM E317 | All materials<br>Internal defects; full volume</p></div>
+    <div class="ndtc"><canvas id="c-et" width="180" height="110" style="width:180px;height:110px"></canvas><h3>Eddy Current (ET)</h3><p>ASTM E309 | Conductive materials<br>Surface &amp; near-surface; high speed</p></div>
+    <div class="ndtc"><canvas id="c-rt" width="180" height="110" style="width:180px;height:110px"></canvas><h3>Radiography (RT)</h3><p>ASTM E94 | All materials<br>Internal volumetric defects</p></div>
+    <div class="ndtc"><canvas id="c-mfl" width="180" height="110" style="width:180px;height:110px"></canvas><h3>Mag. Flux Leakage (MFL)</h3><p>API 5L | Ferromagnetic tube/pipe<br>High-speed inline inspection</p></div>
+  </div>
+  <h2>Detection Capability Matrix</h2>
+  <table>
+    <thead><tr><th>Defect</th><th>Location</th><th class="dc">MT</th><th class="dc">PT</th><th class="dc">UT</th><th class="dc">ET</th><th class="dc">RT</th><th class="dc">MFL</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Laps</strong></td><td>Surface</td><td class="dc dy">●</td><td class="dc dy">●</td><td class="dc dl">◑</td><td class="dc dy">●</td><td class="dc dn">○</td><td class="dc dy">●</td><td>MT preferred for steel; PT for Al/Ti. UT angle-beam for tight laps.</td></tr>
+      <tr><td><strong>Seams</strong></td><td>Surface/near</td><td class="dc dy">●</td><td class="dc dy">●</td><td class="dc dl">◑</td><td class="dc dy">●</td><td class="dc dn">○</td><td class="dc dy">●</td><td>High-speed ET/MFL on mill lines. MT wet fluorescent for sensitivity.</td></tr>
+      <tr><td><strong>Delamination</strong></td><td>Internal (planar)</td><td class="dc dn">○</td><td class="dc dn">○</td><td class="dc dy">●</td><td class="dc dn">○</td><td class="dc dl">◑</td><td class="dc dn">○</td><td>UT straight-beam (A-scan/C-scan) primary. RT misses planar defects parallel to beam.</td></tr>
+      <tr><td><strong>Chevron Cracks</strong></td><td>Internal (center)</td><td class="dc dn">○</td><td class="dc dn">○</td><td class="dc dy">●</td><td class="dc dn">○</td><td class="dc dy">●</td><td class="dc dn">○</td><td>UT angle-beam or phased array. RT micro-focus for wire.</td></tr>
+      <tr><td><strong>Orange Peel</strong></td><td>Surface</td><td class="dc dn">○</td><td class="dc dl">◑</td><td class="dc dn">○</td><td class="dc dl">◑</td><td class="dc dn">○</td><td class="dc dn">○</td><td>Visual + profilometry (Ra). Not a crack — texture defect only.</td></tr>
+      <tr><td><strong>Pipe/Shrinkage</strong></td><td>Internal</td><td class="dc dn">○</td><td class="dc dn">○</td><td class="dc dy">●</td><td class="dc dn">○</td><td class="dc dy">●</td><td class="dc dn">○</td><td>UT and RT both effective. Billet end crops mitigate.</td></tr>
+    </tbody>
+  </table>
+  <div style="margin-top:12px;display:flex;gap:20px;font-size:.78rem;color:#64748b">
+    <span><span class="dy">●</span> Reliable</span><span><span class="dl">◑</span> Limited/conditional</span><span><span class="dn">○</span> Not applicable</span>
+  </div>
+  <div class="card" style="margin-top:20px">
+    <h3>Key Standards by Product Form</h3>
+    <table style="margin-top:8px">
+      <thead><tr><th>Product Form</th><th>Defect</th><th>Standard</th><th>Acceptance Criterion</th></tr></thead>
+      <tbody>
+        <tr><td>Steel bar &amp; rod</td><td>Laps, seams</td><td>ASTM A484 / EN 10221</td><td>No seams &gt;0.03× diameter depth</td></tr>
+        <tr><td>Steel forgings</td><td>All surface</td><td>ASTM A788 / EN 10243</td><td>Surface class A/B per application</td></tr>
+        <tr><td>Aluminum sheet</td><td>Delamination</td><td>AMS 2630 / ASTM B548</td><td>UT C-scan; no reflectors &gt;FBH #3</td></tr>
+        <tr><td>Tube &amp; pipe</td><td>Seams, laps</td><td>ASTM A450 / API 5CT</td><td>ET or UT; reject if through-wall</td></tr>
+        <tr><td>Extrusions</td><td>Pipe defect</td><td>EN 755 / AMS 2770</td><td>Crop min. 10% of billet length</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TAB 3 -->
+<div class="tab-content" id="tab-comparison">
+  <h2>Forming Process Comparison — CustomPartNet</h2>
+  <p>Radar and bar charts compare four primary bulk forming processes across six capability dimensions. Higher score = better performance on that axis.</p>
+  <div class="crow">
+    <canvas id="c-radar" width="460" height="420" style="width:460px;height:420px"></canvas>
+    <div>
+      <div class="legend" style="margin-bottom:18px">
+        <div class="li"><div class="ls" style="background:#ef4444"></div>Forging (closed die)</div>
+        <div class="li"><div class="ls" style="background:#38bdf8"></div>Rolling (cold)</div>
+        <div class="li"><div class="ls" style="background:#4ade80"></div>Extrusion</div>
+        <div class="li"><div class="ls" style="background:#fbbf24"></div>Drawing (cold)</div>
+      </div>
+      <div class="card" style="max-width:320px">
+        <h3>Radar Axes</h3>
+        <table style="margin-top:8px;font-size:.76rem">
+          <tr><td style="color:#fca5a5;font-weight:600;padding:5px 8px">Dimensional Accuracy</td><td style="padding:5px 8px;color:#94a3b8">Tightness of achievable tolerances</td></tr>
+          <tr><td style="color:#fca5a5;font-weight:600;padding:5px 8px">Surface Finish</td><td style="padding:5px 8px;color:#94a3b8">Ra quality (lower Ra → higher score)</td></tr>
+          <tr><td style="color:#fca5a5;font-weight:600;padding:5px 8px">Material Utilization</td><td style="padding:5px 8px;color:#94a3b8">% input material retained in part</td></tr>
+          <tr><td style="color:#fca5a5;font-weight:600;padding:5px 8px">Production Rate</td><td style="padding:5px 8px;color:#94a3b8">Throughput relative to other processes</td></tr>
+          <tr><td style="color:#fca5a5;font-weight:600;padding:5px 8px">Shape Complexity</td><td style="padding:5px 8px;color:#94a3b8">3D feature capability</td></tr>
+          <tr><td style="color:#fca5a5;font-weight:600;padding:5px 8px">Mechanical Properties</td><td style="padding:5px 8px;color:#94a3b8">Strength &amp; fatigue vs. cast baseline</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <h2>Grouped Bar Comparison</h2>
+  <canvas id="c-bars" width="760" height="290" style="width:760px;height:290px"></canvas>
+  <div style="display:flex;gap:20px;margin-top:10px;flex-wrap:wrap">
+    <div class="li"><div class="ls" style="background:#ef4444"></div><span style="font-size:.8rem;color:#94a3b8">Forging</span></div>
+    <div class="li"><div class="ls" style="background:#38bdf8"></div><span style="font-size:.8rem;color:#94a3b8">Rolling</span></div>
+    <div class="li"><div class="ls" style="background:#4ade80"></div><span style="font-size:.8rem;color:#94a3b8">Extrusion</span></div>
+    <div class="li"><div class="ls" style="background:#fbbf24"></div><span style="font-size:.8rem;color:#94a3b8">Drawing</span></div>
+  </div>
+</div>
+
+<!-- TAB 4 -->
+<div class="tab-content" id="tab-capability">
+  <h2>Process Capability Data</h2>
+  <table style="margin-bottom:24px">
+    <thead><tr><th>Parameter</th><th>Forging (Closed Die)</th><th>Rolling (Cold)</th><th>Extrusion (Al, Cold)</th><th>Drawing (Cold)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Typical Tolerance</strong></td><td>±0.5 – 2.0 mm</td><td>±0.05 – 0.25 mm</td><td>±0.05 – 0.25 mm</td><td>±0.01 – 0.05 mm</td></tr>
+      <tr><td><strong>Surface Ra (μm)</strong></td><td>1.6 – 6.3</td><td>0.1 – 1.6</td><td>0.4 – 1.6</td><td>0.1 – 0.8</td></tr>
+      <tr><td><strong>Material Utilization</strong></td><td>70 – 90%</td><td>90 – 98%</td><td>75 – 88%</td><td>85 – 97%</td></tr>
+      <tr><td><strong>Production Rate</strong></td><td>50 – 300 parts/hr</td><td>Continuous (m/min)</td><td>Continuous (profile)</td><td>High (coil-to-coil)</td></tr>
+      <tr><td><strong>Min Wall Thickness</strong></td><td>3 mm (steel)</td><td>0.05 mm (foil)</td><td>0.5 mm (Al)</td><td>0.1 mm</td></tr>
+      <tr><td><strong>Tooling Cost</strong></td><td>High ($10k – $200k)</td><td>High (rolls)</td><td>Low–Med ($500–$5k)</td><td>Low ($200–$2k)</td></tr>
+      <tr><td><strong>UTS vs. Cast</strong></td><td>+30 – 50%</td><td>+20 – 40%</td><td>+15 – 35%</td><td>+25 – 50%</td></tr>
+      <tr><td><strong>Shape Complexity</strong></td><td>3D complex</td><td>Flat / 2D only</td><td>Complex 2D cross-sections</td><td>Round / simple profiles</td></tr>
+      <tr><td><strong>Lead Time</strong></td><td>4 – 12 weeks</td><td>2 – 6 weeks</td><td>1 – 4 weeks</td><td>1 – 3 weeks</td></tr>
+      <tr><td><strong>Key Standard</strong></td><td>ASTM A788, AMS 2375</td><td>ASTM A568, EN 10130</td><td>ASTM B221, EN 755</td><td>ASTM A108, EN 10277</td></tr>
+    </tbody>
+  </table>
+  <div class="grid2">
+    <div><h2>Tolerance Range</h2><canvas id="c-tol" width="360" height="260" style="width:360px;height:260px"></canvas></div>
+    <div><h2>Material Utilization</h2><canvas id="c-util" width="360" height="260" style="width:360px;height:260px"></canvas></div>
+  </div>
+</div>
+
+<div class="back"><a href="index.html">← Back to Visualizations Index</a></div>
+
+<script>
+const PCOLS = ['#ef4444','#38bdf8','#4ade80','#fbbf24'];
+const PALP  = ['rgba(239,68,68,','rgba(56,189,248,','rgba(74,222,128,','rgba(251,191,36,'];
+const PNAMES = ['Forging','Rolling','Extrusion','Drawing'];
+
+function gctx(id){
+  const cv=document.getElementById(id); if(!cv) return null;
+  const dpr=window.devicePixelRatio||1;
+  if(!cv._dpr){
+    cv.style.width=cv.width+'px'; cv.style.height=cv.height+'px';
+    cv.width=Math.round(cv.width*dpr); cv.height=Math.round(cv.height*dpr);
+    cv._dpr=true;
+  }
+  const ctx=cv.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, W:parseInt(cv.style.width), H:parseInt(cv.style.height)};
+}
+
+// Tab switching
+document.querySelectorAll('.tab-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    const t='tab-'+b.dataset.tab;
+    document.getElementById(t).classList.add('active');
+    drawTab(b.dataset.tab);
+  });
+});
+
+function drawTab(t){
+  if(t==='defects') drawDefects();
+  if(t==='ndt') drawNDT();
+  if(t==='comparison'){drawRadar();drawBars();}
+  if(t==='capability'){drawTol();drawUtil();}
+}
+
+// ============================
+// TAB 1: DEFECT ILLUSTRATIONS
+// ============================
+function drawDefects(){drawLaps();drawSeams();drawDelam();drawBurst();drawEar();}
+
+function drawLaps(){
+  const r=gctx('c-laps'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0f1f3d'; ctx.fillRect(0,0,W,H);
+  const bx=36,by=58,bw=W-72,bh=90;
+  ctx.fillStyle='#78909c'; ctx.fillRect(bx,by,bw,bh);
+  // grain lines
+  ctx.strokeStyle='#546e7a'; ctx.lineWidth=.7;
+  for(let i=1;i<7;i++){const y=by+bh/7*i; ctx.beginPath();ctx.moveTo(bx+6,y);ctx.lineTo(bx+bw-6,y);ctx.stroke();}
+  // Lap on top surface
+  function drawLap(lx,ly,dir){
+    ctx.strokeStyle='#ef4444'; ctx.lineWidth=2;
+    ctx.beginPath();
+    if(dir>0){ctx.moveTo(lx,ly);ctx.bezierCurveTo(lx-14,ly-3,lx-28,ly+14,lx-18,ly+22);ctx.bezierCurveTo(lx-8,ly+28,lx+8,ly+18,lx+12,ly);}
+    else{ctx.moveTo(lx,ly);ctx.bezierCurveTo(lx+14,ly-3,lx+28,ly+14,lx+18,ly+22);ctx.bezierCurveTo(lx+8,ly+28,lx-8,ly+18,lx-12,ly);}
+    ctx.stroke();
+    ctx.fillStyle='rgba(239,68,68,.14)'; ctx.beginPath();
+    if(dir>0){ctx.moveTo(lx,ly);ctx.bezierCurveTo(lx-14,ly-3,lx-28,ly+14,lx-18,ly+22);ctx.bezierCurveTo(lx-8,ly+28,lx+8,ly+18,lx+12,ly);}
+    else{ctx.moveTo(lx,ly);ctx.bezierCurveTo(lx+14,ly-3,lx+28,ly+14,lx+18,ly+22);ctx.bezierCurveTo(lx+8,ly+28,lx-8,ly+18,lx-12,ly);}
+    ctx.fill();
+  }
+  drawLap(bx+80,by,1);
+  drawLap(bx+bw-80,by+bh,-1);
+  ctx.strokeStyle='#455a64'; ctx.lineWidth=1.5; ctx.strokeRect(bx,by,bw,bh);
+  ctx.font='bold 12px system-ui'; ctx.fillStyle='#fca5a5'; ctx.textAlign='center'; ctx.fillText('LAPS',W/2,22);
+  ctx.font='10px system-ui'; ctx.fillStyle='#ef4444'; ctx.textAlign='left'; ctx.fillText('Oxide-filled fold',bx+54,by-8);
+  ctx.fillStyle='#64748b'; ctx.fillText('Rolling direction  →',bx+6,by+bh+18);
+  ctx.fillText('Longitudinal cross-section',bx+6,H-6);
+}
+
+function drawSeams(){
+  const r=gctx('c-seams'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0f1f3d'; ctx.fillRect(0,0,W,H);
+  const bx=36,by=58,bw=W-72,bh=90;
+  ctx.fillStyle='#78909c'; ctx.fillRect(bx,by,bw,bh);
+  ctx.strokeStyle='#546e7a'; ctx.lineWidth=.7;
+  for(let i=1;i<7;i++){const y=by+bh/7*i; ctx.beginPath();ctx.moveTo(bx+6,y);ctx.lineTo(bx+bw-6,y);ctx.stroke();}
+  // Seam lines along top surface
+  ctx.strokeStyle='#ef4444'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(bx+16,by+2); ctx.lineTo(bx+bw-16,by+2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(bx+24,by+5); ctx.quadraticCurveTo(bx+bw/2,by+8,bx+bw-36,by+5); ctx.stroke();
+  // Depth indicator
+  ctx.strokeStyle='rgba(239,68,68,.4)'; ctx.lineWidth=.8; ctx.setLineDash([3,3]);
+  ctx.beginPath(); ctx.moveTo(bx+60,by+2); ctx.lineTo(bx+60,by+16); ctx.stroke(); ctx.setLineDash([]);
+  ctx.strokeStyle='#455a64'; ctx.lineWidth=1.5; ctx.strokeRect(bx,by,bw,bh);
+  ctx.font='bold 12px system-ui'; ctx.fillStyle='#fca5a5'; ctx.textAlign='center'; ctx.fillText('SEAMS',W/2,22);
+  ctx.font='10px system-ui'; ctx.fillStyle='#ef4444'; ctx.textAlign='left'; ctx.fillText('Elongated ingot defect',bx+40,by-8);
+  ctx.fillStyle='#64748b'; ctx.fillText('Rolling direction  →',bx+6,by+bh+18);
+  ctx.fillText('Oxide-filled, parallel to rolling axis',bx+6,H-6);
+}
+
+function drawDelam(){
+  const r=gctx('c-delam'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0f1f3d'; ctx.fillRect(0,0,W,H);
+  const bx=36,by=48,bw=W-72,bh=110;
+  const my=by+bh/2;
+  // Two halves with gap
+  ctx.fillStyle='#78909c';
+  ctx.fillRect(bx,by,bw,bh/2-7);
+  ctx.fillRect(bx,my+7,bw,bh/2-7);
+  // grain lines top
+  ctx.strokeStyle='#546e7a'; ctx.lineWidth=.7;
+  for(let i=1;i<4;i++){const y=by+(bh/2-7)/4*i; ctx.beginPath();ctx.moveTo(bx+6,y);ctx.lineTo(bx+bw-6,y);ctx.stroke();}
+  for(let i=1;i<4;i++){const y=my+7+(bh/2-7)/4*i; ctx.beginPath();ctx.moveTo(bx+6,y);ctx.lineTo(bx+bw-6,y);ctx.stroke();}
+  // inclusion stringer band
+  ctx.fillStyle='#1e3a5f'; ctx.fillRect(bx,my-7,bw,14);
+  for(let i=0;i<15;i++){
+    const ex=bx+14+i*(bw-28)/14;
+    ctx.fillStyle='#334155';
+    ctx.beginPath(); ctx.ellipse(ex,my,8+Math.sin(i*1.9)*3,3,0,0,Math.PI*2); ctx.fill();
+  }
+  // delamination crack lines
+  ctx.strokeStyle='#ef4444'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(bx+8,my-5); ctx.lineTo(bx+bw-8,my-5); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(bx+8,my+5); ctx.lineTo(bx+bw-8,my+5); ctx.stroke();
+  ctx.strokeStyle='#455a64'; ctx.lineWidth=1.5;
+  ctx.strokeRect(bx,by,bw,bh/2-7); ctx.strokeRect(bx,my+7,bw,bh/2-7);
+  ctx.font='bold 12px system-ui'; ctx.fillStyle='#fca5a5'; ctx.textAlign='center'; ctx.fillText('DELAMINATION',W/2,20);
+  ctx.font='10px system-ui'; ctx.fillStyle='#ef4444'; ctx.textAlign='right'; ctx.fillText('Separation plane',bx+bw-8,my-10);
+  ctx.fillStyle='#64748b'; ctx.textAlign='left'; ctx.fillText('Inclusion stringer (sulfides/oxides elongated by rolling)',bx,H-6);
+  ctx.fillText('Rolling direction  →',bx+6,by+bh+20);
+}
+
+function drawBurst(){
+  const r=gctx('c-burst'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0f1f3d'; ctx.fillRect(0,0,W,H);
+  const bx=28,by=45,bw=W-56,bh=70;
+  ctx.fillStyle='#78909c'; ctx.fillRect(bx,by,bw,bh);
+  const cy2=by+bh/2;
+  ctx.strokeStyle='#546e7a'; ctx.lineWidth=.8; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(bx,cy2); ctx.lineTo(bx+bw,cy2); ctx.stroke(); ctx.setLineDash([]);
+  // chevron cracks
+  ctx.strokeStyle='#ef4444'; ctx.lineWidth=2;
+  [bx+55,bx+120,bx+185,bx+250].forEach(px=>{
+    ctx.beginPath(); ctx.moveTo(px,cy2-14); ctx.lineTo(px+14,cy2); ctx.lineTo(px,cy2+14); ctx.stroke();
+  });
+  ctx.strokeStyle='#455a64'; ctx.lineWidth=1.5; ctx.strokeRect(bx,by,bw,bh);
+  ctx.font='bold 12px system-ui'; ctx.fillStyle='#fca5a5'; ctx.textAlign='center'; ctx.fillText('INTERNAL BURSTS (CHEVRON CRACKING)',W/2,20);
+  ctx.font='10px system-ui'; ctx.fillStyle='#64748b'; ctx.textAlign='left';
+  ctx.fillText('Centerline tensile stress → periodic V-cracks in drawing/extrusion direction →',bx,H-6);
+}
+
+function drawEar(){
+  const r=gctx('c-ear'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0f1f3d'; ctx.fillRect(0,0,W,H);
+  const cx=W/2, cy=130, rad=54, ht=76;
+  // Cup walls
+  ctx.fillStyle='#78909c';
+  ctx.fillRect(cx-rad-7,cy,14,ht); ctx.fillRect(cx+rad-7,cy,14,ht);
+  ctx.fillRect(cx-rad-7,cy+ht-7,rad*2+14,14);
+  // top with ears
+  ctx.beginPath();
+  ctx.moveTo(cx-rad-7,cy);
+  ctx.lineTo(cx-rad-7,cy-18);
+  ctx.bezierCurveTo(cx-rad-7,cy-30,cx-rad+4,cy-30,cx-rad+4,cy-20);
+  ctx.lineTo(cx-10,cy);
+  ctx.bezierCurveTo(cx-4,cy-5,cx+4,cy-5,cx+10,cy);
+  ctx.lineTo(cx+rad-4,cy-20);
+  ctx.bezierCurveTo(cx+rad-4,cy-30,cx+rad+7,cy-30,cx+rad+7,cy-18);
+  ctx.lineTo(cx+rad+7,cy);
+  ctx.fill();
+  ctx.strokeStyle='#546e7a'; ctx.lineWidth=1.5; ctx.stroke();
+  // highlight ears
+  ctx.fillStyle='rgba(239,68,68,.35)';
+  ctx.beginPath();
+  ctx.moveTo(cx-rad-7,cy); ctx.lineTo(cx-rad-7,cy-18);
+  ctx.bezierCurveTo(cx-rad-7,cy-30,cx-rad+4,cy-30,cx-rad+4,cy-20);
+  ctx.lineTo(cx-rad+4,cy); ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(cx+rad-4,cy); ctx.lineTo(cx+rad-4,cy-20);
+  ctx.bezierCurveTo(cx+rad-4,cy-30,cx+rad+7,cy-30,cx+rad+7,cy-18);
+  ctx.lineTo(cx+rad+7,cy); ctx.fill();
+  ctx.font='bold 12px system-ui'; ctx.fillStyle='#fca5a5'; ctx.textAlign='center'; ctx.fillText('EARRING & ORANGE PEEL',W/2,22);
+  ctx.font='10px system-ui'; ctx.fillStyle='#ef4444';
+  ctx.textAlign='left'; ctx.fillText('Ears',cx-rad-28,cy-22); ctx.fillText('Ears',cx+rad-4,cy-22);
+  ctx.fillStyle='#64748b'; ctx.fillText('Earing: planar anisotropy (Δr ≠ 0) from texture',24,H-6);
+}
+
+// ============================
+// TAB 2: NDT ICONS
+// ============================
+function drawNDT(){drawMT();drawPT();drawUT();drawET();drawRT();drawMFL();}
+
+function drawMT(){
+  const r=gctx('c-mt'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0f1f3d'; ctx.fillRect(0,0,W,H);
+  const bx=18,by=32,bw=W-36,bh=38;
+  ctx.fillStyle='#607d8b'; ctx.fillRect(bx,by,bw,bh);
+  ctx.strokeStyle='#38bdf8'; ctx.lineWidth=1; ctx.setLineDash([2,3]);
+  for(let i=0;i<4;i++){const fw=(bw-16)*(1-i*.14); ctx.beginPath(); ctx.arc(W/2,by,fw/2,Math.PI,0); ctx.stroke();}
+  ctx.setLineDash([]);
+  ctx.strokeStyle='#ef4444'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(W/2-4,by); ctx.lineTo(W/2,by+10); ctx.stroke();
+  ctx.fillStyle='#ef4444';
+  for(let i=-3;i<=3;i++){ctx.beginPath();ctx.arc(W/2+i*3,by+1,1.8,0,Math.PI*2);ctx.fill();}
+  ctx.strokeStyle='#455a64'; ctx.lineWidth=1; ctx.strokeRect(bx,by,bw,bh);
+  ctx.font='10px system-ui'; ctx.fillStyle='#64748b'; ctx.fillText('Flux leakage → particle buildup at crack',6,H-6);
+}
+
+function drawPT(){
+  const r=gctx('c-pt'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0f1f3d'; ctx.fillRect(0,0,W,H);
+  const bx=18,by=32,bw=W-36,bh=38;
+  ctx.fillStyle='#607d8b'; ctx.fillRect(bx,by,bw,bh);
+  ctx.strokeStyle='#0f1f3d'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(W/2,by); ctx.lineTo(W/2+4,by+14); ctx.stroke();
+  ctx.strokeStyle='#ef4444'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(W/2,by); ctx.lineTo(W/2+4,by+14); ctx.stroke();
+  ctx.fillStyle='rgba(239,68,68,.5)';
+  ctx.beginPath(); ctx.ellipse(W/2+2,by+1,11,4,0,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#455a64'; ctx.lineWidth=1; ctx.strokeRect(bx,by,bw,bh);
+  ctx.font='10px system-ui'; ctx.fillStyle='#64748b'; ctx.fillText('Penetrant bleeds out → developer reveals',4,H-6);
+}
+
+function drawUT(){
+  const r=gctx('c-ut'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0f1f3d'; ctx.fillRect(0,0,W,H);
+  const bx=24,by=26,bw=W-48,bh=54;
+  ctx.fillStyle='#607d8b'; ctx.fillRect(bx,by,bw,bh);
+  const dy=by+bh/2+4;
+  ctx.strokeStyle='#ef4444'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(bx+14,dy); ctx.lineTo(bx+bw-14,dy); ctx.stroke();
+  ctx.fillStyle='#38bdf8'; ctx.fillRect(W/2-10,by-20,20,18);
+  ctx.strokeStyle='rgba(56,189,248,.5)'; ctx.lineWidth=1;
+  for(let dx=-5;dx<=5;dx+=3){ctx.beginPath();ctx.moveTo(W/2+dx,by);ctx.lineTo(W/2+dx,dy);ctx.stroke();}
+  ctx.strokeStyle='#455a64'; ctx.lineWidth=1; ctx.strokeRect(bx,by,bw,bh);
+  ctx.font='10px system-ui'; ctx.fillStyle='#64748b'; ctx.fillText('Sound reflects off internal defect',4,H-6);
+}
+
+function drawET(){
+  const r=gctx('c-et'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0f1f3d'; ctx.fillRect(0,0,W,H);
+  const bx=18,by=36,bw=W-36,bh=36;
+  ctx.fillStyle='#607d8b'; ctx.fillRect(bx,by,bw,bh);
+  ctx.strokeStyle='#4ade80'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.arc(W/2,by-8,12,Math.PI,0); ctx.stroke();
+  ctx.strokeStyle='rgba(74,222,128,.25)'; ctx.lineWidth=1;
+  for(let ri=1;ri<=3;ri++){ctx.beginPath();ctx.ellipse(W/2,by+5,ri*10,ri*3,0,0,Math.PI*2);ctx.stroke();}
+  ctx.strokeStyle='#ef4444'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(W/2+22,by); ctx.lineTo(W/2+26,by+12); ctx.stroke();
+  ctx.strokeStyle='#455a64'; ctx.lineWidth=1; ctx.strokeRect(bx,by,bw,bh);
+  ctx.font='10px system-ui'; ctx.fillStyle='#64748b'; ctx.fillText('Crack disrupts eddy currents → signal',4,H-6);
+}
+
+function drawRT(){
+  const r=gctx('c-rt'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0f1f3d'; ctx.fillRect(0,0,W,H);
+  const bx=24,by=26,bw=W-48,bh=48;
+  ctx.fillStyle='#607d8b'; ctx.fillRect(bx,by,bw,bh);
+  ctx.fillStyle='#fbbf24'; ctx.beginPath(); ctx.arc(W/2,by-16,7,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='rgba(251,191,36,.35)'; ctx.lineWidth=1;
+  for(let i=-3;i<=3;i++){ctx.beginPath();ctx.moveTo(W/2,by-9);ctx.lineTo(W/2+i*18,by+bh+10);ctx.stroke();}
+  ctx.fillStyle='rgba(239,68,68,.22)';
+  ctx.beginPath(); ctx.ellipse(W/2,by+bh/2,16,5,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#1e3a5f'; ctx.fillRect(bx,by+bh+4,bw,8);
+  ctx.fillStyle='rgba(239,68,68,.5)'; ctx.fillRect(W/2-12,by+bh+4,24,8);
+  ctx.strokeStyle='#455a64'; ctx.lineWidth=1; ctx.strokeRect(bx,by,bw,bh);
+  ctx.font='10px system-ui'; ctx.fillStyle='#64748b'; ctx.fillText('Void → darker region on film/detector',4,H-6);
+}
+
+function drawMFL(){
+  const r=gctx('c-mfl'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0f1f3d'; ctx.fillRect(0,0,W,H);
+  const cx=W/2, cy=H/2+4;
+  ctx.strokeStyle='#607d8b'; ctx.lineWidth=8;
+  ctx.beginPath(); ctx.arc(cx,cy,30,0,Math.PI*2); ctx.stroke();
+  ctx.fillStyle='#38bdf8'; ctx.fillRect(cx-54,cy-9,14,18); ctx.fillRect(cx+40,cy-9,14,18);
+  ctx.strokeStyle='rgba(56,189,248,.4)'; ctx.lineWidth=1;
+  for(let dy=-5;dy<=5;dy+=3){ctx.beginPath();ctx.moveTo(cx-40,cy+dy);ctx.lineTo(cx+40,cy+dy);ctx.stroke();}
+  ctx.strokeStyle='#ef4444'; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.arc(cx,cy,30,-0.35,0.35); ctx.stroke();
+  ctx.font='10px system-ui'; ctx.fillStyle='#64748b'; ctx.fillText('Flux leaks at wall defect → sensor spike',2,H-6);
+}
+
+// ============================
+// TAB 3: RADAR + BARS
+// ============================
+// scores 0-10: [Forging, Rolling, Extrusion, Drawing] for each axis
+const RDAT=[
+  [6,7.5,7.5,10], // dim accuracy
+  [5,8.5,8,9],    // surface finish
+  [8,9.5,8,9],    // material utilization
+  [5,9,7,8],      // production rate
+  [9,3,7,3],      // shape complexity
+  [10,7,7,7],     // mechanical props
+];
+const RLBL=['Dimensional\nAccuracy','Surface\nFinish','Material\nUtilization','Production\nRate','Shape\nComplexity','Mech.\nProperties'];
+
+function drawRadar(){
+  const r=gctx('c-radar'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0f1f3d'; ctx.fillRect(0,0,W,H);
+  const cx=220,cy=215,R=155,N=6;
+  const angs=Array.from({length:N},(_,i)=>-Math.PI/2+i*Math.PI*2/N);
+  // rings
+  for(let ring=1;ring<=5;ring++){
+    const rr=R*ring/5;
+    ctx.strokeStyle=ring===5?'#1e3a5f':'#162236'; ctx.lineWidth=ring===5?1.4:.7;
+    ctx.beginPath();
+    angs.forEach((a,i)=>{const x=cx+Math.cos(a)*rr,y=cy+Math.sin(a)*rr; i?ctx.lineTo(x,y):ctx.moveTo(x,y);});
+    ctx.closePath(); ctx.stroke();
+  }
+  // spokes
+  ctx.strokeStyle='#1e3a5f'; ctx.lineWidth=1;
+  angs.forEach(a=>{ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R);ctx.stroke();});
+  // data: transpose RDAT to per-process
+  const perProc=[[],[],[],[]];
+  RDAT.forEach(axData=>axData.forEach((v,pi)=>perProc[pi].push(v)));
+  perProc.forEach((data,pi)=>{
+    ctx.beginPath();
+    angs.forEach((a,i)=>{const rr=R*data[i]/10,x=cx+Math.cos(a)*rr,y=cy+Math.sin(a)*rr; i?ctx.lineTo(x,y):ctx.moveTo(x,y);});
+    ctx.closePath();
+    ctx.fillStyle=PALP[pi]+'0.13)'; ctx.fill();
+    ctx.strokeStyle=PCOLS[pi]; ctx.lineWidth=2; ctx.stroke();
+    ctx.fillStyle=PCOLS[pi];
+    angs.forEach((a,i)=>{const rr=R*data[i]/10; ctx.beginPath();ctx.arc(cx+Math.cos(a)*rr,cy+Math.sin(a)*rr,3.5,0,Math.PI*2);ctx.fill();});
+  });
+  // labels
+  ctx.fillStyle='#94a3b8'; ctx.textAlign='center';
+  angs.forEach((a,i)=>{
+    const lx=cx+Math.cos(a)*(R+30), ly=cy+Math.sin(a)*(R+30);
+    const lines=RLBL[i].split('\n');
+    ctx.font='11px system-ui';
+    lines.forEach((ln,li)=>ctx.fillText(ln,lx,ly+li*14-(lines.length-1)*7));
+  });
+  ctx.fillStyle='#475569'; ctx.font='9px system-ui';
+  [2,4,6,8,10].forEach((v,i)=>ctx.fillText(v,cx+4,cy-R*(i+1)/5+4));
+  ctx.textAlign='left';
+}
+
+// bar chart: 4 categories, 4 processes each
+const BCATS=['Dimensional\nAccuracy Score','Surface Finish\nScore','Material\nUtilization %','Mech. Props\nvs. Cast (norm)'];
+const BNORM=[
+  [60,75,75,100],
+  [50,85,80,90],
+  [80,95,82,90],
+  [93,87,83,90],
+];
+function drawBars(){
+  const r=gctx('c-bars'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0f1f3d'; ctx.fillRect(0,0,W,H);
+  const pL=56,pR=16,pT=18,pB=58;
+  const cw=W-pL-pR, ch=H-pT-pB;
+  const gW=cw/4, bW=(gW-14)/4;
+  // grid
+  ctx.strokeStyle='#1a2f4a'; ctx.lineWidth=.7;
+  for(let g=0;g<=5;g++){
+    const y=pT+ch-ch*g/5;
+    ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(pL+cw,y);ctx.stroke();
+    ctx.fillStyle='#475569'; ctx.font='9px system-ui'; ctx.textAlign='right';
+    ctx.fillText(g*20+'%',pL-4,y+3);
+  }
+  ctx.strokeStyle='#1e3a5f'; ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,pT+ch);ctx.lineTo(pL+cw,pT+ch);ctx.stroke();
+  BNORM.forEach((gd,ci)=>{
+    const gx=pL+ci*gW+7;
+    gd.forEach((val,pi)=>{
+      const bh=ch*val/100, x=gx+pi*bW, y=pT+ch-bh;
+      ctx.fillStyle=PALP[pi]+'0.75)'; ctx.fillRect(x,y,bW-2,bh);
+      ctx.strokeStyle=PCOLS[pi]; ctx.lineWidth=1; ctx.strokeRect(x,y,bW-2,bh);
+    });
+    ctx.fillStyle='#94a3b8'; ctx.font='10px system-ui'; ctx.textAlign='center';
+    BCATS[ci].split('\n').forEach((ln,li)=>ctx.fillText(ln,pL+ci*gW+gW/2,pT+ch+18+li*13));
+  });
+  ctx.textAlign='left';
+}
+
+// ============================
+// TAB 4: CAPABILITY CHARTS
+// ============================
+function drawTol(){
+  const r=gctx('c-tol'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0f1f3d'; ctx.fillRect(0,0,W,H);
+  const pL=118,pR=60,pT=30,pB=22, ch=H-pT-pB;
+  const bh=(ch-12)/4;
+  // title
+  ctx.font='bold 11px system-ui'; ctx.fillStyle='#94a3b8'; ctx.textAlign='center';
+  ctx.fillText('Typical Tolerance ±(mm) — lower is tighter',pL+(W-pL-pR)/2,18);
+  const vals=[1.25,.15,.15,.03]; const maxV=1.5;
+  vals.forEach((v,i)=>{
+    const y=pT+i*(bh+3);
+    const bw=(W-pL-pR)*v/maxV;
+    ctx.fillStyle=PALP[i]+'0.7)'; ctx.fillRect(pL,y,bw,bh-4);
+    ctx.strokeStyle=PCOLS[i]; ctx.lineWidth=1; ctx.strokeRect(pL,y,bw,bh-4);
+    ctx.fillStyle=PCOLS[i]; ctx.font='12px system-ui'; ctx.textAlign='right';
+    ctx.fillText(PNAMES[i],pL-6,y+bh/2);
+    ctx.fillStyle='#e2e8f0'; ctx.font='11px system-ui'; ctx.textAlign='left';
+    ctx.fillText('±'+v.toFixed(2),pL+bw+4,y+bh/2);
+  });
+  ctx.strokeStyle='#1e3a5f'; ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(pL,pT+ch);ctx.lineTo(W-pR,pT+ch);ctx.stroke();
+  [0,.5,1,1.5].forEach(v=>{
+    const x=pL+(W-pL-pR)*v/maxV;
+    ctx.fillStyle='#475569'; ctx.font='9px system-ui'; ctx.textAlign='center';
+    ctx.fillText(v.toFixed(1),x,pT+ch+14);
+  });
+  ctx.textAlign='left';
+}
+
+function drawUtil(){
+  const r=gctx('c-util'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0f1f3d'; ctx.fillRect(0,0,W,H);
+  const pL=118,pR=64,pT=30,pB=22, ch=H-pT-pB;
+  const bh=(ch-12)/4;
+  ctx.font='bold 11px system-ui'; ctx.fillStyle='#94a3b8'; ctx.textAlign='center';
+  ctx.fillText('Material Utilization Range (%)',pL+(W-pL-pR)/2,18);
+  const ranges=[[70,90],[90,98],[75,88],[85,97]];
+  ranges.forEach((v,i)=>{
+    const y=pT+i*(bh+3);
+    const xMn=(W-pL-pR)*v[0]/100, xMx=(W-pL-pR)*v[1]/100;
+    ctx.fillStyle='rgba(30,58,95,.5)'; ctx.fillRect(pL,y,W-pL-pR,bh-4);
+    ctx.fillStyle=PALP[i]+'0.75)'; ctx.fillRect(pL+xMn,y,xMx-xMn,bh-4);
+    ctx.strokeStyle=PCOLS[i]; ctx.lineWidth=1; ctx.strokeRect(pL+xMn,y,xMx-xMn,bh-4);
+    ctx.fillStyle=PCOLS[i]; ctx.font='12px system-ui'; ctx.textAlign='right';
+    ctx.fillText(PNAMES[i],pL-6,y+bh/2);
+    ctx.fillStyle='#e2e8f0'; ctx.font='11px system-ui'; ctx.textAlign='left';
+    ctx.fillText(v[0]+'–'+v[1]+'%',pL+xMx+4,y+bh/2);
+  });
+  ctx.strokeStyle='#1e3a5f'; ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(pL,pT+ch);ctx.lineTo(W-pR,pT+ch);ctx.stroke();
+  [60,70,80,90,100].forEach(v=>{
+    const x=pL+(W-pL-pR)*v/100;
+    ctx.fillStyle='#475569'; ctx.font='9px system-ui'; ctx.textAlign='center';
+    ctx.fillText(v+'%',x,pT+ch+14);
+  });
+  ctx.textAlign='left';
+}
+
+// Init
+window.addEventListener('DOMContentLoaded',()=>{drawDefects();drawNDT();});
+</script>
+</body></html>

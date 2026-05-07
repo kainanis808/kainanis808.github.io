@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tube &amp; Pipe – Manufacturing, Drawing Processes &amp; Inspection</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#0a1628;color:#e2e8f0;font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;}
+  header{background:linear-gradient(135deg,#0f2040 0%,#164e63 100%);padding:24px 32px 20px;border-bottom:2px solid #0891b2;}
+  header h1{font-size:1.75rem;color:#0891b2;letter-spacing:.5px;}
+  header p{color:#94a3b8;font-size:.9rem;margin-top:4px;}
+
+  .tabs{display:flex;border-bottom:2px solid #1e3a5c;background:#0d1f38;padding:0 24px;}
+  .tab-btn{padding:14px 22px;background:none;border:none;color:#94a3b8;font-size:.9rem;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s;white-space:nowrap;}
+  .tab-btn:hover{color:#38bdf8;}
+  .tab-btn.active{color:#0891b2;border-bottom-color:#0891b2;font-weight:600;}
+
+  .tab-content{display:none;padding:28px 32px;}
+  .tab-content.active{display:block;}
+  h2{font-size:1.2rem;color:#0891b2;margin-bottom:16px;}
+  h3{font-size:1rem;color:#38bdf8;margin-bottom:10px;}
+  canvas{display:block;}
+
+  .mfg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .mfg-card{background:#0f2040;border:1px solid #1e3a5c;border-radius:10px;padding:14px;text-align:center;}
+  .mfg-card h3{font-size:.85rem;margin-bottom:8px;}
+  .mfg-card p{font-size:.75rem;color:#94a3b8;margin-top:7px;line-height:1.45;}
+
+  .mode-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px;}
+  .mode-btn{background:#1a3a5c;color:#94a3b8;border:1px solid #334155;border-radius:6px;padding:7px 18px;font-size:.82rem;cursor:pointer;transition:all .2s;}
+  .mode-btn:hover{border-color:#0891b2;color:#38bdf8;}
+  .mode-btn.active{background:#0c4a6e;color:#0891b2;border-color:#0891b2;font-weight:600;}
+
+  .anim-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;}
+  .canvas-box{background:#0f2040;border:1px solid #1e3a5c;border-radius:10px;padding:10px;}
+  #draw-label{font-size:.95rem;color:#38bdf8;text-align:center;}
+  #draw-desc{font-size:.8rem;color:#94a3b8;text-align:center;max-width:700px;line-height:1.5;}
+
+  .data-table{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:14px;}
+  .data-table th{background:#164e63;color:#0891b2;padding:8px 10px;text-align:left;border:1px solid #1e3a5c;}
+  .data-table td{padding:7px 10px;border:1px solid #1e3a5c;color:#cbd5e1;}
+  .data-table tr:nth-child(even) td{background:#0f2040;}
+  .data-table tr:nth-child(odd) td{background:#0a1628;}
+  .data-table caption{color:#64748b;font-size:.73rem;caption-side:bottom;padding-top:5px;text-align:left;}
+
+  .std-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+  .std-btn{background:#1a3a5c;color:#94a3b8;border:1px solid #334155;border-radius:6px;padding:6px 14px;font-size:.78rem;cursor:pointer;transition:all .2s;}
+  .std-btn:hover{border-color:#0891b2;color:#38bdf8;}
+  .std-btn.active{background:#0c4a6e;color:#0891b2;border-color:#0891b2;}
+
+  .insp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .insp-card{background:#0f2040;border:1px solid #1e3a5c;border-radius:10px;padding:12px;text-align:center;}
+  .insp-card h3{font-size:.8rem;color:#38bdf8;margin-bottom:6px;}
+  .insp-card p{font-size:.72rem;color:#94a3b8;line-height:1.4;margin-top:5px;}
+
+  .back-link{text-align:center;padding:28px;}
+  .back-link a{color:#0891b2;text-decoration:none;font-size:.9rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Tube &amp; Pipe – Manufacturing, Drawing &amp; Inspection</h1>
+  <p>Based on Tube &amp; Pipe Association (TPA) International, ASTM, EN, and ASME standards</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="mfg">Manufacturing Processes</button>
+  <button class="tab-btn" data-tab="drawing">Drawing Process</button>
+  <button class="tab-btn" data-tab="tolerances">Dimensional Tolerances</button>
+  <button class="tab-btn" data-tab="inspection">Inspection Requirements</button>
+</div>
+
+<!-- ══ TAB 1 ══ -->
+<div class="tab-content active" id="tab-mfg">
+  <h2>Tube &amp; Pipe Manufacturing Processes</h2>
+  <div class="mfg-grid">
+    <div class="mfg-card">
+      <h3 style="color:#4ade80;">Mannesmann Rotary Piercing (Seamless)</h3>
+      <canvas id="c-mannesmann" width="260" height="180"></canvas>
+      <p><b>Process:</b> Heated round billet fed between two skewed barrel rolls. Secondary stress creates a central void; piercing plug opens it into a seamless shell. Then elongated/sized on a mandrel mill or pilger mill.</p>
+    </div>
+    <div class="mfg-card">
+      <h3 style="color:#60a5fa;">ERW – Electric Resistance Welding</h3>
+      <canvas id="c-erw" width="260" height="180"></canvas>
+      <p><b>Process:</b> Steel strip is formed into a round shape by progressive roll forming, then edges are resistance-welded using high-frequency current. Weld bead is sheared flush. Fastest, lowest cost for line pipe &lt;610mm OD.</p>
+    </div>
+    <div class="mfg-card">
+      <h3 style="color:#fbbf24;">DOM – Drawn Over Mandrel</h3>
+      <canvas id="c-dom" width="260" height="180"></canvas>
+      <p><b>Process:</b> ERW tube is cold-drawn through a die over a mandrel. The weld zone is worked into the base metal microstructure. Produces tight OD/ID tolerances, smooth bore, and near-seamless mechanical properties.</p>
+    </div>
+    <div class="mfg-card">
+      <h3 style="color:#e879f9;">Pilgering (Cold Rolling, Seamless)</h3>
+      <canvas id="c-pilger" width="260" height="180"></canvas>
+      <p><b>Process:</b> Tube shell is pushed into tapered dies that rock back and forth (pilgrim step). Reduces wall and OD in incremental strokes. Excellent wall uniformity; used for nuclear fuel rod cladding, titanium tube.</p>
+    </div>
+    <div class="mfg-card">
+      <h3 style="color:#f97316;">HSAW – Helical Submerged Arc</h3>
+      <canvas id="c-hsaw" width="260" height="180"></canvas>
+      <p><b>Process:</b> Strip is continuously formed into a helix and submerged arc welded on both inside and outside. Used for large-diameter pipe (406–2540mm). The helical weld is the weakest axis under hoop stress.</p>
+    </div>
+    <div class="mfg-card">
+      <h3 style="color:#94a3b8;">Extrusion (Seamless)</h3>
+      <canvas id="c-extru" width="260" height="180"></canvas>
+      <p><b>Process:</b> Heated billet is pressed through an annular die with a mandrel forming the bore. Used for stainless steel, nickel alloys, titanium, and non-ferrous metals where Mannesmann piercing is impractical.</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:24px;">Process Comparison</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>Parameter</th><th style="color:#4ade80;">Seamless (hot)</th><th style="color:#fbbf24;">DOM</th><th style="color:#60a5fa;">ERW</th><th style="color:#f97316;">HSAW / LSAW</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>OD range</td><td>6–600 mm</td><td>6–200 mm</td><td>10–610 mm</td><td>406–2540 mm</td></tr>
+      <tr><td>Wall uniformity</td><td>±10–12%</td><td>±5–8%</td><td>±7–10%</td><td>±7–10%</td></tr>
+      <tr><td>Surface finish (bore)</td><td>Rough (hot)</td><td>Smooth (drawn)</td><td>Moderate</td><td>Rough</td></tr>
+      <tr><td>Weld seam</td><td>None</td><td>Worked-in</td><td>Visible line</td><td>Visible spiral</td></tr>
+      <tr><td>Pressure rating</td><td>Highest</td><td>High</td><td>Moderate</td><td>Moderate</td></tr>
+      <tr><td>Relative cost</td><td>High</td><td>Moderate</td><td>Lowest</td><td>Low–moderate</td></tr>
+      <tr><td>Typical application</td><td>Pressure vessels, boilers, oil/gas</td><td>Hydraulic cylinders, shafts</td><td>Structural, line pipe</td><td>Oil/gas transmission pipelines</td></tr>
+      <tr><td>Key standards</td><td>ASTM A519, A106, EN 10216</td><td>ASTM A513 Type 5</td><td>ASTM A513 Type 1, A135</td><td>API 5L, ASTM A1016</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══ TAB 2 ══ -->
+<div class="tab-content" id="tab-drawing">
+  <h2>Cold Drawing Processes</h2>
+  <div class="anim-wrap">
+    <div class="mode-bar">
+      <button class="mode-btn active" onclick="setDrawMode('sinking')">Tube Sinking</button>
+      <button class="mode-btn" onclick="setDrawMode('fixed')">Fixed Plug</button>
+      <button class="mode-btn" onclick="setDrawMode('floating')">Floating Plug</button>
+      <button class="mode-btn" onclick="setDrawMode('rod')">Rod (Mandrel)</button>
+    </div>
+    <div class="canvas-box">
+      <canvas id="c-draw" width="720" height="340" style="width:720px;height:340px;"></canvas>
+    </div>
+    <div id="draw-label" style="font-size:.95rem;color:#38bdf8;"></div>
+    <div id="draw-desc" style="font-size:.78rem;color:#94a3b8;max-width:700px;text-align:center;line-height:1.5;"></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:22px;">
+    <table class="data-table">
+      <caption>Typical reduction and application data per pass</caption>
+      <thead><tr><th>Drawing Mode</th><th>Max. Area Reduction</th><th>OD Control</th><th>ID / Wall Control</th><th>Typical Use</th></tr></thead>
+      <tbody>
+        <tr><td>Tube sinking</td><td>15–20%</td><td>Yes (die)</td><td>Poor (wall thickens)</td><td>Rough sizing, OD reduction only</td></tr>
+        <tr><td>Fixed plug</td><td>25–35%</td><td>Yes</td><td>Yes (both)</td><td>Precision short tubes, hydraulic cylinder</td></tr>
+        <tr><td>Floating plug</td><td>25–40%</td><td>Yes</td><td>Yes</td><td>Long coil tubing: copper, HVAC, small OD</td></tr>
+        <tr><td>Rod (mandrel)</td><td>35–45%</td><td>Yes</td><td>Best wall</td><td>Highest precision, thin wall, short lengths</td></tr>
+      </tbody>
+    </table>
+    <table class="data-table">
+      <caption>Drawing die parameters — typical values for steel tube</caption>
+      <thead><tr><th>Parameter</th><th>Value</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Die entry (approach) angle</td><td>8–15°</td><td>Half-angle from tube axis</td></tr>
+        <tr><td>Bearing land length</td><td>3–6% of OD</td><td>Controls final size and surface</td></tr>
+        <tr><td>Die relief angle</td><td>25–30°</td><td>Prevents re-contact after bearing</td></tr>
+        <tr><td>Die material</td><td>Carbide (WC-Co)</td><td>High wear resistance; carbide insert in steel holder</td></tr>
+        <tr><td>Lubricant (steel)</td><td>Soap/lime or EP oil</td><td>Pre-coated on tube; dry soap drawing common</td></tr>
+        <tr><td>Draw speed</td><td>15–60 m/min</td><td>Slower for difficult alloys</td></tr>
+        <tr><td>Annealing frequency</td><td>Every 2–4 passes</td><td>Restores ductility, prevents cracking</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ TAB 3 ══ -->
+<div class="tab-content" id="tab-tolerances">
+  <h2>Dimensional Tolerances</h2>
+  <div class="std-bar" id="std-bar">
+    <button class="std-btn active" onclick="setStd('a519')">ASTM A519 (Seamless)</button>
+    <button class="std-btn" onclick="setStd('a513')">ASTM A513 (Welded/DOM)</button>
+    <button class="std-btn" onclick="setStd('en10305')">EN 10305 (Precision)</button>
+    <button class="std-btn" onclick="setStd('b3610')">ASME B36.10 (Pipe Schedule)</button>
+  </div>
+
+  <div id="std-content"></div>
+</div>
+
+<!-- ══ TAB 4 ══ -->
+<div class="tab-content" id="tab-inspection">
+  <h2>Inspection Requirements</h2>
+  <div class="insp-grid">
+    <div class="insp-card">
+      <h3>Hydrostatic Test</h3>
+      <canvas id="c-hydro" width="160" height="110"></canvas>
+      <p>Each tube pressurized to specified test pressure for ≥5 s. Detects through-wall defects. Required per ASTM A1016 §13. Test pressure = 2S·t/OD (Barlow's formula).</p>
+    </div>
+    <div class="insp-card">
+      <h3>Eddy Current (ET)</h3>
+      <canvas id="c-et" width="160" height="110"></canvas>
+      <p>Coil encircles tube; induced currents disturbed by surface and near-surface defects. Per ASTM E309. Detects seams, laps, pits. Alternate to hydrostatic for small tube.</p>
+    </div>
+    <div class="insp-card">
+      <h3>Ultrasonic (UT)</h3>
+      <canvas id="c-ut" width="160" height="110"></canvas>
+      <p>Immersion or contact transducer sends shear-wave into wall. Longitudinal and transverse notch calibration per ASTM E213. Detects wall cracks, inclusions, laminations.</p>
+    </div>
+    <div class="insp-card">
+      <h3>Flux Leakage (MFL)</h3>
+      <canvas id="c-mfl" width="160" height="110"></canvas>
+      <p>Tube magnetized; Hall sensors detect flux leakage at defects. ASTM E570. High speed (up to 2 m/s); used for carbon steel pipe and tube. Does not work on non-magnetic alloys.</p>
+    </div>
+    <div class="insp-card">
+      <h3>Tensile Test</h3>
+      <canvas id="c-tensile" width="160" height="110"></canvas>
+      <p>Transverse or longitudinal specimen per ASTM A370. Verifies UTS, YS, elongation per heat of material. Frequency: per heat/lot, not 100% inspection.</p>
+    </div>
+    <div class="insp-card">
+      <h3>Flattening Test</h3>
+      <canvas id="c-flatten" width="160" height="110"></canvas>
+      <p>Round tube compressed between parallel platens until gap = specified fraction of OD. Per ASTM A1016 §9. Checks weld quality and ductility. Tube must not crack before specified flattening.</p>
+    </div>
+    <div class="insp-card">
+      <h3>Flare / Flange Test</h3>
+      <canvas id="c-flare" width="160" height="110"></canvas>
+      <p>Tube end expanded over a conical mandrel (flare) or flanged over a flat die. ASTM A1016 §10–11. Checks ductility and freedom from seam defects at the tube end.</p>
+    </div>
+    <div class="insp-card">
+      <h3>Dimensional Inspection</h3>
+      <canvas id="c-dim" width="160" height="110"></canvas>
+      <p>OD checked by micrometer or laser gauge; wall by UT or micrometer; length by tape/laser. Straightness: max bow measured over full length. 100% for precision tube; sample for standard.</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:24px;">Inspection Standards Reference</h3>
+  <table class="data-table">
+    <caption>Key inspection methods and applicable standards for steel tube and pipe.</caption>
+    <thead><tr><th>Method</th><th>Standard</th><th>Sensitivity (typical notch)</th><th>Speed</th><th>Alloy compatibility</th></tr></thead>
+    <tbody>
+      <tr><td>Hydrostatic pressure</td><td>ASTM A1016, API 5L §9.8</td><td>Through-wall only</td><td>Low (static)</td><td>All</td></tr>
+      <tr><td>Eddy current</td><td>ASTM E309, EN ISO 10893-2</td><td>12.5% wall notch</td><td>High (&gt;1 m/s)</td><td>All (conductors)</td></tr>
+      <tr><td>Ultrasonic (immersion)</td><td>ASTM E213, EN ISO 10893-10</td><td>5% wall notch</td><td>Moderate</td><td>All</td></tr>
+      <tr><td>Magnetic flux leakage</td><td>ASTM E570, EN ISO 10893-3</td><td>12.5% wall notch</td><td>High</td><td>Ferritic steel only</td></tr>
+      <tr><td>Liquid penetrant</td><td>ASTM E165, EN ISO 10893-4</td><td>Surface defects only</td><td>Low</td><td>Non-porous surfaces</td></tr>
+      <tr><td>Magnetic particle</td><td>ASTM E709, EN ISO 10893-5</td><td>Near-surface</td><td>Moderate</td><td>Ferritic steel only</td></tr>
+      <tr><td>Flattening test</td><td>ASTM A1016 §9</td><td>Macro ductility / weld</td><td>Low</td><td>Round tube all alloys</td></tr>
+      <tr><td>Flare test</td><td>ASTM A1016 §10</td><td>Seam ductility</td><td>Low</td><td>Round tube all alloys</td></tr>
+      <tr><td>Tensile / hardness</td><td>ASTM A370, E18</td><td>Bulk mechanical</td><td>Low (per lot)</td><td>All</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="back-link"><a href="index.html">← Back to Visualizations</a></div>
+
+<script>
+// ─── HI-DPI ───────────────────────────────────────────────────────
+function getCtx(id) {
+  const cv = document.getElementById(id);
+  const dpr = window.devicePixelRatio || 1;
+  if (!cv._dpr) {
+    cv.style.width  = cv.width  + 'px';
+    cv.style.height = cv.height + 'px';
+    cv.width  = Math.round(cv.width  * dpr);
+    cv.height = Math.round(cv.height * dpr);
+    cv._dpr = true;
+  }
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const el = document.getElementById(id);
+  return { ctx, W: el.width / dpr, H: el.height / dpr };
+}
+
+// ─── TABS ─────────────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'inspection') drawInspection();
+    if (btn.dataset.tab === 'tolerances') { renderStdContent('a519'); }
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// TAB 1 – MANUFACTURING CANVASES
+// ═══════════════════════════════════════════════════════════════════
+function drawMannesmann() {
+  const { ctx, W, H } = getCtx('c-mannesmann');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  // Billet (round cross-section entering)
+  const grad = ctx.createLinearGradient(20, H/2, 120, H/2);
+  grad.addColorStop(0,'#9a3412'); grad.addColorStop(1,'#ea580c');
+  ctx.fillStyle = grad;
+  ctx.beginPath(); ctx.ellipse(60, H/2, 30, 30, 0, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle = '#f97316'; ctx.lineWidth = 1.5; ctx.stroke();
+
+  // Arrow right
+  ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(95, H/2); ctx.lineTo(115, H/2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(108, H/2-5); ctx.lineTo(115, H/2); ctx.lineTo(108, H/2+5); ctx.stroke();
+
+  // Two skewed barrel rolls (top-left and bottom-right)
+  ctx.fillStyle = '#374151';
+  ctx.save(); ctx.translate(140, H/2); ctx.rotate(-0.35);
+  ctx.beginPath(); ctx.ellipse(0, -20, 12, 28, 0, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#64748b'; ctx.lineWidth=1; ctx.stroke();
+  ctx.restore();
+  ctx.save(); ctx.translate(140, H/2); ctx.rotate(-0.35);
+  ctx.beginPath(); ctx.ellipse(0, 20, 12, 28, 0, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#64748b'; ctx.lineWidth=1; ctx.stroke();
+  ctx.restore();
+
+  // Piercing plug (center)
+  ctx.fillStyle = '#0891b2';
+  ctx.beginPath(); ctx.ellipse(145, H/2, 6, 14, 0, 0, Math.PI*2); ctx.fill();
+
+  // Resulting shell with hole
+  ctx.strokeStyle = '#f97316'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.ellipse(210, H/2, 26, 26, 0, 0, Math.PI*2); ctx.stroke();
+  ctx.strokeStyle = '#0891b2'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.ellipse(210, H/2, 14, 14, 0, 0, Math.PI*2); ctx.stroke();
+
+  // Labels
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Billet', 60, H-12);
+  ctx.fillText('Skewed rolls', 140, 18);
+  ctx.fillStyle = '#0891b2'; ctx.fillText('Plug', 145, H-12);
+  ctx.fillStyle = '#4ade80'; ctx.fillText('Shell', 210, H-12);
+}
+
+function drawERW() {
+  const { ctx, W, H } = getCtx('c-erw');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  // Strip entering from left (flat)
+  ctx.fillStyle = '#475569';
+  ctx.fillRect(10, H/2-6, 60, 12);
+  ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1; ctx.stroke();
+
+  // Progressive forming rolls → tube shape
+  const stages = [0.25, 0.55, 0.85];
+  stages.forEach((open, i) => {
+    const cx = 95 + i * 50;
+    ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(cx, H/2, 18, Math.PI * open, Math.PI * (2 - open));
+    ctx.stroke();
+    // Roll
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.arc(cx, H/2, 22, Math.PI * open, Math.PI * (2 - open));
+    ctx.stroke();
+  });
+
+  // Closed tube with weld seam
+  const tx = 212;
+  ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(tx, H/2, 18, 0, Math.PI*2); ctx.stroke();
+  // Weld seam flash (triangle at top)
+  ctx.fillStyle = '#fbbf24';
+  ctx.beginPath(); ctx.moveTo(tx-6, H/2-18); ctx.lineTo(tx, H/2-28); ctx.lineTo(tx+6, H/2-18); ctx.fill();
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(tx, H/2-18); ctx.lineTo(tx, H/2+18); ctx.stroke();
+
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Strip', 40, H/2+28);
+  ctx.fillText('Form rolls', 145, H-12);
+  ctx.fillStyle = '#fbbf24'; ctx.fillText('Seam', tx+24, H/2-24);
+  ctx.fillStyle = '#60a5fa'; ctx.fillText('ERW tube', tx, H-12);
+}
+
+function drawDOM() {
+  const { ctx, W, H } = getCtx('c-dom');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  // ERW tube entering
+  ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(38, H/2, 26, 0, Math.PI*2); ctx.stroke();
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1; ctx.setLineDash([2,2]);
+  ctx.beginPath(); ctx.moveTo(38, H/2-26); ctx.lineTo(38, H/2+26); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#60a5fa'; ctx.font = '8px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('ERW', 38, H-12);
+
+  // Arrow
+  ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(68, H/2); ctx.lineTo(90, H/2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(83, H/2-4); ctx.lineTo(90, H/2); ctx.lineTo(83, H/2+4); ctx.stroke();
+
+  // Die block
+  ctx.fillStyle = '#374151';
+  ctx.fillRect(90, H/2-42, 35, 32);
+  ctx.fillRect(90, H/2+10, 35, 32);
+  ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1; ctx.stroke();
+  // Die opening taper
+  ctx.strokeStyle = '#0891b2'; ctx.lineWidth = 1; ctx.setLineDash([2,2]);
+  ctx.beginPath(); ctx.moveTo(90, H/2-10); ctx.lineTo(125, H/2-8); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(90, H/2+10); ctx.lineTo(125, H/2+8); ctx.stroke();
+  ctx.setLineDash([]);
+  // Mandrel rod
+  ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(78, H/2); ctx.lineTo(175, H/2); ctx.stroke();
+  ctx.fillStyle = '#4ade80'; ctx.font = '8px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Mandrel', 127, H/2+14);
+
+  // DOM tube exiting
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(210, H/2, 20, 0, Math.PI*2); ctx.stroke();
+  ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.arc(210, H/2, 12, 0, Math.PI*2); ctx.stroke();
+  ctx.fillStyle = '#fbbf24'; ctx.font = '8px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('DOM tube', 210, H-12);
+  ctx.fillStyle = '#94a3b8'; ctx.font = '7px Arial';
+  ctx.fillText('(weld zone worked in)', 210, H-3);
+}
+
+function drawPilger() {
+  const { ctx, W, H } = getCtx('c-pilger');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  // Tube shell (entering large)
+  ctx.strokeStyle = '#f97316'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(38, H/2, 32, 0, Math.PI*2); ctx.stroke();
+  ctx.strokeStyle = '#0891b2'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.arc(38, H/2, 20, 0, Math.PI*2); ctx.stroke();
+  ctx.fillStyle = '#f97316'; ctx.font = '8px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Shell (large)', 38, H-12);
+
+  // Tapered dies (top and bottom, rocking)
+  ctx.fillStyle = '#374151';
+  ctx.beginPath();
+  ctx.moveTo(88, H/2-50); ctx.lineTo(180, H/2-20); ctx.lineTo(180, H/2-4); ctx.lineTo(88, H/2-12); ctx.closePath();
+  ctx.fill(); ctx.strokeStyle='#64748b'; ctx.lineWidth=1; ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(88, H/2+50); ctx.lineTo(180, H/2+20); ctx.lineTo(180, H/2+4); ctx.lineTo(88, H/2+12); ctx.closePath();
+  ctx.fill(); ctx.stroke();
+  // Pilgering mandrel
+  ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(70, H/2); ctx.lineTo(200, H/2); ctx.stroke();
+
+  // Exiting tube (smaller, more precise wall)
+  ctx.strokeStyle = '#e879f9'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(225, H/2, 20, 0, Math.PI*2); ctx.stroke();
+  ctx.strokeStyle = '#0891b2'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.arc(225, H/2, 13, 0, Math.PI*2); ctx.stroke();
+  ctx.fillStyle = '#e879f9'; ctx.font = '8px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Precise tube', 225, H-12);
+
+  ctx.fillStyle = '#94a3b8'; ctx.font = '8px Arial';
+  ctx.fillText('Tapered dies (rock back/forth)', 134, H/2-56);
+}
+
+function drawHSAW() {
+  const { ctx, W, H } = getCtx('c-hsaw');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  // Large pipe cross-section with helical weld
+  const cx = 130, cy = H/2, R = 55;
+  ctx.strokeStyle = '#f97316'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI*2); ctx.stroke();
+  // Helical weld line
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2;
+  // Draw a diagonal line suggesting helix
+  ctx.beginPath();
+  ctx.moveTo(cx - R*0.7, cy - R*0.7);
+  ctx.quadraticCurveTo(cx, cy - R*1.05, cx + R*0.7, cy - R*0.4);
+  ctx.stroke();
+  // Strip entering at angle
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 5;
+  ctx.beginPath(); ctx.moveTo(0, cy-20); ctx.lineTo(cx-R*0.8, cy - R*0.8); ctx.stroke();
+  ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, cy-20+4); ctx.lineTo(cx-R*0.8, cy - R*0.8+4); ctx.stroke();
+
+  ctx.fillStyle = '#f97316'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Large pipe', cx, H-12);
+  ctx.fillStyle = '#fbbf24'; ctx.fillText('Helical seam', cx+40, cy-30);
+  ctx.fillStyle = '#94a3b8'; ctx.fillText('Strip feed', 32, cy-28);
+}
+
+function drawExtrusion() {
+  const { ctx, W, H } = getCtx('c-extru');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  // Container
+  ctx.fillStyle = '#1e3a5c';
+  ctx.fillRect(15, H/2-48, 160, 96);
+  ctx.fillStyle = '#0a1628';
+  ctx.fillRect(25, H/2-36, 140, 72);
+  ctx.strokeStyle = '#334155'; ctx.lineWidth = 1.5; ctx.strokeRect(15, H/2-48, 160, 96);
+
+  // Billet inside
+  const g = ctx.createLinearGradient(25, 0, 165, 0);
+  g.addColorStop(0,'#7f1d1d'); g.addColorStop(1,'#dc2626');
+  ctx.fillStyle = g; ctx.fillRect(25, H/2-36, 140, 72);
+
+  // Ram (from left)
+  ctx.fillStyle = '#475569'; ctx.fillRect(0, H/2-44, 20, 88);
+
+  // Die (on right)
+  ctx.fillStyle = '#374151'; ctx.fillRect(175, H/2-48, 22, 48); // top
+  ctx.fillRect(175, H/2, 22, 48); // bot
+  ctx.strokeStyle = '#0891b2'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(175, H/2-14); ctx.lineTo(175, H/2+14); ctx.stroke();
+  // Mandrel through die
+  ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(175, H/2); ctx.lineTo(230, H/2); ctx.stroke();
+
+  // Extruded tube emerging
+  ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(197, H/2-14); ctx.lineTo(255, H/2-14); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(197, H/2+14); ctx.lineTo(255, H/2+14); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(197, H/2-8); ctx.lineTo(255, H/2-8); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(197, H/2+8); ctx.lineTo(255, H/2+8); ctx.stroke();
+
+  ctx.fillStyle = '#94a3b8'; ctx.font = '8px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Ram →', 12, H-12);
+  ctx.fillText('Billet', 95, H-12);
+  ctx.fillStyle = '#0891b2'; ctx.fillText('Die', 186, H-12);
+  ctx.fillStyle = '#4ade80'; ctx.fillText('Mandrel', 213, H/2+22);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// TAB 2 – DRAWING PROCESS
+// ═══════════════════════════════════════════════════════════════════
+let drawMode = 'sinking';
+
+const DRAW_INFO = {
+  sinking: {
+    label: 'Tube Sinking – No Internal Tooling',
+    desc: 'The tube is drawn through a die without any mandrel or plug inside. The die controls the outside diameter; the inside bore is unsupported. Wall thickness increases slightly (conservation of volume). Inner diameter reduction is not controlled and may vary. Lowest tooling cost; fastest setup; limited to ~15–20% area reduction per pass before surface defects appear on the bore.'
+  },
+  fixed: {
+    label: 'Fixed Plug Drawing',
+    desc: 'A plug is mounted on a long rod that passes back through the die and is held stationary. The plug contacts the tube bore at the die entry, controlling both OD (die) and ID (plug) simultaneously. Both wall thickness and bore diameter are precisely controlled. The rod must resist buckling under draw load — limits tube length and reduction. Used for hydraulic cylinder tube, precision mechanical tubing.'
+  },
+  floating: {
+    label: 'Floating Plug Drawing',
+    desc: 'A short double-tapered plug is placed inside the tube and positions itself automatically at the die throat by force equilibrium between the plug friction force and die reaction force. No holding rod is required — the plug "floats." Enables drawing from coil (unlimited length). Used for copper plumbing tube, HVAC coils, and small-diameter precision tube. The plug must be carefully designed to remain stable during drawing.'
+  },
+  rod: {
+    label: 'Rod (Mandrel) Drawing',
+    desc: 'A solid rod passes through the full tube length. The rod OD defines the tube ID precisely throughout. After drawing, the rod is withdrawn (pushed out) and reused. Produces the best wall thickness uniformity and bore surface finish. Highest tooling cost and setup time; best for short, high-precision tubes. The rod must be stronger than the tube and is typically annealed steel or carbide-coated.'
+  }
+};
+
+function setDrawMode(mode) {
+  drawMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.toLowerCase().includes(
+      mode === 'sinking' ? 'sinking' : mode === 'fixed' ? 'fixed' : mode === 'floating' ? 'floating' : 'rod'
+    ));
+  });
+  drawDrawCanvas();
+}
+
+function drawDrawCanvas() {
+  const cv = document.getElementById('c-draw');
+  const dpr = window.devicePixelRatio || 1;
+  if (!cv._dpr) {
+    cv.width = Math.round(720 * dpr); cv.height = Math.round(340 * dpr); cv._dpr = true;
+  }
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const W = 720, H = 340;
+
+  const info = DRAW_INFO[drawMode];
+  document.getElementById('draw-label').textContent = info.label;
+  document.getElementById('draw-desc').textContent  = info.desc;
+
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+
+  const cy = 170; // center line
+  // Entering tube dimensions (half values, in pixels)
+  const OD_e = 56, ID_e = 38, WALL_e = 18;
+  // Exiting tube dimensions
+  let OD_x, ID_x;
+  if (drawMode === 'sinking') { OD_x = 42; ID_x = 26; }       // wall increases
+  else if (drawMode === 'fixed') { OD_x = 42; ID_x = 30; }    // wall slightly reduced
+  else if (drawMode === 'floating') { OD_x = 42; ID_x = 30; } // similar to fixed
+  else { OD_x = 42; ID_x = 32; }                              // rod: best ID control
+
+  // Die zone coordinates
+  const dieEntX = 160, dieBear1 = 295, dieBear2 = 345, dieExX = 420;
+  // Plug/rod coordinates
+  const plugNoseX = 255, plugBodyX2 = 345;
+
+  // ── Draw bench rails ──
+  ctx.strokeStyle = '#1e3a5c'; ctx.lineWidth = 1; ctx.setLineDash([6,4]);
+  ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(W, cy); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // ── Entering tube (left of die) ──
+  // Top outer surface
+  ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(0, cy - OD_e); ctx.lineTo(dieEntX, cy - OD_e); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0, cy + OD_e); ctx.lineTo(dieEntX, cy + OD_e); ctx.stroke();
+  // Inner bore
+  ctx.strokeStyle = '#1d4ed8'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(0, cy - ID_e); ctx.lineTo(dieEntX, cy - ID_e); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0, cy + ID_e); ctx.lineTo(dieEntX, cy + ID_e); ctx.stroke();
+  // Fill tube cross-section entering (light tint)
+  ctx.fillStyle = '#1e3a5c44';
+  ctx.fillRect(0, cy - OD_e, dieEntX, OD_e - ID_e);
+  ctx.fillRect(0, cy + ID_e, dieEntX, OD_e - ID_e);
+
+  // ── Exiting tube (right of die) ──
+  ctx.strokeStyle = '#0891b2'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(dieExX, cy - OD_x); ctx.lineTo(W, cy - OD_x); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(dieExX, cy + OD_x); ctx.lineTo(W, cy + OD_x); ctx.stroke();
+  ctx.strokeStyle = '#0369a1'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(dieExX, cy - ID_x); ctx.lineTo(W, cy - ID_x); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(dieExX, cy + ID_x); ctx.lineTo(W, cy + ID_x); ctx.stroke();
+  ctx.fillStyle = '#0891b233';
+  ctx.fillRect(dieExX, cy - OD_x, W - dieExX, OD_x - ID_x);
+  ctx.fillRect(dieExX, cy + ID_x, W - dieExX, OD_x - ID_x);
+
+  // ── Die block ──
+  const dieMid = (dieBear1 + dieBear2) / 2;
+  // Die body: top block
+  ctx.fillStyle = '#374151';
+  ctx.beginPath();
+  ctx.moveTo(dieEntX - 20, 0);
+  ctx.lineTo(dieBear2 + 20, 0);
+  ctx.lineTo(dieBear2 + 20, cy - OD_x - 6);
+  ctx.lineTo(dieBear2, cy - OD_x);
+  ctx.lineTo(dieBear1, cy - OD_x);
+  ctx.lineTo(dieEntX, cy - OD_e);
+  ctx.lineTo(dieEntX - 20, cy - OD_e);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1; ctx.stroke();
+  // Die body: bottom block
+  ctx.fillStyle = '#374151';
+  ctx.beginPath();
+  ctx.moveTo(dieEntX - 20, H);
+  ctx.lineTo(dieBear2 + 20, H);
+  ctx.lineTo(dieBear2 + 20, cy + OD_x + 6);
+  ctx.lineTo(dieBear2, cy + OD_x);
+  ctx.lineTo(dieBear1, cy + OD_x);
+  ctx.lineTo(dieEntX, cy + OD_e);
+  ctx.lineTo(dieEntX - 20, cy + OD_e);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1; ctx.stroke();
+
+  // Die bearing surface highlight
+  ctx.strokeStyle = '#0891b2'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(dieBear1, cy - OD_x); ctx.lineTo(dieBear2, cy - OD_x); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(dieBear1, cy + OD_x); ctx.lineTo(dieBear2, cy + OD_x); ctx.stroke();
+
+  // ── Rod (all modes — the draw bench rod exits through die) ──
+  if (drawMode === 'rod') {
+    // Long mandrel rod through full tube
+    ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 6;
+    ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(W, cy); ctx.stroke();
+    ctx.fillStyle = '#4ade80'; ctx.font = 'bold 10px Arial'; ctx.textAlign = 'center';
+    ctx.fillText('Mandrel rod (full length)', W/2, cy + ID_x + 20);
+  } else if (drawMode === 'fixed') {
+    // Fixed plug + hold rod extending back through die
+    // Hold rod (going back through die to left)
+    ctx.strokeStyle = '#a78bfa'; ctx.lineWidth = 5;
+    ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(plugNoseX + 10, cy); ctx.stroke();
+    // Plug body (cylinder)
+    ctx.fillStyle = '#7c3aed';
+    ctx.fillRect(plugNoseX, cy - ID_x + 2, plugBodyX2 - plugNoseX, (ID_x - 2) * 2);
+    // Plug nose (tapered)
+    ctx.beginPath();
+    ctx.moveTo(plugNoseX, cy - ID_x + 2);
+    ctx.lineTo(plugNoseX - 14, cy);
+    ctx.lineTo(plugNoseX, cy + ID_x - 2);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#a78bfa'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+    ctx.fillText('Fixed plug', (plugNoseX + plugBodyX2)/2, cy - ID_x - 8);
+    ctx.fillText('Hold rod', 80, cy - 14);
+  } else if (drawMode === 'floating') {
+    // Floating plug (self-positioning, no rod)
+    const px = dieBear1 - 10;
+    ctx.fillStyle = '#f97316';
+    // Plug body
+    ctx.fillRect(px, cy - ID_x + 3, 50, (ID_x - 3) * 2);
+    // Front taper
+    ctx.beginPath();
+    ctx.moveTo(px, cy - ID_x + 3);
+    ctx.lineTo(px - 18, cy);
+    ctx.lineTo(px, cy + ID_x - 3);
+    ctx.closePath(); ctx.fill();
+    // Rear taper (self-centering feature)
+    ctx.beginPath();
+    ctx.moveTo(px + 50, cy - ID_x + 3);
+    ctx.lineTo(px + 64, cy);
+    ctx.lineTo(px + 50, cy + ID_x - 3);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#fdba74'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+    ctx.fillText('Floating plug', px + 25, cy - ID_x - 8);
+    ctx.fillText('(self-positioning)', px + 25, cy - ID_x - 0);
+    // "no rod" label
+    ctx.fillStyle = '#4ade80'; ctx.font = '9px Arial';
+    ctx.fillText('No hold rod needed', px + 25, cy + ID_x + 18);
+  }
+
+  // ── Draw force arrow ──
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(480, cy); ctx.lineTo(540, cy); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(533, cy-6); ctx.lineTo(540, cy); ctx.lineTo(533, cy+6); ctx.stroke();
+  ctx.fillStyle = '#38bdf8'; ctx.font = 'bold 10px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Draw force →', 510, cy - 14);
+
+  // ── Dimension callouts ──
+  const ann = (y1, y2, x, label, col) => {
+    ctx.strokeStyle = col; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x, y1); ctx.lineTo(x, y2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x-4, y1+4); ctx.lineTo(x, y1); ctx.lineTo(x+4, y1+4); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x-4, y2-4); ctx.lineTo(x, y2); ctx.lineTo(x+4, y2-4); ctx.stroke();
+    ctx.fillStyle = col; ctx.font = '9px Arial'; ctx.textAlign = 'left';
+    ctx.fillText(label, x+6, (y1+y2)/2+3);
+  };
+  ann(cy - OD_e, cy + OD_e, 65, 'OD in', '#60a5fa');
+  ann(cy - ID_e, cy + ID_e, 80, 'ID in', '#1d4ed8');
+  ann(cy - OD_x, cy + OD_x, 590, 'OD out', '#0891b2');
+  ann(cy - ID_x, cy + ID_x, 608, 'ID out', '#0369a1');
+
+  // ── Labels ──
+  ctx.fillStyle = '#94a3b8'; ctx.font = '10px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Die entry cone', (dieEntX + dieBear1)/2, 16);
+  ctx.fillText('Bearing land', dieMid, 16);
+  ctx.fillStyle = '#0891b2'; ctx.font = '9px Arial';
+  ctx.fillText('Die (carbide insert)', dieMid, H - 8);
+
+  // Approach angle label
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1; ctx.setLineDash([2,2]);
+  ctx.beginPath(); ctx.moveTo(dieEntX, cy-OD_e); ctx.lineTo(dieBear1, cy-OD_x); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#fbbf24'; ctx.font = '9px Arial'; ctx.textAlign = 'left';
+  ctx.fillText('~10° entry', dieEntX+8, cy - OD_e - 8);
+
+  // Draw direction arrow (tube moving right)
+  ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1; ctx.setLineDash([3,2]);
+  ctx.beginPath(); ctx.moveTo(20, cy+OD_e+18); ctx.lineTo(130, cy+OD_e+18); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(123, cy+OD_e+12); ctx.lineTo(130, cy+OD_e+18); ctx.lineTo(123, cy+OD_e+24); ctx.stroke();
+  ctx.fillStyle = '#64748b'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Tube travel direction', 75, cy+OD_e+32);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// TAB 3 – TOLERANCES
+// ═══════════════════════════════════════════════════════════════════
+const STD_DATA = {
+  a519: {
+    title: 'ASTM A519 – Seamless Carbon and Alloy Steel Mechanical Tubing',
+    rows: [
+      ['OD ≤ 25.4 mm (1")','±0.13 mm','±10% of nom. wall','±0.13 mm','±6.4 mm (12" per 24 ft)'],
+      ['OD 25.4–63.5 mm (1–2.5")','±0.25 mm','±10%','±0.25 mm','±6.4 mm'],
+      ['OD 63.5–127 mm (2.5–5")','±0.38 mm','±10%','±0.38 mm','±6.4 mm'],
+      ['OD 127–203 mm (5–8")','±0.76 mm','±10%','±0.76 mm','±9.5 mm'],
+      ['OD > 203 mm (>8")','±1.0% of OD','±12.5%','±1.0% of OD','±12.7 mm'],
+    ],
+    headers: ['OD Range','OD Tolerance','Wall Tolerance','Eccentricity','Length Tolerance'],
+    note: 'Source: ASTM A519-22. Cold-drawn condition. Straightness: 3.2 mm max in any 1.5 m (1/8" per 5 ft). Values are for cold-drawn tubing; hot-finished tolerances are approximately double.',
+  },
+  a513: {
+    title: 'ASTM A513 – Electric Resistance Welded Mechanical Tubing (incl. DOM)',
+    rows: [
+      ['OD ≤ 38.1 mm (1.5")','±0.13 mm','±0.13 mm or 10%','±4.8 mm (max)','Same as A519'],
+      ['OD 38.1–76.2 mm (1.5–3")','±0.25 mm','±0.25 mm or 10%','±6.4 mm','—'],
+      ['OD 76.2–152.4 mm (3–6")','±0.38 mm','±0.38 mm or 10%','±7.9 mm','—'],
+      ['OD > 152.4 mm (6")','±0.50 mm','±0.50 mm or 10%','±9.5 mm','—'],
+    ],
+    headers: ['OD Range','OD Tolerance','Wall Tolerance','Out-of-round','Length'],
+    note: 'Source: ASTM A513-20. Type 1 = ERW; Type 5 = DOM (drawn over mandrel). DOM has tighter OD tolerance due to cold draw. Wall ratio max = 3:1 (thickest:thinnest in same cross-section).',
+  },
+  en10305: {
+    title: 'EN 10305-1 (E1) – Seamless Cold-Drawn Steel Tubes for Precision Applications',
+    rows: [
+      ['OD 4–10 mm','±0.075 mm','±0.075 mm','—','+∞ / −0'],
+      ['OD 10–18 mm','±0.080 mm','±0.090 mm','0.2 mm','+∞ / −0'],
+      ['OD 18–30 mm','±0.100 mm','±0.100 mm','0.3 mm','—'],
+      ['OD 30–50 mm','±0.120 mm','±0.120 mm','0.3 mm','—'],
+      ['OD 50–80 mm','±0.150 mm','±0.150 mm','0.4 mm','—'],
+      ['OD 80–120 mm','±0.200 mm','±0.200 mm','0.5 mm','—'],
+      ['OD 120–180 mm','±0.250 mm','±0.250 mm','0.5 mm','—'],
+    ],
+    headers: ['OD Range','OD Tolerance (class D4)','Wall Tolerance (class T4)','Ovality','Length'],
+    note: 'Source: EN 10305-1:2016. Class D4/T4 (standard precision). Tighter classes D7/T7 available at ±0.03 mm OD for hydraulic cylinders. Straightness: ≤ 1.5 mm/m (3 mm/m for OD > 80 mm). EN 10305-2 covers welded tube.',
+  },
+  b3610: {
+    title: 'ASME B36.10M – Welded and Seamless Wrought Steel Pipe (Nominal Pipe Sizes)',
+    rows: [
+      ['NPS ½ (21.3 mm OD)','Sch 40','2.77 mm','±1% OD','±12.5% wall'],
+      ['NPS 1 (33.4 mm OD)','Sch 40','3.38 mm','±1% OD','±12.5% wall'],
+      ['NPS 2 (60.3 mm OD)','Sch 40','3.91 mm','±1% OD','±12.5% wall'],
+      ['NPS 4 (114.3 mm OD)','Sch 40','6.02 mm','±1% OD','±12.5% wall'],
+      ['NPS 6 (168.3 mm OD)','Sch 40','7.11 mm','±1% OD','±12.5% wall'],
+      ['NPS 8 (219.1 mm OD)','Sch 40','8.18 mm','±1% OD','±12.5% wall'],
+      ['NPS 12 (323.9 mm OD)','Sch 40','9.53 mm','±1% OD','±12.5% wall'],
+      ['NPS 16 (406.4 mm OD)','Sch 30','9.53 mm','±1% OD','±12.5% wall'],
+    ],
+    headers: ['Nominal Pipe Size','Schedule','Wall Thickness (nom.)','OD Tolerance','Wall Tolerance'],
+    note: 'Source: ASME B36.10M-2018. OD tolerance ±1% of nominal OD per ASTM A530. Wall tolerance ±12.5% (hot finished). Pipe schedules define constant nominal OD with varying wall thickness. "Standard Weight" ≈ Sch 40 for NPS ≤ 10". Length: mill random = 4.9–7.0 m; double random ≥ 10.7 m.',
+  },
+};
+
+function setStd(key) {
+  document.querySelectorAll('.std-btn').forEach(b => b.classList.toggle('active', b.onclick.toString().includes(key)));
+  renderStdContent(key);
+}
+
+function renderStdContent(key) {
+  const d = STD_DATA[key];
+  let html = `<h3 style="margin-bottom:10px;">${d.title}</h3><table class="data-table"><thead><tr>`;
+  d.headers.forEach(h => html += `<th>${h}</th>`);
+  html += '</tr></thead><tbody>';
+  d.rows.forEach((r, i) => {
+    html += '<tr>';
+    r.forEach((cell, j) => html += `<td>${cell}</td>`);
+    html += '</tr>';
+  });
+  html += `</tbody></table><p style="font-size:.73rem;color:#64748b;margin-top:6px;">${d.note}</p>`;
+  document.getElementById('std-content').innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// TAB 4 – INSPECTION CANVASES
+// ═══════════════════════════════════════════════════════════════════
+function drawInspection() {
+  drawHydro(); drawET(); drawUT(); drawMFL(); drawTensile(); drawFlatten(); drawFlare(); drawDim();
+}
+
+function drawHydro() {
+  const { ctx, W, H } = getCtx('c-hydro');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  // Tube cross-section
+  ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(W/2, H/2, 40, 0, Math.PI*2); ctx.stroke();
+  ctx.beginPath(); ctx.arc(W/2, H/2, 28, 0, Math.PI*2); ctx.stroke();
+  // Pressure arrows inward
+  const arrows = [[W/2, H/2-40],[W/2, H/2+40],[W/2-40, H/2],[W/2+40, H/2]];
+  arrows.forEach(([ax, ay]) => {
+    const dx = W/2-ax, dy = H/2-ay;
+    const len = Math.sqrt(dx*dx+dy*dy);
+    const ux = dx/len*10, uy = dy/len*10;
+    ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(ax+ux*1.8, ay+uy*1.8); ctx.lineTo(ax+ux*3, ay+uy*3); ctx.stroke();
+  });
+  ctx.fillStyle = '#38bdf8'; ctx.font = '8px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('P test', W/2, H/2+4);
+  ctx.fillStyle = '#94a3b8'; ctx.font = '8px Arial';
+  ctx.fillText('Hydraulic pressure', W/2, H-4);
+}
+
+function drawET() {
+  const { ctx, W, H } = getCtx('c-et');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  // Tube
+  ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 2;
+  ctx.fillRect(20, H/2-12, W-40, 24);
+  ctx.fillStyle = '#1e3a5c'; ctx.fillRect(20, H/2-12, W-40, 24);
+  ctx.strokeStyle = '#60a5fa'; ctx.strokeRect(20, H/2-12, W-40, 24);
+  // Coil (encircles tube)
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2;
+  for (let i = 0; i < 4; i++) {
+    const x = 40 + i*24;
+    ctx.beginPath(); ctx.ellipse(x, H/2, 4, 20, 0, 0, Math.PI*2); ctx.stroke();
+  }
+  // Defect
+  ctx.fillStyle = '#f87171'; ctx.fillRect(95, H/2-12, 6, 14);
+  ctx.fillStyle = '#fbbf24'; ctx.font = '8px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Encircling coil', W/2, H/2-24);
+  ctx.fillStyle = '#f87171'; ctx.fillText('Defect', 100, H-4);
+}
+
+function drawUT() {
+  const { ctx, W, H } = getCtx('c-ut');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  // Tube wall
+  ctx.fillStyle = '#1e3a5c';
+  ctx.fillRect(10, H/2-30, W-20, 60);
+  ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 1.5;
+  ctx.strokeRect(10, H/2-30, W-20, 60);
+  // Transducer
+  ctx.fillStyle = '#374151'; ctx.fillRect(60, 10, 30, 20); ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1; ctx.strokeRect(60, 10, 30, 20);
+  // Beam
+  ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 1.5; ctx.setLineDash([3,2]);
+  ctx.beginPath(); ctx.moveTo(75, 30); ctx.lineTo(75, H/2-30); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(75, H/2-30); ctx.lineTo(75, H/2+30); ctx.stroke();
+  ctx.setLineDash([]);
+  // Echo from defect
+  ctx.strokeStyle = '#f87171'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(75, H/2-10); ctx.lineTo(62, 30); ctx.stroke();
+  ctx.fillStyle = '#f87171'; ctx.fillRect(70, H/2-12, 10, 4);
+  ctx.fillStyle = '#4ade80'; ctx.font = '8px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('UT beam', 100, 22);
+  ctx.fillStyle = '#f87171'; ctx.fillText('Echo', 55, 40);
+}
+
+function drawMFL() {
+  const { ctx, W, H } = getCtx('c-mfl');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  // Tube
+  ctx.fillStyle = '#1e3a5c'; ctx.fillRect(10, H/2-18, W-20, 36);
+  ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 1.5; ctx.strokeRect(10, H/2-18, W-20, 36);
+  // Magnets (top and bottom)
+  ctx.fillStyle = '#dc2626'; ctx.fillRect(30, H/2-42, 24, 20); ctx.fillStyle = '#2563eb'; ctx.fillRect(60, H/2-42, 24, 20);
+  ctx.fillStyle = '#dc2626'; ctx.fillRect(30, H/2+22, 24, 20); ctx.fillStyle = '#2563eb'; ctx.fillRect(60, H/2+22, 24, 20);
+  ctx.fillStyle = '#f87171'; ctx.font = '8px Arial'; ctx.textAlign = 'center'; ctx.fillText('N', 42, H/2-28);
+  ctx.fillStyle = '#60a5fa'; ctx.fillText('S', 72, H/2-28);
+  // Flux lines
+  ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1; ctx.setLineDash([2,2]);
+  ctx.beginPath(); ctx.moveTo(90, H/2-18); ctx.quadraticCurveTo(105, H/2, 90, H/2+18); ctx.stroke();
+  ctx.setLineDash([]);
+  // Defect + leakage
+  ctx.fillStyle = '#f87171'; ctx.fillRect(85, H/2-18, 6, 8);
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(85, H/2-18); ctx.lineTo(78, H/2-32); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(91, H/2-18); ctx.lineTo(98, H/2-32); ctx.stroke();
+  ctx.fillStyle = '#fbbf24'; ctx.font = '8px Arial';
+  ctx.fillText('Flux leakage', W/2+20, H/2-35);
+}
+
+function drawTensile() {
+  const { ctx, W, H } = getCtx('c-tensile');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  // Dog bone shape
+  ctx.fillStyle = '#374151';
+  ctx.fillRect(10, H/2-18, 30, 36);
+  ctx.fillRect(120, H/2-18, 30, 36);
+  // Gage section
+  ctx.fillStyle = '#60a5fa';
+  ctx.fillRect(40, H/2-8, 80, 16);
+  ctx.strokeStyle = '#0891b2'; ctx.lineWidth = 1; ctx.strokeRect(40, H/2-8, 80, 16);
+  // Tensile arrows
+  ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(0, H/2); ctx.lineTo(15, H/2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(145, H/2); ctx.lineTo(155, H/2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(6,H/2-5); ctx.lineTo(0,H/2); ctx.lineTo(6,H/2+5); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(149,H/2-5); ctx.lineTo(155,H/2); ctx.lineTo(149,H/2+5); ctx.stroke();
+  ctx.fillStyle = '#60a5fa'; ctx.font = '8px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Gage length', 80, H/2+22);
+  ctx.fillStyle = '#4ade80'; ctx.fillText('← Tensile →', 80, H-4);
+}
+
+function drawFlatten() {
+  const { ctx, W, H } = getCtx('c-flatten');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  // Platens
+  ctx.fillStyle = '#374151'; ctx.fillRect(20, 10, W-40, 18); ctx.fillRect(20, H-28, W-40, 18);
+  ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1; ctx.stroke();
+  // Compressed tube (flattened oval)
+  ctx.fillStyle = '#1e3a5c';
+  ctx.beginPath(); ctx.ellipse(W/2, H/2, 40, 18, 0, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 2; ctx.stroke();
+  // H dimension
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(W-20, 28); ctx.lineTo(W-20, H-28); ctx.stroke();
+  ctx.fillStyle = '#fbbf24'; ctx.font = '8px Arial'; ctx.textAlign = 'left';
+  ctx.fillText('H', W-14, H/2+3);
+  // Force arrows
+  ctx.strokeStyle = '#f87171'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(W/2, 28); ctx.lineTo(W/2, H/2-18); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(W/2-5, 34); ctx.lineTo(W/2, 28); ctx.lineTo(W/2+5, 34); ctx.stroke();
+}
+
+function drawFlare() {
+  const { ctx, W, H } = getCtx('c-flare');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  // Original tube end (left)
+  ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(20, H/2-20); ctx.lineTo(70, H/2-20); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(20, H/2+20); ctx.lineTo(70, H/2+20); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(20, H/2-12); ctx.lineTo(70, H/2-12); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(20, H/2+12); ctx.lineTo(70, H/2+12); ctx.stroke();
+  // Cone mandrel
+  ctx.fillStyle = '#374151';
+  ctx.beginPath();
+  ctx.moveTo(90, H/2-28); ctx.lineTo(130, H/2-2); ctx.lineTo(130, H/2+2); ctx.lineTo(90, H/2+28); ctx.closePath();
+  ctx.fill(); ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1; ctx.stroke();
+  // Flared tube end
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(70, H/2-20); ctx.lineTo(90, H/2-28); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(70, H/2+20); ctx.lineTo(90, H/2+28); ctx.stroke();
+  ctx.fillStyle = '#374151'; // mandrel arrow
+  ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(130, H/2); ctx.lineTo(100, H/2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(106, H/2-5); ctx.lineTo(100, H/2); ctx.lineTo(106, H/2+5); ctx.stroke();
+  ctx.fillStyle = '#fbbf24'; ctx.font = '8px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Flared end', 85, H-4);
+}
+
+function drawDim() {
+  const { ctx, W, H } = getCtx('c-dim');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  // Tube cross-section
+  ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(W/2, H/2, 32, 0, Math.PI*2); ctx.stroke();
+  ctx.beginPath(); ctx.arc(W/2, H/2, 22, 0, Math.PI*2); ctx.stroke();
+  // OD dimension line
+  ctx.strokeStyle = '#0891b2'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(W/2-32, H/2+50); ctx.lineTo(W/2+32, H/2+50); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(W/2-32, H/2+44); ctx.lineTo(W/2-32, H/2+56); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(W/2+32, H/2+44); ctx.lineTo(W/2+32, H/2+56); ctx.stroke();
+  ctx.fillStyle = '#0891b2'; ctx.font = '8px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('OD ±tol', W/2, H/2+62);
+  // Wall thickness indicator
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(W/2, H/2-32); ctx.lineTo(W/2, H/2-22); ctx.stroke();
+  ctx.fillStyle = '#fbbf24'; ctx.font = '8px Arial';
+  ctx.fillText('t ±10%', W/2, H/2-36);
+  // Micrometer symbol
+  ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(W/2+36, H/2-24, 10, 0, Math.PI*2); ctx.stroke();
+  ctx.fillStyle = '#4ade80'; ctx.font = '8px Arial'; ctx.fillText('μm', W/2+36, H/2-21);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════
+window.addEventListener('load', () => {
+  drawMannesmann(); drawERW(); drawDOM(); drawPilger(); drawHSAW(); drawExtrusion();
+  drawDrawCanvas();
+  renderStdContent('a519');
+});
+</script>
+</body>
+</html>

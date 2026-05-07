@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hot vs Cold Working &amp; Work Hardening</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#0a1628;color:#e2e8f0;}
+header{text-align:center;padding:28px 20px 22px;background:linear-gradient(135deg,#0a1628,#0d2240);}
+header h1{font-size:2rem;font-weight:700;color:#f0f9ff;}
+header .subtitle{color:#6ee7b7;margin-top:6px;font-size:1rem;}
+main{max-width:1020px;margin:0 auto;padding:24px 18px 60px;}
+
+/* Tabs */
+.tab-bar{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid #1e3a5f;padding-bottom:0;}
+.tab-btn{
+  padding:10px 20px;background:transparent;border:none;border-bottom:3px solid transparent;
+  color:#64748b;font-size:0.88rem;font-weight:600;cursor:pointer;transition:all .15s;
+  margin-bottom:-2px;white-space:nowrap;
+}
+.tab-btn:hover{color:#34d399;}
+.tab-btn.active{color:#34d399;border-bottom-color:#34d399;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* Cards / sections */
+.card{
+  background:#0f2040;border:1px solid #1e3a5f;border-radius:12px;
+  padding:20px;margin-bottom:20px;
+}
+.card-title{font-size:1rem;font-weight:700;color:#6ee7b7;margin-bottom:14px;}
+.card-sub{font-size:0.82rem;color:#94a3b8;margin-top:4px;}
+.source{font-size:0.75rem;color:#475569;margin-top:8px;}
+
+/* Canvases */
+canvas{display:block;max-width:100%;border-radius:8px;}
+
+/* Alloy toggle buttons */
+.alloy-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.alloy-btn{
+  padding:5px 14px;border-radius:20px;border:1.5px solid #334155;
+  background:#0a1628;color:#94a3b8;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all .15s;
+}
+.alloy-btn.active-cu{border-color:#f59e0b;color:#f59e0b;}
+.alloy-btn.active-fe{border-color:#60a5fa;color:#60a5fa;}
+.alloy-btn.active-al{border-color:#a78bfa;color:#a78bfa;}
+
+/* Slider */
+.slider-row{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.slider-row label{font-size:0.85rem;color:#94a3b8;white-space:nowrap;}
+input[type=range]{
+  flex:1;-webkit-appearance:none;appearance:none;height:5px;
+  background:#1e3a5f;border-radius:3px;outline:none;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:16px;height:16px;
+  border-radius:50%;background:#34d399;cursor:pointer;
+}
+.slider-val{font-size:0.9rem;font-weight:700;color:#34d399;min-width:44px;text-align:right;}
+
+/* Value cards */
+.value-cards{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
+.val-card{
+  background:#0a1628;border:1px solid #1e3a5f;border-radius:8px;
+  padding:10px 16px;min-width:120px;flex:1;
+}
+.val-card .vc-label{font-size:0.7rem;color:#64748b;text-transform:uppercase;letter-spacing:.06em;}
+.val-card .vc-val{font-size:1.35rem;font-weight:700;margin-top:3px;}
+.vc-uts{color:#f87171;} .vc-ys{color:#fb923c;} .vc-el{color:#34d399;} .vc-ratio{color:#818cf8;}
+
+/* Stage buttons (microstructure) */
+.stage-bar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+.stage-btn{
+  padding:6px 13px;border-radius:6px;border:1px solid #1e3a5f;
+  background:#0a1628;color:#64748b;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all .15s;
+}
+.stage-btn.active{background:#0d2a1f;border-color:#10b981;color:#34d399;}
+.stage-desc{
+  background:#071428;border:1px solid #1e3a5f;border-radius:8px;
+  padding:14px 16px;margin-top:14px;font-size:0.86rem;color:#94a3b8;line-height:1.65;
+}
+.stage-props{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+.sprop{background:#0f2040;border:1px solid #1e3a5f;border-radius:6px;padding:6px 12px;font-size:0.78rem;}
+.sprop span{color:#34d399;font-weight:700;}
+
+/* Comparison table */
+table{width:100%;border-collapse:collapse;font-size:0.83rem;margin-top:10px;}
+thead tr{background:#0d2240;}
+thead th{padding:10px 12px;text-align:left;font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b;}
+tbody tr:nth-child(odd){background:#071428;}
+tbody tr:nth-child(even){background:#0a1832;}
+tbody td{padding:9px 12px;border-bottom:1px solid #1e3a5f;vertical-align:top;color:#cbd5e1;}
+tbody td:first-child{font-weight:700;color:#94a3b8;white-space:nowrap;}
+.td-cold{color:#60a5fa;} .td-warm{color:#fbbf24;} .td-hot{color:#f87171;}
+
+@media(max-width:600px){
+  .tab-btn{padding:8px 12px;font-size:0.8rem;}
+  header h1{font-size:1.5rem;}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Hot vs Cold Working &amp; Work Hardening</h1>
+  <p class="subtitle">ASM International Recrystallization Diagrams &amp; Property Relationships</p>
+</header>
+
+<main>
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="wh">Work Hardening</button>
+  <button class="tab-btn" data-tab="rx">Recrystallization</button>
+  <button class="tab-btn" data-tab="hc">Hot vs Cold Working</button>
+  <button class="tab-btn" data-tab="ms">Microstructure</button>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 1 — WORK HARDENING
+═══════════════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-wh">
+
+  <div class="card">
+    <div class="card-title">Effect of % Cold Work on Mechanical Properties</div>
+    <div class="card-sub">Based on ASM International / Callister data — Tensile Strength, Yield Strength, and Elongation vs % Cold Work</div>
+    <div class="alloy-bar" style="margin-top:12px;">
+      <button class="alloy-btn active-cu" data-alloy="copper">Copper (OFHC)</button>
+      <button class="alloy-btn" data-alloy="steel">Low-Carbon Steel (1020)</button>
+      <button class="alloy-btn" data-alloy="aluminum">Aluminum (1100-O)</button>
+    </div>
+    <div class="slider-row">
+      <label>% Cold Work</label>
+      <input type="range" id="cwSlider" min="0" max="80" value="0" step="1">
+      <span class="slider-val" id="cwVal">0%</span>
+    </div>
+    <canvas id="propCanvas" width="720" height="300" style="width:100%;"></canvas>
+    <div class="value-cards" id="valueCards">
+      <div class="val-card"><div class="vc-label">Tensile Strength</div><div class="vc-val vc-uts" id="vcUTS">— MPa</div></div>
+      <div class="val-card"><div class="vc-label">Yield Strength</div><div class="vc-val vc-ys" id="vcYS">— MPa</div></div>
+      <div class="val-card"><div class="vc-label">Elongation</div><div class="vc-val vc-el" id="vcEL">— %</div></div>
+      <div class="val-card"><div class="vc-label">YS / UTS ratio</div><div class="vc-val vc-ratio" id="vcRatio">—</div></div>
+    </div>
+    <div class="source">Sources: ASM Metals Handbook Vol. 2; Callister & Rethwisch, Materials Science & Engineering, 9th ed., Figs. 7.19–7.21</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;flex-wrap:wrap;">
+    <div class="card">
+      <div class="card-title">True Stress–Strain: σ = Kε<sup>n</sup></div>
+      <div class="card-sub">Hollomon equation — flow stress during plastic deformation</div>
+      <canvas id="trueCanvas" width="340" height="240" style="width:100%;"></canvas>
+      <div class="source" style="margin-top:8px;">K = strength coefficient, n = strain-hardening exponent (ASM Metals Handbook)</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Dislocation Density Schematic</div>
+      <div class="card-sub">Dislocation density (ρ) increases with % cold work — basis of work hardening</div>
+      <canvas id="dislocCanvas" width="340" height="240" style="width:100%;"></canvas>
+    </div>
+  </div>
+
+</div><!-- end tab-wh -->
+
+<!-- ══════════════════════════════════════════════
+     TAB 2 — RECRYSTALLIZATION
+═══════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-rx">
+
+  <div class="card">
+    <div class="card-title">Recrystallization Temperature vs % Cold Work</div>
+    <div class="card-sub">Higher cold work → lower stored energy threshold → lower recrystallization temperature (T<sub>rx</sub>)</div>
+    <canvas id="trexCanvas" width="720" height="250" style="width:100%;"></canvas>
+    <div class="source">Data: ASM International — approximate values, highly dependent on purity and prior processing</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Grain Size After Annealing vs % Cold Work</div>
+    <div class="card-sub">Critical cold work (~2–5%) produces abnormally large grains; higher %CW yields finer recrystallized grains</div>
+    <canvas id="gsizeCanvas" width="720" height="220" style="width:100%;"></canvas>
+    <div class="source">Source: ASM International — curve shape from Callister Fig. 7.23 (Cu basis)</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Three-Stage Annealing of Cold-Worked Metal</div>
+    <div class="card-sub">Recovery → Recrystallization → Grain Growth — Tensile Strength and Ductility vs Annealing Temperature (Cu at 60% CW)</div>
+    <canvas id="annealCanvas" width="720" height="260" style="width:100%;"></canvas>
+    <div class="source">Source: ASM International; Callister Fig. 7.22</div>
+  </div>
+
+</div><!-- end tab-rx -->
+
+<!-- ══════════════════════════════════════════════
+     TAB 3 — HOT vs COLD WORKING
+═══════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-hc">
+
+  <div class="card">
+    <div class="card-title">Homologous Temperature &amp; Working Regimes</div>
+    <div class="card-sub">Cold work: T &lt; 0.3 T<sub>m</sub> &nbsp;|&nbsp; Warm work: 0.3–0.6 T<sub>m</sub> &nbsp;|&nbsp; Hot work: T &gt; 0.6 T<sub>m</sub> &nbsp;(all temperatures in K)</div>
+    <canvas id="homoCanvas" width="720" height="310" style="width:100%;"></canvas>
+    <div class="source">Working temperature regimes per ASM International — T<sub>m</sub> values from ASM Alloy Phase Diagram Database</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Cold vs Warm vs Hot Working — Property Comparison</div>
+    <table>
+      <thead><tr>
+        <th>Property / Feature</th>
+        <th class="td-cold">Cold Working (T &lt; 0.3T<sub>m</sub>)</th>
+        <th class="td-warm">Warm Working (0.3–0.6T<sub>m</sub>)</th>
+        <th class="td-hot">Hot Working (T &gt; 0.6T<sub>m</sub>)</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>Strength change</td><td class="td-cold">Large increase</td><td class="td-warm">Moderate increase</td><td class="td-hot">Minimal (dynamic RX)</td></tr>
+        <tr><td>Ductility</td><td class="td-cold">Decreases significantly</td><td class="td-warm">Slight decrease</td><td class="td-hot">Maintained / increased</td></tr>
+        <tr><td>Surface finish</td><td class="td-cold">Excellent (Ra &lt; 1 μm)</td><td class="td-warm">Good</td><td class="td-hot">Rough (scale/oxide)</td></tr>
+        <tr><td>Dimensional tolerance</td><td class="td-cold">Tight (±0.01 mm)</td><td class="td-warm">Moderate</td><td class="td-hot">Loose (±1–3 mm)</td></tr>
+        <tr><td>Energy required</td><td class="td-cold">Higher (flow stress rises)</td><td class="td-warm">Moderate</td><td class="td-hot">Lower (lower flow stress)</td></tr>
+        <tr><td>Microstructure</td><td class="td-cold">Elongated grains, high ρ</td><td class="td-warm">Partially recovered</td><td class="td-hot">Equiaxed, recrystallized</td></tr>
+        <tr><td>Residual stress</td><td class="td-cold">Significant</td><td class="td-warm">Moderate</td><td class="td-hot">Low</td></tr>
+        <tr><td>Recrystallization</td><td class="td-cold">No (static, post-process)</td><td class="td-warm">Partial</td><td class="td-hot">Dynamic (during working)</td></tr>
+        <tr><td>Typical processes</td><td class="td-cold">Cold rolling, wire drawing, stamping, coining</td><td class="td-warm">Warm forging, warm rolling</td><td class="td-hot">Hot rolling, forging, extrusion, casting</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- end tab-hc -->
+
+<!-- ══════════════════════════════════════════════
+     TAB 4 — MICROSTRUCTURE
+═══════════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-ms">
+  <div class="card">
+    <div class="card-title">Microstructural Evolution — Cold Work &amp; Annealing Sequence</div>
+    <div class="stage-bar" id="stageBar">
+      <button class="stage-btn active" data-stage="0">1. Annealed</button>
+      <button class="stage-btn" data-stage="1">2. 10% Cold Work</button>
+      <button class="stage-btn" data-stage="2">3. 60% Cold Work</button>
+      <button class="stage-btn" data-stage="3">4. Recovery</button>
+      <button class="stage-btn" data-stage="4">5. Recrystallization</button>
+      <button class="stage-btn" data-stage="5">6. Grain Growth</button>
+    </div>
+    <canvas id="microCanvas" width="720" height="320" style="width:100%;border-radius:8px;"></canvas>
+    <div class="stage-desc" id="stageDesc">Select a stage above.</div>
+    <div class="stage-props" id="stageProps"></div>
+  </div>
+</div><!-- end tab-ms -->
+
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   UTILITY FUNCTIONS
+═══════════════════════════════════════════════════════ */
+function interp(xs, ys, x) {
+    if (x <= xs[0]) return ys[0];
+    if (x >= xs[xs.length-1]) return ys[ys.length-1];
+    for (let i = 0; i < xs.length-1; i++) {
+        if (x >= xs[i] && x <= xs[i+1]) {
+            const t = (x - xs[i]) / (xs[i+1] - xs[i]);
+            return ys[i] + t * (ys[i+1] - ys[i]);
+        }
+    }
+}
+
+function seeded(n) {
+    let s = n || 1;
+    return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+}
+
+function lx(val, min, max, x0, x1) { return x0 + (val-min)/(max-min)*(x1-x0); }
+function ly(val, min, max, y0, y1) { return y0 + (1-(val-min)/(max-min))*(y1-y0); }
+
+function gridLines(ctx, x0, y0, x1, y1, nx, ny) {
+    ctx.strokeStyle = '#1e3a5f'; ctx.lineWidth = 0.8;
+    for (let i = 0; i <= nx; i++) {
+        const x = x0 + i*(x1-x0)/nx;
+        ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x, y1); ctx.stroke();
+    }
+    for (let j = 0; j <= ny; j++) {
+        const y = y0 + j*(y1-y0)/ny;
+        ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+    }
+}
+
+function axisLabel(ctx, txt, x, y, size, color, align) {
+    ctx.fillStyle = color || '#64748b';
+    ctx.font = `${size || 11}px sans-serif`;
+    ctx.textAlign = align || 'center';
+    ctx.fillText(txt, x, y);
+    ctx.textAlign = 'left';
+}
+
+function plotCurve(ctx, xs, ys, xmin, xmax, ymin, ymax, px0, py0, px1, py1, color, lw) {
+    ctx.beginPath();
+    xs.forEach((x, i) => {
+        const px = lx(x, xmin, xmax, px0, px1);
+        const py = ly(ys[i], ymin, ymax, py0, py1);
+        i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    });
+    ctx.strokeStyle = color; ctx.lineWidth = lw || 2; ctx.stroke();
+}
+
+/* ═══════════════════════════════════════════════════════
+   ALLOY DATA
+═══════════════════════════════════════════════════════ */
+const ALLOYS = {
+    copper: {
+        name: 'Copper (OFHC)', Tm: 1085,
+        K: 530, n: 0.54, color: '#f59e0b',
+        cw:  [0,  10,  20,  30,  40,  50,  60,  70,  80],
+        uts: [210, 265, 295, 320, 345, 365, 385, 400, 415],
+        ys:  [70,  195, 250, 275, 300, 320, 345, 360, 385],
+        el:  [45,  28,  20,  14,  10,   7,   5,   4,   3],
+        trex:[475, 445, 410, 385, 360, 340, 310, 295, 280]
+    },
+    steel: {
+        name: 'Low-Carbon Steel (1020)', Tm: 1537,
+        K: 600, n: 0.26, color: '#60a5fa',
+        cw:  [0,  10,  20,  30,  40,  50,  60,  70,  80],
+        uts: [415, 490, 540, 580, 620, 655, 690, 715, 750],
+        ys:  [220, 395, 465, 510, 550, 585, 625, 650, 700],
+        el:  [35,  22,  15,  11,   8,   6,   4,   3,   2],
+        trex:[620, 590, 560, 535, 510, 490, 470, 455, 440]
+    },
+    aluminum: {
+        name: 'Aluminum (1100-O)', Tm: 660,
+        K: 140, n: 0.20, color: '#a78bfa',
+        cw:  [0,  10,  20,  30,  40,  50,  60,  70,  80],
+        uts: [90,  115, 130, 145, 158, 168, 178, 186, 192],
+        ys:  [35,   82, 103, 121, 136, 150, 163, 174, 184],
+        el:  [35,  21,  14,  10,   7,   5,   4,   3,   2],
+        trex:[290, 270, 250, 232, 215, 200, 188, 178, 168]
+    }
+};
+
+let activeAlloy = 'copper';
+let cwPct = 0;
+
+/* ═══════════════════════════════════════════════════════
+   TAB 1 — PROPERTY CHART
+═══════════════════════════════════════════════════════ */
+function drawPropChart() {
+    const canvas = document.getElementById('propCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const M = {l:60, r:60, t:24, b:48};
+    const px0 = M.l, px1 = W-M.r, py0 = M.t, py1 = H-M.b;
+    const a = ALLOYS[activeAlloy];
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#071428'; ctx.fillRect(0, 0, W, H);
+
+    // determine y ranges
+    const maxStr = activeAlloy === 'steel' ? 800 : activeAlloy === 'copper' ? 500 : 260;
+    const maxEl = 50;
+
+    gridLines(ctx, px0, py0, px1, py1, 8, 6);
+
+    // axes
+    ctx.strokeStyle = '#334155'; ctx.lineWidth = 1.5;
+    ctx.strokeRect(px0, py0, px1-px0, py1-py0);
+
+    // x-axis ticks and labels
+    for (let cw = 0; cw <= 80; cw += 10) {
+        const x = lx(cw, 0, 80, px0, px1);
+        axisLabel(ctx, cw+'%', x, py1+14, 10, '#64748b', 'center');
+    }
+    axisLabel(ctx, '% Cold Work', (px0+px1)/2, H-6, 11, '#94a3b8', 'center');
+
+    // left y-axis (strength)
+    for (let s = 0; s <= maxStr; s += maxStr/5) {
+        const y = ly(s, 0, maxStr, py0, py1);
+        axisLabel(ctx, Math.round(s)+'', px0-6, y+4, 10, '#94a3b8', 'right');
+    }
+    ctx.save(); ctx.translate(14, (py0+py1)/2); ctx.rotate(-Math.PI/2);
+    axisLabel(ctx, 'Strength (MPa)', 0, 0, 11, '#94a3b8', 'center');
+    ctx.restore();
+
+    // right y-axis (ductility)
+    for (let e = 0; e <= maxEl; e += 10) {
+        const y = ly(e, 0, maxEl, py0, py1);
+        axisLabel(ctx, e+'%', px1+6, y+4, 10, '#94a3b8', 'left');
+    }
+    ctx.save(); ctx.translate(W-8, (py0+py1)/2); ctx.rotate(Math.PI/2);
+    axisLabel(ctx, '% Elongation', 0, 0, 11, '#34d399', 'center');
+    ctx.restore();
+
+    // UTS curve
+    plotCurve(ctx, a.cw, a.uts, 0, 80, 0, maxStr, px0, py0, px1, py1, '#f87171', 2.5);
+    // YS curve
+    plotCurve(ctx, a.cw, a.ys, 0, 80, 0, maxStr, px0, py0, px1, py1, '#fb923c', 2.5);
+    // %EL curve on right axis
+    ctx.beginPath();
+    a.cw.forEach((x, i) => {
+        const px = lx(x, 0, 80, px0, px1);
+        const py = ly(a.el[i], 0, maxEl, py0, py1);
+        i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    });
+    ctx.strokeStyle = '#34d399'; ctx.lineWidth = 2.5; ctx.stroke();
+
+    // current CW vertical line
+    const cx = lx(cwPct, 0, 80, px0, px1);
+    ctx.strokeStyle = 'rgba(255,255,255,0.25)'; ctx.lineWidth = 1; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(cx, py0); ctx.lineTo(cx, py1); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // dots on curves at current CW
+    const utsV = interp(a.cw, a.uts, cwPct);
+    const ysV  = interp(a.cw, a.ys, cwPct);
+    const elV  = interp(a.cw, a.el, cwPct);
+
+    [[utsV, '#f87171', 0, maxStr], [ysV, '#fb923c', 0, maxStr], [elV, '#34d399', 0, maxEl]].forEach(([v, col, mn, mx]) => {
+        const py = ly(v, mn, mx, py0, py1);
+        ctx.beginPath(); ctx.arc(cx, py, 5, 0, Math.PI*2);
+        ctx.fillStyle = col; ctx.fill();
+        ctx.strokeStyle = '#0a1628'; ctx.lineWidth = 1.5; ctx.stroke();
+    });
+
+    // legend
+    const legData = [['UTS','#f87171'],['Yield Strength','#fb923c'],['% Elongation (right axis)','#34d399']];
+    legData.forEach(([lbl, col], i) => {
+        const lx2 = px0+10, ly2 = py0+14+i*17;
+        ctx.strokeStyle = col; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.moveTo(lx2, ly2); ctx.lineTo(lx2+22, ly2); ctx.stroke();
+        ctx.fillStyle = col; ctx.font = '10px sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText(lbl, lx2+26, ly2+4);
+    });
+
+    // update value cards
+    document.getElementById('vcUTS').textContent = Math.round(utsV)+' MPa';
+    document.getElementById('vcYS').textContent  = Math.round(ysV)+' MPa';
+    document.getElementById('vcEL').textContent  = elV.toFixed(1)+'%';
+    document.getElementById('vcRatio').textContent = (ysV/utsV).toFixed(2);
+    document.getElementById('cwVal').textContent = cwPct+'%';
+}
+
+/* ═══════════════════════════════════════════════════════
+   TAB 1 — TRUE STRESS-STRAIN
+═══════════════════════════════════════════════════════ */
+function drawTrueCanvas() {
+    const canvas = document.getElementById('trueCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const M = {l:54, r:14, t:20, b:44};
+    const px0=M.l, px1=W-M.r, py0=M.t, py1=H-M.b;
+
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#071428'; ctx.fillRect(0,0,W,H);
+
+    const maxSig = 700, maxEps = 0.8;
+    gridLines(ctx, px0, py0, px1, py1, 8, 6);
+    ctx.strokeStyle='#334155'; ctx.lineWidth=1.2; ctx.strokeRect(px0,py0,px1-px0,py1-py0);
+
+    // x ticks
+    for (let e = 0; e <= maxEps; e += 0.1) {
+        const x = lx(e, 0, maxEps, px0, px1);
+        axisLabel(ctx, e.toFixed(1), x, py1+13, 9, '#64748b', 'center');
+    }
+    axisLabel(ctx, 'True Strain (ε)', (px0+px1)/2, H-6, 10, '#94a3b8', 'center');
+    // y ticks
+    for (let s = 0; s <= maxSig; s += 100) {
+        const y = ly(s, 0, maxSig, py0, py1);
+        axisLabel(ctx, s+'', px0-4, y+4, 9, '#94a3b8', 'right');
+    }
+    ctx.save(); ctx.translate(12, (py0+py1)/2); ctx.rotate(-Math.PI/2);
+    axisLabel(ctx, 'True Stress σ (MPa)', 0, 0, 10, '#94a3b8', 'center');
+    ctx.restore();
+
+    // σ = K ε^n curves for each alloy
+    Object.entries(ALLOYS).forEach(([key, a]) => {
+        ctx.beginPath();
+        let first = true;
+        for (let e = 0.001; e <= maxEps; e += 0.005) {
+            const s = a.K * Math.pow(e, a.n);
+            if (s > maxSig) break;
+            const px = lx(e, 0, maxEps, px0, px1);
+            const py = ly(s, 0, maxSig, py0, py1);
+            first ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+            first = false;
+        }
+        ctx.strokeStyle = a.color + (key===activeAlloy ? 'ff' : '55');
+        ctx.lineWidth = key===activeAlloy ? 2.5 : 1.5;
+        ctx.stroke();
+        // label at end
+        const eEnd = 0.72, sEnd = a.K * Math.pow(eEnd, a.n);
+        if (sEnd < maxSig) {
+            const px = lx(eEnd, 0, maxEps, px0, px1);
+            const py = ly(sEnd, 0, maxSig, py0, py1);
+            ctx.fillStyle = a.color + (key===activeAlloy ? 'ff' : '77');
+            ctx.font = `bold 9px sans-serif`; ctx.textAlign = 'left';
+            const shortName = key === 'copper' ? 'Cu' : key === 'steel' ? 'Fe' : 'Al';
+            ctx.fillText(`${shortName} n=${a.n}`, px+4, py);
+        }
+    });
+
+    // equation label
+    ctx.fillStyle = '#94a3b8'; ctx.font = 'italic 11px serif';
+    ctx.textAlign = 'left'; ctx.fillText('σ = K·ε', px0+6, py0+16);
+    ctx.font = '9px serif'; ctx.fillText('n', px0+68, py0+11);
+}
+
+/* ═══════════════════════════════════════════════════════
+   TAB 1 — DISLOCATION DENSITY CANVAS
+═══════════════════════════════════════════════════════ */
+function drawDislocCanvas() {
+    const canvas = document.getElementById('dislocCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#071428'; ctx.fillRect(0,0,W,H);
+
+    // draw a single hexagonal grain boundary
+    const cx = W*0.5, cy = H*0.5-10, r = Math.min(W,H)*0.36;
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+        const ang = i*Math.PI/3 - Math.PI/6;
+        const rng = seeded(i*17+3);
+        const jitter = 1 + (rng()-0.5)*0.1;
+        i===0 ? ctx.moveTo(cx+Math.cos(ang)*r*jitter, cy+Math.sin(ang)*r*jitter)
+              : ctx.lineTo(cx+Math.cos(ang)*r*jitter, cy+Math.sin(ang)*r*jitter);
+    }
+    ctx.closePath();
+    ctx.fillStyle = '#0d2240'; ctx.fill();
+    ctx.strokeStyle = '#334155'; ctx.lineWidth = 2; ctx.stroke();
+
+    // clip to grain for dislocations
+    ctx.save(); ctx.clip();
+
+    // draw dislocation symbols ⊥ with density based on cwPct
+    const density = Math.floor(4 + cwPct * 0.55); // 4-48 dislocations
+    const rng = seeded(42);
+    for (let i = 0; i < density; i++) {
+        const dx = cx + (rng()-0.5)*r*1.6, dy = cy + (rng()-0.5)*r*1.6;
+        const ang = rng()*Math.PI*2;
+        const len = 8;
+        ctx.strokeStyle = 'rgba(100,200,160,0.7)'; ctx.lineWidth = 1.5;
+        // ⊥ symbol (rotated)
+        ctx.beginPath();
+        ctx.moveTo(dx + Math.cos(ang)*len*0.5, dy + Math.sin(ang)*len*0.5);
+        ctx.lineTo(dx - Math.cos(ang)*len*0.5, dy - Math.sin(ang)*len*0.5);
+        ctx.moveTo(dx - Math.cos(ang)*len*0.5 - Math.sin(ang)*len*0.4, dy - Math.sin(ang)*len*0.5 + Math.cos(ang)*len*0.4);
+        ctx.lineTo(dx - Math.cos(ang)*len*0.5 + Math.sin(ang)*len*0.4, dy - Math.sin(ang)*len*0.5 - Math.cos(ang)*len*0.4);
+        ctx.stroke();
+    }
+    ctx.restore();
+
+    // label
+    const exponent = cwPct < 5 ? '8' : cwPct < 20 ? '9' : cwPct < 50 ? '10' : '11–12';
+    ctx.fillStyle = '#64748b'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(`ρ ≈ 10${exponent} /cm²`, cx, H-12);
+    ctx.font = 'bold 10px sans-serif'; ctx.fillStyle = '#34d399';
+    ctx.fillText(`${density} dislocation symbols shown`, cx, H-26);
+
+    // title
+    ctx.fillStyle = '#94a3b8'; ctx.font = '10px sans-serif';
+    ctx.fillText(`%CW = ${cwPct}%`, cx, H-40);
+}
+
+/* ═══════════════════════════════════════════════════════
+   TAB 2 — TREX vs %CW
+═══════════════════════════════════════════════════════ */
+function drawTrexCanvas() {
+    const canvas = document.getElementById('trexCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const M = {l:60, r:18, t:20, b:44};
+    const px0=M.l, px1=W-M.r, py0=M.t, py1=H-M.b;
+
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#071428'; ctx.fillRect(0,0,W,H);
+
+    const minT=0, maxT=700;
+    gridLines(ctx, px0, py0, px1, py1, 8, 7);
+    ctx.strokeStyle='#334155'; ctx.lineWidth=1.2; ctx.strokeRect(px0,py0,px1-px0,py1-py0);
+
+    // Room temperature line
+    const rtY = ly(20, minT, maxT, py0, py1);
+    ctx.strokeStyle='rgba(100,200,160,0.25)'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(px0,rtY); ctx.lineTo(px1,rtY); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#34d399'; ctx.font='9px sans-serif'; ctx.textAlign='right';
+    ctx.fillText('Room temp (20°C)', px1-4, rtY-4);
+
+    // axes
+    for (let cw = 0; cw <= 80; cw += 10) {
+        const x = lx(cw, 0, 80, px0, px1);
+        axisLabel(ctx, cw+'%', x, py1+14, 10, '#64748b', 'center');
+    }
+    axisLabel(ctx, '% Cold Work', (px0+px1)/2, H-6, 11, '#94a3b8', 'center');
+    for (let t = 0; t <= maxT; t += 100) {
+        const y = ly(t, minT, maxT, py0, py1);
+        axisLabel(ctx, t+'', px0-5, y+4, 10, '#94a3b8', 'right');
+    }
+    ctx.save(); ctx.translate(14, (py0+py1)/2); ctx.rotate(-Math.PI/2);
+    axisLabel(ctx, 'Recrystallization Temp (°C)', 0, 0, 11, '#94a3b8', 'center');
+    ctx.restore();
+
+    // Tm reference lines
+    [['copper', 1085, 'Cu Tm=1085°C'], ['steel', 1537, 'Fe Tm=1537°C'], ['aluminum', 660, 'Al Tm=660°C']].forEach(([key, tm, lbl]) => {
+        const a = ALLOYS[key];
+        // 0.3 Tm and 0.6 Tm lines
+        [0.3, 0.6].forEach(frac => {
+            const T = (tm+273)*frac - 273;
+            if (T < maxT && T > minT) {
+                const y = ly(T, minT, maxT, py0, py1);
+                ctx.strokeStyle = a.color+'22'; ctx.lineWidth=0.8; ctx.setLineDash([2,3]);
+                ctx.beginPath(); ctx.moveTo(px0,y); ctx.lineTo(px1,y); ctx.stroke();
+                ctx.setLineDash([]);
+            }
+        });
+        // Trex curve
+        plotCurve(ctx, a.cw, a.trex, 0, 80, minT, maxT, px0, py0, px1, py1, a.color, 2.2);
+        // end label
+        const lastT = a.trex[a.trex.length-1];
+        const lpy = ly(lastT, minT, maxT, py0, py1);
+        ctx.fillStyle = a.color; ctx.font='bold 10px sans-serif'; ctx.textAlign='left';
+        ctx.fillText(a.name.split(' ')[0], px1+3, lpy+4);
+    });
+
+    // legend
+    Object.entries(ALLOYS).forEach(([key, a], i) => {
+        const ly2 = py0+14+i*17;
+        ctx.strokeStyle = a.color; ctx.lineWidth=2.5;
+        ctx.beginPath(); ctx.moveTo(px0+8, ly2); ctx.lineTo(px0+28, ly2); ctx.stroke();
+        ctx.fillStyle = a.color; ctx.font='10px sans-serif'; ctx.textAlign='left';
+        ctx.fillText(a.name, px0+32, ly2+4);
+    });
+}
+
+/* ═══════════════════════════════════════════════════════
+   TAB 2 — GRAIN SIZE vs %CW
+═══════════════════════════════════════════════════════ */
+function drawGsizeCanvas() {
+    const canvas = document.getElementById('gsizeCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const M = {l:60, r:18, t:20, b:44};
+    const px0=M.l, px1=W-M.r, py0=M.t, py1=H-M.b;
+
+    ctx.clearRect(0,0,W,H); ctx.fillStyle='#071428'; ctx.fillRect(0,0,W,H);
+
+    // grain size data: U-peak at critical CW ~4%
+    const cws  = [0,  1,   2,   4,   6,  10,  15,  20,  30,  40,  50,  60,  80];
+    const gszs = [80, 85, 110, 420, 240, 140,  90,  60,  40,  28,  20,  16,  12];
+    const maxG = 450, minG = 0;
+
+    gridLines(ctx, px0, py0, px1, py1, 8, 5);
+    ctx.strokeStyle='#334155'; ctx.lineWidth=1.2; ctx.strokeRect(px0,py0,px1-px0,py1-py0);
+
+    for (let cw = 0; cw <= 80; cw += 10) {
+        const x = lx(cw, 0, 80, px0, px1);
+        axisLabel(ctx, cw+'%', x, py1+14, 10, '#64748b', 'center');
+    }
+    axisLabel(ctx, '% Cold Work', (px0+px1)/2, H-6, 11, '#94a3b8', 'center');
+
+    for (let g = 0; g <= maxG; g += 100) {
+        const y = ly(g, minG, maxG, py0, py1);
+        axisLabel(ctx, g+'', px0-4, y+4, 10, '#94a3b8', 'right');
+    }
+    ctx.save(); ctx.translate(14, (py0+py1)/2); ctx.rotate(-Math.PI/2);
+    axisLabel(ctx, 'Average Grain Diameter (μm)', 0, 0, 11, '#94a3b8', 'center');
+    ctx.restore();
+
+    // critical CW shaded region (2-6%)
+    const critX0 = lx(2, 0, 80, px0, px1), critX1 = lx(6, 0, 80, px0, px1);
+    ctx.fillStyle = 'rgba(251,146,60,0.08)'; ctx.fillRect(critX0, py0, critX1-critX0, py1-py0);
+    ctx.strokeStyle = '#fb923c'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(critX0,py0); ctx.lineTo(critX0,py1);
+    ctx.moveTo(critX1,py0); ctx.lineTo(critX1,py1); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#fb923c'; ctx.font='9px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('Critical CW', (critX0+critX1)/2, py0+12);
+    ctx.fillText('(abnormal', (critX0+critX1)/2, py0+22);
+    ctx.fillText('grain growth)', (critX0+critX1)/2, py0+32);
+
+    // grain size curve
+    plotCurve(ctx, cws, gszs, 0, 80, minG, maxG, px0, py0, px1, py1, '#f59e0b', 2.5);
+
+    // peak annotation
+    const peakX = lx(4, 0, 80, px0, px1), peakY = ly(420, minG, maxG, py0, py1);
+    ctx.fillStyle='#f59e0b'; ctx.font='bold 10px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('Abnormal', peakX+28, peakY-18);
+    ctx.fillText('grain growth', peakX+28, peakY-6);
+
+    // fine grain annotation
+    ctx.fillStyle='#34d399'; ctx.font='10px sans-serif'; ctx.textAlign='center';
+    const fgX = lx(60, 0, 80, px0, px1), fgY = ly(16, minG, maxG, py0, py1);
+    ctx.fillText('Fine, uniform', fgX, fgY-16);
+    ctx.fillText('recryst. grains', fgX, fgY-4);
+}
+
+/* ═══════════════════════════════════════════════════════
+   TAB 2 — THREE-STAGE ANNEALING
+═══════════════════════════════════════════════════════ */
+function drawAnnealCanvas() {
+    const canvas = document.getElementById('annealCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const M = {l:60, r:60, t:28, b:44};
+    const px0=M.l, px1=W-M.r, py0=M.t, py1=H-M.b;
+
+    ctx.clearRect(0,0,W,H); ctx.fillStyle='#071428'; ctx.fillRect(0,0,W,H);
+
+    // Stage boundaries (for copper at 60%CW): recovery 0-250, recryst 250-450, grain growth 450-700
+    const stageBounds = [0, 250, 450, 700];
+    const stageColors = ['rgba(96,165,250,0.07)','rgba(248,113,113,0.07)','rgba(251,146,60,0.07)'];
+    const stageLabels = ['Recovery','Recrystallization','Grain Growth'];
+
+    stageBounds.slice(0,-1).forEach((t0, i) => {
+        const t1 = stageBounds[i+1];
+        const sx0 = lx(t0, 0, 700, px0, px1), sx1 = lx(t1, 0, 700, px0, px1);
+        ctx.fillStyle = stageColors[i]; ctx.fillRect(sx0, py0, sx1-sx0, py1-py0);
+        ctx.strokeStyle = stageColors[i].replace('0.07','0.3'); ctx.lineWidth=1; ctx.setLineDash([4,3]);
+        if (i > 0) { ctx.beginPath(); ctx.moveTo(sx0,py0); ctx.lineTo(sx0,py1); ctx.stroke(); }
+        ctx.setLineDash([]);
+        const labelColors = ['#60a5fa','#f87171','#fb923c'];
+        ctx.fillStyle = labelColors[i]; ctx.font='bold 10px sans-serif'; ctx.textAlign='center';
+        ctx.fillText(stageLabels[i], (sx0+sx1)/2, py0+14);
+    });
+
+    gridLines(ctx, px0, py0, px1, py1, 7, 5);
+    ctx.strokeStyle='#334155'; ctx.lineWidth=1.2; ctx.strokeRect(px0,py0,px1-px0,py1-py0);
+
+    // x-axis
+    for (let t = 0; t <= 700; t += 100) {
+        const x = lx(t, 0, 700, px0, px1);
+        axisLabel(ctx, t+'°C', x, py1+14, 10, '#64748b', 'center');
+    }
+    axisLabel(ctx, 'Annealing Temperature (°C)', (px0+px1)/2, H-6, 11, '#94a3b8', 'center');
+
+    // left y-axis (TS, MPa)
+    const maxStr = 450;
+    for (let s = 0; s <= maxStr; s += 100) {
+        const y = ly(s, 0, maxStr, py0, py1);
+        axisLabel(ctx, s+'', px0-5, y+4, 10, '#f87171', 'right');
+    }
+    ctx.save(); ctx.translate(12, (py0+py1)/2); ctx.rotate(-Math.PI/2);
+    axisLabel(ctx, 'Tensile Strength (MPa)', 0, 0, 11, '#f87171', 'center');
+    ctx.restore();
+
+    // right y-axis (%EL)
+    const maxEl = 50;
+    for (let e = 0; e <= maxEl; e += 10) {
+        const y = ly(e, 0, maxEl, py0, py1);
+        axisLabel(ctx, e+'%', px1+4, y+4, 10, '#34d399', 'left');
+    }
+    ctx.save(); ctx.translate(W-12, (py0+py1)/2); ctx.rotate(Math.PI/2);
+    axisLabel(ctx, '% Elongation', 0, 0, 11, '#34d399', 'center');
+    ctx.restore();
+
+    // TS data (Cu, 60%CW, starting at 385 MPa)
+    const temps = [0,  100, 200, 260, 320, 380, 420, 450, 500, 600, 700];
+    const tsArr = [385, 382, 375, 340, 260, 215, 212, 210, 205, 198, 192];
+    const elArr = [5,    5,   6,  10,  28,  38,  41,  43,  44,  44,  45];
+
+    plotCurve(ctx, temps, tsArr, 0, 700, 0, maxStr, px0, py0, px1, py1, '#f87171', 2.5);
+    ctx.beginPath();
+    temps.forEach((t, i) => {
+        const px = lx(t, 0, 700, px0, px1);
+        const py = ly(elArr[i], 0, maxEl, py0, py1);
+        i===0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    });
+    ctx.strokeStyle='#34d399'; ctx.lineWidth=2.5; ctx.stroke();
+
+    // legend
+    [['— Tensile Strength','#f87171'],['— % Elongation','#34d399']].forEach(([lbl, col], i) => {
+        ctx.strokeStyle=col; ctx.lineWidth=2.5;
+        ctx.beginPath(); ctx.moveTo(px0+8, py0+24+i*16); ctx.lineTo(px0+28, py0+24+i*16); ctx.stroke();
+        ctx.fillStyle=col; ctx.font='10px sans-serif'; ctx.textAlign='left';
+        ctx.fillText(lbl.substring(2), px0+32, py0+28+i*16);
+    });
+
+    // note
+    ctx.fillStyle='#64748b'; ctx.font='9px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('Copper at 60% cold work, annealed 1 hour at each temperature', (px0+px1)/2, py1+36);
+}
+
+/* ═══════════════════════════════════════════════════════
+   TAB 3 — HOMOLOGOUS TEMPERATURE
+═══════════════════════════════════════════════════════ */
+function drawHomoCanvas() {
+    const canvas = document.getElementById('homoCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const M = {l:120, r:18, t:36, b:44};
+    const px0=M.l, px1=W-M.r, py0=M.t, py1=H-M.b;
+
+    ctx.clearRect(0,0,W,H); ctx.fillStyle='#071428'; ctx.fillRect(0,0,W,H);
+
+    const metals = [
+        {name:'Lead (Pb)',   Tm:327,  Troom:20, Thot:200,  col:'#94a3b8'},
+        {name:'Tin (Sn)',    Tm:232,  Troom:20, Thot:150,  col:'#64748b'},
+        {name:'Zinc (Zn)',   Tm:420,  Troom:20, Thot:300,  col:'#a78bfa'},
+        {name:'Aluminum',    Tm:660,  Troom:20, Thot:400,  col:'#818cf8'},
+        {name:'Copper',      Tm:1085, Troom:20, Thot:800,  col:'#f59e0b'},
+        {name:'Nickel',      Tm:1455, Troom:20, Thot:1100, col:'#34d399'},
+        {name:'Iron/Steel',  Tm:1537, Troom:20, Thot:1200, col:'#60a5fa'},
+        {name:'Tungsten',    Tm:3422, Troom:20, Thot:2000, col:'#f87171'},
+    ];
+
+    const maxTemp = 3500;
+    const barH = (py1-py0-10) / metals.length - 4;
+
+    // title labels
+    ctx.fillStyle='#64748b'; ctx.font='bold 9px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('Cold Work Zone', lx(0.15, 0, 1, px0, px1), py0-6);
+    ctx.fillText('Warm', lx(0.45, 0, 1, px0, px1), py0-6);
+    ctx.fillText('Hot Work Zone', lx(0.8, 0, 1, px0, px1), py0-6);
+
+    metals.forEach((m, i) => {
+        const TmK = m.Tm + 273;
+        const y = py0 + i*(barH+4);
+
+        // full bar (0 to Tm in K, displayed up to maxTemp °C)
+        const barW = lx(Math.min(m.Tm, maxTemp), 0, maxTemp, px0, px1) - px0;
+
+        // cold zone (0 to 0.3Tm K → 0.3Tm-273 °C)
+        const t30 = TmK*0.3 - 273;
+        const t60 = TmK*0.6 - 273;
+        const x30 = lx(Math.min(Math.max(t30,0), maxTemp), 0, maxTemp, px0, px1);
+        const x60 = lx(Math.min(Math.max(t60,0), maxTemp), 0, maxTemp, px0, px1);
+        const xTm = lx(Math.min(m.Tm, maxTemp), 0, maxTemp, px0, px1);
+
+        ctx.fillStyle = 'rgba(96,165,250,0.18)';
+        ctx.fillRect(px0, y, x30-px0, barH);
+        ctx.fillStyle = 'rgba(251,191,36,0.18)';
+        ctx.fillRect(x30, y, x60-x30, barH);
+        ctx.fillStyle = 'rgba(248,113,113,0.18)';
+        ctx.fillRect(x60, y, xTm-x60, barH);
+
+        // colored dot for Troom
+        const xRoom = lx(Math.min(m.Troom, maxTemp), 0, maxTemp, px0, px1);
+        ctx.beginPath(); ctx.arc(xRoom, y+barH/2, 5, 0, Math.PI*2);
+        ctx.fillStyle = '#60a5fa'; ctx.fill();
+
+        // bar outline
+        ctx.strokeStyle = m.col+'55'; ctx.lineWidth=1;
+        ctx.strokeRect(px0, y, barW, barH);
+
+        // Tm marker
+        ctx.strokeStyle = m.col; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.moveTo(xTm, y); ctx.lineTo(xTm, y+barH); ctx.stroke();
+        ctx.fillStyle = m.col; ctx.font='bold 9px sans-serif'; ctx.textAlign='center';
+        if (m.Tm <= maxTemp) ctx.fillText('Tₘ', xTm, y+barH+10);
+
+        // hot working temp marker
+        const xHot = lx(Math.min(m.Thot, maxTemp), 0, maxTemp, px0, px1);
+        ctx.beginPath(); ctx.arc(xHot, y+barH/2, 4, 0, Math.PI*2);
+        ctx.fillStyle = '#f87171'; ctx.fill();
+
+        // metal name
+        ctx.fillStyle = '#94a3b8'; ctx.font='bold 10px sans-serif'; ctx.textAlign='right';
+        ctx.fillText(m.name, px0-6, y+barH*0.7);
+    });
+
+    // x-axis ticks
+    for (let t = 0; t <= maxTemp; t += 500) {
+        const x = lx(t, 0, maxTemp, px0, px1);
+        if (x > px1) break;
+        axisLabel(ctx, t+'°C', x, py1+14, 9, '#64748b', 'center');
+        ctx.strokeStyle='#1e3a5f'; ctx.lineWidth=0.6;
+        ctx.beginPath(); ctx.moveTo(x, py0); ctx.lineTo(x, py1); ctx.stroke();
+    }
+    axisLabel(ctx, 'Temperature (°C)', (px0+px1)/2, H-6, 10, '#94a3b8', 'center');
+
+    // legend
+    const legItems = [['● Room temp (20°C)','#60a5fa'],['● Typical hot working temp','#f87171'],['| Tₘ (melting point)','#94a3b8']];
+    legItems.forEach(([lbl, col], i) => {
+        ctx.fillStyle = col; ctx.font='9px sans-serif'; ctx.textAlign='left';
+        ctx.fillText(lbl, px0+6+i*170, py1+30);
+    });
+
+    // zone labels on color bands
+    [['COLD',0.12,'#60a5fa'],['WARM',0.42,'#fbbf24'],['HOT',0.78,'#f87171']].forEach(([lbl, frac, col]) => {
+        const x = lx(maxTemp*frac, 0, maxTemp, px0, px1);
+        ctx.strokeStyle=col+'33'; ctx.lineWidth=0.8; ctx.setLineDash([3,3]);
+        ctx.beginPath(); ctx.moveTo(x, py0); ctx.lineTo(x, py1); ctx.stroke();
+        ctx.setLineDash([]);
+    });
+}
+
+/* ═══════════════════════════════════════════════════════
+   TAB 4 — MICROSTRUCTURE (VORONOI)
+═══════════════════════════════════════════════════════ */
+const GRAIN_RGB = [
+    [180,130,130],[130,160,190],[170,190,130],[190,160,120],[130,185,175],
+    [185,145,185],[155,190,150],[190,175,125],[135,155,195],[195,155,145],
+    [145,190,165],[190,140,160],[160,175,195],[185,190,140],[155,140,190],
+    [140,185,185],[195,165,140],[160,190,145],[185,140,185],[145,165,190],
+    [190,185,145],[145,190,160],[190,150,135],[165,145,190],[140,185,165]
+];
+
+const MICRO_STAGES = [
+    {
+        label:'Annealed', nSeeds:15, scaleX:1.0, disloc:0,
+        newFrac:0, newNSeeds:0, brightness:1.0,
+        props:{Strength:'Low',Ductility:'High',Hardness:'Low','Dislocation ρ':'~10⁸ /cm²'},
+        desc:'Fully annealed condition. Equiaxed polygonal grains meet at approximately 120° triple-point junctions — the minimum energy configuration. Dislocation density is low (~10⁸ /cm²). This represents the softest, most ductile state. Used as the starting condition for cold working operations.'
+    },
+    {
+        label:'10% Cold Work', nSeeds:15, scaleX:1.6, disloc:0.3,
+        newFrac:0, newNSeeds:0, brightness:0.95,
+        props:{Strength:'Slightly elevated',Ductility:'Reduced',Hardness:'Slightly elevated','Dislocation ρ':'~10⁹ /cm²'},
+        desc:'Light cold work. Grains begin to elongate in the working direction. Dislocation density rises one order of magnitude. Tensile strength increases ~25% for copper; ductility (elongation) drops from ~45% to ~28%. Still significant remaining ductility — suitable for further drawing or bending operations.'
+    },
+    {
+        label:'60% Cold Work', nSeeds:15, scaleX:3.5, disloc:1.0,
+        newFrac:0, newNSeeds:0, brightness:0.85,
+        props:{Strength:'High',Ductility:'Low',Hardness:'High','Dislocation ρ':'~10¹¹–10¹² /cm²'},
+        desc:'Heavy cold work. Grains are severely elongated into a fibrous structure. Dislocation density approaches saturation (~10¹²/cm²) — dislocations pile up at grain boundaries and interact, blocking each other\'s motion (Taylor hardening). Strength ~83% of UTS at 60%CW. Ductility greatly reduced. Annealing required before further forming.'
+    },
+    {
+        label:'Recovery', nSeeds:15, scaleX:3.5, disloc:0.15,
+        newFrac:0, newNSeeds:0, brightness:0.88,
+        props:{Strength:'Slightly reduced',Ductility:'Slightly improved',Hardness:'Slightly reduced','Dislocation ρ':'~10¹⁰ /cm²'},
+        desc:'Low-temperature anneal activates recovery. Dislocations rearrange into lower-energy configurations (subgrain walls / polygonization) and some annihilate at grain boundaries. Grain shape remains elongated — no new grain nucleation yet. Electrical conductivity recovers significantly (important for Cu). Strength drops slightly; residual stresses relieved. T ≈ 0.2–0.3 Tm.'
+    },
+    {
+        label:'Recrystallization', nSeeds:15, scaleX:3.5, disloc:0,
+        newFrac:0.45, newNSeeds:28, brightness:0.88,
+        props:{Strength:'Drops sharply',Ductility:'Rises sharply',Hardness:'Returns near annealed','Dislocation ρ':'~10⁸ /cm² (new grains)'},
+        desc:'New strain-free equiaxed grains nucleate preferentially at grain boundaries, triple junctions, and high-dislocation-density regions and consume the deformed matrix. The stored strain energy provides the driving force. Hardness drops sharply back toward the annealed value. T_rx ≈ 0.3–0.5 Tm. Grain size is fine if %CW was large (many nucleation sites). Partial recrystallization shown: new equiaxed grains in ~45% of area.'
+    },
+    {
+        label:'Grain Growth', nSeeds:6, scaleX:1.0, disloc:0,
+        newFrac:0, newNSeeds:0, brightness:1.05,
+        props:{Strength:'Slightly lower',Ductility:'Slightly higher',Hardness:'Slightly lower than fully RX','Dislocation ρ':'~10⁸ /cm²'},
+        desc:'After full recrystallization, further annealing at higher temperatures causes grain growth — larger grains grow at the expense of smaller ones (curvature-driven). Grain boundary area is reduced (lower energy). Hall-Petch: σ_y = σ_0 + k/√d — larger grains mean lower yield strength. Grain growth is exponential with temperature (D² − D₀² = K·t) and can be slowed by second-phase particles (Zener pinning). T > 0.5 Tm.'
+    }
+];
+
+let currentStage = 0;
+
+function computeVoronoi(W, H, seeds, scaleX) {
+    const map = new Uint8Array(W * H);
+    for (let y = 0; y < H; y++) {
+        for (let x = 0; x < W; x++) {
+            let minD = Infinity, nearest = 0;
+            for (let i = 0; i < seeds.length; i++) {
+                const dx = (x - seeds[i].x) / scaleX;
+                const dy = (y - seeds[i].y);
+                const d = dx*dx + dy*dy;
+                if (d < minD) { minD = d; nearest = i; }
+            }
+            map[y*W + x] = nearest;
+        }
+    }
+    return map;
+}
+
+function genSeeds(n, W, H, seedVal) {
+    const rng = seeded(seedVal || 42);
+    const seeds = [];
+    for (let i = 0; i < n; i++) {
+        seeds.push({ x: rng()*W, y: rng()*H });
+    }
+    return seeds;
+}
+
+function isBoundary(map, W, H, x, y) {
+    const c = map[y*W+x];
+    if (x>0 && map[y*W+x-1]!==c) return true;
+    if (y>0 && map[(y-1)*W+x]!==c) return true;
+    if (x<W-1 && map[y*W+x+1]!==c) return true;
+    if (y<H-1 && map[(y+1)*W+x]!==c) return true;
+    return false;
+}
+
+function drawMicrostructure() {
+    const canvas = document.getElementById('microCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const stg = MICRO_STAGES[currentStage];
+    ctx.clearRect(0,0,W,H);
+
+    const seeds = genSeeds(stg.nSeeds, W, H, 42);
+    const map = computeVoronoi(W, H, seeds, stg.scaleX);
+
+    let newMap = null, newSeeds = null;
+    if (stg.newFrac > 0 && stg.newNSeeds > 0) {
+        newSeeds = genSeeds(stg.newNSeeds, W, H, 99);
+        newMap = computeVoronoi(W, H, newSeeds, 1.0);
+    }
+
+    // pre-compute recrystallized region: random patches (seed-based)
+    let rxPatch = null;
+    if (newMap) {
+        rxPatch = new Uint8Array(W * H);
+        const rng2 = seeded(77);
+        const nPatches = 6;
+        const patches = [];
+        for (let p = 0; p < nPatches; p++) {
+            patches.push({ cx: rng2()*W, cy: rng2()*H, r: 30 + rng2()*50 });
+        }
+        for (let y = 0; y < H; y++) {
+            for (let x = 0; x < W; x++) {
+                for (const p of patches) {
+                    const d = (x-p.cx)**2 + (y-p.cy)**2;
+                    if (d < p.r*p.r) { rxPatch[y*W+x] = 1; break; }
+                }
+            }
+        }
+    }
+
+    // render pixels
+    const imgData = ctx.createImageData(W, H);
+    const d = imgData.data;
+    const bf = stg.brightness;
+
+    for (let y = 0; y < H; y++) {
+        for (let x = 0; x < W; x++) {
+            const idx = (y*W+x)*4;
+            let isRX = rxPatch ? rxPatch[y*W+x] : false;
+
+            let cell, useBoundary, grain;
+            if (isRX && newMap) {
+                cell = newMap[y*W+x];
+                const gc = GRAIN_RGB[cell % GRAIN_RGB.length];
+                useBoundary = isBoundary(newMap, W, H, x, y);
+                grain = gc;
+            } else {
+                cell = map[y*W+x];
+                const gc = GRAIN_RGB[cell % GRAIN_RGB.length];
+                useBoundary = isBoundary(map, W, H, x, y) || (rxPatch && rxPatch[y*W+x]===0 && newMap && rxPatch[Math.min(y+1,H-1)*W+x]===1);
+                grain = gc;
+            }
+
+            if (useBoundary) {
+                d[idx]=20; d[idx+1]=25; d[idx+2]=35; d[idx+3]=255;
+            } else {
+                d[idx]=Math.min(255,grain[0]*bf);
+                d[idx+1]=Math.min(255,grain[1]*bf);
+                d[idx+2]=Math.min(255,grain[2]*bf);
+                d[idx+3]=255;
+            }
+        }
+    }
+    ctx.putImageData(imgData, 0, 0);
+
+    // overlay dislocation symbols
+    if (stg.disloc > 0) {
+        const nDisloc = Math.floor(stg.disloc * 120);
+        const rng = seeded(333);
+        ctx.strokeStyle = 'rgba(10,20,40,0.65)'; ctx.lineWidth = 1.2;
+        for (let i = 0; i < nDisloc; i++) {
+            const dx = rng()*W, dy = rng()*H;
+            const ang = rng()*Math.PI, len = 7;
+            const cos = Math.cos(ang), sin = Math.sin(ang);
+            ctx.beginPath();
+            // vertical part of ⊥
+            ctx.moveTo(dx-cos*len*0.5, dy-sin*len*0.5);
+            ctx.lineTo(dx+cos*len*0.5, dy+sin*len*0.5);
+            // crossbar of ⊥ at one end
+            const ex = dx+cos*len*0.5, ey = dy+sin*len*0.5;
+            ctx.moveTo(ex-sin*len*0.4, ey+cos*len*0.4);
+            ctx.lineTo(ex+sin*len*0.4, ey-cos*len*0.4);
+            ctx.stroke();
+        }
+    }
+
+    // scale bar
+    ctx.fillStyle = 'rgba(10,20,40,0.6)'; ctx.fillRect(W-90, H-24, 80, 18);
+    ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(W-78, H-12); ctx.lineTo(W-28, H-12); ctx.stroke();
+    ctx.fillStyle = '#94a3b8'; ctx.font = '9px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('50 μm', W-53, H-14);
+
+    // stage label in canvas
+    ctx.fillStyle = 'rgba(10,20,40,0.65)'; ctx.fillRect(8, 8, 180, 22);
+    ctx.fillStyle = '#6ee7b7'; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('Stage: ' + stg.label, 14, 23);
+
+    // update description and props
+    document.getElementById('stageDesc').textContent = stg.desc;
+    const propsEl = document.getElementById('stageProps');
+    propsEl.innerHTML = Object.entries(stg.props).map(([k,v]) =>
+        `<div class="sprop">${k}: <span>${v}</span></div>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════════
+   EVENT LISTENERS
+═══════════════════════════════════════════════════════ */
+// Tabs
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+        if (btn.dataset.tab === 'rx') { drawTrexCanvas(); drawGsizeCanvas(); drawAnnealCanvas(); }
+        if (btn.dataset.tab === 'hc') { drawHomoCanvas(); }
+        if (btn.dataset.tab === 'ms') { drawMicrostructure(); }
+        if (btn.dataset.tab === 'wh') { drawTrueCanvas(); }
+    });
+});
+
+// Alloy selection
+document.querySelectorAll('.alloy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.alloy-btn').forEach(b => {
+            b.className = 'alloy-btn';
+        });
+        activeAlloy = btn.dataset.alloy;
+        btn.classList.add('active-'+activeAlloy.substring(0,2));
+        drawPropChart(); drawTrueCanvas(); drawDislocCanvas();
+    });
+});
+
+// CW slider
+document.getElementById('cwSlider').addEventListener('input', e => {
+    cwPct = +e.target.value;
+    drawPropChart(); drawDislocCanvas();
+});
+
+// Stage buttons
+document.querySelectorAll('.stage-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.stage-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentStage = +btn.dataset.stage;
+        drawMicrostructure();
+    });
+});
+
+/* ═══════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════ */
+drawPropChart();
+drawTrueCanvas();
+drawDislocCanvas();
+</script>
+</body>
+</html>
