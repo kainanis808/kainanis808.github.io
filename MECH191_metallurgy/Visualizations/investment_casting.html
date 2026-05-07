@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Casting – ICI Process &amp; Design</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        header {
+            text-align: center;
+            padding: 26px 20px;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+        }
+        h1 { font-size: 2rem; color: #f1f5f9; }
+        .subtitle { color: #94a3b8; margin-top: 6px; font-size: 1rem; }
+        .source-line { font-size: 0.76rem; color: #475569; margin-top: 6px; }
+        main { max-width: 1060px; margin: 0 auto; padding: 26px 20px; }
+
+        .tab-bar {
+            display: flex; gap: 4px; margin-bottom: 22px;
+            border-bottom: 2px solid #334155; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 9px 18px; background: transparent; border: none;
+            border-bottom: 3px solid transparent; color: #94a3b8;
+            cursor: pointer; font-size: 0.9rem; font-family: inherit;
+            margin-bottom: -2px; transition: color 0.15s, border-color 0.15s;
+        }
+        .tab-btn.active { color: #a78bfa; border-bottom-color: #a78bfa; }
+        .tab-btn:hover:not(.active) { color: #cbd5e1; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        .card {
+            background: #1e293b; border: 1px solid #334155;
+            border-radius: 12px; padding: 22px; margin-bottom: 22px;
+        }
+        .card h2 { font-size: 1.2rem; color: #a78bfa; margin-bottom: 10px; }
+        .card p, .card li { color: #94a3b8; font-size: 0.91rem; line-height: 1.65; }
+        .card ul { padding-left: 18px; }
+        .card ul li { margin-bottom: 4px; }
+
+        .spec-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+        .spec-table th { background: #0f172a; color: #a78bfa; padding: 9px 12px; text-align: left; border-bottom: 1px solid #334155; }
+        .spec-table td { padding: 8px 12px; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
+        .spec-table tr:nth-child(even) td { background: #162032; }
+        .spec-table td:first-child { color: #e2e8f0; font-weight: 600; }
+        .good { color: #4ade80; } .mid { color: #fbbf24; } .bad { color: #f87171; }
+
+        .bar-wrap { margin: 8px 0; }
+        .bar-label { font-size: 0.82rem; color: #94a3b8; margin-bottom: 3px; }
+        .bar-track { background: #0f172a; border-radius: 4px; height: 18px; }
+        .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center;
+            padding-left: 6px; font-size: 0.75rem; color: #fff; font-weight: 600; white-space: nowrap; }
+
+        /* process step cards */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 14px;
+        }
+        .step-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 14px;
+        }
+        .step-card .step-num {
+            display: inline-block;
+            background: #4c1d95;
+            color: #c4b5fd;
+            border-radius: 50%;
+            width: 26px; height: 26px;
+            text-align: center; line-height: 26px;
+            font-size: 0.82rem; font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .step-card h3 { font-size: 0.93rem; color: #e2e8f0; margin-bottom: 5px; }
+        .step-card p { font-size: 0.8rem; color: #64748b; line-height: 1.55; }
+
+        /* design guideline grid */
+        .guide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr)); gap: 16px; }
+        .guide-item { background: #0f172a; border: 1px solid #334155; border-radius: 10px; overflow: hidden; }
+        .guide-item canvas { display: block; width: 100%; }
+        .guide-body { padding: 13px; }
+        .guide-body h3 { font-size: 0.93rem; color: #e2e8f0; margin-bottom: 4px; }
+        .guide-body p { font-size: 0.81rem; color: #64748b; line-height: 1.55; }
+
+        /* alloy grid */
+        .alloy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px,1fr)); gap: 12px; }
+        .alloy-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 14px; cursor: pointer; transition: border-color 0.15s; }
+        .alloy-card:hover, .alloy-card.selected { border-color: #a78bfa; background: #16102a; }
+        .alloy-card h3 { font-size: 0.92rem; color: #e2e8f0; margin-bottom: 5px; }
+        .alloy-card .tag { display: inline-block; background: #2e1065; color: #c4b5fd; border-radius: 4px; padding: 1px 7px; font-size: 0.72rem; margin-bottom: 6px; }
+        .alloy-card p { font-size: 0.79rem; color: #64748b; line-height: 1.5; }
+        #alloy-detail { background: #0f172a; border: 1px solid #a78bfa; border-radius: 10px; padding: 18px; margin-top: 16px; display: none; }
+        #alloy-detail h3 { color: #a78bfa; margin-bottom: 8px; font-size: 1.05rem; }
+        .alloy-spec-row { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 10px; }
+        .alloy-spec .spec-name { font-size: 0.74rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .alloy-spec .spec-val  { font-size: 0.9rem; color: #e2e8f0; margin-top: 2px; }
+
+        /* animation */
+        .anim-selector { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+        #anim-outer { display: flex; gap: 22px; align-items: flex-start; flex-wrap: wrap; }
+        #anim-canvas { border: 1px solid #334155; border-radius: 10px; background: #0f172a; flex-shrink: 0; max-width: 100%; }
+        #anim-side { flex: 1; min-width: 210px; }
+        .stage-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+        .stage-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #64748b; padding: 7px 11px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; transition: all 0.15s; }
+        .stage-item:hover { background: #1e293b; }
+        .stage-item.active { background: #1e1030; border-color: #a78bfa; color: #c4b5fd; }
+        .stage-item.done { color: #4ade80; }
+        .stage-dot { width: 9px; height: 9px; border-radius: 50%; background: #334155; flex-shrink: 0; }
+        .stage-item.active .stage-dot { background: #a78bfa; }
+        .stage-item.done  .stage-dot { background: #4ade80; }
+        #anim-desc { font-size: 0.85rem; color: #94a3b8; line-height: 1.65; background: #0f172a; border-radius: 8px; padding: 12px; border: 1px solid #1e293b; min-height: 80px; }
+        .anim-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+        .anim-btn { padding: 8px 18px; background: #2e1065; border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.88rem; font-family: inherit; transition: background 0.15s; }
+        .anim-btn:hover { background: #4c1d95; }
+        .anim-btn.secondary { background: #374151; }
+        .anim-btn.secondary:hover { background: #4b5563; }
+
+        .back-link { display: block; text-align: center; margin-top: 28px; color: #a78bfa; text-decoration: none; font-size: 0.92rem; }
+        .back-link:hover { text-decoration: underline; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Investment Casting (Lost-Wax)</h1>
+    <p class="subtitle">Process overview, design guidelines, tolerance standards, and step-by-step process animation</p>
+    <p class="source-line">Data sources: Investment Casting Institute (ICI) · Hitchiner Manufacturing Process · ICI Casting Tolerances Standard</p>
+</header>
+
+<main>
+<nav class="tab-bar">
+    <button class="tab-btn active" data-tab="overview">Process Overview</button>
+    <button class="tab-btn" data-tab="design">Design Guidelines</button>
+    <button class="tab-btn" data-tab="alloys">Alloys &amp; Applications</button>
+    <button class="tab-btn" data-tab="anim">Process Animation</button>
+</nav>
+
+<!-- ═══════════════ TAB 1 — OVERVIEW ═══════════════ -->
+<div class="tab-panel active" id="tab-overview">
+
+<div class="card">
+    <h2>What Is Investment Casting?</h2>
+    <p>Investment casting (lost-wax casting) is one of the oldest known metalworking processes — traced to 3000 BC in ancient Egypt and China. A wax replica of the desired part is coated in multiple layers of ceramic slurry and coarse sand (the "investment") to form a shell mold. The wax is then melted or flash-fired out, leaving a hollow ceramic cavity that exactly replicates the wax surface. Molten metal is poured in, the shell is broken away, and the casting is finished.</p>
+    <p style="margin-top:8px;">The result is the most dimensionally accurate, smoothest, and geometrically complex casting achievable — with <strong>zero draft required</strong>, internal undercuts possible, and surface finishes approaching machined quality. The tradeoff is process time (1–3 weeks per batch) and higher per-part cost.</p>
+</div>
+
+<div class="card">
+    <h2>Process Steps (ICI Sequence)</h2>
+    <div class="steps-grid">
+        <div class="step-card"><div class="step-num">1</div><h3>Wax Injection</h3><p>Wax (or plastic) injected under pressure into precision metal dies at 60–80 °C to form exact replicas of the finished part.</p></div>
+        <div class="step-card"><div class="step-num">2</div><h3>Pattern Assembly</h3><p>Individual wax patterns are welded (heat or solvent) to a central wax sprue to form a "tree" — typically 10–100 parts per cluster.</p></div>
+        <div class="step-card"><div class="step-num">3</div><h3>Shell Building</h3><p>Tree dipped in ceramic slurry, drained, coated in refractory stucco, and dried. Repeated 7–12 times over 3–10 days. First 2–3 coats use fine zircon for surface finish; later coats use coarser material for strength.</p></div>
+        <div class="step-card"><div class="step-num">4</div><h3>Dewaxing</h3><p>Wax removed in a flash-fire autoclave (~350 °C steam) or direct-flame oven. The shell expands slightly before the wax, preventing cracking — a key Hitchiner innovation.</p></div>
+        <div class="step-card"><div class="step-num">5</div><h3>Shell Burnout</h3><p>Empty shell fired at 900–1100 °C to burn residual wax, sinter the ceramic, and pre-heat the mold for pour. Eliminates gas-generating organics.</p></div>
+        <div class="step-card"><div class="step-num">6</div><h3>Metal Pour</h3><p>Molten metal poured into the hot shell (gravity, vacuum, or counter-gravity). Hot shell improves fluidity and reduces thermal shock on thin sections.</p></div>
+        <div class="step-card"><div class="step-num">7</div><h3>Shell Removal</h3><p>Ceramic broken away by vibration, water blasting, or chemical leaching (for complex internal passages). Individual parts visible on tree.</p></div>
+        <div class="step-card"><div class="step-num">8</div><h3>Cutoff &amp; Finishing</h3><p>Parts cut from tree with abrasive wheel. Gate stubs ground flush. NDT inspection (FPI, X-ray), heat treatment, machining of critical features if required.</p></div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Surface Finish vs. Other Casting Processes</h2>
+    <p style="margin-bottom:12px;">Investment casting produces the finest as-cast surface of all casting processes. ICI standard finish is <strong style="color:#4ade80;">32–125 µin Ra (0.8–3.2 µm)</strong>; best achievable with polished dies is ~16 µin Ra (0.4 µm).</p>
+    <div class="bar-wrap"><div class="bar-label">Investment Casting (as-cast)</div><div class="bar-track"><div class="bar-fill" style="width:14%;background:#4ade80;">32–125 µin Ra</div></div></div>
+    <div class="bar-wrap"><div class="bar-label">Die Casting</div><div class="bar-track"><div class="bar-fill" style="width:16%;background:#22d3ee;">32–125 µin Ra</div></div></div>
+    <div class="bar-wrap"><div class="bar-label">Permanent Mold</div><div class="bar-track"><div class="bar-fill" style="width:30%;background:#60a5fa;">63–250 µin Ra</div></div></div>
+    <div class="bar-wrap"><div class="bar-label">Sand Casting</div><div class="bar-track"><div class="bar-fill" style="width:72%;background:#ef4444;">125–500 µin Ra</div></div></div>
+</div>
+
+<div class="card">
+    <h2>Key Process Specifications (ICI)</h2>
+    <table class="spec-table">
+        <thead><tr><th>Parameter</th><th>Typical Range</th><th>Best Achievable</th><th>vs. Sand Casting</th></tr></thead>
+        <tbody>
+            <tr><td>Surface Roughness Ra</td><td>0.8–3.2 µm (32–125 µin)</td><td>0.4 µm (16 µin)</td><td class="good">4–20× smoother</td></tr>
+            <tr><td>Linear Tolerance (ICI Class 2)</td><td>±0.13 mm for 25 mm</td><td>±0.08 mm (Class 3)</td><td class="good">5–10× tighter</td></tr>
+            <tr><td>Draft Angle Required</td><td>0° to 0.5°</td><td>0° (zero draft)</td><td class="good">Far less — major advantage</td></tr>
+            <tr><td>Minimum Wall Thickness (Steel)</td><td>1.5–2.0 mm</td><td>0.75 mm (short sections)</td><td class="good">3–4× thinner than sand</td></tr>
+            <tr><td>Minimum Wall Thickness (Al/Ti)</td><td>1.0–1.5 mm</td><td>0.6 mm</td><td class="good">3–4× thinner than sand</td></tr>
+            <tr><td>Part Weight Range</td><td>1 g – 50 kg</td><td>—</td><td class="bad">Narrower than sand casting</td></tr>
+            <tr><td>Undercuts</td><td>Freely possible</td><td>—</td><td class="good">No restriction — shell breaks away</td></tr>
+            <tr><td>Internal Passages</td><td>Via ceramic cores</td><td>Min. ~1.5 mm dia.</td><td class="good">More complex than sand cores</td></tr>
+            <tr><td>Minimum Hole Diameter</td><td>1.5–3 mm (cast)</td><td>1.5 mm</td><td class="good">Much smaller than sand</td></tr>
+            <tr><td>Applicable Alloys</td><td colspan="2">Nearly all — ferrous, non-ferrous, superalloys, precious metals</td><td class="good">Broadest alloy range</td></tr>
+            <tr><td>Tooling Cost</td><td>$1,000–$30,000 (wax dies)</td><td>—</td><td class="mid">Higher than sand; lower than die cast</td></tr>
+            <tr><td>Lead Time (first article)</td><td>4–8 weeks</td><td>—</td><td class="bad">Longest of all processes</td></tr>
+            <tr><td>Production Rate</td><td>1–1000 parts/batch</td><td>—</td><td class="mid">Lower than die casting</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h2>ICI Dimensional Tolerance Chart</h2>
+    <canvas id="tol-canvas" width="700" height="270" style="border-radius:8px;border:1px solid #334155;max-width:100%;"></canvas>
+    <p style="margin-top:8px;font-size:0.79rem;color:#64748b;">
+        ICI Classes 1–3: Class 1 = general commercial; Class 2 = precision (most common); Class 3 = close tolerance (special dies, controlled conditions). Tolerance applies to individual dimensions within one die half; across-parting-line and core dimensions carry an additional allowance.
+    </p>
+</div>
+
+</div><!-- end tab-overview -->
+
+<!-- ═══════════════ TAB 2 — DESIGN ═══════════════ -->
+<div class="tab-panel" id="tab-design">
+<div class="card">
+    <h2>ICI Casting Design Principles</h2>
+    <p>Investment casting design freedom far exceeds other casting processes: zero draft, free undercuts, thin walls, small holes, and complex internal passages are all achievable. The primary constraints are feeding (shrinkage in heavy sections) and distortion (thin flat sections). Seven key guidelines are illustrated below.</p>
+</div>
+<div class="guide-grid" id="guide-grid"></div>
+</div>
+
+<!-- ═══════════════ TAB 3 — ALLOYS ═══════════════ -->
+<div class="tab-panel" id="tab-alloys">
+<div class="card">
+    <h2>Why Investment Casting Dominates Superalloy &amp; Titanium Processing</h2>
+    <p>Because the mold is ceramic and sacrificial, investment casting imposes no die-material temperature limit. This makes it the <em>only</em> practical near-net-shape route for nickel superalloys (turbine blades), titanium alloys (aerospace structural parts), and cobalt alloys (surgical implants). The process also handles precious metals (jewelry, dental) and standard engineering alloys. Click an alloy family for details.</p>
+</div>
+<div class="card" style="padding-bottom:14px;">
+    <h2>Alloy Families — Click for Details</h2>
+    <div class="alloy-grid" id="alloy-grid"></div>
+    <div id="alloy-detail"></div>
+</div>
+</div>
+
+<!-- ═══════════════ TAB 4 — ANIMATION ═══════════════ -->
+<div class="tab-panel" id="tab-anim">
+<div class="card" style="padding-bottom:14px;">
+    <h2>Investment Casting Process Animation</h2>
+    <p style="margin-bottom:14px;">Step through all eight stages from wax injection to finished part. Based on the Hitchiner Manufacturing process sequence. Press <strong>Play</strong> for automatic advance, or click any stage in the list.</p>
+    <div id="anim-outer">
+        <canvas id="anim-canvas" width="600" height="390"></canvas>
+        <div id="anim-side">
+            <div class="stage-list" id="stage-list"></div>
+            <div id="anim-desc">Select a stage to begin.</div>
+            <div class="anim-btns">
+                <button class="anim-btn" id="btn-play">▶ Play</button>
+                <button class="anim-btn secondary" id="btn-prev">◀ Prev</button>
+                <button class="anim-btn secondary" id="btn-next">Next ▶</button>
+                <button class="anim-btn secondary" id="btn-reset">Reset</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<a class="back-link" href="index.html">← Back to Visualizations</a>
+</main>
+
+<script>
+/* ═══════════════════════════════════════════
+   TABS
+═══════════════════════════════════════════ */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+        if (btn.dataset.tab === 'anim') { resetAnim(); drawFrame(); }
+    });
+});
+
+/* ═══════════════════════════════════════════
+   TAB 1 — TOLERANCE CHART
+═══════════════════════════════════════════ */
+(function() {
+    const canvas = document.getElementById('tol-canvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const PAD = { top: 22, right: 30, bottom: 52, left: 66 };
+    const CW = W - PAD.left - PAD.right, CH = H - PAD.top - PAD.bottom;
+
+    const xMin = 5, xMax = 400;
+    const yMin = 0, yMax = 1.4;
+    function xP(v) { return PAD.left + (Math.log10(v) - Math.log10(xMin)) / (Math.log10(xMax) - Math.log10(xMin)) * CW; }
+    function yP(v) { return PAD.top + CH - (v - yMin) / (yMax - yMin) * CH; }
+
+    ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+
+    ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
+    [0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4].forEach(y => {
+        ctx.beginPath(); ctx.moveTo(PAD.left, yP(y)); ctx.lineTo(PAD.left + CW, yP(y)); ctx.stroke();
+    });
+    [5, 10, 25, 50, 100, 200, 400].forEach(x => {
+        ctx.beginPath(); ctx.moveTo(xP(x), PAD.top); ctx.lineTo(xP(x), PAD.top + CH); ctx.stroke();
+    });
+
+    // ICI Class 3 (close): ±0.076 mm per 25mm
+    // ICI Class 2 (precision): ±0.13 mm per 25mm
+    // ICI Class 1 (commercial): ±0.25 mm per 25mm
+    // All have a minimum absolute tolerance at small dimensions
+    const classes = [
+        { lo: d => Math.max(0.05, d * 0.003), hi: d => Math.max(0.076, d * 0.003), color: '#4ade80', label: 'Class 3 (close)' },
+        { lo: d => Math.max(0.076, d * 0.003), hi: d => Math.max(0.13, d * 0.005), color: '#a78bfa', label: 'Class 2 (precision)' },
+        { lo: d => Math.max(0.13, d * 0.005), hi: d => Math.max(0.25, d * 0.010), color: '#38bdf8', label: 'Class 1 (commercial)' },
+    ];
+
+    const xs = Array.from({ length: 200 }, (_, i) => xMin * Math.pow(xMax / xMin, i / 199));
+
+    classes.forEach(c => {
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(xP(xs[0]), yP(Math.min(yMax, c.hi(xs[0]))));
+        xs.forEach(x => ctx.lineTo(xP(x), yP(Math.min(yMax, c.hi(x)))));
+        xs.slice().reverse().forEach(x => ctx.lineTo(xP(x), yP(Math.min(yMax, c.lo(x)))));
+        ctx.closePath();
+        ctx.fillStyle = c.color + '28'; ctx.fill();
+        ctx.beginPath();
+        xs.forEach((x, i) => { const py = yP(Math.min(yMax, c.hi(x))); i ? ctx.lineTo(xP(x), py) : ctx.moveTo(xP(x), py); });
+        ctx.strokeStyle = c.color; ctx.lineWidth = 2; ctx.stroke();
+        ctx.restore();
+        // label at right end
+        ctx.fillStyle = c.color; ctx.font = '10px Segoe UI'; ctx.textAlign = 'left';
+        ctx.fillText(c.label, xP(xs[xs.length - 1]) + 4, yP(c.hi(xs[xs.length - 1])) + 4);
+    });
+
+    // Sand casting reference (lower bound)
+    ctx.beginPath();
+    xs.forEach((x, i) => {
+        const py = yP(Math.min(yMax, 0.38 + x * 0.0025));
+        i ? ctx.lineTo(xP(x), py) : ctx.moveTo(xP(x), py);
+    });
+    ctx.strokeStyle = '#f8717166'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 3]); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = '#f87171'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'left';
+    ctx.fillText('Sand cast (best)', xP(30), yP(0.38 + 30 * 0.0025) - 6);
+
+    ctx.strokeStyle = '#475569'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(PAD.left, PAD.top); ctx.lineTo(PAD.left, PAD.top + CH); ctx.lineTo(PAD.left + CW, PAD.top + CH); ctx.stroke();
+
+    ctx.fillStyle = '#94a3b8'; ctx.font = '11px Segoe UI'; ctx.textAlign = 'right';
+    [0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4].forEach(y => ctx.fillText(`±${y.toFixed(1)}`, PAD.left - 6, yP(y) + 4));
+    ctx.textAlign = 'center';
+    [5, 10, 25, 50, 100, 200, 400].forEach(x => ctx.fillText(x + 'mm', xP(x), PAD.top + CH + 18));
+
+    ctx.save(); ctx.translate(14, PAD.top + CH / 2); ctx.rotate(-Math.PI / 2);
+    ctx.textAlign = 'center'; ctx.fillStyle = '#64748b'; ctx.font = '12px Segoe UI';
+    ctx.fillText('±Tolerance (mm)', 0, 0); ctx.restore();
+    ctx.textAlign = 'center'; ctx.fillStyle = '#64748b';
+    ctx.fillText('Nominal Dimension (mm, log scale)', PAD.left + CW / 2, H - 8);
+})();
+
+/* ═══════════════════════════════════════════
+   TAB 2 — DESIGN GUIDELINES
+═══════════════════════════════════════════ */
+const GUIDELINES = [
+    {
+        title: 'Zero Draft — No Taper Required',
+        desc: 'Because the ceramic shell is broken away (not pulled off), investment castings need zero draft on external or internal surfaces. This allows truly vertical walls, parallel bores, and complex re-entrant shapes impossible in die or sand casting.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+            const cx = W / 2;
+
+            // Left: die casting (must have draft)
+            ctx.fillStyle = '#7f1d1d'; ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(cx / 2 - 30, 30); ctx.lineTo(cx / 2 - 45, 110);
+            ctx.lineTo(cx / 2 + 45, 110); ctx.lineTo(cx / 2 + 30, 30); ctx.closePath();
+            ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#ef4444'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Die cast: 1–3° draft', cx / 2, 125);
+            ctx.fillText('required', cx / 2, 136);
+            // draft angle annotation
+            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(cx / 2 + 30, 30); ctx.lineTo(cx / 2 + 30, 60); ctx.stroke();
+            ctx.fillStyle = '#fbbf24'; ctx.font = '8px Segoe UI';
+            ctx.fillText('draft', cx / 2 + 44, 46);
+
+            // Right: investment (vertical walls)
+            ctx.fillStyle = '#14532d'; ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(cx + cx / 2 - 38, 30); ctx.lineTo(cx + cx / 2 - 38, 110);
+            ctx.lineTo(cx + cx / 2 + 38, 110); ctx.lineTo(cx + cx / 2 + 38, 30); ctx.closePath();
+            ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#4ade80'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Investment: 0° draft', cx + cx / 2, 125);
+            ctx.fillText('— vertical walls OK', cx + cx / 2, 136);
+
+            ctx.fillStyle = '#64748b'; ctx.font = '9px Segoe UI';
+            ctx.fillText('Cross-section view — parting plane is horizontal', cx, H - 6);
+        }
+    },
+    {
+        title: 'Minimum Wall Thickness',
+        desc: 'ICI minimum wall thickness: ~1.5 mm for steel, ~1.0 mm for aluminum and titanium in short sections. Walls thinner than 0.75 mm risk misrun. Thin walls must be supported by ribs if long, to prevent wax deflection and shell distortion during drying.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+            const cx = W / 2;
+
+            // Thin wall section (OK)
+            ctx.fillStyle = '#166534'; ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 1.5;
+            ctx.fillRect(cx - 80, 50, 8, 90);
+            ctx.strokeRect(cx - 80, 50, 8, 90);
+            ctx.fillStyle = '#4ade80'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('1.5 mm ✓', cx - 76, 44);
+            // dimension arrow
+            ctx.strokeStyle = '#86efac'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(cx - 80, 28); ctx.lineTo(cx - 72, 28); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(cx - 80, 22); ctx.lineTo(cx - 80, 34); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(cx - 72, 22); ctx.lineTo(cx - 72, 34); ctx.stroke();
+
+            // Heavy section with porosity risk
+            ctx.fillStyle = '#78350f'; ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1.5;
+            ctx.fillRect(cx - 20, 50, 50, 90);
+            ctx.strokeRect(cx - 20, 50, 50, 90);
+            // shrinkage indication
+            ctx.fillStyle = 'rgba(15,23,42,0.5)';
+            ctx.beginPath(); ctx.arc(cx + 5, 100, 12, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 1; ctx.stroke();
+            ctx.fillStyle = '#f87171'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Heavy section', cx + 5, 156);
+            ctx.fillText('→ shrinkage risk', cx + 5, 167);
+
+            // Ribbed thin wall (good)
+            ctx.fillStyle = '#14532d'; ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 1.5;
+            ctx.fillRect(cx + 60, 50, 8, 90);
+            ctx.strokeRect(cx + 60, 50, 8, 90);
+            // rib
+            ctx.fillRect(cx + 60, 90, 25, 8);
+            ctx.strokeRect(cx + 60, 90, 25, 8);
+            ctx.fillStyle = '#4ade80'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Rib-supported', cx + 73, 44);
+            ctx.fillText('thin wall ✓', cx + 73, H - 6);
+        }
+    },
+    {
+        title: 'Undercuts — Freely Allowed',
+        desc: 'Because the ceramic shell is non-reusable and broken away, undercuts of any geometry are possible at no extra cost. Re-entrant features, reversed tapers, and through-holes at any angle are all castable. This is the most significant design advantage over die and sand casting.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+            const cx = W / 2, cy = H / 2;
+
+            // T-shaped part with undercuts
+            ctx.fillStyle = '#2e1065'; ctx.strokeStyle = '#a78bfa'; ctx.lineWidth = 2;
+            ctx.beginPath();
+            // T-shape with dovetail undercut at bottom
+            ctx.moveTo(cx - 70, cy - 40); ctx.lineTo(cx + 70, cy - 40); // top
+            ctx.lineTo(cx + 70, cy - 20); ctx.lineTo(cx + 28, cy - 20);
+            ctx.lineTo(cx + 40, cy + 40);  // angled undercut side (flared out)
+            ctx.lineTo(cx + 55, cy + 50);
+            ctx.lineTo(cx - 55, cy + 50);
+            ctx.lineTo(cx - 40, cy + 40);
+            ctx.lineTo(cx - 28, cy - 20); ctx.lineTo(cx - 70, cy - 20);
+            ctx.closePath(); ctx.fill(); ctx.stroke();
+
+            // Annotation arrows pointing to undercuts
+            ctx.strokeStyle = '#fbbf24'; ctx.fillStyle = '#fbbf24'; ctx.lineWidth = 1.5;
+            [[cx + 46, cy + 44, 18, -10], [cx - 46, cy + 44, -18, -10]].forEach(([x, y, dx, dy]) => {
+                ctx.beginPath(); ctx.moveTo(x + dx, y + dy); ctx.lineTo(x, y); ctx.stroke();
+                ctx.beginPath(); ctx.arc(x + dx, y + dy, 3, 0, Math.PI * 2); ctx.fill();
+            });
+            ctx.fillStyle = '#fbbf24'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Undercut — impossible in die/sand casting', cx, H - 6);
+            ctx.fillText('No problem for investment casting', cx, H - 17);
+
+            // Shell breaking symbol
+            ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 0.8; ctx.setLineDash([2, 2]);
+            ctx.beginPath(); ctx.roundRect(cx - 80, cy - 48, 160, 108, 4); ctx.stroke(); ctx.setLineDash([]);
+            ctx.fillStyle = '#64748b'; ctx.font = '8px Segoe UI';
+            ctx.fillText('Ceramic shell (breaks away)', cx, cy - 52);
+        }
+    },
+    {
+        title: 'Internal Passages via Ceramic Cores',
+        desc: 'Complex internal passages are formed by pre-made ceramic cores placed in the wax die before injection. The core is held in position by the shell and is leached out chemically (caustic or HF) or vibrated out after casting. Used extensively for turbine blade cooling channels.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+            const cx = W / 2, cy = H / 2;
+
+            // Outer airfoil shape (simplified)
+            ctx.fillStyle = '#2d3a4a'; ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.ellipse(cx, cy, 70, 36, -0.2, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+            // Internal cooling channels (ceramic core locations)
+            ctx.fillStyle = '#7c3aed'; ctx.strokeStyle = '#a78bfa'; ctx.lineWidth = 1;
+            [[-35, 0], [-15, -6], [5, -8], [25, -4], [40, 2]].forEach(([ox, oy]) => {
+                ctx.beginPath(); ctx.ellipse(cx + ox, cy + oy, 6, 10, -0.2, 0, Math.PI * 2);
+                ctx.fill(); ctx.stroke();
+            });
+            ctx.fillStyle = '#a78bfa'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Cooling channels (ceramic cores)', cx, H / 2 + 52);
+            ctx.fillText('formed inside airfoil', cx, H / 2 + 63);
+
+            ctx.fillStyle = '#64748b'; ctx.font = '9px Segoe UI';
+            ctx.fillText('Turbine blade cross-section', cx, H - 6);
+        }
+    },
+    {
+        title: 'Section Changes & Feeding',
+        desc: 'Despite zero draft, investment castings still require careful attention to solidification feeding. Heavy sections should be oriented to solidify toward the sprue (directional solidification). Abrupt section changes cause microshrinkage; taper transitions or radii mitigate this.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+            const cx = W / 2;
+
+            // Good: tapered section feeding toward sprue (top)
+            ctx.fillStyle = '#14532d'; ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(cx - 60, 20); ctx.lineTo(cx + 60, 20); // sprue/top
+            ctx.lineTo(cx + 40, 80); ctx.lineTo(cx + 25, 120); ctx.lineTo(cx - 25, 120); ctx.lineTo(cx - 40, 80); ctx.closePath();
+            ctx.fill(); ctx.stroke();
+            // arrows showing solidification direction
+            ctx.strokeStyle = '#86efac'; ctx.lineWidth = 1.5;
+            [[cx, 100], [cx - 25, 80], [cx + 25, 80]].forEach(([x, y]) => {
+                ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y - 20); ctx.stroke();
+                ctx.fillStyle = '#86efac';
+                ctx.beginPath(); ctx.moveTo(x, y - 20); ctx.lineTo(x - 4, y - 12); ctx.lineTo(x + 4, y - 12); ctx.closePath(); ctx.fill();
+            });
+            ctx.fillStyle = '#4ade80'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Tapered section ✓', cx - 80, H / 2 + 10);
+            ctx.fillText('Feeds toward sprue', cx - 80, H / 2 + 21);
+
+            // Bad: abrupt change with shrinkage
+            ctx.fillStyle = '#7f1d1d'; ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 1.5;
+            ctx.fillRect(cx + 30, 20, 50, 15);
+            ctx.fillRect(cx + 42, 35, 26, 85);
+            ctx.strokeRect(cx + 30, 20, 50, 15);
+            ctx.strokeRect(cx + 42, 35, 26, 85);
+            // shrinkage void
+            ctx.fillStyle = 'rgba(15,23,42,0.7)';
+            ctx.beginPath(); ctx.arc(cx + 55, 37, 7, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 1; ctx.stroke();
+            ctx.fillStyle = '#f87171'; ctx.font = '9px Segoe UI';
+            ctx.fillText('Abrupt step ✗', cx + 80, H / 2 + 10);
+            ctx.fillText('Shrinkage void', cx + 80, H / 2 + 21);
+            ctx.fillStyle = '#64748b'; ctx.font = '9px Segoe UI';
+            ctx.fillText('Solidification direction control is critical', cx, H - 6);
+        }
+    },
+    {
+        title: 'Wax Pattern Quality → Casting Quality',
+        desc: 'Investment casting replicates the wax surface exactly. Any defect in the wax — sink marks from non-uniform wax cooling, weld lines where two flows meet, or distortion during assembly — transfers directly to the metal. Wax die design and injection conditions are therefore critical.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+            const cx = W / 2;
+
+            // Wax pattern (left)
+            const wx = cx / 2;
+            ctx.fillStyle = '#78350f'; ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.roundRect(wx - 40, 30, 80, 120, 6); ctx.fill(); ctx.stroke();
+            // sink mark
+            ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.arc(wx, 75, 10, 0.3, Math.PI - 0.3, false); ctx.stroke();
+            ctx.fillStyle = '#ef4444'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Sink mark on wax', wx, 165);
+
+            // Arrow
+            ctx.fillStyle = '#94a3b8'; ctx.font = '18px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('→', cx, 90);
+            ctx.fillStyle = '#64748b'; ctx.font = '8px Segoe UI';
+            ctx.fillText('replicated', cx, 104);
+            ctx.fillText('exactly', cx, 114);
+
+            // Metal part (right)
+            const mx = cx + cx / 2;
+            ctx.fillStyle = '#374151'; ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.roundRect(mx - 40, 30, 80, 120, 6); ctx.fill(); ctx.stroke();
+            // same sink mark on metal
+            ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.arc(mx, 75, 10, 0.3, Math.PI - 0.3, false); ctx.stroke();
+            ctx.fillStyle = '#ef4444'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Same defect in metal', mx, 165);
+
+            ctx.fillStyle = '#fbbf24'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Wax surface fidelity = casting surface fidelity', cx, H - 6);
+        }
+    },
+    {
+        title: 'Sprue & Gating on the Wax Tree',
+        desc: 'Part orientation on the tree controls: (1) metal flow path and fill quality, (2) feeding efficiency from the central sprue, (3) shell drying (no trapped slurry), and (4) knockout accessibility. Heavy sections face the sprue for riser-like feeding. Thin fins face away.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+            const cx = W / 2;
+
+            // Central sprue
+            ctx.fillStyle = '#78350f'; ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2;
+            ctx.fillRect(cx - 8, 10, 16, H - 30); ctx.strokeRect(cx - 8, 10, 16, H - 30);
+            ctx.fillStyle = '#f59e0b'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'right';
+            ctx.fillText('Central sprue', cx - 12, 22);
+
+            // Runner gates at various heights
+            const heights = [40, 90, 140, 200];
+            [[-1, 1], [1, -1], [-1, 1], [1, -1]].forEach(([side, rot], i) => {
+                const y = heights[i];
+                const px = cx + side * 14;
+                // gate
+                ctx.fillStyle = '#92400e'; ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1;
+                ctx.fillRect(px, y, side * 20, 8);
+                ctx.strokeRect(px, y, side * 20, 8);
+                // part
+                const px2 = px + side * 20;
+                ctx.fillStyle = '#374151'; ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.roundRect(px2 + (side > 0 ? 0 : -44), y - 18, 44, 44, 4);
+                ctx.fill(); ctx.stroke();
+                ctx.fillStyle = '#f59e0b'; ctx.font = '8px Segoe UI'; ctx.textAlign = side > 0 ? 'left' : 'right';
+                ctx.fillText('Part', px2 + (side > 0 ? 48 : -48), y + 5);
+                ctx.fillText('Gate', px + (side > 0 ? 6 : -6), y + 16);
+            });
+            ctx.fillStyle = '#64748b'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Tree = sprue + runners + parts', cx, H - 6);
+        }
+    },
+];
+
+(function() {
+    const grid = document.getElementById('guide-grid');
+    GUIDELINES.forEach(g => {
+        const item = document.createElement('div');
+        item.className = 'guide-item';
+        const c = document.createElement('canvas');
+        c.width = 310; c.height = 185; c.style.width = '100%';
+        item.appendChild(c);
+        const body = document.createElement('div');
+        body.className = 'guide-body';
+        body.innerHTML = `<h3>${g.title}</h3><p>${g.desc}</p>`;
+        item.appendChild(body);
+        grid.appendChild(item);
+        const ctx = c.getContext('2d');
+        ctx.font = '11px Segoe UI'; ctx.textAlign = 'left';
+        g.draw(ctx, c.width, c.height);
+    });
+})();
+
+/* ═══════════════════════════════════════════
+   TAB 3 — ALLOY DATA
+═══════════════════════════════════════════ */
+const ALLOYS = [
+    { name: 'Carbon & Alloy Steel', tag: 'Ferrous',
+      short: 'The largest volume investment casting alloy family.',
+      melt: '1420–1530 °C', minWall: '1.5–2 mm', uts: '450–1100 MPa',
+      tolClass: 'ICI Class 2', surface: '1.6–3.2 µm Ra',
+      notes: 'Low/medium/high carbon and alloy steels are the workhorse. Used for valves, impellers, pump casings, firearms components, and structural hardware. Post-cast heat treatment (anneal, normalize, Q&T) common.' },
+    { name: 'Stainless Steel', tag: 'Ferrous',
+      short: '17-4PH, 15-5PH, 316, 304 — corrosion-resistant precision parts.',
+      melt: '1380–1450 °C', minWall: '1.5–2 mm', uts: '500–1300 MPa',
+      tolClass: 'ICI Class 2', surface: '1.6–3.2 µm Ra',
+      notes: '17-4 PH is the most common grade — excellent strength + corrosion resistance after H-series aging. Used for aerospace fittings, food/chemical processing equipment, and medical devices. Investment casting avoids the weld-heat-affected-zone issues of fabricated stainless.' },
+    { name: 'Nickel Superalloys', tag: 'Ferrous',
+      short: 'Inconel 713, René 80, IN100 — the reason investment casting exists for aerospace.',
+      melt: '1230–1340 °C', minWall: '0.9–1.5 mm', uts: '900–1400 MPa (at RT)',
+      tolClass: 'ICI Class 2–3', surface: '0.8–1.6 µm Ra',
+      notes: 'Virtually all jet engine turbine blades and vanes are investment cast. Directional solidification (DS) and single-crystal (SX) processes grow blades as oriented or single grains for maximum creep resistance. Hot-section parts operate at 85–90% of their solidus temperature.' },
+    { name: 'Cobalt Alloys', tag: 'Non-ferrous',
+      short: 'Stellite, Haynes 25, L605 — wear, corrosion, and biocompatibility.',
+      melt: '1330–1410 °C', minWall: '1.5–2 mm', uts: '800–1200 MPa',
+      tolClass: 'ICI Class 2', surface: '1.6–3.2 µm Ra',
+      notes: 'Co-Cr-Mo alloys (e.g., ASTM F75) are the dominant material for orthopaedic implants (hip/knee replacements). Investment casting achieves net-shape complex geometry while the alloy provides biocompatibility and wear resistance. Also used for dental prosthetics and superalloy hot-section parts.' },
+    { name: 'Titanium Alloys', tag: 'Non-ferrous',
+      short: 'Ti-6Al-4V — aerospace structural parts with exceptional strength/weight.',
+      melt: '1604–1660 °C', minWall: '1.0–1.5 mm', uts: '900–1000 MPa',
+      tolClass: 'ICI Class 2', surface: '1.6–3.2 µm Ra',
+      notes: 'Ti-6Al-4V must be vacuum poured in a cold-wall induction furnace to prevent contamination. The ceramic shell must be titanium-compatible (yttria or CaO-stabilised zirconia — not silica, which reacts). HIP (hot isostatic pressing) is almost always applied to close porosity. Used for airframe brackets, compressor blades, and biomedical implants.' },
+    { name: 'Aluminum Alloys', tag: 'Non-ferrous',
+      short: 'A356, 201, 206 — lightweight, thin-wall precision parts.',
+      melt: '580–650 °C', minWall: '0.75–1.5 mm', uts: '220–450 MPa',
+      tolClass: 'ICI Class 1–2', surface: '0.8–3.2 µm Ra',
+      notes: 'Al investment castings achieve thinner walls and tighter tolerances than sand-cast equivalents. A356-T6 is most common. Used for aerospace housings, electronic enclosures, and complex architectural hardware. Low pour temperature reduces die and tooling wear.' },
+    { name: 'Copper Alloys', tag: 'Non-ferrous',
+      short: 'Silicon bronze, phosphor bronze, brass — art and precision hardware.',
+      melt: '900–1050 °C', minWall: '1.5–2 mm', uts: '300–700 MPa',
+      tolClass: 'ICI Class 1–2', surface: '1.6–3.2 µm Ra',
+      notes: 'Widely used for art castings (sculpture, architectural), propeller hubs, pump impellers, and electrical connectors. Silicon bronze (C87500) is popular for decorative and marine use. Excellent castability and corrosion resistance.' },
+    { name: 'Precious Metals', tag: 'Non-ferrous',
+      short: 'Gold, silver, platinum — jewelry and dental, the original use of the process.',
+      melt: '960–1065 °C (Ag/Au)', minWall: '0.5–1 mm', uts: 'Varies',
+      tolClass: 'ICI Class 3', surface: '0.4–0.8 µm Ra',
+      notes: 'Jewelry investment casting uses low-temperature investment plaster (not ceramic) and vacuum/centrifugal pour. The process (cire perdue) dates to antiquity. Dental alloys (gold, Co-Cr, Ni-Cr) are cast in small centrifugal units. The fine surface finish eliminates most polishing.' },
+];
+
+(function() {
+    const grid = document.getElementById('alloy-grid');
+    const detail = document.getElementById('alloy-detail');
+    ALLOYS.forEach(a => {
+        const card = document.createElement('div');
+        card.className = 'alloy-card';
+        card.innerHTML = `<div class="tag">${a.tag}</div><h3>${a.name}</h3><p>${a.short}</p>`;
+        card.addEventListener('click', () => {
+            document.querySelectorAll('.alloy-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            detail.style.display = 'block';
+            detail.innerHTML = `<h3>${a.name}</h3>
+            <p style="color:#94a3b8;margin-bottom:10px;font-size:0.9rem;">${a.notes}</p>
+            <div class="alloy-spec-row">
+                ${[['Melt Range', a.melt], ['Min Wall', a.minWall], ['UTS', a.uts],
+                   ['ICI Tolerance', a.tolClass], ['Surface Ra', a.surface]]
+                  .map(([n, v]) => `<div class="alloy-spec"><div class="spec-name">${n}</div><div class="spec-val">${v}</div></div>`).join('')}
+            </div>`;
+        });
+        grid.appendChild(card);
+    });
+})();
+
+/* ═══════════════════════════════════════════
+   TAB 4 — PROCESS ANIMATION
+═══════════════════════════════════════════ */
+const STAGES = [
+    {
+        name: 'Wax Injection',
+        time: 'Minutes per part',
+        desc: 'Molten wax (60–80 °C) is injected under pressure into a precision aluminum or steel die. The die produces an exact wax replica of the finished part. Multiple cavities per die are common. Critical: wax temperature, injection pressure, and die temperature all affect sink marks and dimensional accuracy of the wax.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+            const cx = W / 2, cy = H / 2;
+
+            // Die — two halves (top and bottom split)
+            const dieW = 200, dieH = 60, cavH = 50, cavW = 120;
+
+            // Bottom half
+            ctx.fillStyle = '#374151'; ctx.strokeStyle = '#4b5563'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.roundRect(cx - dieW / 2, cy + 2, dieW, dieH, 4); ctx.fill(); ctx.stroke();
+            // cavity recess in bottom half
+            ctx.fillStyle = '#1e293b';
+            ctx.beginPath(); ctx.roundRect(cx - cavW / 2, cy + 2, cavW, cavH / 2, [0,0,4,4]); ctx.fill();
+
+            // Top half
+            ctx.fillStyle = '#2d3a4a'; ctx.strokeStyle = '#4b5563'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.roundRect(cx - dieW / 2, cy - dieH - 2, dieW, dieH, 4); ctx.fill(); ctx.stroke();
+            // cavity recess in top half
+            ctx.fillStyle = '#1e293b';
+            ctx.beginPath(); ctx.roundRect(cx - cavW / 2, cy - cavH / 2 - 2, cavW, cavH / 2, [4,4,0,0]); ctx.fill();
+
+            // Wax filling cavity
+            ctx.fillStyle = '#a16207';
+            ctx.beginPath(); ctx.roundRect(cx - cavW / 2 + 2, cy - cavH / 2 + 2, cavW - 4, cavH - 4, 3); ctx.fill();
+
+            // Parting line
+            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+            ctx.beginPath(); ctx.moveTo(cx - dieW / 2 - 10, cy); ctx.lineTo(cx + dieW / 2 + 10, cy); ctx.stroke(); ctx.setLineDash([]);
+
+            // Injection nozzle (left side)
+            ctx.fillStyle = '#1e40af'; ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.roundRect(cx - dieW / 2 - 60, cy - 12, 58, 24, 4); ctx.fill(); ctx.stroke();
+            // nozzle tip
+            ctx.beginPath(); ctx.moveTo(cx - dieW / 2 - 2, cy - 8); ctx.lineTo(cx - dieW / 2 - 2, cy + 8); ctx.lineTo(cx - dieW / 2 + 4, cy); ctx.closePath();
+            ctx.fillStyle = '#2563eb'; ctx.fill();
+            // wax stream in nozzle
+            ctx.fillStyle = '#a16207';
+            ctx.fillRect(cx - dieW / 2 - 58, cy - 4, 56, 8);
+            ctx.fillStyle = '#fbbf24'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Wax injection nozzle', cx - dieW / 2 - 30, cy - 20);
+            ctx.fillText('~60–80 °C', cx - dieW / 2 - 30, cy + 30);
+
+            // Labels
+            ctx.fillStyle = '#64748b'; ctx.font = '10px Segoe UI';
+            ctx.fillText('Metal die (top half)', cx, cy - dieH - 10);
+            ctx.fillText('Metal die (bottom half)', cx, cy + dieH + 18);
+            ctx.fillStyle = '#a16207'; ctx.fillText('Wax pattern', cx, cy + 2);
+            ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 11px Segoe UI';
+            ctx.fillText('Stage 1: Wax Injection', W / 2, 18);
+        }
+    },
+    {
+        name: 'Pattern Assembly (Tree)',
+        time: 'Hours per cluster',
+        desc: 'Individual wax patterns are attached (heat welding or solvent bonding) to a central wax sprue, forming a "tree" or "cluster." A typical tree holds 10–100 parts. The cluster geometry controls metal flow, feeding, and shell drying. The wax sprue becomes the main pour channel.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+            const cx = W / 2;
+
+            // Central sprue (vertical)
+            ctx.fillStyle = '#a16207'; ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.roundRect(cx - 10, 20, 20, H - 50, 4); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#fbbf24'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'right';
+            ctx.fillText('Wax sprue', cx - 14, 34);
+
+            // Pour cup at top
+            ctx.fillStyle = '#92400e'; ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(cx - 32, 20); ctx.lineTo(cx - 16, 36); ctx.lineTo(cx + 16, 36); ctx.lineTo(cx + 32, 20);
+            ctx.closePath(); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#fbbf24'; ctx.font = '8px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Pour cup', cx, 14);
+
+            // Parts on tree — alternating left/right
+            const parts = [
+                { y: 65,  side: -1 }, { y: 65,  side: 1 },
+                { y: 140, side: -1 }, { y: 140, side: 1 },
+                { y: 215, side: -1 }, { y: 215, side: 1 },
+                { y: 290, side: -1 }, { y: 290, side: 1 },
+            ];
+            parts.forEach(({ y, side }) => {
+                const gx = cx + side * 10;
+                // gate runner
+                ctx.fillStyle = '#92400e'; ctx.strokeStyle = '#d97706'; ctx.lineWidth = 1;
+                ctx.fillRect(gx, y, side * 30, 7);
+                ctx.strokeRect(gx, y, side * 30, 7);
+                // wax pattern (small part shape)
+                const px = gx + side * 30;
+                ctx.fillStyle = '#a16207'; ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.2;
+                ctx.beginPath(); ctx.roundRect(px + (side > 0 ? 0 : -44), y - 16, 44, 40, 4); ctx.fill(); ctx.stroke();
+            });
+
+            ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 11px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Stage 2: Pattern Assembly', W / 2, H - 10);
+        }
+    },
+    {
+        name: 'Shell Building (Dipping)',
+        time: '3–10 days (7–12 coats)',
+        desc: 'The wax tree is dipped into ceramic slurry (colloidal silica + zircon flour), drained, then coated with dry refractory stucco (sand/fused silica). Each coat must dry fully (6–24 h) before the next. Early coats use fine zircon (60–120 mesh) for surface finish; later "backup" coats use coarser mullite or alumina for structural strength.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+            const cx = W / 2;
+
+            // Left: shell cross-section showing layers
+            const sx = 110, sy = 60, sw = 80, sh = 240;
+
+            // Part core (wax still inside)
+            ctx.fillStyle = '#a16207';
+            ctx.beginPath(); ctx.roundRect(sx - 18, sy + 60, 36, 120, 4); ctx.fill();
+            // sprue wax core
+            ctx.fillRect(sx - 6, sy, 12, sh);
+
+            // Shell layers (drawn outside-in, then clip)
+            const layers = [
+                { t: 14, color: '#7c5e3c' },  // backup 2
+                { t: 10, color: '#8b6914' },  // backup 1
+                { t: 6,  color: '#a37c2e' },  // primary coat 2
+                { t: 4,  color: '#b8922a' },  // primary coat 1 (finest)
+            ];
+            let offset = 0;
+            layers.forEach(l => {
+                offset += l.t;
+                ctx.fillStyle = l.color;
+                ctx.beginPath();
+                ctx.roundRect(sx - 18 - offset, sy + 60 - offset, 36 + offset * 2, 120 + offset * 2, 4 + offset * 0.2);
+                ctx.fill();
+            });
+            // re-draw wax on top
+            ctx.fillStyle = '#a16207';
+            ctx.beginPath(); ctx.roundRect(sx - 18, sy + 60, 36, 120, 4); ctx.fill();
+            ctx.fillRect(sx - 6, sy + 20, 12, sh - 20);
+
+            // Labels for layers
+            const ly = sy + 60;
+            ctx.fillStyle = '#94a3b8'; ctx.font = '8px Segoe UI'; ctx.textAlign = 'left';
+            [['Primary (fine zircon)', sx + 30, ly + 30],
+             ['Backup coat 1', sx + 30, ly + 55],
+             ['Backup coat 2', sx + 30, ly + 80]].forEach(([t, x, y]) => {
+                ctx.fillText(t, x + 5, y);
+            });
+            ctx.fillStyle = '#fbbf24'; ctx.font = '8px Segoe UI';
+            ctx.fillText('Wax pattern inside', sx - 18, ly + 140);
+
+            // Right: slurry dipping tank
+            const tx = W - 130, ty = H / 2 - 70;
+            ctx.fillStyle = '#1e293b'; ctx.strokeStyle = '#334155'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.roundRect(tx - 50, ty, 100, 130, 6); ctx.fill(); ctx.stroke();
+            // slurry inside tank
+            ctx.fillStyle = '#a37c2e';
+            ctx.fillRect(tx - 46, ty + 20, 92, 106);
+            ctx.fillStyle = '#8b6914'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Ceramic slurry', tx, ty + 75);
+            ctx.fillText('(colloidal silica +', tx, ty + 87);
+            ctx.fillText('zircon flour)', tx, ty + 99);
+
+            // Tree being dipped into tank
+            ctx.fillStyle = '#a16207'; ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.5;
+            ctx.fillRect(tx - 5, ty - 50, 10, 70);
+            ctx.strokeRect(tx - 5, ty - 50, 10, 70);
+            // part hanging in slurry
+            ctx.fillStyle = '#8b6914'; // slurry-coated part
+            ctx.beginPath(); ctx.roundRect(tx - 18, ty + 10, 36, 55, 4); ctx.fill();
+            ctx.fillStyle = '#a16207';
+            ctx.beginPath(); ctx.roundRect(tx - 12, ty + 15, 24, 45, 3); ctx.fill();
+
+            ctx.fillStyle = '#64748b'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Shell x-section', sx, H - 6);
+            ctx.fillText('Dipping', tx, H - 6);
+            ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 11px Segoe UI';
+            ctx.fillText('Stage 3: Shell Building', W / 2, 18);
+        }
+    },
+    {
+        name: 'Dewaxing',
+        time: '5–30 minutes',
+        desc: 'The shelled cluster is placed in a flash-fire autoclave or steam autoclave. High-pressure steam (~180 °C, 600 kPa) or direct flame (~350 °C) rapidly melts the wax. Critical Hitchiner innovation: the shell heats and expands slightly before the wax — preventing the expanding wax from cracking the shell. Wax drains and is collected for recycling.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+            const cx = W / 2, cy = H / 2;
+
+            // Autoclave chamber
+            ctx.fillStyle = '#1e293b'; ctx.strokeStyle = '#475569'; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.roundRect(cx - 140, 35, 280, H - 80, 12); ctx.fill(); ctx.stroke();
+            // inner chamber
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath(); ctx.roundRect(cx - 125, 50, 250, H - 110, 8); ctx.fill();
+
+            // Door / hinge left
+            ctx.fillStyle = '#374151'; ctx.strokeStyle = '#4b5563'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.roundRect(cx - 145, 60, 14, H - 130, 4); ctx.fill(); ctx.stroke();
+
+            // Steam jets
+            ctx.strokeStyle = '#7dd3fc'; ctx.lineWidth = 1.5;
+            [[cx - 90, 70], [cx + 90, 70], [cx - 90, H - 80], [cx + 90, H - 80]].forEach(([x, y]) => {
+                for (let i = -1; i <= 1; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    ctx.quadraticCurveTo(x + i * 20, y + 20, x + i * 15, y + 40);
+                    ctx.stroke();
+                }
+            });
+            ctx.fillStyle = '#7dd3fc'; ctx.font = '8px Segoe UI'; ctx.textAlign = 'left';
+            ctx.fillText('Steam ~180 °C', cx - 125, 68);
+
+            // Shell (ceramic, no wax inside)
+            ctx.fillStyle = '#8b6914'; ctx.strokeStyle = '#a37c2e'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.roundRect(cx - 22, cy - 80, 44, 160, 4); ctx.fill(); ctx.stroke(); // sprue shell
+            ctx.beginPath(); ctx.roundRect(cx - 48, cy - 20, 96, 70, 6); ctx.fill(); ctx.stroke(); // part shell
+
+            // Hollow cavity (wax removed)
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath(); ctx.roundRect(cx - 14, cy - 74, 28, 148, 3); ctx.fill();
+            ctx.beginPath(); ctx.roundRect(cx - 38, cy - 12, 76, 54, 4); ctx.fill();
+
+            // Wax dripping out at bottom
+            ctx.fillStyle = '#a16207';
+            [[cx - 10, cy + 75], [cx + 5, cy + 80], [cx - 3, cy + 88]].forEach(([x, y]) => {
+                ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fill();
+            });
+            // collection tray
+            ctx.fillStyle = '#92400e';
+            ctx.fillRect(cx - 40, H - 72, 80, 8);
+            ctx.fillStyle = '#a16207'; ctx.font = '8px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Wax drains → recycled', cx, H - 58);
+
+            ctx.fillStyle = '#64748b'; ctx.font = '9px Segoe UI';
+            ctx.fillText('Hollow ceramic shell', cx + 55, cy - 10);
+            ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 11px Segoe UI';
+            ctx.fillText('Stage 4: Dewaxing (Autoclave)', W / 2, 18);
+        }
+    },
+    {
+        name: 'Shell Burnout & Preheat',
+        time: '2–4 hours at 900–1100 °C',
+        desc: 'The empty shell is placed in a high-temperature furnace (900–1100 °C). This burns out any residual wax organics, sinters the ceramic for maximum strength, and pre-heats the mold to improve metal fluidity during pour. The pre-heated shell also reduces thermal shock on thin-walled sections and extends the filling time.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+            const cx = W / 2, cy = H / 2;
+
+            // Furnace walls (brick pattern)
+            const brickColors = ['#7f1d1d', '#991b1b', '#b91c1c'];
+            const fw = 260, fh = H - 70;
+            for (let row = 0; row < 12; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const bx = cx - fw / 2 + col * (fw / 8);
+                    const by = 35 + row * (fh / 12);
+                    const offset = row % 2 === 0 ? 0 : fw / 16;
+                    ctx.fillStyle = brickColors[row % 3];
+                    ctx.fillRect(bx + offset, by, fw / 8 - 2, fh / 12 - 2);
+                }
+            }
+            // Furnace interior glow
+            const grd = ctx.createRadialGradient(cx, cy, 20, cx, cy, 100);
+            grd.addColorStop(0, 'rgba(251,191,36,0.9)');
+            grd.addColorStop(0.4, 'rgba(239,68,68,0.6)');
+            grd.addColorStop(1, 'rgba(127,29,29,0.1)');
+            ctx.fillStyle = grd;
+            ctx.beginPath(); ctx.roundRect(cx - 100, 55, 200, H - 100, 6); ctx.fill();
+
+            // Shell inside furnace (glowing orange)
+            ctx.fillStyle = '#f97316'; ctx.strokeStyle = '#fb923c'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.roundRect(cx - 18, cy - 85, 36, 170, 4); ctx.fill(); ctx.stroke();
+            ctx.beginPath(); ctx.roundRect(cx - 44, cy - 20, 88, 70, 6); ctx.fill(); ctx.stroke();
+            // Hollow (black interior)
+            ctx.fillStyle = '#1a0800';
+            ctx.beginPath(); ctx.roundRect(cx - 12, cy - 79, 24, 158, 3); ctx.fill();
+            ctx.beginPath(); ctx.roundRect(cx - 36, cy - 13, 72, 56, 4); ctx.fill();
+
+            // Flames at bottom
+            ctx.fillStyle = '#fbbf24';
+            [cx - 60, cx - 20, cx + 20, cx + 60].forEach(fx => {
+                ctx.beginPath();
+                ctx.moveTo(fx, H - 35);
+                ctx.quadraticCurveTo(fx - 10, H - 65, fx, H - 80);
+                ctx.quadraticCurveTo(fx + 10, H - 65, fx, H - 35);
+                ctx.fill();
+            });
+
+            // Temperature label
+            ctx.fillStyle = '#fff'; ctx.font = 'bold 13px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('900–1100 °C', cx, cy + 110);
+            ctx.fillStyle = '#fbbf24'; ctx.font = '9px Segoe UI';
+            ctx.fillText('Shell sinters → max strength', cx, cy + 124);
+
+            ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 11px Segoe UI';
+            ctx.fillText('Stage 5: Shell Burnout & Preheat', W / 2, 18);
+        }
+    },
+    {
+        name: 'Metal Pour',
+        time: 'Minutes',
+        desc: 'Molten metal is poured into the hot shell (gravity pour). The pre-heated shell maintains metal fluidity, enabling thin-wall fill. For reactive metals (Ti, superalloys), vacuum induction melting and pour is used. Counter-gravity processes (Hitchiner CLV) draw metal up into the mold from below — reducing turbulence and improving yield.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+            const cx = W / 2, cy = H / 2;
+
+            // Shell (ceramic exterior)
+            ctx.fillStyle = '#8b6914'; ctx.strokeStyle = '#a37c2e'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.roundRect(cx - 22, cy - 80, 44, 160, 4); ctx.fill(); ctx.stroke();
+            ctx.beginPath(); ctx.roundRect(cx - 50, cy - 16, 100, 72, 6); ctx.fill(); ctx.stroke();
+
+            // Pour cup at top of shell
+            ctx.fillStyle = '#7c5e3c'; ctx.strokeStyle = '#a37c2e';
+            ctx.beginPath();
+            ctx.moveTo(cx - 38, cy - 80); ctx.lineTo(cx - 22, cy - 68);
+            ctx.lineTo(cx + 22, cy - 68); ctx.lineTo(cx + 38, cy - 80); ctx.closePath();
+            ctx.fill(); ctx.stroke();
+
+            // Metal filling inside (gradient from bottom up)
+            const metalFill = ctx.createLinearGradient(cx, cy, cx, cy - 80);
+            metalFill.addColorStop(0, '#dc2626');
+            metalFill.addColorStop(0.5, '#f97316');
+            metalFill.addColorStop(1, '#fbbf24');
+            ctx.fillStyle = metalFill;
+            // cavity interior — partially filled
+            ctx.beginPath(); ctx.roundRect(cx - 14, cy - 30, 28, 95, 3); ctx.fill();
+            ctx.beginPath(); ctx.roundRect(cx - 42, cy, 84, 58, 4); ctx.fill();
+
+            // Pour stream from ladle (top right)
+            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(cx + 110, 40);
+            ctx.quadraticCurveTo(cx + 80, 80, cx + 5, cy - 80);
+            ctx.stroke();
+            ctx.lineCap = 'butt';
+
+            // Ladle
+            ctx.fillStyle = '#374151'; ctx.strokeStyle = '#4b5563'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.arc(cx + 120, 28, 34, Math.PI * 0.7, Math.PI * 2.3); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#fbbf24';
+            ctx.beginPath(); ctx.arc(cx + 120, 28, 26, Math.PI * 0.7, Math.PI * 2.3); ctx.fill();
+            ctx.fillStyle = '#fbbf24'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Molten metal', cx + 120, 15);
+
+            // Glowing metal surface reflection
+            ctx.fillStyle = 'rgba(251,191,36,0.2)';
+            ctx.beginPath(); ctx.ellipse(cx, cy - 28, 13, 3, 0, 0, Math.PI * 2); ctx.fill();
+
+            ctx.fillStyle = '#64748b'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Ceramic shell (pre-heated)', cx - 70, cy + 35);
+            ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 11px Segoe UI';
+            ctx.fillText('Stage 6: Metal Pour', W / 2, 18);
+        }
+    },
+    {
+        name: 'Shell Removal (Knockout)',
+        time: 'Minutes to hours',
+        desc: 'After solidification (~10–30 min), the ceramic shell is broken away by vibration hammer, water blasting, or chemical leaching. The metal tree is revealed. For complex internal passages (turbine blades), caustic soda (NaOH) or HF acid leaches the ceramic core out of blind passages unreachable mechanically.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+            const cx = W / 2, cy = H / 2;
+
+            // Metal tree (solid)
+            ctx.fillStyle = '#6b7280'; ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1.5;
+            // sprue
+            ctx.beginPath(); ctx.roundRect(cx - 9, 40, 18, H - 80, 3); ctx.fill(); ctx.stroke();
+            // parts
+            [{ y: 80, side: -1 }, { y: 80, side: 1 },
+             { y: 160, side: -1 }, { y: 160, side: 1 },
+             { y: 240, side: -1 }, { y: 240, side: 1 }].forEach(({ y, side }) => {
+                // gate
+                ctx.fillRect(cx + side * 9, y, side * 22, 7);
+                ctx.strokeRect(cx + side * 9, y, side * 22, 7);
+                // part
+                const px = cx + side * 31;
+                ctx.beginPath();
+                ctx.roundRect(px + (side > 0 ? 0 : -40), y - 14, 40, 38, 4);
+                ctx.fill(); ctx.stroke();
+            });
+
+            // Broken ceramic fragments
+            const fragColors = ['#78350f', '#92400e', '#7c5e3c', '#8b6914'];
+            const frags = [
+                [cx - 80, 100, 30, 18], [cx + 55, 120, 24, 14], [cx - 70, 200, 20, 22],
+                [cx + 60, 190, 28, 16], [cx - 85, 280, 22, 18], [cx + 70, 270, 26, 12],
+                [cx - 60, 140, 16, 12], [cx + 50, 240, 18, 16],
+            ];
+            frags.forEach(([fx, fy, fw, fh], i) => {
+                ctx.save();
+                ctx.translate(fx + fw / 2, fy + fh / 2);
+                ctx.rotate((i * 47 + 15) * Math.PI / 180);
+                ctx.fillStyle = fragColors[i % 4]; ctx.strokeStyle = '#a37c2e'; ctx.lineWidth = 0.8;
+                ctx.beginPath(); ctx.roundRect(-fw / 2, -fh / 2, fw, fh, 2); ctx.fill(); ctx.stroke();
+                ctx.restore();
+            });
+
+            // Vibration hammer (right)
+            ctx.fillStyle = '#374151'; ctx.strokeStyle = '#4b5563'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.roundRect(W - 60, cy - 20, 40, 40, 4); ctx.fill(); ctx.stroke();
+            // hammer head
+            ctx.beginPath(); ctx.roundRect(W - 68, cy - 10, 14, 20, 3); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#fbbf24'; ctx.font = '8px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Vibration', W - 42, cy - 28);
+            ctx.fillText('hammer', W - 42, cy - 18);
+
+            // Crack lines on remaining shell bits
+            ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 1;
+            [[cx - 80, 100], [cx + 55, 120]].forEach(([fx, fy]) => {
+                ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(fx + 10, fy + 18); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(fx + 14, fy + 5); ctx.lineTo(fx + 6, fy + 20); ctx.stroke();
+            });
+
+            ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 11px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Stage 7: Shell Knockout', W / 2, 18);
+            ctx.fillStyle = '#64748b'; ctx.font = '9px Segoe UI';
+            ctx.fillText('Ceramic fragments removed by vibration/blasting', cx, H - 6);
+        }
+    },
+    {
+        name: 'Cutoff & Finishing',
+        time: 'Hours to days',
+        desc: 'Individual parts are cut from the tree using an abrasive cutoff wheel or band saw. Gate stubs are ground flush. Parts then undergo: (1) visual inspection, (2) dimensional check, (3) fluorescent penetrant inspection (FPI) for surface cracks, (4) X-ray for internal defects, (5) heat treatment (annealing, solution treat + age), and (6) machining of critical features to final tolerance.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+            const cx = W / 2;
+
+            // Cutoff wheel (left)
+            const wx = 120, wy = H / 2 - 10;
+            ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.arc(wx, wy, 44, 0, Math.PI * 2); ctx.stroke();
+            ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1;
+            for (let a = 0; a < Math.PI * 2; a += Math.PI / 8) {
+                ctx.beginPath(); ctx.moveTo(wx + Math.cos(a) * 30, wy + Math.sin(a) * 30); ctx.lineTo(wx + Math.cos(a) * 44, wy + Math.sin(a) * 44); ctx.stroke();
+            }
+            ctx.fillStyle = '#64748b'; ctx.fillText = ''; // inner hub
+            ctx.fillStyle = '#374151'; ctx.beginPath(); ctx.arc(wx, wy, 8, 0, Math.PI * 2); ctx.fill();
+            // Sparks
+            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1;
+            [[wx + 40, wy - 5], [wx + 38, wy + 12], [wx + 42, wy + 20]].forEach(([sx, sy]) => {
+                for (let i = 0; i < 3; i++) {
+                    ctx.beginPath(); ctx.moveTo(sx, sy);
+                    ctx.lineTo(sx + (Math.random() > 0.5 ? 12 : -8), sy + 10); ctx.stroke();
+                }
+            });
+            // Part being cut
+            ctx.fillStyle = '#6b7280'; ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.roundRect(wx + 36, wy - 22, 55, 46, 4); ctx.fill(); ctx.stroke();
+            // gate stub being cut
+            ctx.fillStyle = '#475569';
+            ctx.fillRect(wx + 36, wy - 5, 10, 12);
+            ctx.fillStyle = '#64748b'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Abrasive cutoff', wx, wy + 60);
+
+            // Finished part (right)
+            const px = cx + 100, py = H / 2;
+            ctx.fillStyle = '#9ca3af'; ctx.strokeStyle = '#d1d5db'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.roundRect(px - 38, py - 30, 76, 60, 5); ctx.fill(); ctx.stroke();
+            // Surface finish lines
+            ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 0.5;
+            for (let i = py - 25; i < py + 28; i += 5) {
+                ctx.beginPath(); ctx.moveTo(px - 34, i); ctx.lineTo(px + 34, i); ctx.stroke();
+            }
+            ctx.fillStyle = '#4ade80'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Finished casting', px, py + 42);
+            ctx.fillText('Ra 0.8–3.2 µm as-cast', px, py + 54);
+
+            // Inspection checklist
+            const checks = ['FPI (surface cracks)', 'X-ray (internal)', 'Dimensional CMM', 'Heat treat'];
+            ctx.fillStyle = '#64748b'; ctx.font = '8px Segoe UI'; ctx.textAlign = 'left';
+            checks.forEach((c, i) => {
+                ctx.fillStyle = '#4ade80'; ctx.fillText('✓', cx + 2, H - 70 + i * 14);
+                ctx.fillStyle = '#94a3b8'; ctx.fillText(c, cx + 14, H - 70 + i * 14);
+            });
+
+            ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 11px Segoe UI'; ctx.textAlign = 'center';
+            ctx.fillText('Stage 8: Cutoff & Finishing', W / 2, 18);
+        }
+    },
+];
+
+let currentStage = 0;
+let playTimer = null;
+let isPlaying = false;
+
+function buildStageList() {
+    const list = document.getElementById('stage-list');
+    list.innerHTML = '';
+    STAGES.forEach((s, i) => {
+        const item = document.createElement('div');
+        item.className = 'stage-item' + (i === currentStage ? ' active' : i < currentStage ? ' done' : '');
+        item.innerHTML = `<div class="stage-dot"></div><span>${s.name}</span>`;
+        item.addEventListener('click', () => { currentStage = i; stopPlay(); drawFrame(); });
+        list.appendChild(item);
+    });
+    updateDesc();
+}
+
+function updateDesc() {
+    document.querySelectorAll('.stage-item').forEach((item, i) => {
+        item.className = 'stage-item' + (i === currentStage ? ' active' : i < currentStage ? ' done' : '');
+    });
+    const s = STAGES[currentStage];
+    document.getElementById('anim-desc').innerHTML =
+        `<strong style="color:#c4b5fd;">${s.name}</strong> <span style="color:#475569;font-size:0.78rem;">(${s.time})</span><br><span style="margin-top:4px;display:block;">${s.desc}</span>`;
+}
+
+function stopPlay() {
+    if (playTimer) clearInterval(playTimer);
+    isPlaying = false;
+    document.getElementById('btn-play').textContent = '▶ Play';
+}
+
+function resetAnim() { currentStage = 0; stopPlay(); buildStageList(); }
+
+function drawFrame() {
+    const canvas = document.getElementById('anim-canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.font = '10px Segoe UI'; ctx.textAlign = 'left';
+    STAGES[currentStage].draw(ctx, canvas.width, canvas.height);
+    updateDesc();
+}
+
+document.getElementById('btn-play').addEventListener('click', () => {
+    if (isPlaying) { stopPlay(); return; }
+    isPlaying = true;
+    document.getElementById('btn-play').textContent = '⏸ Pause';
+    playTimer = setInterval(() => {
+        currentStage = (currentStage + 1) % STAGES.length;
+        drawFrame();
+    }, 2600);
+});
+document.getElementById('btn-next').addEventListener('click', () => {
+    stopPlay();
+    if (currentStage < STAGES.length - 1) { currentStage++; drawFrame(); }
+});
+document.getElementById('btn-prev').addEventListener('click', () => {
+    stopPlay();
+    if (currentStage > 0) { currentStage--; drawFrame(); }
+});
+document.getElementById('btn-reset').addEventListener('click', resetAnim);
+
+buildStageList();
+drawFrame();
+</script>
+</body>
+</html>

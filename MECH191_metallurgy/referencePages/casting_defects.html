@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casting Defects Reference — TWI Defect Library</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #1a1a1a; }
+
+        header { text-align: center; padding: 30px 20px 24px; background: #1e3a5f; color: #fff; }
+        header h1 { font-size: 2rem; font-weight: 700; }
+        header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 1rem; }
+
+        main { max-width: 1080px; margin: 0 auto; padding: 28px 20px 60px; }
+
+        .source-note {
+            background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;
+            padding: 12px 16px; margin-bottom: 24px; font-size: 0.88rem; color: #1e40af;
+            line-height: 1.5;
+        }
+
+        /* ─── Filter bar ─── */
+        .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+        .filter-btn {
+            padding: 6px 14px; border-radius: 20px; border: 1.5px solid #cbd5e1;
+            background: #fff; color: #475569; font-size: 0.83rem; font-weight: 600;
+            cursor: pointer; transition: all 0.15s;
+        }
+        .filter-btn:hover { border-color: #1e3a5f; color: #1e3a5f; }
+        .filter-btn.active { background: #1e3a5f; color: #fff; border-color: #1e3a5f; }
+
+        /* ─── Defect grid ─── */
+        .defect-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+        .defect-card {
+            border: 1.5px solid #e2e8f0; border-radius: 10px; overflow: hidden;
+            cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s;
+            background: #fff;
+        }
+        .defect-card:hover { border-color: #1e3a5f; box-shadow: 0 2px 8px rgba(30,58,95,0.12); }
+        .defect-card.selected { border-color: #1e3a5f; box-shadow: 0 0 0 2px #93c5fd; }
+        .defect-card canvas { display: block; width: 100%; }
+        .defect-card-info { padding: 8px 10px 10px; }
+        .card-code { font-size: 0.7rem; font-family: 'Courier New', monospace; font-weight: 700; color: #6b7280; }
+        .card-name { font-size: 0.85rem; font-weight: 700; color: #1e3a5f; margin-top: 2px; line-height: 1.3; }
+        .card-cat { display: inline-block; margin-top: 5px; padding: 1px 7px; border-radius: 10px; font-size: 0.68rem; font-weight: 700; }
+
+        .cat-gas        { background: #dbeafe; color: #1d4ed8; }
+        .cat-shrinkage  { background: #ffedd5; color: #c2410c; }
+        .cat-cracking   { background: #fee2e2; color: #b91c1c; }
+        .cat-filling    { background: #fef9c3; color: #854d0e; }
+        .cat-inclusion  { background: #ede9fe; color: #6d28d9; }
+        .cat-surface    { background: #d1fae5; color: #065f46; }
+        .cat-shape      { background: #dcfce7; color: #15803d; }
+        .cat-segregation{ background: #fce7f3; color: #9d174d; }
+
+        .defect-card.hidden { display: none; }
+
+        /* ─── Detail panel ─── */
+        #detailPanel {
+            display: none; border: 1.5px solid #bfdbfe; border-radius: 12px;
+            overflow: hidden; margin-bottom: 32px;
+        }
+        #detailPanel.visible { display: block; }
+
+        .detail-header {
+            background: #1e3a5f; color: #fff;
+            padding: 14px 20px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+        }
+        .detail-header h2 { font-size: 1.25rem; flex: 1; }
+        .detail-code { font-family: 'Courier New', monospace; font-size: 0.85rem; color: #93c5fd; white-space: nowrap; }
+        .close-btn {
+            background: none; border: 1.5px solid #93c5fd; color: #93c5fd;
+            border-radius: 6px; padding: 3px 10px; font-size: 0.8rem; cursor: pointer;
+        }
+        .close-btn:hover { background: #93c5fd; color: #1e3a5f; }
+
+        .detail-body { display: grid; grid-template-columns: 1fr 1fr; }
+        @media (max-width: 700px) { .detail-body { grid-template-columns: 1fr; } }
+
+        .detail-canvas-col { background: #f1f5f9; padding: 18px; display: flex; flex-direction: column; align-items: center; }
+        #detailCanvas { border-radius: 8px; max-width: 100%; }
+        .illus-note { font-size: 0.7rem; color: #94a3b8; margin-top: 8px; }
+
+        .detail-info-col { padding: 20px; }
+        .detail-desc { font-size: 0.9rem; color: #374151; line-height: 1.65; margin-bottom: 16px; }
+        .processes-row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 16px; }
+        .proc-badge {
+            padding: 2px 9px; border-radius: 4px; font-size: 0.72rem; font-weight: 600;
+            background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;
+        }
+
+        .detail-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+        @media (max-width: 700px) { .detail-two-col { grid-template-columns: 1fr; } }
+
+        .cp-col { padding: 16px 20px; }
+        .cp-col:first-child { border-right: 1px solid #e2e8f0; border-top: 1px solid #e2e8f0; }
+        .cp-col:last-child { border-top: 1px solid #e2e8f0; }
+        .cp-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9ca3af; margin-bottom: 10px; }
+        .cp-col ul { list-style: none; padding: 0; }
+        .cp-col ul li { font-size: 0.84rem; color: #374151; line-height: 1.5; padding: 4px 0; border-bottom: 1px solid #f1f5f9; display: flex; gap: 6px; }
+        .cp-col ul li:last-child { border-bottom: none; }
+        .bullet-cause { color: #b91c1c; font-weight: 700; flex-shrink: 0; }
+        .bullet-prev  { color: #059669; font-weight: 700; flex-shrink: 0; }
+
+        footer { text-align: center; padding: 24px 16px; border-top: 1px solid #e2e8f0; color: #6b7280; font-size: 0.82rem; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Casting Defects Reference</h1>
+    <p class="subtitle">TWI Defect Library — Identification, Causes &amp; Prevention</p>
+</header>
+
+<main>
+    <div class="source-note">
+        <strong>Source:</strong> Classification codes and defect descriptions based on the
+        <strong>TWI (The Welding Institute) Casting Defect Library</strong> (twi-global.com).
+        Canvas illustrations are schematic cross-sections for educational purposes.
+        Defects are grouped A–H following the TWI alphanumeric system.
+    </div>
+
+    <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All (20)</button>
+        <button class="filter-btn" data-filter="gas">A — Gas</button>
+        <button class="filter-btn" data-filter="shrinkage">B — Shrinkage</button>
+        <button class="filter-btn" data-filter="cracking">C — Cracking</button>
+        <button class="filter-btn" data-filter="filling">D — Filling</button>
+        <button class="filter-btn" data-filter="inclusion">E — Inclusions</button>
+        <button class="filter-btn" data-filter="surface">F — Surface</button>
+        <button class="filter-btn" data-filter="shape">G — Shape</button>
+        <button class="filter-btn" data-filter="segregation">H — Segregation</button>
+    </div>
+
+    <div class="defect-grid" id="defectGrid"></div>
+    <div id="detailPanel">
+        <div class="detail-header">
+            <span class="detail-code" id="dCode"></span>
+            <h2 id="dName"></h2>
+            <span id="dCatBadge" class="card-cat"></span>
+            <button class="close-btn" id="closeBtn">✕ Close</button>
+        </div>
+        <div class="detail-body">
+            <div class="detail-canvas-col">
+                <canvas id="detailCanvas" width="480" height="240"></canvas>
+                <div class="illus-note">Schematic cross-section — representative illustration</div>
+            </div>
+            <div class="detail-info-col">
+                <p class="detail-desc" id="dDesc"></p>
+                <div class="cp-label">Applicable Processes</div>
+                <div class="processes-row" id="dProcs"></div>
+            </div>
+        </div>
+        <div class="detail-two-col">
+            <div class="cp-col">
+                <div class="cp-label">Causes</div>
+                <ul id="dCauses"></ul>
+            </div>
+            <div class="cp-col">
+                <div class="cp-label">Prevention</div>
+                <ul id="dPrev"></ul>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    MECH191 Metallurgy &nbsp;|&nbsp; Casting Defects Reference based on TWI Defect Library &nbsp;|&nbsp;
+    <a href="index.html" style="color:#3b82f6;">Back to References</a>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════════════════ */
+function seeded(n) {
+    let s = n || 1;
+    return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+}
+
+function metalBg(ctx, x, y, w, h) {
+    const g = ctx.createLinearGradient(x, y, x, y + h);
+    g.addColorStop(0,   '#c4ccd8');
+    g.addColorStop(0.35,'#9ca3af');
+    g.addColorStop(0.65,'#9ca3af');
+    g.addColorStop(1,   '#c4ccd8');
+    ctx.fillStyle = g;
+    ctx.fillRect(x, y, w, h);
+}
+
+function drawPore(ctx, cx, cy, r) {
+    const g = ctx.createRadialGradient(cx - r*0.3, cy - r*0.3, 0, cx, cy, r);
+    g.addColorStop(0,   '#f9fafb');
+    g.addColorStop(0.55,'#e5e7eb');
+    g.addColorStop(1,   '#6b7280');
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fillStyle = g; ctx.fill();
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 0.8; ctx.stroke();
+}
+
+function jagged(ctx, x1, y1, x2, y2, jag, rng) {
+    ctx.beginPath(); ctx.moveTo(x1, y1);
+    const steps = 14;
+    for (let i = 1; i <= steps; i++) {
+        const t = i / steps;
+        ctx.lineTo(x1 + (x2-x1)*t + (rng()-0.5)*jag,
+                   y1 + (y2-y1)*t + (rng()-0.5)*jag);
+    }
+}
+
+function label(ctx, txt, x, y, sz) {
+    ctx.fillStyle = 'rgba(30,58,95,0.85)';
+    ctx.font = `bold ${sz}px sans-serif`;
+    ctx.fillText(txt, x, y);
+}
+
+/* ═══════════════════════════════════════════════════════
+   DEFECT DATA
+═══════════════════════════════════════════════════════ */
+const DEFECTS = [
+
+/* ── A: GAS DEFECTS ──────────────────────────────────── */
+{
+    code: 'A100', name: 'Gas Porosity', category: 'gas',
+    desc: 'Spherical or near-spherical voids formed when dissolved gases (H₂ in aluminium, N₂ and CO in ferrous alloys) come out of solution during solidification. Pores have smooth walls and can be scattered uniformly or clustered in the last-to-freeze regions.',
+    causes: [
+        'Excess hydrogen absorbed from moisture in mold/cores or charge scrap',
+        'Insufficient degassing of the melt before pouring',
+        'High pouring temperature increases gas solubility',
+        'Turbulent gating trapping atmospheric air',
+        'Green-sand moisture too high; steam generated at metal contact'
+    ],
+    prevention: [
+        'Rotary degassing or flux injection to reduce dissolved H₂',
+        'Dry all scrap, ingots, and core materials before use',
+        'Bottom-fill gating systems to minimize turbulence',
+        'Reduce pouring temperature to minimum acceptable level',
+        'Monitor and control mold moisture; use venting channels'
+    ],
+    processes: ['Sand','Permanent Mold','Investment','Die'],
+    draw(ctx, w, h) {
+        metalBg(ctx, 0, 0, w, h);
+        const rng = seeded(101);
+        for (let i = 0; i < 17; i++) {
+            drawPore(ctx, w*0.05+rng()*w*0.9, h*0.07+rng()*h*0.86, Math.max(3, w*0.014+rng()*w*0.022));
+        }
+        label(ctx,'Polished cross-section', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+{
+    code: 'A200', name: 'Blowhole', category: 'gas',
+    desc: 'A single large gas void, typically spherical or elongated with smooth walls, formed by a concentrated source of gas (steam from a wet core, or evolved CO from a binder). Larger than individual pinholes and usually subsurface. Also called a "wormhole" when elongated.',
+    causes: [
+        'Undried or poorly bonded cores releasing steam or gas',
+        'Core vent holes blocked, trapping gases under pressure',
+        'Metal penetrating sand and contacting moisture-rich backing',
+        'Binder breakdown generating CO or other gases in quantity',
+        'Insufficient core permeability preventing gas escape'
+    ],
+    prevention: [
+        'Thoroughly dry and cure all cores before assembly',
+        'Provide adequate core venting channels',
+        'Use permeable low-gas-content binders',
+        'Coat cores with low-permeability wash to reduce metal penetration',
+        'Control pouring speed to allow gas escape through vents'
+    ],
+    processes: ['Sand','Permanent Mold','Investment'],
+    draw(ctx, w, h) {
+        metalBg(ctx, 0, 0, w, h);
+        const cx = w*0.53, cy = h*0.5, rx = w*0.2, ry = h*0.3;
+        const g = ctx.createRadialGradient(cx-rx*0.2, cy-ry*0.2, 0, cx, cy, Math.max(rx,ry));
+        g.addColorStop(0,'#f8fafc'); g.addColorStop(0.5,'#e5e7eb'); g.addColorStop(1,'#6b7280');
+        ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI*2);
+        ctx.fillStyle = g; ctx.fill();
+        ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5; ctx.stroke();
+        label(ctx,'Smooth-walled void', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+{
+    code: 'A300', name: 'Subcutaneous Blowhole', category: 'gas',
+    desc: 'A gas void located just below the casting surface, hidden by a thin metal skin. Often revealed only after machining or grinding. Common in green-sand castings when moisture at the mold surface flashes to steam. The skin may sag inward creating a dimple.',
+    causes: [
+        'High moisture at the mold–metal interface flashing to steam',
+        'Green-sand compacted too tightly, trapping steam',
+        'Aluminothermic reactions generating H₂ near the surface',
+        'Low permeability skin preventing gas escape outward',
+        'Rapid metal fill trapping steam against the mold wall'
+    ],
+    prevention: [
+        'Control sand moisture to the lower end of acceptable range',
+        'Apply mold washes or coatings to reduce gas generation at surface',
+        'Use permeable sand mixes that allow steam to pass outward',
+        'Add facing sand with lower moisture content at the mold face',
+        'Vent the cope immediately above susceptible surfaces'
+    ],
+    processes: ['Sand'],
+    draw(ctx, w, h) {
+        metalBg(ctx, 0, 0, w, h);
+        // casting surface line at top
+        ctx.fillStyle = '#8a929f'; ctx.fillRect(0, 0, w, h*0.09);
+        ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(0, h*0.09); ctx.lineTo(w, h*0.09); ctx.stroke();
+        // void near top
+        const cx = w*0.5, cy = h*0.42, rx = w*0.23, ry = h*0.22;
+        const g = ctx.createRadialGradient(cx-rx*0.1, cy-ry*0.1, 0, cx, cy, Math.max(rx,ry));
+        g.addColorStop(0,'#f8fafc'); g.addColorStop(0.6,'#e5e7eb'); g.addColorStop(1,'#6b7280');
+        ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI*2);
+        ctx.fillStyle = g; ctx.fill();
+        ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.2; ctx.stroke();
+        // thin skin annotation
+        ctx.strokeStyle = '#1e3a5f'; ctx.lineWidth = 1; ctx.setLineDash([3,2]);
+        ctx.beginPath(); ctx.moveTo(w*0.74, h*0.09); ctx.lineTo(w*0.74, cy-ry); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#1e3a5f'; ctx.font = `${Math.max(8,h*0.065)}px sans-serif`;
+        ctx.fillText('Thin skin', w*0.76, h*0.24);
+        label(ctx,'Just below casting surface', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+/* ── B: SHRINKAGE DEFECTS ────────────────────────────── */
+{
+    code: 'B100', name: 'Pipe / Macro Shrinkage', category: 'shrinkage',
+    desc: 'A large open void, typically V-shaped or funnel-shaped, formed by the volumetric contraction of metal as it transitions from liquid to solid. Develops in the last region to solidify — usually the top-center of an ingot or a heavy feeder/riser. Walls are rough and dendritic.',
+    causes: [
+        'Insufficient feeder/riser volume to compensate solidification shrinkage (~4–7% for steel)',
+        'Feeder solidifying before the casting section it feeds',
+        'Inadequate insulation on feeders allowing premature freezing',
+        'Long solidification range alloys prone to dispersed shrinkage',
+        'Incorrect feeder positioning — not placed at the thermal center'
+    ],
+    prevention: [
+        'Size feeders using modulus method (feeder modulus > casting modulus)',
+        'Use exothermic or insulating feeder sleeves to extend feed time',
+        'Place feeders at the hottest, last-to-freeze section',
+        'Apply chills opposite the feeder to direct solidification',
+        'Use computer simulation (e.g. MAGMASOFT) to verify feed paths'
+    ],
+    processes: ['Sand','Permanent Mold','Investment'],
+    draw(ctx, w, h) {
+        // ingot outline
+        const ing = { l: w*0.15, r: w*0.85, t: h*0.06, b: h*0.95 };
+        ctx.beginPath();
+        ctx.moveTo(ing.l + w*0.04, ing.t);
+        ctx.lineTo(ing.r - w*0.04, ing.t);
+        ctx.lineTo(ing.r, ing.b);
+        ctx.lineTo(ing.l, ing.b);
+        ctx.closePath();
+        const mg = ctx.createLinearGradient(ing.l, 0, ing.r, 0);
+        mg.addColorStop(0,'#c4ccd8'); mg.addColorStop(0.5,'#9ca3af'); mg.addColorStop(1,'#c4ccd8');
+        ctx.fillStyle = mg; ctx.fill();
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5; ctx.stroke();
+        // shrinkage pipe (V-cavity from top)
+        const rng = seeded(201);
+        const midX = w*0.5, topY = ing.t, pipeD = h*0.55, hw = w*0.18;
+        ctx.beginPath(); ctx.moveTo(midX - hw, topY);
+        // left side jagged down to tip
+        for (let i = 0; i <= 10; i++) {
+            const t = i/10;
+            ctx.lineTo(midX - hw*(1-t) + (rng()-0.5)*hw*0.12, topY + pipeD*t);
+        }
+        ctx.lineTo(midX + (rng()-0.5)*8, topY + pipeD + h*0.03);
+        // right side back up
+        for (let i = 10; i >= 0; i--) {
+            const t = i/10;
+            ctx.lineTo(midX + hw*(1-t) + (rng()-0.5)*hw*0.12, topY + pipeD*t);
+        }
+        ctx.closePath();
+        const sg = ctx.createLinearGradient(midX, topY, midX, topY+pipeD);
+        sg.addColorStop(0,'#d1d5db'); sg.addColorStop(0.5,'#6b7280'); sg.addColorStop(1,'#1f2937');
+        ctx.fillStyle = sg; ctx.fill();
+        ctx.strokeStyle = '#374151'; ctx.lineWidth = 0.8; ctx.stroke();
+        label(ctx,'Ingot cross-section', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+{
+    code: 'B200', name: 'Micro / Dispersed Shrinkage', category: 'shrinkage',
+    desc: 'Fine, irregular voids distributed through the casting, forming between dendrite arms as interdendritic liquid is starved of feed metal. Unlike spherical gas pores, micro-shrinkage voids have jagged, angular walls that follow solidification channels. Found in alloys with wide freezing ranges.',
+    causes: [
+        'Wide solidification range alloy forming mushy zone (e.g. high-Si Al alloys)',
+        'Inadequate feeding pressure — feeder head too low or feeder too small',
+        'Fast cooling rates creating isolated liquid pools cut off from feed',
+        'High alloy content promoting long-range freezing (Cu-Sn bronzes)',
+        'Improper directional solidification — freezing front not progressing toward feeder'
+    ],
+    prevention: [
+        'Select alloys with narrower freezing range where possible',
+        'Use increased feeder head height or apply pressurized gating',
+        'Apply chills to promote directional solidification toward the feeder',
+        'Increase pouring temperature slightly to extend feed time',
+        'Hot isostatic pressing (HIP) after casting for critical components'
+    ],
+    processes: ['Sand','Investment','Permanent Mold'],
+    draw(ctx, w, h) {
+        metalBg(ctx, 0, 0, w, h);
+        const rng = seeded(202);
+        for (let i = 0; i < 24; i++) {
+            const cx = w*0.05 + rng()*w*0.9, cy = h*0.05 + rng()*h*0.9;
+            const r = Math.max(2, w*0.007 + rng()*w*0.016);
+            const pts = 4 + Math.floor(rng()*3);
+            ctx.beginPath();
+            for (let j = 0; j < pts; j++) {
+                const ang = (j/pts)*Math.PI*2 + rng()*0.8;
+                const d = r*(0.4 + rng()*0.7);
+                const px = cx + Math.cos(ang)*d, py = cy + Math.sin(ang)*d;
+                j === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+            }
+            ctx.closePath(); ctx.fillStyle = '#1f2937'; ctx.fill();
+        }
+        label(ctx,'Irregular interdendritic voids', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+{
+    code: 'B300', name: 'Sponge / Interdendritic Shrinkage', category: 'shrinkage',
+    desc: 'A dense cluster of very fine interconnected shrinkage channels concentrated in a localized hot spot, giving a sponge-like appearance. The dendritic structure creates a network of fine channels that collapse as feed metal is unable to reach the interior. Often found near thick sections or poorly placed feeders.',
+    causes: [
+        'Isolated hot spot cut off from feed metal by premature outer solidification',
+        'Poorly positioned feeder that cannot maintain liquid pressure at the hot spot',
+        'Very high carbon equivalent in grey iron — excessive graphite expansion masks shrinkage',
+        'Alloys with very wide freezing ranges where mushy zone occupies entire section',
+        'Abrupt section thickness change creating a localized heat accumulation'
+    ],
+    prevention: [
+        'Redesign sections to eliminate abrupt thickness changes (use tapers)',
+        'Apply external chills at the hot spot to accelerate local solidification',
+        'Increase feeder size or add additional blind risers above the hot spot',
+        'Conduct thermal simulation to identify and eliminate isolated hot spots',
+        'Use inoculants to refine grain structure and promote more uniform feeding'
+    ],
+    processes: ['Sand','Investment'],
+    draw(ctx, w, h) {
+        metalBg(ctx, 0, 0, w, h);
+        // dendritic lines in background
+        const rng = seeded(305);
+        ctx.strokeStyle = 'rgba(140,150,165,0.5)'; ctx.lineWidth = 0.7;
+        for (let i = 0; i < 10; i++) {
+            const x = w*0.08 + rng()*w*0.84, y = h*0.05;
+            ctx.beginPath(); ctx.moveTo(x, y);
+            ctx.lineTo(x + (rng()-0.5)*w*0.08, h*0.95); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+(rng()-0.5)*w*0.12, h*0.45); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+(rng()-0.5)*w*0.12, h*0.7); ctx.stroke();
+        }
+        // concentrated porosity region (oval hotspot)
+        const hx = w*0.52, hy = h*0.5, hrx = w*0.26, hry = h*0.3;
+        ctx.save(); ctx.beginPath(); ctx.ellipse(hx, hy, hrx, hry, 0, 0, Math.PI*2); ctx.clip();
+        const rng2 = seeded(303);
+        for (let i = 0; i < 38; i++) {
+            const cx = hx-hrx + rng2()*hrx*2, cy = hy-hry + rng2()*hry*2;
+            const r = Math.max(1.5, w*0.005 + rng2()*w*0.012);
+            const pts = 4 + Math.floor(rng2()*3);
+            ctx.beginPath();
+            for (let j = 0; j < pts; j++) {
+                const ang = (j/pts)*Math.PI*2 + rng2()*0.9;
+                const d = r*(0.4 + rng2()*0.7);
+                j === 0 ? ctx.moveTo(cx+Math.cos(ang)*d, cy+Math.sin(ang)*d)
+                        : ctx.lineTo(cx+Math.cos(ang)*d, cy+Math.sin(ang)*d);
+            }
+            ctx.closePath(); ctx.fillStyle = '#111827'; ctx.fill();
+        }
+        ctx.restore();
+        ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1.5; ctx.setLineDash([4,3]);
+        ctx.beginPath(); ctx.ellipse(hx, hy, hrx, hry, 0, 0, Math.PI*2); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#92400e'; ctx.font = `${Math.max(8,h*0.065)}px sans-serif`;
+        ctx.fillText('Hotspot', w*0.63, h*0.18);
+        label(ctx,'Dense interconnected channels', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+/* ── C: CRACKING DEFECTS ─────────────────────────────── */
+{
+    code: 'C100', name: 'Hot Tear / Hot Cracking', category: 'cracking',
+    desc: 'A ragged, intergranular crack formed during the final stages of solidification when the alloy has low ductility (coherent mushy zone) and is subjected to thermal contraction stresses. Hot tears follow grain boundaries and have oxidized, irregular surfaces. Most common at abrupt section changes and sharp re-entrant corners.',
+    causes: [
+        'Thermal contraction restrained by the mold or core at a re-entrant corner',
+        'Abrupt section thickness change creating stress concentration during shrinkage',
+        'Wide solidification range alloy — thin liquid films remain between grains under tension',
+        'Insufficient metal fluidity to heal forming cracks through liquid flow',
+        'Mold or core too rigid — will not yield as casting contracts'
+    ],
+    prevention: [
+        'Eliminate sharp internal corners — use generous fillets (R ≥ section thickness / 3)',
+        'Use tapered transitions between section thicknesses',
+        'Select low hot-cracking susceptibility alloys or adjust composition (Si, Sr)',
+        'Use collapsible cores or cores with controlled breakdown',
+        'Reduce restraint by allowing casting to move freely from the mold early'
+    ],
+    processes: ['Sand','Investment','Permanent Mold','Die'],
+    draw(ctx, w, h) {
+        // L-shaped casting
+        const mg = ctx.createLinearGradient(0,0,w,h);
+        mg.addColorStop(0,'#c4ccd8'); mg.addColorStop(0.5,'#9ca3af'); mg.addColorStop(1,'#c4ccd8');
+        ctx.fillStyle = mg;
+        ctx.fillRect(0, h*0.5, w, h*0.5); // horizontal bar
+        ctx.fillRect(0, 0, w*0.32, h*0.5); // vertical bar
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5;
+        ctx.strokeRect(1, 1, w*0.32-1, h*0.5-0.5);
+        ctx.strokeRect(1, h*0.5, w-1, h*0.5-1);
+        // hot tear from inner corner
+        const rng = seeded(401);
+        ctx.strokeStyle = '#991b1b'; ctx.lineWidth = 2;
+        jagged(ctx, w*0.32, h*0.5, w*0.32+w*0.15, h*0.5-h*0.22, w*0.06, rng);
+        ctx.stroke();
+        // branch
+        const rng2 = seeded(402); ctx.lineWidth = 1.2;
+        jagged(ctx, w*0.32+w*0.06, h*0.5-h*0.09, w*0.32+w*0.18, h*0.5-h*0.05, w*0.04, rng2);
+        ctx.stroke();
+        // corner arrow
+        ctx.fillStyle = '#991b1b'; ctx.font = `${Math.max(8,h*0.065)}px sans-serif`;
+        ctx.fillText('Inner corner', w*0.33, h*0.44);
+        label(ctx,'Hot tear at re-entrant corner', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+{
+    code: 'C200', name: 'Cold Crack', category: 'cracking',
+    desc: 'A smooth, transgranular crack formed after the metal has fully solidified, caused by residual thermal stresses during cooling or by stresses applied during shake-out and handling. Cold cracks have bright, unoxidized fracture surfaces and can propagate through grains. They are straighter than hot tears.',
+    causes: [
+        'Rapid or non-uniform cooling creating large thermal gradients and residual stress',
+        'Premature shake-out while the casting is still too hot to handle stresses',
+        'Impact loads during knockout or handling of a brittle casting',
+        'Notch sensitivity at sharp corners, holes, or machined features',
+        'Hydrogen embrittlement in steel castings from dissolved hydrogen'
+    ],
+    prevention: [
+        'Control cooling rate — use slow controlled cooling after solidification',
+        'Avoid premature shake-out; allow casting to cool below the ductile-to-brittle transition',
+        'Stress-relief anneal immediately after shake-out for susceptible alloys',
+        'Reduce stress concentrations by adding fillets and gentle section transitions',
+        'Hydrogen bake-out treatment for low-alloy steel castings'
+    ],
+    processes: ['Sand','Investment','Permanent Mold'],
+    draw(ctx, w, h) {
+        metalBg(ctx, 0, 0, w, h);
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5;
+        ctx.strokeRect(w*0.06, h*0.08, w*0.88, h*0.84);
+        // smooth crack through casting
+        const rng = seeded(501);
+        ctx.strokeStyle = '#1f2937'; ctx.lineWidth = 1.8;
+        ctx.beginPath(); ctx.moveTo(w*0.32, h*0.08);
+        let cx = w*0.32, cy = h*0.08;
+        const steps = 18;
+        for (let i = 0; i < steps; i++) {
+            cx += (rng()-0.5)*w*0.025;
+            cy += h*0.84/steps;
+            ctx.lineTo(cx, cy);
+        }
+        ctx.stroke();
+        // label
+        ctx.fillStyle = '#374151'; ctx.font = `${Math.max(8,h*0.065)}px sans-serif`;
+        ctx.fillText('Smooth walls', w*0.37, h*0.48);
+        // arrows showing thermal gradient
+        ctx.fillStyle = '#1d4ed8';
+        ctx.font = `${Math.max(8,h*0.065)}px sans-serif`;
+        ctx.fillText('←ΔT→', w*0.55, h*0.52);
+        label(ctx,'Transgranular, unoxidized crack', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+/* ── D: FILLING DEFECTS ──────────────────────────────── */
+{
+    code: 'D100', name: 'Misrun', category: 'filling',
+    desc: 'Incomplete filling of the mold cavity — the metal solidifies before reaching the far end or thin sections of the mold. The incomplete region has a smooth, rounded edge (the frozen metal front) rather than a sharp casting edge. Misruns leave voids that are open to the casting surface.',
+    causes: [
+        'Pouring temperature too low — metal loses fluidity before filling is complete',
+        'Thin wall sections in the casting too narrow for the alloy to traverse',
+        'Gating system too restrictive, reducing metal velocity and flow rate',
+        'Long flow path from gate to extremities exceeds the alloy\'s fluidity length',
+        'Mold too cold or too permeable — chilling the metal front prematurely'
+    ],
+    prevention: [
+        'Increase pouring temperature (within limits to avoid other defects)',
+        'Increase gate size or add additional in-gates to reduce flow path',
+        'Use multiple in-gates for castings with long thin sections',
+        'Preheat the mold for permanent mold casting',
+        'Verify minimum wall thickness against alloy fluidity (eFunda/NADCA charts)'
+    ],
+    processes: ['Sand','Permanent Mold','Investment','Die'],
+    draw(ctx, w, h) {
+        // mold outline
+        ctx.strokeStyle = '#d1a87a'; ctx.lineWidth = 2;
+        ctx.setLineDash([5,3]);
+        ctx.strokeRect(w*0.05, h*0.1, w*0.9, h*0.8);
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#fef3c7'; ctx.font = `${Math.max(8,h*0.065)}px sans-serif`;
+        ctx.fillText('Mold cavity outline', w*0.38, h*0.08);
+        // metal filled portion
+        const mg = ctx.createLinearGradient(w*0.05, 0, w*0.7, 0);
+        mg.addColorStop(0,'#c4ccd8'); mg.addColorStop(1,'#9ca3af');
+        ctx.fillStyle = mg;
+        ctx.fillRect(w*0.06, h*0.11, w*0.58, h*0.78);
+        // rounded frozen front
+        ctx.fillStyle = '#b8bec9';
+        ctx.beginPath();
+        ctx.arc(w*0.64, h*0.5, h*0.39, -Math.PI/2, Math.PI/2);
+        ctx.lineTo(w*0.06+w*0.58, h*0.89); ctx.lineTo(w*0.06+w*0.58, h*0.11); ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1; ctx.stroke();
+        // unfilled region
+        ctx.fillStyle = '#fafaf9';
+        ctx.fillRect(w*0.68, h*0.11, w*0.27, h*0.78);
+        ctx.fillStyle = '#d97706'; ctx.font = `bold ${Math.max(8,h*0.065)}px sans-serif`;
+        ctx.fillText('Unfilled', w*0.72, h*0.52);
+        // arrow showing flow direction
+        ctx.strokeStyle = '#1e3a5f'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(w*0.12, h*0.5); ctx.lineTo(w*0.58, h*0.5); ctx.stroke();
+        ctx.fillStyle = '#1e3a5f'; ctx.beginPath();
+        ctx.moveTo(w*0.61, h*0.5); ctx.lineTo(w*0.55, h*0.47); ctx.lineTo(w*0.55, h*0.53); ctx.fill();
+        label(ctx,'Rounded solidified front', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+{
+    code: 'D200', name: 'Cold Shut', category: 'filling',
+    desc: 'A seam or fold on the casting surface where two streams of metal have met but failed to fuse, due to an oxide film or semi-solid layer on each stream\'s leading surface. Cold shuts appear as a linear surface discontinuity, often with a slight raised ridge or folded appearance, and may be open or partially bonded.',
+    causes: [
+        'Two converging metal streams meeting with insufficient superheat to fuse',
+        'Oxide skin on the leading flow front acting as a barrier to bonding',
+        'Interrupted pour — a pause allows the metal front to partially solidify',
+        'Complex mold geometry forcing metal to flow long distances and meet',
+        'Insufficient pouring rate creating a slow, low-momentum fill front'
+    ],
+    prevention: [
+        'Increase pouring temperature to ensure adequate superheat at meeting point',
+        'Increase pouring rate to maintain turbulent (fusing) metal fronts',
+        'Redesign gating to ensure metal streams meet while both are still fully liquid',
+        'Avoid interruptions during pouring',
+        'Add overflow wells where streams converge to flush oxide skins out of the casting'
+    ],
+    processes: ['Sand','Die','Permanent Mold'],
+    draw(ctx, w, h) {
+        metalBg(ctx, 0, 0, w, h);
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1; ctx.strokeRect(w*0.05, h*0.07, w*0.9, h*0.86);
+        // two flow arrows converging
+        ctx.strokeStyle = '#1d4ed8'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(w*0.1, h*0.5); ctx.lineTo(w*0.42, h*0.5); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(w*0.9, h*0.5); ctx.lineTo(w*0.58, h*0.5); ctx.stroke();
+        ctx.fillStyle = '#1d4ed8';
+        ctx.font = `${Math.max(8,h*0.065)}px sans-serif`;
+        ctx.fillText('Flow →', w*0.1, h*0.44);
+        ctx.fillText('← Flow', w*0.65, h*0.44);
+        // oxide seam / cold shut line
+        const rng = seeded(601);
+        ctx.strokeStyle = '#78350f'; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.moveTo(w*0.5, h*0.1);
+        for (let i = 1; i <= 16; i++) {
+            const t = i/16;
+            ctx.lineTo(w*0.5 + (rng()-0.5)*w*0.04, h*0.1 + h*0.8*t);
+        }
+        ctx.stroke();
+        // slightly thicker region around seam
+        ctx.strokeStyle = '#b45309'; ctx.lineWidth = 6; ctx.globalAlpha = 0.25;
+        ctx.beginPath(); ctx.moveTo(w*0.5, h*0.1);
+        for (let i = 1; i <= 16; i++) {
+            const t = i/16; ctx.lineTo(w*0.5 + (rng()-0.5)*w*0.04, h*0.1 + h*0.8*t);
+        }
+        ctx.stroke(); ctx.globalAlpha = 1;
+        ctx.fillStyle = '#92400e'; ctx.font = `bold ${Math.max(8,h*0.065)}px sans-serif`;
+        ctx.fillText('Oxide seam', w*0.53, h*0.32);
+        label(ctx,'Linear surface seam — two streams', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+/* ── E: INCLUSIONS ───────────────────────────────────── */
+{
+    code: 'E100', name: 'Sand Inclusion', category: 'inclusion',
+    desc: 'Fragments of mold or core sand embedded in the casting surface or interior. The particles are angular and harder than the surrounding metal. Sand inclusions appear as dark spots on polished sections and cause surface roughness, machining difficulty, and possible stress concentration in service.',
+    causes: [
+        'Low green-sand strength or erosion by high-velocity metal flow',
+        'Mold or core damage during mold assembly or from thermal shock',
+        'Sand knocked into the mold cavity during setting of cores or closing',
+        'Metal entry velocity too high, scouring sand from mold walls (metal velocity > 0.5 m/s)',
+        'Inadequate mold coating or wash that exposes the sand surface'
+    ],
+    prevention: [
+        'Use properly mixed sand with adequate green and dry strengths',
+        'Apply anti-scour mold coatings/washes in high-velocity gating areas',
+        'Use strainer cores in the gating system to filter inclusions',
+        'Control metal entry velocity below 0.5 m/s in the mold cavity',
+        'Inspect mold cavity before closing; clean out loose sand'
+    ],
+    processes: ['Sand'],
+    draw(ctx, w, h) {
+        metalBg(ctx, 0, 0, w, h);
+        const rng = seeded(701);
+        for (let i = 0; i < 10; i++) {
+            const cx = w*0.08 + rng()*w*0.84, cy = h*0.08 + rng()*h*0.84;
+            const sz = Math.max(4, w*0.018 + rng()*w*0.03);
+            const pts = 4 + Math.floor(rng()*3);
+            ctx.beginPath();
+            for (let j = 0; j < pts; j++) {
+                const ang = (j/pts)*Math.PI*2;
+                const d = sz*(0.5 + rng()*0.6);
+                j===0 ? ctx.moveTo(cx+Math.cos(ang)*d, cy+Math.sin(ang)*d)
+                       : ctx.lineTo(cx+Math.cos(ang)*d, cy+Math.sin(ang)*d);
+            }
+            ctx.closePath();
+            // sand color (tan/brown angular)
+            ctx.fillStyle = `hsl(30,${40+rng()*30}%,${35+rng()*20}%)`;
+            ctx.fill();
+            ctx.strokeStyle = '#451a03'; ctx.lineWidth = 0.8; ctx.stroke();
+        }
+        ctx.fillStyle = '#92400e'; ctx.font = `${Math.max(8,h*0.065)}px sans-serif`;
+        ctx.fillText('Angular sand particles', w*0.03, h*0.14);
+        label(ctx,'Polished cross-section', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+{
+    code: 'E200', name: 'Oxide / Dross Inclusion', category: 'inclusion',
+    desc: 'Thin films or particles of metal oxide (e.g. Al₂O₃ in aluminium, FeO in steel), slag, or dross entrained in the casting. Oxide inclusions appear as dark, irregular, often folded or film-like features on polished sections. They are sources of stress concentration and drastically reduce fatigue life and elongation.',
+    causes: [
+        'Turbulent pouring folding oxide skin from the melt surface into the stream',
+        'Inadequate skimming of slag/dross before pouring',
+        'Splashing during furnace tapping or ladle transfers',
+        'Long drop height allowing metal to splash and re-oxidize',
+        'Oxidizing furnace atmosphere or inadequate flux cover'
+    ],
+    prevention: [
+        'Use bottom-pour ladles or teapot-spout ladles to keep oxide films below the flow',
+        'Skim thoroughly before pouring; use ceramic foam filters in the gating system',
+        'Minimize pour height; use offset or side-pour sprue geometry',
+        'Use non-oxidizing atmosphere (inert gas cover) in critical alloy casting',
+        'Include slag/dross traps (runner extensions, dross pockets) in the gating system'
+    ],
+    processes: ['Sand','Permanent Mold','Investment','Die'],
+    draw(ctx, w, h) {
+        metalBg(ctx, 0, 0, w, h);
+        const rng = seeded(801);
+        for (let i = 0; i < 8; i++) {
+            const cx = w*0.1 + rng()*w*0.8, cy = h*0.1 + rng()*h*0.8;
+            const len = w*0.06 + rng()*w*0.14, thick = h*0.012 + rng()*h*0.018;
+            const ang = rng()*Math.PI;
+            ctx.save(); ctx.translate(cx, cy); ctx.rotate(ang);
+            // wavy/folded film shape
+            ctx.beginPath(); ctx.moveTo(-len/2, -thick/2);
+            ctx.bezierCurveTo(-len*0.2, -thick*2, len*0.2, thick*2, len/2, -thick/2);
+            ctx.lineTo(len/2, thick/2);
+            ctx.bezierCurveTo(len*0.2, thick*2, -len*0.2, -thick*2, -len/2, thick/2);
+            ctx.closePath();
+            ctx.fillStyle = `rgba(30,10,5,${0.7+rng()*0.3})`; ctx.fill();
+            ctx.restore();
+        }
+        ctx.fillStyle = '#374151'; ctx.font = `${Math.max(8,h*0.065)}px sans-serif`;
+        ctx.fillText('Folded oxide films', w*0.03, h*0.14);
+        label(ctx,'Polished section', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+/* ── F: SURFACE DEFECTS ──────────────────────────────── */
+{
+    code: 'F100', name: 'Metal Penetration', category: 'surface',
+    desc: 'Metal forces into sand grain interstices at the mold surface, creating a rough casting surface with adhering sand. Severe penetration produces a rough, fused sand layer (burn-on) that is difficult to remove. The surface roughness is far greater than the specified finish. The defect is worst at lower mold surfaces (high metallostatic pressure).',
+    causes: [
+        'High metallostatic pressure forcing liquid metal into sand pores',
+        'Coarse sand grain size providing larger interstices for metal entry',
+        'Insufficient mold wash/coating to seal the sand surface',
+        'High pouring temperature increasing metal fluidity and penetrating ability',
+        'Low-strength binder allowing sand particles to separate under pressure'
+    ],
+    prevention: [
+        'Apply a refractory mold wash or coating (zircon, silica-based) to sand faces',
+        'Use finer grain sand to reduce inter-grain pore size',
+        'Reduce pouring temperature to minimum compatible with complete fill',
+        'Increase sand compaction density around lower mold faces',
+        'Use exothermic additives or anti-penetration additives in the sand mix'
+    ],
+    processes: ['Sand'],
+    draw(ctx, w, h) {
+        // bulk casting on top half
+        metalBg(ctx, 0, 0, w, h*0.45);
+        // penetration fingers
+        const rng = seeded(901);
+        for (let i = 0; i < 22; i++) {
+            const x = w*0.04 + rng()*w*0.92;
+            const fingerH = h*0.05 + rng()*h*0.22;
+            const fw = w*0.01 + rng()*w*0.025;
+            const mg = ctx.createLinearGradient(x, h*0.44, x, h*0.44+fingerH);
+            mg.addColorStop(0,'#9ca3af'); mg.addColorStop(1,'#6b7280');
+            ctx.fillStyle = mg;
+            ctx.beginPath();
+            ctx.moveTo(x-fw/2, h*0.44);
+            ctx.lineTo(x-fw/3, h*0.44+fingerH*(0.8+rng()*0.2));
+            ctx.lineTo(x+fw/3, h*0.44+fingerH*(0.8+rng()*0.2));
+            ctx.lineTo(x+fw/2, h*0.44); ctx.closePath(); ctx.fill();
+        }
+        // sand background
+        ctx.fillStyle = '#c4965e'; ctx.fillRect(0, h*0.44, w, h*0.56);
+        // sand grains
+        const rng2 = seeded(902);
+        for (let i = 0; i < 40; i++) {
+            const sx = rng2()*w, sy = h*0.46 + rng2()*h*0.5;
+            const sr = Math.max(3, w*0.014 + rng2()*w*0.02);
+            ctx.beginPath(); ctx.arc(sx, sy, sr, 0, Math.PI*2);
+            ctx.fillStyle = `hsl(28,${50+rng2()*30}%,${42+rng2()*20}%)`; ctx.fill();
+        }
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(0, h*0.44); ctx.lineTo(w, h*0.44); ctx.stroke();
+        ctx.fillStyle = '#1e3a5f'; ctx.font = `${Math.max(8,h*0.065)}px sans-serif`;
+        ctx.fillText('Casting', w*0.04, h*0.38);
+        ctx.fillText('Sand mold', w*0.04, h*0.94);
+        ctx.fillStyle = '#991b1b'; ctx.fillText('Metal fingers', w*0.55, h*0.65);
+        label(ctx,'Cross-section at mold surface', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+{
+    code: 'F200', name: 'Flash &amp; Fins', category: 'surface',
+    desc: 'Thin, flat projections of metal extending from the casting surface at the mold parting line, core prints, or any mold joint. Flash occurs when liquid metal enters the gap between mold halves under metallostatic pressure. In die casting this is called flash; in sand casting, fins. They require removal by grinding, trimming, or tumbling.',
+    causes: [
+        'Insufficient clamping or clamping force on die/mold halves',
+        'Worn or damaged mold parting surfaces creating a gap',
+        'Excessive injection pressure in die casting forcing metal into parting line',
+        'High metallostatic pressure in tall sand casting molds',
+        'Mold halves not matched properly or shifted during pour'
+    ],
+    prevention: [
+        'Maintain die clamping force above the projected area × metal pressure',
+        'Regular inspection and re-machining of parting surfaces to maintain fit',
+        'Control injection pressure and gate velocity in die casting',
+        'Use mold weights or clamps on sand mold cope',
+        'Ensure mold halves are correctly registered with pins and bushings'
+    ],
+    processes: ['Sand','Die','Permanent Mold','Investment'],
+    draw(ctx, w, h) {
+        // left half (fixed)
+        metalBg(ctx, w*0.08, h*0.12, w*0.38, h*0.76);
+        // right half (moving/cope)
+        metalBg(ctx, w*0.54, h*0.12, w*0.38, h*0.76);
+        // parting line
+        ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1; ctx.setLineDash([4,3]);
+        ctx.beginPath(); ctx.moveTo(w*0.5, 0); ctx.lineTo(w*0.5, h); ctx.stroke();
+        ctx.setLineDash([]);
+        // fin projecting from parting line
+        const finW = w*0.06, finH = h*0.08;
+        ctx.fillStyle = '#b0b8c4';
+        ctx.fillRect(w*0.46, h*0.42, finW + w*0.02, finH);
+        // thin fin edges
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 0.8;
+        ctx.strokeRect(w*0.46, h*0.42, finW + w*0.02, finH);
+        // second fin at other parting line gap
+        ctx.fillStyle = '#b0b8c4';
+        ctx.fillRect(w*0.46, h*0.63, finW + w*0.02, h*0.05);
+        ctx.strokeRect(w*0.46, h*0.63, finW + w*0.02, h*0.05);
+        // labels
+        ctx.fillStyle = '#92400e'; ctx.font = `bold ${Math.max(8,h*0.068)}px sans-serif`;
+        ctx.fillText('Flash/fin', w*0.35, h*0.46);
+        ctx.fillStyle = '#854d0e'; ctx.font = `${Math.max(8,h*0.065)}px sans-serif`;
+        ctx.fillText('Parting line', w*0.51, h*0.08);
+        label(ctx,'Parting line cross-section', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+{
+    code: 'F300', name: 'Swell', category: 'surface',
+    desc: 'A localized enlargement of the casting where the mold wall has been pushed outward by metallostatic pressure, creating a section that is thicker than designed. Swells appear as smooth bulges on the casting surface, often on lower mold surfaces where pressure is highest. They increase the casting weight and may cause interference in machined assemblies.',
+    causes: [
+        'Insufficient mold ramming or compaction leaving a weak zone',
+        'High metallostatic pressure from tall sprue or heavy pour head',
+        'Soft or poorly bonded mold sand at lower mold surfaces',
+        'Thin mold cross-section that yields under metal pressure',
+        'Mold walls unsupported in large flat areas'
+    ],
+    prevention: [
+        'Increase sand compaction especially on drag (lower) surfaces',
+        'Add backing sand and reinforce large flat mold areas with support rods',
+        'Reduce sprue height (reduce metallostatic head)',
+        'Use harder-setting binder systems for large molds',
+        'Place the parting line to avoid large horizontal lower surfaces under high pressure'
+    ],
+    processes: ['Sand'],
+    draw(ctx, w, h) {
+        // designed outline (dashed)
+        ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5; ctx.setLineDash([5,4]);
+        ctx.strokeRect(w*0.15, h*0.12, w*0.7, h*0.76);
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#94a3b8'; ctx.font = `${Math.max(8,h*0.065)}px sans-serif`;
+        ctx.fillText('Designed outline', w*0.16, h*0.09);
+        // actual casting with swell on bottom
+        ctx.beginPath();
+        ctx.moveTo(w*0.15, h*0.12);
+        ctx.lineTo(w*0.85, h*0.12);
+        ctx.lineTo(w*0.85, h*0.78);
+        // swell bulge at bottom
+        ctx.bezierCurveTo(w*0.85, h*0.78, w*0.75, h*0.95, w*0.5, h*0.96);
+        ctx.bezierCurveTo(w*0.25, h*0.95, w*0.15, h*0.78, w*0.15, h*0.78);
+        ctx.closePath();
+        const mg = ctx.createLinearGradient(w*0.15, h*0.12, w*0.85, h*0.96);
+        mg.addColorStop(0,'#c4ccd8'); mg.addColorStop(0.5,'#9ca3af'); mg.addColorStop(1,'#c4ccd8');
+        ctx.fillStyle = mg; ctx.fill();
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5; ctx.stroke();
+        ctx.fillStyle = '#991b1b'; ctx.font = `bold ${Math.max(8,h*0.068)}px sans-serif`;
+        ctx.fillText('Swell bulge', w*0.33, h*0.91);
+        label(ctx,'Lower mold face — excess metal', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+{
+    code: 'F400', name: 'Rat Tail &amp; Buckle', category: 'surface',
+    desc: 'Linear surface depressions (rat tails) or raised ridges (buckles) on the casting surface caused by thermal expansion of the mold sand, which buckles under the heat of the incoming metal. The mold face cracks and lifts slightly, imprinting the pattern on the casting. More common on large flat surfaces in iron and steel castings.',
+    causes: [
+        'Mold surface sand expanding rapidly under thermal shock from hot metal',
+        'Large flat horizontal mold surfaces with no relief for expansion',
+        'Low-expansion sand mixes (e.g. pure silica) that stress rather than yield',
+        'High pouring temperature increasing thermal shock to the mold surface',
+        'Thin facing sand layer with insufficient backing for thermal support'
+    ],
+    prevention: [
+        'Use low-expansion facing sands (zircon, chromite, olivine) on large flat surfaces',
+        'Add expansion joints or score lines in the mold face to provide relief',
+        'Apply refractory wash to insulate the mold surface from initial thermal shock',
+        'Reduce pouring temperature to minimum compatible with fill',
+        'Use shell-mold or investment casting for castings requiring smooth flat surfaces'
+    ],
+    processes: ['Sand'],
+    draw(ctx, w, h) {
+        // flat casting surface view (plan view from above)
+        const mg = ctx.createLinearGradient(0, 0, 0, h);
+        mg.addColorStop(0,'#c4ccd8'); mg.addColorStop(1,'#9ca3af');
+        ctx.fillStyle = mg; ctx.fillRect(0, 0, w, h);
+        // rat tail linear groove across surface
+        const rng = seeded(1101);
+        ctx.strokeStyle = '#374151'; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.moveTo(w*0.12, h*0.38);
+        for (let i = 1; i <= 20; i++) {
+            const t = i/20;
+            ctx.lineTo(w*0.12 + w*0.76*t, h*0.38 + (rng()-0.5)*h*0.04);
+        }
+        ctx.stroke();
+        // shadow below the groove (depression)
+        ctx.strokeStyle = 'rgba(200,210,220,0.6)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(w*0.12, h*0.42);
+        for (let i = 1; i <= 20; i++) {
+            const t = i/20; const rng2 = seeded(1102+i);
+            ctx.lineTo(w*0.12 + w*0.76*t, h*0.42 + (rng2()-0.5)*h*0.04);
+        }
+        ctx.stroke();
+        // second rat tail
+        ctx.strokeStyle = '#374151'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(w*0.25, h*0.62);
+        for (let i = 1; i <= 16; i++) {
+            const t = i/16; const rng3 = seeded(1103+i);
+            ctx.lineTo(w*0.25 + w*0.5*t, h*0.62 + (rng3()-0.5)*h*0.035);
+        }
+        ctx.stroke();
+        ctx.fillStyle = '#1e3a5f'; ctx.font = `${Math.max(8,h*0.065)}px sans-serif`;
+        ctx.fillText('Linear grooves', w*0.03, h*0.28);
+        ctx.fillText('(plan view)', w*0.03, h*0.37);
+        label(ctx,'Large flat casting surface', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+/* ── G: SHAPE DEFECTS ────────────────────────────────── */
+{
+    code: 'G100', name: 'Mismatch / Shift', category: 'shape',
+    desc: 'A step or offset at the casting parting line where the cope (upper) and drag (lower) mold halves have not been aligned correctly. The casting is dimensionally correct in each half but the two halves are laterally offset. Also called "shift." The defect is visible as a step on the parting line surface.',
+    causes: [
+        'Worn, broken, or loose mold alignment pins and bushings',
+        'Flask warpage or distortion from repeated heating',
+        'Core prints not registered correctly — core pushing mold half sideways',
+        'Mold halves forced together with sand trapped in the locating pin area',
+        'Pattern plate shift during compaction'
+    ],
+    prevention: [
+        'Inspect and replace worn locating pins and bushings on a regular schedule',
+        'Check flask flatness and alignment before each molding cycle',
+        'Use double-dowel registration systems for close-tolerance castings',
+        'Include mold alignment guides that are more robust for heavy production',
+        'Perform first-article inspection of parting line step on each new mold'
+    ],
+    processes: ['Sand','Permanent Mold'],
+    draw(ctx, w, h) {
+        // cope half (upper) - offset to the right
+        const shift = w*0.1;
+        metalBg(ctx, w*0.1+shift, h*0.08, w*0.75, h*0.42);
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5;
+        ctx.strokeRect(w*0.1+shift, h*0.08, w*0.75, h*0.42);
+        ctx.fillStyle = '#1e3a5f'; ctx.font = `${Math.max(8,h*0.065)}px sans-serif`;
+        ctx.fillText('Cope', w*0.13+shift, h*0.28);
+        // drag half (lower) - at original position
+        metalBg(ctx, w*0.1, h*0.5, w*0.75, h*0.42);
+        ctx.strokeRect(w*0.1, h*0.5, w*0.75, h*0.42);
+        ctx.fillText('Drag', w*0.13, h*0.72);
+        // parting line with step
+        ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(w*0.1, h*0.5);
+        ctx.lineTo(w*0.1+shift, h*0.5);
+        ctx.lineTo(w*0.1+shift, h*0.5);
+        ctx.stroke();
+        // shift arrow
+        ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(w*0.1, h*0.47); ctx.lineTo(w*0.1+shift, h*0.47); ctx.stroke();
+        ctx.fillStyle = '#dc2626'; ctx.beginPath();
+        ctx.moveTo(w*0.1+shift, h*0.47); ctx.lineTo(w*0.1+shift-w*0.02, h*0.44);
+        ctx.lineTo(w*0.1+shift-w*0.02, h*0.5); ctx.fill();
+        ctx.font = `bold ${Math.max(8,h*0.068)}px sans-serif`;
+        ctx.fillStyle = '#dc2626'; ctx.fillText(`Offset`, w*0.1+shift/2+w*0.01, h*0.43);
+        label(ctx,'Parting line step', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+{
+    code: 'G200', name: 'Core Shift', category: 'shape',
+    desc: 'A casting defect where the internal core has moved from its designed position during filling, causing the wall thickness to be non-uniform — thin on one side and thick on the other. Severe core shift can result in a "breakthrough" where the core touches the mold wall and the casting wall is missing entirely.',
+    causes: [
+        'Buoyancy force from liquid metal lifting the core from its prints',
+        'Core print area too small to resist the buoyancy and flow forces',
+        'Metal entry velocity pushing the core sideways during fill',
+        'Core too light or of low density relative to the metal',
+        'Core prints worn, damaged, or insufficiently designed for the core weight'
+    ],
+    prevention: [
+        'Design core prints to resist calculated buoyancy force (F = ρ_metal × V_core × g)',
+        'Use chaplets (metal spacers) to support cores mid-span for long cores',
+        'Reduce fill velocity near core locations',
+        'Apply core weights or tie cores down for highly buoyant cores',
+        'Check core seating before closing the mold — measure print depth'
+    ],
+    processes: ['Sand','Investment'],
+    draw(ctx, w, h) {
+        // outer casting ring
+        const cx = w*0.5, cy = h*0.5, outerR = Math.min(w,h)*0.39;
+        metalBg(ctx, cx-outerR, cy-outerR, outerR*2, outerR*2);
+        // mask to ring shape
+        ctx.save();
+        ctx.beginPath(); ctx.arc(cx, cy, outerR, 0, Math.PI*2);
+        ctx.clip();
+        const mg = ctx.createRadialGradient(cx, cy, 0, cx, cy, outerR);
+        mg.addColorStop(0,'#c4ccd8'); mg.addColorStop(0.4,'#9ca3af'); mg.addColorStop(1,'#c4ccd8');
+        ctx.fillStyle = mg; ctx.fill(); ctx.restore();
+        // outer border
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(cx, cy, outerR, 0, Math.PI*2); ctx.stroke();
+        // shifted hole (not centered) — shifted left
+        const holeR = outerR*0.55, shiftX = outerR*0.22;
+        ctx.beginPath(); ctx.arc(cx - shiftX, cy, holeR, 0, Math.PI*2);
+        ctx.fillStyle = '#f1f5f9'; ctx.fill();
+        ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5; ctx.stroke();
+        // designed center hole (dashed)
+        ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1; ctx.setLineDash([4,3]);
+        ctx.beginPath(); ctx.arc(cx, cy, holeR, 0, Math.PI*2); ctx.stroke();
+        ctx.setLineDash([]);
+        // thin/thick wall annotations
+        const thinW = outerR - holeR - shiftX;
+        const thickW = outerR - holeR + shiftX;
+        ctx.fillStyle = '#991b1b'; ctx.font = `bold ${Math.max(8,h*0.062)}px sans-serif`;
+        ctx.fillText('Thin wall', cx-outerR+thinW/2-w*0.12, cy+h*0.06);
+        ctx.fillStyle = '#059669';
+        ctx.fillText('Thick wall', cx+holeR*0.4, cy+h*0.06);
+        label(ctx,'Cross-section — shifted hole', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+{
+    code: 'G300', name: 'Warpage / Distortion', category: 'shape',
+    desc: 'Permanent deformation of the casting from its designed shape due to residual stresses from non-uniform cooling and solidification. Flat or long thin castings are most susceptible. Warpage can also occur after machining when residual stresses are released. It makes the casting dimensionally out-of-tolerance without any visible surface defect.',
+    causes: [
+        'Non-uniform wall thickness causing differential cooling rates and residual stress',
+        'Asymmetric geometry that cools faster on one side',
+        'Premature shake-out locking in thermal stresses',
+        'Insufficient stress-relief annealing after solidification',
+        'Long, thin flat castings constrained by the mold during cooling'
+    ],
+    prevention: [
+        'Design for uniform wall thickness to promote even cooling',
+        'Use stress-relief annealing (e.g. 550°C for cast iron, 350°C for Al) after casting',
+        'Allow sufficient cooling time before shake-out',
+        'Use straightening fixtures during heat treatment for long components',
+        'Compensate with intentional pre-bend in the pattern for predictable warp'
+    ],
+    processes: ['Sand','Investment','Permanent Mold','Die'],
+    draw(ctx, w, h) {
+        // designed flat part (dashed)
+        ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5; ctx.setLineDash([5,4]);
+        ctx.strokeRect(w*0.06, h*0.38, w*0.88, h*0.24);
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#94a3b8'; ctx.font = `${Math.max(8,h*0.065)}px sans-serif`;
+        ctx.fillText('Designed flat profile', w*0.35, h*0.35);
+        // warped casting profile
+        ctx.beginPath(); ctx.moveTo(w*0.06, h*0.38+h*0.06);
+        ctx.bezierCurveTo(w*0.3, h*0.38+h*0.06, w*0.5, h*0.22, w*0.7, h*0.38+h*0.06);
+        ctx.bezierCurveTo(w*0.82, h*0.38+h*0.06, w*0.94, h*0.38+h*0.06, w*0.94, h*0.38+h*0.06);
+        const mg = ctx.createLinearGradient(0, h*0.2, 0, h*0.7);
+        mg.addColorStop(0,'#c4ccd8'); mg.addColorStop(0.5,'#9ca3af'); mg.addColorStop(1,'#c4ccd8');
+        // bottom of bar
+        ctx.bezierCurveTo(w*0.94, h*0.62+h*0.06, w*0.82, h*0.62+h*0.06, w*0.7, h*0.62+h*0.06);
+        ctx.bezierCurveTo(w*0.5, h*0.46, w*0.3, h*0.62+h*0.06, w*0.06, h*0.62+h*0.06);
+        ctx.closePath();
+        ctx.fillStyle = mg; ctx.fill();
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5; ctx.stroke();
+        // warp arrow
+        ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(w*0.5, h*0.38+h*0.06); ctx.lineTo(w*0.5, h*0.29); ctx.stroke();
+        ctx.fillStyle = '#dc2626'; ctx.beginPath();
+        ctx.moveTo(w*0.5, h*0.22); ctx.lineTo(w*0.47, h*0.29); ctx.lineTo(w*0.53, h*0.29); ctx.fill();
+        ctx.fillStyle = '#dc2626'; ctx.font = `bold ${Math.max(8,h*0.068)}px sans-serif`;
+        ctx.fillText('Δ bow', w*0.52, h*0.26);
+        label(ctx,'Side view — exaggerated bow', w*0.03, h*0.97, Math.max(9,h*0.074));
+    }
+},
+
+/* ── H: SEGREGATION ──────────────────────────────────── */
+{
+    code: 'H100', name: 'Inverse Segregation', category: 'segregation',
+    desc: 'An anomalous enrichment of lower-melting-point (solute-rich) material at the casting surface, opposite to the normal pattern. Caused by interdendritic liquid being expelled toward the surface by solidification shrinkage pressure. Common in tin bronzes and aluminum-copper alloys as "tin sweat" or "exudation." Reduces surface hardness and corrosion resistance.',
+    causes: [
+        'Dendritic shrinkage pressure forcing solute-rich interdendritic liquid outward',
+        'Long freezing range alloy maintaining a mushy zone for extended time',
+        'High pressure differential between solid and liquid zones during solidification',
+        'Alloy compositions prone to exudation (Cu-Sn bronzes > 8% Sn, Al-Cu alloys)',
+        'Slow cooling rates that allow extended time for segregation to develop'
+    ],
+    prevention: [
+        'Select alloy composition to minimize segregation susceptibility (lower Sn in bronze)',
+        'Use faster cooling rates (permanent mold or chill castings) to limit diffusion time',
+        'Apply inoculants to promote finer grain structure and reduce channel formation',
+        'Use directional solidification to sweep solute away systematically',
+        'Post-casting homogenization heat treatment to redistribute solute elements'
+    ],
+    processes: ['Sand','Permanent Mold','Investment'],
+    draw(ctx, w, h) {
+        // circular casting cross-section
+        const cx = w*0.5, cy = h*0.5, R = Math.min(w,h)*0.4;
+        // center — lean in solute (lighter)
+        const radG = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
+        radG.addColorStop(0,   '#c8d8e8');
+        radG.addColorStop(0.55,'#9ca3af');
+        radG.addColorStop(0.8, '#8b6f47');
+        radG.addColorStop(1,   '#7c5c35');
+        ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI*2);
+        ctx.fillStyle = radG; ctx.fill();
+        ctx.strokeStyle = '#4b5563'; ctx.lineWidth = 1.5; ctx.stroke();
+        // legend
+        const lx = w*0.04, ly = h*0.15;
+        const grad = ctx.createLinearGradient(lx, ly, lx, ly+h*0.55);
+        grad.addColorStop(0,'#c8d8e8'); grad.addColorStop(1,'#7c5c35');
+        ctx.fillStyle = grad; ctx.fillRect(lx, ly, w*0.04, h*0.55);
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 0.8; ctx.strokeRect(lx, ly, w*0.04, h*0.55);
+        ctx.fillStyle = '#1e3a5f'; ctx.font = `${Math.max(7,h*0.062)}px sans-serif`;
+        ctx.fillText('Low', lx+w*0.05, ly+h*0.06);
+        ctx.fillText('solute', lx+w*0.05, ly+h*0.12);
+        ctx.fillText('High', lx+w*0.05, ly+h*0.52);
+        ctx.fillText('solute', lx+w*0.05, ly+h*0.58);
+        // annotation for enriched surface
+        ctx.strokeStyle = '#92400e'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(cx, cy, R*0.87, 0, Math.PI*2); ctx.stroke();
+        ctx.setLineDash([3,2]); ctx.beginPath(); ctx.arc(cx, cy, R*0.7, 0, Math.PI*2); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#92400e'; ctx.font = `${Math.max(7,h*0.062)}px sans-serif`;
+        ctx.fillText('Solute-rich', cx+R*0.55, cy-R*0.5);
+        ctx.fillText('surface zone', cx+R*0.55, cy-R*0.38);
+        label(ctx,'Radial solute gradient — ingot cross-section', w*0.03, h*0.97, Math.max(8,h*0.066));
+    }
+}
+
+]; // end DEFECTS array
+
+/* ═══════════════════════════════════════════════════════
+   CATEGORY CONFIG
+═══════════════════════════════════════════════════════ */
+const CAT_LABELS = {
+    gas: 'Gas', shrinkage: 'Shrinkage', cracking: 'Cracking',
+    filling: 'Filling', inclusion: 'Inclusion', surface: 'Surface',
+    shape: 'Shape', segregation: 'Segregation'
+};
+
+/* ═══════════════════════════════════════════════════════
+   BUILD CARDS
+═══════════════════════════════════════════════════════ */
+let selectedIndex = -1;
+
+function buildCards() {
+    const grid = document.getElementById('defectGrid');
+    DEFECTS.forEach((d, i) => {
+        const card = document.createElement('div');
+        card.className = 'defect-card';
+        card.dataset.cat = d.category;
+        card.dataset.idx = i;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 160; canvas.height = 100;
+        canvas.style.width = '100%';
+        const ctx = canvas.getContext('2d');
+        d.draw(ctx, 160, 100);
+
+        card.innerHTML = `
+            <div class="defect-card-info">
+                <div class="card-code">${d.code}</div>
+                <div class="card-name">${d.name}</div>
+                <span class="card-cat cat-${d.category}">${CAT_LABELS[d.category]}</span>
+            </div>`;
+        card.insertBefore(canvas, card.firstChild);
+
+        card.addEventListener('click', () => selectDefect(i));
+        grid.appendChild(card);
+    });
+}
+
+function selectDefect(idx) {
+    // deselect previous
+    document.querySelectorAll('.defect-card').forEach(c => c.classList.remove('selected'));
+    const cards = document.querySelectorAll('.defect-card');
+    cards[idx].classList.add('selected');
+    selectedIndex = idx;
+
+    const d = DEFECTS[idx];
+    // update header
+    document.getElementById('dCode').textContent = d.code;
+    document.getElementById('dName').innerHTML = d.name;
+    const badge = document.getElementById('dCatBadge');
+    badge.textContent = CAT_LABELS[d.category];
+    badge.className = `card-cat cat-${d.category}`;
+
+    // description & processes
+    document.getElementById('dDesc').innerHTML = d.desc;
+    const procsEl = document.getElementById('dProcs');
+    procsEl.innerHTML = d.processes.map(p => `<span class="proc-badge">${p}</span>`).join('');
+
+    // causes
+    const causesEl = document.getElementById('dCauses');
+    causesEl.innerHTML = d.causes.map(c => `<li><span class="bullet-cause">✕</span>${c}</li>`).join('');
+    // prevention
+    const prevEl = document.getElementById('dPrev');
+    prevEl.innerHTML = d.prevention.map(p => `<li><span class="bullet-prev">✓</span>${p}</li>`).join('');
+
+    // draw detail canvas
+    const dc = document.getElementById('detailCanvas');
+    const ctx = dc.getContext('2d');
+    ctx.clearRect(0, 0, dc.width, dc.height);
+    d.draw(ctx, dc.width, dc.height);
+
+    // show panel and scroll
+    const panel = document.getElementById('detailPanel');
+    panel.classList.add('visible');
+    setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+}
+
+document.getElementById('closeBtn').addEventListener('click', () => {
+    document.getElementById('detailPanel').classList.remove('visible');
+    document.querySelectorAll('.defect-card').forEach(c => c.classList.remove('selected'));
+    selectedIndex = -1;
+});
+
+/* ═══════════════════════════════════════════════════════
+   FILTER
+═══════════════════════════════════════════════════════ */
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        document.querySelectorAll('.defect-card').forEach(card => {
+            const show = filter === 'all' || card.dataset.cat === filter;
+            card.classList.toggle('hidden', !show);
+        });
+        // close detail if selected card is now hidden
+        if (selectedIndex >= 0) {
+            const cat = DEFECTS[selectedIndex].category;
+            if (filter !== 'all' && cat !== filter) {
+                document.getElementById('detailPanel').classList.remove('visible');
+                document.querySelectorAll('.defect-card').forEach(c => c.classList.remove('selected'));
+                selectedIndex = -1;
+            }
+        }
+    });
+});
+
+/* ═══════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════ */
+buildCards();
+</script>
+</body>
+</html>

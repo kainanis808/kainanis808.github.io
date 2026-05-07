@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sand Casting – Process, Design &amp; Defects</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        header {
+            text-align: center;
+            padding: 28px 20px;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+        }
+        h1 { font-size: 2rem; color: #f1f5f9; }
+        .subtitle { color: #94a3b8; margin-top: 6px; font-size: 1rem; }
+
+        main { max-width: 1060px; margin: 0 auto; padding: 28px 20px; }
+
+        /* ── Tabs ── */
+        .tab-bar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #334155;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 9px 20px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 0.92rem;
+            font-family: inherit;
+            margin-bottom: -2px;
+            transition: color 0.15s, border-color 0.15s;
+        }
+        .tab-btn.active { color: #38bdf8; border-bottom-color: #38bdf8; }
+        .tab-btn:hover:not(.active) { color: #cbd5e1; }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* ── Generic cards ── */
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 22px;
+        }
+        .card h2 {
+            font-size: 1.2rem;
+            color: #7dd3fc;
+            margin-bottom: 10px;
+        }
+        .card p, .card li {
+            color: #94a3b8;
+            font-size: 0.92rem;
+            line-height: 1.65;
+        }
+        .card ul { padding-left: 18px; }
+        .card ul li { margin-bottom: 4px; }
+
+        /* ── Spec table ── */
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+        .spec-table th {
+            background: #0f172a;
+            color: #7dd3fc;
+            padding: 9px 12px;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+        }
+        .spec-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #1e293b;
+            color: #cbd5e1;
+        }
+        .spec-table tr:nth-child(even) td { background: #162032; }
+        .spec-table td:first-child { color: #e2e8f0; font-weight: 600; }
+        .spec-table .good  { color: #4ade80; }
+        .spec-table .mid   { color: #fbbf24; }
+        .spec-table .bad   { color: #f87171; }
+
+        /* ── Bar chart for surface finish / tolerance ── */
+        .bar-wrap { margin: 10px 0; }
+        .bar-label { font-size: 0.82rem; color: #94a3b8; margin-bottom: 3px; }
+        .bar-track {
+            background: #0f172a;
+            border-radius: 4px;
+            height: 18px;
+            position: relative;
+            overflow: visible;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding-left: 6px;
+            font-size: 0.75rem;
+            color: #fff;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: width 0.4s ease;
+        }
+        .bar-range-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        /* ── Alloy grid ── */
+        .alloy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        .alloy-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 14px;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+        }
+        .alloy-card:hover, .alloy-card.selected {
+            border-color: #38bdf8;
+            background: #162032;
+        }
+        .alloy-card h3 { font-size: 0.95rem; color: #e2e8f0; margin-bottom: 6px; }
+        .alloy-card .tag {
+            display: inline-block;
+            background: #1e3a5f;
+            color: #93c5fd;
+            border-radius: 4px;
+            padding: 1px 7px;
+            font-size: 0.72rem;
+            margin-bottom: 6px;
+        }
+        .alloy-card p { font-size: 0.8rem; color: #64748b; line-height: 1.5; }
+        #alloy-detail {
+            background: #0f172a;
+            border: 1px solid #38bdf8;
+            border-radius: 10px;
+            padding: 18px;
+            margin-top: 16px;
+            min-height: 80px;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            line-height: 1.65;
+            display: none;
+        }
+        #alloy-detail h3 { color: #7dd3fc; margin-bottom: 8px; font-size: 1.05rem; }
+        .alloy-spec-row { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 10px; }
+        .alloy-spec { flex: 1; min-width: 140px; }
+        .alloy-spec .spec-name { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .alloy-spec .spec-val  { font-size: 0.92rem; color: #e2e8f0; margin-top: 2px; }
+
+        /* ── Design guidelines ── */
+        .guide-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+        .guide-item {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .guide-item canvas { display: block; width: 100%; }
+        .guide-body { padding: 14px; }
+        .guide-body h3 { font-size: 0.95rem; color: #e2e8f0; margin-bottom: 4px; }
+        .guide-body p  { font-size: 0.82rem; color: #64748b; line-height: 1.55; }
+        .badge-good { display:inline-block; background:#14532d; color:#4ade80; border-radius:4px; padding:1px 8px; font-size:0.72rem; margin-right:6px; }
+        .badge-bad  { display:inline-block; background:#7f1d1d; color:#f87171; border-radius:4px; padding:1px 8px; font-size:0.72rem; margin-right:6px; }
+
+        /* ── Defect gallery ── */
+        .defect-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .defect-btn {
+            padding: 7px 14px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: inherit;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .defect-btn:hover { border-color: #64748b; color: #e2e8f0; }
+        .defect-btn.active { border-color: #f59e0b; color: #fbbf24; background: #1c1408; }
+        #defect-panel {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+        #defect-canvas {
+            border: 1px solid #334155;
+            border-radius: 10px;
+            flex-shrink: 0;
+            background: #0f172a;
+        }
+        #defect-info {
+            flex: 1;
+            min-width: 220px;
+        }
+        #defect-info h3 { color: #fbbf24; font-size: 1.1rem; margin-bottom: 10px; }
+        .defect-meta { display: flex; flex-direction: column; gap: 10px; }
+        .defect-meta-row { }
+        .dmr-label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .dmr-val   { font-size: 0.88rem; color: #cbd5e1; line-height: 1.55; margin-top: 2px; }
+
+        /* ── Sources ── */
+        .source-line {
+            font-size: 0.78rem;
+            color: #475569;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #38bdf8;
+            text-decoration: none;
+            font-size: 0.92rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Sand Casting</h1>
+    <p class="subtitle">Process capabilities, alloy selection, design guidelines, and defect identification</p>
+    <p class="source-line">Data sources: eFunda Manufacturing Processes · American Foundry Society (AFS) Casting Design Guidelines</p>
+</header>
+
+<main>
+
+<nav class="tab-bar">
+    <button class="tab-btn active" data-tab="specs">Process Specs</button>
+    <button class="tab-btn" data-tab="alloys">Compatible Alloys</button>
+    <button class="tab-btn" data-tab="design">Design Guidelines</button>
+    <button class="tab-btn" data-tab="defects">Defect Identification</button>
+</nav>
+
+<!-- ══════════════════════════════════════
+     TAB 1 — PROCESS SPECS (eFunda)
+══════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-specs">
+
+    <div class="card">
+        <h2>What Is Sand Casting?</h2>
+        <p>
+            Sand casting is the oldest and most widely used casting process. A pattern (typically wood, plastic, or metal) is pressed
+            into a moist sand mixture to form a mold cavity. Molten metal is poured in, allowed to solidify, and the sand is
+            broken away to release the part. It accommodates virtually any metal, nearly any size, and extremely complex geometry
+            through the use of sand cores — making it the process of choice when tooling cost must be low or part runs are small.
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>Surface Finish</h2>
+        <p style="margin-bottom:14px;">
+            Sand casting produces the roughest surfaces of all casting processes. The typical range is
+            <strong style="color:#fbbf24;">125–500 µin Ra (3.2–12.5 µm Ra)</strong>.
+            With careful pattern work, fine-grained molding sand, and mold washes a best-achievable of
+            ~63 µin Ra (1.6 µm) is possible, but rare in production.
+            Compare to die casting (~32–125 µin) or investment casting (~32–63 µin).
+        </p>
+        <div style="margin-bottom:10px;">
+            <div class="bar-label">Sand Casting — typical production</div>
+            <div class="bar-track" style="width:100%;">
+                <div class="bar-fill" style="width:70%;background:linear-gradient(90deg,#f59e0b,#ef4444);">125–500 µin Ra</div>
+            </div>
+            <div class="bar-range-label">Rougher ←→ Finer</div>
+        </div>
+        <div style="margin-bottom:10px;">
+            <div class="bar-label">Permanent Mold</div>
+            <div class="bar-track"><div class="bar-fill" style="width:40%;background:linear-gradient(90deg,#22d3ee,#3b82f6);">63–250 µin Ra</div></div>
+        </div>
+        <div style="margin-bottom:10px;">
+            <div class="bar-label">Die Casting</div>
+            <div class="bar-track"><div class="bar-fill" style="width:22%;background:#22d3ee;">32–125 µin Ra</div></div>
+        </div>
+        <div>
+            <div class="bar-label">Investment Casting</div>
+            <div class="bar-track"><div class="bar-fill" style="width:14%;background:#4ade80;">32–63 µin Ra</div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Key Process Specifications (eFunda)</h2>
+        <table class="spec-table">
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Typical Range</th>
+                    <th>Best Achievable</th>
+                    <th>Rating vs. Other Processes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Surface Roughness Ra</td>
+                    <td>3.2–12.5 µm (125–500 µin)</td>
+                    <td>~1.6 µm (63 µin)</td>
+                    <td class="bad">Poor (roughest of casting processes)</td>
+                </tr>
+                <tr>
+                    <td>Linear Dimensional Tolerance</td>
+                    <td>±0.76–3.2 mm (±0.030–0.125 in)</td>
+                    <td>±0.38 mm (±0.015 in) with metal pattern</td>
+                    <td class="mid">Fair</td>
+                </tr>
+                <tr>
+                    <td>Part Weight</td>
+                    <td>0.01 kg – 300,000 kg</td>
+                    <td>No practical upper limit</td>
+                    <td class="good">Excellent — widest range of any process</td>
+                </tr>
+                <tr>
+                    <td>Min. Wall Thickness (Al)</td>
+                    <td>4–5 mm</td>
+                    <td>3 mm (with vacuum assist)</td>
+                    <td class="mid">Fair</td>
+                </tr>
+                <tr>
+                    <td>Min. Wall Thickness (Iron)</td>
+                    <td>3–4 mm</td>
+                    <td>2.5 mm (thin-wall iron)</td>
+                    <td class="mid">Fair</td>
+                </tr>
+                <tr>
+                    <td>Min. Wall Thickness (Steel)</td>
+                    <td>6–8 mm</td>
+                    <td>5 mm</td>
+                    <td class="bad">Poor vs. die/investment casting</td>
+                </tr>
+                <tr>
+                    <td>Production Rate</td>
+                    <td>1–20 parts/hr (manual)</td>
+                    <td>Up to 90 molds/hr (automated)</td>
+                    <td class="mid">Low-moderate</td>
+                </tr>
+                <tr>
+                    <td>Tooling Cost</td>
+                    <td>Very low (wood patterns)</td>
+                    <td>—</td>
+                    <td class="good">Excellent — lowest tooling cost</td>
+                </tr>
+                <tr>
+                    <td>Draft Angle Required</td>
+                    <td>1°–3° per side (green sand)</td>
+                    <td>0.5° (dry sand, metal pattern)</td>
+                    <td class="mid">Moderate requirement</td>
+                </tr>
+                <tr>
+                    <td>Undercuts</td>
+                    <td>Possible via sand cores</td>
+                    <td>—</td>
+                    <td class="good">Good flexibility with cores</td>
+                </tr>
+                <tr>
+                    <td>Applicable Alloys</td>
+                    <td colspan="2">Nearly all — ferrous and non-ferrous (see Alloys tab)</td>
+                    <td class="good">Excellent — most versatile</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Dimensional Tolerance vs. Part Size</h2>
+        <p style="margin-bottom:14px;">
+            Tolerance in sand casting is not fixed — it scales with part size. The AFS
+            <em>Casting Tolerances Standard</em> (CT system, ISO 8062) assigns a tolerance grade
+            based on part length and process. Sand casting typically falls in CT11–CT14.
+        </p>
+        <canvas id="tol-canvas" width="680" height="260" style="border-radius:8px;border:1px solid #334155;max-width:100%;"></canvas>
+        <p style="margin-top:10px;font-size:0.8rem;color:#64748b;">
+            Shaded band shows the ±tolerance for a given largest dimension. Metal patterns and controlled molding conditions
+            push toward the lower bound; hand-rammed green sand is near the upper bound.
+        </p>
+    </div>
+
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 2 — COMPATIBLE ALLOYS
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-alloys">
+
+    <div class="card">
+        <h2>Why Sand Casting Is Alloy-Agnostic</h2>
+        <p>
+            Because the mold is sacrificial (broken apart each cycle), there is no chemical
+            interaction or temperature limit imposed by a permanent mold material. Sand is
+            refractory to &gt;1600 °C, so even high-melting-point alloys like carbon steel and
+            nickel superalloys can be sand cast. Click an alloy family below to see details.
+        </p>
+    </div>
+
+    <div class="card" style="padding-bottom:14px;">
+        <h2>Alloy Families — Click for Details</h2>
+        <div class="alloy-grid" id="alloy-grid"></div>
+        <div id="alloy-detail"></div>
+    </div>
+
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 3 — DESIGN GUIDELINES (AFS)
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-design">
+
+    <div class="card">
+        <h2>AFS Casting Design Principles</h2>
+        <p>
+            The American Foundry Society emphasizes that castings should be designed for the process,
+            not machined-part conventions. The six rules below are the most impactful on yield and quality.
+            Each panel shows a cross-sectional sketch — <span style="color:#4ade80;">green = preferred</span>,
+            <span style="color:#f87171;">red = avoid</span>.
+        </p>
+    </div>
+
+    <div class="guide-grid" id="guide-grid"></div>
+
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 4 — DEFECT IDENTIFICATION (AFS)
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-defects">
+
+    <div class="card">
+        <h2>AFS Casting Defect Classification</h2>
+        <p>
+            The AFS Casting Defect Atlas classifies sand casting defects into seven categories.
+            Select a defect below to see a schematic illustration and remediation guidance.
+        </p>
+    </div>
+
+    <div class="card">
+        <div class="defect-selector" id="defect-selector"></div>
+        <div id="defect-panel">
+            <canvas id="defect-canvas" width="360" height="280"></canvas>
+            <div id="defect-info">
+                <h3 id="defect-name">Select a defect above</h3>
+                <div class="defect-meta" id="defect-meta"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<a class="back-link" href="index.html">← Back to Visualizations</a>
+
+</main>
+
+<script>
+/* ════════════════════════════════════════════════════════════
+   TAB SWITCHING
+════════════════════════════════════════════════════════════ */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+});
+
+
+/* ════════════════════════════════════════════════════════════
+   TAB 1 — TOLERANCE vs PART SIZE CHART
+════════════════════════════════════════════════════════════ */
+(function() {
+    const canvas = document.getElementById('tol-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const PAD = { top: 20, right: 20, bottom: 50, left: 64 };
+    const CW = W - PAD.left - PAD.right;
+    const CH = H - PAD.top - PAD.bottom;
+
+    // x = part largest dimension (mm), log scale 10–3000
+    // y = tolerance ±mm
+    const xMin = 10, xMax = 3000;
+    const yMin = 0, yMax = 12;
+
+    function xToP(v) { return PAD.left + (Math.log10(v) - Math.log10(xMin)) / (Math.log10(xMax) - Math.log10(xMin)) * CW; }
+    function yToP(v) { return PAD.top + CH - (v - yMin) / (yMax - yMin) * CH; }
+
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, W, H);
+
+    // grid
+    ctx.strokeStyle = '#1e293b';
+    ctx.lineWidth = 1;
+    [0,2,4,6,8,10,12].forEach(y => {
+        ctx.beginPath();
+        ctx.moveTo(PAD.left, yToP(y));
+        ctx.lineTo(PAD.left + CW, yToP(y));
+        ctx.stroke();
+    });
+    [10,30,100,300,1000,3000].forEach(x => {
+        const px = xToP(x);
+        ctx.beginPath();
+        ctx.moveTo(px, PAD.top);
+        ctx.lineTo(px, PAD.top + CH);
+        ctx.stroke();
+    });
+
+    // shaded band: lower = 0.38 + 0.003*L, upper = 0.76 + 0.004*L (rough linear approximation over log range)
+    // more accurately use CT11/CT14 from ISO 8062 lookup, approximated here
+    function lowerTol(L) { return 0.38 + 0.0025 * L; }
+    function upperTol(L) { return 0.76 + 0.004  * L; }
+
+    ctx.save();
+    ctx.beginPath();
+    const steps = 200;
+    const xs = Array.from({length: steps}, (_, i) => xMin * Math.pow(xMax/xMin, i/(steps-1)));
+    ctx.moveTo(xToP(xs[0]), yToP(Math.min(yMax, upperTol(xs[0]))));
+    xs.forEach(x => ctx.lineTo(xToP(x), yToP(Math.min(yMax, upperTol(x)))));
+    xs.slice().reverse().forEach(x => ctx.lineTo(xToP(x), yToP(Math.min(yMax, lowerTol(x)))));
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(251,191,36,0.18)';
+    ctx.fill();
+
+    // upper line
+    ctx.beginPath();
+    xs.forEach((x,i) => {
+        const py = yToP(Math.min(yMax, upperTol(x)));
+        i === 0 ? ctx.moveTo(xToP(x), py) : ctx.lineTo(xToP(x), py);
+    });
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // lower line
+    ctx.beginPath();
+    xs.forEach((x,i) => {
+        const py = yToP(lowerTol(x));
+        i === 0 ? ctx.moveTo(xToP(x), py) : ctx.lineTo(xToP(x), py);
+    });
+    ctx.strokeStyle = '#22d3ee';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.restore();
+
+    // labels for bands
+    ctx.font = '11px Segoe UI';
+    ctx.fillStyle = '#f59e0b';
+    ctx.fillText('Upper bound (green sand, CT14)', xToP(12), yToP(upperTol(12)) - 6);
+    ctx.fillStyle = '#22d3ee';
+    ctx.fillText('Lower bound (metal pattern, CT11)', xToP(12), yToP(lowerTol(12)) + 14);
+
+    // axes
+    ctx.strokeStyle = '#475569';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(PAD.left, PAD.top);
+    ctx.lineTo(PAD.left, PAD.top + CH);
+    ctx.lineTo(PAD.left + CW, PAD.top + CH);
+    ctx.stroke();
+
+    // y-axis labels
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '11px Segoe UI';
+    ctx.textAlign = 'right';
+    [0,2,4,6,8,10,12].forEach(y => {
+        ctx.fillText(`±${y} mm`, PAD.left - 6, yToP(y) + 4);
+    });
+
+    // x-axis labels
+    ctx.textAlign = 'center';
+    [[10,'10'],[30,'30'],[100,'100'],[300,'300'],[1000,'1000'],[3000,'3000']].forEach(([x, label]) => {
+        ctx.fillText(label, xToP(x), PAD.top + CH + 18);
+    });
+
+    // axis titles
+    ctx.save();
+    ctx.translate(14, PAD.top + CH/2);
+    ctx.rotate(-Math.PI/2);
+    ctx.textAlign = 'center';
+    ctx.font = '12px Segoe UI';
+    ctx.fillStyle = '#64748b';
+    ctx.fillText('±Tolerance (mm)', 0, 0);
+    ctx.restore();
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#64748b';
+    ctx.fillText('Largest Dimension (mm, log scale)', PAD.left + CW/2, H - 8);
+})();
+
+
+/* ════════════════════════════════════════════════════════════
+   TAB 2 — ALLOY DATA
+════════════════════════════════════════════════════════════ */
+const ALLOYS = [
+    {
+        name: 'Gray Cast Iron',
+        tag: 'Ferrous',
+        short: 'Most common sand casting alloy. ~70% of all castings by weight.',
+        meltRange: '1150–1300 °C',
+        fluidity: 'Excellent',
+        shrinkage: '~1.0%',
+        minWall: '2.5–4 mm',
+        commonGrades: 'ASTM A48 Cl. 20–60; HH250, HH350 (tensile MPa)',
+        notes: 'Graphite flakes act as built-in lubricant and vibration damper. Excellent castability but brittle in tension. Used for engine blocks, brake rotors, machine beds.',
+        surfaceRa: '6.3–12.5 µm',
+        tolClass: 'CT12–CT14',
+    },
+    {
+        name: 'Ductile (Nodular) Iron',
+        tag: 'Ferrous',
+        short: 'Gray iron + Mg treatment → spheroidal graphite → ductile behavior.',
+        meltRange: '1150–1350 °C',
+        fluidity: 'Good',
+        shrinkage: '~2.7%',
+        minWall: '3–6 mm',
+        commonGrades: 'ASTM A536: 60-40-18, 65-45-12, 80-55-06, 100-70-03',
+        notes: 'Tensile strength 415–830 MPa with 3–18% elongation. Replaces steel in crankshafts, gears, pipe fittings. Higher shrinkage than gray iron demands larger risers.',
+        surfaceRa: '6.3–12.5 µm',
+        tolClass: 'CT12–CT14',
+    },
+    {
+        name: 'Carbon & Alloy Steel',
+        tag: 'Ferrous',
+        short: 'High strength and toughness; most demanding sand casting alloy.',
+        meltRange: '1420–1540 °C',
+        fluidity: 'Fair (high surface tension)',
+        shrinkage: '~2.5–3.0%',
+        minWall: '6–8 mm',
+        commonGrades: 'ASTM A27, A148; low (C<0.2%), medium (0.2–0.5%), high (>0.5%) C',
+        notes: 'Requires high pour temperature → high thermal gradients → more risk of hot tearing. Yield strengths 250–1000 MPa. Used for valves, pumps, structural machinery.',
+        surfaceRa: '6.3–12.5 µm',
+        tolClass: 'CT13–CT14',
+    },
+    {
+        name: 'Aluminum Alloys',
+        tag: 'Non-ferrous',
+        short: 'Lightweight; excellent castability and corrosion resistance.',
+        meltRange: '580–720 °C',
+        fluidity: 'Very good',
+        shrinkage: '~3.5–8.5%',
+        minWall: '4–5 mm',
+        commonGrades: 'A356.0, 319.0, 355.0, A380 (die), LM25 (BS)',
+        notes: 'High shrinkage demands good riser design. Good-to-excellent machinability. A356-T6 yields ~230 MPa UTS and ~165 MPa yield. Used for automotive components, aerospace housings, marine parts.',
+        surfaceRa: '3.2–12.5 µm',
+        tolClass: 'CT11–CT13',
+    },
+    {
+        name: 'Copper Alloys (Brass/Bronze)',
+        tag: 'Non-ferrous',
+        short: 'Excellent corrosion resistance; good bearing properties.',
+        meltRange: '900–1085 °C',
+        fluidity: 'Good',
+        shrinkage: '~1.5–2.0%',
+        minWall: '3–5 mm',
+        commonGrades: 'C83600 (85-5-5-5 gunmetal), C90500 (tin bronze), C93200 (bearing bronze)',
+        notes: 'Tin bronzes have excellent corrosion resistance and are used for marine fittings, bushings, valve bodies. Lead bearing bronzes (C93200) are common bearing materials. Lower shrinkage than aluminum.',
+        surfaceRa: '3.2–12.5 µm',
+        tolClass: 'CT11–CT13',
+    },
+    {
+        name: 'Magnesium Alloys',
+        tag: 'Non-ferrous',
+        short: 'Lightest structural casting metal (ρ ≈ 1.8 g/cm³).',
+        meltRange: '620–680 °C',
+        fluidity: 'Good (with flux protection)',
+        shrinkage: '~4.0%',
+        minWall: '4–5 mm',
+        commonGrades: 'AZ91, AM60, AS41',
+        notes: 'Must be cast under protective atmosphere or flux to prevent oxidation/ignition. AZ91 is the workhorse: 230 MPa UTS. Used for aerospace structures, hand tool housings, electronics enclosures.',
+        surfaceRa: '3.2–12.5 µm',
+        tolClass: 'CT12–CT13',
+    },
+    {
+        name: 'Nickel Alloys',
+        tag: 'Non-ferrous',
+        short: 'High-temp strength; corrosion/oxidation resistance up to 1100 °C.',
+        meltRange: '1260–1450 °C',
+        fluidity: 'Fair',
+        shrinkage: '~2.0%',
+        minWall: '5–8 mm',
+        commonGrades: 'Monel 400, Inconel 625, Hastelloy C-276',
+        notes: 'Sand casting is often the only economic route for large nickel-alloy parts. Very high pour temperature demands high-quality refractory sands. Used for chemical plant equipment, marine hardware, superalloy turbine housings.',
+        surfaceRa: '6.3–12.5 µm',
+        tolClass: 'CT13–CT14',
+    },
+    {
+        name: 'Zinc Alloys',
+        tag: 'Non-ferrous',
+        short: 'Low melt temperature; typically die cast, but sand cast for large/prototype parts.',
+        meltRange: '385–430 °C',
+        fluidity: 'Excellent',
+        shrinkage: '~1.2%',
+        minWall: '2–3 mm',
+        commonGrades: 'Zamak 3, Zamak 5, ZA-8, ZA-27',
+        notes: 'Very low pour temperature makes sand casting easy and safe. Used for prototypes, art castings, and large parts not suited to die casting tooling. ZA-27 has the highest strength (~400 MPa) of the zinc alloys.',
+        surfaceRa: '3.2–12.5 µm',
+        tolClass: 'CT11–CT13',
+    },
+];
+
+(function() {
+    const grid = document.getElementById('alloy-grid');
+    const detail = document.getElementById('alloy-detail');
+    let selected = null;
+
+    ALLOYS.forEach((a, i) => {
+        const card = document.createElement('div');
+        card.className = 'alloy-card';
+        card.innerHTML = `
+            <div class="tag">${a.tag}</div>
+            <h3>${a.name}</h3>
+            <p>${a.short}</p>
+        `;
+        card.addEventListener('click', () => {
+            document.querySelectorAll('.alloy-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            detail.style.display = 'block';
+            detail.innerHTML = `
+                <h3>${a.name}</h3>
+                <p style="margin-bottom:10px;color:#94a3b8;">${a.notes}</p>
+                <div class="alloy-spec-row">
+                    <div class="alloy-spec">
+                        <div class="spec-name">Melt Range</div>
+                        <div class="spec-val">${a.meltRange}</div>
+                    </div>
+                    <div class="alloy-spec">
+                        <div class="spec-name">Fluidity</div>
+                        <div class="spec-val">${a.fluidity}</div>
+                    </div>
+                    <div class="alloy-spec">
+                        <div class="spec-name">Solidification Shrinkage</div>
+                        <div class="spec-val">${a.shrinkage}</div>
+                    </div>
+                    <div class="alloy-spec">
+                        <div class="spec-name">Min. Wall Thickness</div>
+                        <div class="spec-val">${a.minWall}</div>
+                    </div>
+                    <div class="alloy-spec">
+                        <div class="spec-name">Surface Ra</div>
+                        <div class="spec-val">${a.surfaceRa}</div>
+                    </div>
+                    <div class="alloy-spec">
+                        <div class="spec-name">AFS Tolerance Class</div>
+                        <div class="spec-val">${a.tolClass}</div>
+                    </div>
+                    <div class="alloy-spec" style="flex:2;min-width:200px;">
+                        <div class="spec-name">Common Grades / Standards</div>
+                        <div class="spec-val">${a.commonGrades}</div>
+                    </div>
+                </div>
+            `;
+        });
+        grid.appendChild(card);
+    });
+})();
+
+
+/* ════════════════════════════════════════════════════════════
+   TAB 3 — DESIGN GUIDELINES (canvas sketches)
+════════════════════════════════════════════════════════════ */
+const GUIDELINES = [
+    {
+        title: 'Draft Angles',
+        desc: 'All vertical faces must taper (draft) so the pattern can be withdrawn without tearing the mold. Minimum 1° per side for green sand; 0.5° for dry sand. Deeper pockets need more draft.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, W, H);
+            const mx = W / 2;
+
+            // BAD — no draft (vertical walls)
+            ctx.fillStyle = '#7f1d1d';
+            ctx.fillRect(20, 20, 20, 5);
+            ctx.fillText('Avoid', 30, 16);
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.moveTo(20, 25); ctx.lineTo(40, 25);
+            ctx.lineTo(40, 100); ctx.lineTo(20, 100); ctx.closePath();
+            ctx.fill();
+            ctx.fillStyle = '#f87171';
+            // vertical arrows to show no taper
+            ctx.fillRect(36, 30, 2, 60);
+            ctx.fillRect(18, 30, 2, 60);
+
+            // sand mold outline bad
+            ctx.strokeStyle = '#f87171';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 3]);
+            ctx.beginPath();
+            ctx.moveTo(10, 25); ctx.lineTo(10, 115); ctx.lineTo(50, 115); ctx.lineTo(50, 25);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // GOOD — with draft
+            ctx.fillStyle = '#14532d';
+            ctx.fillRect(mx + 10, 20, 20, 5);
+            ctx.fillStyle = '#4ade80';
+            ctx.fillText('Preferred', mx + 12, 16);
+            ctx.beginPath();
+            ctx.moveTo(mx + 12, 25); ctx.lineTo(mx + 48, 25);
+            ctx.lineTo(mx + 40, 100); ctx.lineTo(mx + 20, 100); ctx.closePath();
+            ctx.fill();
+
+            // angle annotation
+            ctx.strokeStyle = '#86efac';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(mx + 48, 25); ctx.lineTo(mx + 48, 55);
+            ctx.stroke();
+            ctx.fillStyle = '#86efac';
+            ctx.font = '10px Segoe UI';
+            ctx.fillText('1–3°', mx + 50, 40);
+
+            // sand mold outline good
+            ctx.strokeStyle = '#4ade80';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 3]);
+            ctx.beginPath();
+            ctx.moveTo(mx + 2, 25); ctx.lineTo(mx, 115); ctx.lineTo(mx + 60, 115); ctx.lineTo(mx + 58, 25);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // label
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px Segoe UI';
+            ctx.fillText('Draft angle = taper to release pattern', 10, H - 6);
+        }
+    },
+    {
+        title: 'Uniform Wall Thickness',
+        desc: 'Abrupt section changes create hot spots where thick sections solidify last and pull liquid from thin sections, causing shrinkage. Taper gradually (max 2:1 ratio between adjacent sections; ideally ≤1.5:1).',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, W, H);
+            const cx = W / 2;
+
+            // BAD — abrupt change
+            ctx.fillStyle = '#ef4444';
+            ctx.fillRect(10, 50, 60, 12);    // thin
+            ctx.fillRect(70, 30, 50, 52);    // thick abrupt
+            ctx.fillRect(120, 50, 50, 12);   // thin again
+            // hot spot marker
+            ctx.fillStyle = '#ff6b35';
+            ctx.beginPath();
+            ctx.arc(75, 56, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.font = '9px Segoe UI';
+            ctx.textAlign = 'center';
+            ctx.fillText('HOT', 75, 59);
+            ctx.fillStyle = '#f87171';
+            ctx.textAlign = 'left';
+            ctx.fillText('Abrupt step → hot spot', 10, 100);
+
+            // GOOD — tapered transition
+            ctx.fillStyle = '#4ade80';
+            const y0 = 130;
+            ctx.beginPath();
+            ctx.moveTo(10, y0 + 4);
+            ctx.lineTo(70, y0 + 4);
+            ctx.lineTo(90, y0 - 12);    // taper up
+            ctx.lineTo(130, y0 - 12);
+            ctx.lineTo(150, y0 + 4);    // taper back down
+            ctx.lineTo(190, y0 + 4);
+            ctx.lineTo(190, y0 + 16);
+            ctx.lineTo(150, y0 + 16);
+            ctx.lineTo(130, y0 + 34);
+            ctx.lineTo(90, y0 + 34);
+            ctx.lineTo(70, y0 + 16);
+            ctx.lineTo(10, y0 + 16);
+            ctx.closePath();
+            ctx.fill();
+            ctx.fillStyle = '#86efac';
+            ctx.fillText('Tapered transition → even solidification', 10, H - 6);
+        }
+    },
+    {
+        title: 'Fillets & Radii (No Sharp Corners)',
+        desc: 'Sharp internal corners concentrate stress and are the primary initiation sites for hot tears. AFS recommends a minimum fillet radius equal to the wall thickness (r ≥ t). External corners may be sharp but are typically radiused for pattern durability.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, W, H);
+
+            // BAD — sharp corner
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.moveTo(20, 40); ctx.lineTo(110, 40); ctx.lineTo(110, 110); ctx.lineTo(90, 110);
+            ctx.lineTo(90, 60); ctx.lineTo(20, 60); ctx.closePath();
+            ctx.fill();
+            // stress concentration indicator
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(110, 40, 6, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.fillStyle = '#fbbf24';
+            ctx.font = '9px Segoe UI';
+            ctx.fillText('⚡ stress', 114, 44);
+            ctx.fillStyle = '#f87171';
+            ctx.fillText('Sharp corner — hot tear risk', 20, H / 2 - 6);
+
+            // GOOD — filleted corner
+            ctx.fillStyle = '#4ade80';
+            const ox = 165;
+            const oy = 10;
+            const r = 15;
+            ctx.beginPath();
+            ctx.moveTo(ox + 20, oy + 40); ctx.lineTo(ox + 90, oy + 40);
+            ctx.arcTo(ox + 110, oy + 40, ox + 110, oy + 60, r);
+            ctx.lineTo(ox + 110, oy + 110); ctx.lineTo(ox + 90, oy + 110);
+            ctx.lineTo(ox + 90, oy + 60 + r);
+            ctx.arcTo(ox + 90, oy + 60, ox + 70, oy + 60, r);
+            ctx.lineTo(ox + 20, oy + 60); ctx.closePath();
+            ctx.fill();
+            ctx.strokeStyle = '#86efac';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(ox + 90, oy + 60, r, 0, Math.PI / 2);
+            ctx.stroke();
+            ctx.fillStyle = '#86efac';
+            ctx.font = '9px Segoe UI';
+            ctx.fillText('r ≥ t', ox + 94, oy + 72);
+            ctx.fillStyle = '#4ade80';
+            ctx.fillText('Filleted — stress flows smoothly', ox - 145, H / 2 + 14);
+        }
+    },
+    {
+        title: 'Parting Line Placement',
+        desc: 'The parting line splits the mold into cope (top) and drag (bottom). Place it along the largest cross-section of the part, avoid placing it across critical surfaces (flash forms here), and keep it in a single plane whenever possible.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, W, H);
+            const cx = W / 2;
+
+            // Part cross-section (oval-like)
+            function drawPart(ox, oy, w, h, lineY, label, good) {
+                ctx.fillStyle = good ? '#1a3a2a' : '#3a1a1a';
+                ctx.strokeStyle = good ? '#4ade80' : '#ef4444';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.ellipse(ox + w/2, oy + h/2, w/2, h/2, 0, 0, Math.PI * 2);
+                ctx.fill(); ctx.stroke();
+
+                // parting line
+                ctx.strokeStyle = '#fbbf24';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 3]);
+                ctx.beginPath();
+                ctx.moveTo(ox - 10, oy + lineY);
+                ctx.lineTo(ox + w + 10, oy + lineY);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                ctx.fillStyle = '#fbbf24';
+                ctx.font = '9px Segoe UI';
+                ctx.fillText('PL', ox + w + 12, oy + lineY + 4);
+
+                ctx.fillStyle = good ? '#4ade80' : '#f87171';
+                ctx.font = '10px Segoe UI';
+                ctx.fillText(label, ox, oy + h + 16);
+            }
+
+            drawPart(20,  30, 110, 80, 40, 'Preferred: PL at widest', true);
+            drawPart(175, 30, 110, 80,  8, 'Avoid: PL off-center', false);
+
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px Segoe UI';
+            ctx.fillText('PL = parting line (cope/drag split)', 10, H - 6);
+        }
+    },
+    {
+        title: 'Cores for Internal Passages',
+        desc: 'Sand cores create hollow interiors and undercuts impossible to form by the pattern alone. Cores must be supported at both ends (core prints) when possible, and have adequate cross-section to resist flotation and metal pressure.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, W, H);
+
+            // pipe cross section with core
+            const cx = W / 2, cy = H / 2 - 10;
+
+            // outer casting (gray)
+            ctx.fillStyle = '#2d3748';
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.ellipse(cx, cy, 85, 55, 0, 0, Math.PI * 2);
+            ctx.fill(); ctx.stroke();
+
+            // core (amber)
+            ctx.fillStyle = '#78350f';
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.ellipse(cx, cy, 52, 30, 0, 0, Math.PI * 2);
+            ctx.fill(); ctx.stroke();
+
+            // resulting hole (dark)
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath();
+            ctx.ellipse(cx, cy, 52, 30, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // core label
+            ctx.fillStyle = '#fbbf24';
+            ctx.font = '11px Segoe UI';
+            ctx.textAlign = 'center';
+            ctx.fillText('Core (sand)', cx, cy + 5);
+
+            // metal label
+            ctx.fillStyle = '#94a3b8';
+            ctx.fillText('Cast metal', cx, cy - 38);
+
+            // core prints
+            ctx.fillStyle = '#78350f';
+            ctx.fillRect(W - 22, cy - 14, 20, 28);
+            ctx.fillRect(2, cy - 14, 20, 28);
+            ctx.fillStyle = '#fbbf24';
+            ctx.font = '9px Segoe UI';
+            ctx.fillText('core print', 12, cy - 18);
+
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px Segoe UI';
+            ctx.fillText('Core supported in prints on both ends', cx, H - 6);
+        }
+    },
+    {
+        title: 'Riser (Feeder) Design',
+        desc: 'Metals shrink ~2–8% when solidifying. Risers are reservoirs of liquid metal that feed the casting as it contracts. They must remain liquid longer than the heaviest section they feed — achieved by insulating sleeves or exothermic material. AFS rule: riser modulus > casting section modulus × 1.2.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, W, H);
+
+            const cx = W / 2;
+
+            // casting block
+            ctx.fillStyle = '#1e3a5f';
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.rect(cx - 90, 110, 180, 70);
+            ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#38bdf8';
+            ctx.font = '11px Segoe UI';
+            ctx.textAlign = 'center';
+            ctx.fillText('Casting (solidifies first)', cx, 150);
+
+            // riser
+            ctx.fillStyle = '#2d4a22';
+            ctx.strokeStyle = '#4ade80';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.rect(cx - 28, 40, 56, 70);
+            ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#4ade80';
+            ctx.fillText('Riser', cx, 65);
+            ctx.font = '9px Segoe UI';
+            ctx.fillStyle = '#86efac';
+            ctx.fillText('(stays liquid longer)', cx, 80);
+
+            // arrow showing feed direction
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(cx, 110); ctx.lineTo(cx, 108);
+            ctx.stroke();
+            // arrowhead
+            ctx.fillStyle = '#fbbf24';
+            ctx.beginPath();
+            ctx.moveTo(cx, 105); ctx.lineTo(cx - 5, 113); ctx.lineTo(cx + 5, 113);
+            ctx.closePath(); ctx.fill();
+            ctx.font = '9px Segoe UI';
+            ctx.fillText('liquid feeds shrinkage', cx, 100);
+
+            // solidification arrows in casting
+            ctx.strokeStyle = '#60a5fa';
+            [[cx - 60, 125],[cx + 60, 125],[cx - 60, 165],[cx + 60, 165]].forEach(([x,y]) => {
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + (x < cx ? 12 : -12), y + (y < 148 ? 10 : -10));
+                ctx.stroke();
+            });
+            ctx.fillStyle = '#64748b';
+            ctx.font = '9px Segoe UI';
+            ctx.fillText('Solidification fronts converge toward riser', cx, H - 6);
+        }
+    },
+];
+
+(function() {
+    const grid = document.getElementById('guide-grid');
+    GUIDELINES.forEach(g => {
+        const item = document.createElement('div');
+        item.className = 'guide-item';
+        const c = document.createElement('canvas');
+        c.width = 320; c.height = 185;
+        c.style.width = '100%';
+        item.appendChild(c);
+        const body = document.createElement('div');
+        body.className = 'guide-body';
+        body.innerHTML = `<h3>${g.title}</h3><p>${g.desc}</p>`;
+        item.appendChild(body);
+        grid.appendChild(item);
+
+        const ctx = c.getContext('2d');
+        ctx.font = '11px Segoe UI';
+        ctx.textAlign = 'left';
+        g.draw(ctx, c.width, c.height);
+    });
+})();
+
+
+/* ════════════════════════════════════════════════════════════
+   TAB 4 — DEFECT IDENTIFICATION
+════════════════════════════════════════════════════════════ */
+const DEFECTS = [
+    {
+        name: 'Gas Porosity',
+        afsCode: 'A1–A3',
+        appearance: 'Smooth, spherical or elongated voids beneath the surface or through the cross-section. Round shape distinguishes gas from shrinkage.',
+        causes: 'Dissolved hydrogen/nitrogen released during solidification; moisture in sand or charge; inadequate venting; too high pour temperature.',
+        prevention: 'Degas melt (rotary degassing, flux); dry charge materials; limit pour temperature; adequate vent pins in mold.',
+        severity: 'Moderate — reduces fatigue life significantly; may cause pressure leaks.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,W,H);
+            // metal background
+            ctx.fillStyle = '#2d3748';
+            ctx.beginPath(); ctx.roundRect(20, 30, W-40, H-60, 8); ctx.fill();
+            // spherical voids
+            [[90,80,18],[160,120,12],[220,90,22],[140,65,8],[80,140,14],[240,150,10]].forEach(([x,y,r]) => {
+                const g = ctx.createRadialGradient(x-r*0.3,y-r*0.3,1,x,y,r);
+                g.addColorStop(0,'#475569'); g.addColorStop(1,'#0f172a');
+                ctx.fillStyle = g;
+                ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+                ctx.strokeStyle='#94a3b8'; ctx.lineWidth=0.8;
+                ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.stroke();
+            });
+            ctx.fillStyle='#fbbf24'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Spherical voids — smooth walls', W/2, H-10);
+        }
+    },
+    {
+        name: 'Shrinkage Porosity',
+        afsCode: 'B1–B3',
+        appearance: 'Irregular, jagged or dendritic voids typically located at the geometric center or last-to-freeze section. Rough, torn appearance distinguishes from gas porosity.',
+        causes: 'Insufficient riser feeding; poor riser placement; incorrect riser modulus; no directional solidification toward riser.',
+        prevention: 'Increase riser size or number; use exothermic or insulating sleeves; ensure directional solidification; check riser modulus ratio > 1.2.',
+        severity: 'Severe — major structural defect; causes premature failure under load.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,W,H);
+            ctx.fillStyle = '#2d3748';
+            ctx.beginPath(); ctx.roundRect(20, 30, W-40, H-60, 8); ctx.fill();
+            // jagged shrinkage void in center
+            ctx.fillStyle = '#0f172a';
+            ctx.strokeStyle = '#475569'; ctx.lineWidth = 1;
+            ctx.beginPath();
+            const cx = W/2, cy = H/2;
+            const pts = [[cx,cy-35],[cx+18,cy-18],[cx+32,cy-5],[cx+20,cy+8],
+                         [cx+10,cy+25],[cx-5,cy+32],[cx-20,cy+18],[cx-35,cy+5],
+                         [cx-25,cy-12],[cx-12,cy-28]];
+            ctx.moveTo(pts[0][0],pts[0][1]);
+            pts.forEach(p => ctx.lineTo(p[0],p[1]));
+            ctx.closePath(); ctx.fill(); ctx.stroke();
+            // dendritic arms inside void
+            ctx.strokeStyle='#334155'; ctx.lineWidth=1;
+            [[cx+10,cy-10,cx+22,cy+5],[cx-8,cy+12,cx-20,cy-5],[cx+15,cy+10,cx+5,cy+22]].forEach(([x1,y1,x2,y2])=>{
+                ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+            });
+            ctx.fillStyle='#fbbf24'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Jagged, dendritic void — center of section', W/2, H-10);
+        }
+    },
+    {
+        name: 'Cold Shut',
+        afsCode: 'C2',
+        appearance: 'Visible seam or lap on the casting surface where two streams of metal met but did not fuse. Surface is smooth along the seam; may be an actual crack or just a visible oxide film.',
+        causes: 'Metal cools too much before filling the cavity; two flow fronts meet with oxide skins; pour temperature too low; thin sections or long flow paths.',
+        prevention: 'Increase pour temperature; increase pour rate; redesign gating to reduce flow length; preheat mold for large thin castings.',
+        severity: 'High — acts as a notch/crack; fails under cyclic loading.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,W,H);
+            ctx.fillStyle = '#2d3748';
+            ctx.beginPath(); ctx.roundRect(20, 40, W-40, H-80, 8); ctx.fill();
+            // cold shut seam
+            ctx.strokeStyle = '#475569'; ctx.lineWidth = 3;
+            ctx.setLineDash([]);
+            ctx.beginPath();
+            ctx.moveTo(50, H/2); ctx.quadraticCurveTo(W/2, H/2-15, W-50, H/2+5);
+            ctx.stroke();
+            // oxide film highlight
+            ctx.strokeStyle = '#78716c'; ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(50, H/2-2); ctx.quadraticCurveTo(W/2, H/2-17, W-50, H/2+3);
+            ctx.stroke();
+            // flow arrows
+            ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 1.5;
+            [[70,H/2+18,true],[W-70,H/2-10,false]].forEach(([x,y,left])=>{
+                ctx.beginPath();
+                ctx.moveTo(x,y); ctx.lineTo(x + (left?20:-20),y);
+                ctx.stroke();
+                ctx.fillStyle='#60a5fa';
+                ctx.beginPath();
+                ctx.moveTo(x+(left?20:-20),y); ctx.lineTo(x+(left?12:-12),y-4); ctx.lineTo(x+(left?12:-12),y+4);
+                ctx.closePath(); ctx.fill();
+            });
+            ctx.fillStyle='#94a3b8'; ctx.font='9px Segoe UI'; ctx.textAlign='left';
+            ctx.fillText('Flow →',55,H/2+30); ctx.textAlign='right'; ctx.fillText('← Flow',W-55,H/2-20);
+            ctx.fillStyle='#fbbf24'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Surface seam — two fronts failed to fuse', W/2, H-10);
+        }
+    },
+    {
+        name: 'Misrun',
+        afsCode: 'C1',
+        appearance: 'Incomplete casting — a section of the cavity was not filled. The unfilled area typically has a rounded, smooth edge where the metal froze before reaching the end of the cavity.',
+        causes: 'Insufficient pour temperature or rate; mold venting inadequate; gate too small; very thin sections; alloy with poor fluidity.',
+        prevention: 'Increase pour temperature; add vent pins; enlarge gates; redesign thin sections; pre-evaluate with fluidity tests (spiral test).',
+        severity: 'Critical — part is scrap; entire cavity section missing.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,W,H);
+            // partial fill
+            ctx.fillStyle = '#2d3748';
+            ctx.beginPath();
+            ctx.roundRect(20, 40, W-40, H-80, 8);
+            ctx.fill();
+            // unfilled region
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath();
+            ctx.moveTo(W-60, 40);
+            ctx.lineTo(W-20, 40);
+            ctx.lineTo(W-20, H-40);
+            ctx.quadraticCurveTo(W-60, H/2, W-80, 80);
+            ctx.closePath(); ctx.fill();
+            // frozen front line
+            ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(W-80, 80); ctx.quadraticCurveTo(W-60, H/2, W-20, H-40);
+            ctx.stroke();
+            // label
+            ctx.fillStyle='#ef4444'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Unfilled', W-40, H/2);
+            ctx.fillStyle='#94a3b8'; ctx.font='9px Segoe UI';
+            ctx.fillText('Frozen front', W-95, 75);
+            ctx.fillStyle='#fbbf24'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Cavity not fully filled — part is scrap', W/2, H-10);
+        }
+    },
+    {
+        name: 'Hot Tear',
+        afsCode: 'D1',
+        appearance: 'Irregular, often branching cracks with oxidized (dark) surfaces, typically located at sharp corners, re-entrant angles, or section changes. Crack surfaces are dendritic and rough.',
+        causes: 'Thermal contraction stresses tear the semi-solid network before full solidification; sharp corners create stress concentration; mold restraint; long freezing range alloys most susceptible.',
+        prevention: 'Add generous fillets (r ≥ t); avoid sharp corners; use collapsible cores; select alloys with short freezing range; reduce mold restraint.',
+        severity: 'Critical — penetrating crack through structural section; part is scrap or requires weld repair.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,W,H);
+            // L-shaped casting
+            ctx.fillStyle = '#2d3748';
+            ctx.beginPath();
+            ctx.moveTo(40,40); ctx.lineTo(W-40,40); ctx.lineTo(W-40,H/2);
+            ctx.lineTo(W/2+20,H/2); ctx.lineTo(W/2+20,H-40); ctx.lineTo(40,H-40); ctx.closePath(); ctx.fill();
+            // hot tear at inner corner
+            ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(W/2+20, H/2);
+            ctx.lineTo(W/2+5, H/2-18);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(W/2+5,H/2-18); ctx.lineTo(W/2-8,H/2-30); ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(W/2+5,H/2-18); ctx.lineTo(W/2+18,H/2-35); ctx.stroke();
+            // stress arrows
+            ctx.strokeStyle='#fbbf24'; ctx.lineWidth=1.5;
+            [[W/2+35,H/2-5,10,0],[W/2+20,H/2+15,0,10]].forEach(([x,y,dx,dy])=>{
+                ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+dx*2,y+dy*2); ctx.stroke();
+            });
+            ctx.fillStyle='#ef4444'; ctx.font='9px Segoe UI'; ctx.textAlign='left';
+            ctx.fillText('Hot tear', W/2+22, H/2-40);
+            ctx.fillStyle='#94a3b8'; ctx.font='9px Segoe UI';
+            ctx.fillText('Re-entrant corner', W/2+22, H/2+8);
+            ctx.fillStyle='#fbbf24'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Branching crack — oxidized, dendritic surfaces', W/2, H-10);
+        }
+    },
+    {
+        name: 'Sand Inclusion',
+        afsCode: 'G1',
+        appearance: 'Dark, angular particles of sand embedded in the casting surface or subsurface. Appear as depressions or pits after machining. Hard and abrasive, damaging cutting tools.',
+        causes: 'Mold erosion by turbulent metal flow; weak mold/core binder; metal velocity too high at gate; veining and breakout of core.',
+        prevention: 'Reduce gate velocity (use tapered runners); strengthen mold/core; use strainer cores at gate; apply mold wash; avoid turbulence.',
+        severity: 'Moderate — functional parts may be scrapped; accelerates tool wear in machining.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,W,H);
+            ctx.fillStyle = '#2d3748';
+            ctx.beginPath(); ctx.roundRect(20,30,W-40,H-60,8); ctx.fill();
+            // sand inclusions
+            [[80,70],[150,110],[220,85],[110,150],[190,140],[260,110],[85,130]].forEach(([x,y])=>{
+                ctx.fillStyle='#78350f';
+                ctx.beginPath();
+                ctx.moveTo(x,y-7); ctx.lineTo(x+8,y-2); ctx.lineTo(x+5,y+7);
+                ctx.lineTo(x-4,y+8); ctx.lineTo(x-8,y); ctx.closePath(); ctx.fill();
+                ctx.strokeStyle='#a16207'; ctx.lineWidth=0.8;
+                ctx.stroke();
+            });
+            ctx.fillStyle='#fbbf24'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Angular sand particles embedded in metal', W/2, H-10);
+            ctx.fillStyle='#92400e'; ctx.font='9px Segoe UI';
+            ctx.fillText('Sand', 88, 65);
+        }
+    },
+    {
+        name: 'Metal Penetration',
+        afsCode: 'H1',
+        appearance: 'Very rough surface where liquid metal has forced its way between sand grains. The surface looks like a metallic sponge and cannot be machined smooth without removing excessive stock.',
+        causes: 'Metallostatic pressure too high (tall casting, fast pour); sand permeability too high; binder too weak; fine-grained alloys with high fluidity.',
+        prevention: 'Use finer sand with stronger binder; apply mold wash/coating; reduce pour rate; check metallostatic head.',
+        severity: 'Moderate — surface integrity lost; excess stock needed; may be unrepairable.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,W,H);
+            // main metal body
+            ctx.fillStyle = '#2d3748';
+            ctx.beginPath(); ctx.roundRect(20,40,W-40,H-100,8); ctx.fill();
+            // penetration zone — rough surface fingers
+            ctx.fillStyle = '#374151';
+            for (let x = 30; x < W-30; x += 18) {
+                const depth = 10 + Math.sin(x*0.4)*6 + Math.random()*8;
+                ctx.beginPath();
+                ctx.roundRect(x, H-60, 12, depth, 3); ctx.fill();
+            }
+            // sand grain layer
+            for (let i = 0; i < 30; i++) {
+                const x = 25 + Math.random()*(W-50);
+                const y = H - 45 + Math.random()*20;
+                ctx.fillStyle='#78350f';
+                ctx.beginPath(); ctx.arc(x,y,3+Math.random()*3,0,Math.PI*2); ctx.fill();
+            }
+            ctx.fillStyle='#fbbf24'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Metal fingers penetrate sand grain gaps', W/2, H-10);
+        }
+    },
+    {
+        name: 'Warpage & Distortion',
+        afsCode: 'F1',
+        appearance: 'Dimensional deviation from the pattern — bowing, twisting, or bending. Not a crack or void, but the part is out of tolerance. Most visible in thin, flat sections.',
+        causes: 'Non-uniform cooling rates create unequal contraction stresses; mold ejection before full solidification; asymmetric geometry; high restraint from mold.',
+        prevention: 'Ensure uniform wall thickness; allow full solidification before shakeout; use straightening fixtures (F-irons) during cooling; redesign for symmetry.',
+        severity: 'Variable — mild distortion may be corrected by straightening; severe is scrap.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,W,H);
+            // intended flat bar (dashed)
+            ctx.strokeStyle='#64748b'; ctx.lineWidth=1.5; ctx.setLineDash([5,4]);
+            ctx.beginPath(); ctx.moveTo(30,H/2-8); ctx.lineTo(W-30,H/2-8);
+            ctx.moveTo(30,H/2+8); ctx.lineTo(W-30,H/2+8);
+            ctx.stroke(); ctx.setLineDash([]);
+            ctx.fillStyle='#64748b'; ctx.font='9px Segoe UI'; ctx.textAlign='left';
+            ctx.fillText('Intended (flat)', 35, H/2-12);
+
+            // warped shape
+            ctx.fillStyle='#1e3a5f';
+            ctx.strokeStyle='#38bdf8'; ctx.lineWidth=2;
+            ctx.beginPath();
+            ctx.moveTo(30,H/2+30);
+            ctx.bezierCurveTo(100,H/2+30,150,H/2-40,W/2,H/2-40);
+            ctx.bezierCurveTo(W/2+80,H/2-40,W-100,H/2+10,W-30,H/2+10);
+            ctx.lineTo(W-30,H/2+25);
+            ctx.bezierCurveTo(W-100,H/2+25,W/2+80,H/2-25,W/2,H/2-25);
+            ctx.bezierCurveTo(150,H/2-25,100,H/2+45,30,H/2+45);
+            ctx.closePath(); ctx.fill(); ctx.stroke();
+
+            // deviation arrow
+            ctx.strokeStyle='#ef4444'; ctx.lineWidth=1.5;
+            ctx.beginPath(); ctx.moveTo(W/2,H/2-8); ctx.lineTo(W/2,H/2-38); ctx.stroke();
+            ctx.fillStyle='#ef4444'; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Δ', W/2+3, H/2-20);
+
+            ctx.fillStyle='#fbbf24'; ctx.font='10px Segoe UI';
+            ctx.fillText('Bowed flat section — non-uniform contraction', W/2, H-10);
+        }
+    },
+];
+
+(function() {
+    const selector = document.getElementById('defect-selector');
+    const canvas   = document.getElementById('defect-canvas');
+    const ctx      = canvas.getContext('2d');
+    const nameEl   = document.getElementById('defect-name');
+    const metaEl   = document.getElementById('defect-meta');
+
+    DEFECTS.forEach((d, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'defect-btn';
+        btn.textContent = d.name;
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.defect-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            d.draw(ctx, canvas.width, canvas.height);
+            nameEl.textContent = `${d.name}  (AFS ${d.afsCode})`;
+            metaEl.innerHTML = `
+                <div class="defect-meta-row">
+                    <div class="dmr-label">Visual Appearance</div>
+                    <div class="dmr-val">${d.appearance}</div>
+                </div>
+                <div class="defect-meta-row">
+                    <div class="dmr-label">Root Causes</div>
+                    <div class="dmr-val">${d.causes}</div>
+                </div>
+                <div class="defect-meta-row">
+                    <div class="dmr-label">Prevention</div>
+                    <div class="dmr-val">${d.prevention}</div>
+                </div>
+                <div class="defect-meta-row">
+                    <div class="dmr-label">Severity</div>
+                    <div class="dmr-val">${d.severity}</div>
+                </div>
+            `;
+        });
+        selector.appendChild(btn);
+    });
+
+    // draw first defect by default
+    if (DEFECTS.length) {
+        selector.children[0].click();
+    }
+})();
+</script>
+
+</body>
+</html>

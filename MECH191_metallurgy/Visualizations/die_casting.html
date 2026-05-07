@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Die Casting – NADCA Process &amp; Design</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        header {
+            text-align: center;
+            padding: 26px 20px;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+        }
+        h1 { font-size: 2rem; color: #f1f5f9; }
+        .subtitle { color: #94a3b8; margin-top: 6px; font-size: 1rem; }
+        .source-line { font-size: 0.76rem; color: #475569; margin-top: 6px; }
+        main { max-width: 1060px; margin: 0 auto; padding: 26px 20px; }
+
+        .tab-bar {
+            display: flex; gap: 4px; margin-bottom: 22px;
+            border-bottom: 2px solid #334155; flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 9px 18px; background: transparent; border: none;
+            border-bottom: 3px solid transparent; color: #94a3b8;
+            cursor: pointer; font-size: 0.9rem; font-family: inherit;
+            margin-bottom: -2px; transition: color 0.15s, border-color 0.15s;
+        }
+        .tab-btn.active { color: #38bdf8; border-bottom-color: #38bdf8; }
+        .tab-btn:hover:not(.active) { color: #cbd5e1; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        .card {
+            background: #1e293b; border: 1px solid #334155;
+            border-radius: 12px; padding: 22px; margin-bottom: 22px;
+        }
+        .card h2 { font-size: 1.2rem; color: #7dd3fc; margin-bottom: 10px; }
+        .card p, .card li { color: #94a3b8; font-size: 0.91rem; line-height: 1.65; }
+        .card ul { padding-left: 18px; }
+        .card ul li { margin-bottom: 4px; }
+
+        /* spec table */
+        .spec-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+        .spec-table th { background: #0f172a; color: #7dd3fc; padding: 9px 12px; text-align: left; border-bottom: 1px solid #334155; }
+        .spec-table td { padding: 8px 12px; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
+        .spec-table tr:nth-child(even) td { background: #162032; }
+        .spec-table td:first-child { color: #e2e8f0; font-weight: 600; }
+        .good { color: #4ade80; } .mid { color: #fbbf24; } .bad { color: #f87171; }
+
+        /* bar chart */
+        .bar-wrap { margin: 8px 0; }
+        .bar-label { font-size: 0.82rem; color: #94a3b8; margin-bottom: 3px; }
+        .bar-track { background: #0f172a; border-radius: 4px; height: 18px; }
+        .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center;
+            padding-left: 6px; font-size: 0.75rem; color: #fff; font-weight: 600; white-space: nowrap; }
+
+        /* alloy grid */
+        .alloy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px,1fr)); gap: 12px; }
+        .alloy-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 14px; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+        .alloy-card:hover, .alloy-card.selected { border-color: #38bdf8; background: #162032; }
+        .alloy-card h3 { font-size: 0.93rem; color: #e2e8f0; margin-bottom: 6px; }
+        .alloy-card .tag { display: inline-block; background: #1e3a5f; color: #93c5fd; border-radius: 4px; padding: 1px 7px; font-size: 0.72rem; margin-bottom: 6px; }
+        .alloy-card p { font-size: 0.79rem; color: #64748b; line-height: 1.5; }
+        #alloy-detail { background: #0f172a; border: 1px solid #38bdf8; border-radius: 10px; padding: 18px; margin-top: 16px; display: none; color: #cbd5e1; font-size: 0.89rem; line-height: 1.65; }
+        #alloy-detail h3 { color: #7dd3fc; margin-bottom: 8px; font-size: 1.05rem; }
+        .alloy-spec-row { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
+        .alloy-spec { flex: 1; min-width: 130px; }
+        .alloy-spec .spec-name { font-size: 0.74rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .alloy-spec .spec-val  { font-size: 0.9rem; color: #e2e8f0; margin-top: 2px; }
+
+        /* radar chart */
+        #radar-wrap { display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; margin-top: 14px; }
+        #radar-canvas { border: 1px solid #334155; border-radius: 8px; flex-shrink: 0; }
+        #radar-legend { flex: 1; min-width: 180px; }
+        .radar-row { display: flex; align-items: center; gap: 8px; font-size: 0.83rem; color: #94a3b8; margin-bottom: 8px; cursor: pointer; }
+        .radar-swatch { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+        .radar-row.active { color: #e2e8f0; }
+
+        /* guide grid */
+        .guide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr)); gap: 16px; }
+        .guide-item { background: #0f172a; border: 1px solid #334155; border-radius: 10px; overflow: hidden; }
+        .guide-item canvas { display: block; width: 100%; }
+        .guide-body { padding: 13px; }
+        .guide-body h3 { font-size: 0.93rem; color: #e2e8f0; margin-bottom: 4px; }
+        .guide-body p { font-size: 0.81rem; color: #64748b; line-height: 1.55; }
+
+        /* animation tab */
+        .anim-selector { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+        .anim-toggle { padding: 9px 22px; border: 1px solid #334155; border-radius: 8px; background: #0f172a; color: #94a3b8; cursor: pointer; font-size: 0.9rem; font-family: inherit; transition: all 0.15s; }
+        .anim-toggle.active { border-color: #f59e0b; color: #fbbf24; background: #1c1408; }
+        #anim-outer { display: flex; gap: 22px; align-items: flex-start; flex-wrap: wrap; }
+        #anim-canvas { border: 1px solid #334155; border-radius: 10px; background: #0f172a; flex-shrink: 0; max-width: 100%; }
+        #anim-side { flex: 1; min-width: 200px; }
+        .stage-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+        .stage-item { display: flex; align-items: center; gap: 10px; font-size: 0.86rem; color: #64748b; padding: 8px 12px; border-radius: 8px; border: 1px solid transparent; transition: all 0.2s; }
+        .stage-item.active { background: #1e293b; border-color: #f59e0b; color: #fbbf24; }
+        .stage-dot { width: 10px; height: 10px; border-radius: 50%; background: #334155; flex-shrink: 0; }
+        .stage-item.active .stage-dot { background: #f59e0b; }
+        .stage-item.done { color: #4ade80; }
+        .stage-item.done .stage-dot { background: #4ade80; }
+        #anim-desc { font-size: 0.86rem; color: #94a3b8; line-height: 1.65; background: #0f172a; border-radius: 8px; padding: 12px; border: 1px solid #1e293b; }
+        .anim-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+        .anim-btn { padding: 8px 18px; background: #1e3a5f; border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 0.88rem; font-family: inherit; transition: background 0.15s; }
+        .anim-btn:hover { background: #2d5a8e; }
+        .anim-btn.secondary { background: #374151; }
+        .anim-btn.secondary:hover { background: #4b5563; }
+
+        .back-link { display: block; text-align: center; margin-top: 28px; color: #38bdf8; text-decoration: none; font-size: 0.92rem; }
+        .back-link:hover { text-decoration: underline; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Die Casting</h1>
+    <p class="subtitle">Hot &amp; cold chamber processes, NADCA design guidelines, and alloy selection</p>
+    <p class="source-line">Data sources: North American Die Casting Association (NADCA) Product Standards &amp; Engineering · NADCA Design Guidelines (8th ed.)</p>
+</header>
+
+<main>
+<nav class="tab-bar">
+    <button class="tab-btn active" data-tab="specs">Process Specs</button>
+    <button class="tab-btn" data-tab="alloys">Alloy Selection</button>
+    <button class="tab-btn" data-tab="design">Design Guidelines</button>
+    <button class="tab-btn" data-tab="anim">Process Animation</button>
+</nav>
+
+<!-- ═══════════════ TAB 1 — SPECS ═══════════════ -->
+<div class="tab-panel active" id="tab-specs">
+
+<div class="card">
+    <h2>What Is Die Casting?</h2>
+    <p>Die casting forces molten metal into a hardened steel die (tool) under high pressure (7–200 MPa). The metal fills the cavity in milliseconds, solidifies rapidly under pressure, and is ejected by pins. It yields the tightest tolerances and smoothest surfaces of any casting process — at the cost of high tooling investment and limitation to lower-melting alloys. Two variants exist: <strong>hot chamber</strong> (injection mechanism submerged in molten metal — used for Zn, Mg, Pb) and <strong>cold chamber</strong> (metal is ladled separately — used for Al, Cu, Mg).</p>
+</div>
+
+<div class="card">
+    <h2>Surface Finish vs. Other Casting Processes</h2>
+    <p style="margin-bottom:12px;">NADCA standard surface finish for die casting is <strong style="color:#4ade80;">32–125 µin Ra (0.8–3.2 µm)</strong> as-cast, with best achievable ~16 µin Ra (0.4 µm) on polished die faces. This is 4–10× smoother than sand casting.</p>
+    <div class="bar-wrap"><div class="bar-label">Die Casting (as-cast)</div><div class="bar-track"><div class="bar-fill" style="width:16%;background:#4ade80;">32–125 µin Ra</div></div></div>
+    <div class="bar-wrap"><div class="bar-label">Permanent Mold</div><div class="bar-track"><div class="bar-fill" style="width:30%;background:#22d3ee;">63–250 µin Ra</div></div></div>
+    <div class="bar-wrap"><div class="bar-label">Investment Casting</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:#a78bfa;">32–125 µin Ra</div></div></div>
+    <div class="bar-wrap"><div class="bar-label">Sand Casting</div><div class="bar-track"><div class="bar-fill" style="width:70%;background:#ef4444;">125–500 µin Ra</div></div></div>
+    <p style="margin-top:10px;font-size:0.8rem;color:#64748b;">NADCA Std 516-2020: Surface discontinuity limits defined separately by class (A = cosmetic, B = structural, C = general).</p>
+</div>
+
+<div class="card">
+    <h2>NADCA Key Process Specifications</h2>
+    <table class="spec-table">
+        <thead><tr><th>Parameter</th><th>Hot Chamber</th><th>Cold Chamber</th><th>vs. Sand Casting</th></tr></thead>
+        <tbody>
+            <tr><td>Applicable Alloys</td><td>Zn, Mg, Pb, Sn</td><td>Al, Mg, Cu, Zn (large)</td><td class="good">Much narrower alloy range</td></tr>
+            <tr><td>Injection Pressure</td><td>7–35 MPa</td><td>35–200 MPa</td><td class="good">Far higher → denser casting</td></tr>
+            <tr><td>Cycle Time</td><td>~2–6 s/shot</td><td>~30–90 s/shot</td><td class="good">10–100× faster than sand</td></tr>
+            <tr><td>Surface Ra (as-cast)</td><td>0.4–1.6 µm</td><td>0.8–3.2 µm</td><td class="good">4–20× smoother</td></tr>
+            <tr><td>Linear Tolerance (basic)</td><td>±0.025 mm/25 mm</td><td>±0.050 mm/25 mm</td><td class="good">3–5× tighter</td></tr>
+            <tr><td>Across Parting Line Tol.</td><td>±0.08–0.15 mm</td><td>±0.13–0.25 mm</td><td class="good">Still tighter than sand</td></tr>
+            <tr><td>Min. Wall Thickness (Zn)</td><td>0.4–0.6 mm</td><td>—</td><td class="good">Thinnest possible</td></tr>
+            <tr><td>Min. Wall Thickness (Al)</td><td>—</td><td>0.9–1.5 mm</td><td class="good">Thinner than sand (4–5 mm)</td></tr>
+            <tr><td>Draft Angle (internal)</td><td>1–2°</td><td>1–3°</td><td class="good">Less draft than sand</td></tr>
+            <tr><td>Draft Angle (external)</td><td>0.5–1°</td><td>0.5–1.5°</td><td class="good">Less draft than sand</td></tr>
+            <tr><td>Tooling Cost</td><td>$20K–$100K</td><td>$30K–$250K</td><td class="bad">Much higher than sand</td></tr>
+            <tr><td>Die Life (shots)</td><td>500K–1M (Zn)</td><td>80K–200K (Al)</td><td>—</td></tr>
+            <tr><td>Part Weight Range</td><td>1 g – 5 kg</td><td>30 g – 25 kg</td><td class="bad">Much smaller range than sand</td></tr>
+            <tr><td>Porosity</td><td>Low (Zn)</td><td>Moderate (Al) — gas entrapment risk</td><td class="mid">Better with vacuum die casting</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h2>NADCA Dimensional Tolerance Chart</h2>
+    <canvas id="tol-canvas" width="700" height="260" style="border-radius:8px;border:1px solid #334155;max-width:100%;"></canvas>
+    <p style="margin-top:8px;font-size:0.79rem;color:#64748b;">
+        NADCA "basic" tolerance = ±0.001 in per inch of dimension for aluminum; additional ±0.001 in across the parting line or any moving die component.
+        Die casting tolerances tighten further with precision CNC die machining and controlled shot parameters.
+    </p>
+</div>
+
+</div><!-- end tab-specs -->
+
+<!-- ═══════════════ TAB 2 — ALLOYS ═══════════════ -->
+<div class="tab-panel" id="tab-alloys">
+
+<div class="card">
+    <h2>Alloy Families for Die Casting</h2>
+    <p>Die casting alloy selection is driven by melting temperature (determines hot vs. cold chamber), required strength, corrosion resistance, and minimum wall thickness. Click a card for details, then compare properties on the radar chart below.</p>
+    <div class="alloy-grid" id="alloy-grid" style="margin-top:14px;"></div>
+    <div id="alloy-detail"></div>
+</div>
+
+<div class="card">
+    <h2>Alloy Property Radar Comparison</h2>
+    <p style="margin-bottom:12px;">Click alloy rows to overlay on radar chart. Properties normalized 0–10.</p>
+    <div id="radar-wrap">
+        <canvas id="radar-canvas" width="340" height="310"></canvas>
+        <div id="radar-legend"></div>
+    </div>
+</div>
+
+</div><!-- end tab-alloys -->
+
+<!-- ═══════════════ TAB 3 — DESIGN ═══════════════ -->
+<div class="tab-panel" id="tab-design">
+<div class="card">
+    <h2>NADCA Casting Design Guidelines</h2>
+    <p>NADCA's design rules differ from sand casting in degree: tighter tolerances are achievable, less draft is needed, thinner walls are possible — but porosity from high-velocity injection is a unique concern. Seven key guidelines are illustrated below.</p>
+</div>
+<div class="guide-grid" id="guide-grid"></div>
+</div>
+
+<!-- ═══════════════ TAB 4 — ANIMATION ═══════════════ -->
+<div class="tab-panel" id="tab-anim">
+
+<div class="card" style="padding-bottom:14px;">
+    <h2>Die Casting Process Animation</h2>
+    <p style="margin-bottom:14px;">Select hot or cold chamber, then press <strong>Play</strong> to step through the injection sequence automatically, or use <strong>Next / Prev</strong> to step manually.</p>
+
+    <div class="anim-selector">
+        <button class="anim-toggle active" id="toggle-hot">Hot Chamber (Zn/Mg)</button>
+        <button class="anim-toggle" id="toggle-cold">Cold Chamber (Al/Cu)</button>
+    </div>
+
+    <div id="anim-outer">
+        <canvas id="anim-canvas" width="580" height="380"></canvas>
+        <div id="anim-side">
+            <div class="stage-list" id="stage-list"></div>
+            <div id="anim-desc">Select a process and press Play.</div>
+            <div class="anim-btns">
+                <button class="anim-btn" id="btn-play">▶ Play</button>
+                <button class="anim-btn secondary" id="btn-prev">◀ Prev</button>
+                <button class="anim-btn secondary" id="btn-next">Next ▶</button>
+                <button class="anim-btn secondary" id="btn-reset">Reset</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div><!-- end tab-anim -->
+
+<a class="back-link" href="index.html">← Back to Visualizations</a>
+</main>
+
+<script>
+/* ═══════════════════════════════════════════
+   TABS
+═══════════════════════════════════════════ */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+        if (btn.dataset.tab === 'alloys') drawRadar();
+        if (btn.dataset.tab === 'anim') { resetAnim(); drawFrame(); }
+    });
+});
+
+/* ═══════════════════════════════════════════
+   TAB 1 — TOLERANCE CHART
+═══════════════════════════════════════════ */
+(function() {
+    const canvas = document.getElementById('tol-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const PAD = { top:20, right:30, bottom:50, left:65 };
+    const CW = W-PAD.left-PAD.right, CH = H-PAD.top-PAD.bottom;
+
+    const xMin=10, xMax=500, yMin=0, yMax=1.6;
+    function xP(v){ return PAD.left + (Math.log10(v)-Math.log10(xMin))/(Math.log10(xMax)-Math.log10(xMin))*CW; }
+    function yP(v){ return PAD.top + CH - (v-yMin)/(yMax-yMin)*CH; }
+
+    ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='#1e293b'; ctx.lineWidth=1;
+    [0,0.4,0.8,1.2,1.6].forEach(y=>{ ctx.beginPath(); ctx.moveTo(PAD.left,yP(y)); ctx.lineTo(PAD.left+CW,yP(y)); ctx.stroke(); });
+    [10,30,100,300,500].forEach(x=>{ const px=xP(x); ctx.beginPath(); ctx.moveTo(px,PAD.top); ctx.lineTo(px,PAD.top+CH); ctx.stroke(); });
+
+    // Al cold chamber band
+    function alLow(L){ return 0.025 + L*0.001; }
+    function alHigh(L){ return 0.05  + L*0.002; }
+    // Zn hot chamber band
+    function znLow(L){ return 0.013 + L*0.0006; }
+    function znHigh(L){ return 0.025 + L*0.001; }
+
+    function drawBand(fnLo, fnHi, fillCol, strokeLo, strokeHi, label) {
+        const xs = Array.from({length:150},(_,i)=>xMin*(xMax/xMin)**(i/149));
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(xP(xs[0]), yP(Math.min(yMax,fnHi(xs[0]))));
+        xs.forEach(x=>ctx.lineTo(xP(x),yP(Math.min(yMax,fnHi(x)))));
+        xs.slice().reverse().forEach(x=>ctx.lineTo(xP(x),yP(fnLo(x))));
+        ctx.closePath();
+        ctx.fillStyle=fillCol; ctx.fill();
+        ctx.beginPath(); xs.forEach((x,i)=>{ const py=yP(Math.min(yMax,fnHi(x))); i?ctx.lineTo(xP(x),py):ctx.moveTo(xP(x),py); }); ctx.strokeStyle=strokeHi; ctx.lineWidth=2; ctx.stroke();
+        ctx.beginPath(); xs.forEach((x,i)=>{ const py=yP(fnLo(x)); i?ctx.lineTo(xP(x),py):ctx.moveTo(xP(x),py); }); ctx.strokeStyle=strokeLo; ctx.lineWidth=1.5; ctx.stroke();
+        ctx.restore();
+        ctx.fillStyle=strokeHi; ctx.font='10px Segoe UI'; ctx.textAlign='left';
+        ctx.fillText(label, xP(xMin)+4, yP(fnHi(xMin))-5);
+    }
+
+    drawBand(znLow, znHigh, 'rgba(74,222,128,0.15)', '#4ade80', '#86efac', 'Zn hot chamber (NADCA)');
+    drawBand(alLow, alHigh, 'rgba(56,189,248,0.15)', '#38bdf8', '#7dd3fc', 'Al cold chamber (NADCA)');
+
+    // Sand casting line for comparison
+    function sandTol(L){ return 0.76+0.004*L; }
+    ctx.beginPath();
+    const sxs=Array.from({length:150},(_,i)=>xMin*(xMax/xMin)**(i/149));
+    sxs.forEach((x,i)=>{ const py=yP(Math.min(yMax,sandTol(x)/10)); i?ctx.lineTo(xP(x),py):ctx.moveTo(xP(x),py); });
+    ctx.strokeStyle='#f87171'; ctx.lineWidth=1.5; ctx.setLineDash([5,3]); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle='#f87171'; ctx.font='10px Segoe UI';
+    ctx.fillText('Sand casting (lower bound ÷10 for scale)', xP(12), yP(sandTol(12)/10)-5);
+
+    // axes
+    ctx.strokeStyle='#475569'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(PAD.left,PAD.top); ctx.lineTo(PAD.left,PAD.top+CH); ctx.lineTo(PAD.left+CW,PAD.top+CH); ctx.stroke();
+    ctx.fillStyle='#94a3b8'; ctx.font='11px Segoe UI'; ctx.textAlign='right';
+    [0,0.4,0.8,1.2,1.6].forEach(y=>ctx.fillText(`±${y.toFixed(1)} mm`,PAD.left-6,yP(y)+4));
+    ctx.textAlign='center';
+    [10,30,100,300,500].forEach(x=>ctx.fillText(x+'mm',xP(x),PAD.top+CH+18));
+    ctx.save(); ctx.translate(14,PAD.top+CH/2); ctx.rotate(-Math.PI/2); ctx.textAlign='center'; ctx.fillStyle='#64748b'; ctx.font='12px Segoe UI';
+    ctx.fillText('±Tolerance (mm)',0,0); ctx.restore();
+    ctx.textAlign='center'; ctx.fillStyle='#64748b';
+    ctx.fillText('Nominal Dimension (mm, log scale)',PAD.left+CW/2,H-8);
+})();
+
+/* ═══════════════════════════════════════════
+   TAB 2 — ALLOY DATA
+═══════════════════════════════════════════ */
+const ALLOYS = [
+    { name:'Aluminum A380', tag:'Cold chamber', short:'Most widely die cast alloy worldwide.',
+      process:'Cold chamber', melt:'580–620 °C', uts:'330 MPa', yield:'160 MPa', elongation:'3.5%',
+      density:'2.71 g/cm³', corrosion:'Good', castability:'Excellent', minWall:'1.0 mm', machinability:'Good',
+      notes:'A380 (or ADC12 per JIS) dominates automotive die casting. Excellent fluidity and die life. Not heat-treatable in as-cast form. Used for engine brackets, valve bodies, housings. A383 used where improved die-fill is needed.',
+      radar:[8,7,6,9,7,5] },
+    { name:'Zinc Zamak 3', tag:'Hot chamber', short:'#1 zinc die casting alloy — smoothest, finest detail.',
+      process:'Hot chamber', melt:'385–395 °C', uts:'283 MPa', yield:'221 MPa', elongation:'10%',
+      density:'6.60 g/cm³', corrosion:'Good (platable)', castability:'Excellent', minWall:'0.4 mm', machinability:'Excellent',
+      notes:'Zamak 3 (ASTM AG40A) is the standard for consumer hardware, decorative parts, and precision miniatures. Hot chamber process enables very fast cycles. Can be plated directly with chrome, nickel. High density is a drawback for weight-critical parts.',
+      radar:[6,8,10,7,10,7] },
+    { name:'Zinc ZA-8', tag:'Hot chamber', short:'Higher strength zinc; good for bearings.',
+      process:'Hot chamber', melt:'375–404 °C', uts:'374 MPa', yield:'290 MPa', elongation:'6%',
+      density:'6.3 g/cm³', corrosion:'Good', castability:'Very good', minWall:'0.5 mm', machinability:'Good',
+      notes:'ZA-8 has higher Al content than Zamak alloys, giving superior creep resistance and strength. Used in bearing applications where Zamak 3 is marginal. Can be hot-chamber cast unlike ZA-12 and ZA-27.',
+      radar:[7,8,9,7,9,7] },
+    { name:'Magnesium AZ91D', tag:'Hot or cold chamber', short:'Lightest structural die casting alloy.',
+      process:'Hot or cold chamber', melt:'598–621 °C', uts:'230 MPa', yield:'160 MPa', elongation:'3%',
+      density:'1.81 g/cm³', corrosion:'Fair (needs coating)', castability:'Good', minWall:'1.3 mm', machinability:'Excellent',
+      notes:'AZ91D is the workhorse Mg alloy. Density 35% lower than aluminum. Used for laptop housings, steering wheels, hand tools. Requires protective atmosphere during melting. Hot chamber process possible with iron-free equipment.',
+      radar:[5,9,7,8,6,9] },
+    { name:'Copper Alloy 858', tag:'Cold chamber', short:'Highest strength die casting alloy; excellent wear resistance.',
+      process:'Cold chamber', melt:'900–1000 °C', uts:'655 MPa', yield:'345 MPa', elongation:'15%',
+      density:'8.5 g/cm³', corrosion:'Excellent', castability:'Fair', minWall:'2.5 mm', machinability:'Fair',
+      notes:'Silicon brass (Alloy 858) is the most common copper die casting alloy. High melting point dramatically shortens die life (20K–50K shots vs. 200K for Al). Excellent corrosion resistance. Used for plumbing, valves, electrical connectors.',
+      radar:[10,5,4,6,5,6] },
+    { name:'Aluminum A360', tag:'Cold chamber', short:'Better corrosion resistance than A380; higher ductility.',
+      process:'Cold chamber', melt:'574–632 °C', uts:'315 MPa', yield:'170 MPa', elongation:'5%',
+      density:'2.63 g/cm³', corrosion:'Very good', castability:'Good', minWall:'1.0 mm', machinability:'Good',
+      notes:'A360 offers improved pressure tightness and corrosion resistance vs A380, at slightly lower strength. Preferred for fluid-handling components and parts exposed to salt environments.',
+      radar:[7,8,6,8,7,5] },
+];
+
+const RADAR_AXES = ['Strength','Corrosion Resist.','Castability','Wt. Efficiency','Detail Resolution','Machinability'];
+const RADAR_COLORS = ['#38bdf8','#4ade80','#a78bfa','#f59e0b','#f87171','#34d399'];
+let radarActive = new Set([0,1]);
+
+(function buildAlloys() {
+    const grid = document.getElementById('alloy-grid');
+    const detail = document.getElementById('alloy-detail');
+    ALLOYS.forEach((a,i) => {
+        const card = document.createElement('div');
+        card.className = 'alloy-card';
+        card.innerHTML = `<div class="tag">${a.tag}</div><h3>${a.name}</h3><p>${a.short}</p>`;
+        card.addEventListener('click', () => {
+            document.querySelectorAll('.alloy-card').forEach(c=>c.classList.remove('selected'));
+            card.classList.add('selected');
+            detail.style.display='block';
+            detail.innerHTML = `<h3>${a.name}</h3><p style="margin-bottom:10px;color:#94a3b8;">${a.notes}</p>
+            <div class="alloy-spec-row">
+                ${[['Process',a.process],['Melt Range',a.melt],['UTS',a.uts],['Yield',a.yield],
+                   ['Elongation',a.elongation],['Density',a.density],['Corrosion',a.corrosion],
+                   ['Castability',a.castability],['Min Wall',a.minWall],['Machinability',a.machinability]]
+                  .map(([n,v])=>`<div class="alloy-spec"><div class="spec-name">${n}</div><div class="spec-val">${v}</div></div>`).join('')}
+            </div>`;
+        });
+        grid.appendChild(card);
+    });
+})();
+
+function buildRadarLegend() {
+    const leg = document.getElementById('radar-legend');
+    leg.innerHTML='';
+    ALLOYS.forEach((a,i)=>{
+        const row=document.createElement('div');
+        row.className='radar-row'+(radarActive.has(i)?' active':'');
+        row.innerHTML=`<div class="radar-swatch" style="background:${RADAR_COLORS[i]};opacity:${radarActive.has(i)?1:0.3};"></div><span>${a.name}</span>`;
+        row.addEventListener('click',()=>{
+            if(radarActive.has(i)) radarActive.delete(i); else radarActive.add(i);
+            buildRadarLegend(); drawRadar();
+        });
+        leg.appendChild(row);
+    });
+    const note=document.createElement('p');
+    note.style.cssText='font-size:0.76rem;color:#475569;margin-top:12px;line-height:1.5;';
+    note.textContent='Click to toggle alloys. Properties normalized 0–10. Axes: NADCA relative ratings.';
+    leg.appendChild(note);
+}
+
+function drawRadar() {
+    const canvas=document.getElementById('radar-canvas');
+    if(!canvas) return;
+    const ctx=canvas.getContext('2d');
+    const W=canvas.width, H=canvas.height;
+    const cx=W/2, cy=H/2+10, R=110;
+    const N=RADAR_AXES.length;
+
+    ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+
+    // grid rings
+    [2,4,6,8,10].forEach(r=>{
+        ctx.beginPath();
+        for(let i=0;i<N;i++){
+            const a=Math.PI*2*i/N-Math.PI/2;
+            const x=cx+Math.cos(a)*(R*r/10);
+            const y=cy+Math.sin(a)*(R*r/10);
+            i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+        }
+        ctx.closePath();
+        ctx.strokeStyle=r===10?'#334155':'#1e293b'; ctx.lineWidth=1; ctx.stroke();
+    });
+
+    // spokes + labels
+    ctx.strokeStyle='#334155'; ctx.lineWidth=1;
+    RADAR_AXES.forEach((label,i)=>{
+        const a=Math.PI*2*i/N-Math.PI/2;
+        ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R); ctx.stroke();
+        ctx.fillStyle='#94a3b8'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+        const lx=cx+Math.cos(a)*(R+18), ly=cy+Math.sin(a)*(R+18)+3;
+        ctx.fillText(label,lx,ly);
+    });
+
+    // data polygons
+    ALLOYS.forEach((a,i)=>{
+        if(!radarActive.has(i)) return;
+        ctx.save();
+        ctx.beginPath();
+        a.radar.forEach((v,j)=>{
+            const ang=Math.PI*2*j/N-Math.PI/2;
+            const x=cx+Math.cos(ang)*(R*v/10);
+            const y=cy+Math.sin(ang)*(R*v/10);
+            j?ctx.lineTo(x,y):ctx.moveTo(x,y);
+        });
+        ctx.closePath();
+        ctx.fillStyle=RADAR_COLORS[i]+'33'; ctx.fill();
+        ctx.strokeStyle=RADAR_COLORS[i]; ctx.lineWidth=2; ctx.stroke();
+        ctx.restore();
+    });
+}
+
+buildRadarLegend();
+// don't draw until tab is visible — will draw on tab switch
+
+/* ═══════════════════════════════════════════
+   TAB 3 — DESIGN GUIDELINES (canvas sketches)
+═══════════════════════════════════════════ */
+const GUIDELINES = [
+    { title:'Draft Angles (External vs. Internal)',
+      desc:'NADCA recommends 0.5–1° draft on external surfaces and 1–2° on internal/core surfaces. Less than sand casting because steel dies are stiffer and smoother than sand. Deeper ribs need proportionally more draft.',
+      draw(ctx,W,H){
+        ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+        const mid=W/2;
+
+        // External — good
+        ctx.fillStyle='#1e3a5f'; ctx.strokeStyle='#38bdf8'; ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.moveTo(mid-70,20); ctx.lineTo(mid-52,100); ctx.lineTo(mid+52,100); ctx.lineTo(mid+70,20); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle='#38bdf8'; ctx.font='9px Segoe UI'; ctx.textAlign='center'; ctx.fillText('External 0.5–1°',mid,115);
+        // angle marker
+        ctx.strokeStyle='#7dd3fc'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(mid+70,20); ctx.lineTo(mid+70,50); ctx.stroke();
+        ctx.fillStyle='#7dd3fc'; ctx.font='9px Segoe UI'; ctx.fillText('0.5–1°',mid+80,36);
+
+        // Internal bore — good
+        ctx.fillStyle='#0f172a';
+        ctx.beginPath(); ctx.moveTo(mid-22,20); ctx.lineTo(mid-12,95); ctx.lineTo(mid+12,95); ctx.lineTo(mid+22,20); ctx.closePath(); ctx.fill();
+        ctx.strokeStyle='#f59e0b'; ctx.lineWidth=1; ctx.stroke();
+        ctx.fillStyle='#f59e0b'; ctx.font='9px Segoe UI'; ctx.fillText('Internal 1–2°',mid,130);
+
+        ctx.fillStyle='#64748b'; ctx.font='9px Segoe UI'; ctx.fillText('Die cavity cross-section',mid,H-6);
+      }
+    },
+    { title:'Uniform Wall Thickness & Ribs',
+      desc:'NADCA rule: adjacent wall thickness ratio ≤ 2:1. Ribs add stiffness without heavy sections — rib thickness = 0.6–0.8 × wall; rib height ≤ 5× wall. Abrupt thickness change → porosity and sink marks.',
+      draw(ctx,W,H){
+        ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+        // BAD — abrupt step
+        ctx.fillStyle='#7f1d1d';
+        ctx.fillRect(10,40,55,15); ctx.fillRect(65,25,40,45); ctx.fillRect(105,40,55,15);
+        ctx.fillStyle='#ef4444'; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+        ctx.fillText('Avoid: abrupt step → shrink',100,75);
+        // hot spot
+        ctx.fillStyle='rgba(239,68,68,0.4)'; ctx.beginPath(); ctx.arc(65,47,10,0,Math.PI*2); ctx.fill();
+
+        // GOOD — gradual transition + rib
+        const y0=100;
+        ctx.fillStyle='#14532d';
+        ctx.beginPath();
+        ctx.moveTo(10,y0); ctx.lineTo(10,y0+15); ctx.lineTo(55,y0+15);
+        ctx.lineTo(70,y0-8); ctx.lineTo(100,y0-8); ctx.lineTo(115,y0+15); ctx.lineTo(170,y0+15); ctx.lineTo(170,y0); ctx.closePath();
+        ctx.fill();
+        // rib on top
+        ctx.fillStyle='#166534';
+        ctx.fillRect(82,y0-28,14,20);
+        ctx.strokeStyle='#4ade80'; ctx.lineWidth=1; ctx.strokeRect(82,y0-28,14,20);
+        ctx.fillStyle='#4ade80'; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+        ctx.fillText('Rib t=0.7×wall',100,y0-32);
+        ctx.fillText('Tapered transition',100,y0+30);
+        ctx.fillStyle='#64748b'; ctx.fillText('Wall-to-wall ratio ≤ 2:1',100,H-6);
+      }
+    },
+    { title:'Parting Line & Flash',
+      desc:'Flash forms at the parting line — thin metal fins caused by die opening. NADCA allows flash up to 0.1 mm (Zn) or 0.4 mm (Al) before trimming. Place parting line at maximum cross-section; keep it planar to minimize flash.',
+      draw(ctx,W,H){
+        ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+        const cx=W/2, cy=H/2;
+        // cope half
+        ctx.fillStyle='#1e3a5f'; ctx.strokeStyle='#334155'; ctx.lineWidth=1;
+        ctx.fillRect(cx-70,cy-60,140,55); // upper die
+        ctx.fillStyle='#1e293b'; ctx.fillRect(cx-40,cy-60,80,50); // part cavity upper
+        // drag half
+        ctx.fillStyle='#1e3a5f';
+        ctx.fillRect(cx-70,cy+5,140,55); // lower die
+        ctx.fillStyle='#1e293b'; ctx.fillRect(cx-40,cy,80,50); // part cavity lower
+
+        // part
+        ctx.fillStyle='#374151';
+        ctx.beginPath(); ctx.roundRect(cx-38,cy-9,76,18,3); ctx.fill();
+
+        // parting line
+        ctx.strokeStyle='#fbbf24'; ctx.lineWidth=2; ctx.setLineDash([5,3]);
+        ctx.beginPath(); ctx.moveTo(cx-80,cy); ctx.lineTo(cx+80,cy); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle='#fbbf24'; ctx.font='9px Segoe UI'; ctx.textAlign='right';
+        ctx.fillText('Parting line',cx-82,cy-3);
+
+        // flash extrusion (bad)
+        ctx.fillStyle='#ef4444';
+        ctx.fillRect(cx+38,cy-1,20,2);
+        ctx.fillRect(cx-58,cy-1,20,2);
+        ctx.fillStyle='#f87171'; ctx.font='9px Segoe UI'; ctx.textAlign='left';
+        ctx.fillText('Flash (to be trimmed)',cx+60,cy+3);
+
+        ctx.fillStyle='#64748b'; ctx.textAlign='center';
+        ctx.fillText('Flash at parting line — max 0.4 mm (Al), 0.1 mm (Zn)',cx,H-6);
+      }
+    },
+    { title:'Gates & Runners',
+      desc:'Gate velocity = 20–60 m/s (Al); 30–50 m/s (Zn). Too slow → cold shut; too fast → gas entrapment and erosion. Fan gates distribute flow; overflow wells collect first-shot cold metal and gas.',
+      draw(ctx,W,H){
+        ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+        const cx=W/2;
+        // part cavity
+        ctx.fillStyle='#1e3a5f'; ctx.strokeStyle='#38bdf8'; ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.roundRect(cx-70,50,140,90,6); ctx.fill(); ctx.stroke();
+        ctx.fillStyle='#38bdf8'; ctx.font='9px Segoe UI'; ctx.textAlign='center'; ctx.fillText('Part cavity',cx,100);
+
+        // runner
+        ctx.fillStyle='#78350f'; ctx.strokeStyle='#f59e0b'; ctx.lineWidth=1.5;
+        ctx.fillRect(cx-10,145,20,40);
+        ctx.strokeRect(cx-10,145,20,40);
+        ctx.fillStyle='#f59e0b'; ctx.fillText('Runner',cx,200);
+
+        // fan gate
+        ctx.fillStyle='#92400e'; ctx.strokeStyle='#fbbf24'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(cx-10,145); ctx.lineTo(cx-50,140); ctx.lineTo(cx-70,140); ctx.lineTo(cx-70,145); ctx.lineTo(cx+70,145); ctx.lineTo(cx+70,140); ctx.lineTo(cx+50,140); ctx.lineTo(cx+10,145); ctx.closePath();
+        ctx.fill(); ctx.stroke();
+        ctx.fillStyle='#fbbf24'; ctx.fillText('Fan gate',cx,135);
+
+        // overflow wells
+        ctx.fillStyle='#166534'; ctx.strokeStyle='#4ade80'; ctx.lineWidth=1;
+        [cx-85, cx+65].forEach(x=>{ ctx.beginPath(); ctx.roundRect(x,55,18,30,3); ctx.fill(); ctx.stroke(); });
+        ctx.fillStyle='#4ade80'; ctx.fillText('Overflow wells',cx,H-6);
+
+        // flow arrows inside cavity
+        ctx.strokeStyle='rgba(56,189,248,0.5)'; ctx.lineWidth=1.5;
+        [[cx,140],[cx-30,120],[cx+30,120]].forEach(([x,y])=>{
+            ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x,y-20); ctx.stroke();
+        });
+      }
+    },
+    { title:'Cores & Undercuts',
+      desc:'Side cores (actions) allow limited undercuts by pulling perpendicular to ejection. NADCA rule: avoid undercuts when possible; if needed, use side cores or collapsible cores. Side cores add cost and cycle time.',
+      draw(ctx,W,H){
+        ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+        const cx=W/2, cy=H/2;
+
+        // Part with side hole
+        ctx.fillStyle='#2d3748'; ctx.strokeStyle='#64748b'; ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.roundRect(cx-55,cy-45,110,90,6); ctx.fill(); ctx.stroke();
+
+        // side core (left)
+        ctx.fillStyle='#78350f'; ctx.strokeStyle='#f59e0b'; ctx.lineWidth=2;
+        ctx.fillRect(20,cy-8,cx-55,16); ctx.strokeRect(20,cy-8,cx-55,16);
+        // side core (right)
+        ctx.fillRect(cx+55,cy-8,W-cx-75,16); ctx.strokeRect(cx+55,cy-8,W-cx-75,16);
+
+        // resulting hole
+        ctx.fillStyle='#0f172a';
+        ctx.fillRect(cx-55,cy-8,110,16);
+
+        // pull arrows
+        ctx.strokeStyle='#fbbf24'; ctx.lineWidth=2;
+        [[30,cy,true],[W-30,cy,false]].forEach(([x,y,left])=>{
+            ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+(left?-12:12),y); ctx.stroke();
+            ctx.fillStyle='#fbbf24'; ctx.beginPath();
+            ctx.moveTo(x+(left?-12:12),y); ctx.lineTo(x+(left?-4:4),y-5); ctx.lineTo(x+(left?-4:4),y+5); ctx.closePath(); ctx.fill();
+        });
+        ctx.fillStyle='#f59e0b'; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+        ctx.fillText('Side core pulls laterally before ejection',cx,H-6);
+        ctx.fillStyle='#fbbf24'; ctx.fillText('← pull',40,cy-12); ctx.fillText('pull →',W-50,cy-12);
+      }
+    },
+    { title:'Boss & Hole Design',
+      desc:'Bosses locate fasteners. NADCA: boss OD/ID ratio = 2:1 (max); boss height ≤ 3× OD. Holes formed by die pins are cheaper than drilled holes. Blind holes limited to 2× diameter depth; through holes preferred.',
+      draw(ctx,W,H){
+        ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+        const cx=W/2;
+
+        // base wall
+        ctx.fillStyle='#1e3a5f'; ctx.fillRect(20,H-50,W-40,20);
+
+        // GOOD boss
+        const bx=cx-60, bh=70, br=18;
+        ctx.fillStyle='#166534'; ctx.strokeStyle='#4ade80'; ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.roundRect(bx-br,H-50-bh,br*2,bh,3); ctx.fill(); ctx.stroke();
+        // hole in boss
+        ctx.fillStyle='#0f172a';
+        ctx.fillRect(bx-7,H-50-bh+5,14,bh-10);
+        ctx.fillStyle='#4ade80'; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+        ctx.fillText('OD/ID=2:1 ✓',bx,H-55-bh);
+        ctx.fillText('h≤3×OD ✓',bx,H-45-bh);
+
+        // BAD boss — too tall, thin walls
+        const bx2=cx+60, bh2=110, br2=12;
+        ctx.fillStyle='#7f1d1d'; ctx.strokeStyle='#ef4444'; ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.roundRect(bx2-br2,H-50-bh2,br2*2,bh2,3); ctx.fill(); ctx.stroke();
+        ctx.fillStyle='#0f172a'; ctx.fillRect(bx2-7,H-50-bh2+5,14,bh2-10);
+        ctx.fillStyle='#f87171'; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+        ctx.fillText('Too tall ✗',bx2,H-55-bh2);
+        ctx.fillText('Thin wall ✗',bx2,H-45-bh2);
+
+        ctx.fillStyle='#64748b'; ctx.fillText('Boss design: proportion controls fill and porosity',cx,H-6);
+      }
+    },
+    { title:'Porosity & Vacuum Die Casting',
+      desc:'High-velocity injection traps air → gas porosity. NADCA "porosity grades" rate acceptance. Vacuum die casting (< 80 mbar in cavity) dramatically reduces porosity, enabling T6 heat treatment and structural applications.',
+      draw(ctx,W,H){
+        ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+        const cx=W/2;
+
+        // Conventional — with porosity
+        ctx.fillStyle='#2d3748'; ctx.strokeStyle='#334155'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.roundRect(15,20,cx-25,H-50,6); ctx.fill(); ctx.stroke();
+        ctx.fillStyle='#ef4444'; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+        ctx.fillText('Conventional',cx/2,H-18);
+        ctx.fillText('(gas entrapped)',cx/2,H-8);
+        // pores
+        [[55,60,6],[80,90,4],[45,110,5],[90,130,7],[60,150,4],[75,70,5]].forEach(([x,y,r])=>{
+            ctx.fillStyle='rgba(15,23,42,0.8)'; ctx.strokeStyle='#475569'; ctx.lineWidth=0.8;
+            ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); ctx.stroke();
+        });
+
+        // Vacuum — clean
+        ctx.fillStyle='#1a3a2a'; ctx.strokeStyle='#4ade80'; ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.roundRect(cx+10,20,cx-25,H-50,6); ctx.fill(); ctx.stroke();
+        ctx.fillStyle='#4ade80'; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+        ctx.fillText('Vacuum die casting',cx+(cx-25)/2+10,H-18);
+        ctx.fillText('(< 80 mbar)',cx+(cx-25)/2+10,H-8);
+        // vacuum line icon
+        ctx.strokeStyle='#86efac'; ctx.lineWidth=1.5; ctx.setLineDash([3,2]);
+        ctx.beginPath(); ctx.moveTo(cx+10,50); ctx.lineTo(cx+10,H-30); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle='#86efac'; ctx.fillText('←vacuum',cx+30,55);
+
+        ctx.fillStyle='#fbbf24'; ctx.textAlign='center'; ctx.font='10px Segoe UI';
+        ctx.fillText('Porosity comparison at same magnification',cx,12);
+      }
+    },
+];
+
+(function() {
+    const grid = document.getElementById('guide-grid');
+    GUIDELINES.forEach(g=>{
+        const item=document.createElement('div');
+        item.className='guide-item';
+        const c=document.createElement('canvas');
+        c.width=310; c.height=180; c.style.width='100%';
+        item.appendChild(c);
+        const body=document.createElement('div');
+        body.className='guide-body';
+        body.innerHTML=`<h3>${g.title}</h3><p>${g.desc}</p>`;
+        item.appendChild(body);
+        grid.appendChild(item);
+        const ctx=c.getContext('2d');
+        ctx.font='11px Segoe UI'; ctx.textAlign='left';
+        g.draw(ctx,c.width,c.height);
+    });
+})();
+
+/* ═══════════════════════════════════════════
+   TAB 4 — PROCESS ANIMATION
+═══════════════════════════════════════════ */
+const HOT_STAGES = [
+    { name:'Idle — Die Closed',
+      desc:'The die is clamped shut under high tonnage (10–4000 tons). The gooseneck and plunger sit in the molten metal bath. The furnace keeps metal at controlled temperature (385–395 °C for Zn).' },
+    { name:'Port Open — Metal Enters Gooseneck',
+      desc:'The plunger rises, opening the inlet port. Molten metal flows under atmospheric pressure from the furnace pot up into the gooseneck channel, filling it ready for injection.' },
+    { name:'Injection — Plunger Strokes Down',
+      desc:'The hydraulic plunger drives downward, closing the inlet port and forcing metal up through the nozzle at 30–50 m/s. Metal fills the die cavity in 10–100 ms.' },
+    { name:'Die Filling & Intensification',
+      desc:'Metal fills the cavity and overflows into overflow wells. Intensification pressure (2nd-phase) is applied — a secondary plunger squeeze compresses the solidifying metal to reduce porosity.' },
+    { name:'Solidification',
+      desc:'Metal solidifies in ~1–3 s. The die acts as a heat sink. Cooling channels in the die remove heat rapidly, enabling cycle times of 2–6 s. Die temperature is controlled at 180–220 °C.' },
+    { name:'Die Opens & Part Ejection',
+      desc:'The moving half retracts. Ejector pins push the part and runner out of the die. The shot — part + runner + overflow — drops into a trim press. The die is lubricated and the cycle repeats.' },
+];
+
+const COLD_STAGES = [
+    { name:'Die Closed & Locked',
+      desc:'The die halves clamp together under high tonnage. The cold-chamber shot sleeve (separate from the furnace) is open and empty, waiting for metal.' },
+    { name:'Metal Ladled into Shot Sleeve',
+      desc:'A robot ladle or automatic dosing furnace pours a precise shot of molten metal (580–620 °C for Al) into the horizontal shot sleeve. This step adds 10–30 s to the cycle vs. hot chamber.' },
+    { name:'Plunger Advances — Slow Shot Phase',
+      desc:'The hydraulic plunger moves slowly (~0.1–0.5 m/s) to push air out of the sleeve ahead of the metal and avoid turbulence before the gate. This "slow shot" is critical for reducing porosity.' },
+    { name:'Fast Shot — Cavity Fill',
+      desc:'As metal reaches the gate, plunger velocity jumps to 3–8 m/s (gate velocity 20–60 m/s). The cavity fills in 10–80 ms. Overflow wells collect cold first-shot metal and gas.' },
+    { name:'Intensification & Solidification',
+      desc:'A secondary pressure spike (intensification) compresses the solidifying casting to feed shrinkage and collapse porosity. Metal solidifies in 2–20 s depending on section thickness and alloy.' },
+    { name:'Die Opens, Part Ejected, Sleeve Cleared',
+      desc:'The moving die half opens. Ejector pins push the casting out. The biscuit (metal remaining in sleeve) is ejected and recycled. The sleeve and die are lubricated; cycle repeats.' },
+];
+
+let currentMode = 'hot';
+let currentStage = 0;
+let playTimer = null;
+let isPlaying = false;
+
+function getStages() { return currentMode === 'hot' ? HOT_STAGES : COLD_STAGES; }
+
+function buildStageList() {
+    const list = document.getElementById('stage-list');
+    list.innerHTML = '';
+    getStages().forEach((s, i) => {
+        const item = document.createElement('div');
+        item.className = 'stage-item' + (i === currentStage ? ' active' : i < currentStage ? ' done' : '');
+        item.innerHTML = `<div class="stage-dot"></div><span>${s.name}</span>`;
+        item.addEventListener('click', () => { currentStage = i; stopPlay(); drawFrame(); });
+        list.appendChild(item);
+    });
+    document.getElementById('anim-desc').textContent = getStages()[currentStage].desc;
+}
+
+function updateStageList() {
+    document.querySelectorAll('.stage-item').forEach((item, i) => {
+        item.className = 'stage-item' + (i === currentStage ? ' active' : i < currentStage ? ' done' : '');
+    });
+    document.getElementById('anim-desc').textContent = getStages()[currentStage].desc;
+}
+
+function stopPlay() {
+    if (playTimer) clearInterval(playTimer);
+    isPlaying = false;
+    document.getElementById('btn-play').textContent = '▶ Play';
+}
+
+function resetAnim() { currentStage = 0; stopPlay(); buildStageList(); }
+
+/* ── HOT CHAMBER DRAWING ── */
+function drawHot(ctx, W, H, stage) {
+    ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+
+    const ST = '#374151', SS = '#4b5563';       // steel fill / stroke
+    const FX = '#2d3a4a';                        // fixed-half accent
+    const LIQ = '#f59e0b', SOL = '#92400e';
+    const PLU = '#1e40af', PLU2 = '#2563eb';
+
+    // ── Furnace ──────────────────────────────────
+    const DX = 22, FW = 148, FH = 108;
+    const FY = H - FH - 28;                     // top of furnace box
+    ctx.fillStyle = '#1e293b'; ctx.strokeStyle = '#475569'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.roundRect(DX, FY, FW, FH, 6); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = LIQ;
+    ctx.fillRect(DX + 5, FY + 22, FW - 10, FH - 27); // molten metal
+
+    // ── Gooseneck geometry ────────────────────────
+    const GX = DX + FW / 2;  // 96 — gooseneck axis
+
+    // Elbow pivot: corner where vertical becomes horizontal
+    const EX = GX + 44, EY = FY - 36, ER = 44;
+    // Top of horizontal tube
+    const HTY = EY - ER;      // y-coord of top face of horizontal tube
+    const HTH = 18;           // tube height
+
+    // ── Die layout ────────────────────────────────
+    // Fixed half left edge = where horizontal tube ends
+    const DIE_X  = 300;       // fixed half left x
+    const HALF_W = 88;        // width of each die half
+    const DIE_H  = 185;
+    const DIE_Y  = 28;
+    const PL     = DIE_X + HALF_W;  // parting line x = 388
+
+    const dieOpen  = stage >= 5;
+    const movingX  = dieOpen ? PL + 82 : PL;  // moving half left edge
+
+    // ── Cavity ───────────────────────────────────
+    const CAV_HW = 36;                          // half-width each side of PL
+    const CAV_H  = 98;
+    const CAV_X  = PL - CAV_HW;                // 352
+    const CAV_Y  = DIE_Y + (DIE_H - CAV_H) / 2; // vertically centred in die
+    const CAV_CY = CAV_Y + CAV_H / 2;
+
+    // ── Sprue / gate channel in fixed half ───────
+    // Horizontal tube centre y:
+    const H_TUBE_CY = HTY + HTH / 2;
+    // Draw sprue (filled if metal is present)
+    const sprueColor = stage >= 1 ? LIQ : '#0f172a';
+    ctx.fillStyle = sprueColor;
+    ctx.fillRect(DIE_X + 3, H_TUBE_CY - 5, CAV_X - DIE_X - 3, 10); // horizontal in fixed half
+    // If tube centre doesn't align with cavity centre, add vertical runner
+    if (Math.abs(H_TUBE_CY - CAV_CY) > 4) {
+        const ry  = Math.min(H_TUBE_CY, CAV_CY) - 1;
+        const rh  = Math.abs(H_TUBE_CY - CAV_CY) + 2;
+        ctx.fillRect(CAV_X - 5, ry, 10, rh);
+    }
+
+    // ── Fixed half ───────────────────────────────
+    ctx.fillStyle = FX; ctx.strokeStyle = SS; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.roundRect(DIE_X, DIE_Y, HALF_W, DIE_H, 4); ctx.fill(); ctx.stroke();
+
+    // ── Moving half ──────────────────────────────
+    ctx.fillStyle = ST; ctx.strokeStyle = SS; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.roundRect(movingX, DIE_Y, HALF_W, DIE_H, 4); ctx.fill(); ctx.stroke();
+
+    // ── Parting-line seam (visible when closed) ──
+    if (!dieOpen) {
+        ctx.save();
+        ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 3]);
+        ctx.beginPath(); ctx.moveTo(PL, DIE_Y + 6); ctx.lineTo(PL, DIE_Y + DIE_H - 6); ctx.stroke();
+        ctx.restore();
+    }
+
+    // ── Cavity fill or ejected part ──────────────
+    if (!dieOpen) {
+        const cavColor = stage >= 3 ? (stage >= 5 ? SOL : LIQ) : '#0f172a';
+        ctx.fillStyle = cavColor;
+        ctx.beginPath(); ctx.roundRect(CAV_X, CAV_Y, CAV_HW * 2, CAV_H, 3); ctx.fill();
+        ctx.strokeStyle = '#4b5563'; ctx.lineWidth = 1;
+        ctx.strokeRect(CAV_X, CAV_Y, CAV_HW * 2, CAV_H);
+
+        // Overflow wells (top & bottom, centred on parting line)
+        [CAV_Y - 14, CAV_Y + CAV_H + 2].forEach(wy => {
+            ctx.fillStyle = stage >= 3 ? LIQ : '#0f172a';
+            ctx.beginPath(); ctx.roundRect(PL - 18, wy, 36, 12, 2); ctx.fill();
+            ctx.strokeStyle = '#4b5563'; ctx.lineWidth = 0.8;
+            ctx.strokeRect(PL - 18, wy, 36, 12);
+        });
+    } else {
+        // Part sitting between the open halves
+        ctx.fillStyle = SOL;
+        ctx.beginPath(); ctx.roundRect(CAV_X + 5, CAV_Y + 10, CAV_HW * 2 - 10, CAV_H - 20, 3); ctx.fill();
+        ctx.strokeStyle = '#a16207'; ctx.lineWidth = 1; ctx.stroke();
+    }
+
+    // ── Horizontal gooseneck tube ─────────────────
+    ctx.fillStyle = ST;
+    ctx.fillRect(EX, HTY, DIE_X - EX, HTH);
+    ctx.strokeStyle = SS; ctx.lineWidth = 1.5;
+    ctx.strokeRect(EX, HTY, DIE_X - EX, HTH);
+    // bore (show metal if stage >= 1)
+    ctx.fillStyle = stage >= 1 ? LIQ : '#0f172a';
+    ctx.fillRect(EX + 2, HTY + 3, DIE_X - EX - 2, HTH - 6);
+
+    // ── Elbow (quarter-arc) ───────────────────────
+    ctx.save();
+    ctx.lineWidth = 20; ctx.strokeStyle = ST;
+    ctx.beginPath(); ctx.arc(EX, EY, ER, Math.PI, Math.PI * 1.5); ctx.stroke();
+    ctx.lineWidth = 12; ctx.strokeStyle = stage >= 1 ? LIQ : '#0f172a';
+    ctx.stroke();
+    ctx.lineWidth = 22; ctx.strokeStyle = SS;
+    ctx.beginPath(); ctx.arc(EX, EY, ER + 1, Math.PI, Math.PI * 1.5); ctx.stroke();
+    ctx.restore();
+
+    // ── Vertical gooseneck tube (in furnace) ──────
+    ctx.fillStyle = ST; ctx.strokeStyle = SS; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.roundRect(GX - 11, FY - 6, 22, FH + 6, 3); ctx.fill(); ctx.stroke();
+    // bore + metal in bore
+    ctx.fillStyle = stage >= 1 && stage < 2 ? LIQ : '#0f172a';
+    ctx.fillRect(GX - 5, FY + 2, 10, FH - 35);
+    // inlet port (open = liquid visible below plunger)
+    if (stage < 2) {
+        ctx.fillStyle = LIQ;
+        ctx.fillRect(GX - 5, FY + FH - 32, 10, 25);
+    }
+
+    // ── Plunger ───────────────────────────────────
+    // Down (injecting) at stage >= 2, up otherwise
+    const PY = stage >= 2 ? FY + FH - 22 : FY + FH - 55;
+    ctx.fillStyle = PLU;
+    ctx.fillRect(GX - 6, FY - 55, 12, PY - (FY - 55));
+    ctx.fillStyle = PLU2;
+    ctx.fillRect(GX - 9, PY, 18, 14);
+
+    // ── Nozzle at die face ────────────────────────
+    ctx.fillStyle = ST;
+    ctx.fillRect(DIE_X - 10, HTY - 1, 14, HTH + 2);
+    ctx.strokeStyle = SS; ctx.lineWidth = 1;
+    ctx.strokeRect(DIE_X - 10, HTY - 1, 14, HTH + 2);
+
+    // ── Ejector pins ─────────────────────────────
+    if (dieOpen) {
+        ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 2;
+        [[movingX + 14, CAV_Y + 24], [movingX + 14, CAV_Y + CAV_H - 24]].forEach(([x, y]) => {
+            ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - 24, y); ctx.stroke();
+            ctx.fillStyle = '#4ade80';
+            ctx.beginPath(); ctx.moveTo(x - 24, y); ctx.lineTo(x - 17, y - 5); ctx.lineTo(x - 17, y + 5); ctx.closePath(); ctx.fill();
+        });
+    }
+
+    // ── Labels ────────────────────────────────────
+    ctx.fillStyle = '#64748b'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'center';
+    ctx.fillText('Furnace / pot', DX + FW / 2, H - 8);
+    ctx.fillText('Gooseneck', EX + (DIE_X - EX) / 2, HTY - 8);
+    ctx.fillText('Fixed half',  DIE_X + HALF_W / 2, DIE_Y + DIE_H + 16);
+    ctx.fillText('Moving half', movingX + HALF_W / 2, DIE_Y + DIE_H + 16);
+    ctx.fillText('Plunger', GX - 26, PY - 10);
+    if (!dieOpen) {
+        ctx.fillStyle = '#fbbf2488'; ctx.font = '9px Segoe UI';
+        ctx.fillText('PL', PL + 16, DIE_Y + 14);
+    }
+
+    ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 11px Segoe UI';
+    ctx.fillText(`Stage ${stage + 1}: ${getStages()[stage].name}`, W / 2, 18);
+}
+
+/* ── COLD CHAMBER DRAWING ── */
+function drawCold(ctx, W, H, stage) {
+    ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+
+    const ST = '#374151', SS = '#4b5563';
+    const FX = '#2d3a4a';                       // fixed-half accent
+    const LIQ = '#38bdf8', SOL = '#1e3a5f';
+
+    // ── Die layout ────────────────────────────────
+    const FIXED_X = 368;     // left edge of fixed (cover) half
+    const HALF_W  = 88;      // width of each half
+    const DIE_H   = 170;
+    const DIE_Y   = (H - DIE_H) / 2 - 14;
+    const PL      = FIXED_X + HALF_W;   // parting line x = 456
+
+    const dieOpen = stage >= 5;
+    const movingX = dieOpen ? PL + 88 : PL;   // ← KEY FIX: closed = PL, not PL+HALF_W
+
+    // ── Cavity (centred on parting line) ─────────
+    const CAV_HW = 34;                         // half-width each side of PL
+    const CAV_H  = 100;
+    const CAV_X  = PL - CAV_HW;               // 422
+    const CAV_Y  = DIE_Y + (DIE_H - CAV_H) / 2;
+    const CAV_CY = CAV_Y + CAV_H / 2;
+
+    // ── Shot sleeve ───────────────────────────────
+    const SLX = 26;
+    const SLY = H / 2 + 4;    // sleeve centre y
+    const SL_R = 16;           // half-height
+    const SL_LEN = FIXED_X - SLX;   // sleeve spans SLX → FIXED_X
+
+    // Draw sleeve
+    ctx.fillStyle = ST; ctx.strokeStyle = SS; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.roundRect(SLX, SLY - SL_R, SL_LEN, SL_R * 2, 4); ctx.fill(); ctx.stroke();
+    // bore
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(SLX + 4, SLY - SL_R + 4, SL_LEN - 4, (SL_R - 4) * 2);
+
+    // ── Sprue / gate in fixed half ─────────────────
+    // Connects sleeve bore (at FIXED_X, SLY) horizontally to cavity (at CAV_X, CAV_CY)
+    const sprueColor = stage >= 2 ? LIQ : '#0f172a';
+    ctx.fillStyle = sprueColor;
+    ctx.fillRect(FIXED_X + 3, SLY - 5, CAV_X - FIXED_X - 3, 10);  // horizontal sprue
+    // Vertical runner if sleeve centre ≠ cavity centre
+    if (Math.abs(SLY - CAV_CY) > 4) {
+        const ry = Math.min(SLY - 5, CAV_CY - 5);
+        const rh = Math.abs(SLY - CAV_CY) + 10;
+        ctx.fillRect(CAV_X - 4, ry, 8, rh);
+    }
+
+    // ── Fixed half ───────────────────────────────
+    ctx.fillStyle = FX; ctx.strokeStyle = SS; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.roundRect(FIXED_X, DIE_Y, HALF_W, DIE_H, 4); ctx.fill(); ctx.stroke();
+
+    // Gate aperture (slot where sleeve meets die)
+    ctx.fillStyle = stage >= 2 ? LIQ : '#162032';
+    ctx.fillRect(FIXED_X - 3, SLY - 6, 8, 12);
+
+    // ── Moving half ──────────────────────────────
+    ctx.fillStyle = ST; ctx.strokeStyle = SS; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.roundRect(movingX, DIE_Y, HALF_W + 8, DIE_H, 4); ctx.fill(); ctx.stroke();
+
+    // ── Parting-line seam (closed only) ───────────
+    if (!dieOpen) {
+        ctx.save();
+        ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 3]);
+        ctx.beginPath(); ctx.moveTo(PL, DIE_Y + 6); ctx.lineTo(PL, DIE_Y + DIE_H - 6); ctx.stroke();
+        ctx.restore();
+    }
+
+    // ── Cavity fill or ejected part ──────────────
+    if (!dieOpen) {
+        const fill = stage >= 4 ? SOL : stage >= 3 ? LIQ : null;
+        ctx.fillStyle = fill || '#0f172a';
+        ctx.beginPath(); ctx.roundRect(CAV_X, CAV_Y, CAV_HW * 2, CAV_H, 3); ctx.fill();
+        ctx.strokeStyle = '#4b5563'; ctx.lineWidth = 1;
+        ctx.strokeRect(CAV_X, CAV_Y, CAV_HW * 2, CAV_H);
+
+        // Overflow wells — top & bottom, inside die, centred on parting line
+        [CAV_Y - 13, CAV_Y + CAV_H + 2].forEach(wy => {
+            ctx.fillStyle = stage >= 3 ? LIQ : '#0f172a';
+            ctx.beginPath(); ctx.roundRect(PL - 16, wy, 32, 11, 2); ctx.fill();
+            ctx.strokeStyle = '#4b5563'; ctx.lineWidth = 0.8;
+            ctx.strokeRect(PL - 16, wy, 32, 11);
+        });
+    } else {
+        // Part sitting near parting line after ejection
+        ctx.fillStyle = SOL;
+        ctx.beginPath(); ctx.roundRect(CAV_X + 5, CAV_Y + 8, CAV_HW * 2 - 10, CAV_H - 16, 3); ctx.fill();
+        ctx.strokeStyle = '#334155'; ctx.lineWidth = 1; ctx.stroke();
+    }
+
+    // ── Metal in sleeve bore ──────────────────────
+    const metalFillW = stage === 1 ? SL_LEN * 0.72 :
+                       stage === 2 ? SL_LEN * 0.42 :
+                       0;
+    if (metalFillW > 0) {
+        ctx.fillStyle = LIQ;
+        ctx.fillRect(FIXED_X - metalFillW, SLY - SL_R + 4, metalFillW, (SL_R - 4) * 2);
+    }
+
+    // ── Plunger ───────────────────────────────────
+    const advFrac = stage <= 1 ? 0.02 : stage === 2 ? 0.28 : 0.82;
+    const PLX = SLX + 4 + advFrac * (SL_LEN - 20);
+    ctx.fillStyle = '#1e40af';
+    ctx.fillRect(SLX + 4, SLY - SL_R + 4, PLX - SLX - 4, (SL_R - 4) * 2);
+    ctx.fillStyle = '#2563eb';
+    ctx.fillRect(PLX, SLY - SL_R + 1, 18, (SL_R - 1) * 2);
+
+    // ── Biscuit (stage 5) ─────────────────────────
+    if (stage >= 5) {
+        ctx.fillStyle = SOL;
+        ctx.beginPath(); ctx.roundRect(FIXED_X - 32, SLY - SL_R + 4, 28, (SL_R - 4) * 2, 2); ctx.fill();
+        ctx.strokeStyle = '#334155'; ctx.lineWidth = 1; ctx.stroke();
+    }
+
+    // ── Ladle (stage 1) ───────────────────────────
+    if (stage === 1) {
+        const LX = SLX + SL_LEN * 0.38, LY = SLY - 55;
+        ctx.fillStyle = '#78350f'; ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(LX, LY, 24, 0, Math.PI); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(LX + 18, LY); ctx.lineTo(LX + 18, SLY - SL_R); ctx.stroke();
+        ctx.fillStyle = LIQ;
+        ctx.beginPath(); ctx.arc(LX, LY, 17, 0, Math.PI); ctx.fill();
+        ctx.fillStyle = '#f59e0b'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+        ctx.fillText('Ladle', LX, LY - 30);
+    }
+
+    // ── Ejector pins ─────────────────────────────
+    if (dieOpen) {
+        ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 2;
+        [[movingX + 14, CAV_Y + 22], [movingX + 14, CAV_Y + CAV_H - 22]].forEach(([x, y]) => {
+            ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - 24, y); ctx.stroke();
+            ctx.fillStyle = '#4ade80';
+            ctx.beginPath(); ctx.moveTo(x - 24, y); ctx.lineTo(x - 17, y - 5); ctx.lineTo(x - 17, y + 5); ctx.closePath(); ctx.fill();
+        });
+    }
+
+    // ── Labels ────────────────────────────────────
+    ctx.fillStyle = '#64748b'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'center';
+    ctx.fillText('Shot sleeve', SLX + SL_LEN / 2, SLY + SL_R + 18);
+    ctx.fillText('Fixed half',  FIXED_X + HALF_W / 2, DIE_Y + DIE_H + 16);
+    ctx.fillText('Moving half', movingX + HALF_W / 2, DIE_Y + DIE_H + 16);
+    ctx.fillText('Plunger', SLX + (PLX - SLX) / 2, SLY - SL_R - 8);
+    if (!dieOpen) {
+        ctx.fillStyle = '#fbbf2488'; ctx.font = '9px Segoe UI';
+        ctx.fillText('PL', PL + 14, DIE_Y + 14);
+    }
+
+    ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 11px Segoe UI';
+    ctx.fillText(`Stage ${stage + 1}: ${getStages()[stage].name}`, W / 2, 18);
+}
+
+function drawFrame() {
+    const canvas = document.getElementById('anim-canvas');
+    const ctx = canvas.getContext('2d');
+    if (currentMode === 'hot') drawHot(ctx, canvas.width, canvas.height, currentStage);
+    else drawCold(ctx, canvas.width, canvas.height, currentStage);
+    updateStageList();
+}
+
+document.getElementById('btn-play').addEventListener('click', () => {
+    if (isPlaying) { stopPlay(); return; }
+    isPlaying = true;
+    document.getElementById('btn-play').textContent = '⏸ Pause';
+    playTimer = setInterval(() => {
+        currentStage++;
+        if (currentStage >= getStages().length) { currentStage = 0; }
+        drawFrame();
+    }, 2200);
+});
+document.getElementById('btn-next').addEventListener('click', () => {
+    stopPlay();
+    if (currentStage < getStages().length - 1) { currentStage++; drawFrame(); }
+});
+document.getElementById('btn-prev').addEventListener('click', () => {
+    stopPlay();
+    if (currentStage > 0) { currentStage--; drawFrame(); }
+});
+document.getElementById('btn-reset').addEventListener('click', resetAnim);
+
+document.getElementById('toggle-hot').addEventListener('click', () => {
+    currentMode = 'hot';
+    document.getElementById('toggle-hot').classList.add('active');
+    document.getElementById('toggle-cold').classList.remove('active');
+    resetAnim(); drawFrame();
+});
+document.getElementById('toggle-cold').addEventListener('click', () => {
+    currentMode = 'cold';
+    document.getElementById('toggle-cold').classList.add('active');
+    document.getElementById('toggle-hot').classList.remove('active');
+    resetAnim(); drawFrame();
+});
+
+// Initial build
+buildStageList();
+drawFrame();
+</script>
+</body>
+</html>
