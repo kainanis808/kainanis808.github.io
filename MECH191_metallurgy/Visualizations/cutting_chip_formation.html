@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<title>Cutting & Chip Formation</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a1628;color:#e2e8f0;font-family:system-ui,sans-serif;min-height:100vh}
+header{background:#0f1f3d;border-bottom:2px solid #f59e0b;padding:18px 32px}
+header h1{font-size:1.5rem;color:#f59e0b}
+header p{font-size:.85rem;color:#94a3b8;margin-top:4px}
+.tabs{display:flex;background:#0f1f3d;border-bottom:1px solid #1e3a5f;padding:0 24px;flex-wrap:wrap}
+.tab-btn{padding:12px 18px;cursor:pointer;font-size:.84rem;color:#94a3b8;border:none;background:none;border-bottom:3px solid transparent;transition:all .2s}
+.tab-btn.active{color:#f59e0b;border-bottom-color:#f59e0b}
+.tab-btn:hover{color:#e2e8f0}
+.tab-content{display:none;padding:26px 30px}
+.tab-content.active{display:block}
+h2{font-size:1.1rem;color:#f59e0b;margin-bottom:12px}
+h3{font-size:.9rem;color:#fcd34d;margin-bottom:8px}
+p{font-size:.85rem;color:#94a3b8;line-height:1.6;margin-bottom:10px}
+canvas{display:block;background:#0f1f3d;border-radius:8px;border:1px solid #1e3a5f}
+.row{display:flex;gap:20px;align-items:flex-start;margin-bottom:22px;flex-wrap:wrap}
+.col{flex:1;min-width:220px}
+.card{background:#0f1f3d;border:1px solid #1e3a5f;border-radius:10px;padding:16px;margin-bottom:16px}
+.eq{background:#0a1628;border:1px solid #1e3a5f;border-radius:6px;padding:10px 14px;font-family:monospace;font-size:.9rem;color:#fcd34d;margin:8px 0}
+table{width:100%;border-collapse:collapse;font-size:.8rem}
+th{background:#1e3a5f;color:#f59e0b;padding:9px 12px;text-align:left;font-weight:600}
+td{padding:8px 12px;border-bottom:1px solid #1e3a5f;color:#cbd5e1}
+tr:hover td{background:rgba(245,158,11,.04)}
+.badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:.7rem;font-weight:600;margin:2px}
+.zone1{background:rgba(251,146,60,.2);color:#fb923c;border:1px solid rgba(251,146,60,.4)}
+.zone2{background:rgba(56,189,248,.2);color:#38bdf8;border:1px solid rgba(56,189,248,.4)}
+.zone3{background:rgba(74,222,128,.2);color:#4ade80;border:1px solid rgba(74,222,128,.4)}
+.back{text-align:center;margin-top:28px}
+.back a{color:#f59e0b;text-decoration:none;font-size:.875rem}
+</style>
+</head><body>
+<header>
+  <h1>Fundamentals of Cutting &amp; Chip Formation</h1>
+  <p>DoITPoMS Cambridge — chip formation &amp; deformation zones &nbsp;|&nbsp; Sandvik Coromant — parameters, geometry &amp; material guide</p>
+</header>
+<div class="tabs">
+  <button class="tab-btn active" data-tab="ortho">Orthogonal Cutting Model</button>
+  <button class="tab-btn" data-tab="zones">Deformation Zones &amp; Wear</button>
+  <button class="tab-btn" data-tab="params">Cutting Parameters</button>
+  <button class="tab-btn" data-tab="geo">Tool Geometry &amp; Materials</button>
+</div>
+
+<!-- TAB 1: ORTHOGONAL CUTTING -->
+<div class="tab-content active" id="tab-ortho">
+  <h2>Orthogonal Cutting Model — DoITPoMS</h2>
+  <p>In orthogonal cutting, the tool edge is perpendicular to the cutting velocity. Material ahead of the tool is forced to shear along a thin zone — the shear plane — at angle φ. The chip then slides along the rake face, experiencing a second deformation zone.</p>
+  <canvas id="c-ortho" width="760" height="370" style="width:760px;height:370px;margin-bottom:16px"></canvas>
+
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <h3>Merchant's Shear Angle Equation</h3>
+        <div class="eq">φ = 45° + α/2 − λ/2</div>
+        <p>where <strong style="color:#fcd34d">α</strong> = rake angle, <strong style="color:#fcd34d">λ</strong> = friction angle (= arctan μ). Higher rake or lower friction → larger shear angle → thinner chip → less energy.</p>
+        <div class="eq">r = t₁/t₂ = sin φ / cos(φ − α)</div>
+        <p>Chip thickness ratio r. Since chip is thicker than uncut chip (t₂ &gt; t₁), we always have r &lt; 1.</p>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <h3>Specific Cutting Energy</h3>
+        <div class="eq">u = Fc / (t₁ · b)  [J/mm³]</div>
+        <p><strong style="color:#fcd34d">Fc</strong> = cutting force, <strong style="color:#fcd34d">b</strong> = width of cut. Specific energy depends on work material, chip thickness (size effect), and tool geometry. Harder materials → higher u.</p>
+        <div class="eq">MRR = Vc · t₁ · b  [mm³/s]</div>
+        <p>Material removal rate. Power = u × MRR.</p>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <h3>Force Components</h3>
+        <div class="eq">Fc = τs · As / sin φ · cos(λ−α) / cos(φ+λ−α)</div>
+        <p><strong style="color:#fcd34d">τs</strong> = shear yield stress, <strong style="color:#fcd34d">As</strong> = shear plane area = t₁·b/sinφ. Thrust force Ft acts perpendicular to Vc. For positive rake: Ft can be negative (tool is pulled into the work).</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Chip Types</h2>
+  <canvas id="c-chips" width="760" height="190" style="width:760px;height:190px;margin-bottom:16px"></canvas>
+  <div class="row">
+    <div class="col card"><h3>Continuous</h3><p>Ductile materials at moderate speed. Smooth rake face, positive rake angle. Good surface finish but chip disposal problem. <span class="badge zone2">Preferred for finish cuts</span></p></div>
+    <div class="col card"><h3>Continuous with BUE</h3><p>Built-up edge: work material cold-welds to rake face at low–medium speeds. Acts as unstable cutting edge — periodic fracture degrades surface finish. <span class="badge zone1">Avoid: adjust speed/coolant</span></p></div>
+    <div class="col card"><h3>Segmented (Serrated)</h3><p>Periodic shear bands — thermally softened zones alternate with harder regions. Common in titanium, hardened steel, high-speed cutting. Not necessarily harmful. <span class="badge zone1">Ti alloys, Inconel</span></p></div>
+    <div class="col card"><h3>Discontinuous</h3><p>Brittle materials (cast iron, hard brass) or negative rake cutting. Chip fractures into segments. Good chip control, but cyclic force variation can damage surface. <span class="badge zone3">Cast iron, ceramics</span></p></div>
+  </div>
+</div>
+
+<!-- TAB 2: DEFORMATION ZONES & WEAR -->
+<div class="tab-content" id="tab-zones">
+  <h2>Three Deformation Zones — DoITPoMS</h2>
+  <div class="row" style="margin-bottom:8px">
+    <span class="badge zone1" style="font-size:.8rem;padding:4px 12px">● Primary Zone — Shear Plane</span>
+    <span class="badge zone2" style="font-size:.8rem;padding:4px 12px">● Secondary Zone — Rake Face</span>
+    <span class="badge zone3" style="font-size:.8rem;padding:4px 12px">● Tertiary Zone — Machined Surface</span>
+  </div>
+  <canvas id="c-zones" width="760" height="360" style="width:760px;height:360px;margin-bottom:16px"></canvas>
+  <div class="row">
+    <div class="col card">
+      <h3><span class="badge zone1">Primary Zone</span></h3>
+      <p>Thin shear zone along the shear plane. Strain rates: 10³–10⁵ s⁻¹. Material undergoes intense plastic shear — the majority of cutting energy is dissipated here as heat. Temperatures: 400–900 °C depending on Vc and material.</p>
+    </div>
+    <div class="col card">
+      <h3><span class="badge zone2">Secondary Zone</span></h3>
+      <p>Friction between the underside of the chip and the rake face. High compressive stresses near the tool tip cause sticking contact (seizure zone); further up, sliding contact. Peak temperatures occur here — drives crater wear through diffusion.</p>
+    </div>
+    <div class="col card">
+      <h3><span class="badge zone3">Tertiary Zone</span></h3>
+      <p>Rubbing/ploughing between the tool flank and the newly machined surface. Determines surface integrity — residual stresses, work hardening, and surface roughness. Driven by flank wear land growth over tool life.</p>
+    </div>
+  </div>
+
+  <h2>Tool Wear Mechanisms &amp; Measurement</h2>
+  <canvas id="c-wear" width="760" height="280" style="width:760px;height:280px;margin-bottom:16px"></canvas>
+  <div class="row">
+    <div class="col card">
+      <h3>Flank Wear (VB)</h3>
+      <p>Abrasive wear on the clearance face. Measured as wear land width VB (mm). ISO 3685 criterion: VB = 0.3 mm (uniform), or VBmax = 0.6 mm. Primary cause of dimensional inaccuracy.</p>
+      <div class="eq">Taylor's Equation:  Vc · Tⁿ = C</div>
+      <p>n = Taylor exponent (0.1–0.4 for HSS; 0.2–0.5 for carbide). Higher Vc → shorter tool life exponentially.</p>
+    </div>
+    <div class="col card">
+      <h3>Crater Wear (KT, KB, KM)</h3>
+      <p>Thermally-driven diffusion wear on rake face. Deepens the crater (KT = depth, KB = distance from edge, KM = max width). Critical for carbide tools in steel — mitigated by TiC/TiN coatings.</p>
+    </div>
+    <div class="col card">
+      <h3>Other Wear Modes</h3>
+      <p><strong style="color:#fcd34d">Notch wear:</strong> at depth-of-cut line — oxidation + hard scale. <strong style="color:#fcd34d">BUE fracture:</strong> built-up edge periodically breaks away. <strong style="color:#fcd34d">Plastic deformation:</strong> at very high Vc + temperature, tool nose deforms. <strong style="color:#fcd34d">Chipping:</strong> micro-fracture from interrupted cuts.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: CUTTING PARAMETERS -->
+<div class="tab-content" id="tab-params">
+  <h2>Cutting Parameters — Sandvik Coromant</h2>
+  <p>All material removal operations are controlled by three primary parameters. Understanding their interaction determines productivity, surface quality, and tool life.</p>
+  <div class="row">
+    <canvas id="c-turning" width="480" height="350" style="width:480px;height:350px"></canvas>
+    <div style="flex:1">
+      <div class="card">
+        <h3>Cutting Speed  Vc  (m/min)</h3>
+        <div class="eq">Vc = π · Dm · n / 1000</div>
+        <p>Peripheral speed at the cutting edge. <strong style="color:#fcd34d">Dm</strong> = machined diameter (mm), <strong style="color:#fcd34d">n</strong> = spindle speed (rpm). Vc is the strongest driver of tool life (Taylor). Recommended starting values by material:</p>
+        <table style="margin-top:6px;font-size:.76rem">
+          <tr><th>Material</th><th>Carbide Vc (m/min)</th><th>Coated Carbide</th></tr>
+          <tr><td>Low carbon steel</td><td>200–300</td><td>300–500</td></tr>
+          <tr><td>Alloy steel (HB 250)</td><td>100–180</td><td>150–280</td></tr>
+          <tr><td>Stainless 304</td><td>100–180</td><td>150–250</td></tr>
+          <tr><td>Titanium Ti-6Al-4V</td><td>40–80</td><td>50–100</td></tr>
+          <tr><td>Aluminum 6061</td><td>500–1500</td><td>800–3000</td></tr>
+          <tr><td>Gray cast iron</td><td>150–250</td><td>250–400</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Feed per Revolution  fn  (mm/rev)</h3>
+        <div class="eq">Ra ≈ fn² / (8 · rε)  [mm]</div>
+        <p><strong style="color:#fcd34d">rε</strong> = nose radius (mm). Feed dominates surface roughness. Increasing fn raises MRR and chip load — too high causes insert chipping. Typical: 0.1–0.5 mm/rev roughing; 0.05–0.15 finishing.</p>
+      </div>
+      <div class="card">
+        <h3>Depth of Cut  ap  (mm)</h3>
+        <p>Radial engagement. Has the smallest effect on tool life of the three parameters. Minimum ap should be &gt;1.5× the cutting edge radius to avoid rubbing instead of cutting. Roughing: 2–8 mm; finishing: 0.2–1 mm.</p>
+        <div class="eq">MRR = Vc · fn · ap  [cm³/min]  (× 1/1000 for unit match)</div>
+      </div>
+    </div>
+  </div>
+  <h2>Chip Thickness &amp; Engagement</h2>
+  <canvas id="c-chipth" width="760" height="200" style="width:760px;height:200px;margin-bottom:14px"></canvas>
+  <div class="row">
+    <div class="col card">
+      <h3>Mean Chip Thickness  hm</h3>
+      <div class="eq">hm = fn · sin κr</div>
+      <p><strong style="color:#fcd34d">κr</strong> = entering (lead) angle. At κr = 90°, hm = fn (full feed). Reducing κr thins the chip — distributes load over longer edge, allowing higher fn without overloading the insert.</p>
+    </div>
+    <div class="col card">
+      <h3>Specific Cutting Force  kc</h3>
+      <div class="eq">kc = kc1 · hm⁻ᵐᶜ  [N/mm²]</div>
+      <p><strong style="color:#fcd34d">kc1</strong> = specific force at hm=1 mm, <strong style="color:#fcd34d">mc</strong> = chip thickness exponent (~0.2–0.4). As chip thins (small hm), kc rises sharply — the "size effect." Relevant for finishing and micro-machining.</p>
+    </div>
+    <div class="col card">
+      <h3>Cutting Force Components</h3>
+      <div class="eq">Fc = kc · ap · hm</div>
+      <p>Tangential (main) cutting force. Radial (passive) force Fp ≈ 0.3–0.5 Fc; axial (feed) force Ff ≈ 0.1–0.3 Fc. Power = Fc × Vc / 60 000 (kW). Size cutting force components to prevent workpiece deflection.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: TOOL GEOMETRY & MATERIALS -->
+<div class="tab-content" id="tab-geo">
+  <h2>Tool Geometry — Sandvik Coromant</h2>
+  <div class="row">
+    <canvas id="c-toolge" width="400" height="340" style="width:400px;height:340px"></canvas>
+    <div style="flex:1">
+      <div class="card">
+        <h3>Rake Angle  γ (γo)</h3>
+        <p><strong style="color:#fcd34d">Positive rake</strong> (+10° to +20°): sharp, low forces, less heat — use for ductile materials (Al, soft steel, plastics). Risk of cutting edge weakness.<br>
+        <strong style="color:#fcd34d">Negative rake</strong> (−6° to 0°): strong edge, handles interrupted cuts — use for hardened steel, cast iron, heavy roughing.</p>
+      </div>
+      <div class="card">
+        <h3>Clearance Angle  α (αo)</h3>
+        <p>Prevents flank face rubbing on machined surface. Typical 6–12°. Too small → rubbing &amp; heat; too large → weak edge. Turning inserts: 7° standard. For hardened steel, use smaller clearance (5–7°) for edge strength.</p>
+      </div>
+      <div class="card">
+        <h3>Entering (Lead) Angle  κr</h3>
+        <p>Angle between cutting edge and feed direction. <strong style="color:#fcd34d">κr = 90°</strong>: all force in radial direction; <strong style="color:#fcd34d">κr = 45°</strong>: forces split equally radial/axial. Smaller κr → thinner chip → longer engaged edge → better tool life (but more vibration risk).</p>
+      </div>
+      <div class="card">
+        <h3>Nose Radius  rε</h3>
+        <p>Controls surface finish and edge strength. Large rε: stronger, better Ra but more radial force → vibration. Small rε: finer corners, less radial force. Sandvik recommendation: rε = fn × 2 to fn × 6 for stable cutting.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>ISO Material Group &amp; Grade Selection — Sandvik Coromant</h2>
+  <canvas id="c-grades" width="760" height="260" style="width:760px;height:260px;margin-bottom:16px"></canvas>
+  <table>
+    <thead><tr><th>ISO Group</th><th>Color</th><th>Material Type</th><th>Characteristics</th><th>Typical Grade</th><th>Key Challenge</th></tr></thead>
+    <tbody>
+      <tr style="border-left:4px solid #3b82f6"><td><strong>P</strong></td><td style="color:#60a5fa">Blue</td><td>Steel, cast steel, ferritic/martensitic stainless</td><td>Long continuous chip; good machinability range</td><td>GC4315, GC4325</td><td>Crater wear at high Vc; built-up edge at low Vc</td></tr>
+      <tr style="border-left:4px solid #eab308"><td><strong>M</strong></td><td style="color:#fbbf24">Yellow</td><td>Stainless steel (austenitic, duplex)</td><td>Work-hardens; tough, stringy chips; low thermal conductivity</td><td>GC2035, GC235</td><td>Notch wear, BUE, edge chipping — use sharp positive geometry</td></tr>
+      <tr style="border-left:4px solid #ef4444"><td><strong>K</strong></td><td style="color:#f87171">Red</td><td>Cast iron, hardened steel, chilled cast iron</td><td>Short discontinuous chip; abrasive; brittle</td><td>GC3210, GC3220</td><td>Abrasive flank wear — use wear-resistant Al₂O₃-coated grades</td></tr>
+      <tr style="border-left:4px solid #22c55e"><td><strong>N</strong></td><td style="color:#4ade80">Green</td><td>Aluminum, copper, brass, plastics</td><td>Soft, non-ferrous; long chip; sticky</td><td>H10, CD10</td><td>BUE adhesion — use sharp uncoated PCD or fine-grain carbide</td></tr>
+      <tr style="border-left:4px solid #f97316"><td><strong>S</strong></td><td style="color:#fb923c">Orange</td><td>Heat-resistant superalloys (Inconel, Hastelloy) &amp; Ti alloys</td><td>Low thermal conductivity; work-hardening; abrasive</td><td>GC1105, S05F</td><td>Notch wear, rapid flank wear — low Vc, high feed, flood coolant</td></tr>
+      <tr style="border-left:4px solid #94a3b8"><td><strong>H</strong></td><td style="color:#cbd5e1">Grey</td><td>Hardened steel (45–65 HRC), hard cast iron, chilled rolls</td><td>Hard, brittle; high abrasion</td><td>CB7015, CB7025</td><td>Requires CBN or ceramic; no coolant (thermal shock)</td></tr>
+    </tbody>
+  </table>
+  <div class="card" style="margin-top:16px">
+    <h3>Grade Designation Logic (Sandvik GC series)</h3>
+    <p>GC = <strong style="color:#fcd34d">G</strong>eneration <strong style="color:#fcd34d">C</strong>oated. First digit: ISO group (1=P, 2=M, 3=K, 4=general). Middle digits: position in toughness-hardness scale (05=hardest/most wear-resistant → 40=toughest). Example: GC4315 = general-purpose P-steel grade, hard side of range.</p>
+    <p>Coating systems: <strong style="color:#fcd34d">CVD</strong> (TiCN+Al₂O₃+TiN) for high Vc steel/cast iron; <strong style="color:#fcd34d">PVD</strong> (TiAlN, TiSiN) for sharp edges, stainless, titanium, interrupted cuts; <strong style="color:#fcd34d">PCD</strong> for non-ferrous; <strong style="color:#fcd34d">CBN</strong> for hardened steel.</p>
+  </div>
+</div>
+
+<div class="back"><a href="index.html">← Back to Visualizations Index</a></div>
+
+<script>
+const DEG = Math.PI / 180;
+
+function gctx(id){
+  const cv = document.getElementById(id); if(!cv) return null;
+  const dpr = window.devicePixelRatio || 1;
+  if(!cv._dpr){
+    cv.style.width  = cv.width  + 'px';
+    cv.style.height = cv.height + 'px';
+    cv.width  = Math.round(cv.width  * dpr);
+    cv.height = Math.round(cv.height * dpr);
+    cv._dpr = true;
+  }
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, W:parseInt(cv.style.width), H:parseInt(cv.style.height)};
+}
+
+// ---- Tab switching ----
+document.querySelectorAll('.tab-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById('tab-'+b.dataset.tab).classList.add('active');
+    drawTab(b.dataset.tab);
+  });
+});
+
+function drawTab(t){
+  if(t==='ortho')  { drawOrtho(); drawChips(); }
+  if(t==='zones')  { drawZones(); drawWear(); }
+  if(t==='params') { drawTurning(); drawChipTh(); }
+  if(t==='geo')    { drawToolGeo(); drawGrades(); }
+}
+
+// ============================================================
+// TAB 1: ORTHOGONAL CUTTING MODEL
+// ============================================================
+function drawOrtho(){
+  const r = gctx('c-ortho'); if(!r) return;
+  const {ctx, W, H} = r;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0,0,W,H);
+
+  const TIPx=450, TIPy=230;
+  const t1=44;           // uncut chip thickness px
+  const UNCUT_Y = TIPy - t1; // = 186
+  const ALPHA = 12*DEG;  // rake angle
+  const GAMMA = 8*DEG;   // clearance angle
+  const PHI   = 30*DEG;  // shear angle
+
+  // Workpiece body (below machined surface)
+  ctx.fillStyle = '#455a64';
+  ctx.fillRect(60, TIPy, TIPx-60, H-TIPy-30);
+
+  // Uncut material layer (chip origin)
+  ctx.fillStyle = '#607d8b';
+  ctx.fillRect(60, UNCUT_Y, TIPx-60, t1);
+
+  // Workpiece outline
+  ctx.strokeStyle = '#546e7a'; ctx.lineWidth=1.2;
+  ctx.strokeRect(60, UNCUT_Y, TIPx-60, H-UNCUT_Y-30);
+
+  // ---- PRIMARY DEFORMATION ZONE (shear plane band) ----
+  // Shear plane: from TIP going up-left at angle PHI from horizontal
+  const sp_dx = -Math.cos(PHI), sp_dy = -Math.sin(PHI);
+  const SP_LEN = t1 / Math.sin(PHI); // exact: t1/sinφ
+  const SPex = TIPx + sp_dx * SP_LEN;
+  const SPey = TIPy + sp_dy * SP_LEN;
+  // Band half-width
+  const BW = 10;
+  const perp_x = sp_dy, perp_y = -sp_dx; // perpendicular to shear plane
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(TIPx + perp_x*BW, TIPy + perp_y*BW);
+  ctx.lineTo(SPex + perp_x*BW, SPey + perp_y*BW);
+  ctx.lineTo(SPex - perp_x*BW, SPey - perp_y*BW);
+  ctx.lineTo(TIPx - perp_x*BW, TIPy - perp_y*BW);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(251,146,60,0.35)'; ctx.fill();
+  ctx.strokeStyle='#fb923c'; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.restore();
+
+  // Shear plane center line
+  ctx.strokeStyle='#f97316'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
+  ctx.beginPath(); ctx.moveTo(TIPx,TIPy); ctx.lineTo(SPex,SPey); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // ---- TOOL BODY ----
+  // Rake face: from TIP going up, leaning left by ALPHA from vertical
+  const RAKE_LEN = 130;
+  const rk_dx = -Math.sin(ALPHA), rk_dy = -Math.cos(ALPHA);
+  const RKex = TIPx + rk_dx*RAKE_LEN;
+  const RKey = TIPy + rk_dy*RAKE_LEN;
+
+  // Flank face: from TIP going right along machined surface with slight downward tilt
+  const FL_LEN = 90;
+  const fl_dx = Math.cos(GAMMA), fl_dy = Math.sin(GAMMA);
+  const FLex = TIPx + fl_dx*FL_LEN;
+  const FLey = TIPy + fl_dy*FL_LEN;
+
+  // Tool body polygon (dark gray wedge)
+  ctx.beginPath();
+  ctx.moveTo(TIPx, TIPy);
+  ctx.lineTo(RKex, RKey);
+  ctx.lineTo(RKex+80, RKey);   // top of tool shank
+  ctx.lineTo(FLex+60, FLey-20); // back top
+  ctx.lineTo(FLex, FLey);
+  ctx.closePath();
+  ctx.fillStyle = '#37474f'; ctx.fill();
+  ctx.strokeStyle = '#78909c'; ctx.lineWidth=1.5; ctx.stroke();
+
+  // ---- SECONDARY DEFORMATION ZONE (rake face contact) ----
+  const SEC_W = 7;
+  const perp2x = rk_dy, perp2y = -rk_dx;
+  const secLen = 90;
+  ctx.beginPath();
+  ctx.moveTo(TIPx, TIPy);
+  ctx.lineTo(TIPx + rk_dx*secLen, TIPy + rk_dy*secLen);
+  ctx.lineTo(TIPx + rk_dx*secLen - perp2x*SEC_W, TIPy + rk_dy*secLen - perp2y*SEC_W);
+  ctx.lineTo(TIPx - perp2x*SEC_W, TIPy - perp2y*SEC_W);
+  ctx.closePath();
+  ctx.fillStyle='rgba(56,189,248,0.3)'; ctx.fill();
+  ctx.strokeStyle='#38bdf8'; ctx.lineWidth=1; ctx.stroke();
+
+  // ---- TERTIARY DEFORMATION ZONE (flank / machined surface) ----
+  const TERT_D = 7;
+  ctx.beginPath();
+  ctx.moveTo(TIPx, TIPy);
+  ctx.lineTo(TIPx+70, TIPy);
+  ctx.lineTo(TIPx+70, TIPy+TERT_D);
+  ctx.lineTo(TIPx, TIPy+TERT_D);
+  ctx.closePath();
+  ctx.fillStyle='rgba(74,222,128,0.3)'; ctx.fill();
+  ctx.strokeStyle='#4ade80'; ctx.lineWidth=1; ctx.stroke();
+
+  // ---- CHIP ----
+  // Chip starts at shear plane top and curls up along rake face
+  const chip_t2 = t1 * 1.75; // thicker chip
+  ctx.beginPath();
+  ctx.moveTo(SPex, SPey);
+  ctx.lineTo(TIPx, TIPy);
+  // chip outer edge along rake face
+  ctx.lineTo(TIPx + rk_dx*85, TIPy + rk_dy*85);
+  // chip thickness offset perpendicular to rake face
+  const chip_ox = -perp2x*chip_t2, chip_oy = -perp2y*chip_t2;
+  ctx.lineTo(TIPx + rk_dx*85 + chip_ox, TIPy + rk_dy*85 + chip_oy);
+  // curl at top
+  ctx.bezierCurveTo(
+    TIPx + rk_dx*60 + chip_ox + 30, TIPy + rk_dy*60 + chip_oy + 40,
+    SPex + chip_ox + 60, SPey + chip_oy + 50,
+    SPex + 30, SPey + 30
+  );
+  ctx.closePath();
+  ctx.fillStyle = '#607d8b'; ctx.fill();
+  ctx.strokeStyle = '#78909c'; ctx.lineWidth=1.2; ctx.stroke();
+
+  // ---- MACHINED SURFACE LINE ----
+  ctx.strokeStyle='#94a3b8'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(TIPx,TIPy); ctx.lineTo(W-40,TIPy); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // ---- CUTTING VELOCITY ARROW ----
+  arrow(ctx, 80, H-50, 180, H-50, '#fbbf24', 2);
+  ctx.fillStyle='#fbbf24'; ctx.font='bold 11px system-ui';
+  ctx.fillText('Vc', 190, H-46);
+
+  // ---- DIMENSION ANNOTATIONS ----
+  // t1 label
+  dimArrow(ctx, 50, UNCUT_Y, 50, TIPy, '#94a3b8');
+  ctx.fillStyle='#94a3b8'; ctx.font='11px system-ui';
+  ctx.fillText('t₁', 36, (UNCUT_Y+TIPy)/2+4);
+
+  // chip thickness label
+  const cm_x = TIPx + rk_dx*50 - perp2x*chip_t2/2;
+  const cm_y = TIPy + rk_dy*50 - perp2y*chip_t2/2;
+
+  // Rake angle arc
+  ctx.strokeStyle='#fcd34d'; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.arc(TIPx, TIPy, 28, -Math.PI/2, -Math.PI/2+ALPHA); ctx.stroke();
+  ctx.fillStyle='#fcd34d'; ctx.font='11px system-ui';
+  ctx.fillText('α=12°', TIPx+6, TIPy-22);
+
+  // Shear angle arc
+  ctx.strokeStyle='#fb923c'; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.arc(TIPx, TIPy, 44, Math.PI-PHI, Math.PI); ctx.stroke();
+  ctx.fillStyle='#fb923c'; ctx.font='11px system-ui';
+  ctx.fillText('φ=30°', TIPx-90, TIPy-14);
+
+  // ---- ZONE LABELS ----
+  ctx.font='bold 11px system-ui';
+  ctx.fillStyle='#f97316';
+  ctx.fillText('① Primary zone', TIPx-180, TIPy-52);
+  ctx.fillStyle='#38bdf8';
+  ctx.fillText('② Secondary zone', TIPx+12, TIPy-68);
+  ctx.fillStyle='#4ade80';
+  ctx.fillText('③ Tertiary zone', TIPx+14, TIPy+24);
+
+  ctx.fillStyle='#94a3b8'; ctx.font='11px system-ui';
+  ctx.fillText('CHIP', TIPx+rk_dx*50-chip_ox/2-16, TIPy+rk_dy*50-chip_oy/2+4);
+
+  // Title
+  ctx.fillStyle='#f59e0b'; ctx.font='bold 13px system-ui'; ctx.textAlign='center';
+  ctx.fillText('Orthogonal Cutting Model', W/2, 22);
+  ctx.textAlign='left';
+
+  ctx.fillStyle='#475569'; ctx.font='10px system-ui';
+  ctx.fillText('Workpiece', 90, TIPy+26);
+  ctx.fillStyle='#94a3b8';
+  ctx.fillText('Machined surface →', TIPx+8, TIPy+16);
+  ctx.fillText('TOOL', RKex+12, (RKey+TIPy)/2);
+}
+
+function arrow(ctx, x1,y1,x2,y2,col,lw){
+  const dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy);
+  const ux=dx/L,uy=dy/L;
+  ctx.strokeStyle=col; ctx.lineWidth=lw;
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  ctx.fillStyle=col;
+  ctx.beginPath();
+  ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-ux*10+uy*5,y2-uy*10-ux*5);
+  ctx.lineTo(x2-ux*10-uy*5,y2-uy*10+ux*5);
+  ctx.fill();
+}
+
+function dimArrow(ctx, x1,y1,x2,y2,col){
+  ctx.strokeStyle=col; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  // ticks
+  ctx.beginPath(); ctx.moveTo(x1-5,y1); ctx.lineTo(x1+5,y1); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x2-5,y2); ctx.lineTo(x2+5,y2); ctx.stroke();
+}
+
+// ---- CHIP TYPES ----
+function drawChips(){
+  const r = gctx('c-chips'); if(!r) return;
+  const {ctx, W, H} = r;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#0a1628'; ctx.fillRect(0,0,W,H);
+
+  const cw = W/4;
+  const names = ['Continuous','Continuous + BUE','Segmented','Discontinuous'];
+  const cols  = ['#4ade80','#ef4444','#fbbf24','#38bdf8'];
+
+  names.forEach((nm,i)=>{
+    const cx = cw*i + cw/2;
+    const y0 = 32;
+    // Draw each chip type as a cross-section of a wavy/segmented strip
+    ctx.fillStyle='#607d8b';
+    if(i===0){ // continuous — smooth ribbon
+      ctx.beginPath();
+      ctx.moveTo(cx-48,y0+20);
+      for(let x=-48;x<=48;x+=4){
+        const yy=y0+20+Math.sin(x/8)*6;
+        ctx.lineTo(cx+x,yy);
+      }
+      ctx.lineTo(cx+48,y0+50);
+      for(let x=48;x>=-48;x-=4){
+        const yy=y0+50+Math.sin(x/8)*6;
+        ctx.lineTo(cx+x,yy);
+      }
+      ctx.closePath(); ctx.fill();
+      ctx.strokeStyle='#78909c'; ctx.lineWidth=1; ctx.stroke();
+    } else if(i===1){ // BUE — continuous but with BUE lump at tool
+      ctx.beginPath();
+      ctx.moveTo(cx-48,y0+20); ctx.lineTo(cx+48,y0+20);
+      ctx.lineTo(cx+48,y0+48); ctx.lineTo(cx-48,y0+48);
+      ctx.closePath(); ctx.fill();
+      ctx.strokeStyle='#78909c'; ctx.lineWidth=1; ctx.stroke();
+      // BUE lump
+      ctx.fillStyle='#ef4444';
+      ctx.beginPath(); ctx.arc(cx-40,y0+34,10,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#fca5a5'; ctx.font='8px system-ui'; ctx.textAlign='center';
+      ctx.fillText('BUE',cx-40,y0+37);
+    } else if(i===2){ // segmented
+      for(let s=-3;s<=3;s++){
+        const sx = cx + s*16;
+        ctx.fillStyle = s%2===0 ? '#607d8b':'#546e7a';
+        ctx.beginPath();
+        ctx.moveTo(sx-6,y0+16); ctx.lineTo(sx+8,y0+18);
+        ctx.lineTo(sx+10,y0+50); ctx.lineTo(sx-8,y0+48);
+        ctx.closePath(); ctx.fill();
+        ctx.strokeStyle='#263238'; ctx.lineWidth=1; ctx.stroke();
+      }
+    } else { // discontinuous
+      for(let s=-3;s<=3;s++){
+        const sx = cx + s*14;
+        const ang = s*0.3;
+        ctx.save();
+        ctx.translate(sx,y0+34); ctx.rotate(ang);
+        ctx.fillStyle='#607d8b';
+        ctx.fillRect(-8,-12,14,22);
+        ctx.strokeStyle='#78909c'; ctx.lineWidth=1; ctx.strokeRect(-8,-12,14,22);
+        ctx.restore();
+      }
+    }
+    // Label
+    ctx.fillStyle=cols[i]; ctx.font='bold 11px system-ui'; ctx.textAlign='center';
+    ctx.fillText(nm,cx,H-10);
+    // Small line separator
+    if(i<3){ctx.strokeStyle='#1e3a5f';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(cw*(i+1),0);ctx.lineTo(cw*(i+1),H);ctx.stroke();}
+  });
+  ctx.textAlign='left';
+}
+
+// ============================================================
+// TAB 2: DEFORMATION ZONES CLOSE-UP
+// ============================================================
+function drawZones(){
+  const r = gctx('c-zones'); if(!r) return;
+  const {ctx, W, H} = r;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#0a1628'; ctx.fillRect(0,0,W,H);
+
+  // Close-up of cutting zone
+  const TIPx=380, TIPy=200;
+  const t1=60;
+  const UNCUT_Y = TIPy-t1;
+  const ALPHA=12*DEG, GAMMA=8*DEG, PHI=30*DEG;
+
+  // Workpiece body
+  ctx.fillStyle='#455a64'; ctx.fillRect(60, TIPy, TIPx-60, H-TIPy-40);
+  // Uncut layer
+  ctx.fillStyle='#607d8b'; ctx.fillRect(60, UNCUT_Y, TIPx-60, t1);
+  ctx.strokeStyle='#546e7a'; ctx.lineWidth=1; ctx.strokeRect(60,UNCUT_Y,TIPx-60,H-UNCUT_Y-40);
+
+  const SP_LEN = t1/Math.sin(PHI);
+  const sp_dx=-Math.cos(PHI), sp_dy=-Math.sin(PHI);
+  const SPex=TIPx+sp_dx*SP_LEN, SPey=TIPy+sp_dy*SP_LEN;
+  const rk_dx=-Math.sin(ALPHA), rk_dy=-Math.cos(ALPHA);
+  const fl_dx=Math.cos(GAMMA), fl_dy=Math.sin(GAMMA);
+  const perp_x=sp_dy, perp_y=-sp_dx;
+  const perp2x=rk_dy, perp2y=-rk_dx;
+
+  // PRIMARY ZONE — large orange band
+  const BW=16;
+  ctx.beginPath();
+  ctx.moveTo(TIPx+perp_x*BW, TIPy+perp_y*BW);
+  ctx.lineTo(SPex+perp_x*BW, SPey+perp_y*BW);
+  ctx.lineTo(SPex-perp_x*BW, SPey-perp_y*BW);
+  ctx.lineTo(TIPx-perp_x*BW, TIPy-perp_y*BW);
+  ctx.closePath();
+  ctx.fillStyle='rgba(251,146,60,0.4)'; ctx.fill();
+  ctx.strokeStyle='#f97316'; ctx.lineWidth=2; ctx.stroke();
+
+  // Grid lines in primary zone (shear)
+  ctx.strokeStyle='rgba(251,146,60,0.5)'; ctx.lineWidth=0.8;
+  for(let t=0.15;t<0.9;t+=0.15){
+    const px=TIPx+sp_dx*SP_LEN*t, py=TIPy+sp_dy*SP_LEN*t;
+    ctx.beginPath();
+    ctx.moveTo(px-perp_x*BW,py-perp_y*BW);
+    ctx.lineTo(px+perp_x*BW,py+perp_y*BW);
+    ctx.stroke();
+  }
+
+  // Tool body
+  ctx.beginPath();
+  ctx.moveTo(TIPx,TIPy);
+  ctx.lineTo(TIPx+rk_dx*160,TIPy+rk_dy*160);
+  ctx.lineTo(TIPx+rk_dx*160+80,TIPy+rk_dy*160);
+  ctx.lineTo(TIPx+fl_dx*110+60,TIPy+fl_dy*110-30);
+  ctx.lineTo(TIPx+fl_dx*110,TIPy+fl_dy*110);
+  ctx.closePath();
+  ctx.fillStyle='#263238'; ctx.fill();
+  ctx.strokeStyle='#546e7a'; ctx.lineWidth=1.5; ctx.stroke();
+
+  // SECONDARY ZONE — blue layer on rake face
+  const SEC_W=14;
+  ctx.beginPath();
+  ctx.moveTo(TIPx,TIPy);
+  ctx.lineTo(TIPx+rk_dx*140,TIPy+rk_dy*140);
+  ctx.lineTo(TIPx+rk_dx*140+perp2x*SEC_W,TIPy+rk_dy*140+perp2y*SEC_W);
+  ctx.lineTo(TIPx+perp2x*SEC_W,TIPy+perp2y*SEC_W);
+  ctx.closePath();
+  ctx.fillStyle='rgba(56,189,248,0.35)'; ctx.fill();
+  ctx.strokeStyle='#38bdf8'; ctx.lineWidth=1.5; ctx.stroke();
+
+  // Sticking + sliding zones in secondary
+  ctx.fillStyle='rgba(56,189,248,0.2)'; // sticking near tip
+  ctx.beginPath();
+  ctx.moveTo(TIPx,TIPy);
+  ctx.lineTo(TIPx+rk_dx*55,TIPy+rk_dy*55);
+  ctx.lineTo(TIPx+rk_dx*55+perp2x*SEC_W,TIPy+rk_dy*55+perp2y*SEC_W);
+  ctx.lineTo(TIPx+perp2x*SEC_W,TIPy+perp2y*SEC_W);
+  ctx.closePath();
+  ctx.fillStyle='rgba(167,139,250,0.3)'; ctx.fill();
+
+  // TERTIARY ZONE — green strip below tip
+  ctx.beginPath();
+  ctx.moveTo(TIPx,TIPy);
+  ctx.lineTo(TIPx+90,TIPy);
+  ctx.lineTo(TIPx+90,TIPy+12);
+  ctx.lineTo(TIPx,TIPy+12);
+  ctx.closePath();
+  ctx.fillStyle='rgba(74,222,128,0.35)'; ctx.fill();
+  ctx.strokeStyle='#4ade80'; ctx.lineWidth=1.5; ctx.stroke();
+
+  // CHIP
+  const chip_t2=t1*1.7;
+  ctx.beginPath();
+  ctx.moveTo(SPex,SPey);
+  ctx.lineTo(TIPx,TIPy);
+  ctx.lineTo(TIPx+rk_dx*130,TIPy+rk_dy*130);
+  const cx2=TIPx+rk_dx*130-perp2x*chip_t2, cy2=TIPy+rk_dy*130-perp2y*chip_t2;
+  ctx.lineTo(cx2,cy2);
+  ctx.bezierCurveTo(cx2+40,cy2+50,SPex-perp2x*chip_t2+50,SPey-perp2y*chip_t2+30,SPex+20,SPey+20);
+  ctx.closePath();
+  ctx.fillStyle='#607d8b'; ctx.fill();
+  ctx.strokeStyle='#78909c'; ctx.lineWidth=1; ctx.stroke();
+
+  // Temperature gradient in secondary zone (color ramp)
+  const grad = ctx.createLinearGradient(TIPx,TIPy,TIPx+rk_dx*130,TIPy+rk_dy*130);
+  grad.addColorStop(0,'rgba(239,68,68,0.2)');
+  grad.addColorStop(0.4,'rgba(245,158,11,0.15)');
+  grad.addColorStop(1,'rgba(56,189,248,0.05)');
+  ctx.beginPath();
+  ctx.moveTo(TIPx+perp2x*2,TIPy+perp2y*2);
+  ctx.lineTo(TIPx+rk_dx*130+perp2x*2,TIPy+rk_dy*130+perp2y*2);
+  ctx.lineTo(TIPx+rk_dx*130+perp2x*SEC_W,TIPy+rk_dy*130+perp2y*SEC_W);
+  ctx.lineTo(TIPx+perp2x*SEC_W,TIPy+perp2y*SEC_W);
+  ctx.closePath();
+  ctx.fillStyle=grad; ctx.fill();
+
+  // ---- ANNOTATIONS ----
+  // Temperature labels
+  ctx.font='bold 11px system-ui'; ctx.fillStyle='#ef4444';
+  ctx.fillText('Peak T ~900°C',TIPx+rk_dx*40+perp2x*20-10,TIPy+rk_dy*40+perp2y*20-4);
+  ctx.fillStyle='rgba(167,139,250,0.9)';
+  ctx.fillText('Sticking',TIPx+rk_dx*28+perp2x*SEC_W/2+2,TIPy+rk_dy*28+perp2y*SEC_W/2);
+  ctx.fillStyle='#7dd3fc';
+  ctx.fillText('Sliding',TIPx+rk_dx*90+perp2x*SEC_W/2+2,TIPy+rk_dy*90+perp2y*SEC_W/2);
+
+  // Zone labels with arrows
+  ctx.font='bold 12px system-ui';
+  ctx.fillStyle='#fb923c';
+  ctx.fillText('① PRIMARY',60,UNCUT_Y+t1/2+5);
+  ctx.fillText('   SHEAR ZONE',60,UNCUT_Y+t1/2+20);
+
+  ctx.fillStyle='#38bdf8';
+  const lx2=TIPx+rk_dx*70+perp2x*SEC_W+14;
+  const ly2=TIPy+rk_dy*70+perp2y*SEC_W;
+  ctx.fillText('② SECONDARY',lx2,ly2);
+  ctx.fillText('   (rake face)',lx2,ly2+14);
+
+  ctx.fillStyle='#4ade80';
+  ctx.fillText('③ TERTIARY',TIPx+16,TIPy+32);
+
+  ctx.fillStyle='#f59e0b'; ctx.font='bold 13px system-ui'; ctx.textAlign='center';
+  ctx.fillText('Three Deformation Zones — Close-Up',W/2,22);
+  ctx.textAlign='left';
+
+  // Strain rate annotation
+  ctx.fillStyle='#94a3b8'; ctx.font='10px system-ui';
+  ctx.fillText('ε̇ ≈ 10³–10⁵ s⁻¹',TIPx-90,UNCUT_Y+t1/2+38);
+  ctx.fillText('High friction heat',lx2,ly2+28);
+  ctx.fillText('Surface integrity',TIPx+16,TIPy+46);
+}
+
+// ---- TOOL WEAR DIAGRAM ----
+function drawWear(){
+  const r = gctx('c-wear'); if(!r) return;
+  const {ctx, W, H} = r;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#0a1628'; ctx.fillRect(0,0,W,H);
+
+  // Left panel: flank wear view (looking at flank face)
+  const TIPx=200, TIPy=70, tw=160, th=140;
+
+  // Tool cross section
+  ctx.fillStyle='#37474f';
+  ctx.beginPath();
+  ctx.moveTo(TIPx,TIPy);
+  ctx.lineTo(TIPx-30,TIPy+14);
+  ctx.lineTo(TIPx-30,TIPy+th);
+  ctx.lineTo(TIPx+tw,TIPy+th);
+  ctx.lineTo(TIPx+tw,TIPy+14);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle='#546e7a'; ctx.lineWidth=1.5; ctx.stroke();
+
+  // Machined surface
+  ctx.strokeStyle='#94a3b8'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(TIPx,TIPy+th+30); ctx.lineTo(TIPx+tw+60,TIPy+th+30); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#607d8b'; ctx.fillRect(TIPx,TIPy+th+30,tw+60,20);
+
+  // Flank wear VB land
+  ctx.fillStyle='rgba(239,68,68,0.4)';
+  ctx.fillRect(TIPx, TIPy+th, tw, 30);
+  ctx.strokeStyle='#ef4444'; ctx.lineWidth=2;
+  ctx.strokeRect(TIPx,TIPy+th,tw,30);
+
+  // VB dimension arrow
+  dimArrow(ctx, TIPx-18, TIPy+th, TIPx-18, TIPy+th+30, '#ef4444');
+  ctx.fillStyle='#ef4444'; ctx.font='bold 11px system-ui';
+  ctx.fillText('VB',TIPx-38,TIPy+th+16);
+
+  // VB limit line
+  ctx.strokeStyle='rgba(239,68,68,0.5)'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(TIPx,TIPy+th+22); ctx.lineTo(TIPx+tw+40,TIPy+th+22); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='rgba(239,68,68,0.8)'; ctx.font='10px system-ui';
+  ctx.fillText('VB = 0.3 mm limit',TIPx+tw+4,TIPy+th+26);
+
+  ctx.fillStyle='#fcd34d'; ctx.font='bold 12px system-ui';
+  ctx.fillText('FLANK WEAR',TIPx+20,TIPy+th-8);
+  ctx.fillStyle='#94a3b8'; ctx.font='10px system-ui';
+  ctx.fillText('Abrasive — shortens tool,',TIPx+tw+4,TIPy+th+10);
+  ctx.fillText('reduces dimensional accuracy',TIPx+tw+4,TIPy+th+22);
+
+  // Right panel: rake face — crater wear (tool top view)
+  const cx2=560, cy2=50, rw=160, rh=160;
+  ctx.fillStyle='#37474f';
+  ctx.fillRect(cx2,cy2,rw,rh);
+  ctx.strokeStyle='#546e7a'; ctx.lineWidth=1.5; ctx.strokeRect(cx2,cy2,rw,rh);
+
+  // Crater
+  const crat_cx=cx2+45, crat_cy=cy2+rh/2;
+  const KB=60, KT=14, KM=44;
+  ctx.fillStyle='rgba(56,189,248,0.35)';
+  ctx.beginPath();
+  ctx.ellipse(crat_cx+KB/2,crat_cy,KB/2,KM/2,0,0,Math.PI*2);
+  ctx.fill();
+  ctx.strokeStyle='#38bdf8'; ctx.lineWidth=1.5; ctx.stroke();
+
+  // KT depth bar
+  dimArrow(ctx,cx2+rw+8,crat_cy-KM/2,cx2+rw+8,crat_cy+KM/2,'#38bdf8');
+  ctx.fillStyle='#38bdf8'; ctx.font='10px system-ui';
+  ctx.fillText('KM',cx2+rw+16,crat_cy+4);
+
+  // Cutting edge at left of tool rect
+  ctx.strokeStyle='#fbbf24'; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.moveTo(cx2,cy2); ctx.lineTo(cx2,cy2+rh); ctx.stroke();
+
+  // KB distance
+  ctx.strokeStyle='rgba(56,189,248,0.6)'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+  ctx.beginPath(); ctx.moveTo(cx2,crat_cy); ctx.lineTo(crat_cx,crat_cy); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#7dd3fc'; ctx.font='10px system-ui';
+  ctx.fillText('KB',cx2+KB/2-8,crat_cy-KM/2-6);
+
+  ctx.fillStyle='#fcd34d'; ctx.font='bold 12px system-ui';
+  ctx.fillText('CRATER WEAR',cx2+30,cy2-10);
+  ctx.fillStyle='#94a3b8'; ctx.font='10px system-ui';
+  ctx.fillText('Diffusion/abrasion on rake face',cx2-10,cy2+rh+16);
+  ctx.fillText('Measures: KT (depth), KB (distance), KM (width)',cx2-10,cy2+rh+30);
+
+  // Notch wear annotation
+  ctx.fillStyle='rgba(251,146,60,0.6)';
+  ctx.fillRect(cx2-8,cy2+rh-12,16,14);
+  ctx.strokeStyle='#fb923c'; ctx.lineWidth=1; ctx.strokeRect(cx2-8,cy2+rh-12,16,14);
+  ctx.fillStyle='#fb923c'; ctx.font='10px system-ui';
+  ctx.fillText('← Notch wear (depth-of-cut line)',cx2+12,cy2+rh-3);
+
+  // Taylor curve (right side)
+  const tx=580, ty=200, tw2=160, th2=80;
+  // Axes
+  ctx.strokeStyle='#1e3a5f'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(tx,ty+th2); ctx.lineTo(tx+tw2,ty+th2); ctx.stroke();
+  ctx.fillStyle='#475569'; ctx.font='9px system-ui'; ctx.textAlign='center';
+  ctx.fillText('Cutting Speed Vc',tx+tw2/2,ty+th2+20);
+  ctx.save(); ctx.translate(tx-14,ty+th2/2); ctx.rotate(-Math.PI/2); ctx.fillText('Tool Life T',0,0); ctx.restore();
+
+  // Taylor curves for different tool materials
+  const tools=[{n:.15,C:280,col:'#ef4444',lbl:'HSS'},{n:.3,C:400,col:'#38bdf8',lbl:'Carbide'},{n:.5,C:700,col:'#4ade80',lbl:'Ceramic'}];
+  tools.forEach(({n,C,col,lbl})=>{
+    ctx.strokeStyle=col; ctx.lineWidth=1.5;
+    ctx.beginPath();
+    for(let vi=0;vi<=1;vi+=0.02){
+      const Vc_norm=0.3+vi*0.7;
+      const T_norm=Math.pow(C/(Vc_norm*350),1/n);
+      const px=tx+vi*tw2;
+      const py=ty+th2-Math.min(T_norm,1.2)*th2*0.85;
+      vi===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    }
+    ctx.stroke();
+    ctx.fillStyle=col; ctx.font='9px system-ui';
+    ctx.fillText(lbl,tx+tw2-24,ty+tools.indexOf(tools.find(t=>t.col===col))*12+12);
+  });
+
+  ctx.fillStyle='#fcd34d'; ctx.font='bold 11px system-ui'; ctx.textAlign='center';
+  ctx.fillText("Taylor Tool Life",tx+tw2/2,ty-8);
+  ctx.fillText("Vc · Tⁿ = C",tx+tw2/2,ty+8);
+  ctx.textAlign='left';
+
+  ctx.fillStyle='#f59e0b'; ctx.font='bold 13px system-ui'; ctx.textAlign='center';
+  ctx.fillText('Tool Wear — Measurement &amp; Taylor Equation',W/2,22);
+  ctx.textAlign='left';
+}
+
+// ============================================================
+// TAB 3: CUTTING PARAMETERS
+// ============================================================
+function drawTurning(){
+  const r = gctx('c-turning'); if(!r) return;
+  const {ctx, W, H} = r;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#0a1628'; ctx.fillRect(0,0,W,H);
+
+  const cx=220, cy=180, Ro=130, Ri=85;
+
+  // Workpiece cylinder (ellipse for perspective)
+  const ey=0.32; // y-scale for ellipse (perspective)
+  function ellArc(cx2,cy2,rx,ry,a0,a1){
+    ctx.save(); ctx.scale(1,ry/rx); ctx.arc(cx2,cy2*rx/ry,rx,a0,a1); ctx.restore();
+  }
+
+  // End face (right side)
+  ctx.fillStyle='#546e7a';
+  ctx.beginPath(); ellArc(cx,cy,Ro*ey,Ro,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#78909c'; ctx.lineWidth=1.2; ctx.stroke();
+
+  // Machined zone (smaller radius on end face)
+  ctx.fillStyle='#607d8b';
+  ctx.beginPath(); ellArc(cx,cy,Ri*ey,Ri,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#78909c'; ctx.lineWidth=1; ctx.stroke();
+
+  // Cylinder body (side view, left part)
+  const LEN=200;
+  ctx.fillStyle='#455a64';
+  ctx.beginPath();
+  ctx.moveTo(cx,cy-Ro);
+  ctx.lineTo(cx-LEN,cy-Ro);
+  ctx.lineTo(cx-LEN,cy+Ro);
+  ctx.lineTo(cx,cy+Ro);
+  ellArc(cx,cy,Ro*ey,Ro,Math.PI/2,3*Math.PI/2);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle='#546e7a'; ctx.lineWidth=1.2; ctx.stroke();
+
+  // Machined inner cylinder (showing ap removed)
+  ctx.fillStyle='#607d8b';
+  ctx.beginPath();
+  ctx.moveTo(cx,cy-Ri);
+  ctx.lineTo(cx-LEN,cy-Ri);
+  ctx.lineTo(cx-LEN,cy+Ri);
+  ctx.lineTo(cx,cy+Ri);
+  ellArc(cx,cy,Ri*ey,Ri,Math.PI/2,3*Math.PI/2);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle='#78909c'; ctx.lineWidth=1; ctx.stroke();
+
+  // Centerline
+  ctx.strokeStyle='#1e3a5f'; ctx.lineWidth=1; ctx.setLineDash([6,5]);
+  ctx.beginPath(); ctx.moveTo(cx-LEN-20,cy); ctx.lineTo(cx+20,cy); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Tool
+  const TOOLx=cx-100, TOOLy=cy-Ri-28;
+  ctx.fillStyle='#37474f';
+  ctx.beginPath();
+  ctx.moveTo(TOOLx,TOOLy+28);        // tip
+  ctx.lineTo(TOOLx-24,TOOLy+18);
+  ctx.lineTo(TOOLx-28,TOOLy);
+  ctx.lineTo(TOOLx+14,TOOLy+2);
+  ctx.lineTo(TOOLx+18,TOOLy+24);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle='#fbbf24'; ctx.lineWidth=1.5; ctx.stroke();
+  // tool holder
+  ctx.fillStyle='#263238';
+  ctx.fillRect(TOOLx-28,TOOLy-50,46,52);
+  ctx.strokeStyle='#455a64'; ctx.lineWidth=1; ctx.strokeRect(TOOLx-28,TOOLy-50,46,52);
+
+  // Vc arrow (tangential — around the workpiece)
+  arrow(ctx,cx,cy-Ro-14,cx-60,cy-Ro-14,'#fbbf24',2);
+  ctx.fillStyle='#fbbf24'; ctx.font='bold 11px system-ui';
+  ctx.fillText('Vc',cx-80,cy-Ro-10);
+
+  // fn arrow (axial — along workpiece length)
+  arrow(ctx,TOOLx,TOOLy+60,TOOLx+40,TOOLy+60,'#38bdf8',2);
+  ctx.fillStyle='#38bdf8'; ctx.font='bold 11px system-ui';
+  ctx.fillText('fn',TOOLx+44,TOOLy+64);
+
+  // ap arrow (radial — depth of cut)
+  dimArrow(ctx,cx+16,cy-Ro,cx+16,cy-Ri,'#4ade80');
+  ctx.fillStyle='#4ade80'; ctx.font='bold 11px system-ui';
+  ctx.fillText('ap',cx+20,(cy-Ro+cy-Ri)/2+4);
+
+  // Dm label
+  dimArrow(ctx,cx+30,cy,cx+30,cy-Ro,'#94a3b8');
+  ctx.fillStyle='#94a3b8'; ctx.font='10px system-ui';
+  ctx.fillText('Dm',cx+34,(cy+cy-Ro)/2+4);
+
+  // Spindle rotation arc
+  ctx.strokeStyle='rgba(251,191,36,0.4)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.arc(cx,cy,Ro+24,Math.PI*1.1,Math.PI*1.6); ctx.stroke();
+  arrow(ctx,cx+Math.cos(Math.PI*1.6)*(Ro+24),cy+Math.sin(Math.PI*1.6)*(Ro+24),
+        cx+Math.cos(Math.PI*1.65)*(Ro+24),cy+Math.sin(Math.PI*1.65)*(Ro+24),'rgba(251,191,36,0.6)',1);
+  ctx.fillStyle='rgba(251,191,36,0.7)'; ctx.font='10px system-ui';
+  ctx.fillText('n (rpm)',cx-50,cy+Ro+36);
+
+  ctx.fillStyle='#f59e0b'; ctx.font='bold 13px system-ui'; ctx.textAlign='center';
+  ctx.fillText('Turning Operation — Key Parameters',W/2,22);
+  ctx.textAlign='left';
+
+  ctx.fillStyle='#475569'; ctx.font='10px system-ui';
+  ctx.fillText('D₀ (original)',cx+30,cy+18);
+}
+
+// ---- Chip thickness / entering angle ----
+function drawChipTh(){
+  const r = gctx('c-chipth'); if(!r) return;
+  const {ctx, W, H} = r;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#0a1628'; ctx.fillRect(0,0,W,H);
+
+  const titles=['κr = 90° (neutral)', 'κr = 75°', 'κr = 45° (low-force)', 'κr = 60° (typical)'];
+  const krs=[90,75,45,60];
+  const fn_px=28; // fn in pixels
+
+  krs.forEach((kr,i)=>{
+    const cx=W/4*i+W/8, cy=H/2, rad=50;
+    const ang=(90-kr)*DEG;
+
+    // Workpiece circle
+    ctx.strokeStyle='#455a64'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.arc(cx,cy,rad,0,Math.PI*2); ctx.stroke();
+
+    // Chip cross-section (hm projected)
+    const hm_px=fn_px*Math.sin(kr*DEG);
+    const edge_len=fn_px/Math.sin(kr*DEG);
+
+    // Edge line
+    ctx.strokeStyle='#fbbf24'; ctx.lineWidth=2.5;
+    const ex=Math.cos(ang), ey=Math.sin(ang);
+    ctx.beginPath();
+    ctx.moveTo(cx-rad*ex-ey*fn_px/2,cy-rad*ey+ex*fn_px/2);
+    ctx.lineTo(cx-rad*ex+ey*fn_px/2,cy-rad*ey-ex*fn_px/2);
+    ctx.stroke();
+
+    // Feed arrow
+    arrow(ctx,cx+rad-4,cy-fn_px/2,cx+rad-4,cy+fn_px/2,'#38bdf8',1.5);
+
+    // hm annotation
+    ctx.fillStyle='#4ade80'; ctx.font='10px system-ui'; ctx.textAlign='center';
+    ctx.fillText('hm='+Math.round(hm_px/fn_px*100)+'%',cx,cy+rad+20);
+    ctx.fillStyle='#fcd34d'; ctx.font='bold 11px system-ui';
+    ctx.fillText('κr='+kr+'°',cx,cy-rad-10);
+    if(i<3){ctx.strokeStyle='#1e3a5f';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W/4*(i+1),0);ctx.lineTo(W/4*(i+1),H);ctx.stroke();}
+  });
+
+  ctx.fillStyle='#38bdf8'; ctx.font='10px system-ui'; ctx.textAlign='center';
+  ctx.fillText('→ fn (feed)',W*0.88,H/2+fn_px/2+14);
+  ctx.fillStyle='#94a3b8'; ctx.font='9px system-ui';
+  ctx.fillText('hm = fn · sin κr — smaller κr → thinner chip → lower cutting force per unit edge length',W/2,H-6);
+  ctx.textAlign='left';
+}
+
+// ============================================================
+// TAB 4: TOOL GEOMETRY
+// ============================================================
+function drawToolGeo(){
+  const r = gctx('c-toolge'); if(!r) return;
+  const {ctx, W, H} = r;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#0a1628'; ctx.fillRect(0,0,W,H);
+
+  const TIPx=160, TIPy=200;
+  const RAKE=14*DEG, CLEAR=8*DEG, KR=75*DEG;
+
+  // Tool body (wedge in cross-section)
+  const rk_dx=-Math.sin(RAKE), rk_dy=-Math.cos(RAKE);
+  const fl_dx=Math.cos(CLEAR), fl_dy=Math.sin(CLEAR);
+  const RAKE_L=130, FL_L=110;
+  const RKex=TIPx+rk_dx*RAKE_L, RKey=TIPy+rk_dy*RAKE_L;
+  const FLex=TIPx+fl_dx*FL_L, FLey=TIPy+fl_dy*FL_L;
+
+  // Workpiece (light reference plane)
+  ctx.fillStyle='#1a2f4a';
+  ctx.fillRect(60, TIPy+2, W-80, H-TIPy-20);
+  ctx.strokeStyle='#2d4a6e'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(60,TIPy+2); ctx.lineTo(W-20,TIPy+2); ctx.stroke();
+  ctx.fillStyle='#475569'; ctx.font='10px system-ui';
+  ctx.fillText('Machined surface (reference plane)',80,TIPy+18);
+
+  ctx.fillStyle='#37474f';
+  ctx.beginPath();
+  ctx.moveTo(TIPx,TIPy);
+  ctx.lineTo(RKex,RKey);
+  ctx.lineTo(RKex+80,RKey);
+  ctx.lineTo(FLex+60,FLey-20);
+  ctx.lineTo(FLex,FLey);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle='#607d8b'; ctx.lineWidth=1.5; ctx.stroke();
+
+  // --- RAKE ANGLE annotation ---
+  const vertLen=70;
+  ctx.strokeStyle='rgba(252,211,77,0.4)'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(TIPx,TIPy); ctx.lineTo(TIPx,TIPy-vertLen); ctx.stroke();
+  ctx.setLineDash([]);
+  // Rake angle arc
+  ctx.strokeStyle='#fcd34d'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.arc(TIPx,TIPy,36,-Math.PI/2,-Math.PI/2+RAKE); ctx.stroke();
+  ctx.fillStyle='#fcd34d'; ctx.font='bold 11px system-ui';
+  ctx.fillText('γ (rake)',TIPx+8,TIPy-44);
+  ctx.font='10px system-ui';
+  ctx.fillText('+14°',TIPx+8,TIPy-30);
+
+  // --- CLEARANCE ANGLE annotation ---
+  const horizLen=80;
+  ctx.strokeStyle='rgba(56,189,248,0.4)'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(TIPx,TIPy); ctx.lineTo(TIPx+horizLen,TIPy); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.strokeStyle='#38bdf8'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.arc(TIPx,TIPy,46,0,CLEAR); ctx.stroke();
+  ctx.fillStyle='#38bdf8'; ctx.font='bold 11px system-ui';
+  ctx.fillText('α (clearance)',TIPx+50,TIPy+22);
+  ctx.font='10px system-ui'; ctx.fillText('8°',TIPx+50,TIPy+34);
+
+  // Wedge angle label
+  ctx.fillStyle='#94a3b8'; ctx.font='10px system-ui';
+  ctx.fillText('β = 90°−γ−α',TIPx+40,TIPy-10);
+  ctx.fillText('= wedge angle',TIPx+40,TIPy+2);
+
+  // Rake face label
+  ctx.save();
+  ctx.translate(TIPx+rk_dx*70, TIPy+rk_dy*70);
+  ctx.rotate(Math.atan2(rk_dy,rk_dx));
+  ctx.fillStyle='#fcd34d'; ctx.font='10px system-ui'; ctx.textAlign='center';
+  ctx.fillText('Rake face',10,-8);
+  ctx.restore();
+
+  // Flank face label
+  ctx.fillStyle='#38bdf8'; ctx.font='10px system-ui';
+  ctx.fillText('Flank face',TIPx+fl_dx*50+4,TIPy+fl_dy*50+14);
+
+  // Nose radius
+  ctx.fillStyle='rgba(74,222,128,0.4)';
+  ctx.beginPath(); ctx.arc(TIPx,TIPy,14,Math.PI/2-RAKE,CLEAR); ctx.fill();
+  ctx.fillStyle='#4ade80'; ctx.font='10px system-ui';
+  ctx.fillText('rε',TIPx+16,TIPy+12);
+
+  // Top view — showing entering angle
+  const tvx=260, tvy=80, tvR=60;
+  ctx.fillStyle='#455a64'; ctx.beginPath(); ctx.arc(tvx,tvy,tvR,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#546e7a'; ctx.lineWidth=1; ctx.stroke();
+  // Entering angle
+  const feed_ang=Math.PI/2;
+  const edge_ang=feed_ang-KR;
+  ctx.strokeStyle='#fbbf24'; ctx.lineWidth=2.5;
+  ctx.beginPath();
+  ctx.moveTo(tvx+Math.cos(edge_ang+Math.PI/2)*tvR*0.7,tvy+Math.sin(edge_ang+Math.PI/2)*tvR*0.7);
+  ctx.lineTo(tvx-Math.cos(edge_ang+Math.PI/2)*tvR*0.7,tvy-Math.sin(edge_ang+Math.PI/2)*tvR*0.7);
+  ctx.stroke();
+  // Feed direction
+  arrow(ctx,tvx,tvy-tvR-14,tvx,tvy-tvR+14,'#38bdf8',2);
+  // KR arc
+  ctx.strokeStyle='#fb923c'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.arc(tvx,tvy+tvR*0.1,28,-Math.PI/2,-Math.PI/2+KR); ctx.stroke();
+  ctx.fillStyle='#fb923c'; ctx.font='10px system-ui';
+  ctx.fillText('κr=75°',tvx+12,tvy+tvR*0.1-12);
+  ctx.fillStyle='#fcd34d'; ctx.font='bold 11px system-ui'; ctx.textAlign='center';
+  ctx.fillText('Entering Angle (top view)',tvx,tvy+tvR+18);
+  ctx.textAlign='left';
+
+  ctx.fillStyle='#f59e0b'; ctx.font='bold 13px system-ui'; ctx.textAlign='center';
+  ctx.fillText('Tool Geometry (Orthogonal Cross-section)',W/2,22);
+  ctx.textAlign='left';
+}
+
+// ---- ISO Grade visualization ----
+function drawGrades(){
+  const r = gctx('c-grades'); if(!r) return;
+  const {ctx, W, H} = r;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#0a1628'; ctx.fillRect(0,0,W,H);
+
+  const groups=[
+    {id:'P',col:'#3b82f6',name:'Steel',vc:[200,500],fn:[0.1,0.5],ap:[1,6],wear:'Crater'},
+    {id:'M',col:'#eab308',name:'Stainless',vc:[120,250],fn:[0.1,0.4],ap:[1,4],wear:'Notch+BUE'},
+    {id:'K',col:'#ef4444',name:'Cast Iron',vc:[150,400],fn:[0.1,0.4],ap:[1,5],wear:'Flank'},
+    {id:'N',col:'#22c55e',name:'Aluminum',vc:[500,3000],fn:[0.1,0.5],ap:[1,8],wear:'BUE'},
+    {id:'S',col:'#f97316',name:'Superalloy/Ti',vc:[40,120],fn:[0.05,0.2],ap:[0.5,3],wear:'Notch'},
+    {id:'H',col:'#94a3b8',name:'Hardened',vc:[80,200],fn:[0.05,0.2],ap:[0.1,1],wear:'Abrasive'},
+  ];
+
+  // Draw Vc bar chart
+  const padL=56,padR=20,padT=36,padB=30;
+  const cw=W-padL-padR, ch=H-padT-padB;
+  const barW=cw/groups.length-8;
+  const maxVc=3000;
+
+  // Title
+  ctx.font='bold 13px system-ui'; ctx.fillStyle='#f59e0b'; ctx.textAlign='center';
+  ctx.fillText('Recommended Cutting Speed Vc (m/min) by ISO Material Group — Coated Carbide',W/2,18);
+  ctx.textAlign='left';
+
+  // Grid
+  [0,500,1000,1500,2000,2500,3000].forEach(v=>{
+    const y=padT+ch-ch*v/maxVc;
+    ctx.strokeStyle='#1a2f4a'; ctx.lineWidth=v===0?1.5:.6;
+    ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(padL+cw,y); ctx.stroke();
+    ctx.fillStyle='#475569'; ctx.font='9px system-ui'; ctx.textAlign='right';
+    ctx.fillText(v,padL-4,y+3);
+  });
+
+  groups.forEach((g,i)=>{
+    const x=padL+i*(cw/groups.length)+4;
+    const yMin=padT+ch-ch*g.vc[0]/maxVc;
+    const yMax=padT+ch-ch*g.vc[1]/maxVc;
+
+    // Range bar (min-max)
+    ctx.fillStyle=g.col+'33';
+    ctx.fillRect(x,yMax,barW,yMin-yMax);
+    ctx.strokeStyle=g.col; ctx.lineWidth=1.5;
+    ctx.strokeRect(x,yMax,barW,yMin-yMax);
+
+    // Min/max ticks
+    ctx.strokeStyle=g.col; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(x+6,yMin); ctx.lineTo(x+barW-6,yMin); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x+6,yMax); ctx.lineTo(x+barW-6,yMax); ctx.stroke();
+
+    // Group ID badge
+    ctx.fillStyle=g.col;
+    ctx.beginPath(); ctx.arc(x+barW/2,padT+ch+14,10,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#0a1628'; ctx.font='bold 11px system-ui'; ctx.textAlign='center';
+    ctx.fillText(g.id,x+barW/2,padT+ch+18);
+
+    ctx.fillStyle=g.col; ctx.font='9px system-ui';
+    ctx.fillText(g.name,x+barW/2,padT+ch+30);
+
+    // Vc range numbers
+    ctx.fillStyle=g.col; ctx.font='9px system-ui';
+    ctx.fillText(g.vc[1],x+barW/2,yMax-4);
+    ctx.fillText(g.vc[0],x+barW/2,yMin+10);
+  });
+
+  ctx.fillStyle='#475569'; ctx.font='9px system-ui'; ctx.textAlign='left';
+  ctx.fillText('Vc (m/min)',4,padT+ch/2);
+  ctx.textAlign='left';
+}
+
+// ---- Init ----
+window.addEventListener('DOMContentLoaded',()=>{
+  drawOrtho(); drawChips();
+});
+</script>
+</body></html>

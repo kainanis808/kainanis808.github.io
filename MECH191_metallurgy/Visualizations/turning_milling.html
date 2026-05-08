@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<title>Turning & Milling</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a1628;color:#e2e8f0;font-family:system-ui,sans-serif;min-height:100vh}
+header{background:#0f1f3d;border-bottom:2px solid #06b6d4;padding:18px 32px}
+header h1{font-size:1.5rem;color:#06b6d4}
+header p{font-size:.85rem;color:#94a3b8;margin-top:4px}
+.tabs{display:flex;background:#0f1f3d;border-bottom:1px solid #1e3a5f;padding:0 24px;flex-wrap:wrap}
+.tab-btn{padding:12px 18px;cursor:pointer;font-size:.84rem;color:#94a3b8;border:none;background:none;border-bottom:3px solid transparent;transition:all .2s}
+.tab-btn.active{color:#06b6d4;border-bottom-color:#06b6d4}
+.tab-btn:hover{color:#e2e8f0}
+.tab-content{display:none;padding:26px 30px}
+.tab-content.active{display:block}
+h2{font-size:1.1rem;color:#06b6d4;margin-bottom:12px}
+h3{font-size:.9rem;color:#67e8f9;margin-bottom:8px}
+p{font-size:.85rem;color:#94a3b8;line-height:1.6;margin-bottom:10px}
+canvas{display:block;background:#0f1f3d;border-radius:8px;border:1px solid #1e3a5f}
+.row{display:flex;gap:20px;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap}
+.col{flex:1;min-width:200px}
+.card{background:#0f1f3d;border:1px solid #1e3a5f;border-radius:10px;padding:14px;margin-bottom:14px}
+.eq{background:#0a1628;border:1px solid #1e3a5f;border-radius:6px;padding:9px 13px;font-family:monospace;font-size:.88rem;color:#67e8f9;margin:7px 0}
+table{width:100%;border-collapse:collapse;font-size:.79rem}
+th{background:#1e3a5f;color:#06b6d4;padding:8px 11px;text-align:left;font-weight:600}
+td{padding:7px 11px;border-bottom:1px solid #1e3a5f;color:#cbd5e1}
+tr:hover td{background:rgba(6,182,212,.04)}
+.tip{background:rgba(6,182,212,.08);border-left:3px solid #06b6d4;border-radius:0 6px 6px 0;padding:10px 14px;margin:10px 0;font-size:.82rem;color:#94a3b8}
+.tip strong{color:#67e8f9}
+.badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:.7rem;font-weight:600;margin:2px}
+.bc{background:rgba(6,182,212,.2);color:#67e8f9;border:1px solid rgba(6,182,212,.4)}
+.bg{background:rgba(74,222,128,.15);color:#86efac;border:1px solid rgba(74,222,128,.3)}
+.br{background:rgba(239,68,68,.18);color:#fca5a5;border:1px solid rgba(239,68,68,.3)}
+.bo{background:rgba(251,146,60,.15);color:#fdba74;border:1px solid rgba(251,146,60,.3)}
+.back{text-align:center;margin-top:28px}
+.back a{color:#06b6d4;text-decoration:none;font-size:.875rem}
+</style>
+</head><body>
+<header>
+  <h1>CNC Turning &amp; Milling</h1>
+  <p>Sandvik Coromant calculators &nbsp;|&nbsp; Haas Automation operation guides &nbsp;|&nbsp; Harvey Tool &amp; Helical Solutions difficult-material strategies</p>
+</header>
+<div class="tabs">
+  <button class="tab-btn active" data-tab="turning">CNC Turning</button>
+  <button class="tab-btn" data-tab="milling">CNC Milling</button>
+  <button class="tab-btn" data-tab="finish">Surface Finish</button>
+  <button class="tab-btn" data-tab="difficult">Difficult Materials</button>
+</div>
+
+<!-- ===== TAB 1: TURNING ===== -->
+<div class="tab-content active" id="tab-turning">
+  <h2>CNC Turning — Sandvik Coromant &amp; Haas</h2>
+  <canvas id="c-lathe" width="760" height="310" style="width:760px;height:310px;margin-bottom:16px"></canvas>
+
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <h3>Sandvik — Primary Formulas</h3>
+        <div class="eq">Vc = π · D · n / 1000  [m/min]</div>
+        <div class="eq">n  = Vc · 1000 / (π · D)  [rpm]</div>
+        <div class="eq">vf = fn · n  [mm/min]</div>
+        <div class="eq">MRR = ap · fn · Vc  [cm³/min ÷1000]</div>
+        <div class="eq">Pc = Fc · Vc / (60 000 · η)  [kW]</div>
+        <p style="margin-top:6px"><strong style="color:#67e8f9">η</strong> = machine efficiency (~0.80). <strong style="color:#67e8f9">Fc</strong> = kc · ap · fn. Use Pc to check against machine spindle power.</p>
+      </div>
+      <div class="card">
+        <h3>Starting Parameter Ranges</h3>
+        <table>
+          <thead><tr><th>Material</th><th>Vc (m/min)</th><th>fn (mm/rev)</th><th>ap rough (mm)</th></tr></thead>
+          <tbody>
+            <tr><td>Low-carbon steel</td><td>250–400</td><td>0.15–0.40</td><td>2–5</td></tr>
+            <tr><td>Alloy steel HB250</td><td>150–280</td><td>0.12–0.35</td><td>2–4</td></tr>
+            <tr><td>Stainless 304</td><td>130–220</td><td>0.10–0.30</td><td>1–3</td></tr>
+            <tr><td>Gray cast iron</td><td>180–350</td><td>0.15–0.40</td><td>2–5</td></tr>
+            <tr><td>Ti-6Al-4V</td><td>50–90</td><td>0.08–0.20</td><td>1–2</td></tr>
+            <tr><td>Inconel 718</td><td>30–60</td><td>0.05–0.15</td><td>0.5–1.5</td></tr>
+            <tr><td>Aluminum 6061</td><td>600–1500</td><td>0.15–0.50</td><td>2–6</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <h3>Haas — Machine Operation Tips</h3>
+        <div class="tip"><strong>Tool offsets (G41/G42):</strong> Always set geometry offset (wear offset = 0 at start). Measure tool with probe or edge-find — enter actual Z and X values. Wrong offset = crash or scrap.</div>
+        <div class="tip"><strong>Work coordinate:</strong> G54 is standard first work offset. Set Z0 at part face. G28 (machine home) before tool change — never skip.</div>
+        <div class="tip"><strong>First-part caution:</strong> Run at 50% feed and speed override until proven. Single-block mode (OB key on Haas) steps one block at a time — use for first article.</div>
+        <div class="tip"><strong>Chip control:</strong> Chip breaker geometry on insert selection matters as much as grade. Break chips before they wrap around the part or spindle. Use coolant at 60–80 PSI directed at cutting zone.</div>
+        <div class="tip"><strong>Facing passes:</strong> Always face from OD to center (positive X to X0). This ensures chip exits — facing center-out causes built-up chip.</div>
+      </div>
+      <div class="card">
+        <h3>Turning Operation Types</h3>
+        <table style="font-size:.76rem">
+          <thead><tr><th>Operation</th><th>Tool Motion</th><th>Key Parameter</th></tr></thead>
+          <tbody>
+            <tr><td>Facing</td><td>−X (OD→center)</td><td>fn controls Ra; ap = 0.2–1 mm</td></tr>
+            <tr><td>OD roughing</td><td>−Z (axial)</td><td>Max ap for rigidity; high fn</td></tr>
+            <tr><td>OD finishing</td><td>−Z with contour</td><td>Low fn (0.05–0.15), small ap</td></tr>
+            <tr><td>Grooving</td><td>−X plunge</td><td>fn = 0.03–0.10; no axial feed</td></tr>
+            <tr><td>Threading</td><td>−Z synchronized</td><td>fn = thread pitch (G76/G32)</td></tr>
+            <tr><td>Boring (ID)</td><td>+Z into bore</td><td>Minimize stickout; use anti-vib bar</td></tr>
+            <tr><td>Parting</td><td>−X to center</td><td>Reduce fn 50% at center; flood coolant</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <h2>Insert Shape &amp; Application Reference</h2>
+  <canvas id="c-insert" width="760" height="190" style="width:760px;height:190px;margin-bottom:16px"></canvas>
+  <div class="row" style="margin-top:4px">
+    <div class="col card">
+      <h3>Insert Grade Logic (ISO P/M/K/N/S/H)</h3>
+      <p>First digit = ISO group. Higher number = tougher (more cobalt, coarser grain). Use harder grades (P10, K10) at high Vc; use tougher grades (P40) for interrupted cuts, scale, or unstable setups.</p>
+    </div>
+    <div class="col card">
+      <h3>Chip Breaker Selection</h3>
+      <p><strong style="color:#67e8f9">Finishing (F):</strong> Sharp edge, positive rake — use at low fn (0.05–0.15 mm/rev). <strong style="color:#67e8f9">Medium (M):</strong> General purpose 0.10–0.30. <strong style="color:#67e8f9">Roughing (R):</strong> Negative chamfer, handles heavy DOC and hard scale. Match chip breaker geometry to fn range shown in manufacturer chart.</p>
+    </div>
+    <div class="col card">
+      <h3>Haas — Insert Indexing</h3>
+      <p>Index or replace inserts at the first sign of wear marks visible to the naked eye — don't wait for surface finish to degrade. Track insert life per part, not by time. Use Haas tool life management (T offset page) to preset index count alerts.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB 2: MILLING ===== -->
+<div class="tab-content" id="tab-milling">
+  <h2>CNC Milling — Sandvik Coromant &amp; Haas</h2>
+  <div class="row">
+    <canvas id="c-millen" width="420" height="340" style="width:420px;height:340px"></canvas>
+    <div style="flex:1">
+      <div class="card">
+        <h3>Sandvik — Milling Formulas</h3>
+        <div class="eq">Vc  = π · Dc · n / 1000  [m/min]</div>
+        <div class="eq">n   = Vc · 1000 / (π · Dc)  [rpm]</div>
+        <div class="eq">vf  = fz · z · n  [mm/min]  (table feed)</div>
+        <div class="eq">MRR = ae · ap · vf / 1000  [cm³/min]</div>
+        <div class="eq">hm  = fz · √(ae / Dc)   (chip thinning, ae &lt; Dc/2)</div>
+        <p style="margin-top:6px"><strong style="color:#67e8f9">hm</strong> = mean chip thickness. When ae &lt; Dc/2, real chip is thinner than fz — compensate by increasing fz to maintain recommended hm. Haas: always program vf (mm/min), not fz directly.</p>
+        <div class="eq">fz_adj = fz_rec · √(Dc / ae)  (for ae &lt; Dc/2)</div>
+      </div>
+      <div class="card">
+        <h3>Radial &amp; Axial Engagement</h3>
+        <table style="font-size:.78rem">
+          <thead><tr><th>Cut Type</th><th>ae/Dc</th><th>ap</th><th>Strategy</th></tr></thead>
+          <tbody>
+            <tr><td>Full slot</td><td>100%</td><td>0.5–1× Dc</td><td>4-flute; reduced Vc −20%</td></tr>
+            <tr><td>Side milling</td><td>30–50%</td><td>1–2× Dc</td><td>Standard parameters</td></tr>
+            <tr><td>Light radial</td><td>5–15%</td><td>Full depth</td><td>Increase fz (chip thin); trochoidal</td></tr>
+            <tr><td>Finishing</td><td>5–10%</td><td>0.1–0.5</td><td>High Vc, low fz, sharp edge</td></tr>
+            <tr><td>Plunge</td><td>—</td><td>0.05×Dc/pass</td><td>Center-cutting end mill only</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <h2>Toolpath Strategies</h2>
+  <canvas id="c-toolpath" width="760" height="200" style="width:760px;height:200px;margin-bottom:16px"></canvas>
+
+  <div class="row">
+    <div class="col card">
+      <h3>Climb vs. Conventional Milling</h3>
+      <p><strong style="color:#4ade80">Climb milling</strong> (chip thick-to-thin): cutter rotation same direction as feed. Chip is deposited behind the cutter — better surface finish, lower cutting temperature, less work hardening. <strong>Use for all finishing; standard for most operations on CNC.</strong></p>
+      <p><strong style="color:#fca5a5">Conventional milling</strong> (chip thin-to-thick): cutter rotation opposite to feed. Rubbing at chip entry — more heat, work hardening, BUE risk. Use only when backlash is a concern (rare on modern CNC).</p>
+    </div>
+    <div class="col card">
+      <h3>Trochoidal (High-Efficiency) Milling</h3>
+      <p>Small radial engagement (5–15% Dc) with full axial depth of cut. Cutter follows circular arc paths — keeps chip load consistent, prevents heat buildup, allows much higher feed rates. Ideal for hardened or difficult materials where full-width slotting would overheat the tool.</p>
+      <p>Software: HSMWorks, Mastercam "Dynamic Mill", Fusion 360 "Adaptive Clearing", Hypermill Maxx. Haas: use CAM-generated trochoidal G-code — do not program manually.</p>
+    </div>
+    <div class="col card">
+      <h3>Haas — Milling Setup Tips</h3>
+      <div class="tip"><strong>Tool runout:</strong> Check with DTI in spindle. &gt;0.01 mm runout doubles effective chip load variation — degrades tool life and surface finish.</div>
+      <div class="tip"><strong>G54 work offset:</strong> Use Haas probe (if equipped) or edge-finder. Set X0, Y0 at part datum; Z0 at top of stock.</div>
+      <div class="tip"><strong>Pecking:</strong> For deep slots, use incremental ap (peck milling) to clear chips — program Z increments in the CAM or use canned cycle G73/G83 adapted for milling.</div>
+      <div class="tip"><strong>Cutter comp (G41/G42):</strong> Apply on finish passes only. Lead in/out with arc moves — never engage cutter comp in a straight plunge.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col card">
+      <h3>End Mill Selection</h3>
+      <table style="font-size:.76rem">
+        <thead><tr><th>Flute Count</th><th>Best For</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td>2-flute</td><td>Aluminum, plastics, deep slots</td><td>Large chip clearance, prevents re-cutting</td></tr>
+          <tr><td>3-flute</td><td>Aluminum, general purpose</td><td>Balance of chip clearance and feed rate</td></tr>
+          <tr><td>4-flute</td><td>Steel, stainless</td><td>More teeth → higher vf for same fz</td></tr>
+          <tr><td>5-7 flute</td><td>High-MRR in steel</td><td>Increased vf; needs rigid setup</td></tr>
+          <tr><td>7+ flute (finisher)</td><td>Hardened steel finishing</td><td>Very low fz, excellent Ra</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col card">
+      <h3>Corner Radius vs. Sharp Corner</h3>
+      <p>Corner radius (bull-nose end mill) significantly extends tool life vs sharp corners — stress concentration at a sharp corner limits depth of cut. Helical Solutions recommends: use the largest corner radius that part geometry allows. Typical: 0.2–2 mm radius on general-purpose end mills.</p>
+      <p>For inside corners: the minimum radius achievable = tool radius. Always design with fillet ≥ tool radius + 10% clearance.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB 3: SURFACE FINISH ===== -->
+<div class="tab-content" id="tab-finish">
+  <h2>Surface Finish — Sandvik &amp; Haas</h2>
+  <div class="row">
+    <div style="flex:1">
+      <h3>Turning Surface Roughness</h3>
+      <div class="eq">Ra (μm) ≈ fn² / (8 · rε) × 1000</div>
+      <p>Theoretical Ra for a single-point turning tool with nose radius rε. Actual Ra is 1.5–2× theoretical due to vibration, BUE, and chip re-cutting. Reducing fn by half reduces Ra by 4×.</p>
+      <canvas id="c-ra-turn" width="480" height="270" style="width:480px;height:270px;margin:10px 0"></canvas>
+    </div>
+    <div style="flex:1">
+      <h3>Milling Surface Roughness</h3>
+      <div class="eq">Ra (μm) ≈ ae² / (8 · R) × 1000  (ball end)</div>
+      <div class="eq">Ra (μm) ≈ fz² / (8 · rε) × 1000  (flat end, step-over)</div>
+      <p>For a ball-end mill, <strong style="color:#67e8f9">ae</strong> (step-over) and ball radius R determine the scallop height. For a flat end mill with corner radius rε, it is the feed per tooth fz that controls Ra in the feed direction.</p>
+      <canvas id="c-ra-mill" width="340" height="270" style="width:340px;height:270px;margin:10px 0"></canvas>
+    </div>
+  </div>
+
+  <h2>Factors Affecting Actual Surface Finish</h2>
+  <div class="row">
+    <div class="col card">
+      <h3>Vibration &amp; Chatter</h3>
+      <p>Chatter produces characteristic waviness (chatter marks) perpendicular to feed. Caused by regenerative vibration — the tool cuts a wavy surface left by the previous pass.</p>
+      <p><strong style="color:#67e8f9">Fixes (Haas/Sandvik):</strong></p>
+      <ul style="font-size:.82rem;color:#94a3b8;padding-left:18px;line-height:1.8">
+        <li>Reduce ap or ae (less cutting force)</li>
+        <li>Reduce Vc in 10% steps until stable</li>
+        <li>Shorten tool stickout (most effective — rigidity ∝ 1/L³)</li>
+        <li>Use anti-vibration toolholder (Sandvik Silent Tools)</li>
+        <li>Change spindle speed ±15% (shift frequency off resonance)</li>
+        <li>Climb mill instead of conventional</li>
+        <li>Add damping mass to workpiece fixture</li>
+      </ul>
+    </div>
+    <div class="col card">
+      <h3>Built-Up Edge (BUE)</h3>
+      <p>Work material cold-welds to rake face at low-to-medium speeds. Periodically fractures and tears the machined surface — produces poor Ra and irregular finish.</p>
+      <p><strong style="color:#67e8f9">Solutions:</strong> Increase Vc past the BUE speed (material-dependent: typically &gt;150 m/min for steel, &gt;250 m/min for aluminum). Use cutting fluid, increase rake angle, use coated insert (TiN reduces adhesion).</p>
+    </div>
+    <div class="col card">
+      <h3>Haas — Finishing Pass Strategy</h3>
+      <div class="tip"><strong>Leave stock for finish:</strong> Rough to 0.2–0.5 mm stock, then finish. Prevents heat distortion from affecting final dimension.</div>
+      <div class="tip"><strong>Coolant mode:</strong> Flood coolant for steel/stainless. Air blast for cast iron (coolant causes thermal shock to insert). Through-spindle for deep bores.</div>
+      <div class="tip"><strong>Spindle warm-up:</strong> Run spindle 5–10 min at operating speed before taking critical dimension cuts — thermal growth of spindle otherwise shifts Z by 5–30 μm.</div>
+      <div class="tip"><strong>Wiper inserts:</strong> Sandvik Wiper geometry has a secondary flat behind the nose radius — allows 2× feed rate for same Ra. Use for finishing passes where MRR matters.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Ra Target by Application</h3>
+    <table>
+      <thead><tr><th>Ra (μm)</th><th>Finish Level</th><th>Typical Process</th><th>Application</th></tr></thead>
+      <tbody>
+        <tr><td>&gt; 6.3</td><td>Rough</td><td>Rough turning, sawing</td><td>Non-functional surfaces, weld preps</td></tr>
+        <tr><td>1.6 – 6.3</td><td>Semi-finish</td><td>Finish turning, milling</td><td>Clearance surfaces, bolt faces</td></tr>
+        <tr><td>0.8 – 1.6</td><td>Finish</td><td>Fine turning, end milling</td><td>Bearing fits, sliding surfaces</td></tr>
+        <tr><td>0.4 – 0.8</td><td>Fine</td><td>Grinding, fine milling</td><td>Sealing surfaces, precision fits</td></tr>
+        <tr><td>0.1 – 0.4</td><td>Very fine</td><td>Honing, fine grinding</td><td>Hydraulic cylinder bores, lapping</td></tr>
+        <tr><td>&lt; 0.1</td><td>Mirror</td><td>Superfinishing, polishing</td><td>Optical surfaces, gauge blocks</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== TAB 4: DIFFICULT MATERIALS ===== -->
+<div class="tab-content" id="tab-difficult">
+  <h2>Difficult Materials — Harvey Tool &amp; Helical Solutions</h2>
+  <p>Difficult-to-machine materials require systematic parameter reduction and process changes. The chart below shows Vc and fn as a percentage of equivalent steel baseline (AISI 1045, Vc=200 m/min turning).</p>
+  <canvas id="c-matfact" width="760" height="260" style="width:760px;height:260px;margin-bottom:16px"></canvas>
+
+  <div class="row">
+    <div class="col card">
+      <h3 style="color:#fbbf24">Stainless Steel (304, 316, 17-4)</h3>
+      <span class="badge bo">ISO M</span><span class="badge bc">Work-hardens severely</span>
+      <p style="margin-top:8px"><strong style="color:#67e8f9">Turning (Sandvik GC2035):</strong> Vc 120–200 m/min. Maintain positive chip contact — never dwell or allow rubbing. fn min 0.08 mm/rev to cut under the work-hardened layer. Flood coolant essential.</p>
+      <p><strong style="color:#67e8f9">Milling (Helical Solutions):</strong> Use 4-flute end mill with sharp AlTiN coating. Climb mill only. Trochoidal preferred at ae=8–12% Dc. fz: maintain hm ≥ 0.04 mm — too light a cut rubs instead of cuts. Vc 80–150 m/min.</p>
+      <div class="tip"><strong>Harvey Tool tip:</strong> For 17-4 PH (H900/H1025): treat as alloy steel in H1025 condition. In H900, reduce parameters an additional 20%.</div>
+    </div>
+    <div class="col card">
+      <h3 style="color:#fb923c">Titanium (Ti-6Al-4V, Grade 5)</h3>
+      <span class="badge bo">ISO S</span><span class="badge br">Low thermal conductivity</span>
+      <p style="margin-top:8px"><strong style="color:#67e8f9">The key rule:</strong> Keep Vc LOW, keep feed HIGH. Heat cannot escape through the workpiece (κ ≈ 7 W/m·K vs steel 50) — all heat goes into the tool. Low Vc = low heat generation rate.</p>
+      <p><strong style="color:#67e8f9">Turning:</strong> Vc 50–80 m/min. fn 0.10–0.20 mm/rev. Use sharp uncoated or PVD-TiAlN inserts. Never stop feed while spindle runs — BUE and weld instantly.</p>
+      <p><strong style="color:#67e8f9">Milling (Helical Solutions):</strong> 3–4 flute, 38–40° helix, large core diameter. ae = 5–10% Dc, full ap (trochoidal). fz maintain 0.03–0.06 mm. Flood coolant at high pressure (70+ PSI) — directed precisely at cutting edge.</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col card">
+      <h3 style="color:#f87171">Inconel 718 &amp; Nickel Superalloys</h3>
+      <span class="badge bo">ISO S</span><span class="badge br">Hardest to machine</span>
+      <p style="margin-top:8px"><strong style="color:#67e8f9">Turning:</strong> Two regimes — (1) <strong>Carbide at low Vc</strong> (30–60 m/min), fn 0.05–0.15 mm/rev — flood coolant, sharp positive geometry. (2) <strong>Ceramic at high Vc</strong> (200–400 m/min) — no coolant (thermal shock), use SiAlON or whisker-reinforced Al₂O₃. Interrupted cuts: carbide only.</p>
+      <p><strong style="color:#67e8f9">Milling (Harvey Tool):</strong> Maximum rigidity — minimize stickout, use shrink-fit or hydraulic chuck. Vc 35–55 m/min. Trochoidal essential. Through-spindle coolant at 1000+ PSI preferred. Index inserts/replace end mills frequently — catastrophic failure occurs fast with worn tools.</p>
+      <div class="tip"><strong>Critical:</strong> Never stop the cutter in contact with Inconel. Always retract before stopping spindle — the tool will weld to the part.</div>
+    </div>
+    <div class="col card">
+      <h3 style="color:#86efac">Aluminum (6061, 7075, 2024)</h3>
+      <span class="badge bg">ISO N</span><span class="badge bc">High speed, sticky chips</span>
+      <p style="margin-top:8px"><strong style="color:#67e8f9">Turning:</strong> Vc 500–2000 m/min. fn up to 0.5 mm/rev. Use uncoated carbide or PCD (polycrystalline diamond). Positive rake (+15° to +20°). Chip control: use chipbreaker geometry to prevent long stringy chips wrapping around spindle.</p>
+      <p><strong style="color:#67e8f9">Milling (Helical Solutions):</strong> 2–3 flute end mill with large chip gullets and polished flutes (prevents aluminum adhesion). Vc 600–3000 m/min depending on machine. High helix angle (40–45°). Mist coolant or flood.</p>
+      <div class="tip"><strong>Harvey Tool tip (7075):</strong> 7075-T6 is significantly harder than 6061 — use parameters closer to steel. Avoid sharp corners that stress the material and cause tear-out.</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col card">
+      <h3 style="color:#cbd5e1">Hardened Steel (45–65 HRC)</h3>
+      <span class="badge" style="background:rgba(148,163,184,.2);color:#cbd5e1;border:1px solid rgba(148,163,184,.3)">ISO H</span>
+      <p style="margin-top:8px"><strong style="color:#67e8f9">Turning:</strong> CBN inserts (CB7015/CB7025) or Al₂O₃ ceramics. No coolant — thermal shock cracks inserts. Vc 80–200 m/min depending on hardness. Very light DOC (ap 0.1–0.5 mm). Rigid setup mandatory — BN inserts chip instantly under vibration.</p>
+      <p><strong style="color:#67e8f9">Milling (Harvey Tool):</strong> Use AlTiN-coated ball-end or bull-nose end mills (no sharp corners). Climb mill only. ae 5–10% Dc, ap 0.1–0.5 mm, Vc 80–180 m/min for carbide. Trochoidal with constant chip load. Finish to Ra 0.4–0.8 μm to approach grinding quality.</p>
+    </div>
+    <div class="col card">
+      <h3 style="color:#94a3b8">Helical Solutions — Universal Rules</h3>
+      <p><strong style="color:#67e8f9">1. Rigidity first.</strong> Reduce tool stickout before reducing parameters. A 2× reduction in overhang = 8× increase in stiffness.</p>
+      <p><strong style="color:#67e8f9">2. Never rub.</strong> Always maintain minimum chip load (hm ≥ 0.02–0.04 mm). Rubbing generates heat without cutting — accelerates wear instantly.</p>
+      <p><strong style="color:#67e8f9">3. Trochoidal by default</strong> for difficult materials. Constant chip load + chip evacuation &gt; conventional slotting in all difficult materials.</p>
+      <p><strong style="color:#67e8f9">4. Replace proactively.</strong> In difficult materials, worn tools fail catastrophically. Budget for aggressive tool change intervals (track by part, not time).</p>
+      <p><strong style="color:#67e8f9">5. Coating matters.</strong> TiAlN for heat resistance (steel, stainless); AlTiN for extreme heat (Ti, Inconel); diamond-like carbon (DLC) for aluminum adhesion; TiB₂ for silicon aluminum.</p>
+    </div>
+  </div>
+</div>
+
+<div class="back"><a href="index.html">← Back to Visualizations Index</a></div>
+
+<script>
+const DEG = Math.PI/180;
+function gctx(id){
+  const cv=document.getElementById(id); if(!cv) return null;
+  const dpr=window.devicePixelRatio||1;
+  if(!cv._dpr){
+    cv.style.width=cv.width+'px'; cv.style.height=cv.height+'px';
+    cv.width=Math.round(cv.width*dpr); cv.height=Math.round(cv.height*dpr);
+    cv._dpr=true;
+  }
+  const ctx=cv.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx,W:parseInt(cv.style.width),H:parseInt(cv.style.height)};
+}
+function arr(ctx,x1,y1,x2,y2,col,lw){
+  const dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy); if(L<1) return;
+  const ux=dx/L,uy=dy/L;
+  ctx.strokeStyle=col; ctx.lineWidth=lw;
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  ctx.fillStyle=col;
+  ctx.beginPath();
+  ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-ux*10+uy*5,y2-uy*10-ux*5);
+  ctx.lineTo(x2-ux*10-uy*5,y2-uy*10+ux*5);
+  ctx.fill();
+}
+document.querySelectorAll('.tab-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById('tab-'+b.dataset.tab).classList.add('active');
+    drawTab(b.dataset.tab);
+  });
+});
+function drawTab(t){
+  if(t==='turning')  { drawLathe(); drawInsert(); }
+  if(t==='milling')  { drawMillEng(); drawToolpath(); }
+  if(t==='finish')   { drawRaTurn(); drawRaMill(); }
+  if(t==='difficult'){ drawMatFact(); }
+}
+
+// ============================================================
+// TAB 1: LATHE DIAGRAM
+// ============================================================
+function drawLathe(){
+  const r=gctx('c-lathe'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0a1628'; ctx.fillRect(0,0,W,H);
+
+  const cy=H/2, R=88, R2=62, WPL=80, WPR=580;
+
+  // Chuck (left, hatched)
+  ctx.fillStyle='#263238';
+  ctx.fillRect(WPL-40,cy-R-20,40,R*2+40);
+  ctx.strokeStyle='#455a64'; ctx.lineWidth=1.5; ctx.strokeRect(WPL-40,cy-R-20,40,R*2+40);
+  // Chuck jaws
+  const jawH=28, jawW=22;
+  [[cy-R-8],[cy+R+8-jawH],[cy-jawH/2]].forEach(([jy],i)=>{
+    ctx.fillStyle='#546e7a';
+    ctx.fillRect(WPL-8,jy,jawW,jawH);
+    ctx.strokeStyle='#78909c'; ctx.lineWidth=1; ctx.strokeRect(WPL-8,jy,jawW,jawH);
+  });
+
+  // Workpiece body
+  ctx.fillStyle='#546e7a';
+  ctx.fillRect(WPL,cy-R,WPR-WPL,R*2);
+  // Machined section (right portion, smaller radius)
+  ctx.fillStyle='#607d8b';
+  ctx.fillRect(380,cy-R2,WPR-380,R2*2);
+  // Diameter transition (shoulder)
+  ctx.fillStyle='#455a64';
+  ctx.fillRect(380,cy-R,8,R*2);
+
+  // End face (right)
+  ctx.fillStyle='#78909c';
+  ctx.beginPath();
+  ctx.ellipse(WPR,cy,R2*0.3,R2,0,0,Math.PI*2);
+  ctx.fill(); ctx.strokeStyle='#90a4ae'; ctx.lineWidth=1; ctx.stroke();
+
+  // Centerline
+  ctx.strokeStyle='#1e3a5f'; ctx.lineWidth=1; ctx.setLineDash([6,5]);
+  ctx.beginPath(); ctx.moveTo(WPL-50,cy); ctx.lineTo(WPR+20,cy); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Tool (OD turning on right section)
+  const Tx=490, Ty=cy-R2-30;
+  ctx.fillStyle='#37474f';
+  ctx.beginPath();
+  ctx.moveTo(Tx,Ty+28); // tip
+  ctx.lineTo(Tx-28,Ty+18);
+  ctx.lineTo(Tx-32,Ty);
+  ctx.lineTo(Tx+16,Ty+2);
+  ctx.lineTo(Tx+20,Ty+24);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle='#fbbf24'; ctx.lineWidth=1.5; ctx.stroke();
+  // holder
+  ctx.fillStyle='#263238'; ctx.fillRect(Tx-32,Ty-60,52,62);
+  ctx.strokeStyle='#455a64'; ctx.lineWidth=1; ctx.strokeRect(Tx-32,Ty-60,52,62);
+
+  // ap annotation
+  ctx.strokeStyle='#4ade80'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(Tx+14,cy-R2); ctx.lineTo(Tx+14,cy-R); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(Tx+8,cy-R2); ctx.lineTo(Tx+20,cy-R2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(Tx+8,cy-R); ctx.lineTo(Tx+20,cy-R); ctx.stroke();
+  ctx.fillStyle='#4ade80'; ctx.font='bold 11px system-ui'; ctx.fillText('ap',Tx+18,(cy-R2+cy-R)/2+4);
+
+  // Vc arrow (tangential around workpiece)
+  arr(ctx,240,cy-R-14,170,cy-R-14,'#fbbf24',2);
+  ctx.fillStyle='#fbbf24'; ctx.font='bold 11px system-ui'; ctx.fillText('Vc',148,cy-R-10);
+  // Rotation arc
+  ctx.strokeStyle='rgba(251,191,36,.4)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.arc(280,cy,R+20,Math.PI*1.05,Math.PI*1.7); ctx.stroke();
+  arr(ctx,280+Math.cos(Math.PI*1.7)*(R+20),cy+Math.sin(Math.PI*1.7)*(R+20),
+      280+Math.cos(Math.PI*1.78)*(R+20),cy+Math.sin(Math.PI*1.78)*(R+20),'rgba(251,191,36,.5)',1.5);
+
+  // fn arrow (axial feed)
+  arr(ctx,Tx+30,Ty+40,Tx-60,Ty+40,'#38bdf8',2);
+  ctx.fillStyle='#38bdf8'; ctx.font='bold 11px system-ui'; ctx.fillText('fn',Tx-76,Ty+44);
+
+  // D label
+  ctx.strokeStyle='#94a3b8'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(160,cy); ctx.lineTo(160,cy-R); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(154,cy); ctx.lineTo(166,cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(154,cy-R); ctx.lineTo(166,cy-R); ctx.stroke();
+  ctx.fillStyle='#94a3b8'; ctx.font='11px system-ui'; ctx.fillText('D/2',168,(cy+cy-R)/2+4);
+
+  // Title + labels
+  ctx.fillStyle='#06b6d4'; ctx.font='bold 13px system-ui'; ctx.textAlign='center';
+  ctx.fillText('CNC Turning — Vc, fn, ap Relationships',W/2,22);
+  ctx.textAlign='left';
+  ctx.fillStyle='#546e7a'; ctx.font='10px system-ui'; ctx.fillText('Chuck',WPL-34,H-12);
+  ctx.fillStyle='#94a3b8'; ctx.fillText('Workpiece',WPL+80,cy+R+18);
+  ctx.fillText('Machined',390,cy-R2-10);
+  ctx.fillText('TOOL',Tx-22,Ty-16);
+
+  // Chip representation
+  ctx.strokeStyle='rgba(251,191,36,0.5)'; ctx.lineWidth=2;
+  ctx.beginPath();
+  ctx.moveTo(Tx,cy-R2);
+  ctx.quadraticCurveTo(Tx+20,cy-R2-22,Tx+10,cy-R2-44);
+  ctx.quadraticCurveTo(Tx-4,cy-R2-60,Tx+8,cy-R2-72);
+  ctx.stroke();
+  ctx.fillStyle='rgba(251,191,36,0.3)'; ctx.font='9px system-ui';
+  ctx.fillText('chip',Tx+12,cy-R2-72);
+}
+
+// ---- INSERT SHAPES ----
+function drawInsert(){
+  const r=gctx('c-insert'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0a1628'; ctx.fillRect(0,0,W,H);
+
+  const inserts=[
+    {id:'C',name:'80° Rhombic',app:'General turning\n(most common)',ang:80,sides:4,col:'#06b6d4'},
+    {id:'D',name:'55° Rhombic',app:'Profiling &\ncopy turning',ang:55,sides:4,col:'#38bdf8'},
+    {id:'T',name:'60° Triangle',app:'Light finish\ncopy turning',ang:60,sides:3,col:'#4ade80'},
+    {id:'S',name:'Square 90°',app:'Heavy roughing\nhigh strength',ang:90,sides:4,col:'#fbbf24'},
+    {id:'W',name:'80° Trigon',app:'General 3-corner\nhigh economy',ang:80,sides:3,col:'#fb923c'},
+    {id:'R',name:'Round',app:'Finishing, heavy\ninterrupted cuts',ang:0,sides:0,col:'#a78bfa'},
+  ];
+
+  const cw=W/6;
+  inserts.forEach(({id,name,app,ang,sides,col},i)=>{
+    const cx=cw*i+cw/2, cy=90, sz=40;
+    // Draw insert shape
+    ctx.fillStyle=col+'33'; ctx.strokeStyle=col; ctx.lineWidth=2;
+    ctx.beginPath();
+    if(sides===0){ // round
+      ctx.arc(cx,cy,sz,0,Math.PI*2);
+    } else {
+      // polygon with inner angle = ang
+      const N=sides;
+      const step=Math.PI*2/N;
+      const startAng=-Math.PI/2;
+      for(let k=0;k<N;k++){
+        const a=startAng+k*step;
+        const x=cx+Math.cos(a)*sz, y=cy+Math.sin(a)*sz;
+        k===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.closePath();
+    }
+    ctx.fill(); ctx.stroke();
+
+    // Nose radius indicator
+    if(sides>0){
+      const tipAng=-Math.PI/2;
+      const tx=cx+Math.cos(tipAng)*sz, ty=cy+Math.sin(tipAng)*sz;
+      ctx.fillStyle=col;
+      ctx.beginPath(); ctx.arc(tx,ty,5,0,Math.PI*2); ctx.fill();
+    }
+
+    // Labels
+    ctx.font='bold 13px system-ui'; ctx.fillStyle=col; ctx.textAlign='center';
+    ctx.fillText(id,cx,cy+5);
+    ctx.font='bold 11px system-ui'; ctx.fillStyle='#e2e8f0';
+    ctx.fillText(name,cx,cy+sz+18);
+    ctx.font='10px system-ui'; ctx.fillStyle='#64748b';
+    app.split('\n').forEach((ln,li)=>ctx.fillText(ln,cx,cy+sz+32+li*13));
+
+    if(i<5){ctx.strokeStyle='#1e3a5f';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(cw*(i+1),0);ctx.lineTo(cw*(i+1),H);ctx.stroke();}
+  });
+  ctx.textAlign='left';
+
+  ctx.fillStyle='#06b6d4'; ctx.font='bold 12px system-ui'; ctx.textAlign='center';
+  ctx.fillText('ISO Insert Shape Reference — select by tool approach angle and material',W/2,16);
+  ctx.textAlign='left';
+}
+
+// ============================================================
+// TAB 2: MILLING ENGAGEMENT
+// ============================================================
+function drawMillEng(){
+  const r=gctx('c-millen'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0a1628'; ctx.fillRect(0,0,W,H);
+
+  // Top view: end mill over workpiece
+  const cx=W/2, cy=130, Dc2=80; // radius of cutter
+
+  // Workpiece (coming from right side, ae engagement)
+  const ae_pct=0.35; // 35% radial engagement
+  const ae_px=Dc2*2*ae_pct; // pixels
+  const wp_left=cx-Dc2+ae_px; // left edge of cutter overlaps this much
+  ctx.fillStyle='#455a64';
+  ctx.fillRect(wp_left,40,W-wp_left-20,175);
+  ctx.strokeStyle='#546e7a'; ctx.lineWidth=1; ctx.strokeRect(wp_left,40,W-wp_left-20,175);
+  ctx.fillStyle='#607d8b'; ctx.fillRect(wp_left,40,6,175);
+
+  // Engagement arc fill
+  const th1=Math.acos((Dc2-ae_px)/Dc2); // half arc angle
+  ctx.fillStyle='rgba(6,182,212,0.2)';
+  ctx.beginPath();
+  ctx.moveTo(cx,cy);
+  ctx.arc(cx,cy,Dc2,-th1,th1);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle='#06b6d4'; ctx.lineWidth=1.5; ctx.stroke();
+
+  // Cutter circle
+  ctx.strokeStyle='#38bdf8'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.arc(cx,cy,Dc2,0,Math.PI*2); ctx.stroke();
+
+  // Flute lines (4 flutes)
+  [0,90,180,270].forEach(deg=>{
+    const a=deg*DEG;
+    ctx.strokeStyle='rgba(56,189,248,0.5)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.cos(a)*Dc2,cy+Math.sin(a)*Dc2); ctx.stroke();
+  });
+
+  // ae annotation
+  ctx.strokeStyle='#4ade80'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(cx-Dc2,cy-Dc2-18); ctx.lineTo(wp_left,cy-Dc2-18); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx-Dc2,cy-Dc2-24); ctx.lineTo(cx-Dc2,cy-Dc2-12); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(wp_left,cy-Dc2-24); ctx.lineTo(wp_left,cy-Dc2-12); ctx.stroke();
+  ctx.fillStyle='#4ade80'; ctx.font='bold 11px system-ui'; ctx.textAlign='center';
+  ctx.fillText('ae=35%Dc',cx-Dc2+(ae_px)/2,cy-Dc2-24);
+
+  // Dc annotation
+  ctx.strokeStyle='#38bdf8'; ctx.lineWidth=1;
+  const dcY=cy+Dc2+18;
+  ctx.beginPath(); ctx.moveTo(cx-Dc2,dcY); ctx.lineTo(cx+Dc2,dcY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx-Dc2,dcY-5); ctx.lineTo(cx-Dc2,dcY+5); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx+Dc2,dcY-5); ctx.lineTo(cx+Dc2,dcY+5); ctx.stroke();
+  ctx.fillStyle='#38bdf8'; ctx.textAlign='center'; ctx.font='11px system-ui';
+  ctx.fillText('Dc',cx,dcY+14);
+
+  // Rotation arrow
+  ctx.strokeStyle='rgba(56,189,248,0.5)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.arc(cx,cy,Dc2+16,Math.PI*0.8,Math.PI*1.6); ctx.stroke();
+  arr(ctx,cx+Math.cos(Math.PI*1.6)*(Dc2+16),cy+Math.sin(Math.PI*1.6)*(Dc2+16),
+      cx+Math.cos(Math.PI*1.65)*(Dc2+16),cy+Math.sin(Math.PI*1.65)*(Dc2+16),'rgba(56,189,248,0.7)',1.5);
+
+  // Side view (ap)
+  const svx=40, svy=280, svW=W-80, svH=50;
+  ctx.fillStyle='#455a64'; ctx.fillRect(svx,svy,svW,svH+20);
+  ctx.fillStyle='rgba(6,182,212,0.25)';
+  ctx.fillRect(svx,svy,svW,svH); // ap layer
+  ctx.strokeStyle='#06b6d4'; ctx.lineWidth=1.5; ctx.strokeRect(svx,svy,svW,svH);
+
+  // ap annotation
+  const apX=svx+svW+8;
+  ctx.strokeStyle='#fbbf24'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(apX,svy); ctx.lineTo(apX,svy+svH); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(apX-5,svy); ctx.lineTo(apX+5,svy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(apX-5,svy+svH); ctx.lineTo(apX+5,svy+svH); ctx.stroke();
+  ctx.fillStyle='#fbbf24'; ctx.font='bold 11px system-ui'; ctx.textAlign='left';
+  ctx.fillText('ap',apX+6,svy+svH/2+4);
+
+  // Feed arrow
+  arr(ctx,svx+svW*0.7,svy-12,svx+svW*0.3,svy-12,'#fbbf24',2);
+  ctx.fillStyle='#fbbf24'; ctx.font='10px system-ui'; ctx.fillText('vf (feed)',svx+svW*0.2,svy-8);
+
+  ctx.fillStyle='#06b6d4'; ctx.font='bold 12px system-ui'; ctx.textAlign='center';
+  ctx.fillText('End Mill Engagement (top view + side view)',W/2,16);
+  ctx.fillStyle='#94a3b8'; ctx.font='10px system-ui';
+  ctx.fillText('Top view',cx,32);
+  ctx.fillText('Side view (showing ap)',W/2,svy-4);
+  ctx.textAlign='left';
+}
+
+// ---- TOOLPATH STRATEGIES ----
+function drawToolpath(){
+  const r=gctx('c-toolpath'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0a1628'; ctx.fillRect(0,0,W,H);
+
+  const cw=W/3;
+  const strategies=[
+    {name:'Conventional Milling',col:'#ef4444',desc:'Chip starts thin, thickens — rubbing entry, more heat'},
+    {name:'Climb Milling',col:'#4ade80',desc:'Chip starts thick, thins — preferred; better Ra, lower temp'},
+    {name:'Trochoidal (Adaptive)',col:'#06b6d4',desc:'Arc paths, small ae, full ap — best for hard/exotic materials'},
+  ];
+
+  strategies.forEach(({name,col,desc},i)=>{
+    const ox=cw*i, midX=ox+cw/2, midY=H/2+8;
+    // Workpiece block
+    ctx.fillStyle='#263238'; ctx.fillRect(ox+18,34,cw-36,H-60);
+    ctx.strokeStyle='#455a64'; ctx.lineWidth=1; ctx.strokeRect(ox+18,34,cw-36,H-60);
+
+    if(i===0){ // Conventional
+      // Tool moves right, rotates CW, chip thins to thick
+      const toolR=22;
+      for(let row=0;row<3;row++){
+        const ty=52+row*44;
+        // Path lines (left to right)
+        ctx.strokeStyle=col+'55'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+        ctx.beginPath(); ctx.moveTo(ox+28,ty+toolR); ctx.lineTo(ox+cw-28,ty+toolR); ctx.stroke();
+        ctx.setLineDash([]);
+        // Tool circle at middle of path
+        ctx.strokeStyle=col; ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.arc(midX,ty+toolR,toolR,0,Math.PI*2); ctx.stroke();
+        // Rotation arc (CW = clockwise)
+        ctx.strokeStyle=col+'aa'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.arc(midX,ty+toolR,toolR+8,Math.PI*1.1,Math.PI*1.8); ctx.stroke();
+        arr(ctx,midX+Math.cos(Math.PI*1.8)*(toolR+8),ty+toolR+Math.sin(Math.PI*1.8)*(toolR+8),
+            midX+Math.cos(Math.PI*1.85)*(toolR+8),ty+toolR+Math.sin(Math.PI*1.85)*(toolR+8),col+'aa',1);
+        // Feed arrow (left = conventional against rotation)
+        arr(ctx,midX-45,ty+toolR,midX-toolR-10,ty+toolR,col,1.5);
+      }
+    } else if(i===1){ // Climb
+      const toolR=22;
+      for(let row=0;row<3;row++){
+        const ty=52+row*44;
+        ctx.strokeStyle=col+'55'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+        ctx.beginPath(); ctx.moveTo(ox+28,ty+toolR); ctx.lineTo(ox+cw-28,ty+toolR); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.strokeStyle=col; ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.arc(midX,ty+toolR,toolR,0,Math.PI*2); ctx.stroke();
+        ctx.strokeStyle=col+'aa'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.arc(midX,ty+toolR,toolR+8,Math.PI*1.1,Math.PI*1.8); ctx.stroke();
+        arr(ctx,midX+Math.cos(Math.PI*1.8)*(toolR+8),ty+toolR+Math.sin(Math.PI*1.8)*(toolR+8),
+            midX+Math.cos(Math.PI*1.85)*(toolR+8),ty+toolR+Math.sin(Math.PI*1.85)*(toolR+8),col+'aa',1);
+        // Feed in same direction as rotation (climb)
+        arr(ctx,midX+toolR+10,ty+toolR,midX+45,ty+toolR,col,1.5);
+      }
+    } else { // Trochoidal
+      // Draw arc paths
+      const toolR=14, arcR=20;
+      const positions=[[midX-28,66],[midX+10,106],[midX-28,146]];
+      positions.forEach(([tx,ty])=>{
+        ctx.strokeStyle=col; ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.arc(tx,ty,toolR,0,Math.PI*2); ctx.stroke();
+        // Arc toolpath (trochoidal arc)
+        ctx.strokeStyle=col+'88'; ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.arc(tx,ty,toolR+arcR,Math.PI*0.4,Math.PI*1.8); ctx.stroke();
+        arr(ctx,tx+Math.cos(Math.PI*1.8)*(toolR+arcR),ty+Math.sin(Math.PI*1.8)*(toolR+arcR),
+            tx+Math.cos(Math.PI*1.9)*(toolR+arcR),ty+Math.sin(Math.PI*1.9)*(toolR+arcR),col+'88',1.5);
+      });
+      // Small ae annotation
+      ctx.strokeStyle=col+'66'; ctx.lineWidth=1; ctx.setLineDash([2,3]);
+      ctx.beginPath(); ctx.moveTo(midX-28,66); ctx.lineTo(midX-28+toolR+14,66); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle=col; ctx.font='9px system-ui'; ctx.textAlign='center';
+      ctx.fillText('small ae',midX-28+(toolR+14)/2,56);
+    }
+
+    // Divider
+    if(i<2){ctx.strokeStyle='#1e3a5f';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(cw*(i+1),0);ctx.lineTo(cw*(i+1),H);ctx.stroke();}
+
+    // Labels
+    ctx.fillStyle=col; ctx.font='bold 11px system-ui'; ctx.textAlign='center';
+    ctx.fillText(name,midX,16);
+    ctx.fillStyle='#64748b'; ctx.font='9px system-ui';
+    ctx.fillText(desc,midX,H-6);
+  });
+  ctx.textAlign='left';
+}
+
+// ============================================================
+// TAB 3: SURFACE FINISH CHARTS
+// ============================================================
+function drawRaTurn(){
+  const r=gctx('c-ra-turn'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0a1628'; ctx.fillRect(0,0,W,H);
+
+  const pL=52,pR=20,pT=30,pB=44;
+  const cw=W-pL-pR, ch=H-pT-pB;
+  const fnMax=0.50, RaMax=10;
+
+  // Title
+  ctx.font='bold 12px system-ui'; ctx.fillStyle='#06b6d4'; ctx.textAlign='center';
+  ctx.fillText('Theoretical Ra vs. Feed (Turning)',W/2,18);
+  ctx.textAlign='left';
+
+  // Grid
+  [0,2,4,6,8,10].forEach(v=>{
+    const y=pT+ch-ch*v/RaMax;
+    ctx.strokeStyle='#1a2f4a'; ctx.lineWidth=v===0?.5:.5;
+    ctx.beginPath(); ctx.moveTo(pL,y); ctx.lineTo(pL+cw,y); ctx.stroke();
+    ctx.fillStyle='#475569'; ctx.font='9px system-ui'; ctx.textAlign='right';
+    ctx.fillText(v,pL-4,y+3);
+  });
+  [0,.1,.2,.3,.4,.5].forEach(v=>{
+    const x=pL+cw*v/fnMax;
+    ctx.strokeStyle='#1a2f4a'; ctx.lineWidth=.5;
+    ctx.beginPath(); ctx.moveTo(x,pT); ctx.lineTo(x,pT+ch); ctx.stroke();
+    ctx.fillStyle='#475569'; ctx.font='9px system-ui'; ctx.textAlign='center';
+    ctx.fillText(v.toFixed(1),x,pT+ch+12);
+  });
+
+  // Axes
+  ctx.strokeStyle='#1e3a5f'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(pL,pT); ctx.lineTo(pL,pT+ch); ctx.lineTo(pL+cw,pT+ch); ctx.stroke();
+
+  // Curves: Ra = fn^2 / (8*re) * 1000
+  const noseRads=[{re:0.4,col:'#ef4444'},{re:0.8,col:'#06b6d4'},{re:1.2,col:'#4ade80'}];
+  noseRads.forEach(({re,col})=>{
+    ctx.strokeStyle=col; ctx.lineWidth=2;
+    ctx.beginPath();
+    for(let k=0;k<=100;k++){
+      const fn=k*fnMax/100;
+      const Ra=fn*fn/(8*re)*1000;
+      const x=pL+cw*fn/fnMax;
+      const y=pT+ch-ch*Math.min(Ra,RaMax)/RaMax;
+      k===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    // Label at fn=0.45
+    const fn_l=0.44, Ra_l=Math.min(fn_l*fn_l/(8*re)*1000,RaMax*0.95);
+    ctx.fillStyle=col; ctx.font='10px system-ui'; ctx.textAlign='left';
+    ctx.fillText('rε='+re,pL+cw*fn_l/fnMax+4,pT+ch-ch*Ra_l/RaMax);
+  });
+
+  // Axis labels
+  ctx.fillStyle='#94a3b8'; ctx.font='10px system-ui'; ctx.textAlign='center';
+  ctx.fillText('fn (mm/rev)',pL+cw/2,H-6);
+  ctx.save(); ctx.translate(14,pT+ch/2); ctx.rotate(-Math.PI/2); ctx.fillText('Ra (μm)',0,0); ctx.restore();
+
+  // Finish level reference lines
+  [[0.8,'Finish'],[1.6,'Semi-finish'],[6.3,'Rough']].forEach(([v,lbl])=>{
+    const y=pT+ch-ch*v/RaMax;
+    ctx.strokeStyle='rgba(251,191,36,0.3)'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(pL,y); ctx.lineTo(pL+cw,y); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='rgba(251,191,36,0.6)'; ctx.font='9px system-ui'; ctx.textAlign='right';
+    ctx.fillText(lbl,pL+cw-2,y-3);
+  });
+  ctx.textAlign='left';
+}
+
+function drawRaMill(){
+  const r=gctx('c-ra-mill'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0a1628'; ctx.fillRect(0,0,W,H);
+
+  // Scallop height illustration for ball-end mill
+  const cx=W/2, by=H-60, R=80;
+  const steps=3, stepW=(W-60)/steps;
+
+  ctx.font='bold 12px system-ui'; ctx.fillStyle='#06b6d4'; ctx.textAlign='center';
+  ctx.fillText('Ball-End Scallop Height',W/2,18);
+  ctx.textAlign='left';
+
+  // Draw multiple passes
+  const passes=[60,60+stepW,60+stepW*2,60+stepW*3];
+  // Machined surface profile
+  ctx.fillStyle='#607d8b';
+  ctx.beginPath();
+  ctx.moveTo(30,by);
+  passes.forEach((px,i)=>{
+    if(i>0){
+      const mx=(passes[i-1]+px)/2;
+      // Scallop peak between passes
+      const scH=stepW*stepW/(8*R);
+      ctx.quadraticCurveTo(mx,by-scH*40,px,by);
+    }
+  });
+  ctx.lineTo(W-30,by);
+  ctx.lineTo(W-30,H-30);
+  ctx.lineTo(30,H-30);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle='#78909c'; ctx.lineWidth=1; ctx.stroke();
+
+  // Draw cutter circles
+  passes.forEach(px=>{
+    const cy2=by-R;
+    ctx.strokeStyle='rgba(6,182,212,0.3)'; ctx.lineWidth=1.5;
+    ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.arc(px,cy2,R,0,Math.PI*2); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='rgba(6,182,212,0.15)';
+    ctx.beginPath(); ctx.arc(px,cy2,R,0,Math.PI*2); ctx.fill();
+  });
+
+  // Scallop annotation
+  const scH_px=stepW*stepW/(8*R)*40;
+  const scX=(passes[0]+passes[1])/2;
+  ctx.strokeStyle='#4ade80'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(scX,by-scH_px); ctx.lineTo(scX,by); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(scX-6,by-scH_px); ctx.lineTo(scX+6,by-scH_px); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(scX-6,by); ctx.lineTo(scX+6,by); ctx.stroke();
+  ctx.fillStyle='#4ade80'; ctx.font='10px system-ui'; ctx.textAlign='left';
+  ctx.fillText('h',scX+6,by-scH_px/2+4);
+
+  // ae annotation
+  ctx.strokeStyle='#fbbf24'; ctx.lineWidth=1;
+  const aeY=by-R*1.4;
+  ctx.beginPath(); ctx.moveTo(passes[0],aeY); ctx.lineTo(passes[1],aeY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(passes[0],aeY-5); ctx.lineTo(passes[0],aeY+5); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(passes[1],aeY-5); ctx.lineTo(passes[1],aeY+5); ctx.stroke();
+  ctx.fillStyle='#fbbf24'; ctx.textAlign='center';
+  ctx.fillText('ae (step-over)',( passes[0]+passes[1])/2,aeY-6);
+
+  ctx.fillStyle='#94a3b8'; ctx.font='10px system-ui'; ctx.textAlign='center';
+  ctx.fillText('h = ae² / (8R) × 1000 μm',W/2,H-6);
+  ctx.textAlign='left';
+}
+
+// ============================================================
+// TAB 4: MATERIAL FACTOR CHART
+// ============================================================
+function drawMatFact(){
+  const r=gctx('c-matfact'); if(!r) return;
+  const {ctx,W,H}=r;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#0a1628'; ctx.fillRect(0,0,W,H);
+
+  const mats=[
+    {name:'Carbon\nSteel',vcF:1.0,fnF:1.0,lifeF:1.0,col:'#3b82f6'},
+    {name:'Alloy\nSteel',vcF:0.75,fnF:0.85,lifeF:0.7,col:'#60a5fa'},
+    {name:'Stainless\n304',vcF:0.55,fnF:0.70,lifeF:0.5,col:'#eab308'},
+    {name:'Gray\nCast Iron',vcF:0.80,fnF:0.90,lifeF:0.9,col:'#ef4444'},
+    {name:'Ti-6Al-4V',vcF:0.22,fnF:0.55,lifeF:0.3,col:'#f97316'},
+    {name:'Inconel\n718',vcF:0.15,fnF:0.40,lifeF:0.15,col:'#ef4444'},
+    {name:'Aluminum\n6061',vcF:3.5,fnF:1.5,lifeF:3.0,col:'#4ade80'},
+    {name:'Hard Steel\n55HRC',vcF:0.30,fnF:0.30,lifeF:0.2,col:'#94a3b8'},
+  ];
+
+  const maxV=4.0;
+  const N=mats.length;
+  const pL=52,pR=20,pT=34,pB=52;
+  const cw=W-pL-pR, ch=H-pT-pB;
+  const gW=cw/N;
+  const bW=(gW-10)/3;
+
+  ctx.font='bold 12px system-ui'; ctx.fillStyle='#06b6d4'; ctx.textAlign='center';
+  ctx.fillText('Parameter Factors vs. Carbon Steel Baseline — Turning (Coated Carbide)',W/2,18);
+  ctx.textAlign='left';
+
+  // Grid
+  [0,.5,1,1.5,2,2.5,3,3.5,4].forEach(v=>{
+    const y=pT+ch-ch*v/maxV;
+    ctx.strokeStyle='#1a2f4a'; ctx.lineWidth=v===1?1:.5;
+    ctx.beginPath(); ctx.moveTo(pL,y); ctx.lineTo(pL+cw,y); ctx.stroke();
+    ctx.fillStyle=v===1?'#fbbf24':'#475569'; ctx.font='9px system-ui'; ctx.textAlign='right';
+    ctx.fillText(v.toFixed(1)+'×',pL-4,y+3);
+  });
+
+  // Baseline line
+  ctx.strokeStyle='rgba(251,191,36,0.5)'; ctx.lineWidth=1; ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(pL,pT+ch-ch*1/maxV); ctx.lineTo(pL+cw,pT+ch-ch*1/maxV); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Bars
+  const barCols=['#06b6d4','#38bdf8','#4ade80'];
+  const barLabels=['Vc','fn','Tool Life'];
+
+  mats.forEach(({name,vcF,fnF,lifeF,col},i)=>{
+    const gx=pL+i*gW+5;
+    [vcF,fnF,lifeF].forEach((f,j)=>{
+      const bh=ch*Math.min(f,maxV)/maxV;
+      const x=gx+j*bW;
+      const y=pT+ch-bh;
+      ctx.fillStyle=barCols[j]+'44'; ctx.fillRect(x,y,bW-2,bh);
+      ctx.strokeStyle=barCols[j]; ctx.lineWidth=1; ctx.strokeRect(x,y,bW-2,bh);
+    });
+    // Material name
+    ctx.fillStyle=col; ctx.font='10px system-ui'; ctx.textAlign='center';
+    name.split('\n').forEach((ln,li)=>ctx.fillText(ln,gx+gW/2-5,pT+ch+16+li*12));
+    if(i<N-1){ctx.strokeStyle='#1a2f4a';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pL+(i+1)*gW,pT);ctx.lineTo(pL+(i+1)*gW,pT+ch+2);ctx.stroke();}
+  });
+
+  // Legend
+  barLabels.forEach((lbl,i)=>{
+    const lx=pL+20+i*80;
+    ctx.fillStyle=barCols[i]+'44'; ctx.fillRect(lx,H-14,12,10);
+    ctx.strokeStyle=barCols[i]; ctx.lineWidth=1; ctx.strokeRect(lx,H-14,12,10);
+    ctx.fillStyle=barCols[i]; ctx.font='10px system-ui'; ctx.textAlign='left';
+    ctx.fillText(lbl+' factor',lx+15,H-6);
+  });
+  ctx.textAlign='left';
+}
+
+// ---- Init ----
+window.addEventListener('DOMContentLoaded',()=>{ drawLathe(); drawInsert(); });
+</script>
+</body></html>
