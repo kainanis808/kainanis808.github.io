@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Powder Metallurgy – Process, Design &amp; Sintering Fundamentals</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        header {
+            text-align: center;
+            padding: 28px 20px;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+        }
+        h1 { font-size: 2rem; color: #f1f5f9; }
+        .subtitle { color: #94a3b8; margin-top: 6px; font-size: 1rem; }
+        main { max-width: 1060px; margin: 0 auto; padding: 28px 20px; }
+
+        .tab-bar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #334155;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 9px 20px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 0.92rem;
+            font-family: inherit;
+            margin-bottom: -2px;
+            transition: color 0.15s, border-color 0.15s;
+        }
+        .tab-btn.active { color: #38bdf8; border-bottom-color: #38bdf8; }
+        .tab-btn:hover:not(.active) { color: #cbd5e1; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 22px;
+        }
+        .card h2 { font-size: 1.2rem; color: #7dd3fc; margin-bottom: 10px; }
+        .card p, .card li { color: #94a3b8; font-size: 0.92rem; line-height: 1.65; }
+        .card ul { padding-left: 18px; }
+        .card ul li { margin-bottom: 4px; }
+
+        .spec-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        .spec-table th {
+            background: #0f172a; color: #7dd3fc;
+            padding: 9px 12px; text-align: left;
+            border-bottom: 1px solid #334155;
+        }
+        .spec-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #1e293b;
+            color: #cbd5e1;
+        }
+        .spec-table tr:nth-child(even) td { background: #162032; }
+        .spec-table td:first-child { color: #e2e8f0; font-weight: 600; }
+        .spec-table .good  { color: #4ade80; }
+        .spec-table .mid   { color: #fbbf24; }
+        .spec-table .bad   { color: #f87171; }
+
+        /* Process stepper */
+        .process-steps { display: flex; gap: 0; flex-wrap: wrap; margin-bottom: 20px; }
+        .step-btn {
+            flex: 1; min-width: 100px;
+            padding: 10px 8px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-right: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-family: inherit;
+            text-align: center;
+            transition: background 0.15s, color 0.15s;
+            position: relative;
+        }
+        .step-btn:last-child { border-right: 1px solid #334155; border-radius: 0 8px 8px 0; }
+        .step-btn:first-child { border-radius: 8px 0 0 8px; }
+        .step-btn.active { background: #1e3a5f; color: #38bdf8; border-color: #38bdf8; z-index: 1; }
+        .step-btn:hover:not(.active) { background: #1e293b; color: #e2e8f0; }
+        .step-num {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #60a5fa;
+            margin-bottom: 2px;
+        }
+        .step-btn.active .step-num { color: #38bdf8; }
+
+        #step-detail {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+        #step-canvas { border: 1px solid #334155; border-radius: 8px; flex-shrink: 0; }
+        #step-info { flex: 1; min-width: 240px; }
+        #step-info h3 { color: #7dd3fc; font-size: 1.05rem; margin-bottom: 10px; }
+        .step-meta { display: flex; flex-direction: column; gap: 8px; }
+        .smr-label { font-size: 0.73rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .smr-val { font-size: 0.88rem; color: #cbd5e1; line-height: 1.55; margin-top: 2px; }
+
+        /* Material grid */
+        .mat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        .mat-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 14px;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+        }
+        .mat-card:hover, .mat-card.selected { border-color: #38bdf8; background: #162032; }
+        .mat-card h3 { font-size: 0.95rem; color: #e2e8f0; margin-bottom: 6px; }
+        .mat-card .tag {
+            display: inline-block;
+            background: #1e3a5f; color: #93c5fd;
+            border-radius: 4px; padding: 1px 7px;
+            font-size: 0.72rem; margin-bottom: 6px;
+        }
+        .mat-card p { font-size: 0.8rem; color: #64748b; line-height: 1.5; }
+        #mat-detail {
+            background: #0f172a;
+            border: 1px solid #38bdf8;
+            border-radius: 10px;
+            padding: 18px;
+            margin-top: 16px;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            line-height: 1.65;
+            display: none;
+        }
+        #mat-detail h3 { color: #7dd3fc; margin-bottom: 8px; font-size: 1.05rem; }
+        .mat-spec-row { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
+        .mat-spec { flex: 1; min-width: 130px; }
+        .mat-spec .spec-name { font-size: 0.73rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .mat-spec .spec-val  { font-size: 0.9rem; color: #e2e8f0; margin-top: 2px; }
+
+        /* Design guidelines */
+        .guide-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+        .guide-item {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .guide-item canvas { display: block; width: 100%; }
+        .guide-body { padding: 14px; }
+        .guide-body h3 { font-size: 0.95rem; color: #e2e8f0; margin-bottom: 4px; }
+        .guide-body p  { font-size: 0.82rem; color: #64748b; line-height: 1.55; }
+
+        /* Sintering selector */
+        .sinter-selector {
+            display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;
+        }
+        .sinter-btn {
+            padding: 7px 14px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: inherit;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .sinter-btn:hover { border-color: #64748b; color: #e2e8f0; }
+        .sinter-btn.active { border-color: #a78bfa; color: #c4b5fd; background: #1a0f2e; }
+        #sinter-panel {
+            display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;
+        }
+        #sinter-canvas {
+            border: 1px solid #334155; border-radius: 10px;
+            flex-shrink: 0; background: #0f172a;
+        }
+        #sinter-info { flex: 1; min-width: 220px; }
+        #sinter-info h3 { color: #a78bfa; font-size: 1.1rem; margin-bottom: 10px; }
+        .sinter-meta { display: flex; flex-direction: column; gap: 10px; }
+        .snr-label { font-size: 0.73rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .snr-val   { font-size: 0.88rem; color: #cbd5e1; line-height: 1.55; margin-top: 2px; }
+
+        /* Case study cards */
+        .case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .case-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 18px;
+            cursor: pointer;
+            transition: border-color 0.15s;
+        }
+        .case-card:hover { border-color: #64748b; }
+        .case-card.selected { border-color: #f59e0b; }
+        .case-tag {
+            display: inline-block;
+            border-radius: 4px; padding: 2px 8px;
+            font-size: 0.72rem; margin-bottom: 8px; font-weight: 600;
+        }
+        .tag-pm   { background: #1e3a5f; color: #93c5fd; }
+        .tag-am   { background: #2d1e5f; color: #c4b5fd; }
+        .case-card h3 { font-size: 0.95rem; color: #e2e8f0; margin-bottom: 6px; }
+        .case-card p  { font-size: 0.82rem; color: #64748b; line-height: 1.5; }
+        #case-detail {
+            background: #0f172a;
+            border: 1px solid #f59e0b;
+            border-radius: 10px;
+            padding: 18px;
+            margin-top: 16px;
+            display: none;
+        }
+        #case-detail h3 { color: #fbbf24; margin-bottom: 10px; font-size: 1.05rem; }
+        .case-body { color: #cbd5e1; font-size: 0.9rem; line-height: 1.65; }
+        .case-specs { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; }
+        .case-spec { flex: 1; min-width: 130px; }
+        .case-spec .cs-label { font-size: 0.72rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .case-spec .cs-val   { font-size: 0.88rem; color: #e2e8f0; margin-top: 2px; }
+
+        .source-line {
+            font-size: 0.78rem; color: #475569;
+            text-align: center; margin-top: 8px;
+        }
+        .back-link {
+            display: block; text-align: center;
+            margin-top: 30px; color: #38bdf8;
+            text-decoration: none; font-size: 0.92rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+        canvas { display: block; }
+
+        /* Density progress bar */
+        .density-bar-wrap { margin: 8px 0; }
+        .density-label { font-size: 0.82rem; color: #94a3b8; margin-bottom: 3px; }
+        .density-track { background: #0f172a; border-radius: 4px; height: 20px; overflow: hidden; }
+        .density-fill {
+            height: 100%; border-radius: 4px;
+            display: flex; align-items: center; padding-left: 8px;
+            font-size: 0.75rem; color: #fff; font-weight: 600;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Powder Metallurgy</h1>
+    <p class="subtitle">Process overview, design guidelines, material property data, sintering fundamentals &amp; case studies</p>
+    <p class="source-line">Sources: Metal Powder Industries Federation (MPIF) · PM Review · DoITPoMS (University of Cambridge)</p>
+</header>
+
+<main>
+
+<nav class="tab-bar">
+    <button class="tab-btn active" data-tab="process">Process Overview</button>
+    <button class="tab-btn" data-tab="design">Design Guidelines</button>
+    <button class="tab-btn" data-tab="materials">Material Data</button>
+    <button class="tab-btn" data-tab="sintering">Sintering Fundamentals</button>
+    <button class="tab-btn" data-tab="cases">Case Studies</button>
+</nav>
+
+<!-- ══════════════════════════════════════
+     TAB 1 — PROCESS OVERVIEW (MPIF)
+══════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-process">
+
+    <div class="card">
+        <h2>What Is Powder Metallurgy?</h2>
+        <p>
+            Powder metallurgy (PM) is a net-shape or near-net-shape manufacturing process in which metal powders are
+            compacted into a desired form and then sintered (heated below the melting point) to bond the particles into
+            a solid part. Unlike casting, the material never becomes fully liquid — making PM uniquely suited for
+            refractory metals, controlled porosity parts (self-lubricating bearings), and high-volume precision
+            components. According to the <strong style="color:#93c5fd;">Metal Powder Industries Federation (MPIF)</strong>,
+            PM can achieve material utilization above 97%, dimensional tolerances of ±0.05 mm, and production rates
+            exceeding 1,500 parts/hour on automated presses.
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>Four-Stage PM Process — Click Each Stage</h2>
+        <div class="process-steps" id="process-steps"></div>
+        <div id="step-detail">
+            <canvas id="step-canvas" width="300" height="220"></canvas>
+            <div id="step-info">
+                <h3 id="step-title">Select a stage above</h3>
+                <div class="step-meta" id="step-meta"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Process Capability (MPIF Standards)</h2>
+        <table class="spec-table">
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Typical Range</th>
+                    <th>Best Achievable</th>
+                    <th>Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Dimensional Tolerance (dia.)</td>
+                    <td>±0.1–0.25 mm</td>
+                    <td>±0.025 mm (precision dies)</td>
+                    <td class="good">Excellent — near-net-shape</td>
+                </tr>
+                <tr>
+                    <td>Surface Roughness Ra</td>
+                    <td>0.4–1.6 µm</td>
+                    <td>0.2 µm (re-pressed)</td>
+                    <td class="good">Very good</td>
+                </tr>
+                <tr>
+                    <td>Density (as-sintered)</td>
+                    <td>80–95% theoretical</td>
+                    <td>99%+ (HIP or double-press/sinter)</td>
+                    <td class="mid">Good — porosity can be designed in</td>
+                </tr>
+                <tr>
+                    <td>Part Weight</td>
+                    <td>1 g – 22 kg (typical)</td>
+                    <td>Up to ~100 kg (large HIP)</td>
+                    <td class="mid">Best suited for &lt;2 kg</td>
+                </tr>
+                <tr>
+                    <td>Material Utilization</td>
+                    <td>95–99%</td>
+                    <td>&gt;99% (scrap recycled)</td>
+                    <td class="good">Excellent — near-zero waste</td>
+                </tr>
+                <tr>
+                    <td>Production Rate</td>
+                    <td>500–1,500 parts/hr</td>
+                    <td>Up to 3,000/hr (rotary press)</td>
+                    <td class="good">Excellent for high volume</td>
+                </tr>
+                <tr>
+                    <td>Compaction Pressure</td>
+                    <td>150–700 MPa (typical iron)</td>
+                    <td>Up to 1,000 MPa (warm compaction)</td>
+                    <td class="mid">Press size limits part area</td>
+                </tr>
+                <tr>
+                    <td>Min. Wall Thickness</td>
+                    <td>1.5–2 mm</td>
+                    <td>1 mm (thin-wall tooling)</td>
+                    <td class="mid">Fair</td>
+                </tr>
+                <tr>
+                    <td>Tooling Cost</td>
+                    <td>Moderate–High (hardened steel dies)</td>
+                    <td>—</td>
+                    <td class="mid">Amortized over large runs</td>
+                </tr>
+                <tr>
+                    <td>Applicable Materials</td>
+                    <td>Iron, Cu, Al, Ti, W, Mo, hard metals</td>
+                    <td>Any sinterable powder</td>
+                    <td class="good">Excellent — includes refractory metals</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Density Progression Through the PM Route</h2>
+        <p style="margin-bottom:14px; font-size:0.88rem;">
+            Each stage of PM increases part density. Starting from loose powder (55–65% theoretical density),
+            compaction brings the green compact to 80–88%, and sintering further densifies to 85–95%.
+            Secondary operations like repressing or HIP can reach near-full density.
+        </p>
+        <div class="density-bar-wrap">
+            <div class="density-label">Loose Powder (tap density)</div>
+            <div class="density-track"><div class="density-fill" style="width:60%;background:linear-gradient(90deg,#475569,#64748b);">55–65%</div></div>
+        </div>
+        <div class="density-bar-wrap">
+            <div class="density-label">Green Compact (after uniaxial pressing at 400–600 MPa)</div>
+            <div class="density-track"><div class="density-fill" style="width:84%;background:linear-gradient(90deg,#1d4ed8,#3b82f6);">80–88%</div></div>
+        </div>
+        <div class="density-bar-wrap">
+            <div class="density-label">Sintered (conventional, 1120 °C, 30 min, N₂–H₂)</div>
+            <div class="density-track"><div class="density-fill" style="width:90%;background:linear-gradient(90deg,#0369a1,#38bdf8);">85–95%</div></div>
+        </div>
+        <div class="density-bar-wrap">
+            <div class="density-label">Double-Press / Double-Sinter</div>
+            <div class="density-track"><div class="density-fill" style="width:95%;background:linear-gradient(90deg,#065f46,#10b981);">92–97%</div></div>
+        </div>
+        <div class="density-bar-wrap">
+            <div class="density-label">Hot Isostatic Pressing (HIP)</div>
+            <div class="density-track"><div class="density-fill" style="width:99%;background:linear-gradient(90deg,#14532d,#4ade80);">99–100%</div></div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 2 — DESIGN GUIDELINES (MPIF)
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-design">
+
+    <div class="card">
+        <h2>MPIF Design Principles for PM Parts</h2>
+        <p>
+            PM parts are compacted along a single axis (the pressing direction). This fundamental constraint drives most
+            design rules. Shapes that can be formed by a punch pressing straight down — and extracted straight up — are
+            ideal. Features like undercuts, cross-holes, and threads perpendicular to the press axis require secondary
+            operations or are simply impossible in green compaction.
+            <span style="color:#4ade80;">Green = preferred</span> · <span style="color:#f87171;">Red = avoid</span>
+        </p>
+    </div>
+
+    <div class="guide-grid" id="guide-grid"></div>
+
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 3 — MATERIAL DATA (MPIF)
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-materials">
+
+    <div class="card">
+        <h2>PM Material Families — Click for Property Data</h2>
+        <p style="margin-bottom:14px;">
+            MPIF Standard 35 defines mechanical property data for sintered PM materials by material designation and
+            density class. Click a material family to see typical properties. All values are for conventionally sintered
+            parts at stated density unless noted.
+        </p>
+        <div class="mat-grid" id="mat-grid"></div>
+        <div id="mat-detail"></div>
+    </div>
+
+    <div class="card">
+        <h2>Property Comparison: PM vs. Wrought vs. Cast</h2>
+        <canvas id="prop-canvas" width="680" height="300" style="border-radius:8px;border:1px solid #334155;max-width:100%;"></canvas>
+        <p style="margin-top:8px;font-size:0.8rem;color:#64748b;">
+            Tensile strength comparison for iron-based materials across manufacturing routes. PM properties improve
+            significantly with increased density (via warm compaction, HIP, or alloying).
+        </p>
+    </div>
+
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 4 — SINTERING FUNDAMENTALS (DoITPoMS)
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-sintering">
+
+    <div class="card">
+        <h2>Sintering: The Science of Particle Bonding</h2>
+        <p>
+            Sintering is the thermal process by which powder particles bond without full melting. The driving force is
+            the reduction in total surface energy — particles touch at small contact points called <strong style="color:#a78bfa;">necks</strong>.
+            As temperature rises, atoms diffuse across these contacts, growing the neck, reducing porosity, and
+            increasing part density. DoITPoMS (University of Cambridge) identifies five mass-transport mechanisms
+            active during sintering. Select a mechanism or stage below.
+        </p>
+    </div>
+
+    <div class="card">
+        <div class="sinter-selector" id="sinter-selector"></div>
+        <div id="sinter-panel">
+            <canvas id="sinter-canvas" width="340" height="280"></canvas>
+            <div id="sinter-info">
+                <h3 id="sinter-name">Select a mechanism above</h3>
+                <div class="sinter-meta" id="sinter-meta"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Sintering Stages &amp; Densification</h2>
+        <canvas id="sinter-curve" width="680" height="260" style="border-radius:8px;border:1px solid #334155;max-width:100%;"></canvas>
+        <p style="margin-top:8px;font-size:0.8rem;color:#64748b;">
+            Typical densification curve for iron powder sintered at 1120 °C. Three stages: initial neck formation
+            (rapid surface area reduction, little shrinkage), intermediate (pore channels close, grain growth begins),
+            and final (isolated pores shrink slowly, grain coarsening).
+        </p>
+    </div>
+
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 5 — CASE STUDIES (PM Review)
+══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-cases">
+
+    <div class="card">
+        <h2>PM &amp; Metal AM Case Studies (PM Review)</h2>
+        <p style="margin-bottom:14px;">
+            <em>PM Review</em> publishes industry case studies on both conventional PM and metal additive manufacturing (AM).
+            Click a case to expand details on the technical challenge, PM/AM solution, and outcomes.
+        </p>
+        <div class="case-grid" id="case-grid"></div>
+        <div id="case-detail">
+            <h3 id="case-title">—</h3>
+            <div class="case-body" id="case-body"></div>
+        </div>
+    </div>
+
+</div>
+
+<a class="back-link" href="index.html">← Back to Visualizations</a>
+
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   TAB SWITCHING
+═══════════════════════════════════════════════════ */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+});
+
+/* ═══════════════════════════════════════════════════
+   TAB 1 — PROCESS STEPS
+═══════════════════════════════════════════════════ */
+const STEPS = [
+    {
+        label: 'Powder\nProduction',
+        num: '①',
+        title: 'Powder Production',
+        what: 'Metal powders are manufactured by atomization (water or gas), reduction of oxides, electrolytic deposition, or mechanical milling. Particle size, morphology, and flowability are carefully controlled.',
+        params: 'Particle size: 10–150 µm (typical); spherical (gas-atomized) or irregular (water-atomized, reduced). Apparent density: 2.5–4.0 g/cm³ for iron.',
+        purpose: 'Powder characteristics directly determine compressibility, flow in the die, and final sintered microstructure. Spherical powders flow better but compact less efficiently than irregular powders.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,W,H);
+            // atomization nozzle
+            ctx.fillStyle = '#1e3a5f'; ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.rect(W/2-12, 10, 24, 35); ctx.fill(); ctx.stroke();
+            // nozzle tip
+            ctx.beginPath(); ctx.moveTo(W/2-12,45); ctx.lineTo(W/2,60); ctx.lineTo(W/2+12,45); ctx.closePath(); ctx.fill(); ctx.stroke();
+            // liquid metal stream
+            ctx.strokeStyle='#f59e0b'; ctx.lineWidth=3;
+            ctx.beginPath(); ctx.moveTo(W/2, 60); ctx.lineTo(W/2, 80); ctx.stroke();
+            // atomizing gas jets
+            ctx.strokeStyle='#60a5fa'; ctx.lineWidth=1.5;
+            [[-20,-10],[20,-10]].forEach(([dx,dy])=>{
+                ctx.beginPath();
+                ctx.moveTo(W/2+dx*2, 72+dy); ctx.lineTo(W/2, 82); ctx.stroke();
+            });
+            // powder droplets
+            const rng = (seed) => { let x = Math.sin(seed)*10000; return x - Math.floor(x); };
+            for(let i=0;i<22;i++){
+                const angle = (rng(i*7)*180+90) * Math.PI/180;
+                const dist = 20 + rng(i*13)*55;
+                const px = W/2 + Math.cos(angle)*dist;
+                const py = 82 + Math.sin(angle)*dist*0.6;
+                if(py > H-20) continue;
+                const r = 2 + rng(i*3)*4;
+                ctx.fillStyle = i%3===0 ? '#f59e0b' : '#60a5fa';
+                ctx.beginPath(); ctx.arc(px,py,r,0,Math.PI*2); ctx.fill();
+            }
+            // gas label
+            ctx.fillStyle='#60a5fa'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Gas jets', W/2-40, 70);
+            ctx.fillStyle='#f59e0b'; ctx.fillText('Melt', W/2+8, 72);
+            ctx.fillStyle='#94a3b8'; ctx.fillText('Gas/water atomization', W/2, H-8);
+        }
+    },
+    {
+        label: 'Mixing &\nBlending',
+        num: '②',
+        title: 'Mixing & Blending',
+        what: 'Metal powders are blended with alloying additions (graphite, copper, nickel), lubricants (zinc stearate, Acrawax), and sometimes binders. Lubricants coat particle surfaces to reduce die wall friction during compaction.',
+        params: 'Lubricant content: 0.5–1.5 wt%. Mixing time: 15–30 min (twin-cone or V-blender). Graphite addition: 0.3–0.9% for steel compositions.',
+        purpose: 'Homogeneous blending ensures uniform composition and density in the green compact. Lubricants are critical — too little causes die seizure; too much reduces green density and leaves residue.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,W,H);
+            const cx=W/2, cy=H/2;
+            // V-blender outline
+            ctx.strokeStyle='#38bdf8'; ctx.lineWidth=2; ctx.fillStyle='#0f1f3a';
+            ctx.beginPath();
+            ctx.moveTo(cx-70,30); ctx.lineTo(cx-40,30); ctx.lineTo(cx,100);
+            ctx.lineTo(cx+40,30); ctx.lineTo(cx+70,30);
+            ctx.lineTo(cx+70,50); ctx.lineTo(cx+40,50); ctx.lineTo(cx,130);
+            ctx.lineTo(cx-40,50); ctx.lineTo(cx-70,50); ctx.closePath();
+            ctx.fill(); ctx.stroke();
+            // powder dots in blender
+            const colors = ['#60a5fa','#64748b','#fbbf24'];
+            const rng = s => { let x=Math.sin(s)*10000; return x-Math.floor(x); };
+            for(let i=0;i<35;i++){
+                const t=rng(i*11); const lx = cx-55+t*110;
+                const ly = 35+rng(i*7)*55;
+                if(ly > 100-Math.abs(lx-cx)*0.6) continue;
+                ctx.fillStyle=colors[i%3];
+                ctx.beginPath(); ctx.arc(lx,ly,2.5,0,Math.PI*2); ctx.fill();
+            }
+            ctx.fillStyle='#64748b'; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Fe powder', cx-45, 120);
+            ctx.fillStyle='#fbbf24'; ctx.fillText('Graphite', cx+45, 120);
+            ctx.fillStyle='#94a3b8'; ctx.fillText('V-blender with lubricant addition', cx, H-8);
+        }
+    },
+    {
+        label: 'Compaction',
+        num: '③',
+        title: 'Compaction (Die Pressing)',
+        what: 'Blended powder is fed into a rigid die and compacted by upper and lower punches at pressures of 150–700 MPa. The result is a "green compact" with sufficient strength to be handled and transferred to the sintering furnace.',
+        params: 'Compaction pressure: 400–600 MPa (iron/steel). Green density: 6.6–7.1 g/cm³ for iron. Green strength: 15–30 MPa (enough for handling). Ejection force: ~10–15% of compaction force.',
+        purpose: 'Higher pressure = higher green density = better final properties. Pressure is limited by die strength and press tonnage. Lubricant burnoff occurs in early sintering.',
+        draw(ctx, W, H) {
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,W,H);
+            const cx=W/2;
+            // die walls
+            ctx.fillStyle='#1e3a5f'; ctx.strokeStyle='#38bdf8'; ctx.lineWidth=1.5;
+            ctx.fillRect(cx-50,20,18,180); ctx.strokeRect(cx-50,20,18,180);
+            ctx.fillRect(cx+32,20,18,180); ctx.strokeRect(cx+32,20,18,180);
+            // upper punch
+            ctx.fillStyle='#2d4a70'; ctx.strokeStyle='#60a5fa';
+            ctx.fillRect(cx-32,20,64,35); ctx.strokeRect(cx-32,20,64,35);
+            ctx.fillStyle='#60a5fa'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Upper Punch', cx, 42);
+            // lower punch
+            ctx.fillStyle='#2d4a70'; ctx.strokeStyle='#60a5fa';
+            ctx.fillRect(cx-32,160,64,35); ctx.strokeRect(cx-32,160,64,35);
+            ctx.fillStyle='#60a5fa'; ctx.fillText('Lower Punch', cx, 182);
+            // powder / green compact
+            ctx.fillStyle='#374151'; ctx.strokeStyle='#94a3b8'; ctx.lineWidth=1;
+            ctx.fillRect(cx-32,55,64,105); ctx.strokeRect(cx-32,55,64,105);
+            // particle texture
+            const rng=s=>{let x=Math.sin(s)*10000;return x-Math.floor(x);};
+            for(let i=0;i<40;i++){
+                const px=cx-28+rng(i*11)*56, py=58+rng(i*7)*99;
+                ctx.fillStyle='#4b5563';
+                ctx.beginPath(); ctx.arc(px,py,2+rng(i)*2,0,Math.PI*2); ctx.fill();
+            }
+            // force arrows
+            ctx.strokeStyle='#fbbf24'; ctx.lineWidth=2;
+            ctx.beginPath(); ctx.moveTo(cx,18); ctx.lineTo(cx,10); ctx.stroke();
+            ctx.fillStyle='#fbbf24';
+            ctx.beginPath(); ctx.moveTo(cx,8); ctx.lineTo(cx-5,16); ctx.lineTo(cx+5,16); ctx.closePath(); ctx.fill();
+            ctx.beginPath(); ctx.moveTo(cx,202); ctx.lineTo(cx,210); ctx.stroke();
+            ctx.fillStyle='#fbbf24';
+            ctx.beginPath(); ctx.moveTo(cx,212); ctx.lineTo(cx-5,204); ctx.lineTo(cx+5,204); ctx.closePath(); ctx.fill();
+            ctx.fillStyle='#fbbf24'; ctx.font='9px Segoe UI'; ctx.fillText('400–600 MPa', cx+38, 12);
+            ctx.fillStyle='#94a3b8'; ctx.fillText('Uniaxial die compaction', cx, H-8);
+        }
+    },
+    {
+        label: 'Sintering',
+        num: '④',
+        title: 'Sintering',
+        what: 'Green compacts are heated in a controlled-atmosphere furnace to 70–90% of the melting point. At sintering temperature, solid-state diffusion bonds particles, densifies the compact, and imparts mechanical strength. Atmosphere (N₂–H₂, vacuum, or endothermic gas) prevents oxidation.',
+        params: 'Temperature: 1120–1150 °C (iron/steel); 780–800 °C (aluminum). Time at temperature: 20–40 min. Atmosphere: 90% N₂ / 10% H₂ (dissociated ammonia) for iron. Dimensional change: −0.1% to −0.5% (slight shrinkage).',
+        purpose: 'Sintering transforms green strength (~20 MPa) to final part strength (200–600+ MPa). Atmosphere control is critical: oxidizing atmosphere destroys properties. Carbon control (C potential of gas) sets final carbon in steel PM.',
+        draw(ctx, W, H) {
+            ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+            const cx=W/2;
+            // furnace zones
+            const zones=[{x:20,w:60,c:'#1a1a2e',label:'Preheat\n(burn-off)',t:'400°C'},
+                         {x:80,w:100,c:'#2d1500',label:'Sintering\nZone',t:'1120°C'},
+                         {x:180,w:60,c:'#0f1f0f',label:'Cooling',t:'100°C'}];
+            zones.forEach(z=>{
+                ctx.fillStyle=z.c; ctx.fillRect(z.x,30,z.w,160);
+                ctx.strokeStyle='#334155'; ctx.lineWidth=1;
+                ctx.strokeRect(z.x,30,z.w,160);
+                ctx.fillStyle='#94a3b8'; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+                const lines=z.label.split('\n');
+                lines.forEach((l,i)=>ctx.fillText(l,z.x+z.w/2,48+i*12));
+                ctx.fillStyle='#f59e0b'; ctx.font='10px Segoe UI';
+                ctx.fillText(z.t, z.x+z.w/2, 170);
+            });
+            // sintering glow
+            const grad=ctx.createRadialGradient(130,110,5,130,110,50);
+            grad.addColorStop(0,'rgba(251,146,60,0.35)');
+            grad.addColorStop(1,'rgba(251,146,60,0)');
+            ctx.fillStyle=grad;
+            ctx.fillRect(80,30,100,160);
+            // belt conveyor line
+            ctx.strokeStyle='#475569'; ctx.lineWidth=3;
+            ctx.beginPath(); ctx.moveTo(20,130); ctx.lineTo(240,130); ctx.stroke();
+            // parts on belt
+            [50,130,210].forEach(x=>{
+                ctx.fillStyle='#374151'; ctx.strokeStyle='#60a5fa'; ctx.lineWidth=1;
+                ctx.fillRect(x-12,115,24,18); ctx.strokeRect(x-12,115,24,18);
+            });
+            // atmosphere label
+            ctx.fillStyle='#60a5fa'; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('N₂–H₂ atmosphere', cx, 200);
+            ctx.fillStyle='#94a3b8'; ctx.fillText('Continuous mesh-belt sintering furnace', cx, H-8);
+        }
+    },
+    {
+        label: 'Secondary\nOps',
+        num: '⑤',
+        title: 'Secondary Operations (Optional)',
+        what: 'After sintering, PM parts may undergo secondary operations to improve dimensional accuracy, density, or surface properties: sizing/coining (repressing for tolerance), oil impregnation (for self-lubricating bearings), steam treatment (seals pores), heat treatment, and machining.',
+        params: 'Sizing pressure: 200–400 MPa (reduces tolerance to ±0.013 mm). Oil impregnation: vacuum method, 10–30 vol% oil uptake. Steam treatment: 500–550 °C in steam, forms Fe₃O₄ layer 0.02–0.05 mm thick.',
+        purpose: 'Secondary ops tailor final part properties beyond what sintering alone achieves. Oil impregnation is what makes PM the dominant route for self-lubricating bearings — oil seeps to the surface when the bearing heats up.',
+        draw(ctx, W, H) {
+            ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+            // four secondary op icons arranged in 2x2
+            const ops=[
+                {x:40,y:30,c:'#1e3a5f',bc:'#38bdf8',label:'Sizing/Coining',icon:'coin'},
+                {x:160,y:30,c:'#1a2e1a',bc:'#4ade80',label:'Oil Impregnation',icon:'oil'},
+                {x:40,y:130,c:'#2d1e00',bc:'#f59e0b',label:'Steam Treatment',icon:'steam'},
+                {x:160,y:130,c:'#2d1a2d',bc:'#c084fc',label:'Heat Treatment',icon:'heat'},
+            ];
+            ops.forEach(op=>{
+                ctx.fillStyle=op.c; ctx.strokeStyle=op.bc; ctx.lineWidth=1.5;
+                ctx.beginPath(); ctx.roundRect(op.x,op.y,90,80,6); ctx.fill(); ctx.stroke();
+                // icon
+                if(op.icon==='coin'){
+                    ctx.fillStyle=op.bc;
+                    ctx.beginPath(); ctx.ellipse(op.x+45,op.y+35,25,15,0,0,Math.PI*2); ctx.fill();
+                    ctx.strokeStyle='#0f172a'; ctx.lineWidth=2;
+                    ctx.beginPath(); ctx.moveTo(op.x+45,op.y+12); ctx.lineTo(op.x+45,op.y+20); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(op.x+45,op.y+50); ctx.lineTo(op.x+45,op.y+58); ctx.stroke();
+                } else if(op.icon==='oil'){
+                    ctx.fillStyle=op.bc;
+                    for(let i=0;i<6;i++){
+                        ctx.beginPath(); ctx.arc(op.x+25+i*10,op.y+35,3,0,Math.PI*2); ctx.fill();
+                    }
+                    ctx.strokeStyle=op.bc; ctx.lineWidth=2;
+                    ctx.beginPath(); ctx.moveTo(op.x+20,op.y+42); ctx.lineTo(op.x+70,op.y+42); ctx.stroke();
+                } else if(op.icon==='steam'){
+                    ctx.strokeStyle=op.bc; ctx.lineWidth=2;
+                    for(let i=0;i<4;i++){
+                        ctx.beginPath(); ctx.moveTo(op.x+20+i*17,op.y+50);
+                        ctx.quadraticCurveTo(op.x+28+i*17,op.y+35,op.x+24+i*17,op.y+22);
+                        ctx.stroke();
+                    }
+                } else {
+                    ctx.fillStyle=op.bc;
+                    ctx.beginPath(); ctx.arc(op.x+45,op.y+35,20,0,Math.PI*2); ctx.fill();
+                    ctx.fillStyle='#0f172a';
+                    ctx.beginPath(); ctx.arc(op.x+45,op.y+35,12,0,Math.PI*2); ctx.fill();
+                }
+                ctx.fillStyle=op.bc; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+                ctx.fillText(op.label, op.x+45, op.y+73);
+            });
+            ctx.fillStyle='#94a3b8'; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Optional post-sintering operations', cx, H-8);
+        }
+    }
+];
+
+(function(){
+    const stepsDiv = document.getElementById('process-steps');
+    const canvas   = document.getElementById('step-canvas');
+    const ctx      = canvas.getContext('2d');
+    const titleEl  = document.getElementById('step-title');
+    const metaEl   = document.getElementById('step-meta');
+
+    STEPS.forEach((s,i)=>{
+        const btn = document.createElement('button');
+        btn.className = 'step-btn';
+        btn.innerHTML = `<span class="step-num">${s.num}</span>${s.label.replace('\n','<br>')}`;
+        btn.addEventListener('click',()=>{
+            document.querySelectorAll('.step-btn').forEach(b=>b.classList.remove('active'));
+            btn.classList.add('active');
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            s.draw(ctx, canvas.width, canvas.height);
+            titleEl.textContent = s.title;
+            metaEl.innerHTML = `
+                <div><div class="smr-label">What Happens</div><div class="smr-val">${s.what}</div></div>
+                <div><div class="smr-label">Key Parameters</div><div class="smr-val">${s.params}</div></div>
+                <div><div class="smr-label">Why It Matters</div><div class="smr-val">${s.purpose}</div></div>
+            `;
+        });
+        stepsDiv.appendChild(btn);
+    });
+    stepsDiv.children[0].click();
+})();
+
+
+/* ═══════════════════════════════════════════════════
+   TAB 2 — DESIGN GUIDELINES
+═══════════════════════════════════════════════════ */
+const GUIDELINES = [
+    {
+        title: 'Press Direction: No Undercuts',
+        desc: 'PM parts are ejected axially. Any undercut (re-entrant feature perpendicular to pressing axis) locks the part in the die. Grooves, threads, and holes must be parallel to the press direction or added by secondary machining.',
+        draw(ctx,W,H){
+            ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+            ctx.font='10px Segoe UI';
+            // BAD
+            ctx.fillStyle='#ef4444';
+            ctx.beginPath(); ctx.rect(15,40,80,100); ctx.fill();
+            ctx.fillStyle='#0f172a'; // undercut groove
+            ctx.fillRect(15,80,80,18);
+            ctx.fillStyle='#fbbf24'; ctx.textAlign='left';
+            ctx.fillText('⚠ Undercut', 18,75);
+            ctx.fillStyle='#f87171'; ctx.fillText('Avoid', 48,155);
+            // arrows blocked
+            ctx.strokeStyle='#f87171'; ctx.lineWidth=2;
+            ctx.beginPath(); ctx.moveTo(55,15); ctx.lineTo(55,35); ctx.stroke();
+            ctx.fillStyle='#f87171';
+            ctx.beginPath(); ctx.moveTo(55,37); ctx.lineTo(49,28); ctx.lineTo(61,28); ctx.closePath(); ctx.fill();
+
+            // GOOD
+            ctx.fillStyle='#4ade80';
+            ctx.beginPath(); ctx.rect(W/2+10,40,80,100); ctx.fill();
+            // axial groove (slot running top-bottom = OK)
+            ctx.fillStyle='#0f172a';
+            ctx.fillRect(W/2+45,40,12,100);
+            ctx.fillStyle='#86efac'; ctx.fillText('Axial slot ✓', W/2+12,36);
+            ctx.fillStyle='#4ade80'; ctx.fillText('Preferred', W/2+30,155);
+            ctx.strokeStyle='#4ade80'; ctx.lineWidth=2;
+            ctx.beginPath(); ctx.moveTo(W/2+50,15); ctx.lineTo(W/2+50,35); ctx.stroke();
+            ctx.fillStyle='#4ade80';
+            ctx.beginPath(); ctx.moveTo(W/2+50,37); ctx.lineTo(W/2+44,28); ctx.lineTo(W/2+56,28); ctx.closePath(); ctx.fill();
+            ctx.fillStyle='#64748b'; ctx.textAlign='center';
+            ctx.fillText('Press direction = vertical', W/2/2+50, H-8);
+        }
+    },
+    {
+        title: 'Uniform Wall Thickness',
+        desc: 'Powder flows poorly in thin sections — thin walls fill incompletely and compact to lower density. MPIF recommends minimum wall thickness of 1.5 mm; walls thinner than 0.75 mm are impractical. Also avoid abrupt thickness changes that require different die fill depths.',
+        draw(ctx,W,H){
+            ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+            ctx.font='10px Segoe UI';
+            const mid=H/2;
+            // BAD: very thin wall
+            ctx.fillStyle='#ef4444';
+            ctx.fillRect(20,mid-35,35,70);
+            ctx.fillRect(55,mid-35,5,70);   // thin!
+            ctx.fillRect(60,mid-35,35,70);
+            ctx.fillStyle='#fbbf24'; ctx.textAlign='center';
+            ctx.fillText('0.5mm', 57.5, mid+48);
+            ctx.fillStyle='#f87171'; ctx.fillText('Avoid', 57, mid+62);
+            // density variation indicator
+            ctx.fillStyle='rgba(239,68,68,0.3)';
+            ctx.fillRect(55,mid-35,5,70);
+            ctx.fillStyle='#f87171'; ctx.font='8px Segoe UI';
+            ctx.fillText('Low ρ', 30, mid-40);
+            // GOOD: uniform walls
+            const ox=W/2+10;
+            ctx.fillStyle='#4ade80'; ctx.font='10px Segoe UI';
+            ctx.fillRect(ox,mid-35,30,70);
+            ctx.fillRect(ox+45,mid-35,30,70);
+            ctx.fillStyle='#0f172a';  // hollow center
+            ctx.fillRect(ox+30,mid-30,15,60);
+            ctx.fillStyle='#86efac'; ctx.textAlign='center';
+            ctx.fillText('≥1.5mm', ox+37.5, mid+48);
+            ctx.fillStyle='#4ade80'; ctx.fillText('Preferred', ox+37.5, mid+62);
+        }
+    },
+    {
+        title: 'Draft Angles (Minimal)',
+        desc: 'Unlike casting, PM requires very little draft because parts are ejected (pushed) rather than pulled from a mold. Typically 0.25°–1° is sufficient. However, sharp 90° re-entrant corners on the punch face cause die chipping — use a 0.1–0.4 mm chamfer or radius instead.',
+        draw(ctx,W,H){
+            ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+            ctx.font='10px Segoe UI';
+            const W2=W/2;
+            // PM part — near-vertical walls with slight taper
+            ctx.fillStyle='#4ade80';
+            ctx.beginPath();
+            ctx.moveTo(W2/2-20,20); ctx.lineTo(W2/2+20,20);
+            ctx.lineTo(W2/2+18,H-30); ctx.lineTo(W2/2-18,H-30); ctx.closePath(); ctx.fill();
+            ctx.fillStyle='#86efac'; ctx.textAlign='center';
+            ctx.fillText('0.25–1°', W2/2, 15);
+            ctx.fillStyle='#4ade80'; ctx.fillText('PM (ejection)', W2/2, H-15);
+            // casting comparison
+            ctx.fillStyle='#f59e0b';
+            ctx.beginPath();
+            ctx.moveTo(W2+W2/2-30,20); ctx.lineTo(W2+W2/2+30,20);
+            ctx.lineTo(W2+W2/2+20,H-30); ctx.lineTo(W2+W2/2-20,H-30); ctx.closePath(); ctx.fill();
+            ctx.fillStyle='#fbbf24'; ctx.textAlign='center';
+            ctx.fillText('1–3°', W2+W2/2, 15);
+            ctx.fillStyle='#f59e0b'; ctx.fillText('Sand Casting', W2+W2/2, H-15);
+            ctx.fillStyle='#64748b'; ctx.fillText('PM needs less draft than casting', W/2, H-4);
+        }
+    },
+    {
+        title: 'Level Changes (Step Features)',
+        desc: 'PM dies can create multiple levels in one stroke by using multiple punches. However, the height difference between levels must not exceed 2:1 — large steps cause density gradients because powder fills shallower sections at higher pressure. Use tapered transitions or separate die levels.',
+        draw(ctx,W,H){
+            ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+            ctx.font='10px Segoe UI'; ctx.textAlign='center';
+            const cx=W/2;
+            // BAD: large step
+            ctx.fillStyle='#ef4444';
+            ctx.fillRect(20,30,80,120);
+            ctx.fillRect(100,90,50,60);
+            // density arrows
+            ctx.fillStyle='rgba(239,68,68,0.3)'; ctx.fillRect(100,90,50,60);
+            ctx.fillStyle='#fbbf24'; ctx.font='8px Segoe UI';
+            ctx.fillText('High ρ', 55,100); ctx.fillText('Low ρ', 125,120);
+            ctx.fillStyle='#f87171'; ctx.font='10px Segoe UI'; ctx.fillText('Density gradient', 85,165);
+            // GOOD: ≤2:1 step
+            ctx.fillStyle='#4ade80';
+            ctx.fillRect(cx+15,50,70,100);
+            ctx.fillRect(cx+85,70,45,80);
+            ctx.fillStyle='#86efac'; ctx.font='8px Segoe UI';
+            ctx.fillText('H', cx+50,45); ctx.fillText('H/2 max', cx+108,65);
+            ctx.fillStyle='#4ade80'; ctx.font='10px Segoe UI'; ctx.fillText('≤2:1 height ratio', cx+62,165);
+        }
+    },
+    {
+        title: 'Holes and Slots in Pressing Direction',
+        desc: 'Holes parallel to the press axis are formed by core rods (pins fixed to the die or lower punch). They are low-cost and highly accurate. Cross-holes (perpendicular to press) require secondary drilling. Deep holes (aspect ratio >3:1) are difficult due to die pin deflection.',
+        draw(ctx,W,H){
+            ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+            ctx.font='10px Segoe UI';
+            const cx=W/2;
+            // part with axial hole
+            ctx.fillStyle='#4ade80';
+            ctx.beginPath(); ctx.ellipse(cx/2,H/2,35,45,0,0,Math.PI*2); ctx.fill();
+            ctx.fillStyle='#0f172a';
+            ctx.beginPath(); ctx.ellipse(cx/2,H/2,12,45,0,0,Math.PI*2); ctx.fill();
+            ctx.fillStyle='#86efac'; ctx.textAlign='center';
+            ctx.fillText('Axial hole ✓', cx/2, H-15);
+            ctx.fillText('(core rod)', cx/2, H-4);
+            // part with cross-hole marked
+            ctx.fillStyle='#374151';
+            ctx.fillRect(cx+10,H/2-40,80,80);
+            // cross-hole
+            ctx.fillStyle='#0f172a';
+            ctx.fillRect(cx+10,H/2-6,80,12);
+            ctx.fillStyle='#fbbf24'; ctx.font='8px Segoe UI';
+            ctx.fillText('Cross-hole', cx+50,H/2+24);
+            ctx.fillText('→ drill secondary', cx+50, H/2+35);
+            ctx.fillStyle='#f59e0b'; ctx.font='10px Segoe UI';
+            ctx.fillText('Secondary op needed', cx+50,H-8);
+        }
+    },
+    {
+        title: 'Chamfers & Lead-In Angles',
+        desc: 'Sharp 90° edges on PM parts chip easily during ejection and handling. MPIF recommends chamfers of 0.4–0.8 mm × 45° on all exposed top and bottom edges. This is built directly into the punch face — no secondary operation needed and it greatly improves part survivability.',
+        draw(ctx,W,H){
+            ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+            ctx.font='10px Segoe UI';
+            const W2=W/2;
+            // BAD — sharp edge
+            ctx.fillStyle='#ef4444';
+            ctx.beginPath();
+            ctx.moveTo(20,40); ctx.lineTo(100,40); ctx.lineTo(100,H-40); ctx.lineTo(20,H-40); ctx.closePath(); ctx.fill();
+            ctx.strokeStyle='#fbbf24'; ctx.lineWidth=2;
+            ctx.beginPath(); ctx.arc(100,40,8,0,Math.PI*2); ctx.stroke();
+            ctx.fillStyle='#fbbf24'; ctx.font='9px Segoe UI'; ctx.textAlign='left';
+            ctx.fillText('⚡ chip', 105,44);
+            ctx.fillStyle='#f87171'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Avoid', 60, H-25);
+
+            // GOOD — chamfered
+            const ox=W2+15;
+            const c=10; // chamfer size
+            ctx.fillStyle='#4ade80';
+            ctx.beginPath();
+            ctx.moveTo(ox+c,40); ctx.lineTo(ox+80,40);
+            ctx.lineTo(ox+80+c,40+c);   // top-right chamfer out (external)
+            ctx.lineTo(ox+80+c,H-40-c);
+            ctx.lineTo(ox+80,H-40);
+            ctx.lineTo(ox+c,H-40);
+            ctx.lineTo(ox,H-40-c);
+            ctx.lineTo(ox,40+c);
+            ctx.closePath(); ctx.fill();
+            ctx.fillStyle='#86efac'; ctx.font='9px Segoe UI';
+            ctx.fillText('0.5×45° chamfer', ox+40,36);
+            ctx.fillStyle='#4ade80'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Preferred', ox+40, H-25);
+        }
+    }
+];
+
+(function(){
+    const grid = document.getElementById('guide-grid');
+    GUIDELINES.forEach(g=>{
+        const item = document.createElement('div');
+        item.className = 'guide-item';
+        const c = document.createElement('canvas');
+        c.width=320; c.height=190; c.style.width='100%';
+        item.appendChild(c);
+        const body = document.createElement('div');
+        body.className='guide-body';
+        body.innerHTML=`<h3>${g.title}</h3><p>${g.desc}</p>`;
+        item.appendChild(body);
+        grid.appendChild(item);
+        const ctx=c.getContext('2d');
+        ctx.font='11px Segoe UI'; ctx.textAlign='left';
+        g.draw(ctx,c.width,c.height);
+    });
+})();
+
+
+/* ═══════════════════════════════════════════════════
+   TAB 3 — MATERIAL DATA
+═══════════════════════════════════════════════════ */
+const MATERIALS = [
+    {
+        name:'Iron & Low-Alloy Steel', tag:'Fe-based',
+        short:'Workhorse of PM — gears, sprockets, connecting rods, structural components.',
+        uts:'200–620 MPa', yield:'150–500 MPa', elongation:'1–5%',
+        density:'6.6–7.1 g/cm³', hardness:'50–90 HRB',
+        mpif:'FC-0208, FLN2-4405, FD-0405',
+        sinTemp:'1120 °C (air/N₂–H₂)', uses:'Automotive gears, cams, flanges, structural machine parts',
+        notes:'Adding Cu (1–3%) increases strength and hardness. Ni+Mo alloying (FLN series) gives superior toughness. Density-critical: 7.1 g/cm³ gives near-wrought properties. Heat-treatable grades reach 900 MPa+ UTS.'
+    },
+    {
+        name:'Stainless Steel', tag:'Fe-based',
+        short:'Corrosion-resistant PM parts for food, medical, and marine applications.',
+        uts:'350–550 MPa', yield:'200–380 MPa', elongation:'2–8%',
+        density:'6.5–7.0 g/cm³', hardness:'55–75 HRB',
+        mpif:'SS-316L, SS-303, SS-410',
+        sinTemp:'1120–1260 °C (H₂ or vacuum)', uses:'Filter elements, surgical instruments, lock parts, food processing equipment',
+        notes:'316L is the most common — good corrosion resistance and biocompatibility. Must sinter in hydrogen or vacuum to avoid chromium oxidation. Lower density than wrought due to residual porosity.'
+    },
+    {
+        name:'Copper & Bronze', tag:'Cu-based',
+        short:'Self-lubricating bearings, electrical contacts, filters.',
+        uts:'100–250 MPa', yield:'60–180 MPa', elongation:'5–20%',
+        density:'6.2–7.4 g/cm³', hardness:'40–70 HRB',
+        mpif:'CT-1000, CZP-3002, CB-1000',
+        sinTemp:'750–850 °C (H₂ or N₂)', uses:'Oil-impregnated sleeve bearings, sintered filters, current-carrying parts',
+        notes:'The most important PM application is self-lubricating bearings (oil-impregnated bronze). Porosity is intentional (15–30 vol%) to store oil. PM bronze bearings are used in electric motors, household appliances, and industrial machinery worldwide.'
+    },
+    {
+        name:'Aluminum', tag:'Al-based',
+        short:'Lightweight structural and heat-sink PM parts.',
+        uts:'130–310 MPa', yield:'90–250 MPa', elongation:'1–6%',
+        density:'2.5–2.7 g/cm³', hardness:'60–90 HRB',
+        mpif:'MPIF 601, 602 (Al-Si-Mg)',
+        sinTemp:'595–620 °C (N₂)', uses:'Automotive transmission parts, heat sinks, structural brackets',
+        notes:'Al PM uses solid-state sintering just below the eutectic temperature. Oxide layer on Al powders is a major challenge — must be disrupted by magnesium gettering. Lower strength than wrought but competitive for lightweight, high-volume applications. Used in VW, GM transmission components.'
+    },
+    {
+        name:'Titanium', tag:'Ti-based',
+        short:'High specific strength; aerospace and medical implants via PM/HIP.',
+        uts:'700–1000 MPa', yield:'600–900 MPa', elongation:'8–20%',
+        density:'4.2–4.4 g/cm³', hardness:'28–36 HRC',
+        mpif:'Ti-6Al-4V (ASTM B265 equiv.)',
+        sinTemp:'1200–1300 °C (vacuum)', uses:'Aerospace structural parts, orthopedic implants, dental fixtures',
+        notes:'Ti PM (especially Ti-6Al-4V) via HIP produces fully dense parts meeting aerospace specs at lower buy-to-fly ratio than machining. Sintering MUST be in vacuum or argon — oxygen contamination is catastrophic. Metal injection molding (MIM) of Ti is growing for small complex medical parts.'
+    },
+    {
+        name:'Hard Metals (Cemented Carbides)', tag:'WC-Co',
+        short:'Extreme hardness and wear resistance — cutting tools, dies, mining.',
+        uts:'1500–3000 MPa (TRS)', yield:'N/A (brittle in tension)', elongation:'<0.5%',
+        density:'14–15 g/cm³', hardness:'70–92 HRA',
+        mpif:'ISO 513 grades: P, M, K, N, S, H',
+        sinTemp:'1350–1550 °C (H₂ or vacuum) — liquid phase sintering', uses:'Cutting inserts, end mills, drill bits, wire drawing dies, mining picks',
+        notes:'WC-Co is NOT solid-state sintered — a Co liquid phase forms at sintering temperature and provides capillary densification (liquid-phase sintering). Co content 3–25 wt% controls toughness/hardness balance. 90%+ of all cutting tool inserts are PM cemented carbide. TRS = transverse rupture strength (bend test, used because carbides are brittle).'
+    },
+];
+
+(function(){
+    const grid=document.getElementById('mat-grid');
+    const detail=document.getElementById('mat-detail');
+    MATERIALS.forEach(m=>{
+        const card=document.createElement('div');
+        card.className='mat-card';
+        card.innerHTML=`<div class="tag">${m.tag}</div><h3>${m.name}</h3><p>${m.short}</p>`;
+        card.addEventListener('click',()=>{
+            document.querySelectorAll('.mat-card').forEach(c=>c.classList.remove('selected'));
+            card.classList.add('selected');
+            detail.style.display='block';
+            detail.innerHTML=`
+                <h3>${m.name}</h3>
+                <p style="color:#94a3b8;margin-bottom:10px;">${m.notes}</p>
+                <div class="mat-spec-row">
+                    <div class="mat-spec"><div class="spec-name">UTS</div><div class="spec-val">${m.uts}</div></div>
+                    <div class="mat-spec"><div class="spec-name">Yield Strength</div><div class="spec-val">${m.yield}</div></div>
+                    <div class="mat-spec"><div class="spec-name">Elongation</div><div class="spec-val">${m.elongation}</div></div>
+                    <div class="mat-spec"><div class="spec-name">Sintered Density</div><div class="spec-val">${m.density}</div></div>
+                    <div class="mat-spec"><div class="spec-name">Hardness</div><div class="spec-val">${m.hardness}</div></div>
+                    <div class="mat-spec"><div class="spec-name">Sinter Temperature</div><div class="spec-val">${m.sinTemp}</div></div>
+                    <div class="mat-spec" style="flex:2;min-width:200px;"><div class="spec-name">MPIF / ISO Standard</div><div class="spec-val">${m.mpif}</div></div>
+                    <div class="mat-spec" style="flex:3;min-width:240px;"><div class="spec-name">Typical Applications</div><div class="spec-val">${m.uses}</div></div>
+                </div>`;
+        });
+        grid.appendChild(card);
+    });
+})();
+
+/* Property comparison chart */
+(function(){
+    const canvas=document.getElementById('prop-canvas');
+    if(!canvas) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = 680, cssH = 300;
+    canvas.width  = cssW * dpr;
+    canvas.height = cssH * dpr;
+    canvas.style.width  = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    const W = cssW, H = cssH;
+    const PAD={top:30,right:130,bottom:60,left:60};
+    const CW=W-PAD.left-PAD.right, CH=H-PAD.top-PAD.bottom;
+
+    ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+
+    const groups=[
+        {label:'Iron PM\n(FC-0208,\n7.0 g/cm³)',  vals:[{v:380,c:'#38bdf8'},{v:270,c:'#818cf8'},{v:160,c:'#34d399'}]},
+        {label:'Iron PM\n(FLN2-4405,\nHT)',         vals:[{v:900,c:'#38bdf8'},{v:750,c:'#818cf8'},{v:370,c:'#34d399'}]},
+        {label:'Wrought\nLow-C Steel\n(AISI 1020)', vals:[{v:420,c:'#38bdf8'},{v:350,c:'#818cf8'},{v:210,c:'#34d399'}]},
+        {label:'Gray\nCast Iron\n(Class 30)',        vals:[{v:210,c:'#38bdf8'},{v:0,  c:'#818cf8'},{v:90, c:'#34d399'}]},
+    ];
+
+    const maxVal = 950;
+    const barW   = 16;
+    const groupW = CW / groups.length;
+
+    function xFor(gi, bi) { return PAD.left + gi * groupW + bi * (barW + 3) + 14; }
+    function yFor(v)      { return PAD.top + CH - (v / maxVal) * CH; }
+
+    // horizontal grid lines
+    ctx.strokeStyle='#1e293b'; ctx.lineWidth=1;
+    [0,200,400,600,800,950].forEach(v=>{
+        const y=yFor(v);
+        ctx.beginPath(); ctx.moveTo(PAD.left,y); ctx.lineTo(PAD.left+CW,y); ctx.stroke();
+        ctx.fillStyle='#94a3b8'; ctx.font='12px Segoe UI'; ctx.textAlign='right';
+        ctx.fillText(v+'',PAD.left-6,y+4);
+    });
+
+    // axes
+    ctx.strokeStyle='#475569'; ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(PAD.left,PAD.top); ctx.lineTo(PAD.left,PAD.top+CH);
+    ctx.lineTo(PAD.left+CW,PAD.top+CH); ctx.stroke();
+
+    // bars + value labels
+    groups.forEach((g,gi)=>{
+        g.vals.forEach((b,bi)=>{
+            if(b.v===0) return;
+            const x=xFor(gi,bi), yTop=yFor(b.v);
+            ctx.fillStyle=b.c+'88';
+            ctx.strokeStyle=b.c; ctx.lineWidth=1.5;
+            ctx.fillRect(x,yTop,barW,PAD.top+CH-yTop);
+            ctx.strokeRect(x,yTop,barW,PAD.top+CH-yTop);
+            ctx.fillStyle=b.c; ctx.font='bold 10px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText(b.v, x+barW/2, yTop-5);
+        });
+        // group label (multi-line)
+        ctx.fillStyle='#94a3b8'; ctx.font='11px Segoe UI'; ctx.textAlign='center';
+        const gx = PAD.left + gi*groupW + groupW/2;
+        g.label.split('\n').forEach((l,i)=>ctx.fillText(l, gx, PAD.top+CH+16+i*13));
+    });
+
+    // legend
+    const legX=PAD.left+CW+10, legY=PAD.top+10;
+    [['#38bdf8','UTS'],['#818cf8','Yield'],['#34d399','Fatigue']].forEach(([c,l],i)=>{
+        ctx.fillStyle=c; ctx.fillRect(legX, legY+i*22, 14, 12);
+        ctx.fillStyle='#cbd5e1'; ctx.font='12px Segoe UI'; ctx.textAlign='left';
+        ctx.fillText(l+' (MPa)', legX+18, legY+i*22+10);
+    });
+
+    // y-axis label
+    ctx.save();
+    ctx.translate(14, PAD.top+CH/2); ctx.rotate(-Math.PI/2);
+    ctx.textAlign='center'; ctx.fillStyle='#64748b'; ctx.font='12px Segoe UI';
+    ctx.fillText('Strength (MPa)',0,0);
+    ctx.restore();
+})();
+
+
+/* ═══════════════════════════════════════════════════
+   TAB 4 — SINTERING FUNDAMENTALS (DoITPoMS)
+═══════════════════════════════════════════════════ */
+const SINTER_MECHS = [
+    {
+        name:'Neck Formation',
+        color:'#a78bfa',
+        what:'When two powder particles first contact during heating, a small neck forms at the contact point. The driving force is reduction of surface energy — the system lowers its total surface area by converting two free surfaces into one grain boundary.',
+        mechanism:'Surface diffusion and evaporation-condensation are the initial neck-growth mechanisms. They transport material to the neck without causing shrinkage (centers of particles do not approach). Neck radius grows as: x/R ∝ (Dt/R²)ⁿ where n depends on mechanism.',
+        effect:'Neck formation gives the compact mechanical strength and electrical conductivity but causes little dimensional change. This is the dominant mechanism in the early (initial) sintering stage (ρ < ~85%).',
+        draw(ctx,W,H){
+            ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+            const cx=W/2, cy=H/2+10;
+            const R=52;
+            // particle 1
+            ctx.fillStyle='#1e3a5f'; ctx.strokeStyle='#60a5fa'; ctx.lineWidth=2;
+            ctx.beginPath(); ctx.arc(cx-R+15,cy,R,0,Math.PI*2); ctx.fill(); ctx.stroke();
+            // particle 2
+            ctx.beginPath(); ctx.arc(cx+R-15,cy,R,0,Math.PI*2); ctx.fill(); ctx.stroke();
+            // neck highlight
+            ctx.fillStyle='#a78bfa';
+            ctx.beginPath(); ctx.ellipse(cx,cy,14,22,0,0,Math.PI*2); ctx.fill();
+            // neck label
+            ctx.fillStyle='#c4b5fd'; ctx.font='11px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Neck',cx,cy+35);
+            // diffusion arrows around neck
+            ctx.strokeStyle='#f59e0b'; ctx.lineWidth=1.5;
+            const arrs=[[-20,-30,0,-18],[20,-30,0,-18],[-20,30,0,18],[20,30,0,18]];
+            arrs.forEach(([fx,fy,tx,ty])=>{
+                ctx.beginPath(); ctx.moveTo(cx+fx,cy+fy); ctx.lineTo(cx+tx,cy+ty); ctx.stroke();
+                ctx.fillStyle='#f59e0b';
+                ctx.beginPath(); ctx.arc(cx+fx,cy+fy,2.5,0,Math.PI*2); ctx.fill();
+            });
+            ctx.fillStyle='#f59e0b'; ctx.font='9px Segoe UI';
+            ctx.fillText('Surface diffusion →',cx,cy-65);
+            ctx.fillStyle='#94a3b8'; ctx.font='10px Segoe UI';
+            ctx.fillText('Two particles — neck at contact point', cx, H-10);
+        }
+    },
+    {
+        name:'Surface Diffusion',
+        color:'#60a5fa',
+        what:'Atoms migrate along the particle surface from high-curvature regions (convex) toward the neck (concave). This is the fastest diffusion path at low temperatures because surface atoms are less constrained.',
+        mechanism:'Diffusion flux J = −Ds (∂c/∂x). Surface diffusivity Ds is much higher than bulk Dv at low T. Material moves from particle surface → neck region. This grows the neck but does NOT bring particle centers closer — no macroscopic shrinkage occurs.',
+        effect:'Neck growth without densification. Critical in the initial sintering stage. Because it does not shrink the part, surface diffusion alone cannot fully densify a compact.',
+        draw(ctx,W,H){
+            ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+            const cx=W/2, cy=H/2;
+            const R=50;
+            ctx.fillStyle='#1e293b'; ctx.strokeStyle='#334155'; ctx.lineWidth=1;
+            ctx.beginPath(); ctx.arc(cx-R+12,cy,R,0,Math.PI*2); ctx.fill(); ctx.stroke();
+            ctx.beginPath(); ctx.arc(cx+R-12,cy,R,0,Math.PI*2); ctx.fill(); ctx.stroke();
+            // neck
+            ctx.fillStyle='#1e3a5f'; ctx.strokeStyle='#60a5fa'; ctx.lineWidth=2;
+            ctx.beginPath(); ctx.ellipse(cx,cy,12,20,0,0,Math.PI*2); ctx.fill(); ctx.stroke();
+            // surface path arrows (curved along particle surface)
+            ctx.strokeStyle='#60a5fa'; ctx.lineWidth=2;
+            [[-1,1],[1,1]].forEach(([side,yside])=>{
+                ctx.beginPath();
+                ctx.moveTo(cx+side*(R-5), cy-30);
+                ctx.quadraticCurveTo(cx+side*(R-15),cy-50, cx+side*35, cy-28);
+                ctx.quadraticCurveTo(cx+side*20,cy-12, cx+side*12, cy-18);
+                ctx.stroke();
+                // arrowhead
+                ctx.fillStyle='#60a5fa';
+                ctx.beginPath(); ctx.arc(cx+side*12,cy-18,3,0,Math.PI*2); ctx.fill();
+            });
+            ctx.fillStyle='#93c5fd'; ctx.font='10px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Atoms flow along surface → neck',cx,H-28);
+            ctx.fillStyle='#64748b'; ctx.font='9px Segoe UI';
+            ctx.fillText('No shrinkage — particle centers stay fixed',cx,H-14);
+        }
+    },
+    {
+        name:'Volume (Bulk) Diffusion',
+        color:'#34d399',
+        what:'Atoms migrate through the bulk crystal lattice from grain boundaries (under the neck) to the neck region. This mechanism transports mass from the interior, bringing particle centers closer together — causing macroscopic shrinkage and densification.',
+        mechanism:'Vacancy flux from neck region (tension) to grain boundary (compression) under the stress gradient. Diffusivity Dv ≪ Ds but becomes important at higher temperatures where it can overcome the activation energy barrier.',
+        effect:'TRUE densification mechanism — reduces porosity and brings particle centers together. Dominant in the intermediate and final sintering stages at high temperature.',
+        draw(ctx,W,H){
+            ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+            const cx=W/2, cy=H/2+10;
+            const R=52;
+            // particles closer together (centers approaching)
+            ctx.fillStyle='#1e293b'; ctx.strokeStyle='#334155'; ctx.lineWidth=1;
+            ctx.beginPath(); ctx.arc(cx-R+20,cy,R,0,Math.PI*2); ctx.fill(); ctx.stroke();
+            ctx.beginPath(); ctx.arc(cx+R-20,cy,R,0,Math.PI*2); ctx.fill(); ctx.stroke();
+            // grain boundary
+            ctx.strokeStyle='#f59e0b'; ctx.lineWidth=2; ctx.setLineDash([4,3]);
+            ctx.beginPath(); ctx.moveTo(cx,cy-22); ctx.lineTo(cx,cy+22); ctx.stroke();
+            ctx.setLineDash([]);
+            // neck
+            ctx.fillStyle='#14532d'; ctx.strokeStyle='#34d399'; ctx.lineWidth=2;
+            ctx.beginPath(); ctx.ellipse(cx,cy,16,24,0,0,Math.PI*2); ctx.fill(); ctx.stroke();
+            // bulk diffusion arrows (through interior)
+            ctx.strokeStyle='#34d399'; ctx.lineWidth=1.5;
+            [[-1],[1]].forEach(([s])=>{
+                ctx.beginPath();
+                ctx.moveTo(cx+s*30,cy);
+                ctx.lineTo(cx+s*17,cy);
+                ctx.stroke();
+                ctx.fillStyle='#34d399';
+                ctx.beginPath(); ctx.arc(cx+s*17,cy,3,0,Math.PI*2); ctx.fill();
+            });
+            ctx.fillStyle='#f59e0b'; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Grain boundary', cx, cy-28);
+            ctx.fillStyle='#86efac'; ctx.font='10px Segoe UI';
+            ctx.fillText('Atoms move through bulk → densification',cx, H-28);
+            ctx.fillStyle='#64748b'; ctx.font='9px Segoe UI';
+            ctx.fillText('Particle centers approach: true shrinkage',cx,H-14);
+        }
+    },
+    {
+        name:'Grain Boundary Diffusion',
+        color:'#f59e0b',
+        what:'Atoms diffuse along the grain boundary between two sintered particles. The grain boundary is a planar defect with higher diffusivity than the bulk. This provides a fast path for mass transport at intermediate temperatures.',
+        mechanism:'Grain boundary diffusivity Dgb typically lies between Ds and Dv. The flux is concentrated in a thin boundary layer (~2–5 nm wide). Like volume diffusion, grain boundary diffusion moves mass from the boundary region toward the neck, contributing to densification.',
+        effect:'Contributes to both neck growth and densification, particularly at intermediate temperatures. At high temperatures, grain growth eventually eliminates grain boundaries between fully bonded particles.',
+        draw(ctx,W,H){
+            ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+            const cx=W/2, cy=H/2+10;
+            const R=52;
+            ctx.fillStyle='#1e293b'; ctx.strokeStyle='#334155'; ctx.lineWidth=1;
+            ctx.beginPath(); ctx.arc(cx-R+18,cy,R,0,Math.PI*2); ctx.fill(); ctx.stroke();
+            ctx.beginPath(); ctx.arc(cx+R-18,cy,R,0,Math.PI*2); ctx.fill(); ctx.stroke();
+            // grain boundary — highlighted
+            ctx.strokeStyle='#f59e0b'; ctx.lineWidth=4;
+            ctx.beginPath(); ctx.moveTo(cx,cy-30); ctx.lineTo(cx,cy+30); ctx.stroke();
+            // diffusion along boundary
+            ctx.strokeStyle='#fbbf24'; ctx.lineWidth=2;
+            [[0,-25,0,-12],[0,25,0,12]].forEach(([fx,fy,tx,ty])=>{
+                ctx.beginPath(); ctx.moveTo(cx+fx,cy+fy); ctx.lineTo(cx+tx,cy+ty); ctx.stroke();
+                ctx.fillStyle='#fbbf24';
+                ctx.beginPath(); ctx.moveTo(cx+tx,cy+ty);
+                const dir = ty>fy?1:-1;
+                ctx.lineTo(cx-4,cy+ty-dir*6); ctx.lineTo(cx+4,cy+ty-dir*6);
+                ctx.closePath(); ctx.fill();
+            });
+            // neck
+            ctx.fillStyle='#422006'; ctx.strokeStyle='#f59e0b'; ctx.lineWidth=2;
+            ctx.beginPath(); ctx.ellipse(cx,cy,14,22,0,0,Math.PI*2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle='#fbbf24'; ctx.font='9px Segoe UI'; ctx.textAlign='center';
+            ctx.fillText('Grain boundary (fast diffusion path)',cx,cy-45);
+            ctx.fillStyle='#94a3b8'; ctx.font='10px Segoe UI';
+            ctx.fillText('Mass flows down grain boundary → neck',cx,H-14);
+        }
+    },
+    {
+        name:'Densification Stages',
+        color:'#f87171',
+        what:'Sintering progresses through three distinct stages defined by the porosity state and dominant microstructural feature.',
+        mechanism:'Stage 1 (Initial): necks form, open porosity, little shrinkage (~0–3%). Stage 2 (Intermediate): pore channels pinch off, cylindrical pores form, density 70–92%. Stage 3 (Final): isolated spherical pores shrink, grain growth dominates, density 92–99%+.',
+        effect:'Understanding stages guides process control: initial stage is fast-diffusion neck bonding; intermediate stage is where most densification occurs; final stage is where over-sintering causes grain coarsening that can trap pores and stop densification.',
+        draw(ctx,W,H){
+            ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+            ctx.font='10px Segoe UI'; ctx.textAlign='center';
+            const stages=[
+                {x:25, label:'Initial Stage', desc:'Open porosity\nNeck growth\n<85% ρ', color:'#ef4444'},
+                {x:W/2-20, label:'Intermediate', desc:'Channels close\nGrain growth\n85–93% ρ', color:'#f59e0b'},
+                {x:W-120, label:'Final Stage', desc:'Isolated pores\nGrain coarsening\n>93% ρ', color:'#4ade80'},
+            ];
+            stages.forEach(s=>{
+                ctx.fillStyle=s.color+'33'; ctx.strokeStyle=s.color; ctx.lineWidth=1.5;
+                ctx.beginPath(); ctx.roundRect(s.x,15,90,H-25,6); ctx.fill(); ctx.stroke();
+                ctx.fillStyle=s.color; ctx.font='10px Segoe UI';
+                ctx.fillText(s.label, s.x+45, 30);
+                // microstructure sketch
+                const cx2=s.x+45, cy2=H/2-10;
+                if(s.label==='Initial Stage'){
+                    // many small necks, lots of pores
+                    [[0,0],[22,18],[-20,15],[12,-20],[-15,-18]].forEach(([dx,dy])=>{
+                        ctx.fillStyle='#374151';
+                        ctx.beginPath(); ctx.arc(cx2+dx,cy2+dy,14,0,Math.PI*2); ctx.fill();
+                    });
+                    ctx.fillStyle='#0f172a';
+                    [[8,10],[25,-5],[-8,-12],[18,22]].forEach(([dx,dy])=>{
+                        ctx.beginPath(); ctx.arc(cx2+dx,cy2+dy,5,0,Math.PI*2); ctx.fill();
+                    });
+                } else if(s.label==='Intermediate'){
+                    // fewer larger grains, pore channels
+                    ctx.fillStyle='#374151';
+                    ctx.beginPath(); ctx.ellipse(cx2,cy2,28,22,0,0,Math.PI*2); ctx.fill();
+                    ctx.beginPath(); ctx.ellipse(cx2+20,cy2-10,20,16,-0.3,0,Math.PI*2); ctx.fill();
+                    ctx.fillStyle='#0f172a';
+                    ctx.beginPath(); ctx.moveTo(cx2+5,cy2-20); ctx.lineTo(cx2+15,cy2-2); ctx.lineTo(cx2+22,cy2+8); ctx.lineWidth=7; ctx.stroke();
+                } else {
+                    // large grains, isolated pores
+                    ctx.fillStyle='#374151';
+                    ctx.beginPath(); ctx.ellipse(cx2,cy2,34,28,0,0,Math.PI*2); ctx.fill();
+                    ctx.fillStyle='#0f172a';
+                    [[6,5],[-12,8],[8,-10]].forEach(([dx,dy])=>{
+                        ctx.beginPath(); ctx.arc(cx2+dx,cy2+dy,4,0,Math.PI*2); ctx.fill();
+                    });
+                }
+                // description
+                ctx.fillStyle='#94a3b8'; ctx.font='9px Segoe UI';
+                s.desc.split('\n').forEach((l,i)=>ctx.fillText(l,s.x+45,H-50+i*12));
+            });
+        }
+    }
+];
+
+(function(){
+    const sel=document.getElementById('sinter-selector');
+    const canvas=document.getElementById('sinter-canvas');
+    const nameEl=document.getElementById('sinter-name');
+    const metaEl=document.getElementById('sinter-meta');
+
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = 340, cssH = 280;
+    canvas.width  = cssW * dpr;
+    canvas.height = cssH * dpr;
+    canvas.style.width  = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    SINTER_MECHS.forEach((m,i)=>{
+        const btn=document.createElement('button');
+        btn.className='sinter-btn';
+        btn.textContent=m.name;
+        btn.style.setProperty('--mc',m.color);
+        btn.addEventListener('click',()=>{
+            document.querySelectorAll('.sinter-btn').forEach(b=>b.classList.remove('active'));
+            btn.classList.add('active');
+            ctx.clearRect(0,0,cssW,cssH);
+            m.draw(ctx,cssW,cssH);
+            nameEl.textContent=m.name;
+            nameEl.style.color=m.color;
+            metaEl.innerHTML=`
+                <div><div class="snr-label">What Happens</div><div class="snr-val">${m.what}</div></div>
+                <div><div class="snr-label">Mechanism</div><div class="snr-val">${m.mechanism}</div></div>
+                <div><div class="snr-label">Effect on Densification</div><div class="snr-val">${m.effect}</div></div>
+            `;
+        });
+        sel.appendChild(btn);
+    });
+    sel.children[0].click();
+})();
+
+/* Sintering densification curve */
+(function(){
+    const canvas=document.getElementById('sinter-curve');
+    if(!canvas) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = 680, cssH = 260;
+    canvas.width  = cssW * dpr;
+    canvas.height = cssH * dpr;
+    canvas.style.width  = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    const W=cssW, H=cssH;
+    const PAD={top:20,right:130,bottom:50,left:66};
+    const CW=W-PAD.left-PAD.right, CH=H-PAD.top-PAD.bottom;
+
+    ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+
+    // Axes
+    ctx.strokeStyle='#475569'; ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(PAD.left,PAD.top); ctx.lineTo(PAD.left,PAD.top+CH);
+    ctx.lineTo(PAD.left+CW,PAD.top+CH); ctx.stroke();
+
+    // Grid
+    ctx.strokeStyle='#1e293b'; ctx.lineWidth=1;
+    [80,85,90,95,100].forEach(v=>{
+        const y=PAD.top+CH-(v-75)/30*CH;
+        ctx.beginPath(); ctx.moveTo(PAD.left,y); ctx.lineTo(PAD.left+CW,y); ctx.stroke();
+        ctx.fillStyle='#94a3b8'; ctx.font='12px Segoe UI'; ctx.textAlign='right';
+        ctx.fillText(v+'%',PAD.left-6,y+4);
+    });
+
+    // Time ticks
+    ctx.textAlign='center'; ctx.fillStyle='#94a3b8'; ctx.font='12px Segoe UI';
+    [0,10,20,30,40,50,60].forEach(t=>{
+        const x=PAD.left+t/60*CW;
+        ctx.beginPath(); ctx.moveTo(x,PAD.top+CH); ctx.lineTo(x,PAD.top+CH+5); ctx.stroke();
+        ctx.fillText(t+' min',x,PAD.top+CH+20);
+    });
+
+    // Densification curves for different temps
+    const curves=[
+        {label:'1120°C (standard)',color:'#38bdf8',fn:t=>75+22*(1-Math.exp(-t/12))+2*(1-Math.exp(-t/40))},
+        {label:'1180°C (high-temp)',color:'#f59e0b',fn:t=>75+24*(1-Math.exp(-t/8))+2.5*(1-Math.exp(-t/30))},
+        {label:'1060°C (low-temp)', color:'#94a3b8',fn:t=>75+14*(1-Math.exp(-t/18))+1*(1-Math.exp(-t/60))},
+    ];
+
+    curves.forEach((curve,li)=>{
+        ctx.strokeStyle=curve.color; ctx.lineWidth=2;
+        ctx.beginPath();
+        for(let t=0;t<=60;t+=0.5){
+            const v=curve.fn(t);
+            const x=PAD.left+t/60*CW;
+            const y=PAD.top+CH-(v-75)/30*CH;
+            t===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+        }
+        ctx.stroke();
+        ctx.fillStyle=curve.color; ctx.fillRect(PAD.left+CW+8,PAD.top+10+li*24,14,12);
+        ctx.fillStyle='#cbd5e1'; ctx.font='12px Segoe UI'; ctx.textAlign='left';
+        ctx.fillText(curve.label,PAD.left+CW+26,PAD.top+21+li*24);
+    });
+
+    // Stage annotations
+    const stageColors=['#ef4444','#f59e0b','#4ade80'];
+    const stageX=[0,15,38];
+    const stageW=[15,23,22];
+    const stageLabel=['Initial','Intermediate','Final'];
+    stageX.forEach((sx,i)=>{
+        const x1=PAD.left+sx/60*CW, x2=PAD.left+(sx+stageW[i])/60*CW;
+        ctx.fillStyle=stageColors[i]+'1a';
+        ctx.fillRect(x1,PAD.top,x2-x1,CH);
+        ctx.fillStyle=stageColors[i]; ctx.font='11px Segoe UI'; ctx.textAlign='center';
+        ctx.fillText(stageLabel[i],(x1+x2)/2,PAD.top+13);
+    });
+
+    // Axis labels
+    ctx.save(); ctx.translate(13,PAD.top+CH/2); ctx.rotate(-Math.PI/2);
+    ctx.textAlign='center'; ctx.fillStyle='#64748b'; ctx.font='12px Segoe UI';
+    ctx.fillText('Relative Density (%)',0,0); ctx.restore();
+    ctx.textAlign='center'; ctx.fillStyle='#64748b'; ctx.font='12px Segoe UI';
+    ctx.fillText('Time at Sintering Temperature (min)', PAD.left+CW/2, H-6);
+})();
+
+
+/* ═══════════════════════════════════════════════════
+   TAB 5 — CASE STUDIES (PM Review)
+═══════════════════════════════════════════════════ */
+const CASES = [
+    {
+        title:'Automotive Connecting Rod – PM Fracture Splitting',
+        tag:'PM', tagClass:'tag-pm',
+        summary:'PM steel connecting rods using fracture-split manufacturing replace forged steel at lower cost.',
+        material:'FL-4405 (Ni–Mo prealloyed, 0.5% graphite)',
+        process:'High-density compaction (7.0 g/cm³) + sinter + fracture split at notch',
+        outcome:'20–30% cost reduction vs. forged; dimensional accuracy of mating surfaces ±0.005 mm',
+        source:'PM Review Case Study, Dorst Technologies',
+        body:'Connecting rods were historically forged and then cap-separated by sawing. PM route sinters a net-shape con-rod and deliberately notches it so it can be cracked (fracture split) apart. The fracture surfaces mate perfectly for reassembly — eliminating the machining step entirely. High-temperature sintering (1260 °C) with Ni–Mo alloying achieves the required 700 MPa tensile strength at 7.0 g/cm³. This process is used in Honda, BMW, and Volkswagen engines. Annual production exceeds 50 million PM con-rods worldwide.'
+    },
+    {
+        title:'Self-Lubricating Bronze Bearings – Oil-Impregnated PM',
+        tag:'PM', tagClass:'tag-pm',
+        summary:'PM bronze bearings with controlled porosity store oil that seeps to the surface during operation.',
+        material:'CT-1000 (90Cu–10Sn bronze), 15–25% porosity',
+        process:'Uniaxial press at 200 MPa + sinter at 800°C + vacuum oil impregnation',
+        outcome:'Lifetime lubrication; no external oil supply; used in 80%+ of small electric motor shaft bearings',
+        source:'MPIF Technical Literature; PM Review',
+        body:'Bronze PM bearings are arguably the most commercially important PM product ever made. The intentional 15–25 vol% interconnected porosity acts as a reservoir. During operation, heat expands the oil which seeps to the sliding surface. When the motor stops, oil is drawn back in by capillary action. PM bearings are found in fans, appliances, power tools, and automotive window motors. A typical washing machine contains 4–6 PM bearings. Annual global production is estimated at 1–2 billion bearings/year.'
+    },
+    {
+        title:'Ti-6Al-4V Aerospace Bracket – Metal Additive Manufacturing (LPBF)',
+        tag:'AM', tagClass:'tag-am',
+        summary:'Laser powder bed fusion (LPBF) produces a topologically optimized titanium bracket 40% lighter than the machined equivalent.',
+        material:'Ti-6Al-4V ELI powder, 15–45 µm, spherical (gas-atomized)',
+        process:'LPBF at 60–80 µm layer thickness + HIP + machined interfaces',
+        outcome:'41% mass reduction; buy-to-fly ratio 1.2:1 vs. 7:1 for machining from billet',
+        source:'PM Review Metal AM Case Study',
+        body:'A structural bracket for a satellite payload was redesigned using topology optimization — a mathematical approach that removes all material not carrying load. The optimized geometry is impossible to machine but printable via LPBF. Gas-atomized Ti-6Al-4V ELI powder is spread in 60 µm layers and fused by a 200 W fiber laser. Post-build HIP at 920 °C / 100 MPa eliminates internal porosity, bringing density to 99.9% of theoretical. Final fatigue strength matches ASTM B265 annealed bar. Buy-to-fly ratio drops from 7:1 (machining from billet) to 1.2:1 — a significant material saving for an expensive alloy.'
+    },
+    {
+        title:'WC-Co Cutting Inserts – PM Hard Metals',
+        tag:'PM', tagClass:'tag-pm',
+        summary:'Cemented carbide (WC-Co) cutting inserts via PM achieve hardness and wear resistance no other process can match.',
+        material:'WC-6Co (ISO K grade), WC-10Co (ISO P grade)',
+        process:'Ball mill WC + Co → spray dry → press → liquid-phase sinter 1400°C vacuum',
+        outcome:'Hardness 90–92 HRA; wear life 10–50× longer than HSS; produced at ~$0.50/insert',
+        source:'PM Review; ISO 513 Standard',
+        body:'Over 90% of all metal cutting inserts worldwide are PM cemented carbide. WC powder (1–5 µm) is mixed with Co binder (6–10 wt%), spray-dried into flowable granules, and pressed to shape. During sintering at 1400 °C, Co melts (liquid-phase sintering) and capillary forces draw Co between WC grains, filling pores and producing near-100% dense parts. The resulting microstructure — hard WC grains in a tough Co binder — achieves hardness of 1600 GPa (Vickers). A wide range of grades are tailored by varying WC grain size and Co content. PM is the only practical way to manufacture cemented carbide parts of any significant volume.'
+    },
+    {
+        title:'316L Stainless Steel Hip Implant – Metal Injection Molding',
+        tag:'PM', tagClass:'tag-pm',
+        summary:'Metal injection molding (MIM) of 316L SS produces complex orthopedic components at high volume and low cost.',
+        material:'316L SS powder, D50 = 8–12 µm (fine for MIM)',
+        process:'Mix powder + binder → injection mold → debind (solvent + thermal) → sinter 1340°C vacuum',
+        outcome:'Complex geometry (undercuts, internal passages) impossible in conventional PM; ±0.3% dimensional tolerance; cost competitive with investment casting at >50,000 units/year',
+        source:'PM Review; MPIF MIM Design Guide',
+        body:'MIM extends PM to complex 3D geometries by using an injection-moldable feedstock (60 vol% powder + 40 vol% polymer binder). The green part is injection molded like plastic, then the binder is removed (debinding) by solvent wash and thermal burnout, leaving a "brown part" with ~45 vol% porosity. Sintering at 1340 °C in vacuum shrinks the part ~15–20% linearly and densifies to >97% theoretical. Biocompatibility of 316L is well-established. MIM competes with investment casting for small, complex, high-volume parts — it typically wins on cost above 50,000 units/year.'
+    },
+    {
+        title:'Inconel 718 Turbine Component – Hot Isostatic Pressing',
+        tag:'AM', tagClass:'tag-am',
+        summary:'HIP of gas-atomized Inconel 718 powder produces turbine discs with isotropic properties superior to castings.',
+        material:'IN718 powder, 45–150 µm, gas-atomized, HIP at 1165°C / 175 MPa',
+        process:'Powder fill in sheet metal can → evacuate → HIP → machine envelope',
+        outcome:'Fully dense (100%), isotropic properties, no segregation vs. cast; used in GE, Pratt & Whitney turbines',
+        source:'PM Review; ASM Handbook Vol. 7',
+        body:'Large superalloy discs for aircraft engines are PM HIP parts. Gas-atomized IN718 powder is filled into a mild steel canister, the canister is evacuated and sealed, then placed in a HIP unit at 1165 °C / 175 MPa argon for 3–4 hours. The isostatic pressure eliminates all porosity and bonds particles completely. The result is a homogeneous, fully dense disc with no macro-segregation — a problem that plagues large castings. Mechanical properties are isotropic (equal in all directions) and consistent lot-to-lot. The buy-to-fly ratio is ~2:1 vs. ~10:1 for machining from a cast billet. GE Aviation and Pratt & Whitney have qualified PM HIP discs for use in commercial and military aircraft engines.'
+    },
+];
+
+(function(){
+    const grid=document.getElementById('case-grid');
+    const detail=document.getElementById('case-detail');
+    const titleEl=document.getElementById('case-title');
+    const bodyEl=document.getElementById('case-body');
+
+    CASES.forEach(c=>{
+        const card=document.createElement('div');
+        card.className='case-card';
+        card.innerHTML=`<span class="case-tag ${c.tagClass}">${c.tag}</span><h3>${c.title}</h3><p>${c.summary}</p>`;
+        card.addEventListener('click',()=>{
+            document.querySelectorAll('.case-card').forEach(cc=>cc.classList.remove('selected'));
+            card.classList.add('selected');
+            titleEl.textContent=c.title;
+            bodyEl.innerHTML=`
+                <p style="margin-bottom:12px;">${c.body}</p>
+                <div class="case-specs">
+                    <div class="case-spec"><div class="cs-label">Material</div><div class="cs-val">${c.material}</div></div>
+                    <div class="case-spec"><div class="cs-label">Process Route</div><div class="cs-val">${c.process}</div></div>
+                    <div class="case-spec"><div class="cs-label">Outcome</div><div class="cs-val">${c.outcome}</div></div>
+                    <div class="case-spec"><div class="cs-label">Source</div><div class="cs-val" style="color:#94a3b8;font-size:0.82rem;">${c.source}</div></div>
+                </div>`;
+            detail.style.display='block';
+        });
+        grid.appendChild(card);
+    });
+    grid.children[0].click();
+})();
+</script>
+</body>
+</html>
