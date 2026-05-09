@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIM &amp; HIP — Bodycote Process Overview</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.1rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        .source-tag {
+            display: inline-block;
+            margin-top: 10px;
+            background: #1e3a5f;
+            color: #bfdbfe;
+            font-size: 0.82rem;
+            padding: 3px 12px;
+            border-radius: 20px;
+        }
+
+        main { max-width: 1060px; margin: 0 auto; padding: 30px 20px; }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        .section h2 {
+            font-size: 1.3rem;
+            color: #1e3a5f;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .section h3 {
+            font-size: 1rem;
+            color: #334155;
+            margin: 18px 0 8px;
+        }
+        .section p {
+            color: #4b5563;
+            line-height: 1.65;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        /* Tables */
+        .ref-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 0.87rem;
+        }
+        .ref-table th {
+            background: #1e3a5f;
+            color: #fff;
+            padding: 9px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .ref-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #374151;
+            vertical-align: top;
+            line-height: 1.45;
+        }
+        .ref-table tr:nth-child(even) td { background: #f1f5f9; }
+        .ref-table tr:hover td { background: #dbeafe; transition: background 0.1s; }
+        .ref-table .group-header td {
+            background: #e2e8f0;
+            color: #1e3a5f;
+            font-weight: 700;
+            font-size: 0.82rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        /* Diagram */
+        .diagram-wrap {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px 10px 8px;
+            margin: 14px 0;
+            overflow-x: auto;
+        }
+
+        /* Process step cards */
+        .step-flow {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            flex-wrap: wrap;
+            margin: 16px 0;
+        }
+        .step-card {
+            flex: 1 1 130px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px 12px;
+            text-align: center;
+            position: relative;
+        }
+        .step-card + .step-card::before {
+            content: '→';
+            position: absolute;
+            left: -18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: #94a3b8;
+        }
+        .step-num {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #1e3a5f;
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            line-height: 24px;
+            margin-bottom: 6px;
+        }
+        .step-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-bottom: 4px;
+        }
+        .step-detail {
+            font-size: 0.75rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        /* Density comparison cards */
+        .density-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 16px;
+            margin-top: 14px;
+        }
+        .density-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+        }
+        .density-card .mat-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #1e3a5f;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .density-bar-wrap { margin: 6px 0 10px; }
+        .density-bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-bottom: 3px;
+        }
+        .density-bar-bg {
+            background: #e2e8f0;
+            border-radius: 4px;
+            height: 14px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .density-bar-fill {
+            height: 14px;
+            border-radius: 4px;
+        }
+        .density-card .note {
+            font-size: 0.75rem;
+            color: #64748b;
+            line-height: 1.45;
+            margin-top: 4px;
+        }
+
+        /* Case study cards */
+        .case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 14px;
+        }
+        .case-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+        }
+        .case-sector {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 0.03em;
+        }
+        .case-card h4 {
+            font-size: 0.9rem;
+            color: #1e3a5f;
+            margin-bottom: 6px;
+        }
+        .case-card p {
+            font-size: 0.8rem;
+            color: #4b5563;
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+        .case-stat {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .case-stat-item {
+            flex: 1 1 100px;
+            background: #f1f5f9;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 0.74rem;
+        }
+        .case-stat-item strong {
+            display: block;
+            color: #1e3a5f;
+            font-size: 0.88rem;
+        }
+
+        /* Note / warning boxes */
+        .note-box {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            border-radius: 0 8px 8px 0;
+            padding: 11px 16px;
+            margin: 12px 0;
+            font-size: 0.88rem;
+            color: #1e40af;
+            line-height: 1.55;
+        }
+        .warn-box {
+            background: #fefce8;
+            border-left: 4px solid #d97706;
+            border-radius: 0 8px 8px 0;
+            padding: 11px 16px;
+            margin: 12px 0;
+            font-size: 0.88rem;
+            color: #92400e;
+            line-height: 1.55;
+        }
+        .green-box {
+            background: #f0fdf4;
+            border-left: 4px solid #16a34a;
+            border-radius: 0 8px 8px 0;
+            padding: 11px 16px;
+            margin: 12px 0;
+            font-size: 0.88rem;
+            color: #166534;
+            line-height: 1.55;
+        }
+
+        .table-scroll { overflow-x: auto; }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 34px;
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Metal Injection Moulding &amp; HIP — Process Overview</h1>
+    <p class="subtitle">MIM feedstock &bull; injection &bull; debinding &bull; sintering &bull; Hot Isostatic Pressing &bull; density data &bull; case studies</p>
+    <span class="source-tag">Bodycote — HIP Process Overview &amp; Industry Reference Data</span>
+</header>
+
+<main>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 1 — MIM PROCESS OVERVIEW
+═══════════════════════════════════════════════ -->
+<div class="section">
+    <h2>1 &nbsp;Metal Injection Moulding (MIM) — Process Overview</h2>
+    <p>
+        Metal Injection Moulding combines the geometric freedom of plastic injection moulding with the
+        material properties of wrought or PM metals. The process is capable of producing <strong>complex,
+        three-dimensional net-shape or near-net-shape parts</strong> in quantities of thousands to millions
+        per year — at wall thicknesses and internal features that are impractical by conventional machining
+        or die casting. Typical part weight range is 0.1 g to ~300 g.
+    </p>
+    <p>
+        Fine metal powder (particle size &lt;20 µm, often &lt;10 µm for best sintered density) is blended
+        with a thermoplastic or wax-based binder system at 40–45 vol% metal. The resulting
+        <strong>feedstock</strong> is pelletized and fed into a conventional injection moulding machine.
+        After moulding, the binder is removed in a <em>debinding</em> step, leaving a porous "brown part"
+        that is then sintered to near-full density. The overall linear shrinkage is 15–20%, which must be
+        accounted for in tooling design.
+    </p>
+
+    <h3>MIM Process Steps</h3>
+    <div class="step-flow">
+        <div class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-title">Powder Selection</div>
+            <div class="step-detail">Fine atomized powder &lt;20 µm; high surface area promotes sintering</div>
+        </div>
+        <div class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-title">Feedstock Mixing</div>
+            <div class="step-detail">~40–45 vol% metal + thermoplastic / wax binder; twin-screw compounding</div>
+        </div>
+        <div class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-title">Injection Moulding</div>
+            <div class="step-detail">Standard reciprocating screw machine; mould at 30–60 °C; shot fills in &lt;1 s</div>
+        </div>
+        <div class="step-card">
+            <div class="step-num">4</div>
+            <div class="step-title">Debinding</div>
+            <div class="step-detail">Solvent or catalytic (primary) + thermal (secondary) binder removal; "brown part" retains shape</div>
+        </div>
+        <div class="step-card">
+            <div class="step-num">5</div>
+            <div class="step-title">Sintering</div>
+            <div class="step-detail">1000–1400 °C (alloy-dependent); 95–98% density typical; 15–20% linear shrinkage</div>
+        </div>
+        <div class="step-card">
+            <div class="step-num">6</div>
+            <div class="step-title">Optional HIP</div>
+            <div class="step-detail">Closes residual closed porosity; raises density to &gt;99.5%; enhances fatigue life</div>
+        </div>
+    </div>
+
+    <h3>Table 1 — MIM Process Parameters by Alloy Family</h3>
+    <p style="font-size:0.85rem;color:#64748b;margin-bottom:8px;">
+        Representative production parameters; specific values vary by feedstock supplier and part geometry.
+    </p>
+    <div class="table-scroll">
+    <table class="ref-table">
+        <thead>
+            <tr>
+                <th>Alloy / Material</th>
+                <th>Powder Size (µm)</th>
+                <th>Sintering Temp. (°C)</th>
+                <th>Sintering Atmosphere</th>
+                <th>As-sintered Density (% theoretical)</th>
+                <th>Typical Applications</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="group-header"><td colspan="6">Stainless Steels</td></tr>
+            <tr>
+                <td>316L SS</td>
+                <td>&lt;22</td>
+                <td>1340–1380</td>
+                <td>H₂ or vacuum</td>
+                <td>96–98</td>
+                <td>Medical instruments, watch components, chemical hardware</td>
+            </tr>
+            <tr>
+                <td>17-4 PH SS</td>
+                <td>&lt;22</td>
+                <td>1300–1360</td>
+                <td>Vacuum or N₂–H₂</td>
+                <td>96–98</td>
+                <td>Aerospace brackets, firearm components, dental tools</td>
+            </tr>
+            <tr>
+                <td>420 SS</td>
+                <td>&lt;22</td>
+                <td>1260–1320</td>
+                <td>Vacuum</td>
+                <td>95–97</td>
+                <td>Surgical blades, cutting tools</td>
+            </tr>
+            <tr class="group-header"><td colspan="6">Low-Alloy &amp; Tool Steels</td></tr>
+            <tr>
+                <td>4140 / 4605 steel</td>
+                <td>&lt;22</td>
+                <td>1120–1200</td>
+                <td>N₂–H₂ or endothermic</td>
+                <td>95–97</td>
+                <td>Automotive gears, trigger guards, lock parts</td>
+            </tr>
+            <tr>
+                <td>M2 / M4 tool steel</td>
+                <td>&lt;15</td>
+                <td>1200–1280</td>
+                <td>Vacuum</td>
+                <td>97–99</td>
+                <td>Cutting inserts, drill bits, punch tooling</td>
+            </tr>
+            <tr class="group-header"><td colspan="6">Titanium Alloys</td></tr>
+            <tr>
+                <td>Ti-6Al-4V</td>
+                <td>&lt;45 (HDH or GA)</td>
+                <td>1200–1300</td>
+                <td>Vacuum (&lt;10⁻⁴ torr)</td>
+                <td>95–98</td>
+                <td>Biomedical implants, aerospace brackets, dental abutments</td>
+            </tr>
+            <tr>
+                <td>CP Titanium (Grade 2)</td>
+                <td>&lt;45 (HDH)</td>
+                <td>1200–1280</td>
+                <td>Vacuum</td>
+                <td>96–98</td>
+                <td>Medical devices, chemical processing parts</td>
+            </tr>
+            <tr class="group-header"><td colspan="6">Nickel Superalloys</td></tr>
+            <tr>
+                <td>Inconel 625 / 718</td>
+                <td>&lt;20 (GA)</td>
+                <td>1250–1310</td>
+                <td>Vacuum or Ar</td>
+                <td>96–98</td>
+                <td>Aerospace turbine parts, oil &amp; gas valves, high-temperature sensors</td>
+            </tr>
+            <tr class="group-header"><td colspan="6">Cemented Carbides / Tungsten Alloys</td></tr>
+            <tr>
+                <td>WC–Co (10–15% Co)</td>
+                <td>&lt;3 (submicron)</td>
+                <td>1370–1430</td>
+                <td>Vacuum or H₂</td>
+                <td>98–99.5</td>
+                <td>Drilling inserts, wear components, micro-drills</td>
+            </tr>
+            <tr>
+                <td>W–Ni–Fe (heavy alloy)</td>
+                <td>&lt;10</td>
+                <td>1450–1550</td>
+                <td>H₂</td>
+                <td>97–99</td>
+                <td>Radiation shielding, counterweights, kinetic energy penetrators</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="note-box">
+        <strong>Why finer powder?</strong> MIM uses powder significantly finer than conventional die-compaction
+        PM (&lt;20 µm vs. typically 60–150 µm). The high surface area increases sintering driving force (surface
+        energy minimization), enabling near-full density at sintering temperatures that would be insufficient
+        for coarser powder. The trade-off is higher powder cost and greater sensitivity to oxygen pick-up
+        during handling.
+    </div>
+
+    <h3>Feedstock Binder Systems</h3>
+    <div class="table-scroll">
+    <table class="ref-table">
+        <thead>
+            <tr>
+                <th>Binder System</th>
+                <th>Primary Components</th>
+                <th>Debinding Method</th>
+                <th>Debinding Temp. / Medium</th>
+                <th>Cycle Time (typical)</th>
+                <th>Pros / Cons</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Wax–polymer (PW/PP)</strong></td>
+                <td>Paraffin wax + polypropylene backbone</td>
+                <td>Solvent (primary) + thermal (secondary)</td>
+                <td>Heptane / hexane at 40–60 °C; then 450–600 °C</td>
+                <td>12–20 h total</td>
+                <td>Low cost, mature; solvent handling required; moderate dimensional control</td>
+            </tr>
+            <tr>
+                <td><strong>POM / catalytic (BASF Catamold®)</strong></td>
+                <td>Polyoxymethylene backbone</td>
+                <td>Catalytic (HNO₃ vapor)</td>
+                <td>110–130 °C; 5–10 mm/h front progression</td>
+                <td>6–12 h</td>
+                <td>Fast, clean, no solvent; acid handling; brown part is strong</td>
+            </tr>
+            <tr>
+                <td><strong>Water-soluble</strong></td>
+                <td>Polyethylene glycol (PEG) + backbone polymer</td>
+                <td>Water leaching (primary) + thermal</td>
+                <td>Water at 40–70 °C; then thermal at 450–600 °C</td>
+                <td>10–18 h</td>
+                <td>Environmentally benign; moderate cycle time; limited to compatible alloys</td>
+            </tr>
+            <tr>
+                <td><strong>Thermal (all-polymer)</strong></td>
+                <td>Multi-component polyolefin blend</td>
+                <td>Thermal only (slow heating)</td>
+                <td>200–600 °C in atmosphere furnace</td>
+                <td>24–48 h</td>
+                <td>Simple; slow; risk of part slumping if heating too fast</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="warn-box">
+        <strong>Dimensional control:</strong> Because sintering shrinkage (15–20% linear) must be uniform and
+        predictable, feedstock formulation and powder loading are tightly controlled to ±0.2 vol%. Density
+        gradients in the moulded green part caused by non-uniform flow or weld lines translate directly into
+        differential shrinkage and warpage after sintering.
+    </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     SECTION 2 — HIP PROCESS OVERVIEW
+═══════════════════════════════════════════════ -->
+<div class="section">
+    <h2>2 &nbsp;Hot Isostatic Pressing (HIP) — Process Overview</h2>
+    <p>
+        Hot Isostatic Pressing subjects a part or powder compact to <strong>simultaneously high temperature
+        and high isostatic gas pressure</strong>, applied uniformly in all directions through an inert gas
+        medium (typically argon). The combination of temperature-activated diffusion and pressure-driven
+        pore closure eliminates residual porosity that sintering alone cannot remove, producing components
+        at or near <strong>theoretical density (&gt;99.5%)</strong>.
+    </p>
+    <p>
+        HIP was developed in the 1950s at Battelle Memorial Institute for diffusion bonding nuclear fuel
+        rods, and has since become a critical manufacturing step for aerospace castings, powder metallurgy
+        products, and MIM parts requiring maximum mechanical performance. Bodycote is the world's largest
+        provider of HIP services, operating HIP vessels across North America, Europe, and Asia.
+    </p>
+
+    <!-- HIP Cycle Diagram -->
+    <div class="diagram-wrap">
+        <!--
+            HIP cycle: pressure + temperature vs. time
+            Plot area: x 60–680 (620 px = 7 hours)
+                       y  20–260 (temp axis, inverted: 0–1250 °C → 240 px)
+            Pressure axis (right): 0–200 MPa
+            Key points (time in hours → x = 60 + hr*88.6):
+              t=0   → x=60
+              t=0.5 → x=104
+              t=1.5 → x=193 (target temp reached)
+              t=2.0 → x=237 (target pressure reached)
+              t=5.5 → x=547 (hold ends, cool begins)
+              t=7.0 → x=680 (end)
+
+            Temperature (1150 °C): y = 20 + (1250-1150)/1250*240 = 20+19.2 ≈ 39
+            Pressure (150 MPa): y = 20 + (200-150)/200*240 = 20+60 = 80 (right axis, separate scale)
+            Using same vertical space but different logical scales for simplicity.
+
+            Simplified: two curves on same y-space for illustration.
+            Let temp 1150°C map to y=50; 0°C to y=260
+            Pressure 150 MPa map to y=100; 0 MPa to y=260
+        -->
+        <svg viewBox="0 0 720 310" xmlns="http://www.w3.org/2000/svg"
+             style="width:100%;max-width:720px;display:block;margin:0 auto;" aria-label="HIP cycle pressure and temperature vs time diagram">
+
+            <!-- Zone backgrounds -->
+            <rect x="60"  y="20" width="133" height="240" fill="#fff7ed" opacity="0.7"/>  <!-- Ramp up -->
+            <rect x="193" y="20" width="354" height="240" fill="#fef2f2" opacity="0.5"/>  <!-- Dwell -->
+            <rect x="547" y="20" width="133" height="240" fill="#eff6ff" opacity="0.7"/>  <!-- Cool/depressurize -->
+
+            <!-- Zone labels -->
+            <text x="126" y="13" text-anchor="middle" font-size="10" fill="#92400e" font-weight="700">Heat-up &amp; Pressurize</text>
+            <text x="370" y="13" text-anchor="middle" font-size="10" fill="#991b1b" font-weight="700">Dwell (Hold at Temperature &amp; Pressure)</text>
+            <text x="613" y="13" text-anchor="middle" font-size="10" fill="#1e40af" font-weight="700">Controlled Cool &amp; Depressurize</text>
+
+            <!-- Zone boundary lines -->
+            <line x1="193" y1="20" x2="193" y2="260" stroke="#94a3b8" stroke-width="1" stroke-dasharray="5,4"/>
+            <line x1="547" y1="20" x2="547" y2="260" stroke="#94a3b8" stroke-width="1" stroke-dasharray="5,4"/>
+
+            <!-- Horizontal grid lines -->
+            <line x1="60" y1="260" x2="680" y2="260" stroke="#475569" stroke-width="1.5"/>
+            <line x1="60" y1="20"  x2="60"  y2="260" stroke="#475569" stroke-width="1.5"/>
+            <line x1="680" y1="20" x2="680" y2="260" stroke="#94a3b8" stroke-width="1"/>
+            <line x1="60" y1="200" x2="680" y2="200" stroke="#e2e8f0" stroke-width="1"/>
+            <line x1="60" y1="140" x2="680" y2="140" stroke="#e2e8f0" stroke-width="1"/>
+            <line x1="60" y1="80"  x2="680" y2="80"  stroke="#e2e8f0" stroke-width="1"/>
+
+            <!-- Temperature reference line at 1150 °C (y=50) -->
+            <line x1="60" y1="50" x2="680" y2="50" stroke="#dc2626" stroke-width="1" stroke-dasharray="6,5" opacity="0.35"/>
+            <!-- Pressure reference line at 150 MPa (y=100) -->
+            <line x1="60" y1="100" x2="680" y2="100" stroke="#7c3aed" stroke-width="1" stroke-dasharray="6,5" opacity="0.35"/>
+
+            <!-- Left Y-axis labels — Temperature -->
+            <text x="54" y="264" text-anchor="end" font-size="10" fill="#dc2626">0</text>
+            <text x="54" y="204" text-anchor="end" font-size="10" fill="#dc2626">500</text>
+            <text x="54" y="144" text-anchor="end" font-size="10" fill="#dc2626">1000</text>
+            <text x="54" y="84"  text-anchor="end" font-size="10" fill="#dc2626">1150</text>
+            <text x="54" y="54"  text-anchor="end" font-size="9"  fill="#dc2626" font-weight="600">1200 °C</text>
+            <text transform="rotate(-90)" x="-140" y="14" text-anchor="middle" font-size="11" fill="#dc2626">Temperature (°C)</text>
+
+            <!-- Right Y-axis labels — Pressure -->
+            <text x="686" y="264" text-anchor="start" font-size="10" fill="#7c3aed">0</text>
+            <text x="686" y="204" text-anchor="start" font-size="10" fill="#7c3aed">50</text>
+            <text x="686" y="144" text-anchor="start" font-size="10" fill="#7c3aed">100</text>
+            <text x="686" y="84"  text-anchor="start" font-size="10" fill="#7c3aed">150</text>
+            <text x="686" y="54"  text-anchor="start" font-size="9"  fill="#7c3aed" font-weight="600">200 MPa</text>
+            <text transform="rotate(90)" x="140" y="-708" text-anchor="middle" font-size="11" fill="#7c3aed">Pressure (MPa)</text>
+
+            <!-- X-axis labels (hours) -->
+            <text x="60"  y="276" text-anchor="middle" font-size="10" fill="#64748b">0</text>
+            <text x="149" y="276" text-anchor="middle" font-size="10" fill="#64748b">1</text>
+            <text x="238" y="276" text-anchor="middle" font-size="10" fill="#64748b">2</text>
+            <text x="327" y="276" text-anchor="middle" font-size="10" fill="#64748b">3</text>
+            <text x="416" y="276" text-anchor="middle" font-size="10" fill="#64748b">4</text>
+            <text x="505" y="276" text-anchor="middle" font-size="10" fill="#64748b">5</text>
+            <text x="594" y="276" text-anchor="middle" font-size="10" fill="#64748b">6</text>
+            <text x="680" y="276" text-anchor="middle" font-size="10" fill="#64748b">7</text>
+            <text x="370" y="293" text-anchor="middle" font-size="11" fill="#475569">Time (hours)</text>
+
+            <!-- TEMPERATURE CURVE (solid red) — ramp 0→1150°C over 1.5 h, hold, cool to 150°C over 1.5 h -->
+            <!-- t=0 (x=60, T=0 → y=260); t=1.5h (x=193, T=1150 → y=52); hold to t=5.5h (x=547, y=52); cool t=7h (x=680, T=150 → y=238) -->
+            <polyline
+                points="60,260 193,52 547,52 680,238"
+                fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+
+            <!-- PRESSURE CURVE (dashed purple) — pressurize 0→150 MPa over 2 h, hold, vent over 1.5 h -->
+            <!-- t=0 (x=60, P=0 → y=260); t=2h (x=238, P=150 → y=100); hold to t=5.5h (x=547, y=100); vent t=7h (x=680, P=0 → y=260) -->
+            <polyline
+                points="60,260 238,100 547,100 680,260"
+                fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"
+                stroke-dasharray="9,5"/>
+
+            <!-- Dwell bracket for hold time -->
+            <line x1="238" y1="88" x2="547" y2="88" stroke="#7c3aed" stroke-width="1"/>
+            <line x1="238" y1="84" x2="238" y2="92" stroke="#7c3aed" stroke-width="1"/>
+            <line x1="547" y1="84" x2="547" y2="92" stroke="#7c3aed" stroke-width="1"/>
+            <text x="392" y="84" text-anchor="middle" font-size="9" fill="#7c3aed">Dwell: 1–4 h at 100–200 MPa</text>
+
+            <!-- Temp hold annotation -->
+            <rect x="268" y="30" width="170" height="22" fill="white" fill-opacity="0.85" rx="4"/>
+            <text x="353" y="41" text-anchor="middle" font-size="9" fill="#dc2626" font-weight="600">Hold: 900–1250 °C (alloy-dependent)</text>
+            <text x="353" y="52" text-anchor="middle" font-size="8" fill="#dc2626">Ar atmosphere (99.999% purity)</text>
+
+            <!-- Legend -->
+            <line x1="70" y1="284" x2="100" y2="284" stroke="#dc2626" stroke-width="2.5"/>
+            <text x="105" y="287" font-size="10" fill="#374151">Temperature</text>
+            <line x1="200" y1="284" x2="230" y2="284" stroke="#7c3aed" stroke-width="2.5" stroke-dasharray="8,4"/>
+            <text x="235" y="287" font-size="10" fill="#374151">Pressure (Ar)</text>
+        </svg>
+    </div>
+
+    <h3>HIP Process Parameters</h3>
+    <div class="table-scroll">
+    <table class="ref-table">
+        <thead>
+            <tr>
+                <th>Material Class</th>
+                <th>HIP Temperature (°C)</th>
+                <th>HIP Pressure (MPa)</th>
+                <th>Dwell Time (h)</th>
+                <th>Target Density after HIP</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="group-header"><td colspan="6">Titanium Alloys</td></tr>
+            <tr>
+                <td>Ti-6Al-4V (MIM, casting, PM)</td>
+                <td>900–920</td>
+                <td>100–175</td>
+                <td>2–4</td>
+                <td>&gt;99.5%</td>
+                <td>Below β-transus (995 °C) to preserve α+β microstructure; critical for fatigue</td>
+            </tr>
+            <tr class="group-header"><td colspan="6">Nickel Superalloys</td></tr>
+            <tr>
+                <td>IN 625 / IN 718 (casting, PM)</td>
+                <td>1120–1185</td>
+                <td>103–175</td>
+                <td>3–4</td>
+                <td>&gt;99.5%</td>
+                <td>Eliminates shrinkage porosity in complex investment castings; improves creep life</td>
+            </tr>
+            <tr>
+                <td>Waspaloy / Rene 95 (PM disc)</td>
+                <td>1100–1175</td>
+                <td>103–207</td>
+                <td>3–4</td>
+                <td>&gt;99.9%</td>
+                <td>Critical rotating turbine disc application; HIP replaces forging in some PM disc routes</td>
+            </tr>
+            <tr class="group-header"><td colspan="6">Stainless &amp; Tool Steels</td></tr>
+            <tr>
+                <td>316L / 17-4 PH (MIM)</td>
+                <td>1100–1180</td>
+                <td>100–140</td>
+                <td>2–3</td>
+                <td>&gt;99.5%</td>
+                <td>Eliminates residual closed pores from sintering; improves elongation and fatigue</td>
+            </tr>
+            <tr>
+                <td>M2 / D2 tool steel</td>
+                <td>1100–1150</td>
+                <td>100–140</td>
+                <td>3–4</td>
+                <td>&gt;99.9%</td>
+                <td>Used for PM tool steel production via HIP consolidation of powder in steel cans</td>
+            </tr>
+            <tr class="group-header"><td colspan="6">Aluminium &amp; Copper Alloys</td></tr>
+            <tr>
+                <td>Al–Si casting alloys (A356, A357)</td>
+                <td>490–510</td>
+                <td>100–105</td>
+                <td>2–4</td>
+                <td>&gt;99.5%</td>
+                <td>Eliminates subsurface shrinkage in aerospace Al castings; below solidus</td>
+            </tr>
+            <tr>
+                <td>Cu–Be / Cu alloy PM</td>
+                <td>700–900</td>
+                <td>100–140</td>
+                <td>2–3</td>
+                <td>&gt;99%</td>
+                <td>Electrical / thermal applications requiring full density and conductivity</td>
+            </tr>
+            <tr class="group-header"><td colspan="6">Ceramics &amp; Cemented Carbides</td></tr>
+            <tr>
+                <td>WC–Co (cemented carbide)</td>
+                <td>1000–1200</td>
+                <td>100–175</td>
+                <td>1–2</td>
+                <td>&gt;99.9%</td>
+                <td>Can be applied post-sinter to further densify; improves transverse rupture strength</td>
+            </tr>
+            <tr>
+                <td>Si₃N₄ / SiC ceramics</td>
+                <td>1600–1900</td>
+                <td>100–200</td>
+                <td>2–4</td>
+                <td>&gt;99%</td>
+                <td>Requires hermetic glass or metal encapsulation; used for cutting inserts, wear parts</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="note-box">
+        <strong>Why argon?</strong> Argon is the standard HIP pressure medium because it is chemically inert
+        with essentially all metals and ceramics, and has a molecular size too large to diffuse into closed pores
+        under typical HIP conditions. If the atmosphere penetrated pores, those pores would be filled with pressurized
+        gas after cooling and could not be eliminated — a phenomenon known as <em>repressurization</em>. Argon
+        also has a high density at operating pressure (~600 kg/m³ at 150 MPa, 1150 °C), enabling efficient
+        pressure transmission.
+    </div>
+
+    <div class="warn-box">
+        <strong>Open porosity cannot be HIP'd:</strong> HIP only closes <em>sealed, closed</em> porosity.
+        Any pore connected to the surface by an open channel will be pressurized by the argon and remain open.
+        For this reason, MIM parts must be fully sintered to &gt;92% density (closing all open pores) before
+        HIP will be effective. Parts with surface-connected porosity must be encapsulated (in glass or metal)
+        before HIP.
+    </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     SECTION 3 — BEFORE & AFTER DENSITY DATA
+═══════════════════════════════════════════════ -->
+<div class="section">
+    <h2>3 &nbsp;Before &amp; After Density Data — Sintering vs. Sintering + HIP</h2>
+    <p>
+        HIP consistently elevates the relative density of MIM and PM parts from the typical as-sintered
+        range of 95–98% to &gt;99.5% of theoretical. This 1.5–4.5 percentage-point gain in density
+        translates non-linearly into large improvements in fatigue strength (closed pores are crack
+        initiation sites), elongation, and impact toughness. The data below are representative
+        industry values compiled from Bodycote application data and published literature.
+    </p>
+
+    <!-- Visual density comparison bars -->
+    <div class="density-grid">
+
+        <div class="density-card">
+            <div class="mat-name">316L Stainless Steel (MIM)</div>
+            <div class="density-bar-wrap">
+                <div class="density-bar-label">
+                    <span>As-sintered: 97.0%</span>
+                    <span>97.0%</span>
+                </div>
+                <div class="density-bar-bg">
+                    <div class="density-bar-fill" style="width:97%;background:#3b82f6;"></div>
+                </div>
+            </div>
+            <div class="density-bar-wrap">
+                <div class="density-bar-label">
+                    <span>After HIP: &gt;99.5%</span>
+                    <span>&gt;99.5%</span>
+                </div>
+                <div class="density-bar-bg">
+                    <div class="density-bar-fill" style="width:99.5%;background:#16a34a;"></div>
+                </div>
+            </div>
+            <p class="note">HIP at 1150 °C / 103 MPa / 3 h. Porosity reduces from ~3% to &lt;0.5%; elongation increases from ~40% to &gt;50%.</p>
+        </div>
+
+        <div class="density-card">
+            <div class="mat-name">17-4 PH Stainless Steel (MIM)</div>
+            <div class="density-bar-wrap">
+                <div class="density-bar-label">
+                    <span>As-sintered: 96.5%</span>
+                    <span>96.5%</span>
+                </div>
+                <div class="density-bar-bg">
+                    <div class="density-bar-fill" style="width:96.5%;background:#3b82f6;"></div>
+                </div>
+            </div>
+            <div class="density-bar-wrap">
+                <div class="density-bar-label">
+                    <span>After HIP: &gt;99.5%</span>
+                    <span>&gt;99.5%</span>
+                </div>
+                <div class="density-bar-bg">
+                    <div class="density-bar-fill" style="width:99.5%;background:#16a34a;"></div>
+                </div>
+            </div>
+            <p class="note">Fatigue strength (R = −1) increases ~20% in H900 condition after HIP vs. as-sintered.</p>
+        </div>
+
+        <div class="density-card">
+            <div class="mat-name">Ti-6Al-4V (MIM)</div>
+            <div class="density-bar-wrap">
+                <div class="density-bar-label">
+                    <span>As-sintered: 95.5%</span>
+                    <span>95.5%</span>
+                </div>
+                <div class="density-bar-bg">
+                    <div class="density-bar-fill" style="width:95.5%;background:#3b82f6;"></div>
+                </div>
+            </div>
+            <div class="density-bar-wrap">
+                <div class="density-bar-label">
+                    <span>After HIP: &gt;99.5%</span>
+                    <span>&gt;99.5%</span>
+                </div>
+                <div class="density-bar-bg">
+                    <div class="density-bar-fill" style="width:99.5%;background:#16a34a;"></div>
+                </div>
+            </div>
+            <p class="note">HIP at 920 °C / 100 MPa / 2 h. Fatigue limit approaches wrought Ti-6Al-4V. Elongation improves from ~8% to &gt;14%.</p>
+        </div>
+
+        <div class="density-card">
+            <div class="mat-name">Inconel 718 (Investment Casting)</div>
+            <div class="density-bar-wrap">
+                <div class="density-bar-label">
+                    <span>As-cast: 94–97%</span>
+                    <span>~95.5%</span>
+                </div>
+                <div class="density-bar-bg">
+                    <div class="density-bar-fill" style="width:95.5%;background:#3b82f6;"></div>
+                </div>
+            </div>
+            <div class="density-bar-wrap">
+                <div class="density-bar-label">
+                    <span>After HIP: &gt;99.5%</span>
+                    <span>&gt;99.5%</span>
+                </div>
+                <div class="density-bar-bg">
+                    <div class="density-bar-fill" style="width:99.5%;background:#16a34a;"></div>
+                </div>
+            </div>
+            <p class="note">Eliminates shrinkage micro-porosity. Stress-rupture life at 649 °C increases 3–5× vs. un-HIP'd cast IN718.</p>
+        </div>
+
+        <div class="density-card">
+            <div class="mat-name">A356 Aluminium Casting</div>
+            <div class="density-bar-wrap">
+                <div class="density-bar-label">
+                    <span>As-cast: 93–97%</span>
+                    <span>~95%</span>
+                </div>
+                <div class="density-bar-bg">
+                    <div class="density-bar-fill" style="width:95%;background:#3b82f6;"></div>
+                </div>
+            </div>
+            <div class="density-bar-wrap">
+                <div class="density-bar-label">
+                    <span>After HIP: &gt;99%</span>
+                    <span>&gt;99%</span>
+                </div>
+                <div class="density-bar-bg">
+                    <div class="density-bar-fill" style="width:99%;background:#16a34a;"></div>
+                </div>
+            </div>
+            <p class="note">HIP at 500 °C / 100 MPa / 3 h. Fatigue strength at 10⁷ cycles increases 30–50% vs. as-cast in aerospace structural brackets.</p>
+        </div>
+
+        <div class="density-card">
+            <div class="mat-name">M2 Tool Steel (PM consolidated)</div>
+            <div class="density-bar-wrap">
+                <div class="density-bar-label">
+                    <span>Pre-HIP compact: ~96%</span>
+                    <span>~96%</span>
+                </div>
+                <div class="density-bar-bg">
+                    <div class="density-bar-fill" style="width:96%;background:#3b82f6;"></div>
+                </div>
+            </div>
+            <div class="density-bar-wrap">
+                <div class="density-bar-label">
+                    <span>After HIP consolidation: &gt;99.9%</span>
+                    <span>&gt;99.9%</span>
+                </div>
+                <div class="density-bar-bg">
+                    <div class="density-bar-fill" style="width:99.9%;background:#16a34a;"></div>
+                </div>
+            </div>
+            <p class="note">Direct HIP consolidation of pre-alloyed powder (no prior sintering); achieves fully isotropic microstructure vs. conventional forged tool steel.</p>
+        </div>
+
+    </div><!-- /.density-grid -->
+
+    <h3>Table 2 — Mechanical Property Comparison: As-sintered vs. HIP'd</h3>
+    <p style="font-size:0.85rem;color:#64748b;margin-bottom:8px;">
+        Representative values; exact results depend on powder, sintering parameters, HIP cycle, and post-HIP heat treatment.
+        Sources: Bodycote application data; MPIF Standard 35; ASTM F2885 (Ti-6Al-4V MIM).
+    </p>
+    <div class="table-scroll">
+    <table class="ref-table">
+        <thead>
+            <tr>
+                <th>Material</th>
+                <th>Condition</th>
+                <th>Density (% theoretical)</th>
+                <th>UTS (MPa)</th>
+                <th>0.2% YS (MPa)</th>
+                <th>Elongation (%)</th>
+                <th>Fatigue Strength (MPa @ 10⁷ cycles)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="group-header"><td colspan="7">Ti-6Al-4V</td></tr>
+            <tr>
+                <td>Ti-6Al-4V</td>
+                <td>MIM as-sintered</td>
+                <td>95–97</td>
+                <td>860–930</td>
+                <td>780–860</td>
+                <td>6–10</td>
+                <td>~370</td>
+            </tr>
+            <tr>
+                <td>Ti-6Al-4V</td>
+                <td>MIM + HIP (920 °C / 100 MPa)</td>
+                <td>&gt;99.5</td>
+                <td>930–970</td>
+                <td>860–900</td>
+                <td>12–16</td>
+                <td>~480</td>
+            </tr>
+            <tr>
+                <td>Ti-6Al-4V</td>
+                <td>Wrought annealed (reference)</td>
+                <td>100</td>
+                <td>950</td>
+                <td>880</td>
+                <td>14</td>
+                <td>510</td>
+            </tr>
+            <tr class="group-header"><td colspan="7">17-4 PH Stainless Steel</td></tr>
+            <tr>
+                <td>17-4 PH</td>
+                <td>MIM as-sintered (H900)</td>
+                <td>96–97</td>
+                <td>1170–1240</td>
+                <td>1100–1170</td>
+                <td>3–5</td>
+                <td>~415</td>
+            </tr>
+            <tr>
+                <td>17-4 PH</td>
+                <td>MIM + HIP + H900</td>
+                <td>&gt;99.5</td>
+                <td>1240–1310</td>
+                <td>1170–1240</td>
+                <td>5–8</td>
+                <td>~500</td>
+            </tr>
+            <tr class="group-header"><td colspan="7">316L Stainless Steel</td></tr>
+            <tr>
+                <td>316L</td>
+                <td>MIM as-sintered</td>
+                <td>96–98</td>
+                <td>480–520</td>
+                <td>170–200</td>
+                <td>38–45</td>
+                <td>~190</td>
+            </tr>
+            <tr>
+                <td>316L</td>
+                <td>MIM + HIP (1150 °C / 103 MPa)</td>
+                <td>&gt;99.5</td>
+                <td>520–560</td>
+                <td>190–220</td>
+                <td>48–55</td>
+                <td>~240</td>
+            </tr>
+            <tr class="group-header"><td colspan="7">Inconel 718</td></tr>
+            <tr>
+                <td>IN 718</td>
+                <td>Investment cast as-cast</td>
+                <td>94–97</td>
+                <td>1000–1100</td>
+                <td>860–960</td>
+                <td>6–10</td>
+                <td>~380</td>
+            </tr>
+            <tr>
+                <td>IN 718</td>
+                <td>Cast + HIP + age (AMS 2774)</td>
+                <td>&gt;99.5</td>
+                <td>1240–1380</td>
+                <td>1030–1100</td>
+                <td>10–15</td>
+                <td>~515</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="green-box">
+        <strong>Key takeaway:</strong> HIP reliably delivers mechanical properties that approach or match wrought
+        equivalents, especially for fatigue-critical applications. The largest gains are in <em>elongation</em>
+        and <em>fatigue limit</em> — both governed by pore-initiated cracking. Strength (UTS, YS) gains are
+        typically 5–15%, while ductility and fatigue life improvements can be 30–100%.
+    </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     SECTION 4 — BODYCOTE CASE STUDIES
+═══════════════════════════════════════════════ -->
+<div class="section">
+    <h2>4 &nbsp;Bodycote Case Studies — MIM &amp; HIP Applications</h2>
+    <p>
+        Bodycote operates HIP vessels ranging from laboratory scale (300 mm diameter × 600 mm height) to
+        large production units (1650 mm diameter × 3000 mm height), supporting a broad range of part
+        sizes across multiple industry sectors. The following case studies illustrate the application of
+        HIP to MIM and cast components across aerospace, medical, automotive, and oil &amp; gas sectors.
+    </p>
+
+    <div class="case-grid">
+
+        <div class="case-card">
+            <span class="case-sector" style="background:#dbeafe;color:#1e40af;">Aerospace</span>
+            <h4>Turbine Blade &amp; Vane Castings — Nickel Superalloy HIP</h4>
+            <p>
+                Investment-cast IN 718 and Waspaloy turbine vanes contain micro-shrinkage porosity
+                from solidification. HIP at 1175 °C / 150 MPa / 4 h (per AMS 2786 / AMS 2774)
+                eliminates subsurface porosity, qualifying cast parts to the same stress-rupture
+                and fatigue life requirements as forgings at significantly lower cost.
+            </p>
+            <div class="case-stat">
+                <div class="case-stat-item"><strong>+3–5×</strong>Stress-rupture life vs. un-HIP'd cast</div>
+                <div class="case-stat-item"><strong>&gt;99.5%</strong>Density achieved</div>
+                <div class="case-stat-item"><strong>AMS 2774</strong>Governing specification</div>
+            </div>
+        </div>
+
+        <div class="case-card">
+            <span class="case-sector" style="background:#dcfce7;color:#166534;">Medical</span>
+            <h4>MIM Surgical Instrument Jaws — 17-4 PH Stainless Steel</h4>
+            <p>
+                Minimally invasive surgical instrument jaws are produced by MIM from 17-4 PH SS
+                feedstock, achieving complex jaw geometries impossible to machine economically.
+                Post-sinter HIP at 1120 °C / 138 MPa / 3 h followed by H900 precipitation
+                hardening meets ISO 13485 requirements with fatigue performance equivalent
+                to wrought 17-4 PH.
+            </p>
+            <div class="case-stat">
+                <div class="case-stat-item"><strong>&gt;99.5%</strong>Density post-HIP</div>
+                <div class="case-stat-item"><strong>+20%</strong>Fatigue strength vs. as-sintered</div>
+                <div class="case-stat-item"><strong>ISO 13485</strong>Quality standard</div>
+            </div>
+        </div>
+
+        <div class="case-card">
+            <span class="case-sector" style="background:#fef3c7;color:#92400e;">Medical / Implant</span>
+            <h4>Ti-6Al-4V Orthopaedic Trial Implants — MIM + HIP</h4>
+            <p>
+                MIM produces trial hip and knee implant components in Ti-6Al-4V at high volume.
+                ASTM F2885 requires HIP post-sintering for structural implant components.
+                HIP at 920 °C / 100 MPa / 2 h brings density above 99.5% and raises fatigue
+                limit to within 94% of wrought ASTM F1472 specification, enabling regulatory
+                submission as an equivalent manufacturing route.
+            </p>
+            <div class="case-stat">
+                <div class="case-stat-item"><strong>ASTM F2885</strong>MIM Ti implant standard</div>
+                <div class="case-stat-item"><strong>94%</strong>Of wrought fatigue limit achieved</div>
+                <div class="case-stat-item"><strong>&gt;99.5%</strong>Density</div>
+            </div>
+        </div>
+
+        <div class="case-card">
+            <span class="case-sector" style="background:#f3e8ff;color:#6b21a8;">Oil &amp; Gas</span>
+            <h4>Duplex Stainless Steel Valve Bodies — Casting + HIP</h4>
+            <p>
+                Subsea valve bodies and manifold components in 2205 duplex stainless steel are
+                sand or investment cast, then HIP'd at 1100 °C / 140 MPa / 3 h to eliminate
+                shrinkage porosity before pressure testing to NACE MR0175 sour-service
+                requirements. HIP eliminates porosity-related leak paths and eliminates ~30%
+                of hydrostatic test failures vs. non-HIP'd castings.
+            </p>
+            <div class="case-stat">
+                <div class="case-stat-item"><strong>−30%</strong>Hydrostatic test failures</div>
+                <div class="case-stat-item"><strong>NACE MR0175</strong>Sour-service standard met</div>
+                <div class="case-stat-item"><strong>&gt;99%</strong>Density achieved</div>
+            </div>
+        </div>
+
+        <div class="case-card">
+            <span class="case-sector" style="background:#fee2e2;color:#991b1b;">Automotive / Racing</span>
+            <h4>Aluminium Suspension Components — A357 Casting + HIP</h4>
+            <p>
+                High-performance suspension uprights and brake calipers cast in A357 Al–Si alloy
+                are HIP'd at 500 °C / 100 MPa / 3 h to close shrinkage porosity before CNC
+                finishing. HIP'd components pass fatigue testing to 10⁷ cycles at loads that
+                reject 20–40% of non-HIP'd castings, enabling lighter-weight designs with
+                maintained safety margins.
+            </p>
+            <div class="case-stat">
+                <div class="case-stat-item"><strong>+30–50%</strong>Fatigue life improvement</div>
+                <div class="case-stat-item"><strong>−20%</strong>Rejection rate at final test</div>
+                <div class="case-stat-item"><strong>&gt;99%</strong>Density</div>
+            </div>
+        </div>
+
+        <div class="case-card">
+            <span class="case-sector" style="background:#e0f2fe;color:#0c4a6e;">Defence / Aerospace</span>
+            <h4>PM Titanium Structural Brackets — Direct HIP Consolidation</h4>
+            <p>
+                Near-net-shape titanium brackets for airframe applications are produced by filling
+                a titanium or steel canister with pre-alloyed Ti-6Al-4V powder, then HIP
+                consolidating at 920 °C / 100 MPa / 3 h. The consolidated billet is machined
+                to final dimensions. This <em>PM-HIP</em> route eliminates forging die cost
+                for low-volume parts and produces a fully isotropic, 100% dense microstructure
+                with no preferred texture from forging.
+            </p>
+            <div class="case-stat">
+                <div class="case-stat-item"><strong>100%</strong>Density (direct consolidation)</div>
+                <div class="case-stat-item"><strong>Isotropic</strong>Microstructure (no forging texture)</div>
+                <div class="case-stat-item"><strong>~50%</strong>Tool cost saving vs. forging</div>
+            </div>
+        </div>
+
+    </div><!-- /.case-grid -->
+
+    <div class="note-box">
+        <strong>HIP + Sinter-HIP (Sinter-HIP):</strong> Some advanced furnace configurations combine
+        sintering and HIP in a single thermal cycle — the part is sintered under low argon pressure
+        (&lt;0.1 MPa), then at the end of the sintering hold, the vessel is pressurized to full HIP pressure
+        (100–200 MPa) for a dwell period before cooling. Sinter-HIP reduces total cycle time and thermal
+        exposure compared to separate sintering and HIP operations, particularly for cemented carbides and
+        ceramic-matrix composites.
+    </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     SECTION 5 — QUICK-REFERENCE: MIM vs. OTHER PM
+═══════════════════════════════════════════════ -->
+<div class="section">
+    <h2>5 &nbsp;Quick Reference — MIM vs. Other Powder Metallurgy Routes</h2>
+    <div class="table-scroll">
+    <table class="ref-table">
+        <thead>
+            <tr>
+                <th>Attribute</th>
+                <th>MIM</th>
+                <th>Conventional PM (Die Compaction)</th>
+                <th>Direct HIP (PM-HIP)</th>
+                <th>Investment Casting + HIP</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>As-produced density</strong></td>
+                <td>95–98% (sintered)</td>
+                <td>85–92% (sintered)</td>
+                <td>&gt;99.9% (HIP'd)</td>
+                <td>94–97% (as-cast) → &gt;99.5% (HIP'd)</td>
+            </tr>
+            <tr>
+                <td><strong>Shape complexity</strong></td>
+                <td>Very high (3D, internal features, undercuts)</td>
+                <td>Moderate (prismatic, limited undercuts)</td>
+                <td>Moderate (canister shape limited)</td>
+                <td>Very high (wax pattern based)</td>
+            </tr>
+            <tr>
+                <td><strong>Part weight</strong></td>
+                <td>0.1–300 g</td>
+                <td>1–5000 g</td>
+                <td>0.5–10,000 kg</td>
+                <td>1 g–100+ kg</td>
+            </tr>
+            <tr>
+                <td><strong>Dimensional tolerance</strong></td>
+                <td>±0.3–0.5% (as-sintered); ±0.1% (machined)</td>
+                <td>±0.1–0.3% in press direction; ±0.3% transverse</td>
+                <td>Machined to final; no inherent tolerance</td>
+                <td>±0.3–0.8% (as-cast); machined to ±0.05%</td>
+            </tr>
+            <tr>
+                <td><strong>Production volume</strong></td>
+                <td>10,000–10,000,000+ / year</td>
+                <td>1,000–100,000,000 / year</td>
+                <td>1–10,000 / year (low-volume specialty)</td>
+                <td>1–100,000 / year</td>
+            </tr>
+            <tr>
+                <td><strong>Materials range</strong></td>
+                <td>Very broad (all alloys with fine powder available)</td>
+                <td>Mostly iron, copper, SS; limited Ti/superalloy</td>
+                <td>Very broad; any powder that can be atomized</td>
+                <td>Very broad (wax-pattern castable alloys)</td>
+            </tr>
+            <tr>
+                <td><strong>Typical post-process</strong></td>
+                <td>HIP (optional), heat treat, plating</td>
+                <td>Steam treat, heat treat, oil impregnation</td>
+                <td>Machining (HIP is consolidation)</td>
+                <td>HIP (often required for aerospace), machining, NDT</td>
+            </tr>
+            <tr>
+                <td><strong>Fatigue performance</strong></td>
+                <td>As-sintered: ~75–85% of wrought; After HIP: ~90–98% of wrought</td>
+                <td>~60–80% of wrought (residual porosity)</td>
+                <td>~100% of wrought (fully dense)</td>
+                <td>As-cast: ~60–75%; HIP'd: ~90–100% of wrought</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+
+
+<p style="font-size:0.82rem;color:#94a3b8;text-align:center;margin-bottom:12px;">
+    Data sourced from: Bodycote HIP Process Overview (bodycote.com/hip); ASTM F2885 (Ti-6Al-4V MIM);
+    AMS 2774 / AMS 2786 (HIP specifications); MPIF Standard 35 (MIM material properties);
+    German, R.M., <em>Metal Injection Molding</em>, Metal Powder Industries Federation (2011);
+    Atkinson, H.V. &amp; Davies, S., "Fundamental Aspects of Hot Isostatic Pressing: An Overview,"
+    <em>Metallurgical and Materials Transactions A</em>, 31A (2000) 2981–3000.
+    Mechanical property ranges are representative industry values and should not be used for design without
+    material certification data.
+</p>
+
+<a class="back-link" href="index.html">&#8592; Back to Reference Pages</a>
+
+</main>
+</body>
+</html>

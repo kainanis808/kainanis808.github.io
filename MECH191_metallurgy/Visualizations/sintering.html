@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sintering – Neck Formation, Diffusion, Pore Closure &amp; Densification</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+            background:#0f172a; color:#e2e8f0;
+            min-height:100vh; overflow-x:hidden;
+        }
+        header {
+            text-align:center; padding:28px 20px;
+            background:#1e293b; border-bottom:1px solid #334155;
+        }
+        h1 { font-size:2rem; color:#f1f5f9; }
+        .subtitle { color:#94a3b8; margin-top:6px; font-size:1rem; }
+        main { max-width:1060px; margin:0 auto; padding:28px 20px; }
+
+        .tab-bar {
+            display:flex; gap:4px; margin-bottom:24px;
+            border-bottom:2px solid #334155; flex-wrap:wrap;
+        }
+        .tab-btn {
+            padding:9px 20px; background:transparent; border:none;
+            border-bottom:3px solid transparent; color:#94a3b8;
+            cursor:pointer; font-size:0.92rem; font-family:inherit;
+            margin-bottom:-2px; transition:color 0.15s,border-color 0.15s;
+        }
+        .tab-btn.active { color:#38bdf8; border-bottom-color:#38bdf8; }
+        .tab-btn:hover:not(.active) { color:#cbd5e1; }
+        .tab-panel { display:none; }
+        .tab-panel.active { display:block; }
+
+        .card {
+            background:#1e293b; border:1px solid #334155;
+            border-radius:12px; padding:22px; margin-bottom:22px;
+        }
+        .card h2 { font-size:1.2rem; color:#7dd3fc; margin-bottom:10px; }
+        .card p, .card li { color:#94a3b8; font-size:0.92rem; line-height:1.65; }
+        .card ul { padding-left:18px; }
+        .card ul li { margin-bottom:4px; }
+
+        /* Slider controls */
+        .controls {
+            display:flex; gap:20px; flex-wrap:wrap;
+            align-items:center; margin-bottom:18px;
+        }
+        .ctrl-group { display:flex; flex-direction:column; gap:4px; min-width:180px; }
+        .ctrl-label { font-size:0.78rem; color:#64748b; text-transform:uppercase; letter-spacing:.05em; }
+        .ctrl-val   { font-size:0.9rem;  color:#e2e8f0; margin-top:2px; }
+        input[type=range] {
+            -webkit-appearance:none; width:100%; height:6px;
+            background:#1e293b; border-radius:3px; outline:none;
+            border:1px solid #334155;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance:none; width:16px; height:16px;
+            background:#38bdf8; border-radius:50%; cursor:pointer;
+        }
+        .play-btn {
+            padding:8px 22px; background:#1e3a5f; border:1px solid #38bdf8;
+            border-radius:6px; color:#38bdf8; cursor:pointer;
+            font-size:0.88rem; font-family:inherit;
+            transition:background 0.15s;
+        }
+        .play-btn:hover { background:#1e4a7f; }
+        .play-btn.playing { border-color:#f87171; color:#f87171; background:#2d1a1a; }
+
+        /* Canvas wrappers */
+        .canvas-wrap {
+            background:#0f172a; border:1px solid #334155;
+            border-radius:10px; overflow:hidden;
+            display:flex; justify-content:center;
+        }
+        canvas { display:block; }
+
+        /* Mechanism selector */
+        .mech-selector { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+        .mech-btn {
+            padding:7px 16px; background:#0f172a;
+            border:1px solid #334155; border-radius:6px;
+            color:#94a3b8; cursor:pointer; font-size:0.85rem; font-family:inherit;
+            transition:border-color .15s,color .15s;
+        }
+        .mech-btn.active { border-color:#a78bfa; color:#c4b5fd; background:#1a0f2e; }
+        .mech-btn:hover:not(.active) { border-color:#64748b; color:#e2e8f0; }
+
+        /* Info box below canvas */
+        .info-box {
+            background:#0f172a; border:1px solid #334155;
+            border-radius:8px; padding:16px; margin-top:14px;
+        }
+        .info-box h3 { color:#a78bfa; font-size:1rem; margin-bottom:8px; }
+        .info-row { margin-bottom:8px; }
+        .ir-label { font-size:0.73rem; color:#64748b; text-transform:uppercase; letter-spacing:.05em; }
+        .ir-val   { font-size:0.88rem; color:#cbd5e1; line-height:1.55; margin-top:2px; }
+
+        /* Stage stepper for densification */
+        .stage-bar { display:flex; gap:0; margin-bottom:18px; }
+        .stage-btn {
+            flex:1; padding:10px 6px; background:#0f172a;
+            border:1px solid #334155; border-right:none;
+            color:#94a3b8; cursor:pointer; font-size:0.82rem;
+            font-family:inherit; text-align:center;
+            transition:background .15s,color .15s;
+        }
+        .stage-btn:first-child { border-radius:8px 0 0 8px; }
+        .stage-btn:last-child  { border-right:1px solid #334155; border-radius:0 8px 8px 0; }
+        .stage-btn.active { background:#14532d; color:#4ade80; border-color:#4ade80; z-index:1; }
+        .stage-btn:hover:not(.active) { background:#1e293b; color:#e2e8f0; }
+
+        .source-line { font-size:.78rem; color:#475569; text-align:center; margin-top:8px; }
+        .back-link {
+            display:block; text-align:center; margin-top:30px;
+            color:#38bdf8; text-decoration:none; font-size:.92rem;
+        }
+        .back-link:hover { text-decoration:underline; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Sintering Fundamentals</h1>
+    <p class="subtitle">Neck formation · Atomic diffusion · Pore closure · Densification — animated, interactive</p>
+    <p class="source-line">Based on DoITPoMS (University of Cambridge) · ASM Handbook Vol. 7 · Kingery, Bowen &amp; Uhlmann <em>Introduction to Ceramics</em></p>
+</header>
+
+<main>
+
+<nav class="tab-bar">
+    <button class="tab-btn active" data-tab="neck">Neck Formation</button>
+    <button class="tab-btn" data-tab="diff">Atomic Diffusion</button>
+    <button class="tab-btn" data-tab="pore">Pore Closure</button>
+    <button class="tab-btn" data-tab="dens">Densification</button>
+</nav>
+
+<!-- ══════════════════════════════
+     TAB 1 — NECK FORMATION
+══════════════════════════════ -->
+<div class="tab-panel active" id="tab-neck">
+
+    <div class="card">
+        <h2>What Is Neck Formation?</h2>
+        <p>
+            When powder particles are heated, atoms at contact points migrate toward the shared boundary, growing a
+            <strong style="color:#a78bfa;">neck</strong>. The driving force is the reduction in total surface energy —
+            two free surfaces are replaced by one grain boundary, which has lower energy. Neck size is described by
+            the ratio <strong style="color:#38bdf8;">x/R</strong>, where <em>x</em> is the neck radius and <em>R</em>
+            is the particle radius. Early-stage sintering theory (Kuczynski, 1949) predicts
+            <strong style="color:#38bdf8;">(x/R)ⁿ = K·t</strong>, where <em>n</em> and <em>K</em> depend on the
+            active diffusion mechanism and temperature.
+        </p>
+    </div>
+
+    <div class="card">
+        <div class="controls">
+            <div class="ctrl-group">
+                <span class="ctrl-label">Sintering Progress (x/R)</span>
+                <input type="range" id="neck-slider" min="0" max="100" value="0">
+                <span class="ctrl-val" id="neck-val">x/R = 0.00</span>
+            </div>
+            <button class="play-btn" id="neck-play">▶ Animate</button>
+            <div class="ctrl-group" style="min-width:140px;">
+                <span class="ctrl-label">Show Labels</span>
+                <label style="display:flex;align-items:center;gap:8px;color:#94a3b8;font-size:.88rem;margin-top:4px;">
+                    <input type="checkbox" id="neck-labels" checked> Dimensions &amp; annotations
+                </label>
+            </div>
+        </div>
+        <div class="canvas-wrap">
+            <canvas id="neck-canvas"></canvas>
+        </div>
+        <div class="info-box" style="margin-top:14px;">
+            <div style="display:flex;gap:24px;flex-wrap:wrap;">
+                <div class="info-row" style="flex:1;min-width:180px;">
+                    <div class="ir-label">Neck Ratio (x/R)</div>
+                    <div class="ir-val" id="neck-xr">0.00</div>
+                </div>
+                <div class="info-row" style="flex:1;min-width:180px;">
+                    <div class="ir-label">Stage</div>
+                    <div class="ir-val" id="neck-stage">—</div>
+                </div>
+                <div class="info-row" style="flex:2;min-width:260px;">
+                    <div class="ir-label">What Is Happening</div>
+                    <div class="ir-val" id="neck-desc">Move the slider or press Animate.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ══════════════════════════════
+     TAB 2 — ATOMIC DIFFUSION
+══════════════════════════════ -->
+<div class="tab-panel" id="tab-diff">
+
+    <div class="card">
+        <h2>Mass-Transport Mechanisms During Sintering</h2>
+        <p>
+            Sintering densification depends on <em>which</em> diffusion path atoms take. DoITPoMS identifies five mechanisms.
+            Three grow the neck <strong>without densification</strong> (surface diffusion, evaporation–condensation, lattice
+            diffusion from surface) and two cause <strong>true shrinkage</strong> by pulling particle centres together
+            (lattice diffusion from grain boundary, grain-boundary diffusion). Select a mechanism to see an atomic-scale
+            animation of how atoms move.
+        </p>
+    </div>
+
+    <div class="card">
+        <div class="mech-selector" id="mech-selector"></div>
+        <div class="canvas-wrap">
+            <canvas id="diff-canvas"></canvas>
+        </div>
+        <div class="info-box" id="diff-info">
+            <h3 id="diff-title">—</h3>
+            <div style="display:flex;gap:20px;flex-wrap:wrap;">
+                <div class="info-row" style="flex:1;min-width:180px;">
+                    <div class="ir-label">Path</div>
+                    <div class="ir-val" id="diff-path">—</div>
+                </div>
+                <div class="info-row" style="flex:1;min-width:160px;">
+                    <div class="ir-label">Densification?</div>
+                    <div class="ir-val" id="diff-dens">—</div>
+                </div>
+                <div class="info-row" style="flex:2;min-width:240px;">
+                    <div class="ir-label">Description</div>
+                    <div class="ir-val" id="diff-desc">—</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ══════════════════════════════
+     TAB 3 — PORE CLOSURE
+══════════════════════════════ -->
+<div class="tab-panel" id="tab-pore">
+
+    <div class="card">
+        <h2>Pore Evolution &amp; Closure</h2>
+        <p>
+            As sintering proceeds, pores change shape and connectivity. Initially pores form an
+            <strong style="color:#f59e0b;">interconnected channel network</strong> (open porosity).
+            At ~8% porosity the channels pinch off into
+            <strong style="color:#38bdf8;">isolated spherical pores</strong> trapped inside grains or at grain
+            boundaries. Final-stage sintering slowly shrinks these isolated pores — but grain growth can trap them
+            inside grains where diffusion paths are longer, slowing densification. Drag the slider to watch pores
+            evolve through all three stages.
+        </p>
+    </div>
+
+    <div class="card">
+        <div class="controls">
+            <div class="ctrl-group">
+                <span class="ctrl-label">Relative Density</span>
+                <input type="range" id="pore-slider" min="60" max="100" value="60">
+                <span class="ctrl-val" id="pore-val">60%</span>
+            </div>
+            <button class="play-btn" id="pore-play">▶ Animate</button>
+        </div>
+        <div class="canvas-wrap">
+            <canvas id="pore-canvas"></canvas>
+        </div>
+        <div class="info-box" style="margin-top:14px;">
+            <div style="display:flex;gap:24px;flex-wrap:wrap;">
+                <div class="info-row" style="flex:1;min-width:160px;">
+                    <div class="ir-label">Sintering Stage</div>
+                    <div class="ir-val" id="pore-stage">Initial</div>
+                </div>
+                <div class="info-row" style="flex:1;min-width:140px;">
+                    <div class="ir-label">Porosity</div>
+                    <div class="ir-val" id="pore-pct">40%</div>
+                </div>
+                <div class="info-row" style="flex:2;min-width:240px;">
+                    <div class="ir-label">Pore Geometry</div>
+                    <div class="ir-val" id="pore-geom">—</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ══════════════════════════════
+     TAB 4 — DENSIFICATION CURVE
+══════════════════════════════ -->
+<div class="tab-panel" id="tab-dens">
+
+    <div class="card">
+        <h2>Densification Curve &amp; Sintering Stages</h2>
+        <p>
+            The full sintering cycle moves through three stages. Select a stage to highlight it on the curve and see
+            the corresponding microstructure. Hover over the curve to read off density and time values.
+        </p>
+    </div>
+
+    <div class="card">
+        <div class="stage-bar" id="stage-bar"></div>
+        <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;">
+            <div class="canvas-wrap" style="flex:2;min-width:300px;">
+                <canvas id="dens-curve-canvas"></canvas>
+            </div>
+            <div class="canvas-wrap" style="flex:1;min-width:200px;">
+                <canvas id="dens-micro-canvas"></canvas>
+            </div>
+        </div>
+        <div class="info-box" style="margin-top:14px;" id="stage-info">
+            <h3 id="stage-title">Select a stage above</h3>
+            <div style="display:flex;gap:20px;flex-wrap:wrap;">
+                <div class="info-row" style="flex:1;min-width:160px;">
+                    <div class="ir-label">Density Range</div>
+                    <div class="ir-val" id="stage-dens">—</div>
+                </div>
+                <div class="info-row" style="flex:1;min-width:160px;">
+                    <div class="ir-label">Dominant Mechanism</div>
+                    <div class="ir-val" id="stage-mech">—</div>
+                </div>
+                <div class="info-row" style="flex:2;min-width:260px;">
+                    <div class="ir-label">Microstructural Events</div>
+                    <div class="ir-val" id="stage-micro">—</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<a class="back-link" href="index.html">← Back to Visualizations</a>
+</main>
+
+<script>
+'use strict';
+
+/* ─── DPI helper ─────────────────────────────────── */
+function hiDPI(canvas, cssW, cssH) {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width  = cssW * dpr;
+    canvas.height = cssH * dpr;
+    canvas.style.width  = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    return ctx;
+}
+
+/* ─── Tab switching ──────────────────────────────── */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+});
+
+/* ══════════════════════════════════════════════════════════
+   TAB 1 — NECK FORMATION
+══════════════════════════════════════════════════════════ */
+(function(){
+    const CSS_W = 700, CSS_H = 340;
+    const canvas = document.getElementById('neck-canvas');
+    const ctx = hiDPI(canvas, CSS_W, CSS_H);
+
+    const slider   = document.getElementById('neck-slider');
+    const valEl    = document.getElementById('neck-val');
+    const xrEl     = document.getElementById('neck-xr');
+    const stageEl  = document.getElementById('neck-stage');
+    const descEl   = document.getElementById('neck-desc');
+    const labelsEl = document.getElementById('neck-labels');
+    const playBtn  = document.getElementById('neck-play');
+
+    let animId = null, playing = false, neckAnimVal = 0;
+
+    function drawNeck(t01) {
+        // t01 = 0..1 (slider 0-100 mapped to 0-1)
+        const W = CSS_W, H = CSS_H;
+        ctx.clearRect(0, 0, W, H);
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(0, 0, W, H);
+
+        const R = 100;               // particle radius
+        const cx = W / 2, cy = H / 2;
+
+        // neck radius x grows as (x/R)^7 = B*t  → x/R = t01^(1/7) * 0.55 cap
+        const xR = Math.min(0.55, Math.pow(t01, 0.32) * 0.55);
+        const x  = xR * R;          // neck radius in px
+
+        // centre-to-centre distance shrinks only for densifying mechanisms
+        // For display we use a slight approach to show densification effect
+        const approach = xR * R * 0.25;
+        const cx1 = cx - R + approach;
+        const cx2 = cx + R - approach;
+
+        // ── neck concave fillet geometry ──
+        // The neck profile is a concavity of radius ρ tangent to both spheres.
+        // Simplified: draw two circles and clip out a concave bridge.
+        const necky = cy;
+
+        // draw particles
+        const grad1 = ctx.createRadialGradient(cx1 - R*0.3, cy - R*0.3, R*0.1, cx1, cy, R);
+        grad1.addColorStop(0, '#2d4a70');
+        grad1.addColorStop(1, '#0f1f3a');
+        const grad2 = ctx.createRadialGradient(cx2 - R*0.3, cy - R*0.3, R*0.1, cx2, cy, R);
+        grad2.addColorStop(0, '#2d4a70');
+        grad2.addColorStop(1, '#0f1f3a');
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx1, cy, R, 0, Math.PI * 2);
+        ctx.fillStyle = grad1;
+        ctx.fill();
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx2, cy, R, 0, Math.PI * 2);
+        ctx.fillStyle = grad2;
+        ctx.fill();
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.restore();
+
+        // ── neck fill (purple) ──
+        if (x > 1) {
+            ctx.save();
+            ctx.beginPath();
+            // concave neck shape: two arcs meeting at top/bottom of neck
+            const ny = cy - x, ny2 = cy + x;
+            const neckGrad = ctx.createLinearGradient(cx - x, cy, cx + x, cy);
+            neckGrad.addColorStop(0,   '#5b21b6aa');
+            neckGrad.addColorStop(0.5, '#7c3aeddd');
+            neckGrad.addColorStop(1,   '#5b21b6aa');
+            // Fill the overlap / neck region as a rounded lens
+            ctx.arc(cx1, cy, R, -Math.asin(x / R), Math.asin(x / R));
+            ctx.arc(cx2, cy, R, Math.PI - Math.asin(x / R), Math.PI + Math.asin(x / R));
+            ctx.closePath();
+            ctx.fillStyle = neckGrad;
+            ctx.fill();
+            ctx.restore();
+
+            // neck outline
+            ctx.save();
+            ctx.strokeStyle = '#a78bfa';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - x);
+            ctx.lineTo(cx, cy + x);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        // ── grain boundary line ──
+        if (x > 4) {
+            ctx.save();
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([5, 4]);
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - x * 0.9);
+            ctx.lineTo(cx, cy + x * 0.9);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.restore();
+        }
+
+        // ── diffusion arrows (surface path, orange) ──
+        if (x > 3) {
+            const arrowAlpha = Math.min(1, t01 * 3);
+            ctx.save();
+            ctx.globalAlpha = arrowAlpha;
+            ctx.strokeStyle = '#f97316';
+            ctx.lineWidth = 1.5;
+            [[-1], [1]].forEach(([s]) => {
+                ctx.beginPath();
+                // curved arrow along surface of left/right particle toward neck
+                const startAngle = s < 0 ? -0.6 : Math.PI + 0.6;
+                const endAngle   = s < 0 ?  0.18 : Math.PI - 0.18;
+                const pcx = s < 0 ? cx1 : cx2;
+                ctx.arc(pcx, cy, R + 4, startAngle, endAngle, s < 0 ? true : false);
+                ctx.stroke();
+                // arrowhead at neck end
+                const ah = s < 0 ? endAngle : endAngle;
+                const ax = pcx + (R + 4) * Math.cos(ah);
+                const ay = cy  + (R + 4) * Math.sin(ah);
+                ctx.fillStyle = '#f97316';
+                ctx.beginPath();
+                ctx.arc(ax, ay, 4, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.restore();
+        }
+
+        if (!labelsEl.checked) return;
+
+        // ── labels ──
+        ctx.save();
+        ctx.font = '13px Segoe UI';
+        ctx.textAlign = 'center';
+
+        // R annotation - left particle
+        ctx.strokeStyle = '#475569'; ctx.lineWidth = 1; ctx.setLineDash([4,3]);
+        ctx.beginPath();
+        ctx.moveTo(cx1, cy);
+        ctx.lineTo(cx1 - R, cy);
+        ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillText('R', cx1 - R/2, cy - 8);
+
+        // x annotation (neck radius, vertical)
+        if (x > 6) {
+            ctx.strokeStyle = '#a78bfa'; ctx.lineWidth = 1; ctx.setLineDash([4,3]);
+            ctx.beginPath();
+            ctx.moveTo(cx + 18, cy);
+            ctx.lineTo(cx + 18, cy - x);
+            ctx.stroke(); ctx.setLineDash([]);
+            ctx.fillStyle = '#a78bfa';
+            ctx.fillText('x', cx + 30, cy - x/2 + 5);
+        }
+
+        // grain boundary label
+        if (x > 10) {
+            ctx.fillStyle = '#f59e0b';
+            ctx.font = '11px Segoe UI';
+            ctx.fillText('Grain boundary', cx, cy + x + 20);
+        }
+
+        // surface diffusion label
+        if (x > 3) {
+            ctx.fillStyle = '#f97316';
+            ctx.font = '11px Segoe UI';
+            ctx.fillText('Surface diffusion', cx, cy - R - 16);
+        }
+
+        // x/R label
+        ctx.fillStyle = '#c4b5fd';
+        ctx.font = 'bold 13px Segoe UI';
+        ctx.textAlign = 'left';
+        ctx.fillText(`x/R = ${xR.toFixed(2)}`, 18, 26);
+
+        ctx.restore();
+
+        // update info
+        valEl.textContent = `x/R = ${xR.toFixed(2)}`;
+        xrEl.textContent  = xR.toFixed(3);
+        const pct = t01 * 100;
+        if (pct < 5) {
+            stageEl.textContent = 'Pre-sintering (cold contact)';
+            descEl.textContent  = 'Particles touch at a single point. No neck yet — only van der Waals adhesion.';
+        } else if (xR < 0.2) {
+            stageEl.textContent = 'Initial stage — rapid neck growth';
+            descEl.textContent  = 'Surface diffusion and evaporation–condensation dominate. Neck grows quickly but particle centres barely approach — little shrinkage.';
+        } else if (xR < 0.4) {
+            stageEl.textContent = 'Intermediate stage';
+            descEl.textContent  = 'Grain boundary and volume diffusion contribute. Neck growth slows (rate ∝ x⁻⁷). Pore channels begin to pinch off. Real densification begins.';
+        } else {
+            stageEl.textContent = 'Late intermediate / final stage';
+            descEl.textContent  = 'Isolated pores shrink. Grain growth can trap pores inside grains, slowing final densification. x/R > 0.5 is rarely observed in practice.';
+        }
+    }
+
+    function animate() {
+        neckAnimVal += 0.6;
+        if (neckAnimVal >= 100) neckAnimVal = 0;
+        slider.value = Math.round(neckAnimVal);
+        drawNeck(neckAnimVal / 100);
+        animId = requestAnimationFrame(animate);
+    }
+
+    slider.addEventListener('input', () => drawNeck(slider.value / 100));
+    labelsEl.addEventListener('change', () => drawNeck(slider.value / 100));
+
+    playBtn.addEventListener('click', () => {
+        playing = !playing;
+        if (playing) {
+            playBtn.textContent = '⏹ Stop';
+            playBtn.classList.add('playing');
+            animId = requestAnimationFrame(animate);
+        } else {
+            playBtn.textContent = '▶ Animate';
+            playBtn.classList.remove('playing');
+            cancelAnimationFrame(animId);
+        }
+    });
+
+    drawNeck(0);
+})();
+
+
+/* ══════════════════════════════════════════════════════════
+   TAB 2 — ATOMIC DIFFUSION
+══════════════════════════════════════════════════════════ */
+(function(){
+    const CSS_W = 700, CSS_H = 360;
+    const canvas = document.getElementById('diff-canvas');
+    const ctx = hiDPI(canvas, CSS_W, CSS_H);
+
+    let animId = null;
+    let currentMech = null;
+
+    const MECHS = [
+        {
+            id: 'surf',
+            label: 'Surface Diffusion',
+            color: '#38bdf8',
+            dens: false,
+            path: 'Particle surface → neck',
+            desc: 'Atoms hop along the free surface from regions of high curvature (convex particle body) toward the concave neck. Fast at low temperatures because surface atoms have fewer bonds. Grows the neck but does NOT bring particle centres together — no macroscopic shrinkage.',
+            draw(t) { drawSurfDiff(ctx, CSS_W, CSS_H, t); }
+        },
+        {
+            id: 'evap',
+            label: 'Evaporation–Condensation',
+            color: '#f59e0b',
+            dens: false,
+            path: 'Vapour phase (convex → concave)',
+            desc: 'Atoms evaporate from convex surfaces (high vapour pressure by Kelvin equation) and condense at the concave neck (lower vapour pressure). Significant only for materials with appreciable vapour pressure at sintering temperature (e.g. NaCl, ice). No densification.',
+            draw(t) { drawEvapCond(ctx, CSS_W, CSS_H, t); }
+        },
+        {
+            id: 'vol-surf',
+            label: 'Lattice Diffusion\n(from surface)',
+            color: '#34d399',
+            dens: false,
+            path: 'Bulk lattice, source = particle surface',
+            desc: 'Vacancies flow from the neck (tension) into the particle interior; atoms flow outward. Source of atoms is the particle surface — so particle centres do not approach. Neck grows, no shrinkage.',
+            draw(t) { drawLatSurf(ctx, CSS_W, CSS_H, t); }
+        },
+        {
+            id: 'vol-gb',
+            label: 'Lattice Diffusion\n(from grain boundary)',
+            color: '#f87171',
+            dens: true,
+            path: 'Bulk lattice, source = grain boundary',
+            desc: 'Atoms from the grain boundary under the neck diffuse through the lattice to the neck. This removes material from between the particles, pulling their centres together → TRUE densification and shrinkage.',
+            draw(t) { drawLatGB(ctx, CSS_W, CSS_H, t); }
+        },
+        {
+            id: 'gb',
+            label: 'Grain Boundary\nDiffusion',
+            color: '#c084fc',
+            dens: true,
+            path: 'Along grain boundary plane',
+            desc: 'Atoms diffuse along the high-diffusivity grain boundary plane (Dgb ≫ Dv) from the particle contact region outward to the neck. Removes material between particles → densification. Dominant at intermediate temperatures.',
+            draw(t) { drawGBDiff(ctx, CSS_W, CSS_H, t); }
+        },
+    ];
+
+    /* ── Drawing functions ── */
+    function baseParticles(ctx, W, H) {
+        const R = 95, cx = W/2, cy = H/2 - 10;
+        const cx1 = cx - R + 14, cx2 = cx + R - 14;
+        return { R, cx, cy, cx1, cx2 };
+    }
+
+    function drawTwoParticles(ctx, W, H, strokeCol) {
+        const { R, cx, cy, cx1, cx2 } = baseParticles(ctx, W, H);
+        // background
+        ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, W, H);
+        [cx1, cx2].forEach(pcx => {
+            const g = ctx.createRadialGradient(pcx - R*0.3, cy - R*0.3, R*0.1, pcx, cy, R);
+            g.addColorStop(0, '#1e3a5f');
+            g.addColorStop(1, '#0f1f3a');
+            ctx.beginPath(); ctx.arc(pcx, cy, R, 0, Math.PI*2);
+            ctx.fillStyle = g; ctx.fill();
+            ctx.strokeStyle = strokeCol; ctx.lineWidth = 1.5; ctx.stroke();
+        });
+        // draw neck area
+        const neckX = 20;
+        const neckGrad = ctx.createLinearGradient(cx - neckX, cy, cx + neckX, cy);
+        neckGrad.addColorStop(0, '#2d1f5e88');
+        neckGrad.addColorStop(0.5, '#7c3aed99');
+        neckGrad.addColorStop(1, '#2d1f5e88');
+        const angle = Math.asin(neckX / R);
+        ctx.beginPath();
+        ctx.arc(cx1, cy, R, -angle, angle);
+        ctx.arc(cx2, cy, R, Math.PI - angle, Math.PI + angle);
+        ctx.closePath();
+        ctx.fillStyle = neckGrad; ctx.fill();
+        // grain boundary
+        ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 4]);
+        ctx.beginPath(); ctx.moveTo(cx, cy - neckX); ctx.lineTo(cx, cy + neckX);
+        ctx.stroke(); ctx.setLineDash([]);
+        return { R, cx, cy, cx1, cx2, neckX };
+    }
+
+    function movingAtom(ctx, x, y, r, col, alpha) {
+        ctx.save(); ctx.globalAlpha = alpha;
+        const g = ctx.createRadialGradient(x - r*0.3, y - r*0.3, 1, x, y, r);
+        g.addColorStop(0, col + 'ff');
+        g.addColorStop(1, col + '66');
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2);
+        ctx.fillStyle = g; ctx.fill();
+        ctx.strokeStyle = '#fff3'; ctx.lineWidth = 0.8; ctx.stroke();
+        ctx.restore();
+    }
+
+    function arrowAlong(ctx, col, x1, y1, x2, y2, alpha) {
+        ctx.save(); ctx.globalAlpha = alpha;
+        ctx.strokeStyle = col; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+        const ang = Math.atan2(y2 - y1, x2 - x1);
+        ctx.fillStyle = col;
+        ctx.beginPath();
+        ctx.moveTo(x2, y2);
+        ctx.lineTo(x2 - 10*Math.cos(ang - 0.4), y2 - 10*Math.sin(ang - 0.4));
+        ctx.lineTo(x2 - 10*Math.cos(ang + 0.4), y2 - 10*Math.sin(ang + 0.4));
+        ctx.closePath(); ctx.fill();
+        ctx.restore();
+    }
+
+    function drawSurfDiff(ctx, W, H, t) {
+        const { R, cx, cy, cx1, cx2, neckX } = drawTwoParticles(ctx, W, H, '#38bdf8');
+        // atom travelling along surface of left particle toward neck
+        const frac = (t % 1);
+        const startA = -1.1, endA = -Math.asin(neckX / R);
+        const angle1 = startA + (endA - startA) * frac;
+        const ax = cx1 + (R + 5) * Math.cos(angle1);
+        const ay = cy  + (R + 5) * Math.sin(angle1);
+        movingAtom(ctx, ax, ay, 6, '#38bdf8', 0.9);
+        // right side
+        const startA2 = Math.PI + 1.1, endA2 = Math.PI + Math.asin(neckX / R);
+        const angle2 = startA2 + (endA2 - startA2) * frac;
+        const bx = cx2 + (R + 5) * Math.cos(angle2);
+        const by = cy  + (R + 5) * Math.sin(angle2);
+        movingAtom(ctx, bx, by, 6, '#38bdf8', 0.9);
+        // trail
+        ctx.save(); ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2; ctx.globalAlpha = 0.35;
+        ctx.beginPath(); ctx.arc(cx1, cy, R + 5, startA, angle1); ctx.stroke();
+        ctx.beginPath(); ctx.arc(cx2, cy, R + 5, endA2, startA2, true); ctx.stroke();
+        ctx.restore();
+        // label
+        ctx.fillStyle = '#38bdf8'; ctx.font = 'bold 13px Segoe UI'; ctx.textAlign = 'center';
+        ctx.fillText('Surface Diffusion', cx, 24);
+        ctx.fillStyle = '#64748b'; ctx.font = '11px Segoe UI';
+        ctx.fillText('Atoms hop along free surface → neck   |   No densification', cx, H - 14);
+    }
+
+    function drawEvapCond(ctx, W, H, t) {
+        const { R, cx, cy, cx1, cx2, neckX } = drawTwoParticles(ctx, W, H, '#f59e0b');
+        // vapour atoms float from top of particles toward neck
+        const frac = t % 1;
+        [{ pcx: cx1, side: -1 }, { pcx: cx2, side: 1 }].forEach(({ pcx, side }) => {
+            // evaporation point (top of particle)
+            const ex = pcx - side * R * 0.2;
+            const ey = cy - R * 0.85;
+            // condensation at neck top
+            const nx = cx + side * neckX * 0.3;
+            const ny = cy - neckX * 0.8;
+            // interpolate
+            const px = ex + (nx - ex) * frac;
+            const py = ey + (ny - ey) * frac + Math.sin(frac * Math.PI) * (-30);
+            movingAtom(ctx, px, py, 5, '#f59e0b', 1 - frac * 0.3);
+            // evaporation wisp
+            ctx.save(); ctx.globalAlpha = 0.3;
+            ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1.5; ctx.setLineDash([3,4]);
+            ctx.beginPath(); ctx.moveTo(ex, ey + 4); ctx.lineTo(ex, ey - 18); ctx.stroke();
+            ctx.setLineDash([]); ctx.restore();
+        });
+        ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 13px Segoe UI'; ctx.textAlign = 'center';
+        ctx.fillText('Evaporation–Condensation', cx, 24);
+        ctx.fillStyle = '#64748b'; ctx.font = '11px Segoe UI';
+        ctx.fillText('Atoms evaporate (high P) → travel as vapour → condense at neck (low P)   |   No densification', cx, H - 14);
+    }
+
+    function drawLatSurf(ctx, W, H, t) {
+        const { R, cx, cy, cx1, cx2, neckX } = drawTwoParticles(ctx, W, H, '#34d399');
+        // atoms move inside particle, from surface toward neck (radially inward-ish)
+        const frac = t % 1;
+        [{ pcx: cx1 }, { pcx: cx2 }].forEach(({ pcx }) => {
+            // start: inside particle (near surface, away from neck)
+            const sx = pcx + (pcx < cx ? -1 : 1) * R * 0.55;
+            const sy = cy - R * 0.35;
+            // end: neck interior
+            const ex = cx + (pcx < cx ? -1 : 1) * neckX * 0.5;
+            const ey = cy - neckX * 0.5;
+            const px = sx + (ex - sx) * frac;
+            const py = sy + (ey - sy) * frac;
+            movingAtom(ctx, px, py, 5, '#34d399', 0.85);
+            // lattice grid hint
+            ctx.save(); ctx.globalAlpha = 0.12; ctx.strokeStyle = '#34d399'; ctx.lineWidth = 1;
+            for (let gx = pcx - R + 10; gx < pcx + R; gx += 18) {
+                for (let gy = cy - R + 10; gy < cy + R; gy += 18) {
+                    if (Math.hypot(gx - pcx, gy - cy) < R - 5) {
+                        ctx.beginPath(); ctx.arc(gx, gy, 3, 0, Math.PI*2); ctx.stroke();
+                    }
+                }
+            }
+            ctx.restore();
+        });
+        ctx.fillStyle = '#34d399'; ctx.font = 'bold 13px Segoe UI'; ctx.textAlign = 'center';
+        ctx.fillText('Lattice Diffusion (source: surface)', cx, 24);
+        ctx.fillStyle = '#64748b'; ctx.font = '11px Segoe UI';
+        ctx.fillText('Vacancies flow out; atoms flow to neck through bulk   |   No densification', cx, H - 14);
+    }
+
+    function drawLatGB(ctx, W, H, t) {
+        const { R, cx, cy, cx1, cx2, neckX } = drawTwoParticles(ctx, W, H, '#f87171');
+        const frac = t % 1;
+        // atoms move from grain boundary (centre) outward through lattice toward neck edge
+        // source: grain boundary plane at cx
+        const sy = cy - neckX * 0.5 + frac * neckX * 0.8;
+        const ex1 = cx - neckX * 1.2;
+        const ex2 = cx + neckX * 1.2;
+        // left atom
+        const ax1 = cx + (ex1 - cx) * frac;
+        movingAtom(ctx, ax1, sy, 5, '#f87171', 0.9);
+        // right atom
+        const ax2 = cx + (ex2 - cx) * frac;
+        movingAtom(ctx, ax2, sy, 5, '#f87171', 0.9);
+        // convergence arrows (particles approaching)
+        const arAlpha = 0.7;
+        arrowAlong(ctx, '#f87171', cx1 + R * 0.3, cy + R * 0.6, cx1 + R * 0.55, cy + R * 0.45, arAlpha);
+        arrowAlong(ctx, '#f87171', cx2 - R * 0.3, cy + R * 0.6, cx2 - R * 0.55, cy + R * 0.45, arAlpha);
+        ctx.fillStyle = '#f87171'; ctx.font = 'bold 13px Segoe UI'; ctx.textAlign = 'center';
+        ctx.fillText('Lattice Diffusion (source: grain boundary)', cx, 24);
+        ctx.fillStyle = '#4ade80'; ctx.font = 'bold 12px Segoe UI';
+        ctx.fillText('✓ Densification — particle centres approach', cx, H - 30);
+        ctx.fillStyle = '#64748b'; ctx.font = '11px Segoe UI';
+        ctx.fillText('Vacancies annihilate at grain boundary; atoms flow through lattice to neck', cx, H - 14);
+    }
+
+    function drawGBDiff(ctx, W, H, t) {
+        const { R, cx, cy, cx1, cx2, neckX } = drawTwoParticles(ctx, W, H, '#c084fc');
+        const frac = t % 1;
+        // atoms hop along the grain boundary plane itself (horizontal line at cy)
+        // from centre toward neck edge
+        const speed = 0.6;
+        const progress = (frac * 1.6) % 1;
+        const gbW = neckX * 2.0;
+        // left-going atom
+        const lax = cx - progress * gbW;
+        const lay = cy + (Math.sin(progress * Math.PI * 2) * 3);
+        if (lax > cx - gbW) movingAtom(ctx, lax, lay, 5, '#c084fc', 0.9);
+        // right-going atom
+        const rax = cx + progress * gbW;
+        const ray = cy + (Math.sin(progress * Math.PI * 2) * 3);
+        if (rax < cx + gbW) movingAtom(ctx, rax, ray, 5, '#c084fc', 0.9);
+        // highlight GB plane
+        ctx.save(); ctx.globalAlpha = 0.4;
+        ctx.strokeStyle = '#c084fc'; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(cx - neckX, cy); ctx.lineTo(cx + neckX, cy); ctx.stroke();
+        ctx.restore();
+        // approach arrows
+        arrowAlong(ctx, '#c084fc', cx1 + R * 0.3, cy + R * 0.55, cx1 + R * 0.52, cy + R * 0.42, 0.6);
+        arrowAlong(ctx, '#c084fc', cx2 - R * 0.3, cy + R * 0.55, cx2 - R * 0.52, cy + R * 0.42, 0.6);
+        ctx.fillStyle = '#c084fc'; ctx.font = 'bold 13px Segoe UI'; ctx.textAlign = 'center';
+        ctx.fillText('Grain Boundary Diffusion', cx, 24);
+        ctx.fillStyle = '#4ade80'; ctx.font = 'bold 12px Segoe UI';
+        ctx.fillText('✓ Densification — particle centres approach', cx, H - 30);
+        ctx.fillStyle = '#64748b'; ctx.font = '11px Segoe UI';
+        ctx.fillText('Fast diffusion along boundary plane removes material between particles', cx, H - 14);
+    }
+
+    /* ── selector + animation loop ── */
+    const sel = document.getElementById('mech-selector');
+    MECHS.forEach((m, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'mech-btn';
+        btn.textContent = m.label.replace('\n', ' ');
+        btn.addEventListener('click', () => {
+            cancelAnimationFrame(animId);
+            document.querySelectorAll('.mech-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentMech = m;
+            document.getElementById('diff-title').textContent = m.label.replace('\n',' ');
+            document.getElementById('diff-title').style.color = m.color;
+            document.getElementById('diff-path').textContent  = m.path;
+            document.getElementById('diff-dens').innerHTML    = m.dens
+                ? '<span style="color:#4ade80;">Yes — true shrinkage</span>'
+                : '<span style="color:#f87171;">No — neck grows, no shrinkage</span>';
+            document.getElementById('diff-desc').textContent  = m.desc;
+            let start = null;
+            function loop(ts) {
+                if (!start) start = ts;
+                const t = (ts - start) / 2000; // 2 s per cycle
+                m.draw(t);
+                animId = requestAnimationFrame(loop);
+            }
+            animId = requestAnimationFrame(loop);
+        });
+        sel.appendChild(btn);
+    });
+    sel.children[0].click();
+})();
+
+
+/* ══════════════════════════════════════════════════════════
+   TAB 3 — PORE CLOSURE
+══════════════════════════════════════════════════════════ */
+(function(){
+    const CSS_W = 700, CSS_H = 360;
+    const canvas = document.getElementById('pore-canvas');
+    const ctx = hiDPI(canvas, CSS_W, CSS_H);
+
+    const slider   = document.getElementById('pore-slider');
+    const valEl    = document.getElementById('pore-val');
+    const stageEl  = document.getElementById('pore-stage');
+    const pctEl    = document.getElementById('pore-pct');
+    const geomEl   = document.getElementById('pore-geom');
+    const playBtn  = document.getElementById('pore-play');
+    let animId = null, playing = false, animVal = 60;
+
+    // seeded pseudo-random for stable grain positions
+    function rng(seed) { let x = Math.sin(seed) * 10000; return x - Math.floor(x); }
+
+    function drawPores(density) {
+        const W = CSS_W, H = CSS_H;
+        const porosity = 1 - density / 100;
+        ctx.clearRect(0, 0, W, H);
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(0, 0, W, H);
+
+        // determine stage
+        let stage, geom, stageColor;
+        if (density < 80) {
+            stage = 'Initial'; stageColor = '#ef4444';
+            geom = 'Large, irregular, interconnected pores form continuous channel network. High open porosity allows gas exchange.';
+        } else if (density < 92) {
+            stage = 'Intermediate'; stageColor = '#f59e0b';
+            geom = 'Pore channels pinch off and round up. Mix of open channels and isolated pores. Grain growth begins to overtake pore shrinkage.';
+        } else {
+            stage = 'Final'; stageColor = '#4ade80';
+            geom = 'Only isolated near-spherical pores remain (closed porosity). Pores trapped inside grains resist removal. Grain coarsening dominates.';
+        }
+
+        stageEl.textContent = stage;
+        stageEl.style.color = stageColor;
+        pctEl.textContent   = porosity > 0 ? (porosity * 100).toFixed(1) + '%' : '0%';
+        geomEl.textContent  = geom;
+
+        // ── draw grain polygons ──
+        const N = 12; // number of grains
+        const grainSeeds = [];
+        for (let i = 0; i < N; i++) {
+            grainSeeds.push({
+                x: 60 + rng(i * 7 + 1) * (W - 120),
+                y: 40 + rng(i * 11 + 2) * (H - 80),
+            });
+        }
+
+        // simple Voronoi-like cells via clipping
+        grainSeeds.forEach((g, gi) => {
+            ctx.save();
+            // clip to voronoi region (approximate with path around centroid)
+            ctx.beginPath();
+            // build rough polygon by finding midpoints to neighbours
+            const pts = [];
+            const angles = Array.from({length: 16}, (_, k) => k / 16 * Math.PI * 2);
+            angles.forEach(a => {
+                let minD = Infinity, best = { x: g.x + Math.cos(a)*200, y: g.y + Math.sin(a)*200 };
+                let dr = 20;
+                for (let r = 10; r < 240; r += 4) {
+                    const tx = g.x + Math.cos(a) * r;
+                    const ty = g.y + Math.sin(a) * r;
+                    if (tx < 0 || tx > W || ty < 0 || ty > H) { best = {x:tx,y:ty}; break; }
+                    let dominated = false;
+                    for (let j = 0; j < N; j++) {
+                        if (j === gi) continue;
+                        const d1 = Math.hypot(tx - g.x, ty - g.y);
+                        const d2 = Math.hypot(tx - grainSeeds[j].x, ty - grainSeeds[j].y);
+                        if (d2 < d1) { dominated = true; best = {x:tx,y:ty}; break; }
+                    }
+                    if (dominated) break;
+                    best = {x:tx,y:ty};
+                }
+                pts.push(best);
+            });
+            ctx.moveTo(pts[0].x, pts[0].y);
+            pts.forEach(p => ctx.lineTo(p.x, p.y));
+            ctx.closePath();
+            ctx.clip();
+
+            // grain fill
+            const grainCol = `hsl(${210 + gi * 15},25%,${16 + gi % 3 * 3}%)`;
+            ctx.fillStyle = grainCol;
+            ctx.fillRect(0, 0, W, H);
+            ctx.restore();
+
+            // grain boundary stroke
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(pts[0].x, pts[0].y);
+            pts.forEach(p => ctx.lineTo(p.x, p.y));
+            ctx.closePath();
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            ctx.restore();
+        });
+
+        // ── draw pores ──
+        // initial: large irregular connected pores
+        // intermediate: mix
+        // final: small isolated spherical
+        const poreCount = Math.round(8 + porosity * 30);
+
+        for (let i = 0; i < poreCount; i++) {
+            const px = 30 + rng(i * 17 + 3) * (W - 60);
+            const py = 30 + rng(i * 13 + 5) * (H - 60);
+
+            // base size scales with porosity
+            const baseR = 5 + porosity * 55 * rng(i * 23 + 7);
+
+            ctx.save();
+            if (density < 80) {
+                // initial: irregular jagged pores
+                const pts2 = [];
+                const n2 = 7 + Math.floor(rng(i*3)*4);
+                for (let k = 0; k < n2; k++) {
+                    const a = k / n2 * Math.PI * 2;
+                    const r = baseR * (0.5 + rng(i*k+k*7)*0.8);
+                    pts2.push({ x: px + Math.cos(a)*r, y: py + Math.sin(a)*r });
+                }
+                ctx.beginPath();
+                ctx.moveTo(pts2[0].x, pts2[0].y);
+                pts2.forEach(p => ctx.lineTo(p.x, p.y));
+                ctx.closePath();
+                // connect pores with thin channels
+                if (i < poreCount - 1 && rng(i*29+1) > 0.45) {
+                    const nx = 30 + rng((i+1)*17+3)*(W-60);
+                    const ny = 30 + rng((i+1)*13+5)*(H-60);
+                    const dist = Math.hypot(nx-px, ny-py);
+                    if (dist < 200) {
+                        ctx.moveTo(px + (nx-px)*0.25, py + (ny-py)*0.25);
+                        ctx.lineTo(px + (nx-px)*0.75, py + (ny-py)*0.75);
+                    }
+                }
+            } else if (density < 92) {
+                // intermediate: rounding up, mix
+                const roundness = (density - 80) / 12;
+                const pts2 = [];
+                const n2 = 6;
+                for (let k = 0; k < n2; k++) {
+                    const a = k / n2 * Math.PI * 2;
+                    const r = baseR * (roundness + (1 - roundness) * (0.55 + rng(i*k+k*7)*0.65));
+                    pts2.push({ x: px + Math.cos(a)*r, y: py + Math.sin(a)*r });
+                }
+                ctx.beginPath(); ctx.moveTo(pts2[0].x, pts2[0].y);
+                pts2.forEach((p,k) => {
+                    const nxt = pts2[(k+1)%n2];
+                    ctx.arcTo(p.x, p.y, nxt.x, nxt.y, baseR * roundness * 0.8);
+                });
+                ctx.closePath();
+            } else {
+                // final: near-perfect spheres, small
+                const r = Math.max(2, baseR * 0.25);
+                ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI*2);
+            }
+
+            const poreG = ctx.createRadialGradient(px - baseR*0.2, py - baseR*0.2, 1, px, py, baseR);
+            poreG.addColorStop(0, '#1e293b');
+            poreG.addColorStop(1, '#0f172a');
+            ctx.fillStyle = poreG; ctx.fill();
+            ctx.strokeStyle = '#475569'; ctx.lineWidth = 0.8; ctx.stroke();
+            ctx.restore();
+        }
+
+        // ── stage label overlay ──
+        ctx.save();
+        ctx.fillStyle = stageColor;
+        ctx.font = 'bold 14px Segoe UI';
+        ctx.textAlign = 'right';
+        ctx.fillText(stage + ' Stage', W - 14, 22);
+        ctx.fillStyle = '#94a3b8'; ctx.font = '12px Segoe UI';
+        ctx.fillText(`ρ = ${density.toFixed(0)}% theoretical`, W - 14, 40);
+        ctx.restore();
+    }
+
+    slider.addEventListener('input', () => {
+        animVal = parseFloat(slider.value);
+        valEl.textContent = Math.round(animVal) + '%';
+        drawPores(animVal);
+    });
+
+    playBtn.addEventListener('click', () => {
+        playing = !playing;
+        if (playing) {
+            playBtn.textContent = '⏹ Stop';
+            playBtn.classList.add('playing');
+            animVal = parseFloat(slider.value);
+            const step = () => {
+                animVal += 0.18;
+                if (animVal > 100) animVal = 60;
+                slider.value = Math.round(animVal);
+                valEl.textContent = Math.round(animVal) + '%';
+                drawPores(animVal);
+                animId = requestAnimationFrame(step);
+            };
+            animId = requestAnimationFrame(step);
+        } else {
+            playBtn.textContent = '▶ Animate';
+            playBtn.classList.remove('playing');
+            cancelAnimationFrame(animId);
+        }
+    });
+
+    drawPores(60);
+})();
+
+
+/* ══════════════════════════════════════════════════════════
+   TAB 4 — DENSIFICATION CURVE
+══════════════════════════════════════════════════════════ */
+(function(){
+    const CURVE_W = 480, CURVE_H = 310;
+    const MICRO_W = 220, MICRO_H = 310;
+
+    const curveCanvas = document.getElementById('dens-curve-canvas');
+    const microCanvas = document.getElementById('dens-micro-canvas');
+    const ctxC = hiDPI(curveCanvas, CURVE_W, CURVE_H);
+    const ctxM = hiDPI(microCanvas, MICRO_W, MICRO_H);
+
+    const STAGES = [
+        {
+            label: 'Initial Stage',
+            color: '#ef4444',
+            tRange: [0, 18],
+            densRange: '~60–85%',
+            mech: 'Surface diffusion, evaporation–condensation, initial lattice diffusion',
+            micro: 'Rapid neck growth at particle contacts. Open, interconnected porosity. Little macroscopic shrinkage (<3%). Surface area decreases sharply.',
+            drawMicro(ctx, W, H) {
+                ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,W,H);
+                // 4 particles with small necks
+                const pts = [[W/2-38,H/2-35],[W/2+38,H/2-35],[W/2-38,H/2+38],[W/2+38,H/2+38]];
+                const R = 42;
+                pts.forEach(([pcx,pcy]) => {
+                    const g = ctx.createRadialGradient(pcx-12,pcy-12,4,pcx,pcy,R);
+                    g.addColorStop(0,'#1e3a5f'); g.addColorStop(1,'#0f1f3a');
+                    ctx.beginPath(); ctx.arc(pcx,pcy,R,0,Math.PI*2);
+                    ctx.fillStyle=g; ctx.fill();
+                    ctx.strokeStyle='#ef4444'; ctx.lineWidth=1.2; ctx.stroke();
+                });
+                // tiny necks
+                ctx.fillStyle='#5b21b688';
+                [[W/2,H/2-35],[W/2-38,H/2+1],[W/2+38,H/2+1],[W/2,H/2+38]].forEach(([nx,ny]) => {
+                    ctx.beginPath(); ctx.ellipse(nx,ny,6,5,0,0,Math.PI*2); ctx.fill();
+                });
+                // pore channels
+                ctx.strokeStyle='#47556999'; ctx.lineWidth=4;
+                ctx.beginPath(); ctx.arc(W/2,H/2,22,0,Math.PI*2); ctx.stroke();
+                ctx.fillStyle='#ef4444'; ctx.font='bold 12px Segoe UI'; ctx.textAlign='center';
+                ctx.fillText('Initial Stage',W/2,H-18);
+                ctx.fillStyle='#64748b'; ctx.font='11px Segoe UI';
+                ctx.fillText('Open pore channels',W/2,H-5);
+            }
+        },
+        {
+            label: 'Intermediate Stage',
+            color: '#f59e0b',
+            tRange: [15, 40],
+            densRange: '~85–93%',
+            mech: 'Lattice diffusion from grain boundary, grain-boundary diffusion (true densification)',
+            micro: 'Pore channels pinch off into cylinders then spheres. Grain boundaries migrate. First isolated pores appear. Densification rate is highest here.',
+            drawMicro(ctx, W, H) {
+                ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+                const pts=[[W/2-32,H/2-30],[W/2+34,H/2-32],[W/2-30,H/2+32],[W/2+32,H/2+30]];
+                const R=45;
+                pts.forEach(([pcx,pcy])=>{
+                    const g=ctx.createRadialGradient(pcx-12,pcy-12,4,pcx,pcy,R);
+                    g.addColorStop(0,'#1e3a5f'); g.addColorStop(1,'#0f1f3a');
+                    ctx.beginPath(); ctx.arc(pcx,pcy,R,0,Math.PI*2);
+                    ctx.fillStyle=g; ctx.fill();
+                    ctx.strokeStyle='#f59e0b'; ctx.lineWidth=1.5; ctx.stroke();
+                });
+                // larger necks
+                ctx.fillStyle='#7c3aed99';
+                [[W/2,H/2-31],[W/2-31,H/2+1],[W/2+31,H/2+1],[W/2,H/2+31]].forEach(([nx,ny])=>{
+                    ctx.beginPath(); ctx.ellipse(nx,ny,11,10,0,0,Math.PI*2); ctx.fill();
+                });
+                // cylindrical/rounding pores
+                [[W/2,H/2]].forEach(([px,py])=>{
+                    ctx.fillStyle='#0f172a'; ctx.strokeStyle='#47556988'; ctx.lineWidth=1;
+                    ctx.beginPath(); ctx.arc(px,py,13,0,Math.PI*2); ctx.fill(); ctx.stroke();
+                });
+                // grain boundary lines
+                ctx.strokeStyle='#f59e0b66'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
+                [[W/2-32,H/2-30,W/2+34,H/2-32],[W/2-32,H/2-30,W/2-30,H/2+32],
+                 [W/2+34,H/2-32,W/2+32,H/2+30],[W/2-30,H/2+32,W/2+32,H/2+30]].forEach(([x1,y1,x2,y2])=>{
+                    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+                });
+                ctx.setLineDash([]);
+                ctx.fillStyle='#f59e0b'; ctx.font='bold 12px Segoe UI'; ctx.textAlign='center';
+                ctx.fillText('Intermediate Stage',W/2,H-18);
+                ctx.fillStyle='#64748b'; ctx.font='11px Segoe UI';
+                ctx.fillText('Pores rounding up',W/2,H-5);
+            }
+        },
+        {
+            label: 'Final Stage',
+            color: '#4ade80',
+            tRange: [36, 60],
+            densRange: '~93–99%+',
+            mech: 'Lattice diffusion (slow — long path to isolated pores inside grains)',
+            micro: 'Only isolated spherical pores remain. Grain coarsening (grain growth) dominates. Pores trapped inside grains are hardest to remove. Over-sintering causes excessive grain growth with minimal densification gain.',
+            drawMicro(ctx, W, H) {
+                ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);
+                // large grains — fewer, bigger
+                const grains=[[W*0.3,H*0.3,62],[W*0.7,H*0.28,58],[W*0.28,H*0.68,60],[W*0.7,H*0.68,56]];
+                grains.forEach(([gcx,gcy,R])=>{
+                    const g=ctx.createRadialGradient(gcx-18,gcy-18,5,gcx,gcy,R);
+                    g.addColorStop(0,'#1e3a5f'); g.addColorStop(1,'#0f172a');
+                    ctx.beginPath(); ctx.arc(gcx,gcy,R,0,Math.PI*2);
+                    ctx.fillStyle=g; ctx.fill();
+                    ctx.strokeStyle='#4ade8055'; ctx.lineWidth=2; ctx.stroke();
+                });
+                // grain boundaries
+                ctx.strokeStyle='#4ade8044'; ctx.lineWidth=1.5; ctx.setLineDash([5,4]);
+                [[W*0.3,H*0.3,W*0.7,H*0.28],[W*0.3,H*0.3,W*0.28,H*0.68],
+                 [W*0.7,H*0.28,W*0.7,H*0.68],[W*0.28,H*0.68,W*0.7,H*0.68]].forEach(([x1,y1,x2,y2])=>{
+                    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+                });
+                ctx.setLineDash([]);
+                // isolated pores (small spheres inside grains)
+                [[W*0.28,H*0.25],[W*0.72,H*0.42],[W*0.34,H*0.72],[W*0.66,H*0.6]].forEach(([px,py])=>{
+                    ctx.beginPath(); ctx.arc(px,py,5,0,Math.PI*2);
+                    ctx.fillStyle='#0f172a'; ctx.fill();
+                    ctx.strokeStyle='#64748b'; ctx.lineWidth=1; ctx.stroke();
+                });
+                ctx.fillStyle='#4ade80'; ctx.font='bold 12px Segoe UI'; ctx.textAlign='center';
+                ctx.fillText('Final Stage',W/2,H-18);
+                ctx.fillStyle='#64748b'; ctx.font='11px Segoe UI';
+                ctx.fillText('Isolated pores, large grains',W/2,H-5);
+            }
+        },
+    ];
+
+    let activeStage = 0;
+
+    function drawCurve(highlightStage) {
+        const W = CURVE_W, H = CURVE_H;
+        const PAD = { top:28, right:18, bottom:54, left:62 };
+        const CW = W - PAD.left - PAD.right;
+        const CH = H - PAD.top - PAD.bottom;
+
+        ctxC.fillStyle = '#0f172a'; ctxC.fillRect(0, 0, W, H);
+
+        function xFor(t)  { return PAD.left + (t / 60) * CW; }
+        function yFor(rho){ return PAD.top + CH - ((rho - 58) / 44) * CH; }
+
+        const fn = t => 58 + 34*(1 - Math.exp(-t/11)) + 7*(1 - Math.exp(-t/38));
+
+        // stage background bands
+        STAGES.forEach((s, i) => {
+            const x1 = xFor(s.tRange[0]), x2 = xFor(s.tRange[1]);
+            const alpha = i === highlightStage ? '33' : '0d';
+            ctxC.fillStyle = s.color + alpha;
+            ctxC.fillRect(x1, PAD.top, x2 - x1, CH);
+        });
+
+        // grid
+        ctxC.strokeStyle = '#1e293b'; ctxC.lineWidth = 1;
+        [60,70,80,90,100].forEach(v => {
+            const y = yFor(v);
+            ctxC.beginPath(); ctxC.moveTo(PAD.left, y); ctxC.lineTo(PAD.left + CW, y); ctxC.stroke();
+            ctxC.fillStyle = '#94a3b8'; ctxC.font = '12px Segoe UI'; ctxC.textAlign = 'right';
+            ctxC.fillText(v + '%', PAD.left - 6, y + 4);
+        });
+        [0,10,20,30,40,50,60].forEach(t => {
+            const x = xFor(t);
+            ctxC.beginPath(); ctxC.moveTo(x, PAD.top + CH); ctxC.lineTo(x, PAD.top + CH + 5); ctxC.stroke();
+            ctxC.fillStyle = '#94a3b8'; ctxC.font = '12px Segoe UI'; ctxC.textAlign = 'center';
+            ctxC.fillText(t + ' min', x, PAD.top + CH + 20);
+        });
+
+        // axes
+        ctxC.strokeStyle = '#475569'; ctxC.lineWidth = 1;
+        ctxC.beginPath();
+        ctxC.moveTo(PAD.left, PAD.top); ctxC.lineTo(PAD.left, PAD.top + CH);
+        ctxC.lineTo(PAD.left + CW, PAD.top + CH); ctxC.stroke();
+
+        // curve
+        ctxC.beginPath();
+        for (let t = 0; t <= 60; t += 0.5) {
+            const x = xFor(t), y = yFor(fn(t));
+            t === 0 ? ctxC.moveTo(x, y) : ctxC.lineTo(x, y);
+        }
+        ctxC.strokeStyle = '#38bdf8'; ctxC.lineWidth = 2.5; ctxC.stroke();
+
+        // stage labels
+        STAGES.forEach((s, i) => {
+            const midT = (s.tRange[0] + s.tRange[1]) / 2;
+            const col = i === highlightStage ? s.color : s.color + '66';
+            ctxC.fillStyle = col; ctxC.font = `${i===highlightStage?'bold ':''}11px Segoe UI`;
+            ctxC.textAlign = 'center';
+            ctxC.fillText(s.label, xFor(midT), PAD.top + 14);
+        });
+
+        // highlighted stage dot on curve
+        const s = STAGES[highlightStage];
+        const midT2 = (s.tRange[0] + s.tRange[1]) / 2;
+        const dotY = yFor(fn(midT2));
+        ctxC.beginPath(); ctxC.arc(xFor(midT2), dotY, 6, 0, Math.PI*2);
+        ctxC.fillStyle = s.color; ctxC.fill();
+
+        // axis labels
+        ctxC.save(); ctxC.translate(14, PAD.top + CH/2); ctxC.rotate(-Math.PI/2);
+        ctxC.textAlign='center'; ctxC.fillStyle='#64748b'; ctxC.font='12px Segoe UI';
+        ctxC.fillText('Relative Density (%)', 0, 0); ctxC.restore();
+        ctxC.textAlign='center'; ctxC.fillStyle='#64748b'; ctxC.font='12px Segoe UI';
+        ctxC.fillText('Time at Temperature (min)', PAD.left + CW/2, H - 8);
+    }
+
+    function drawMicro(stageIdx) {
+        ctxM.clearRect(0, 0, MICRO_W, MICRO_H);
+        STAGES[stageIdx].drawMicro(ctxM, MICRO_W, MICRO_H);
+    }
+
+    function selectStage(i) {
+        activeStage = i;
+        document.querySelectorAll('.stage-btn').forEach((b, j) => {
+            b.classList.toggle('active', j === i);
+        });
+        const s = STAGES[i];
+        document.getElementById('stage-title').textContent = s.label;
+        document.getElementById('stage-title').style.color = s.color;
+        document.getElementById('stage-dens').textContent  = s.densRange;
+        document.getElementById('stage-mech').textContent  = s.mech;
+        document.getElementById('stage-micro').textContent = s.micro;
+        drawCurve(i);
+        drawMicro(i);
+    }
+
+    // build stage buttons
+    const bar = document.getElementById('stage-bar');
+    STAGES.forEach((s, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'stage-btn';
+        btn.textContent = s.label;
+        btn.addEventListener('click', () => selectStage(i));
+        bar.appendChild(btn);
+    });
+
+    selectStage(0);
+})();
+</script>
+</body>
+</html>

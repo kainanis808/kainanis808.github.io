@@ -778,7 +778,14 @@ const STEPS = [
 (function(){
     const stepsDiv = document.getElementById('process-steps');
     const canvas   = document.getElementById('step-canvas');
-    const ctx      = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = 300, cssH = 220;
+    canvas.width  = cssW * dpr;
+    canvas.height = cssH * dpr;
+    canvas.style.width  = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
     const titleEl  = document.getElementById('step-title');
     const metaEl   = document.getElementById('step-meta');
 
@@ -789,8 +796,8 @@ const STEPS = [
         btn.addEventListener('click',()=>{
             document.querySelectorAll('.step-btn').forEach(b=>b.classList.remove('active'));
             btn.classList.add('active');
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            s.draw(ctx, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, cssW, cssH);
+            s.draw(ctx, cssW, cssH);
             titleEl.textContent = s.title;
             metaEl.innerHTML = `
                 <div><div class="smr-label">What Happens</div><div class="smr-val">${s.what}</div></div>
