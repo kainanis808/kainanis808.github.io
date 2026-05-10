@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manufacturing Process Selection – Tolerance, Surface Finish & Capability</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+        header { text-align: center; padding: 28px 20px; background: #1e293b; border-bottom: 1px solid #334155; }
+        h1 { font-size: 2rem; color: #f1f5f9; }
+        .subtitle { color: #94a3b8; margin-top: 6px; font-size: 1rem; }
+        .source-line { font-size: 0.76rem; color: #475569; margin-top: 8px; }
+        main { max-width: 1140px; margin: 0 auto; padding: 28px 20px; }
+        .tab-bar { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 2px solid #334155; flex-wrap: wrap; }
+        .tab-btn { padding: 9px 20px; background: transparent; border: none; border-bottom: 3px solid transparent; color: #94a3b8; cursor: pointer; font-size: 0.9rem; font-family: inherit; margin-bottom: -2px; transition: color 0.15s, border-color 0.15s; }
+        .tab-btn.active { color: #38bdf8; border-bottom-color: #38bdf8; }
+        .tab-btn:hover:not(.active) { color: #cbd5e1; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+        .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .card h2 { font-size: 1.1rem; color: #7dd3fc; margin-bottom: 10px; }
+        .card p { color: #94a3b8; font-size: 0.9rem; line-height: 1.65; }
+
+        /* Filters */
+        .filter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+        .filter-label { font-size: 0.73rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+        .chip-row { display: flex; flex-wrap: wrap; gap: 5px; }
+        .chip { padding: 5px 12px; background: #0f172a; border: 1px solid #334155; border-radius: 20px; color: #94a3b8; cursor: pointer; font-size: 0.8rem; font-family: inherit; transition: all 0.15s; }
+        .chip.active { background: #1e3a5f; border-color: #38bdf8; color: #7dd3fc; }
+        .chip:hover:not(.active) { border-color: #475569; color: #cbd5e1; }
+
+        /* Results */
+        #results-count { font-size: 0.84rem; color: #64748b; margin-bottom: 10px; }
+        .result-item { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 13px 16px; margin-bottom: 8px; cursor: pointer; transition: border-color 0.15s, background 0.15s; display: flex; align-items: center; gap: 12px; }
+        .result-item:hover { border-color: #475569; background: #111827; }
+        .result-item.selected { border-color: #38bdf8; background: #0c1829; }
+        .result-rank { font-size: 1rem; font-weight: 700; color: #334155; width: 24px; text-align: right; flex-shrink: 0; }
+        .cat-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+        .result-name { font-size: 0.93rem; color: #e2e8f0; font-weight: 600; flex: 1; min-width: 120px; }
+        .result-badges { display: flex; gap: 5px; flex-wrap: wrap; }
+        .badge { display: inline-block; border-radius: 4px; padding: 2px 7px; font-size: 0.7rem; font-weight: 600; }
+        .match-wrap { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+        .match-bg { width: 70px; height: 7px; background: #1e293b; border-radius: 4px; overflow: hidden; }
+        .match-fill { height: 100%; border-radius: 4px; }
+        .match-pct { font-size: 0.75rem; color: #64748b; width: 30px; }
+
+        /* Detail panel */
+        #sel-detail { background: #0f172a; border: 1px solid #38bdf8; border-radius: 10px; padding: 18px; margin-top: 12px; display: none; }
+        #sel-detail h3 { color: #7dd3fc; font-size: 1.05rem; margin-bottom: 8px; }
+        .detail-row { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 10px; }
+        .ds { flex: 1; min-width: 120px; }
+        .ds-name { font-size: 0.72rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .ds-val { font-size: 0.9rem; color: #e2e8f0; margin-top: 2px; }
+        .detail-notes { font-size: 0.85rem; color: #94a3b8; line-height: 1.6; margin-top: 12px; padding-top: 10px; border-top: 1px solid #1e293b; }
+
+        /* eFunda table */
+        .tbl-scroll { overflow-x: auto; }
+        .spec-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; min-width: 820px; }
+        .spec-table th { background: #0f172a; color: #7dd3fc; padding: 9px 11px; text-align: left; border-bottom: 1px solid #334155; cursor: pointer; white-space: nowrap; user-select: none; }
+        .spec-table th:hover { color: #bae6fd; }
+        .spec-table td { padding: 8px 11px; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
+        .spec-table tr:nth-child(even) td { background: #162032; }
+        .spec-table td:first-child { color: #e2e8f0; font-weight: 600; }
+        .sort-ind { opacity: 0.3; margin-left: 3px; }
+        .sorted .sort-ind { opacity: 1; }
+        .good { color: #4ade80; } .mid { color: #fbbf24; } .bad { color: #f87171; }
+
+        /* Kalpakjian chart */
+        #kp-canvas { display: block; border-radius: 10px; border: 1px solid #334155; width: 100%; cursor: crosshair; }
+        .chart-controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 14px; }
+        .ci-group { }
+        .ci-label { font-size: 0.73rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
+        .ci-input { background: #0f172a; border: 1px solid #334155; color: #e2e8f0; border-radius: 6px; padding: 6px 10px; font-size: 0.86rem; width: 130px; font-family: inherit; }
+        .ci-input:focus { outline: none; border-color: #38bdf8; }
+        .ci-btn { background: #1e3a5f; border: 1px solid #38bdf8; color: #7dd3fc; border-radius: 6px; padding: 7px 14px; cursor: pointer; font-size: 0.84rem; font-family: inherit; }
+        .ci-btn:hover { background: #1e4a7f; }
+        .ci-btn.clear { background: #2d1a1a; border-color: #7f1d1d; color: #f87171; }
+        .ci-btn.clear:hover { background: #3d1a1a; }
+        .chart-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+        .leg-item { display: flex; align-items: center; gap: 6px; font-size: 0.79rem; color: #94a3b8; cursor: pointer; padding: 3px 8px; border-radius: 5px; transition: background 0.15s; }
+        .leg-item:hover { background: #1e293b; }
+        .leg-item.dimmed { opacity: 0.3; }
+        .leg-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+        .kp-tooltip { position: fixed; background: #1e293b; border: 1px solid #475569; border-radius: 8px; padding: 10px 13px; font-size: 0.8rem; color: #e2e8f0; pointer-events: none; display: none; z-index: 100; max-width: 240px; }
+        .kp-tooltip h4 { color: #7dd3fc; margin-bottom: 4px; font-size: 0.86rem; }
+        .kp-tooltip p { color: #94a3b8; line-height: 1.5; }
+
+        /* Compare */
+        .cmp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 7px; margin-bottom: 16px; }
+        .cmp-item { display: flex; align-items: center; gap: 7px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 8px 11px; cursor: pointer; font-size: 0.82rem; color: #94a3b8; transition: all 0.15s; }
+        .cmp-item.checked { border-color: #38bdf8; color: #7dd3fc; background: #0c1829; }
+        .cmp-item input { accent-color: #38bdf8; flex-shrink: 0; }
+        .cmp-scroll { overflow-x: auto; }
+        .cmp-table { border-collapse: collapse; font-size: 0.83rem; min-width: 500px; }
+        .cmp-table th { background: #0f172a; color: #7dd3fc; padding: 10px 14px; border-bottom: 1px solid #334155; text-align: left; white-space: nowrap; }
+        .cmp-table td { padding: 8px 14px; border-bottom: 1px solid #1e293b; color: #cbd5e1; vertical-align: top; }
+        .cmp-table tr:nth-child(even) td { background: #162032; }
+        .cmp-row-label { color: #64748b !important; font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.05em; background: #111827 !important; white-space: nowrap; }
+        .bar-mini { height: 8px; border-radius: 4px; margin-top: 4px; min-width: 4px; }
+
+        .back-link { display: block; text-align: center; margin-top: 30px; color: #38bdf8; text-decoration: none; font-size: 0.92rem; }
+        .back-link:hover { text-decoration: underline; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Manufacturing Process Selection</h1>
+    <p class="subtitle">Achievable tolerances, surface finishes, production rates &amp; capability comparison across all major processes</p>
+    <p class="source-line">Sources: CustomPartNet Process Selector · eFunda Manufacturing Processes · Kalpakjian &amp; Schmid, <em>Manufacturing Engineering and Technology</em></p>
+</header>
+
+<main>
+<nav class="tab-bar">
+    <button class="tab-btn active" data-tab="selector">Process Selector</button>
+    <button class="tab-btn" data-tab="efunda">eFunda Capabilities</button>
+    <button class="tab-btn" data-tab="chart">Kalpakjian Chart</button>
+    <button class="tab-btn" data-tab="compare">Compare Processes</button>
+</nav>
+
+<!-- ══ TAB 1: PROCESS SELECTOR ══ -->
+<div class="tab-panel active" id="tab-selector">
+    <div class="card">
+        <h2>Filter by Requirements (CustomPartNet)</h2>
+        <p style="margin-bottom:16px;">Select your part requirements below. Only processes that can meet every checked criterion are shown. Ranking reflects how well production volume and complexity match.</p>
+        <div class="filter-grid">
+            <div>
+                <div class="filter-label">Material Family</div>
+                <div class="chip-row" id="filt-mat">
+                    <button class="chip active" data-val="any">Any</button>
+                    <button class="chip" data-val="steel">Steel</button>
+                    <button class="chip" data-val="iron">Cast Iron</button>
+                    <button class="chip" data-val="aluminum">Aluminum</button>
+                    <button class="chip" data-val="copper">Copper</button>
+                    <button class="chip" data-val="magnesium">Magnesium</button>
+                    <button class="chip" data-val="zinc">Zinc</button>
+                    <button class="chip" data-val="nickel">Nickel/Super</button>
+                    <button class="chip" data-val="titanium">Titanium</button>
+                    <button class="chip" data-val="thermoplastics">Thermoplastics</button>
+                    <button class="chip" data-val="photopolymers">Photopolymers</button>
+                </div>
+            </div>
+            <div>
+                <div class="filter-label">Required Tolerance (±mm)</div>
+                <div class="chip-row" id="filt-tol">
+                    <button class="chip active" data-val="10">Any (&gt;1 mm OK)</button>
+                    <button class="chip" data-val="1">≤ 1.0 mm</button>
+                    <button class="chip" data-val="0.25">≤ 0.25 mm</button>
+                    <button class="chip" data-val="0.05">≤ 0.05 mm</button>
+                    <button class="chip" data-val="0.01">≤ 0.01 mm</button>
+                    <button class="chip" data-val="0.002">≤ 0.002 mm</button>
+                </div>
+            </div>
+            <div>
+                <div class="filter-label">Required Surface Finish (Ra µm)</div>
+                <div class="chip-row" id="filt-sf">
+                    <button class="chip active" data-val="50">Any (rough OK)</button>
+                    <button class="chip" data-val="6.3">≤ 6.3 µm</button>
+                    <button class="chip" data-val="1.6">≤ 1.6 µm</button>
+                    <button class="chip" data-val="0.4">≤ 0.4 µm</button>
+                    <button class="chip" data-val="0.1">≤ 0.1 µm</button>
+                    <button class="chip" data-val="0.025">≤ 0.025 µm</button>
+                </div>
+            </div>
+            <div>
+                <div class="filter-label">Production Volume (annual)</div>
+                <div class="chip-row" id="filt-vol">
+                    <button class="chip active" data-val="0">Any</button>
+                    <button class="chip" data-val="1">Prototype (1–10)</button>
+                    <button class="chip" data-val="10">Low (10–1K)</button>
+                    <button class="chip" data-val="1000">Medium (1K–50K)</button>
+                    <button class="chip" data-val="50000">High (50K–500K)</button>
+                    <button class="chip" data-val="500000">Mass (500K+)</button>
+                </div>
+            </div>
+            <div>
+                <div class="filter-label">Part Complexity</div>
+                <div class="chip-row" id="filt-cpx">
+                    <button class="chip active" data-val="any">Any</button>
+                    <button class="chip" data-val="low">Simple (prismatic/axisymmetric)</button>
+                    <button class="chip" data-val="moderate">Moderate (features, cores)</button>
+                    <button class="chip" data-val="high">Complex (undercuts, intricate)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Matching Processes</h2>
+        <div id="results-count"></div>
+        <div id="results-list"></div>
+        <div id="sel-detail"></div>
+    </div>
+</div>
+
+<!-- ══ TAB 2: eFUNDA CAPABILITIES ══ -->
+<div class="tab-panel" id="tab-efunda">
+    <div class="card">
+        <h2>All-Process Capability Table (eFunda)</h2>
+        <p style="margin-bottom:14px;">Click any column header to sort. "Best" values are the tightest achievable under ideal controlled conditions; "Typical" is normal production range.</p>
+        <div class="tbl-scroll">
+            <table class="spec-table" id="ef-table">
+                <thead>
+                    <tr>
+                        <th data-col="name">Process <span class="sort-ind">↕</span></th>
+                        <th data-col="cat">Category <span class="sort-ind">↕</span></th>
+                        <th data-col="tolBest">Best Tol (±mm) <span class="sort-ind">↕</span></th>
+                        <th data-col="tolTyp">Typ Tol (±mm) <span class="sort-ind">↕</span></th>
+                        <th data-col="sfBest">Best Ra (µm) <span class="sort-ind">↕</span></th>
+                        <th data-col="sfTyp">Typ Ra (µm) <span class="sort-ind">↕</span></th>
+                        <th data-col="rateLo">Rate (parts/hr) <span class="sort-ind">↕</span></th>
+                        <th data-col="toolCost">Tooling Cost <span class="sort-ind">↕</span></th>
+                        <th data-col="volLo">Min Volume <span class="sort-ind">↕</span></th>
+                    </tr>
+                </thead>
+                <tbody id="ef-tbody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ══ TAB 3: KALPAKJIAN CHART ══ -->
+<div class="tab-panel" id="tab-chart">
+    <div class="card">
+        <h2>Tolerance vs. Surface Finish — Kalpakjian Process Selection Chart</h2>
+        <p style="margin-bottom:14px;">Each band shows the achievable range for a process. Lower-left = tighter tolerance &amp; finer finish. Hover over a band to see process details. Toggle categories with the legend. Optionally plot a target requirement.</p>
+        <div class="chart-controls">
+            <div class="ci-group">
+                <div class="ci-label">Target Tolerance ±(mm)</div>
+                <input class="ci-input" type="number" id="tgt-tol" placeholder="e.g. 0.05" step="0.001" min="0.0001">
+            </div>
+            <div class="ci-group">
+                <div class="ci-label">Target Surface Finish Ra (µm)</div>
+                <input class="ci-input" type="number" id="tgt-sf" placeholder="e.g. 0.8" step="0.01" min="0.001">
+            </div>
+            <button class="ci-btn" id="tgt-plot-btn">Plot Target</button>
+            <button class="ci-btn clear" id="tgt-clear-btn">Clear</button>
+        </div>
+        <canvas id="kp-canvas"></canvas>
+        <div class="chart-legend" id="kp-legend"></div>
+    </div>
+</div>
+
+<!-- ══ TAB 4: COMPARE ══ -->
+<div class="tab-panel" id="tab-compare">
+    <div class="card">
+        <h2>Select Processes to Compare (up to 5)</h2>
+        <div class="cmp-grid" id="cmp-checks"></div>
+        <div class="cmp-scroll">
+            <table class="cmp-table" id="cmp-table">
+                <thead><tr id="cmp-head"><th>Parameter</th></tr></thead>
+                <tbody id="cmp-body"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<a class="back-link" href="index.html">← Back to Visualizations</a>
+</main>
+
+<div class="kp-tooltip" id="kp-tip"></div>
+
+<script>
+/* ════════════════════════════════════════════════
+   DATA
+════════════════════════════════════════════════ */
+const CAT_CLR = {
+    'Casting':    '#f59e0b',
+    'Forming':    '#3b82f6',
+    'Machining':  '#22c55e',
+    'Powder Met': '#a855f7',
+    'Polymer':    '#ec4899',
+    'Additive':   '#06b6d4',
+};
+
+const TOOLCOST_ORDER = {'Very Low (<$1K)':0,'Low ($1–10K)':1,'Medium ($10–50K)':2,'High ($50K–$200K)':3,'Very High (>$200K)':4};
+
+const PROCS = [
+  // CASTING
+  { id:'sand', name:'Sand Casting', cat:'Casting',
+    tolBest:0.38, tolTyp:3.2, sfBest:1.6, sfTyp:12.5,
+    rateStr:'1–90 parts/hr', rateLo:1, rateHi:90,
+    toolCost:'Very Low (<$1K)', volLo:1, volHi:50000,
+    mats:['steel','iron','aluminum','copper','magnesium','zinc','nickel','titanium'],
+    complexity:['moderate','high'], minWall:3,
+    notes:'Most versatile casting process — nearly any metal, any size, any complexity via sand cores. Lowest tooling cost of all casting processes. Roughest surface finish; requires generous tolerances and often secondary machining.',
+    efTol:'±0.38–3.2 mm', efSF:'1.6–12.5 µm Ra',
+  },
+  { id:'shell', name:'Shell Molding', cat:'Casting',
+    tolBest:0.13, tolTyp:0.76, sfBest:0.8, sfTyp:6.3,
+    rateStr:'5–20 parts/hr', rateLo:5, rateHi:20,
+    toolCost:'Medium ($10–50K)', volLo:100, volHi:50000,
+    mats:['steel','iron','copper','aluminum'],
+    complexity:['moderate','high'], minWall:1.5,
+    notes:'Thin resin-bonded sand shell gives better finish and tighter tolerance than green-sand casting. Good for moderate-complexity ferrous parts. Higher tooling cost than green sand but far less than die casting.',
+    efTol:'±0.13–0.76 mm', efSF:'0.8–6.3 µm Ra',
+  },
+  { id:'perm', name:'Permanent Mold', cat:'Casting',
+    tolBest:0.13, tolTyp:0.76, sfBest:0.8, sfTyp:6.3,
+    rateStr:'5–50 parts/hr', rateLo:5, rateHi:50,
+    toolCost:'Medium ($10–50K)', volLo:1000, volHi:100000,
+    mats:['aluminum','magnesium','copper','zinc'],
+    complexity:['moderate'], minWall:2,
+    notes:'Reusable metal mold produces better accuracy and finish than sand casting. Limited to non-ferrous metals. Faster cooling rate improves mechanical properties. Best for medium-volume aluminum parts.',
+    efTol:'±0.13–0.76 mm', efSF:'0.8–6.3 µm Ra',
+  },
+  { id:'die', name:'Die Casting', cat:'Casting',
+    tolBest:0.025, tolTyp:0.25, sfBest:0.4, sfTyp:3.2,
+    rateStr:'50–500 parts/hr', rateLo:50, rateHi:500,
+    toolCost:'Very High (>$200K)', volLo:10000, volHi:1000000,
+    mats:['zinc','aluminum','magnesium','copper'],
+    complexity:['moderate'], minWall:0.6,
+    notes:'Highest production rate and best finish of all casting processes. Limited to non-ferrous metals; no complex internal passages without slides. Very high die cost makes this viable only at high volumes (>10K parts).',
+    efTol:'±0.025–0.25 mm', efSF:'0.4–3.2 µm Ra',
+  },
+  { id:'invest', name:'Investment Casting', cat:'Casting',
+    tolBest:0.076, tolTyp:0.38, sfBest:0.4, sfTyp:3.2,
+    rateStr:'1–100 parts/hr', rateLo:1, rateHi:100,
+    toolCost:'Medium ($10–50K)', volLo:10, volHi:100000,
+    mats:['steel','iron','aluminum','copper','magnesium','zinc','nickel','titanium'],
+    complexity:['high'], minWall:0.5,
+    notes:'Best dimensional accuracy and surface finish of all casting processes. Works with all metals including nickel superalloys and titanium. No draft required; no parting line. Ideal for turbine blades, surgical implants, precision hardware.',
+    efTol:'±0.076–0.38 mm', efSF:'0.4–3.2 µm Ra',
+  },
+  { id:'centri', name:'Centrifugal Casting', cat:'Casting',
+    tolBest:0.25, tolTyp:1.27, sfBest:1.6, sfTyp:12.5,
+    rateStr:'1–30 parts/hr', rateLo:1, rateHi:30,
+    toolCost:'Low ($1–10K)', volLo:10, volHi:10000,
+    mats:['steel','iron','aluminum','copper'],
+    complexity:['low'], minWall:5,
+    notes:'Centrifugal force produces dense, sound cylindrical shapes (pipes, tubes, rings, liners). Inclusions migrate to bore. Limited to axisymmetric shapes. Outer surface is sound; bore requires machining.',
+    efTol:'±0.25–1.27 mm', efSF:'1.6–12.5 µm Ra',
+  },
+  // FORMING
+  { id:'forge-c', name:'Closed-Die Forging', cat:'Forming',
+    tolBest:0.1, tolTyp:2.5, sfBest:0.8, sfTyp:12.5,
+    rateStr:'1–300 parts/hr', rateLo:1, rateHi:300,
+    toolCost:'High ($50K–$200K)', volLo:500, volHi:1000000,
+    mats:['steel','iron','aluminum','copper','magnesium','nickel','titanium'],
+    complexity:['moderate'], minWall:3,
+    notes:'Superior mechanical properties vs castings — grain flow follows part contour. Flash die controls material flow. High die cost; widely used for connecting rods, crankshafts, gears, aircraft structural members.',
+    efTol:'±0.1–2.5 mm', efSF:'0.8–12.5 µm Ra',
+  },
+  { id:'forge-o', name:'Open-Die Forging', cat:'Forming',
+    tolBest:0.5, tolTyp:5.0, sfBest:1.6, sfTyp:25,
+    rateStr:'1–20 parts/hr', rateLo:1, rateHi:20,
+    toolCost:'Low ($1–10K)', volLo:1, volHi:1000,
+    mats:['steel','iron','aluminum','copper','nickel','titanium'],
+    complexity:['low'], minWall:10,
+    notes:'Flat or contoured dies; metal flows freely beyond die edges. Used for very large shafts, rolls, ingots — parts too large for closed-die tooling. Rough tolerances require significant subsequent machining.',
+    efTol:'±0.5–5.0 mm', efSF:'1.6–25 µm Ra',
+  },
+  { id:'rolling', name:'Cold Rolling', cat:'Forming',
+    tolBest:0.013, tolTyp:0.25, sfBest:0.1, sfTyp:3.2,
+    rateStr:'Continuous (high rate)', rateLo:1000, rateHi:100000,
+    toolCost:'Very High (>$200K)', volLo:100000, volHi:10000000,
+    mats:['steel','iron','aluminum','copper'],
+    complexity:['low'], minWall:0.1,
+    notes:'Produces flat sheet, strip, plate and structural profiles with tight thickness tolerance and good surface finish. Work hardening increases yield strength. Limited to uniform prismatic cross-sections.',
+    efTol:'±0.013–0.25 mm', efSF:'0.1–3.2 µm Ra',
+  },
+  { id:'extru', name:'Extrusion (Al / Cu)', cat:'Forming',
+    tolBest:0.05, tolTyp:0.5, sfBest:0.4, sfTyp:3.2,
+    rateStr:'Continuous (medium)', rateLo:100, rateHi:10000,
+    toolCost:'Low ($1–10K)', volLo:1000, volHi:1000000,
+    mats:['aluminum','copper','magnesium'],
+    complexity:['moderate'], minWall:0.8,
+    notes:'Complex constant cross-section profiles produced in one pass. Low die cost vs other forming tools. Aluminum extrusions are ubiquitous for frames, heat sinks, channels. Die life limits precision over long runs.',
+    efTol:'±0.05–0.5 mm', efSF:'0.4–3.2 µm Ra',
+  },
+  { id:'stamp', name:'Sheet Metal Stamping', cat:'Forming',
+    tolBest:0.025, tolTyp:0.5, sfBest:0.2, sfTyp:3.2,
+    rateStr:'100–10,000 parts/hr', rateLo:100, rateHi:10000,
+    toolCost:'Very High (>$200K)', volLo:10000, volHi:10000000,
+    mats:['steel','aluminum','copper'],
+    complexity:['moderate'], minWall:0.3,
+    notes:'Progressive dies blank, pierce, bend and form sheet metal at very high rates. Excellent in-plane dimensional control; thickness unchanged. Used for body panels, enclosures, brackets, electrical contacts.',
+    efTol:'±0.025–0.5 mm', efSF:'0.2–3.2 µm Ra',
+  },
+  // MACHINING
+  { id:'turn', name:'CNC Turning', cat:'Machining',
+    tolBest:0.005, tolTyp:0.25, sfBest:0.1, sfTyp:6.3,
+    rateStr:'1–100 parts/hr', rateLo:1, rateHi:100,
+    toolCost:'Low ($1–10K)', volLo:1, volHi:100000,
+    mats:['steel','iron','aluminum','copper','magnesium','zinc','nickel','titanium'],
+    complexity:['moderate'], minWall:0.5,
+    notes:'Rotating workpiece with fixed cutting tool. Ideal for axisymmetric parts. CNC lathes achieve ±0.005 mm routinely. Excellent secondary operation after casting or forging. Interrupted cuts and hard materials require careful tooling selection.',
+    efTol:'±0.005–0.25 mm', efSF:'0.1–6.3 µm Ra',
+  },
+  { id:'mill', name:'CNC Milling', cat:'Machining',
+    tolBest:0.005, tolTyp:0.25, sfBest:0.1, sfTyp:6.3,
+    rateStr:'1–100 parts/hr', rateLo:1, rateHi:100,
+    toolCost:'Low ($1–10K)', volLo:1, volHi:100000,
+    mats:['steel','iron','aluminum','copper','magnesium','zinc','nickel','titanium'],
+    complexity:['high'], minWall:0.3,
+    notes:'Most versatile subtractive process. 3–5 axis CNC produces pockets, slots, contours, undercuts. Handles prismatic to highly sculptured 3D surfaces. Essential secondary operation and primary process for low-volume complex parts.',
+    efTol:'±0.005–0.25 mm', efSF:'0.1–6.3 µm Ra',
+  },
+  { id:'drill', name:'Drilling', cat:'Machining',
+    tolBest:0.013, tolTyp:0.25, sfBest:0.8, sfTyp:12.5,
+    rateStr:'10–500 holes/hr', rateLo:10, rateHi:500,
+    toolCost:'Very Low (<$1K)', volLo:1, volHi:1000000,
+    mats:['steel','iron','aluminum','copper','magnesium','zinc','nickel','titanium'],
+    complexity:['moderate'], minWall:0.5,
+    notes:'Produces circular holes. Tolerance improved by reaming after drilling. Rougher finish than turning/milling due to axial chip formation. Peck cycle needed for deep holes (L/D > 3). Drill presses to multi-spindle CNC centers.',
+    efTol:'±0.013–0.25 mm', efSF:'0.8–12.5 µm Ra',
+  },
+  { id:'grind', name:'Grinding', cat:'Machining',
+    tolBest:0.001, tolTyp:0.025, sfBest:0.025, sfTyp:0.8,
+    rateStr:'5–50 parts/hr', rateLo:5, rateHi:50,
+    toolCost:'Low ($1–10K)', volLo:1, volHi:1000000,
+    mats:['steel','iron','nickel','titanium'],
+    complexity:['moderate'], minWall:0.5,
+    notes:'Abrasive wheel removes very thin layers. Achieves the tightest tolerances and finest finishes of conventional machining. Works on hardened steel (HRC 60+). Used as a finishing operation; generates heat requiring coolant. Cylindrical, surface, and centerless variants.',
+    efTol:'±0.001–0.025 mm', efSF:'0.025–0.8 µm Ra',
+  },
+  { id:'hone', name:'Honing', cat:'Machining',
+    tolBest:0.001, tolTyp:0.013, sfBest:0.013, sfTyp:0.4,
+    rateStr:'2–30 parts/hr', rateLo:2, rateHi:30,
+    toolCost:'Low ($1–10K)', volLo:1, volHi:100000,
+    mats:['steel','iron','aluminum','copper'],
+    complexity:['low'], minWall:1,
+    notes:'Abrasive stones on rotating/reciprocating mandrel produce crosshatch pattern improving oil retention in bores. Corrects out-of-round and taper but not location errors. Used for engine cylinder bores, hydraulic cylinders.',
+    efTol:'±0.001–0.013 mm', efSF:'0.013–0.4 µm Ra',
+  },
+  { id:'lap', name:'Lapping', cat:'Machining',
+    tolBest:0.0005, tolTyp:0.005, sfBest:0.005, sfTyp:0.1,
+    rateStr:'0.5–10 parts/hr', rateLo:0.5, rateHi:10,
+    toolCost:'Medium ($10–50K)', volLo:1, volHi:100000,
+    mats:['steel','iron','aluminum','copper','nickel'],
+    complexity:['low'], minWall:0.5,
+    notes:'Loose abrasive slurry between two surfaces achieves the finest finish of any manufacturing process. Used for gage blocks, optical flats, valve seats. Achieves flatness < 0.1 µm and Ra < 0.05 µm routinely. Requires extreme cleanliness.',
+    efTol:'±0.0005–0.005 mm', efSF:'0.005–0.1 µm Ra',
+  },
+  { id:'broach', name:'Broaching', cat:'Machining',
+    tolBest:0.008, tolTyp:0.05, sfBest:0.2, sfTyp:3.2,
+    rateStr:'10–300 parts/hr', rateLo:10, rateHi:300,
+    toolCost:'High ($50K–$200K)', volLo:1000, volHi:500000,
+    mats:['steel','iron','aluminum','copper'],
+    complexity:['moderate'], minWall:1,
+    notes:'Multi-tooth tool removes a precise profile in one pass — keyways, splines, internal gears, shaped holes. Very high production rate after setup. Tool cost is high and geometry is fixed once broach is made.',
+    efTol:'±0.008–0.05 mm', efSF:'0.2–3.2 µm Ra',
+  },
+  { id:'edm', name:'EDM (Wire / Sinker)', cat:'Machining',
+    tolBest:0.005, tolTyp:0.05, sfBest:0.1, sfTyp:3.2,
+    rateStr:'0.1–10 parts/hr', rateLo:0.1, rateHi:10,
+    toolCost:'Medium ($10–50K)', volLo:1, volHi:10000,
+    mats:['steel','iron','nickel','titanium'],
+    complexity:['high'], minWall:0.1,
+    notes:'Spark erosion removes material without cutting forces — any conductive material regardless of hardness. Wire EDM cuts complex 2D profiles; sinker EDM produces complex 3D cavities. Essential for hardened dies, mold inserts, turbine blade cooling holes.',
+    efTol:'±0.005–0.05 mm', efSF:'0.1–3.2 µm Ra',
+  },
+  // POWDER MET
+  { id:'pm', name:'Powder Metallurgy (PM)', cat:'Powder Met',
+    tolBest:0.013, tolTyp:0.25, sfBest:0.4, sfTyp:3.2,
+    rateStr:'100–5,000 parts/hr', rateLo:100, rateHi:5000,
+    toolCost:'High ($50K–$200K)', volLo:1000, volHi:1000000,
+    mats:['steel','iron','copper','titanium'],
+    complexity:['moderate'], minWall:1,
+    notes:'Near-net-shape from metal powder — compact then sinter. No machining waste; excellent for small complex parts (gears, bushings, bearings). Cannot form undercuts or cross-holes. MPIF tolerances achievable in press direction. High tooling cost.',
+    efTol:'±0.013–0.25 mm', efSF:'0.4–3.2 µm Ra',
+  },
+  // POLYMER
+  { id:'inject', name:'Injection Molding', cat:'Polymer',
+    tolBest:0.013, tolTyp:0.25, sfBest:0.1, sfTyp:3.2,
+    rateStr:'100–10,000 parts/hr', rateLo:100, rateHi:10000,
+    toolCost:'Very High (>$200K)', volLo:10000, volHi:10000000,
+    mats:['thermoplastics'],
+    complexity:['high'], minWall:0.5,
+    notes:'Most common polymer process. Molten plastic injected into closed mold — excellent repeatability, surface finish, and complexity. Slides and lifters allow undercuts. High mold cost requires large volume. Cycle time 10–60 s.',
+    efTol:'±0.013–0.25 mm', efSF:'0.1–3.2 µm Ra',
+  },
+  { id:'blow', name:'Blow Molding', cat:'Polymer',
+    tolBest:0.13, tolTyp:1.27, sfBest:0.4, sfTyp:6.3,
+    rateStr:'50–1,000 parts/hr', rateLo:50, rateHi:1000,
+    toolCost:'High ($50K–$200K)', volLo:5000, volHi:1000000,
+    mats:['thermoplastics'],
+    complexity:['low'], minWall:0.5,
+    notes:'Air inflates parison or preform against mold. Produces hollow containers, bottles, tanks, ducts. Limited to shapes accessible from exterior. Wall thickness variation is a design challenge. High volume process.',
+    efTol:'±0.13–1.27 mm', efSF:'0.4–6.3 µm Ra',
+  },
+  { id:'thermo', name:'Thermoforming', cat:'Polymer',
+    tolBest:0.25, tolTyp:2.5, sfBest:0.4, sfTyp:6.3,
+    rateStr:'10–500 parts/hr', rateLo:10, rateHi:500,
+    toolCost:'Low ($1–10K)', volLo:100, volHi:100000,
+    mats:['thermoplastics'],
+    complexity:['low'], minWall:0.5,
+    notes:'Heated thermoplastic sheet stretched over single-sided mold. Very low tooling cost — molds can be wood, aluminum, or composite. Limited to thin-wall open shapes (trays, covers, packaging). Poor thickness control and accuracy vs. injection molding.',
+    efTol:'±0.25–2.5 mm', efSF:'0.4–6.3 µm Ra',
+  },
+  // ADDITIVE
+  { id:'fdm', name:'FDM / FFF', cat:'Additive',
+    tolBest:0.1, tolTyp:1.0, sfBest:3.2, sfTyp:25,
+    rateStr:'0.1–5 parts/hr', rateLo:0.1, rateHi:5,
+    toolCost:'Very Low (<$1K)', volLo:1, volHi:100,
+    mats:['thermoplastics'],
+    complexity:['high'], minWall:0.8,
+    notes:'Fused deposition of thermoplastic filament. Lowest-cost AM technology. Visible layer lines unless sanded. Supports needed for overhangs > 45°. Best for prototypes and functional test parts. Layer height 0.1–0.3 mm typical.',
+    efTol:'±0.1–1.0 mm', efSF:'3.2–25 µm Ra',
+  },
+  { id:'sla', name:'SLA / DLP', cat:'Additive',
+    tolBest:0.025, tolTyp:0.25, sfBest:0.4, sfTyp:6.3,
+    rateStr:'0.1–5 parts/hr', rateLo:0.1, rateHi:5,
+    toolCost:'Very Low (<$1K)', volLo:1, volHi:100,
+    mats:['photopolymers'],
+    complexity:['high'], minWall:0.3,
+    notes:'UV light cures photopolymer resin. Finest detail and smoothest finish of polymer AM. Parts are brittle — post-cure improves properties. Used for dental, jewelry, hearing aids, patterns for investment casting.',
+    efTol:'±0.025–0.25 mm', efSF:'0.4–6.3 µm Ra',
+  },
+  { id:'sls', name:'SLS (Polymer)', cat:'Additive',
+    tolBest:0.05, tolTyp:0.5, sfBest:1.6, sfTyp:12.5,
+    rateStr:'0.1–10 parts/hr', rateLo:0.1, rateHi:10,
+    toolCost:'Very Low (<$1K)', volLo:1, volHi:1000,
+    mats:['thermoplastics'],
+    complexity:['high'], minWall:0.7,
+    notes:'Laser sinters nylon/PA powder without supports. Parts are ~15% porous without infiltration. Good toughness. Used for functional prototypes and low-volume end-use parts. Nesting parts in build volume improves cost per part.',
+    efTol:'±0.05–0.5 mm', efSF:'1.6–12.5 µm Ra',
+  },
+  { id:'dmls', name:'DMLS / SLM (Metal AM)', cat:'Additive',
+    tolBest:0.025, tolTyp:0.25, sfBest:1.6, sfTyp:12.5,
+    rateStr:'0.1–5 parts/hr', rateLo:0.1, rateHi:5,
+    toolCost:'Very Low (<$1K)', volLo:1, volHi:100,
+    mats:['steel','aluminum','nickel','titanium','copper'],
+    complexity:['high'], minWall:0.3,
+    notes:'Laser melts metal powder layer by layer — nearly full density. Supports required; removed by machining. Post-machining needed for critical fits. High machine and material cost. Uniquely capable of conformal cooling channels, complex internal geometry, graded lattices.',
+    efTol:'±0.025–0.25 mm (±0.005 post-machined)', efSF:'1.6–12.5 µm Ra',
+  },
+];
+
+/* ════════════════════════════════════════════════
+   TAB SWITCHING
+════════════════════════════════════════════════ */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+        if (btn.dataset.tab === 'chart') drawChart();
+    });
+});
+
+/* ════════════════════════════════════════════════
+   TAB 1 — PROCESS SELECTOR
+════════════════════════════════════════════════ */
+const selState = { mat: 'any', tol: 10, sf: 50, vol: 0, cpx: 'any' };
+
+function setupSingleChips(groupId, stateKey) {
+    const el = document.getElementById(groupId);
+    el.querySelectorAll('.chip').forEach(c => {
+        c.addEventListener('click', () => {
+            el.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
+            c.classList.add('active');
+            selState[stateKey] = stateKey === 'mat' || stateKey === 'cpx' ? c.dataset.val : parseFloat(c.dataset.val);
+            runSelector();
+        });
+    });
+}
+setupSingleChips('filt-mat', 'mat');
+setupSingleChips('filt-tol', 'tol');
+setupSingleChips('filt-sf', 'sf');
+setupSingleChips('filt-vol', 'vol');
+setupSingleChips('filt-cpx', 'cpx');
+
+function volScore(p) {
+    const v = selState.vol;
+    if (v === 0) return 3;
+    if (v >= p.volLo && v <= p.volHi) return 3;
+    const dist = v < p.volLo ? Math.log10(p.volLo/v) : Math.log10(v/p.volHi);
+    return dist < 1 ? 2 : dist < 2 ? 1 : 0;
+}
+function cpxScore(p) {
+    if (selState.cpx === 'any') return 2;
+    return p.complexity.includes(selState.cpx) ? 2 : 0;
+}
+
+function runSelector() {
+    const list = document.getElementById('results-list');
+    const cnt  = document.getElementById('results-count');
+    const det  = document.getElementById('sel-detail');
+    det.style.display = 'none';
+
+    const filtered = PROCS.filter(p => {
+        if (selState.mat !== 'any' && !p.mats.includes(selState.mat)) return false;
+        if (p.tolBest > selState.tol) return false;
+        if (p.sfBest  > selState.sf)  return false;
+        return true;
+    });
+
+    const scored = filtered.map(p => ({
+        p, score: volScore(p) + cpxScore(p)
+    })).sort((a,b) => b.score - a.score);
+
+    cnt.textContent = `${scored.length} of ${PROCS.length} processes match your requirements`;
+
+    list.innerHTML = '';
+    scored.forEach(({p, score}, i) => {
+        const pct = Math.round(score / 5 * 100);
+        const clr = CAT_CLR[p.cat] || '#94a3b8';
+        const div = document.createElement('div');
+        div.className = 'result-item';
+        div.innerHTML = `
+            <span class="result-rank">${i+1}</span>
+            <span class="cat-dot" style="background:${clr}"></span>
+            <span class="result-name">${p.name}</span>
+            <div class="result-badges">
+                <span class="badge" style="background:${clr}22;color:${clr}">${p.cat}</span>
+                <span class="badge" style="background:#1e293b;color:#94a3b8">Tol ±${p.tolBest} mm</span>
+                <span class="badge" style="background:#1e293b;color:#94a3b8">Ra ${p.sfBest} µm</span>
+            </div>
+            <div class="match-wrap">
+                <div class="match-bg"><div class="match-fill" style="width:${pct}%;background:${score>=4?'#22c55e':score>=2?'#fbbf24':'#f87171'}"></div></div>
+                <span class="match-pct">${pct}%</span>
+            </div>`;
+        div.addEventListener('click', () => {
+            list.querySelectorAll('.result-item').forEach(x => x.classList.remove('selected'));
+            div.classList.add('selected');
+            showDetail(p);
+        });
+        list.appendChild(div);
+    });
+
+    if (scored.length === 0) {
+        list.innerHTML = '<p style="color:#64748b;font-size:0.88rem;padding:12px 0;">No processes meet all selected requirements. Try relaxing tolerance or surface finish filters.</p>';
+    }
+}
+
+function showDetail(p) {
+    const det = document.getElementById('sel-detail');
+    const clr = CAT_CLR[p.cat] || '#94a3b8';
+    const matStr = p.mats.map(m => m.charAt(0).toUpperCase()+m.slice(1)).join(', ');
+    const cpxStr = p.complexity.map(c => c.charAt(0).toUpperCase()+c.slice(1)).join(', ');
+    det.style.display = 'block';
+    det.innerHTML = `
+        <h3>${p.name} <span style="font-size:0.8rem;font-weight:400;color:${clr};">[${p.cat}]</span></h3>
+        <div class="detail-row">
+            <div class="ds"><div class="ds-name">Best Tolerance</div><div class="ds-val">±${p.tolBest} mm</div></div>
+            <div class="ds"><div class="ds-name">Typical Tolerance</div><div class="ds-val">±${p.tolTyp} mm</div></div>
+            <div class="ds"><div class="ds-name">Best Surface Finish</div><div class="ds-val">${p.sfBest} µm Ra</div></div>
+            <div class="ds"><div class="ds-name">Typical Surface Finish</div><div class="ds-val">${p.sfTyp} µm Ra</div></div>
+            <div class="ds"><div class="ds-name">Production Rate</div><div class="ds-val">${p.rateStr}</div></div>
+            <div class="ds"><div class="ds-name">Tooling Cost</div><div class="ds-val">${p.toolCost}</div></div>
+            <div class="ds"><div class="ds-name">Volume Range</div><div class="ds-val">${p.volLo.toLocaleString()}–${p.volHi.toLocaleString()} parts</div></div>
+            <div class="ds"><div class="ds-name">Min. Wall</div><div class="ds-val">${p.minWall} mm</div></div>
+            <div class="ds"><div class="ds-name">Compatible Materials</div><div class="ds-val">${matStr}</div></div>
+            <div class="ds"><div class="ds-name">Complexity</div><div class="ds-val">${cpxStr}</div></div>
+        </div>
+        <div class="detail-notes">${p.notes}</div>`;
+}
+
+runSelector();
+
+/* ════════════════════════════════════════════════
+   TAB 2 — eFUNDA TABLE
+════════════════════════════════════════════════ */
+(function(){
+    let sortCol = 'tolBest', sortDir = 1;
+    const tbody = document.getElementById('ef-tbody');
+
+    function ratingClass(val, thresholds) {
+        if (val <= thresholds[0]) return 'good';
+        if (val <= thresholds[1]) return 'mid';
+        return 'bad';
+    }
+
+    function render() {
+        const sorted = [...PROCS].sort((a,b) => {
+            let av = a[sortCol], bv = b[sortCol];
+            if (typeof av === 'string') return sortDir * av.localeCompare(bv);
+            return sortDir * (av - bv);
+        });
+        tbody.innerHTML = '';
+        sorted.forEach(p => {
+            const clr = CAT_CLR[p.cat] || '#94a3b8';
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${p.name}</td>
+                <td><span class="badge" style="background:${clr}22;color:${clr};border-radius:4px;padding:1px 7px;font-size:0.7rem;">${p.cat}</span></td>
+                <td class="${ratingClass(p.tolBest,[0.05,0.5])}">${p.tolBest}</td>
+                <td>${p.tolTyp}</td>
+                <td class="${ratingClass(p.sfBest,[0.4,3.2])}">${p.sfBest}</td>
+                <td>${p.sfTyp}</td>
+                <td>${p.rateStr}</td>
+                <td>${p.toolCost}</td>
+                <td>${p.volLo.toLocaleString()}</td>`;
+            tbody.appendChild(tr);
+        });
+    }
+
+    document.querySelectorAll('#ef-table th').forEach(th => {
+        th.addEventListener('click', () => {
+            const col = th.dataset.col;
+            if (!col) return;
+            sortDir = (sortCol === col) ? -sortDir : 1;
+            sortCol = col;
+            document.querySelectorAll('#ef-table th').forEach(t => t.classList.remove('sorted'));
+            th.classList.add('sorted');
+            const ind = th.querySelector('.sort-ind');
+            if (ind) ind.textContent = sortDir === 1 ? '▲' : '▼';
+            render();
+        });
+    });
+
+    render();
+})();
+
+/* ════════════════════════════════════════════════
+   TAB 3 — KALPAKJIAN CHART
+════════════════════════════════════════════════ */
+const hiddenCats = new Set();
+let targetPoint = null;
+
+function drawChart() {
+    const canvas = document.getElementById('kp-canvas');
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const W = canvas.clientWidth || 1060;
+    const H = Math.round(W * 520 / 1060);
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    ctx.scale(dpr, dpr);
+    const PAD = { top: 24, right: 30, bottom: 68, left: 90 };
+    const CW = W - PAD.left - PAD.right;
+    const CH = H - PAD.top - PAD.bottom;
+
+    // X: surface finish Ra (µm), 0.003 to 30, left=fine
+    // Y: tolerance ±(mm),        0.0003 to 6, bottom=tight
+    const SFL = Math.log10(0.003), SFR = Math.log10(30);
+    const TLB = Math.log10(0.0003), TLT = Math.log10(6);
+
+    function sfX(v) { return PAD.left + (Math.log10(v)-SFL)/(SFR-SFL)*CW; }
+    function tyY(v) { return PAD.top + CH - (Math.log10(v)-TLB)/(TLT-TLB)*CH; }
+
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0,0,W,H);
+
+    // grid
+    ctx.strokeStyle = '#1e293b';
+    ctx.lineWidth = 1;
+    const sfTicks  = [0.005,0.01,0.025,0.05,0.1,0.25,0.5,1,2.5,5,10,25];
+    const tolTicks = [0.0005,0.001,0.0025,0.005,0.01,0.025,0.05,0.1,0.25,0.5,1,2.5,5];
+    sfTicks.forEach(v => {
+        if (v<0.003||v>30) return;
+        ctx.beginPath(); ctx.moveTo(sfX(v),PAD.top); ctx.lineTo(sfX(v),PAD.top+CH); ctx.stroke();
+    });
+    tolTicks.forEach(v => {
+        if (v<0.0003||v>6) return;
+        ctx.beginPath(); ctx.moveTo(PAD.left,tyY(v)); ctx.lineTo(PAD.left+CW,tyY(v)); ctx.stroke();
+    });
+
+    // process rectangles
+    PROCS.forEach(p => {
+        if (hiddenCats.has(p.cat)) return;
+        const clr = CAT_CLR[p.cat] || '#94a3b8';
+        const x1 = sfX(Math.max(0.003, p.sfBest));
+        const x2 = sfX(Math.min(30,   p.sfTyp));
+        const y1 = tyY(Math.min(6,    p.tolTyp));
+        const y2 = tyY(Math.max(0.0003,p.tolBest));
+        const rw = Math.max(4, x2-x1);
+        const rh = Math.max(4, y2-y1);
+
+        ctx.globalAlpha = 0.22;
+        ctx.fillStyle = clr;
+        ctx.fillRect(x1, y1, rw, rh);
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = clr;
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(x1, y1, rw, rh);
+
+        // label
+        ctx.fillStyle = clr;
+        ctx.font = '9px Segoe UI';
+        ctx.textAlign = 'left';
+        const lx = x1 + 3;
+        const ly = y1 + 10;
+        if (rw > 20 && rh > 10) ctx.fillText(p.name, lx, ly);
+    });
+
+    // target point
+    if (targetPoint) {
+        const tx = sfX(targetPoint.sf);
+        const ty = tyY(targetPoint.tol);
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 1.5;
+        const cs = 10;
+        ctx.beginPath(); ctx.moveTo(tx-cs,ty); ctx.lineTo(tx+cs,ty); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(tx,ty-cs); ctx.lineTo(tx,ty+cs); ctx.stroke();
+        ctx.beginPath(); ctx.arc(tx,ty,cs,0,Math.PI*2); ctx.stroke();
+        ctx.fillStyle = '#ef4444';
+        ctx.font = 'bold 10px Segoe UI';
+        ctx.textAlign = 'left';
+        ctx.fillText(`Target: ±${targetPoint.tol}mm / Ra${targetPoint.sf}µm`, tx+13, ty+4);
+    }
+
+    // axes
+    ctx.strokeStyle = '#475569';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(PAD.left,PAD.top); ctx.lineTo(PAD.left,PAD.top+CH); ctx.lineTo(PAD.left+CW,PAD.top+CH);
+    ctx.stroke();
+
+    // X axis labels
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '10px Segoe UI';
+    ctx.textAlign = 'center';
+    [0.005,0.01,0.025,0.05,0.1,0.25,0.5,1,2.5,5,10,25].forEach(v => {
+        if (v<0.003||v>30) return;
+        ctx.fillText(v, sfX(v), PAD.top+CH+16);
+    });
+
+    // Y axis labels
+    ctx.textAlign = 'right';
+    [0.0005,0.001,0.0025,0.005,0.01,0.025,0.05,0.1,0.25,0.5,1,2.5,5].forEach(v => {
+        if (v<0.0003||v>6) return;
+        ctx.fillText(v, PAD.left-6, tyY(v)+4);
+    });
+
+    // axis titles
+    ctx.save();
+    ctx.translate(14, PAD.top+CH/2);
+    ctx.rotate(-Math.PI/2);
+    ctx.textAlign = 'center';
+    ctx.font = '12px Segoe UI';
+    ctx.fillStyle = '#64748b';
+    ctx.fillText('Tolerance ±(mm)  ← tighter', 0, 0);
+    ctx.restore();
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#64748b';
+    ctx.font = '12px Segoe UI';
+    ctx.fillText('Surface Roughness Ra (µm)  ← finer', PAD.left+CW/2, H-10);
+
+    // corner annotation
+    ctx.fillStyle = '#22c55e';
+    ctx.font = '10px Segoe UI';
+    ctx.textAlign = 'left';
+    ctx.fillText('← Better', PAD.left+4, PAD.top+14);
+}
+
+// Legend
+(function(){
+    const lgd = document.getElementById('kp-legend');
+    Object.entries(CAT_CLR).forEach(([cat, clr]) => {
+        const el = document.createElement('div');
+        el.className = 'leg-item';
+        el.innerHTML = `<div class="leg-dot" style="background:${clr}"></div>${cat}`;
+        el.addEventListener('click', () => {
+            if (hiddenCats.has(cat)) { hiddenCats.delete(cat); el.classList.remove('dimmed'); }
+            else { hiddenCats.add(cat); el.classList.add('dimmed'); }
+            drawChart();
+        });
+        lgd.appendChild(el);
+    });
+})();
+
+// Tooltip
+(function(){
+    const canvas = document.getElementById('kp-canvas');
+    const tip = document.getElementById('kp-tip');
+    const PAD = {top:24,right:30,bottom:68,left:90};
+    const SFL = Math.log10(0.003), SFR = Math.log10(30);
+    const TLB = Math.log10(0.0003), TLT = Math.log10(6);
+    function sfX(v){ const cw = canvas.clientWidth-PAD.left-PAD.right; return PAD.left+(Math.log10(v)-SFL)/(SFR-SFL)*cw; }
+    function tyY(v){ const ch = canvas.clientHeight-PAD.top-PAD.bottom; return PAD.top+ch-(Math.log10(v)-TLB)/(TLT-TLB)*ch; }
+
+    canvas.addEventListener('mousemove', e => {
+        const rect = canvas.getBoundingClientRect();
+        const cx = e.clientX - rect.left;
+        const cy = e.clientY - rect.top;
+
+        const hit = PROCS.filter(p => {
+            if (hiddenCats.has(p.cat)) return false;
+            const x1 = sfX(Math.max(0.003,p.sfBest)), x2 = sfX(Math.min(30,p.sfTyp));
+            const y1 = tyY(Math.min(6,p.tolTyp)),     y2 = tyY(Math.max(0.0003,p.tolBest));
+            return cx>=x1 && cx<=x2 && cy>=y1 && cy<=y2;
+        });
+
+        if (hit.length > 0) {
+            const p = hit[hit.length-1];
+            tip.style.display = 'block';
+            tip.style.left = (e.clientX+16)+'px';
+            tip.style.top  = (e.clientY-10)+'px';
+            tip.innerHTML  = `<h4>${p.name}</h4><p>Tolerance: ±${p.tolBest}–${p.tolTyp} mm<br>Surface finish: ${p.sfBest}–${p.sfTyp} µm Ra<br>Rate: ${p.rateStr}<br>Tooling: ${p.toolCost}</p>`;
+        } else {
+            tip.style.display = 'none';
+        }
+    });
+    canvas.addEventListener('mouseleave', () => { tip.style.display='none'; });
+})();
+
+// Target point controls
+document.getElementById('tgt-plot-btn').addEventListener('click', () => {
+    const t = parseFloat(document.getElementById('tgt-tol').value);
+    const s = parseFloat(document.getElementById('tgt-sf').value);
+    if (!isNaN(t) && !isNaN(s) && t>0 && s>0) {
+        targetPoint = {tol:t, sf:s};
+        drawChart();
+    }
+});
+document.getElementById('tgt-clear-btn').addEventListener('click', () => {
+    targetPoint = null;
+    document.getElementById('tgt-tol').value = '';
+    document.getElementById('tgt-sf').value = '';
+    drawChart();
+});
+
+/* ════════════════════════════════════════════════
+   TAB 4 — COMPARE
+════════════════════════════════════════════════ */
+const selected = new Set();
+const MAX_SEL = 5;
+
+(function(){
+    const grid = document.getElementById('cmp-checks');
+    PROCS.forEach(p => {
+        const clr = CAT_CLR[p.cat]||'#94a3b8';
+        const el = document.createElement('label');
+        el.className = 'cmp-item';
+        el.innerHTML = `<input type="checkbox" value="${p.id}"><span class="cat-dot" style="background:${clr}"></span>${p.name}`;
+        const cb = el.querySelector('input');
+        cb.addEventListener('change', () => {
+            if (cb.checked && selected.size >= MAX_SEL) { cb.checked = false; return; }
+            cb.checked ? selected.add(p.id) : selected.delete(p.id);
+            el.classList.toggle('checked', cb.checked);
+            renderCompare();
+        });
+        grid.appendChild(el);
+    });
+})();
+
+function renderCompare() {
+    const procs = PROCS.filter(p => selected.has(p.id));
+    const head  = document.getElementById('cmp-head');
+    const body  = document.getElementById('cmp-body');
+    head.innerHTML = '<th style="min-width:160px;color:#64748b;font-size:0.75rem;text-transform:uppercase;">Parameter</th>';
+    procs.forEach(p => {
+        const clr = CAT_CLR[p.cat]||'#94a3b8';
+        head.innerHTML += `<th class="proc-header"><span style="color:${clr}">${p.cat}</span><br>${p.name}</th>`;
+    });
+
+    const rows = [
+        { label:'Best Tolerance (±mm)', fn: p=>`<strong>${p.tolBest}</strong>`, bar: p=>p.tolBest, barMax:5 },
+        { label:'Typical Tolerance (±mm)', fn: p=>p.tolTyp },
+        { label:'Best Surface Finish (µm Ra)', fn: p=>`<strong>${p.sfBest}</strong>`, bar: p=>p.sfBest, barMax:25 },
+        { label:'Typical Surface Finish (µm Ra)', fn: p=>p.sfTyp },
+        { label:'Production Rate', fn: p=>p.rateStr },
+        { label:'Tooling Cost', fn: p=>p.toolCost },
+        { label:'Volume Range', fn: p=>`${p.volLo.toLocaleString()}–${p.volHi.toLocaleString()}` },
+        { label:'Min Wall Thickness (mm)', fn: p=>p.minWall },
+        { label:'Materials', fn: p=>p.mats.map(m=>m.charAt(0).toUpperCase()+m.slice(1)).join(', ') },
+        { label:'Complexity', fn: p=>p.complexity.map(c=>c.charAt(0).toUpperCase()+c.slice(1)).join(', ') },
+        { label:'Notes', fn: p=>`<span style="font-size:0.78rem;color:#64748b">${p.notes}</span>` },
+    ];
+
+    body.innerHTML = '';
+    rows.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td class="cmp-row-label">${row.label}</td>`;
+        procs.forEach(p => {
+            let cell = row.fn(p);
+            if (row.bar) {
+                const pct = Math.min(100, Math.log10(row.bar(p)+0.001)/Math.log10(row.barMax+0.001)*100);
+                const clr = row.bar(p) < row.barMax*0.05 ? '#22c55e' : row.bar(p) < row.barMax*0.3 ? '#fbbf24' : '#f87171';
+                cell += `<div class="bar-mini" style="width:${pct}%;background:${clr};"></div>`;
+            }
+            tr.innerHTML += `<td>${cell}</td>`;
+        });
+        body.appendChild(tr);
+    });
+}
+
+renderCompare();
+
+/* initial chart draw (hidden tab — deferred to tab click) */
+/* draw when tab is first switched to, handled above */
+</script>
+</body>
+</html>

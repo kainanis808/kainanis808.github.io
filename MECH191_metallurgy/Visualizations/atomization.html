@@ -961,7 +961,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         function logNormalPDF(x, mu, sigma) {
             if (x <= 0) return 0;
             const lx = Math.log(x);
-            return Math.exp(-(lx - mu) ** 2 / (2 * sigma ** 2)) / (x * sigma * Math.sqrt(2 * Math.PI));
+            return Math.exp(-((lx - mu) * (lx - mu)) / (2 * sigma * sigma)) / (x * sigma * Math.sqrt(2 * Math.PI));
         }
 
         const curves = [

@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PM Defects Reference — MPIF Standards &amp; TWI Defect Library</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #1a1a1a; }
+
+        header { text-align: center; padding: 30px 20px 24px; background: #1e3a5f; color: #fff; }
+        header h1 { font-size: 2rem; font-weight: 700; }
+        header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 1rem; }
+
+        main { max-width: 1080px; margin: 0 auto; padding: 28px 20px 60px; }
+
+        .source-note {
+            background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;
+            padding: 12px 16px; margin-bottom: 18px; font-size: 0.88rem; color: #1e40af;
+            line-height: 1.5;
+        }
+
+        /* ─── MPIF quick-reference strip ─── */
+        .mpif-strip {
+            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;
+            padding: 14px 18px; margin-bottom: 24px;
+        }
+        .mpif-strip h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.07em; color: #64748b; margin-bottom: 10px; }
+        .mpif-table { display: flex; flex-wrap: wrap; gap: 6px; }
+        .mpif-pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #fff; border: 1.5px solid #cbd5e1; border-radius: 6px;
+            padding: 4px 10px; font-size: 0.78rem;
+        }
+        .mpif-pill .std-num { font-family: 'Courier New', monospace; font-weight: 700; color: #1e3a5f; }
+        .mpif-pill .std-name { color: #475569; }
+
+        /* ─── Filter bar ─── */
+        .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+        .filter-btn {
+            padding: 6px 14px; border-radius: 20px; border: 1.5px solid #cbd5e1;
+            background: #fff; color: #475569; font-size: 0.83rem; font-weight: 600;
+            cursor: pointer; transition: all 0.15s;
+        }
+        .filter-btn:hover { border-color: #1e3a5f; color: #1e3a5f; }
+        .filter-btn.active { background: #1e3a5f; color: #fff; border-color: #1e3a5f; }
+
+        /* ─── Defect grid ─── */
+        .defect-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+        .defect-card {
+            border: 1.5px solid #e2e8f0; border-radius: 10px; overflow: hidden;
+            cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s;
+            background: #fff;
+        }
+        .defect-card:hover { border-color: #1e3a5f; box-shadow: 0 2px 8px rgba(30,58,95,0.12); }
+        .defect-card.selected { border-color: #1e3a5f; box-shadow: 0 0 0 2px #93c5fd; }
+        .defect-card canvas { display: block; width: 100%; }
+        .defect-card-info { padding: 8px 10px 10px; }
+        .card-code { font-size: 0.7rem; font-family: 'Courier New', monospace; font-weight: 700; color: #6b7280; }
+        .card-name { font-size: 0.85rem; font-weight: 700; color: #1e3a5f; margin-top: 2px; line-height: 1.3; }
+        .card-cat { display: inline-block; margin-top: 5px; padding: 1px 7px; border-radius: 10px; font-size: 0.68rem; font-weight: 700; }
+
+        .cat-compaction { background: #fee2e2; color: #b91c1c; }
+        .cat-density    { background: #fef3c7; color: #92400e; }
+        .cat-sintering  { background: #fce7f3; color: #9d174d; }
+        .cat-surface    { background: #d1fae5; color: #065f46; }
+        .cat-inclusion  { background: #ede9fe; color: #6d28d9; }
+        .cat-handling   { background: #dbeafe; color: #1d4ed8; }
+
+        .defect-card.hidden { display: none; }
+
+        /* ─── Detail panel ─── */
+        #detailPanel {
+            display: none; border: 1.5px solid #bfdbfe; border-radius: 12px;
+            overflow: hidden; margin-bottom: 32px;
+        }
+        #detailPanel.visible { display: block; }
+
+        .detail-header {
+            background: #1e3a5f; color: #fff;
+            padding: 14px 20px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+        }
+        .detail-header h2 { font-size: 1.25rem; flex: 1; }
+        .detail-code { font-family: 'Courier New', monospace; font-size: 0.85rem; color: #93c5fd; white-space: nowrap; }
+        .close-btn {
+            background: none; border: 1.5px solid #93c5fd; color: #93c5fd;
+            border-radius: 6px; padding: 3px 10px; font-size: 0.8rem; cursor: pointer;
+        }
+        .close-btn:hover { background: #93c5fd; color: #1e3a5f; }
+
+        .detail-body { display: grid; grid-template-columns: 1fr 1fr; }
+        @media (max-width: 700px) { .detail-body { grid-template-columns: 1fr; } }
+
+        .detail-canvas-col { background: #f1f5f9; padding: 18px; display: flex; flex-direction: column; align-items: center; }
+        #detailCanvas { border-radius: 8px; max-width: 100%; }
+        .illus-note { font-size: 0.7rem; color: #94a3b8; margin-top: 8px; }
+
+        .detail-info-col { padding: 20px; }
+        .detail-desc { font-size: 0.9rem; color: #374151; line-height: 1.65; margin-bottom: 14px; }
+        .det-section-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9ca3af; margin-bottom: 8px; }
+        .detection-row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
+        .det-badge {
+            padding: 2px 9px; border-radius: 4px; font-size: 0.72rem; font-weight: 600;
+            background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;
+        }
+        .mpif-badge {
+            padding: 2px 9px; border-radius: 4px; font-size: 0.72rem; font-weight: 600;
+            background: #ecfdf5; color: #065f46; border: 1px solid #6ee7b7;
+            font-family: 'Courier New', monospace;
+        }
+
+        .detail-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+        @media (max-width: 700px) { .detail-two-col { grid-template-columns: 1fr; } }
+
+        .cp-col { padding: 16px 20px; }
+        .cp-col:first-child { border-right: 1px solid #e2e8f0; border-top: 1px solid #e2e8f0; }
+        .cp-col:last-child { border-top: 1px solid #e2e8f0; }
+        .cp-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9ca3af; margin-bottom: 10px; }
+        .cp-col ul { list-style: none; padding: 0; }
+        .cp-col ul li { font-size: 0.84rem; color: #374151; line-height: 1.5; padding: 4px 0; border-bottom: 1px solid #f1f5f9; display: flex; gap: 6px; }
+        .cp-col ul li:last-child { border-bottom: none; }
+        .bullet-cause { color: #b91c1c; font-weight: 700; flex-shrink: 0; }
+        .bullet-prev  { color: #059669; font-weight: 700; flex-shrink: 0; }
+
+        footer { text-align: center; padding: 24px 16px; border-top: 1px solid #e2e8f0; color: #6b7280; font-size: 0.82rem; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Powder Metallurgy Defects Reference</h1>
+    <p class="subtitle">MPIF Standard Test Methods · TWI PM Defect Library · Identification, Causes &amp; Detection</p>
+</header>
+
+<main>
+    <div class="source-note">
+        <strong>Sources:</strong>
+        Defect classifications and detection methods based on
+        <strong>MPIF Standard Test Methods for Metal Powders and Powder Metallurgy Products</strong>
+        (Metal Powder Industries Federation) and the
+        <strong>TWI (The Welding Institute) PM Defect Library</strong>.
+        Canvas illustrations are schematic cross-sections for educational purposes.
+        Defects are grouped by process stage: Compaction · Density · Sintering · Surface · Inclusion · Handling.
+    </div>
+
+    <div class="mpif-strip">
+        <h3>MPIF Standard Test Methods — Quick Reference</h3>
+        <div class="mpif-table">
+            <div class="mpif-pill"><span class="std-num">MPIF 04</span><span class="std-name">Apparent Density (Hall Apparatus)</span></div>
+            <div class="mpif-pill"><span class="std-num">MPIF 40</span><span class="std-name">Hardness of PM Products</span></div>
+            <div class="mpif-pill"><span class="std-num">MPIF 41</span><span class="std-name">Transverse Rupture Strength (TRS)</span></div>
+            <div class="mpif-pill"><span class="std-num">MPIF 42</span><span class="std-name">Sintered Density (Archimedes)</span></div>
+            <div class="mpif-pill"><span class="std-num">MPIF 43</span><span class="std-name">Tensile Testing of PM Parts</span></div>
+            <div class="mpif-pill"><span class="std-num">MPIF 52</span><span class="std-name">Green Density &amp; Green Strength</span></div>
+            <div class="mpif-pill"><span class="std-num">MPIF 35</span><span class="std-name">Material Standards — Dimensional Tolerances</span></div>
+            <div class="mpif-pill"><span class="std-num">MPIF 55</span><span class="std-name">Microhardness of PM Parts</span></div>
+        </div>
+    </div>
+
+    <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All (15)</button>
+        <button class="filter-btn" data-filter="compaction">Compaction Cracks</button>
+        <button class="filter-btn" data-filter="density">Density</button>
+        <button class="filter-btn" data-filter="sintering">Sintering</button>
+        <button class="filter-btn" data-filter="surface">Surface</button>
+        <button class="filter-btn" data-filter="inclusion">Inclusions</button>
+        <button class="filter-btn" data-filter="handling">Handling</button>
+    </div>
+
+    <div class="defect-grid" id="defectGrid"></div>
+
+    <div id="detailPanel">
+        <div class="detail-header">
+            <span class="detail-code" id="dCode"></span>
+            <h2 id="dName"></h2>
+            <span id="dCatBadge" class="card-cat"></span>
+            <button class="close-btn" id="closeBtn">&#10005; Close</button>
+        </div>
+        <div class="detail-body">
+            <div class="detail-canvas-col">
+                <canvas id="detailCanvas" width="480" height="260"></canvas>
+                <div class="illus-note">Schematic cross-section — representative illustration</div>
+            </div>
+            <div class="detail-info-col">
+                <p class="detail-desc" id="dDesc"></p>
+                <div class="det-section-label">Detection Methods</div>
+                <div class="detection-row" id="dDet"></div>
+                <div class="det-section-label">MPIF Standards</div>
+                <div class="detection-row" id="dMpif"></div>
+            </div>
+        </div>
+        <div class="detail-two-col">
+            <div class="cp-col">
+                <div class="cp-label">Causes</div>
+                <ul id="dCauses"></ul>
+            </div>
+            <div class="cp-col">
+                <div class="cp-label">Prevention</div>
+                <ul id="dPrev"></ul>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    MECH191 Metallurgy &nbsp;|&nbsp; PM Defects based on MPIF Standard Test Methods &amp; TWI Defect Library &nbsp;|&nbsp;
+    <a href="index.html" style="color:#3b82f6;">Back to References</a>
+</footer>
+
+<script>
+/* ════════════════════════════════════════════════════
+   HELPERS
+════════════════════════════════════════════════════ */
+function seeded(n) {
+    let s = (Math.abs(Math.round(n)) || 1) % 233280;
+    return function() { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+}
+
+/* PM-specific background: sintered metal matrix with fine inter-particle porosity */
+function pmBg(ctx, x, y, w, h, density) {
+    density = density || 0.88; // fraction density: 0=all pores, 1=solid
+    var g = ctx.createLinearGradient(x, y, x + w, y + h);
+    g.addColorStop(0,   '#b8c2ce');
+    g.addColorStop(0.5, '#9ca3af');
+    g.addColorStop(1,   '#b8c2ce');
+    ctx.fillStyle = g;
+    ctx.fillRect(x, y, w, h);
+    // scatter fine pores proportional to (1-density)
+    var rng = seeded(Math.floor(x * 7 + y * 13 + w));
+    var poreCount = Math.floor((1 - density) * 180);
+    for (var i = 0; i < poreCount; i++) {
+        var px = x + rng() * w;
+        var py = y + rng() * h;
+        var pr = 1.5 + rng() * 3;
+        var pg = ctx.createRadialGradient(px - pr * 0.3, py - pr * 0.3, 0, px, py, pr);
+        pg.addColorStop(0,   '#f1f5f9');
+        pg.addColorStop(0.6, '#e2e8f0');
+        pg.addColorStop(1,   '#94a3b8');
+        ctx.beginPath(); ctx.arc(px, py, pr, 0, Math.PI * 2);
+        ctx.fillStyle = pg; ctx.fill();
+    }
+}
+
+/* Solid metal background (compact bulk, no pores) */
+function metalBg(ctx, x, y, w, h) {
+    var g = ctx.createLinearGradient(x, y, x, y + h);
+    g.addColorStop(0,   '#c4ccd8');
+    g.addColorStop(0.4, '#9ca3af');
+    g.addColorStop(0.6, '#9ca3af');
+    g.addColorStop(1,   '#c4ccd8');
+    ctx.fillStyle = g;
+    ctx.fillRect(x, y, w, h);
+}
+
+function jagged(ctx, x1, y1, x2, y2, jag, rng) {
+    ctx.beginPath(); ctx.moveTo(x1, y1);
+    var steps = 16;
+    for (var i = 1; i <= steps; i++) {
+        var t = i / steps;
+        ctx.lineTo(x1 + (x2 - x1) * t + (rng() - 0.5) * jag,
+                   y1 + (y2 - y1) * t + (rng() - 0.5) * jag);
+    }
+}
+
+function lbl(ctx, txt, x, y, sz, col) {
+    ctx.fillStyle = col || 'rgba(30,58,95,0.9)';
+    ctx.font = 'bold ' + sz + 'px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(txt, x, y);
+}
+
+/* ════════════════════════════════════════════════════
+   DEFECT DATA
+════════════════════════════════════════════════════ */
+var DEFECTS = [
+
+/* ── COMPACTION CRACKS ─────────────────────────── */
+{
+    code: 'PM-C100', name: 'Lamination Crack', category: 'compaction',
+    desc: 'A planar crack running parallel to the compaction plane (perpendicular to the pressing axis), caused by elastic springback of the compact as the punch retracts. The core of a tall compact experiences net tensile stress during ejection when the die wall constrains the outer surface while the centre expands. Lamination cracks may be surface-visible or entirely internal. This defect is unique to powder metallurgy and has no direct casting analogue.',
+    detection: ['Visual Inspection', 'Liquid Penetrant (ASTM E1417)', 'Radiographic Testing', 'Metallographic Section'],
+    mpif: ['MPIF 41 — TRS (reduced value indicates crack)', 'MPIF 52 — Green Strength'],
+    causes: [
+        'Excessive compaction pressure → high elastic stored energy released on ejection',
+        'Insufficient die taper (should be 0.1–0.5°) preventing free compact expansion',
+        'High compact height-to-diameter ratio (>3:1) amplifying axial springback',
+        'Too-fast punch retraction creating abrupt tensile wave',
+        'Inadequate lubricant content causing high die-wall friction during ejection'
+    ],
+    prevention: [
+        'Reduce compaction pressure to minimum required for target density',
+        'Add 0.1–0.5° die taper to allow gradual expansion during ejection',
+        'Limit H/D ratio to ≤ 2:1 per MPIF 35 design guidelines',
+        'Program slow, controlled punch retraction velocity',
+        'Ensure lubricant content 0.75–1.0% zinc stearate, uniformly distributed'
+    ],
+    draw: function(ctx, w, h) {
+        var rng = seeded(101);
+        // compact body
+        var L = w * 0.15, R = w * 0.85, T = h * 0.1, B = h * 0.9;
+        pmBg(ctx, L, T, R - L, B - T, 0.9);
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5;
+        ctx.strokeRect(L, T, R - L, B - T);
+        // pressing direction arrows
+        ctx.strokeStyle = '#1e3a5f'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(w * 0.5, T - h * 0.08); ctx.lineTo(w * 0.5, T - h * 0.02); ctx.stroke();
+        ctx.fillStyle = '#1e3a5f'; ctx.beginPath();
+        ctx.moveTo(w * 0.5, T); ctx.lineTo(w * 0.5 - w * 0.02, T - h * 0.04); ctx.lineTo(w * 0.5 + w * 0.02, T - h * 0.04); ctx.closePath(); ctx.fill();
+        ctx.font = '9px sans-serif'; ctx.fillStyle = '#1e3a5f'; ctx.textAlign = 'center';
+        ctx.fillText('Press', w * 0.5, T - h * 0.1);
+        // lamination crack — horizontal jagged line at ~half height
+        var cy = (T + B) * 0.5;
+        ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 2;
+        jagged(ctx, L, cy, R, cy, h * 0.04, rng);
+        ctx.stroke();
+        // second thinner crack offset
+        var cy2 = (T + B) * 0.62;
+        ctx.strokeStyle = '#dc262688'; ctx.lineWidth = 1.2;
+        jagged(ctx, L + w * 0.04, cy2, R - w * 0.04, cy2, h * 0.025, rng);
+        ctx.stroke();
+        // label
+        ctx.fillStyle = '#dc2626'; ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText('Lamination', R + w * 0.01, cy - 2);
+        ctx.fillText('crack', R + w * 0.01, cy + 10);
+        lbl(ctx, 'Vertical cross-section', L, B + h * 0.06, Math.max(8, h * 0.065));
+    }
+},
+
+{
+    code: 'PM-C200', name: 'End Capping', category: 'compaction',
+    desc: 'A tensile fracture that separates a cone- or disc-shaped cap from the top or bottom face of the compact during ejection. Die wall friction prevents the sides of the compact from expanding while the punch retracts, placing the end faces in tension. The fracture surface typically shows a 40–55° cone angle from the face. End capping is especially common in high-aspect-ratio compacts with insufficient lubrication.',
+    detection: ['Visual Inspection', 'Liquid Penetrant (ASTM E1417)', 'Green Strength Measurement'],
+    mpif: ['MPIF 52 — Green Density &amp; Green Strength', 'MPIF 41 — TRS (sintered remnants)'],
+    causes: [
+        'Insufficient die wall lubrication — high friction during ejection stroke',
+        'No die taper, so side surface cannot expand during punch retraction',
+        'High compact height-to-diameter ratio (>3:1)',
+        'Too-fast punch retraction velocity creating tensile shock wave',
+        'Lubricant segregation leaving low-lubricant zones near end faces'
+    ],
+    prevention: [
+        'Use 0.75–1.0% zinc stearate or Acrawax; verify uniform mixing',
+        'Add 0.2–0.5° die taper to allow progressive expansion during ejection',
+        'Limit H/D ≤ 2.5:1; use stepped punches for tall compacts',
+        'Program ejection velocity profile: slow initial ejection, faster mid-stroke',
+        'Apply die wall spray lubrication for difficult geometries'
+    ],
+    draw: function(ctx, w, h) {
+        var rng = seeded(201);
+        var L = w * 0.2, R = w * 0.8, T = h * 0.08, B = h * 0.88;
+        // main body (after capping — shows body without cap)
+        pmBg(ctx, L, T + h * 0.25, R - L, B - T - h * 0.25, 0.9);
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5;
+        // body sides and bottom
+        ctx.beginPath();
+        ctx.moveTo(L, T + h * 0.25);
+        ctx.lineTo(L, B);
+        ctx.lineTo(R, B);
+        ctx.lineTo(R, T + h * 0.25);
+        ctx.stroke();
+        // separated cap piece (floating above, slightly tilted)
+        ctx.save(); ctx.translate(w * 0.5, T + h * 0.1); ctx.rotate(0.05);
+        pmBg(ctx, -(R - L) * 0.5, -h * 0.08, R - L, h * 0.16, 0.9);
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5;
+        ctx.strokeRect(-(R - L) * 0.5, -h * 0.08, R - L, h * 0.16);
+        ctx.restore();
+        // crack line at body top
+        ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 2.5;
+        jagged(ctx, L, T + h * 0.25, R, T + h * 0.25, h * 0.03, rng);
+        ctx.stroke();
+        // gap arrow
+        ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 1; ctx.setLineDash([3, 2]);
+        ctx.beginPath(); ctx.moveTo(R + w * 0.03, T + h * 0.04); ctx.lineTo(R + w * 0.03, T + h * 0.25); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#dc2626'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText('Separated', R + w * 0.04, T + h * 0.11);
+        ctx.fillText('cap', R + w * 0.04, T + h * 0.19);
+        lbl(ctx, 'Compact cross-section', L, B + h * 0.08, Math.max(8, h * 0.065));
+    }
+},
+
+{
+    code: 'PM-C300', name: 'Radial Crack', category: 'compaction',
+    desc: 'Cracks propagating radially outward from the centre of the compact face, visible when looking down the pressing axis. Caused by non-uniform die fill creating density and hoop-stress gradients, or by punch/die misalignment introducing lateral forces during compaction. Radial cracks are most common in large-diameter, thin discs where the powder must travel significant radial distances to achieve uniform fill.',
+    detection: ['Visual Inspection (face view)', 'Liquid Penetrant (ASTM E1417)', 'Metallographic Section'],
+    mpif: ['MPIF 52 — Green Strength', 'MPIF 41 — TRS'],
+    causes: [
+        'Non-uniform powder fill — density and stress gradient in radial direction',
+        'Punch or die misalignment introducing off-axis compaction force',
+        'Excessive compaction speed creating radial stress waves',
+        'Asymmetric particle size distribution causing fill-density variation',
+        'Punch face damage concentrating stress at a local point'
+    ],
+    prevention: [
+        'Use controlled powder feed shoes and optimise fill stroke for uniform fill',
+        'Inspect and align punch/die assembly — concentricity within 0.01 mm',
+        'Reduce compaction speed for large-diameter or thin disc compacts',
+        'Use pre-blended powder with consistent apparent density',
+        'Inspect punch face condition; replace worn or damaged punches'
+    ],
+    draw: function(ctx, w, h) {
+        var rng = seeded(301);
+        var cx = w * 0.5, cy = h * 0.5, R = Math.min(w, h) * 0.38;
+        // PM disc face (top view)
+        var radG = ctx.createRadialGradient(cx - R * 0.2, cy - R * 0.2, 0, cx, cy, R);
+        radG.addColorStop(0,   '#c4ccd8');
+        radG.addColorStop(0.5, '#9ca3af');
+        radG.addColorStop(1,   '#7f8ea0');
+        ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2);
+        ctx.fillStyle = radG; ctx.fill();
+        // fine pore scatter
+        for (var i = 0; i < 60; i++) {
+            var ang = rng() * Math.PI * 2;
+            var d = rng() * R;
+            var px = cx + Math.cos(ang) * d;
+            var py = cy + Math.sin(ang) * d;
+            var pr = 1 + rng() * 2.5;
+            ctx.beginPath(); ctx.arc(px, py, pr, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(241,245,249,0.7)'; ctx.fill();
+        }
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
+        // 3 radial cracks from centre
+        var crackAngles = [0.3, Math.PI * 0.7, Math.PI * 1.45];
+        crackAngles.forEach(function(a) {
+            var len = R * (0.7 + rng() * 0.25);
+            ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 1.8;
+            ctx.beginPath(); ctx.moveTo(cx, cy);
+            var steps = 12;
+            for (var k = 1; k <= steps; k++) {
+                var t = k / steps;
+                var ox = (rng() - 0.5) * R * 0.06;
+                var oy = (rng() - 0.5) * R * 0.06;
+                ctx.lineTo(cx + Math.cos(a) * len * t + ox, cy + Math.sin(a) * len * t + oy);
+            }
+            ctx.stroke();
+        });
+        // centre dot
+        ctx.beginPath(); ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+        ctx.fillStyle = '#dc2626'; ctx.fill();
+        ctx.fillStyle = '#dc2626'; ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText('Radial cracks', cx + R * 0.55, cy - R * 0.4);
+        lbl(ctx, 'Compact face (top view)', w * 0.04, h * 0.96, Math.max(8, h * 0.065));
+    }
+},
+
+/* ── DENSITY DEFECTS ────────────────────────────── */
+{
+    code: 'PM-D100', name: 'Density Gradient', category: 'density',
+    desc: 'Non-uniform green and sintered density across the compact cross-section, arising from die wall friction during single-action pressing. Powder near the punch face reaches full pressure earliest; the mid-height zone farthest from both punch faces receives the least compaction force. Density may vary by 0.2–0.5 g/cm³ within a single compact, causing proportional variation in hardness, strength, and dimensional change on sintering.',
+    detection: ['Archimedes Density (section-by-section)', 'Vickers Hardness Traverse (MPIF 40)', 'Metallographic Etching', 'Neutron / X-ray Tomography'],
+    mpif: ['MPIF 42 — Sintered Density', 'MPIF 40 — Hardness', 'MPIF 55 — Microhardness'],
+    causes: [
+        'Single-action pressing with high H/D ratio — die wall friction attenuates force with depth',
+        'High die wall friction (insufficient lubrication or rough die surface)',
+        'Non-uniform powder apparent density causing uneven fill height',
+        'Powder particle size segregation during filling resulting in density bands',
+        'Fixed lower punch position (single-action) vs. floating die setup'
+    ],
+    prevention: [
+        'Use double-action or floating-die pressing to apply pressure from both ends',
+        'Optimise lubrication: 0.75–1.0% zinc stearate uniformly blended',
+        'Limit H/D ratio to ≤ 2:1; use multi-level tooling for stepped features',
+        'Control apparent density of incoming powder per MPIF 04',
+        'Use warm compaction to reduce die-wall friction at elevated temperature'
+    ],
+    draw: function(ctx, w, h) {
+        var L = w * 0.18, R = w * 0.72, T = h * 0.06, B = h * 0.9;
+        var CW = R - L, CH = B - T;
+        // density gradient: dark at top & bottom (high density), light in middle (low)
+        var zones = 40;
+        for (var i = 0; i < zones; i++) {
+            var t = i / zones; // 0=top, 1=bottom
+            var dist = Math.abs(t - 0.5) * 2; // 0 at mid, 1 at ends
+            var lightness = Math.floor(140 + dist * 55); // 140 (mid-dark) to 195 (end-light)
+            ctx.fillStyle = 'rgb(' + lightness + ',' + (lightness + 8) + ',' + (lightness + 18) + ')';
+            ctx.fillRect(L, T + t * CH, CW, CH / zones + 1);
+        }
+        // pore scatter
+        var rng = seeded(401);
+        for (var j = 0; j < 70; j++) {
+            var t2 = rng();
+            var dist2 = Math.abs(t2 - 0.5) * 2;
+            var pr = 1 + (1 - dist2) * 3.5 + rng() * 1.5; // larger pores near mid
+            var px = L + rng() * CW;
+            var py = T + t2 * CH;
+            ctx.beginPath(); ctx.arc(px, py, pr, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(241,245,249,0.75)'; ctx.fill();
+        }
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5;
+        ctx.strokeRect(L, T, CW, CH);
+        // pressing arrows
+        ctx.strokeStyle = '#1e3a5f'; ctx.lineWidth = 1.5;
+        [T, B].forEach(function(fy, ii) {
+            var dir = ii === 0 ? 1 : -1;
+            ctx.beginPath(); ctx.moveTo(w * 0.5, fy - dir * h * 0.07); ctx.lineTo(w * 0.5, fy - dir * h * 0.01); ctx.stroke();
+            ctx.fillStyle = '#1e3a5f'; ctx.beginPath();
+            ctx.moveTo(w * 0.5, fy); ctx.lineTo(w * 0.5 - w * 0.02, fy - dir * h * 0.05); ctx.lineTo(w * 0.5 + w * 0.02, fy - dir * h * 0.05); ctx.closePath(); ctx.fill();
+        });
+        // density legend bar
+        var lx = R + w * 0.05, ly = T;
+        var leg = ctx.createLinearGradient(lx, ly, lx, ly + CH);
+        leg.addColorStop(0,   '#c3cdd9');
+        leg.addColorStop(0.5, '#8b96a8');
+        leg.addColorStop(1,   '#c3cdd9');
+        ctx.fillStyle = leg; ctx.fillRect(lx, ly, w * 0.04, CH);
+        ctx.strokeStyle = '#9ca3af'; ctx.lineWidth = 0.8; ctx.strokeRect(lx, ly, w * 0.04, CH);
+        ctx.fillStyle = '#059669'; ctx.font = 'bold 8px sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText('High', lx + w * 0.05, T + 6);
+        ctx.fillText('ρ', lx + w * 0.05, T + 14);
+        ctx.fillStyle = '#dc2626';
+        ctx.fillText('Low', lx + w * 0.05, T + CH * 0.5 + 4);
+        ctx.fillText('ρ', lx + w * 0.05, T + CH * 0.5 + 12);
+        ctx.fillStyle = '#059669'; ctx.fillText('High', lx + w * 0.05, B - 8);
+        ctx.fillText('ρ', lx + w * 0.05, B);
+        lbl(ctx, 'Single-action vertical section', L, B + h * 0.07, Math.max(8, h * 0.065));
+    }
+},
+
+{
+    code: 'PM-D200', name: 'Oversize Pore / Springback Porosity', category: 'density',
+    desc: 'Isolated pores significantly larger than the normal inter-particle pore network, caused by trapped lubricant vapour during sintering or by localised low-density zones that resist sintering-neck growth. In water-atomised powders, spongy particles can leave elongated slot-like pores after sintering. These large pores act as fatigue crack initiation sites and substantially reduce endurance limit compared to parts with only fine inter-particle porosity.',
+    detection: ['Metallographic Cross-Section', 'Archimedes Density (below spec)', 'SEM Fractography', 'X-ray Radiography'],
+    mpif: ['MPIF 42 — Sintered Density', 'MPIF 43 — Tensile / Fatigue'],
+    causes: [
+        'Lubricant content >1.5% — excess lubricant collects in pockets that fail to escape before pore closure',
+        'Insufficient pre-sinter burn-off temperature or time — lubricant decomposes after pores close',
+        'Spongy/irregular water-atomised particles leaving elongated slot pores after sintering',
+        'Local low-compaction zones (density gradient) with too-large initial inter-particle spacing',
+        'Fast heating rate trapping gas before lubricant has fully decomposed'
+    ],
+    prevention: [
+        'Limit lubricant to 0.75–1.0% and verify distribution with mixing trials',
+        'Provide adequate burn-off dwell: 300–450°C for 20–30 min with low dew point',
+        'Use gas-atomised (spherical) powder when critical fatigue performance is required',
+        'Address upstream density gradient (see PM-D100 prevention)',
+        'Ramp heating rate slowly through 300–500°C burn-off zone'
+    ],
+    draw: function(ctx, w, h) {
+        var rng = seeded(501);
+        pmBg(ctx, 0, 0, w, h, 0.88);
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1;
+        ctx.strokeRect(0, 0, w, h);
+        // one large irregular pore centre-left
+        ctx.beginPath();
+        var cx = w * 0.38, cy = h * 0.45, rx = w * 0.14, ry = h * 0.22;
+        var pts = 10;
+        for (var i = 0; i <= pts; i++) {
+            var ang = (i / pts) * Math.PI * 2;
+            var jr = (i === 0 ? rx : rx) * (0.7 + rng() * 0.5);
+            var jry = ry * (0.7 + rng() * 0.5);
+            var px = cx + Math.cos(ang) * jr;
+            var py = cy + Math.sin(ang) * jry;
+            i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        var pg = ctx.createRadialGradient(cx - rx * 0.2, cy - ry * 0.2, 0, cx, cy, Math.max(rx, ry));
+        pg.addColorStop(0, '#f8fafc'); pg.addColorStop(0.6, '#e5e7eb'); pg.addColorStop(1, '#94a3b8');
+        ctx.fillStyle = pg; ctx.fill();
+        ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.2; ctx.stroke();
+        // smaller oversize pore top-right
+        var cx2 = w * 0.7, cy2 = h * 0.28, r2 = w * 0.06;
+        ctx.beginPath(); ctx.arc(cx2, cy2, r2, 0, Math.PI * 2);
+        var pg2 = ctx.createRadialGradient(cx2 - r2 * 0.3, cy2 - r2 * 0.3, 0, cx2, cy2, r2);
+        pg2.addColorStop(0, '#f1f5f9'); pg2.addColorStop(1, '#94a3b8');
+        ctx.fillStyle = pg2; ctx.fill();
+        ctx.strokeStyle = '#374151'; ctx.lineWidth = 1; ctx.stroke();
+        // labels
+        ctx.fillStyle = '#dc2626'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText('Oversize pore', cx + rx + 4, cy - 4);
+        ctx.fillText('(trapped lubricant)', cx + rx + 4, cy + 8);
+        ctx.fillStyle = '#64748b'; ctx.font = '8px sans-serif';
+        ctx.fillText('Normal inter-', w * 0.55, h * 0.72);
+        ctx.fillText('particle pores', w * 0.55, h * 0.81);
+        lbl(ctx, 'Sintered cross-section', w * 0.03, h * 0.97, Math.max(8, h * 0.065));
+    }
+},
+
+/* ── SINTERING DEFECTS ──────────────────────────── */
+{
+    code: 'PM-S100', name: 'Blistering', category: 'sintering',
+    desc: 'Dome-shaped protrusions on the sintered surface, formed when lubricant vapour or decomposed binder gas is trapped beneath a thin surface skin that has closed its pores before the gas can escape. The expanding gas bulges the surface layer outward. Blisters may remain intact as raised domes or burst, leaving open craters. Blistering is primarily a sintering furnace control problem and always indicates inadequate burn-off conditions.',
+    detection: ['Visual Inspection', 'Surface Profilometry (Ra)', 'Metallographic Cross-Section'],
+    mpif: ['MPIF 41 — TRS (surface flaw reduces TRS)', 'MPIF 40 — Hardness'],
+    causes: [
+        'Surface closes its pores before internal lubricant has fully decomposed (burn-off incomplete)',
+        'Excessive compaction pressure sealing the surface to a high density before sintering',
+        'High lubricant content (>1.5%) or lubricant with high decomposition temperature (e.g. wax)',
+        'Too-fast conveyor speed through the burn-off zone — insufficient dwell time',
+        'Low pre-sinter dwell temperature (<300°C) leaving undecomposed lubricant'
+    ],
+    prevention: [
+        'Maintain burn-off zone at 350–450°C with minimum 20 min dwell time',
+        'Use low-decomposition-temperature lubricant (zinc stearate decomposes at ~300°C)',
+        'Reduce compaction pressure slightly to preserve open surface porosity for gas escape',
+        'Verify dew point and atmosphere flow in burn-off zone — reducing atmosphere aids burnoff',
+        'Reduce conveyor speed through burn-off zone to increase dwell time'
+    ],
+    draw: function(ctx, w, h) {
+        var rng = seeded(601);
+        // sintered part bulk — lower 2/3
+        pmBg(ctx, 0, h * 0.45, w, h * 0.55, 0.88);
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(0, h * 0.45); ctx.lineTo(w, h * 0.45); ctx.stroke();
+        // blisters on surface (from h*0.45 upward)
+        var blisterData = [
+            { cx: w * 0.18, rx: w * 0.1,  ry: h * 0.18, burst: false },
+            { cx: w * 0.42, rx: w * 0.13, ry: h * 0.24, burst: false },
+            { cx: w * 0.66, rx: w * 0.09, ry: h * 0.16, burst: true  },
+            { cx: w * 0.85, rx: w * 0.07, ry: h * 0.12, burst: false },
+        ];
+        blisterData.forEach(function(b) {
+            if (!b.burst) {
+                // intact dome
+                var bg = ctx.createRadialGradient(b.cx - b.rx * 0.2, h * 0.45 - b.ry * 0.6, 0,
+                                                   b.cx, h * 0.45 - b.ry * 0.3, Math.max(b.rx, b.ry));
+                bg.addColorStop(0,   '#c4ccd8');
+                bg.addColorStop(0.5, '#9ca3af');
+                bg.addColorStop(1,   '#7f8ea0');
+                ctx.beginPath();
+                ctx.ellipse(b.cx, h * 0.45, b.rx, b.ry, 0, Math.PI, 0);
+                ctx.fillStyle = bg; ctx.fill();
+                ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.2; ctx.stroke();
+                // trapped gas void inside
+                ctx.beginPath();
+                ctx.ellipse(b.cx, h * 0.45 - b.ry * 0.55, b.rx * 0.5, b.ry * 0.3, 0, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(241,245,249,0.8)'; ctx.fill();
+            } else {
+                // burst blister — open crater
+                ctx.beginPath();
+                ctx.arc(b.cx, h * 0.45, b.rx, Math.PI, 0);
+                ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5; ctx.stroke();
+                ctx.fillStyle = '#f1f5f9'; ctx.fill();
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 1; ctx.setLineDash([2, 2]);
+                ctx.beginPath();
+                ctx.arc(b.cx, h * 0.45, b.rx * 1.15, Math.PI, 0);
+                ctx.stroke(); ctx.setLineDash([]);
+            }
+        });
+        ctx.fillStyle = '#dc2626'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('Intact blister', w * 0.42, h * 0.15);
+        ctx.fillStyle = '#92400e'; ctx.fillText('Burst crater', w * 0.66, h * 0.15);
+        ctx.fillStyle = '#1e3a5f'; ctx.font = '9px sans-serif';
+        ctx.fillText('Sintered bulk', w * 0.5, h * 0.85);
+        lbl(ctx, 'Surface cross-section', w * 0.03, h * 0.97, Math.max(8, h * 0.065));
+    }
+},
+
+{
+    code: 'PM-S200', name: 'Decarburization', category: 'sintering',
+    desc: 'Loss of carbon from the surface of a PM steel part during sintering, caused by an oxidising or insufficiently carbon-active furnace atmosphere. The decarburized zone is revealed on polished and etched metallographic cross-sections as a bright (unetched) surface band, corresponding to near-pure ferrite rather than the pearlite/martensite of the core. Surface hardness drops significantly (HRB 60–75 vs. HRB 90+ core), degrading fatigue strength, wear resistance, and surface hardness specifications.',
+    detection: ['Vickers / Rockwell Hardness Traverse (MPIF 40)', 'Metallographic Etch (Nital 2%)', 'Carbon Content Combustion Analysis'],
+    mpif: ['MPIF 40 — Hardness (surface vs. core traverse)', 'MPIF 55 — Microhardness', 'MPIF 43 — Tensile (reduced UTS)'],
+    causes: [
+        'Insufficient carbon potential (Cp) in sintering atmosphere — H₂/N₂ mix acts as decarburiser',
+        'High furnace dew point (>−30°C) — moisture oxidises surface carbon',
+        'Air ingress through furnace muffle, door seals, or belt entry/exit zones',
+        'Insufficient atmosphere flow rate allowing stagnant oxidising micro-zones',
+        'Sintering temperature too high with poorly controlled atmosphere'
+    ],
+    prevention: [
+        'Maintain atmosphere dew point below −40°C throughout all furnace zones',
+        'Use endothermic atmosphere or add 0.1–0.3% CH₄ to raise carbon potential',
+        'Verify positive furnace pressure (bubbler or manometer) — no air ingress',
+        'Increase atmosphere flow rate, especially at burn-off / sintering transition',
+        'Monitor Cp continuously with O₂ probe or CO/CO₂ analyser'
+    ],
+    draw: function(ctx, w, h) {
+        // bulk PM core — pearlitic (darker)
+        pmBg(ctx, 0, h * 0.22, w, h * 0.78, 0.88);
+        // decarburized surface band — ferritic (light)
+        var bandH = h * 0.18;
+        var dg = ctx.createLinearGradient(0, 0, 0, bandH + h * 0.08);
+        dg.addColorStop(0,   '#dde4ed'); // surface — nearly pure ferrite
+        dg.addColorStop(0.7, '#c0cad6'); // transition zone
+        dg.addColorStop(1,   '#9ca3af'); // merges with PM core
+        ctx.fillStyle = dg; ctx.fillRect(0, 0, w, bandH + h * 0.08);
+        // scatter fine pores in decarb zone
+        var rng = seeded(701);
+        for (var i = 0; i < 25; i++) {
+            var px = rng() * w, py = rng() * bandH;
+            var pr = 0.8 + rng() * 2;
+            ctx.beginPath(); ctx.arc(px, py, pr, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.fill();
+        }
+        // boundary line
+        ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 3]);
+        ctx.beginPath(); ctx.moveTo(0, bandH); ctx.lineTo(w, bandH); ctx.stroke();
+        ctx.setLineDash([]);
+        // annotations
+        ctx.fillStyle = '#374151'; ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText('Decarburized zone', w * 0.04, h * 0.12);
+        ctx.fillStyle = '#6b7280'; ctx.font = '9px sans-serif';
+        ctx.fillText('(soft ferrite layer)', w * 0.04, h * 0.2);
+        ctx.fillStyle = '#1e3a5f'; ctx.font = '10px sans-serif';
+        ctx.fillText('Core (pearlite/martensite)', w * 0.04, h * 0.62);
+        // hardness traverse arrows
+        ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1.5;
+        for (var k = 0; k < 4; k++) {
+            var bx = w * 0.82 + k * 0; // vertical line
+            var by = h * 0.04 + k * h * 0.21;
+            ctx.beginPath(); ctx.arc(w * 0.87, by, 4, 0, Math.PI * 2);
+            ctx.strokeStyle = k === 0 ? '#dc2626' : '#059669'; ctx.fill();
+        }
+        ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 8px sans-serif'; ctx.textAlign = 'right';
+        ctx.fillText('HV traverse', w * 0.97, h * 0.5);
+        lbl(ctx, 'Etched metallographic section', w * 0.03, h * 0.97, Math.max(8, h * 0.065));
+    }
+},
+
+{
+    code: 'PM-S300', name: 'Sintering Distortion', category: 'sintering',
+    desc: 'Shape change during sintering beyond the expected isotropic shrinkage (~0.5–2.0%), manifesting as warpage of flat sections, bowing of thin walls, or asymmetric dimensional change. Driven by density gradients inherited from compaction (non-uniform green density produces non-uniform shrinkage), temperature gradients in the furnace belt, or gravity-induced creep at sintering temperature when the part has inadequate support.',
+    detection: ['CMM / Height Gauge (MPIF 35 tolerances)', 'Go/No-Go Gauges', 'Optical Comparator', 'Surface Plate &amp; Dial Indicator'],
+    mpif: ['MPIF 35 — Dimensional Tolerances (Grade 1–4)', 'MPIF 42 — Density (source density gradient)'],
+    causes: [
+        'Density gradient from compaction causes differential shrinkage across the cross-section',
+        'Temperature gradient across the furnace belt — one side sinters faster than the other',
+        'Gravity creep at sintering temperature (>0.8 Tm) for thin, unsupported parts',
+        'Non-uniform atmosphere flow creating hot/cold spots within the load',
+        'Inadequate or asymmetric support fixture in the sintering furnace'
+    ],
+    prevention: [
+        'Address root-cause density gradient (double-action pressing, lubricant optimisation)',
+        'Use precision ceramic or graphite support fixtures matching part geometry',
+        'Verify furnace temperature uniformity ±5°C across the belt width',
+        'Load parts symmetrically; avoid stacking thin sections without separation plates',
+        'For critical flatness, add a post-sinter sizing (repressing) operation'
+    ],
+    draw: function(ctx, w, h) {
+        // ideal flat plate (dashed outline)
+        ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 3]);
+        ctx.strokeRect(w * 0.1, h * 0.35, w * 0.8, h * 0.2);
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#94a3b8'; ctx.font = '9px sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('Designed flat', w * 0.5, h * 0.33);
+        // warped sintered part
+        var rng = seeded(801);
+        ctx.beginPath();
+        ctx.moveTo(w * 0.1, h * 0.38);
+        // top surface — bowed upward in the middle
+        var steps = 20;
+        for (var i = 0; i <= steps; i++) {
+            var t = i / steps;
+            var sag = -Math.sin(t * Math.PI) * h * 0.18; // bow up
+            var noise = (rng() - 0.5) * h * 0.01;
+            ctx.lineTo(w * 0.1 + t * w * 0.8, h * 0.38 + sag + noise);
+        }
+        // right side + bottom
+        ctx.lineTo(w * 0.9, h * 0.55);
+        for (var j = steps; j >= 0; j--) {
+            var t2 = j / steps;
+            var sag2 = -Math.sin(t2 * Math.PI) * h * 0.14;
+            var n2 = (rng() - 0.5) * h * 0.01;
+            ctx.lineTo(w * 0.1 + t2 * w * 0.8, h * 0.55 + sag2 + n2);
+        }
+        ctx.closePath();
+        var pmg = ctx.createLinearGradient(w * 0.1, h * 0.3, w * 0.1, h * 0.6);
+        pmg.addColorStop(0, '#c4ccd8'); pmg.addColorStop(1, '#9ca3af');
+        ctx.fillStyle = pmg; ctx.fill();
+        ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5; ctx.stroke();
+        // warp arrow
+        ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(w * 0.5, h * 0.35); ctx.lineTo(w * 0.5, h * 0.22); ctx.stroke();
+        ctx.fillStyle = '#dc2626'; ctx.beginPath();
+        ctx.moveTo(w * 0.5, h * 0.18); ctx.lineTo(w * 0.48, h * 0.24); ctx.lineTo(w * 0.52, h * 0.24); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = '#dc2626'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('Bow / warp', w * 0.5, h * 0.14);
+        lbl(ctx, 'Side-on view — exaggerated', w * 0.03, h * 0.97, Math.max(8, h * 0.065));
+    }
+},
+
+{
+    code: 'PM-S400', name: 'Swelling', category: 'sintering',
+    desc: 'Net dimensional increase beyond the expected isotropic shrinkage, caused by the formation of a transient liquid phase (most commonly copper melting at 1083°C and rapidly diffusing into iron) that initially swells the compact before contracting on cooling. Over-addition of copper, too-fast heating through the Cu melting point, or trapped sintering atmosphere gas can all cause net expansion rather than shrinkage, taking the part out of dimensional specification.',
+    detection: ['Dimensional Inspection (MPIF 35)', 'Archimedes Density (MPIF 42)', 'Metallographic Section (Cu phase distribution)'],
+    mpif: ['MPIF 35 — Dimensional Tolerances', 'MPIF 42 — Sintered Density'],
+    causes: [
+        'Copper addition >3% wt — excess liquid Cu expands part before full diffusion',
+        'Fast heating rate through Cu melting point (1083°C) — liquid flooding before diffusion equilibrates',
+        'Poorly mixed elemental copper particles leaving Cu-rich agglomerates',
+        'Trapped sintering atmosphere (N₂) in closed pores expanding on heating',
+        'Mismatched sintering shrinkage rates in multi-component powder mixes'
+    ],
+    prevention: [
+        'Limit elemental Cu addition to ≤ 2%; use pre-alloyed Cu-Fe powder if higher Cu needed',
+        'Use a slow heating rate through 950–1100°C (≤ 5°C/min) to allow diffusion ahead of melting',
+        'Verify uniform Cu distribution with LOD powder quality checks',
+        'Use diffusion-bonded premix to reduce segregation vs. admixed elemental Cu',
+        'Qualify dimensional change with test compacts before production sintering'
+    ],
+    draw: function(ctx, w, h) {
+        // green compact (left, dashed)
+        var gL = w * 0.05, gT = h * 0.25, gW = w * 0.32, gH = h * 0.5;
+        ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 3]);
+        ctx.strokeRect(gL, gT, gW, gH);
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#64748b'; ctx.font = '9px sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('Green', gL + gW * 0.5, gT - 6);
+        ctx.fillText('compact', gL + gW * 0.5, gT + 3);
+        // arrow
+        ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(w * 0.42, h * 0.5); ctx.lineTo(w * 0.56, h * 0.5); ctx.stroke();
+        ctx.fillStyle = '#f59e0b'; ctx.beginPath();
+        ctx.moveTo(w * 0.58, h * 0.5); ctx.lineTo(w * 0.54, h * 0.47); ctx.lineTo(w * 0.54, h * 0.53); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = '#f59e0b'; ctx.font = '8px sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('Sinter', w * 0.49, h * 0.44);
+        // sintered — swollen (larger, shifted right)
+        var sL = w * 0.6, sW = w * 0.36, sH = h * 0.6, sT = h * 0.2;
+        pmBg(ctx, sL, sT, sW, sH, 0.88);
+        ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+        ctx.strokeRect(sL, sT, sW, sH);
+        // Cu phase highlighted as gold-colored pools
+        var rng = seeded(901);
+        for (var i = 0; i < 8; i++) {
+            var px = sL + rng() * sW * 0.85;
+            var py = sT + rng() * sH * 0.85;
+            ctx.beginPath(); ctx.arc(px, py, 3 + rng() * 4, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(245,158,11,0.7)'; ctx.fill();
+        }
+        ctx.fillStyle = '#dc2626'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('Swollen', sL + sW * 0.5, sT - 6);
+        ctx.fillText('(net expansion)', sL + sW * 0.5, sT + 4);
+        ctx.fillStyle = '#f59e0b'; ctx.font = '8px sans-serif';
+        ctx.fillText('Cu pools', sL + sW * 0.5, sT + sH * 0.9);
+        // dimension comparison arrows
+        ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(gL, gT + gH + h * 0.06); ctx.lineTo(gL + gW, gT + gH + h * 0.06); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(sL, sT + sH + h * 0.06); ctx.lineTo(sL + sW, sT + sH + h * 0.06); ctx.stroke();
+        lbl(ctx, 'Dimensional comparison', w * 0.03, h * 0.97, Math.max(8, h * 0.065));
+    }
+},
+
+/* ── SURFACE DEFECTS ────────────────────────────── */
+{
+    code: 'PM-U100', name: 'Surface Oxidation', category: 'surface',
+    desc: 'Discoloration of the sintered surface, ranging from blue–black (Fe₃O₄ magnetite) to brown–red (Fe₂O₃ haematite), caused by oxygen contact during sintering or the cooling phase. The oxide layer reduces surface hardness, impairs corrosion resistance, and prevents secondary operations including brazing, electroplating, and steam treatment. The colour of the oxide is diagnostic: straw/blue = mild tempering oxide (thin), black/grey = magnetite (thick, damaging).',
+    detection: ['Visual Inspection (colour diagnostic)', 'EDS / XRD Analysis (oxide identification)', 'Corrosion Salt-Spray Test (ASTM B117)'],
+    mpif: ['MPIF 40 — Hardness (surface oxidation reduces HRB)', 'MPIF 35 — Surface finish spec'],
+    causes: [
+        'Air ingress during sintering: muffle or belt-seal damage, door leak',
+        'Inadequate reducing atmosphere — H₂ partial pressure below threshold to reduce FeO',
+        'High dew point in cooling zone — moisture reoxidises at <500°C where kinetics are slow',
+        'Premature part removal from protective atmosphere before reaching 150°C',
+        'Stagnant atmosphere zones in cooling section — insufficient flow rate'
+    ],
+    prevention: [
+        'Maintain positive furnace pressure in all zones; check with soap-bubble test at seals',
+        'Ensure H₂ ≥ 10 vol% in cooling zone; measure O₂ residual with analyser',
+        'Monitor and control cooling zone dew point below −40°C',
+        'Keep parts under protective atmosphere until surface temperature < 120°C',
+        'Increase atmosphere flow rate; verify no stagnation in wide belt sections'
+    ],
+    draw: function(ctx, w, h) {
+        var rng = seeded(1001);
+        // PM part bulk
+        pmBg(ctx, 0, h * 0.2, w, h * 0.8, 0.9);
+        // oxide surface layer — colour gradient (blue-black-brown)
+        var oxH = h * 0.15;
+        for (var i = 0; i < w; i++) {
+            var t = i / w;
+            // simulate uneven oxide coverage
+            var oxThick = oxH * (0.5 + rng() * 0.5);
+            var grad = ctx.createLinearGradient(i, 0, i, oxThick);
+            // hue shifts from blue (thin) to black (thick)
+            var r = Math.floor(20 + t * 60);
+            var g2 = Math.floor(10 + t * 20);
+            var b = Math.floor(30 + (1 - t) * 60);
+            grad.addColorStop(0,   'rgb(' + (r + 40) + ',' + (g2 + 30) + ',' + (b + 60) + ')');
+            grad.addColorStop(0.7, 'rgb(' + r + ',' + g2 + ',' + b + ')');
+            grad.addColorStop(1,   '#9ca3af');
+            ctx.fillStyle = grad;
+            ctx.fillRect(i, 0, 1, oxThick);
+        }
+        // surface line
+        ctx.strokeStyle = '#334155'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(0, h * 0.2); ctx.lineTo(w, h * 0.2); ctx.stroke();
+        // colour annotations
+        ctx.fillStyle = '#1e3a5f'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('Oxide layer', w * 0.5, h * 0.08);
+        ctx.fillStyle = '#6b7280'; ctx.font = '8px sans-serif';
+        ctx.fillText('(Fe₃O₄ / Fe₂O₃)', w * 0.5, h * 0.16);
+        ctx.fillStyle = '#1e3a5f'; ctx.font = '9px sans-serif';
+        ctx.fillText('PM part', w * 0.5, h * 0.72);
+        lbl(ctx, 'Surface cross-section', w * 0.03, h * 0.97, Math.max(8, h * 0.065));
+    }
+},
+
+{
+    code: 'PM-U200', name: 'Surface Pitting / Galling', category: 'surface',
+    desc: 'Small craters or longitudinal score marks on the sintered surface, distinct from the normal sintered surface roughness. Pitting arises from die or punch damage transferring to the compact surface, or from hard inclusions in the powder batch scoring the die bore during production runs. Longitudinal galling (ejection scoring) produces parallel scratches aligned with the pressing direction. Both defects affect surface finish Ra and dimensional tolerance at the part surface.',
+    detection: ['Visual Inspection', 'Surface Profilometry (Ra vs. spec)', 'Die Inspection (bore profile)', 'Dye Penetrant for cracks (ASTM E1417)'],
+    mpif: ['MPIF 35 — Surface Finish and Dimensional Tolerances', 'MPIF 40 — Hardness (die condition affects surface)'],
+    causes: [
+        'Die or punch wear — chipped carbide, spalled TiN coating, or scored bore',
+        'Hard inclusions (carbide, ceramic) in powder batch scoring die during compaction',
+        'Insufficient die wall lubrication causing adhesion and galling during ejection',
+        'Excessive ejection force from high-friction compact',
+        'Corrosion of die surface between production runs (storage pitting)'
+    ],
+    prevention: [
+        'Inspect die bore and punch faces after every 50,000–100,000 parts; replace at threshold wear',
+        'Source certified powder with inclusion content limits; incoming inspection per MPIF 04',
+        'Maintain die lubrication: zinc stearate or Acrawax, and verify mixing uniformity',
+        'Apply PVD coating (TiN, CrN) to die bore to reduce friction and improve wear resistance',
+        'Store tooling dry with protective coating; inspect before re-use after storage'
+    ],
+    draw: function(ctx, w, h) {
+        var rng = seeded(1101);
+        // PM sintered surface (side view — surface at top)
+        pmBg(ctx, 0, h * 0.3, w, h * 0.7, 0.9);
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(0, h * 0.3); ctx.lineTo(w, h * 0.3); ctx.stroke();
+        // surface pits (round craters)
+        var pits = [
+            { x: w * 0.15, r: w * 0.04 },
+            { x: w * 0.35, r: w * 0.055 },
+            { x: w * 0.58, r: w * 0.03 },
+        ];
+        pits.forEach(function(p) {
+            ctx.beginPath(); ctx.arc(p.x, h * 0.3, p.r, Math.PI, 0);
+            ctx.fillStyle = '#e5e7eb'; ctx.fill();
+            ctx.strokeStyle = '#374151'; ctx.lineWidth = 1; ctx.stroke();
+            // shadow in pit
+            var sg = ctx.createLinearGradient(p.x - p.r, h * 0.3 - p.r, p.x + p.r, h * 0.3);
+            sg.addColorStop(0, 'rgba(30,58,95,0.3)'); sg.addColorStop(1, 'rgba(255,255,255,0.1)');
+            ctx.beginPath(); ctx.arc(p.x, h * 0.3, p.r, Math.PI, 0);
+            ctx.fillStyle = sg; ctx.fill();
+        });
+        // ejection score (longitudinal) — vertical scratch lines on right side
+        for (var i = 0; i < 3; i++) {
+            var sx = w * 0.7 + i * w * 0.06;
+            ctx.strokeStyle = '#374151'; ctx.lineWidth = 0.8;
+            ctx.beginPath(); ctx.moveTo(sx, h * 0.3);
+            for (var k = 1; k <= 10; k++) {
+                var t = k / 10;
+                ctx.lineTo(sx + (rng() - 0.5) * 2, h * 0.3 + t * h * 0.6);
+            }
+            ctx.stroke();
+        }
+        ctx.fillStyle = '#dc2626'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText('Pits', w * 0.35, h * 0.16);
+        ctx.fillStyle = '#92400e'; ctx.fillText('Score marks', w * 0.7, h * 0.16);
+        lbl(ctx, 'Surface cross-section', w * 0.03, h * 0.97, Math.max(8, h * 0.065));
+    }
+},
+
+/* ── INCLUSION DEFECTS ──────────────────────────── */
+{
+    code: 'PM-I100', name: 'Foreign Powder Inclusion', category: 'inclusion',
+    desc: 'A particle or cluster of particles of incorrect composition embedded in the sintered PM part. Common contaminants include: wrong alloy powder accidentally cross-contaminated during mixing or transfer; ceramic/refractory fragments worn from process equipment; metallic chips from tooling; or oxide scale from atomisation equipment. Inclusions create hard or soft spots (depending on composition), act as stress concentrators, and can cause localised corrosion. Hard ceramic inclusions also progressively damage the die, generating further surface defects.',
+    detection: ['Metallographic Cross-Section (optical)', 'SEM / EDS Analysis (composition)', 'Hardness Mapping (MPIF 40)', 'Incoming Powder Verification (MPIF 04, chemical)'],
+    mpif: ['MPIF 04 — Apparent Density &amp; Incoming Powder Check', 'MPIF 40 — Hardness (spot anomalies)', 'MPIF 41 — TRS (inclusion = stress concentrator)'],
+    causes: [
+        'Cross-contamination between powder batches during mixing, transfer, or storage',
+        'Inadequate cleaning of mixing vessels between alloy grades',
+        'Worn refractory liners or ceramic components shedding particles into powder stream',
+        'No incoming powder traceability or acceptance testing by composition',
+        'Tool steel chips from worn cutters or broken tooling entering powder hopper'
+    ],
+    prevention: [
+        'Establish dedicated mixing vessels per alloy family; colour-code and document',
+        'Incoming powder certification: supplier CoA + in-house ICP/OES chemical verification',
+        'Inspect and replace refractory liners and ceramic components on scheduled basis',
+        'Install magnetic separators in powder feed path to catch ferrous chips',
+        'Maintain traceability records (batch ID) from powder receipt to finished part'
+    ],
+    draw: function(ctx, w, h) {
+        var rng = seeded(1201);
+        // PM matrix background
+        pmBg(ctx, 0, 0, w, h, 0.88);
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1;
+        ctx.strokeRect(0, 0, w, h);
+        // ceramic inclusion — angular, light yellow/tan
+        ctx.beginPath();
+        var pts2 = 7, cx = w * 0.45, cy = h * 0.42, r2 = w * 0.09;
+        for (var i = 0; i < pts2; i++) {
+            var ang = (i / pts2) * Math.PI * 2 + 0.3;
+            var d = r2 * (0.6 + rng() * 0.5);
+            i === 0 ? ctx.moveTo(cx + Math.cos(ang) * d, cy + Math.sin(ang) * d)
+                    : ctx.lineTo(cx + Math.cos(ang) * d, cy + Math.sin(ang) * d);
+        }
+        ctx.closePath();
+        ctx.fillStyle = '#fef3c7'; ctx.fill();
+        ctx.strokeStyle = '#92400e'; ctx.lineWidth = 1.5; ctx.stroke();
+        // wrong-alloy metallic inclusion — rounded, pinkish-copper
+        ctx.beginPath(); ctx.ellipse(w * 0.7, h * 0.65, w * 0.07, h * 0.06, 0.4, 0, Math.PI * 2);
+        var incG = ctx.createRadialGradient(w * 0.68, h * 0.63, 0, w * 0.7, h * 0.65, w * 0.07);
+        incG.addColorStop(0, '#fed7aa'); incG.addColorStop(1, '#c2410c');
+        ctx.fillStyle = incG; ctx.fill();
+        ctx.strokeStyle = '#7c2d12'; ctx.lineWidth = 1.2; ctx.stroke();
+        // labels
+        ctx.fillStyle = '#92400e'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText('Ceramic', cx + r2 + 4, cy - 6);
+        ctx.fillText('inclusion', cx + r2 + 4, cy + 5);
+        ctx.fillStyle = '#c2410c';
+        ctx.fillText('Wrong-alloy', w * 0.72 + w * 0.07, h * 0.62);
+        ctx.fillText('particle', w * 0.72 + w * 0.07, h * 0.71);
+        lbl(ctx, 'Polished cross-section', w * 0.03, h * 0.97, Math.max(8, h * 0.065));
+    }
+},
+
+{
+    code: 'PM-I200', name: 'Lubricant Residue', category: 'inclusion',
+    desc: 'Unburned lubricant remaining in the sintered part as dark carbon-rich pockets, films at particle boundaries, or elongated voids where the lubricant volatilised leaving a channel. Residual lubricant prevents metallurgical bonding between adjacent powder particles, leaving unbonded interfaces that appear as open intergranular cracks on polished sections. The transverse rupture strength (TRS) is significantly reduced — often 30–50% below specification. Carbon content may be elevated by residual lubricant carbon.',
+    detection: ['MPIF 41 — TRS (consistently below min)', 'Metallographic Cross-Section (dark channels)', 'Carbon Combustion Analysis (elevated C)', 'Thermogravimetric Analysis (TGA) of powder blend'],
+    mpif: ['MPIF 41 — Transverse Rupture Strength', 'MPIF 43 — Tensile Testing', 'MPIF 42 — Sintered Density (below spec)'],
+    causes: [
+        'Inadequate pre-sinter burn-off temperature (<300°C) — lubricant survives into sintering zone',
+        'Excessive lubricant content (>1.5%) — too much to fully decompose',
+        'Fast conveyor belt speed through burn-off zone — insufficient dwell time',
+        'Lubricant with high decomposition temperature (e.g. some waxes >450°C) vs. furnace profile',
+        'Poor lubricant distribution — agglomerates surviving as pockets rather than thin films'
+    ],
+    prevention: [
+        'Profile burn-off zone: 300°C entry, 400–450°C peak, minimum 20 min dwell',
+        'Limit lubricant to 0.75–1.0% and verify by LOD (loss on drying) measurement',
+        'Reduce conveyor speed to increase burn-off dwell time',
+        'Select thermally clean lubricant grade matched to furnace profile (zinc stearate for <400°C peak)',
+        'Verify lubricant distribution at mixing stage: sample and LOD test from multiple mix points'
+    ],
+    draw: function(ctx, w, h) {
+        var rng = seeded(1301);
+        // PM matrix
+        pmBg(ctx, 0, 0, w, h, 0.88);
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1;
+        ctx.strokeRect(0, 0, w, h);
+        // lubricant residue channels — dark sinuous lines at former particle boundaries
+        ctx.strokeStyle = '#1c1917'; ctx.lineWidth = 2;
+        var channels = [
+            [w*0.1, h*0.25, w*0.45, h*0.32, w*0.72, h*0.2, w*0.9, h*0.28],
+            [w*0.2, h*0.55, w*0.5,  h*0.62, w*0.7,  h*0.5, w*0.85, h*0.58],
+            [w*0.05,h*0.78, w*0.3,  h*0.72, w*0.6,  h*0.8, w*0.88, h*0.74],
+        ];
+        channels.forEach(function(c) {
+            ctx.beginPath();
+            ctx.moveTo(c[0], c[1]);
+            ctx.bezierCurveTo(c[2], c[3], c[4], c[5], c[6], c[7]);
+            ctx.stroke();
+        });
+        // dark residue pockets
+        for (var i = 0; i < 6; i++) {
+            var px = w * 0.1 + rng() * w * 0.8;
+            var py = h * 0.1 + rng() * h * 0.8;
+            var pr = 3 + rng() * 6;
+            ctx.beginPath(); ctx.arc(px, py, pr, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(30,15,5,0.8)'; ctx.fill();
+        }
+        ctx.fillStyle = '#1c1917'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText('Lubricant', w * 0.48, h * 0.28);
+        ctx.fillText('residue channels', w * 0.48, h * 0.37);
+        lbl(ctx, 'Polished cross-section', w * 0.03, h * 0.97, Math.max(8, h * 0.065));
+    }
+},
+
+/* ── HANDLING DEFECTS ───────────────────────────── */
+{
+    code: 'PM-H100', name: 'Green Part Fragmentation', category: 'handling',
+    desc: 'Physical breakage of the unsintered (green) compact during ejection from the die, transfer to the sintering tray, or conveyor handling. Green strength depends entirely on mechanical interlocking of powder particles and lubricant film cohesion — there are no metallurgical bonds. Green strength is typically 10–20 MPa (three-point bend), far below the sintered TRS of 200–400 MPa. Thin sections, sharp re-entrant corners, and high-aspect-ratio features are most susceptible. Fragmented green compacts cannot be re-pressed; they are scrapped.',
+    detection: ['MPIF 52 — Green Strength (three-point bend on standard TRS bar)', 'MPIF 52 — Green Density', 'Visual Inspection at press and transfer'],
+    mpif: ['MPIF 52 — Green Density and Green Strength (acceptance: typically ≥14 MPa)'],
+    causes: [
+        'Insufficient green density (<5.8 g/cm³ for iron) from low compaction pressure',
+        'Sharp re-entrant corners in tooling concentrating ejection stress',
+        'Excessive ejection force from high die-wall friction',
+        'Vibration during handling — conveyor resonance, robot impact',
+        'Inadequate lubricant content reducing inter-particle cohesion'
+    ],
+    prevention: [
+        'Increase compaction pressure to achieve green density ≥ 6.2 g/cm³ (iron base)',
+        'Radius all internal corners ≥ 0.3 mm in tooling design',
+        'Reduce ejection speed; use compliant ejection pads for fragile geometries',
+        'Dampen conveyor and handling vibration; use pneumatic part transfer for fragile parts',
+        'Verify green strength per MPIF 52 at each die change; minimum ≥ 14 MPa'
+    ],
+    draw: function(ctx, w, h) {
+        var rng = seeded(1401);
+        // main compact body — split into two pieces with gap
+        var gap = h * 0.04;
+        var L = w * 0.15, R = w * 0.85, T = h * 0.1, B = h * 0.88;
+        var splitY = (T + B) * 0.52;
+        // top piece
+        pmBg(ctx, L, T, R - L, splitY - T - gap * 0.5, 0.9);
+        ctx.save(); ctx.translate(w * 0.02, -h * 0.03); // slightly displaced
+        pmBg(ctx, L, splitY + gap * 0.5, R - L, B - splitY - gap * 0.5, 0.9);
+        ctx.restore();
+        // fracture surfaces
+        ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 2;
+        jagged(ctx, L, splitY - gap * 0.5, R, splitY - gap * 0.5, h * 0.04, rng);
+        ctx.stroke();
+        var rng2 = seeded(1402);
+        jagged(ctx, L + w * 0.02, splitY + gap * 0.5, R + w * 0.02, splitY + gap * 0.5, h * 0.04, rng2);
+        ctx.stroke();
+        // outlines
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5;
+        ctx.strokeRect(L, T, R - L, splitY - T - gap * 0.5);
+        ctx.save(); ctx.translate(w * 0.02, -h * 0.03);
+        ctx.strokeRect(L, splitY + gap * 0.5, R - L, B - splitY - gap * 0.5);
+        ctx.restore();
+        // fragment displacement arrows
+        ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(R + w * 0.02, splitY - gap); ctx.lineTo(R + w * 0.06, T + (splitY - T) * 0.4); ctx.stroke();
+        ctx.fillStyle = '#dc2626'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText('Fracture', R + w * 0.04, splitY * 0.55);
+        ctx.fillText('surface', R + w * 0.04, splitY * 0.63);
+        lbl(ctx, 'Green compact — ejection', L, B + h * 0.07, Math.max(8, h * 0.065));
+    }
+},
+
+{
+    code: 'PM-H200', name: 'Ejection Scoring / Die Galling', category: 'handling',
+    desc: 'Longitudinal surface scratches or galling marks on the compact surface, running parallel to the pressing axis, caused by adhesion between the compact and die bore during the ejection stroke. In mild cases the defect is surface-only and may be acceptable. In severe cases, galling causes material transfer (die pickup) that progressively worsens with each press stroke, ultimately seizing the compact in the die. The scoring reduces surface finish Ra and can open into cracks that propagate during sintering.',
+    detection: ['Visual Inspection (scoring direction = pressing axis)', 'Surface Profilometry (Ra measurement)', 'MPIF 41 — TRS (scoring reduces apparent TRS)', 'Die bore inspection (pickup / galling marks)'],
+    mpif: ['MPIF 35 — Surface Finish &amp; Tolerances', 'MPIF 41 — TRS (surface crack propagation)'],
+    causes: [
+        'Insufficient die wall lubrication (zinc stearate or Acrawax) — adhesion on ejection',
+        'Rough die bore surface finish (Ra >0.4 µm) increasing friction',
+        'No die taper — full-contact friction over entire bore height during ejection',
+        'Die material incompatibility with powder alloy (e.g. uncoated steel die with high-Ni powder)',
+        'Lubricant segregation or incorrect mixing — low-lubricant zones in compact'
+    ],
+    prevention: [
+        'Ensure 0.75–1.0% lubricant content; verify uniform mixing with LOD sampling',
+        'Superfinish die bore to Ra ≤ 0.2 µm; check and maintain surface finish',
+        'Apply PVD die coating (TiN, CrN, TiAlN) to reduce friction and adhesion',
+        'Add 0.1–0.3° die taper to allow compact to break contact progressively',
+        'Use warm compaction (120–150°C tooling) to melt wax lubricant uniformly'
+    ],
+    draw: function(ctx, w, h) {
+        var rng = seeded(1501);
+        // compact cross-section (rectangle, surface on left)
+        var L = w * 0.25, R = w * 0.82, T = h * 0.08, B = h * 0.92;
+        pmBg(ctx, L, T, R - L, B - T, 0.9);
+        ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5;
+        ctx.strokeRect(L, T, R - L, B - T);
+        // die bore wall on left
+        ctx.fillStyle = '#374151'; ctx.fillRect(0, T - h * 0.01, L, B - T + h * 0.02);
+        ctx.fillStyle = '#4b5563'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('Die', L * 0.5, h * 0.52);
+        // ejection scores — vertical lines on left surface of compact
+        for (var i = 0; i < 5; i++) {
+            var sx = L + i * w * 0.025 + rng() * w * 0.01;
+            var depth = w * 0.01 + rng() * w * 0.02;
+            ctx.strokeStyle = i === 0 ? '#dc2626' : '#9f1239';
+            ctx.lineWidth = 0.8 + rng() * 1.2;
+            ctx.beginPath(); ctx.moveTo(sx, T + rng() * h * 0.1);
+            for (var k = 1; k <= 12; k++) {
+                var t = k / 12;
+                ctx.lineTo(sx + (rng() - 0.5) * 2, T + t * (B - T));
+            }
+            ctx.stroke();
+        }
+        // pressing direction arrows (upward = ejection)
+        ctx.strokeStyle = '#1e3a5f'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(w * 0.9, B); ctx.lineTo(w * 0.9, T + h * 0.06); ctx.stroke();
+        ctx.fillStyle = '#1e3a5f'; ctx.beginPath();
+        ctx.moveTo(w * 0.9, T); ctx.lineTo(w * 0.88, T + h * 0.08); ctx.lineTo(w * 0.92, T + h * 0.08); ctx.closePath(); ctx.fill();
+        ctx.font = '9px sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('Eject', w * 0.93, h * 0.55);
+        ctx.fillStyle = '#dc2626'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText('Score', L + w * 0.01, T - 4);
+        ctx.fillText('marks', L + w * 0.01, T + 5);
+        lbl(ctx, 'Compact left-face (ejection direction)', L, B + h * 0.05, Math.max(8, h * 0.06));
+    }
+}
+
+]; // end DEFECTS
+
+/* ════════════════════════════════════════════════════
+   CATEGORY CONFIG
+════════════════════════════════════════════════════ */
+var CAT_LABELS = {
+    compaction: 'Compaction',
+    density:    'Density',
+    sintering:  'Sintering',
+    surface:    'Surface',
+    inclusion:  'Inclusion',
+    handling:   'Handling'
+};
+
+/* ════════════════════════════════════════════════════
+   BUILD CARDS
+════════════════════════════════════════════════════ */
+var selectedIndex = -1;
+
+function buildCards() {
+    var grid = document.getElementById('defectGrid');
+    DEFECTS.forEach(function(d, i) {
+        var card = document.createElement('div');
+        card.className = 'defect-card';
+        card.dataset.cat = d.category;
+        card.dataset.idx = i;
+
+        var canvas = document.createElement('canvas');
+        canvas.width = 160; canvas.height = 100;
+        canvas.style.width = '100%';
+        var ctx = canvas.getContext('2d');
+        d.draw(ctx, 160, 100);
+
+        card.innerHTML = '<div class="defect-card-info">' +
+            '<div class="card-code">' + d.code + '</div>' +
+            '<div class="card-name">' + d.name + '</div>' +
+            '<span class="card-cat cat-' + d.category + '">' + CAT_LABELS[d.category] + '</span>' +
+            '</div>';
+        card.insertBefore(canvas, card.firstChild);
+
+        card.addEventListener('click', function() { selectDefect(i); });
+        grid.appendChild(card);
+    });
+}
+
+function selectDefect(idx) {
+    document.querySelectorAll('.defect-card').forEach(function(c) { c.classList.remove('selected'); });
+    var cards = document.querySelectorAll('.defect-card');
+    cards[idx].classList.add('selected');
+    selectedIndex = idx;
+
+    var d = DEFECTS[idx];
+    document.getElementById('dCode').textContent = d.code;
+    document.getElementById('dName').textContent = d.name;
+    var badge = document.getElementById('dCatBadge');
+    badge.textContent = CAT_LABELS[d.category];
+    badge.className = 'card-cat cat-' + d.category;
+    document.getElementById('dDesc').textContent = d.desc;
+
+    var detEl = document.getElementById('dDet');
+    detEl.innerHTML = d.detection.map(function(s) {
+        return '<span class="det-badge">' + s + '</span>';
+    }).join('');
+
+    var mpifEl = document.getElementById('dMpif');
+    mpifEl.innerHTML = d.mpif.map(function(s) {
+        return '<span class="mpif-badge">' + s + '</span>';
+    }).join('');
+
+    var causesEl = document.getElementById('dCauses');
+    causesEl.innerHTML = d.causes.map(function(c) {
+        return '<li><span class="bullet-cause">&#10005;</span>' + c + '</li>';
+    }).join('');
+
+    var prevEl = document.getElementById('dPrev');
+    prevEl.innerHTML = d.prevention.map(function(p) {
+        return '<li><span class="bullet-prev">&#10003;</span>' + p + '</li>';
+    }).join('');
+
+    var dc = document.getElementById('detailCanvas');
+    var ctx = dc.getContext('2d');
+    ctx.clearRect(0, 0, dc.width, dc.height);
+    d.draw(ctx, dc.width, dc.height);
+
+    var panel = document.getElementById('detailPanel');
+    panel.classList.add('visible');
+    setTimeout(function() { panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 50);
+}
+
+document.getElementById('closeBtn').addEventListener('click', function() {
+    document.getElementById('detailPanel').classList.remove('visible');
+    document.querySelectorAll('.defect-card').forEach(function(c) { c.classList.remove('selected'); });
+    selectedIndex = -1;
+});
+
+/* ════════════════════════════════════════════════════
+   FILTER
+════════════════════════════════════════════════════ */
+document.querySelectorAll('.filter-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        var filter = btn.dataset.filter;
+        document.querySelectorAll('.defect-card').forEach(function(card) {
+            var show = filter === 'all' || card.dataset.cat === filter;
+            card.classList.toggle('hidden', !show);
+        });
+        if (selectedIndex >= 0) {
+            var cat = DEFECTS[selectedIndex].category;
+            if (filter !== 'all' && cat !== filter) {
+                document.getElementById('detailPanel').classList.remove('visible');
+                document.querySelectorAll('.defect-card').forEach(function(c) { c.classList.remove('selected'); });
+                selectedIndex = -1;
+            }
+        }
+    });
+});
+
+/* ════════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════════ */
+buildCards();
+</script>
+</body>
+</html>

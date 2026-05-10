@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Additive Manufacturing — America Makes &amp; GE Additive</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #fff; color: #1a1a2e; }
+header { background: #1e3a5f; color: #fff; padding: 18px 24px 14px; }
+header h1 { font-size: 1.35rem; font-weight: 700; }
+header p { font-size: 0.8rem; opacity: 0.75; margin-top: 4px; }
+
+.source-note {
+    background: #f0f7ff;
+    border-left: 4px solid #1e3a5f;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    color: #444;
+}
+
+.compare-strip {
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 10px 20px 12px;
+    overflow-x: auto;
+}
+.compare-strip h3 {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #64748b;
+    margin-bottom: 7px;
+}
+.compare-table {
+    border-collapse: collapse;
+    font-size: 0.74rem;
+    min-width: 580px;
+    width: 100%;
+}
+.compare-table th {
+    background: #1e3a5f;
+    color: #fff;
+    padding: 4px 10px;
+    text-align: left;
+}
+.compare-table td {
+    padding: 3px 10px;
+    border-bottom: 1px solid #e2e8f0;
+}
+.compare-table tr:nth-child(even) td { background: #f1f5f9; }
+
+.filter-bar {
+    display: flex;
+    gap: 8px;
+    padding: 9px 20px;
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
+    flex-wrap: wrap;
+}
+.filter-btn {
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    font-size: 0.78rem;
+    cursor: pointer;
+    color: #475569;
+    transition: all 0.15s;
+}
+.filter-btn.active { background: #1e3a5f; border-color: #1e3a5f; color: #fff; }
+
+.main { display: flex; height: calc(100vh - 290px); min-height: 460px; }
+.grid-panel { flex: 1; overflow-y: auto; padding: 16px 20px; }
+.detail-panel {
+    width: 340px;
+    border-left: 1px solid #e2e8f0;
+    overflow-y: auto;
+    padding: 16px;
+    display: none;
+    flex-direction: column;
+    gap: 11px;
+}
+.detail-panel.open { display: flex; }
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 12px;
+}
+.card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #fff;
+    transition: box-shadow 0.15s, border-color 0.15s;
+}
+.card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-color: #94a3b8; }
+.card.selected { border-color: #1e3a5f; box-shadow: 0 0 0 2px rgba(30,58,95,0.25); }
+.card canvas { display: block; width: 100%; height: 100px; }
+.card-body { padding: 8px 10px; }
+.card-id { font-size: 0.68rem; color: #94a3b8; font-family: monospace; }
+.card-name { font-size: 0.82rem; font-weight: 600; margin: 2px 0; line-height: 1.3; }
+.cat-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    padding: 1px 7px;
+    border-radius: 999px;
+    font-weight: 600;
+    margin-top: 3px;
+}
+.cat-process    { background: #cffafe; color: #0e7490; }
+.cat-material   { background: #ede9fe; color: #6d28d9; }
+.cat-case-study { background: #fef3c7; color: #92400e; }
+
+.detail-canvas { width: 100%; height: 160px; border-radius: 6px; display: block; background: #f8fafc; }
+.detail-id   { font-size: 0.7rem; color: #94a3b8; font-family: monospace; }
+.detail-name { font-size: 1.05rem; font-weight: 700; color: #1e3a5f; margin-top: 2px; }
+.detail-cat  { margin: 4px 0 6px; }
+.detail-desc { font-size: 0.81rem; line-height: 1.55; color: #374151; }
+
+.badge-label { font-size: 0.7rem; font-weight: 600; color: #64748b; margin-top: 6px; }
+.badge-row   { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+.det-badge  { font-size: 0.68rem; padding: 2px 8px; border-radius: 999px; background: #dbeafe; color: #1d4ed8; }
+.spec-badge { font-size: 0.68rem; padding: 2px 8px; border-radius: 999px; background: #dcfce7; color: #15803d; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px; }
+.two-col h4 { font-size: 0.72rem; font-weight: 700; margin-bottom: 4px; }
+.two-col ul { list-style: none; font-size: 0.72rem; color: #374151; }
+.two-col li { margin-bottom: 3px; }
+.col-left h4  { color: #b91c1c; }
+.col-left li::before  { content: "✕ "; color: #b91c1c; }
+.col-right h4 { color: #15803d; }
+.col-right li::before { content: "✓ "; color: #15803d; }
+.no-results { font-size: 0.85rem; color: #94a3b8; padding: 24px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Additive Manufacturing — Metal AM Processes, Materials &amp; Case Studies</h1>
+    <p>America Makes (LPBF, EBM, DED, Binder Jetting) &middot; GE Additive Case Studies (LEAP, Catalyst, GE9X, T901)</p>
+</header>
+
+<div class="source-note">
+    Sources: America Makes &mdash; <em>Additive Manufacturing Technology Roadmap</em> &amp; <em>State of the Industry Reports</em> &middot; GE Additive &mdash; <em>Customer Case Studies</em> &amp; <em>Technology White Papers</em>
+</div>
+
+<div class="compare-strip">
+    <h3>Key Process Comparison &mdash; LPBF (SLM) vs. EBM</h3>
+    <table class="compare-table">
+        <thead><tr><th>Parameter</th><th>LPBF / SLM</th><th>EBM</th></tr></thead>
+        <tbody>
+            <tr><td>Energy Source</td><td>Fiber laser (200–1000 W)</td><td>Electron beam (50–3500 W)</td></tr>
+            <tr><td>Atmosphere</td><td>Inert gas (Ar / N&thinsp;₂)</td><td>High vacuum (&lt;10&thinsp;⁻³ mbar)</td></tr>
+            <tr><td>Build Temperature</td><td>Near room temp (~200&thinsp;°C preheat)</td><td>600–1000&thinsp;°C (full powder bed preheat)</td></tr>
+            <tr><td>Layer Thickness</td><td>20–100&thinsp;µm</td><td>50–200&thinsp;µm</td></tr>
+            <tr><td>Surface Finish</td><td>Ra 4–11&thinsp;µm (better)</td><td>Ra 25–35&thinsp;µm (rougher)</td></tr>
+            <tr><td>Residual Stress</td><td>High — heat treatment required</td><td>Low — hot build chamber</td></tr>
+            <tr><td>Scan Speed</td><td>Up to 7&thinsp;m/s</td><td>Up to 8,000&thinsp;m/s (magnetic deflection)</td></tr>
+            <tr><td>Key Materials</td><td>Ti-6Al-4V, IN718, 316L SS, AlSi10Mg</td><td>Ti-6Al-4V, TiAl, CoCr, IN718</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="filter-bar">
+    <button class="filter-btn active" data-cat="all">All (14)</button>
+    <button class="filter-btn" data-cat="process">Process (4)</button>
+    <button class="filter-btn" data-cat="material">Material (4)</button>
+    <button class="filter-btn" data-cat="case-study">Case Study (6)</button>
+</div>
+
+<div class="main">
+    <div class="grid-panel">
+        <div class="card-grid" id="cardGrid"></div>
+    </div>
+    <div class="detail-panel" id="detailPanel">
+        <canvas class="detail-canvas" id="detailCanvas"></canvas>
+        <div>
+            <div class="detail-id"  id="dId"></div>
+            <div class="detail-name" id="dName"></div>
+            <div class="detail-cat"  id="dCat"></div>
+        </div>
+        <div class="detail-desc" id="dDesc"></div>
+        <div>
+            <div class="badge-label">Key Parameters / Notes</div>
+            <div class="badge-row" id="dDet"></div>
+        </div>
+        <div>
+            <div class="badge-label">Standards / Certifications</div>
+            <div class="badge-row" id="dSpec"></div>
+        </div>
+        <div class="two-col">
+            <div class="col-left">
+                <h4 id="dLeftTitle">Limitations</h4>
+                <ul id="dLeft"></ul>
+            </div>
+            <div class="col-right">
+                <h4 id="dRightTitle">Advantages</h4>
+                <ul id="dRight"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+
+    // Seeded RNG — Math.abs guards against negative-coordinate seeds
+    function seeded(n) {
+        var s = (Math.abs(Math.round(n)) || 1) % 233280;
+        return function() { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+    }
+
+    var entries = [
+
+        // ── PROCESSES ────────────────────────────────────────────────────────
+        {
+            id: 'AM-P100',
+            name: 'Laser Powder Bed Fusion (LPBF / SLM)',
+            cat: 'process',
+            desc: 'A high-power fiber laser selectively melts successive layers of metal powder spread across a build platform. Each layer (20–100 µm) is fused to the previous, building up fully dense parts. Also called Selective Laser Melting (SLM) or Direct Metal Laser Sintering (DMLS). America Makes identifies LPBF as the dominant metal AM process for aerospace and medical applications, with the widest qualified material library and the most deployed machines globally.',
+            detection: ['Layer Thickness: 20–100 µm', 'Laser Power: 200–1000 W', 'As-built Density: >99.5%', 'Atmosphere: Ar / N₂'],
+            specs: ['ASTM F3049', 'AMS 7009', 'AMS 7003', 'AS9100D'],
+            left: ['High residual stress — HT usually required', 'Support structures needed for overhangs', 'Slower build rate vs EBM', 'Build-volume limited (~500 mm cube max)'],
+            right: ['Excellent surface finish (Ra 4–11 µm)', 'Widest qualified material library', 'Complex internal channels printable', 'Production-proven at scale'],
+            draw: function(ctx, w, h) {
+                // Powder bed
+                ctx.fillStyle = '#e8e4d8';
+                ctx.fillRect(0, h * 0.42, w, h * 0.58);
+                var rng = seeded(w * 3 + h);
+                for (var i = 0; i < 55; i++) {
+                    var px = rng() * w;
+                    var py = h * 0.42 + rng() * h * 0.58;
+                    var pr = Math.max(0.5, 1 + rng() * 2);
+                    ctx.beginPath();
+                    ctx.arc(px, py, pr, 0, 6.283);
+                    ctx.fillStyle = 'rgba(180,175,160,0.8)';
+                    ctx.fill();
+                }
+                // Built part (solid layers, gray)
+                ctx.fillStyle = '#7a8898';
+                ctx.fillRect(w * 0.22, h * 0.16, w * 0.56, h * 0.26);
+                // Scan lines on top layer surface
+                for (var k = 0; k < 5; k++) {
+                    var sy = h * 0.16 + k * (h * 0.26 / 5);
+                    ctx.beginPath();
+                    ctx.moveTo(w * 0.22, sy);
+                    ctx.lineTo(w * 0.78, sy);
+                    ctx.strokeStyle = 'rgba(170,195,215,0.35)';
+                    ctx.lineWidth = 0.8;
+                    ctx.stroke();
+                }
+                // Melt pool glow on top
+                var mg = ctx.createRadialGradient(w * 0.5, h * 0.16, 0, w * 0.5, h * 0.16, 20);
+                mg.addColorStop(0, 'rgba(255,200,70,0.95)');
+                mg.addColorStop(0.4, 'rgba(255,110,20,0.55)');
+                mg.addColorStop(1, 'rgba(255,50,0,0)');
+                ctx.fillStyle = mg;
+                ctx.fillRect(w * 0.22, h * 0.04, w * 0.56, h * 0.2);
+                // Laser beam (magenta taper)
+                var lg = ctx.createLinearGradient(w * 0.5, 0, w * 0.5, h * 0.16);
+                lg.addColorStop(0, 'rgba(240,60,190,0)');
+                lg.addColorStop(0.7, 'rgba(240,60,190,0.25)');
+                lg.addColorStop(1, 'rgba(255,195,60,0.85)');
+                ctx.fillStyle = lg;
+                ctx.beginPath();
+                ctx.moveTo(w * 0.478, 0);
+                ctx.lineTo(w * 0.522, 0);
+                ctx.lineTo(w * 0.507, h * 0.16);
+                ctx.lineTo(w * 0.493, h * 0.16);
+                ctx.fill();
+                // Build-direction arrow
+                ctx.beginPath();
+                ctx.moveTo(w * 0.88, h * 0.62);
+                ctx.lineTo(w * 0.88, h * 0.22);
+                ctx.strokeStyle = '#1e3a5f';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(w * 0.84, h * 0.27);
+                ctx.lineTo(w * 0.88, h * 0.19);
+                ctx.lineTo(w * 0.92, h * 0.27);
+                ctx.fillStyle = '#1e3a5f';
+                ctx.fill();
+                ctx.font = '7px sans-serif';
+                ctx.fillStyle = '#1e3a5f';
+                ctx.fillText('Z', w * 0.856, h * 0.68);
+            }
+        },
+
+        {
+            id: 'AM-P200',
+            name: 'Electron Beam Melting (EBM)',
+            cat: 'process',
+            desc: 'A focused electron beam melts pre-sintered metal powder in a high-vacuum chamber. The entire powder bed is held at 600–1000 °C, dramatically reducing residual stress — no post-build stress-relief is required for many alloys. Electromagnetic lenses deflect the beam at up to 8,000 m/s, enabling simultaneous multi-spot scanning. America Makes highlights EBM as critical for biomedical Ti-6Al-4V implants (trabecular structures) and for titanium aluminide (TiAl) turbine blades that cannot be forged conventionally.',
+            detection: ['Layer Thickness: 50–200 µm', 'Beam Power: 50–3500 W', 'Preheat Temp: 600–1000 °C', 'Vacuum: <10⁻³ mbar'],
+            specs: ['ASTM F3001', 'ASTM F2924', 'AMS 4999', 'ISO 13485'],
+            left: ['Rougher surface (Ra 25–35 µm)', 'Powder cake sintered — removal needed', 'Conductive materials only', 'Smaller build volume typical'],
+            right: ['Near-zero residual stress', 'Minimal/no support for many geometries', 'High deposition rate', 'Only viable process for TiAl parts'],
+            draw: function(ctx, w, h) {
+                // Vacuum chamber (dark background)
+                ctx.fillStyle = '#181c2a';
+                ctx.fillRect(0, 0, w, h * 0.52);
+                // Powder bed (warm orange-gray — preheated)
+                ctx.fillStyle = '#b89060';
+                ctx.fillRect(0, h * 0.52, w, h * 0.48);
+                var rng = seeded(w * 5 + h * 2);
+                for (var i = 0; i < 45; i++) {
+                    var px = rng() * w;
+                    var py = h * 0.52 + rng() * h * 0.48;
+                    var pr = Math.max(0.5, 1 + rng() * 2.5);
+                    ctx.beginPath();
+                    ctx.arc(px, py, pr, 0, 6.283);
+                    ctx.fillStyle = 'rgba(155,115,65,0.7)';
+                    ctx.fill();
+                }
+                // Built part
+                ctx.fillStyle = '#6a7a88';
+                ctx.fillRect(w * 0.28, h * 0.26, w * 0.44, h * 0.26);
+                // Electron beam (blue-white)
+                var eg = ctx.createLinearGradient(w * 0.5, 0, w * 0.5, h * 0.26);
+                eg.addColorStop(0, 'rgba(140,195,255,0.9)');
+                eg.addColorStop(0.85, 'rgba(100,165,255,0.45)');
+                eg.addColorStop(1, 'rgba(230,240,255,0.95)');
+                ctx.fillStyle = eg;
+                ctx.beginPath();
+                ctx.moveTo(w * 0.468, 0);
+                ctx.lineTo(w * 0.532, 0);
+                ctx.lineTo(w * 0.507, h * 0.26);
+                ctx.lineTo(w * 0.493, h * 0.26);
+                ctx.fill();
+                // Melt pool
+                var mp = ctx.createRadialGradient(w * 0.5, h * 0.26, 0, w * 0.5, h * 0.26, 11);
+                mp.addColorStop(0, 'rgba(220,240,255,1)');
+                mp.addColorStop(0.5, 'rgba(110,185,255,0.6)');
+                mp.addColorStop(1, 'rgba(110,185,255,0)');
+                ctx.fillStyle = mp;
+                ctx.beginPath();
+                ctx.arc(w * 0.5, h * 0.26, 11, 0, 6.283);
+                ctx.fill();
+                // Cathode / gun at top
+                ctx.fillStyle = '#3a4560';
+                ctx.fillRect(w * 0.4, 0, w * 0.2, h * 0.05);
+                ctx.fillStyle = '#5a6880';
+                ctx.fillRect(w * 0.46, h * 0.05, w * 0.08, h * 0.03);
+                // Preheat glow overlay
+                var hg = ctx.createLinearGradient(0, h * 0.52, 0, h);
+                hg.addColorStop(0, 'rgba(255,145,45,0.28)');
+                hg.addColorStop(1, 'rgba(255,90,0,0.08)');
+                ctx.fillStyle = hg;
+                ctx.fillRect(0, h * 0.52, w, h * 0.48);
+                ctx.font = '7px sans-serif';
+                ctx.fillStyle = 'rgba(140,195,255,0.75)';
+                ctx.fillText('VACUUM', 4, 12);
+                ctx.fillStyle = 'rgba(255,175,80,0.85)';
+                ctx.fillText('PREHEAT ~800°C', 4, h - 6);
+            }
+        },
+
+        {
+            id: 'AM-P300',
+            name: 'Directed Energy Deposition (DED)',
+            cat: 'process',
+            desc: 'Metal powder or wire is fed co-axially through a nozzle and melted by a focused laser or electron beam at the deposition point. DED can deposit onto existing parts for repair or add features to forgings, enabling hybrid manufacturing. America Makes highlights DED for turbine blade repair, large-scale structural components, and cladding. Build rates (0.1–4 kg/hr) are significantly higher than LPBF but resolution and surface finish are lower. Multi-material deposition (functionally graded alloys) is unique to DED.',
+            detection: ['Powder Feed: 2–50 g/min', 'Layer Height: 0.1–1.5 mm', 'Deposition Rate: 0.1–4 kg/hr', 'Laser Power: 0.5–20 kW'],
+            specs: ['ASTM F3187', 'AMS 4999A', 'AWS D20.1', 'AS9100D'],
+            left: ['Lower resolution than LPBF', 'Poor overhangs without support', 'Larger heat-affected zone', 'Higher as-deposited surface roughness'],
+            right: ['Highest deposition rate of laser AM', 'Repair of existing high-value parts', 'Functionally graded materials', 'Large build volume (metres)'],
+            draw: function(ctx, w, h) {
+                // Substrate
+                ctx.fillStyle = '#4e5c6e';
+                ctx.fillRect(0, h * 0.72, w, h * 0.28);
+                // Deposited beads (3 layers)
+                for (var b = 0; b < 3; b++) {
+                    var by = h * 0.72 - b * h * 0.1;
+                    var bg = ctx.createLinearGradient(0, by - h * 0.05, 0, by);
+                    bg.addColorStop(0, '#8899aa');
+                    bg.addColorStop(1, '#68788a');
+                    ctx.fillStyle = bg;
+                    ctx.beginPath();
+                    ctx.ellipse(w * 0.38, by - h * 0.03, w * 0.36, h * 0.055, 0, 0, 6.283);
+                    ctx.fill();
+                }
+                // Active melt pool
+                var mp = ctx.createRadialGradient(w * 0.38, h * 0.42, 0, w * 0.38, h * 0.42, 13);
+                mp.addColorStop(0, 'rgba(255,215,70,1)');
+                mp.addColorStop(0.4, 'rgba(255,115,25,0.8)');
+                mp.addColorStop(1, 'rgba(200,45,0,0)');
+                ctx.fillStyle = mp;
+                ctx.beginPath();
+                ctx.arc(w * 0.38, h * 0.42, 13, 0, 6.283);
+                ctx.fill();
+                // Nozzle (angled from top-right)
+                ctx.save();
+                ctx.translate(w * 0.62, h * 0.14);
+                ctx.rotate(-0.52);
+                ctx.fillStyle = '#2d3748';
+                ctx.fillRect(-5, 0, 10, h * 0.22);
+                ctx.fillStyle = '#4a5568';
+                ctx.beginPath();
+                ctx.moveTo(-7, h * 0.22);
+                ctx.lineTo(7, h * 0.22);
+                ctx.lineTo(3.5, h * 0.31);
+                ctx.lineTo(-3.5, h * 0.31);
+                ctx.fill();
+                ctx.restore();
+                // Powder stream particles
+                var rng = seeded(w + h * 7);
+                for (var i = 0; i < 14; i++) {
+                    var t = rng();
+                    var ppx = w * 0.62 - 0.28 * w * t + rng() * 5 - 2.5;
+                    var ppy = h * 0.35 + t * h * 0.14;
+                    ctx.beginPath();
+                    ctx.arc(ppx, ppy, Math.max(0.5, 1 + rng() * 1.2), 0, 6.283);
+                    ctx.fillStyle = 'rgba(215,195,150,0.85)';
+                    ctx.fill();
+                }
+                // Laser beam line
+                ctx.beginPath();
+                ctx.moveTo(w * 0.56, h * 0.08);
+                ctx.lineTo(w * 0.38, h * 0.42);
+                ctx.strokeStyle = 'rgba(240,60,190,0.4)';
+                ctx.lineWidth = 1.8;
+                ctx.stroke();
+                ctx.font = '7px sans-serif';
+                ctx.fillStyle = 'rgba(200,215,230,0.85)';
+                ctx.fillText('powder + laser', 4, h - 6);
+            }
+        },
+
+        {
+            id: 'AM-P400',
+            name: 'Binder Jetting',
+            cat: 'process',
+            desc: 'An inkjet printhead deposits a liquid binder onto metal powder layers, bonding selected regions without any heat source. No residual stress accumulates during printing. The green part is sintered in a furnace (with optional HIP) to burn off binder and densify the metal. America Makes identifies Binder Jetting as the highest-throughput metal AM process — 10–100× faster than LPBF — making it attractive for high-volume production. Key challenge is controlling sintering shrinkage (~15–20% linear), which must be pre-compensated in the CAD file.',
+            detection: ['Layer Thickness: 50–200 µm', 'Linear Shrinkage: ~15–20%', 'Final Density: 97–99% (HIP: >99.5%)', 'Build Rate: 10–100× LPBF'],
+            specs: ['ASTM F3315', 'MPIF Standard 35', 'MPIF Standard 55', 'ISO/ASTM 52910'],
+            left: ['Shrinkage compensation required in CAD', 'Lower as-sintered density without HIP', 'Binder burnout adds process time', 'Fragile green part handling'],
+            right: ['Highest throughput of metal AM', 'Near-zero residual stress as-printed', 'No support structures typical', 'Low cost per part at production volume'],
+            draw: function(ctx, w, h) {
+                // Powder bed (light gray)
+                ctx.fillStyle = '#dddbd0';
+                ctx.fillRect(0, h * 0.36, w, h * 0.64);
+                var rng = seeded(w * 11 + h * 3);
+                for (var i = 0; i < 65; i++) {
+                    var px = rng() * w;
+                    var py = h * 0.36 + rng() * h * 0.64;
+                    var pr = Math.max(0.5, 0.8 + rng() * 1.8);
+                    ctx.beginPath();
+                    ctx.arc(px, py, pr, 0, 6.283);
+                    ctx.fillStyle = 'rgba(188,184,168,0.7)';
+                    ctx.fill();
+                }
+                // Bound region (amber tint)
+                ctx.fillStyle = 'rgba(175,125,35,0.28)';
+                ctx.fillRect(w * 0.18, h * 0.36, w * 0.62, h * 0.26);
+                // Bound region border
+                ctx.strokeStyle = 'rgba(160,110,20,0.4)';
+                ctx.lineWidth = 0.8;
+                ctx.strokeRect(w * 0.18, h * 0.36, w * 0.62, h * 0.26);
+                // Printhead bar
+                ctx.fillStyle = '#2d3748';
+                ctx.fillRect(0, h * 0.12, w, h * 0.08);
+                ctx.fillStyle = '#1a202c';
+                ctx.fillRect(w * 0.14, h * 0.2, w * 0.52, h * 0.04);
+                // Binder droplets
+                for (var j = 0; j < 8; j++) {
+                    var dx = w * 0.17 + j * w * 0.075;
+                    ctx.beginPath();
+                    ctx.arc(dx, h * 0.29, 2.5, 0, 6.283);
+                    ctx.fillStyle = 'rgba(90,155,255,0.85)';
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.moveTo(dx, h * 0.24);
+                    ctx.lineTo(dx, h * 0.285);
+                    ctx.strokeStyle = 'rgba(90,155,255,0.4)';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+                // Layer lines
+                for (var k = 0; k < 3; k++) {
+                    ctx.beginPath();
+                    ctx.moveTo(w * 0.18, h * 0.36 + k * h * 0.087);
+                    ctx.lineTo(w * 0.8, h * 0.36 + k * h * 0.087);
+                    ctx.strokeStyle = 'rgba(140,95,15,0.25)';
+                    ctx.lineWidth = 0.7;
+                    ctx.stroke();
+                }
+                ctx.font = '7px sans-serif';
+                ctx.fillStyle = '#92400e';
+                ctx.fillText('BOUND', w * 0.2, h * 0.48);
+                ctx.fillStyle = '#666';
+                ctx.fillText('LOOSE POWDER', w * 0.2, h * 0.82);
+            }
+        },
+
+        // ── MATERIALS ─────────────────────────────────────────────────────────
+        {
+            id: 'AM-M100',
+            name: 'Ti-6Al-4V (Grade 23)',
+            cat: 'material',
+            desc: 'The most widely used titanium alloy in metal AM. Ti-6Al-4V (6% Al, 4% V) offers outstanding strength-to-weight ratio and biocompatibility. LPBF\'s rapid cooling creates columnar prior-beta grains filled with fine acicular martensite (alpha\'). Post-process heat treatment — 800 °C anneal or HIP at 900 °C / 100 MPa — transforms alpha\' to stable alpha+beta, restoring ductility (El >10%). America Makes identifies Ti-6Al-4V as the #1 aerospace and medical AM material by volume.',
+            detection: ['UTS: 930–1100 MPa (LPBF + HT)', 'Yield: 860–970 MPa', 'Elongation: 8–14%', 'Density: 4.43 g/cm³'],
+            specs: ['ASTM F3001', 'AMS 4999', 'ASTM F2924 (EBM)', 'ISO 5832-3'],
+            left: ['Columnar grain texture causes anisotropy', 'Martensite forms if not heat-treated', 'Sensitive to O₂ contamination during build', 'High raw powder cost vs steels'],
+            right: ['Highest strength-to-weight ratio', 'Excellent corrosion resistance', 'Biocompatible ELI grade (ISO 5832-3)', 'Most characterised AM material database'],
+            draw: function(ctx, w, h) {
+                ctx.fillStyle = '#18202e';
+                ctx.fillRect(0, 0, w, h);
+                var rng = seeded(w * 13 + h * 5);
+                var numCols = 7;
+                for (var c = 0; c < numCols; c++) {
+                    var cx = (c + 0.5) * (w / numCols) + (rng() - 0.5) * 7;
+                    var cw2 = w / numCols * 0.62 + rng() * 5;
+                    var cg = ctx.createLinearGradient(cx - cw2 / 2, 0, cx + cw2 / 2, 0);
+                    cg.addColorStop(0, 'rgba(55,78,105,0)');
+                    cg.addColorStop(0.5, 'rgba(78,108,142,0.38)');
+                    cg.addColorStop(1, 'rgba(55,78,105,0)');
+                    ctx.fillStyle = cg;
+                    ctx.fillRect(cx - cw2 / 2, 0, cw2, h);
+                    for (var n = 0; n < 9; n++) {
+                        var nx = cx + (rng() - 0.5) * cw2;
+                        var ny = rng() * h;
+                        var nl = 9 + rng() * 14;
+                        var na = (rng() - 0.5) * 1.15;
+                        ctx.save();
+                        ctx.translate(nx, ny);
+                        ctx.rotate(na);
+                        ctx.fillStyle = 'rgba(158,202,232,' + (0.48 + rng() * 0.42) + ')';
+                        ctx.fillRect(-nl / 2, -0.9, nl, 1.8);
+                        ctx.restore();
+                    }
+                }
+                for (var b = 0; b < 14; b++) {
+                    var bx = rng() * w;
+                    var by = rng() * h;
+                    var br = Math.max(0.5, 2 + rng() * 4.5);
+                    ctx.beginPath();
+                    ctx.arc(bx, by, br, 0, 6.283);
+                    ctx.fillStyle = 'rgba(38,48,78,0.55)';
+                    ctx.fill();
+                }
+                ctx.font = '8px sans-serif';
+                ctx.fillStyle = 'rgba(158,202,232,0.85)';
+                ctx.fillText('α’ acicular martensite', 3, h - 18);
+                ctx.fillStyle = 'rgba(100,138,180,0.75)';
+                ctx.fillText('prior-β columns', 3, h - 7);
+            }
+        },
+
+        {
+            id: 'AM-M200',
+            name: 'IN718 (Inconel 718)',
+            cat: 'material',
+            desc: 'The most widely used nickel superalloy in metal AM. IN718 retains strength to 650 °C through gamma-double-prime (γ″, Ni₃Nb) and gamma-prime (γ′, Ni₃Al/Ti) precipitates. LPBF produces columnar dendritic grains parallel to build direction. As-built IN718 is solution-annealed and double-aged per AMS 5663 (SA+DA: 980 °C/1h → 720 °C/8h → 620 °C/8h) to develop full precipitation strengthening. America Makes roadmap prioritises IN718 for turbine disks, blisks, combustors, and hot-section structural components.',
+            detection: ['UTS: 1240–1380 MPa (SA+DA)', 'Yield: 1100–1200 MPa', 'Elongation: 12–18%', 'Max Service Temp: 650 °C'],
+            specs: ['AMS 5663', 'AMS 5664', 'ASTM B637', 'AMS 2774'],
+            left: ['Requires solution anneal + double age HT', 'Columnar grain anisotropy in build direction', 'Laves phase forms if cooling too slow', 'High work-hardening rate — difficult to machine'],
+            right: ['Excellent high-temperature creep resistance', 'Good oxidation/hot-corrosion resistance', 'Largest AM superalloy characterisation database', 'Widely used across LPBF, EBM, DED'],
+            draw: function(ctx, w, h) {
+                ctx.fillStyle = '#171520';
+                ctx.fillRect(0, 0, w, h);
+                var rng = seeded(w * 17 + h * 7);
+                for (var g = 0; g < 6; g++) {
+                    var gx = (g + 0.5) * (w / 6);
+                    var gw2 = w / 6 * 0.52;
+                    for (var arm = 0; arm < 6; arm++) {
+                        var ay = arm * (h / 6);
+                        ctx.beginPath();
+                        ctx.moveTo(gx, ay);
+                        ctx.lineTo(gx, ay + h / 6);
+                        ctx.strokeStyle = 'rgba(195,175,115,0.38)';
+                        ctx.lineWidth = 0.9;
+                        ctx.stroke();
+                        for (var sa = 0; sa < 3; sa++) {
+                            var say = ay + sa * (h / 18);
+                            var sl = gw2 * 0.38 + rng() * gw2 * 0.22;
+                            var dir = (sa % 2 === 0) ? 1 : -1;
+                            ctx.beginPath();
+                            ctx.moveTo(gx, say);
+                            ctx.lineTo(gx + dir * sl, say + 3);
+                            ctx.strokeStyle = 'rgba(175,158,98,0.28)';
+                            ctx.lineWidth = 0.6;
+                            ctx.stroke();
+                        }
+                    }
+                    ctx.beginPath();
+                    ctx.moveTo(gx + gw2, 0);
+                    ctx.lineTo(gx + gw2, h);
+                    ctx.strokeStyle = 'rgba(95,75,55,0.55)';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+                // γ" precipitate dots
+                for (var p = 0; p < 45; p++) {
+                    var ppx = rng() * w;
+                    var ppy = rng() * h;
+                    var ppr = Math.max(0.5, 0.8 + rng() * 1.5);
+                    ctx.beginPath();
+                    ctx.arc(ppx, ppy, ppr, 0, 6.283);
+                    ctx.fillStyle = 'rgba(255,218,95,' + (0.38 + rng() * 0.52) + ')';
+                    ctx.fill();
+                }
+                ctx.font = '8px sans-serif';
+                ctx.fillStyle = 'rgba(255,218,95,0.9)';
+                ctx.fillText('γ″ Ni₃Nb precipitates', 3, h - 18);
+                ctx.fillStyle = 'rgba(195,175,115,0.8)';
+                ctx.fillText('columnar dendritic', 3, h - 7);
+            }
+        },
+
+        {
+            id: 'AM-M300',
+            name: '316L Stainless Steel',
+            cat: 'material',
+            desc: 'The most common stainless steel in metal AM. The low-carbon "L" grade limits sensitisation; 2–3% Mo provides superior pitting resistance. LPBF 316L forms a fine cellular sub-grain structure within austenitic grains — cell size ~0.3–1 µm — giving as-built yield strength (~500–600 MPa) far exceeding wrought 316L (~170 MPa) with no heat treatment. America Makes highlights 316L for chemical, petrochemical, nuclear, and medical device AM applications due to its wide corrosion resistance and low raw-material cost.',
+            detection: ['UTS: 580–680 MPa (as-built)', 'Yield: 490–590 MPa', 'Elongation: 30–50%', 'Density: 7.99 g/cm³'],
+            specs: ['ASTM A276', 'ASTM F3184', 'ASME Section IX', 'ISO 15614'],
+            left: ['Lower strength than Ti64 or IN718', 'Can be slightly magnetic in some build conditions', 'Susceptible to stress corrosion cracking in Cl⁻', 'Higher density increases structural mass'],
+            right: ['Excellent as-built ductility', 'Lowest cost widely-used metal AM alloy', 'Good weldability enables repair', 'Broadest chemical/media resistance'],
+            draw: function(ctx, w, h) {
+                ctx.fillStyle = '#1a1e2c';
+                ctx.fillRect(0, 0, w, h);
+                var rng = seeded(w * 19 + h * 11);
+                var grainCenters = [];
+                for (var g = 0; g < 14; g++) {
+                    grainCenters.push({ x: rng() * w, y: rng() * h });
+                }
+                var colors = [
+                    'rgba(78,118,158,', 'rgba(68,98,138,',
+                    'rgba(88,128,168,', 'rgba(73,108,148,'
+                ];
+                for (var gi = 0; gi < grainCenters.length; gi++) {
+                    var gc = grainCenters[gi];
+                    ctx.beginPath();
+                    var sides = 5 + Math.floor(rng() * 3);
+                    var gr = 18 + rng() * 17;
+                    for (var s = 0; s < sides; s++) {
+                        var angle = (s / sides) * 6.283 + rng() * 0.38;
+                        var rx = gc.x + (gr + rng() * 7) * Math.cos(angle);
+                        var ry = gc.y + (gr + rng() * 7) * Math.sin(angle);
+                        if (s === 0) ctx.moveTo(rx, ry);
+                        else ctx.lineTo(rx, ry);
+                    }
+                    ctx.closePath();
+                    ctx.fillStyle = colors[gi % colors.length] + (0.28 + rng() * 0.2) + ')';
+                    ctx.fill();
+                    ctx.strokeStyle = 'rgba(155,188,218,0.5)';
+                    ctx.lineWidth = 0.8;
+                    ctx.stroke();
+                }
+                // Cellular sub-grain lines
+                for (var ci = 0; ci < 35; ci++) {
+                    var ccx = rng() * w;
+                    var ccy = rng() * h;
+                    var cang = rng() * 6.283;
+                    var cl = 5 + rng() * 9;
+                    ctx.beginPath();
+                    ctx.moveTo(ccx, ccy);
+                    ctx.lineTo(ccx + cl * Math.cos(cang), ccy + cl * Math.sin(cang));
+                    ctx.strokeStyle = 'rgba(195,218,238,0.18)';
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                }
+                ctx.font = '8px sans-serif';
+                ctx.fillStyle = 'rgba(155,188,218,0.9)';
+                ctx.fillText('austenitic grains', 3, h - 18);
+                ctx.fillText('cellular sub-grain ~0.5µm', 3, h - 7);
+            }
+        },
+
+        {
+            id: 'AM-M400',
+            name: 'AlSi10Mg',
+            cat: 'material',
+            desc: 'A near-eutectic aluminum-silicon casting alloy adapted for LPBF. High Si (10%) provides good fluidity and weldability. LPBF\'s rapid solidification creates an extremely fine cellular microstructure (cell size ~0.3–1 µm) with Si decorating cell walls — far finer than any casting process — giving as-built UTS ~430–470 MPa without ageing. Post-process T6 or 300 °C stress relief coarsens Si and reduces anisotropy. America Makes identifies AlSi10Mg as the primary lightweight structural AM alloy for automotive, UAV, and space applications.',
+            detection: ['UTS: 430–470 MPa (as-built)', 'Yield: 240–280 MPa', 'Elongation: 6–10%', 'Density: 2.67 g/cm³ (lightest metal AM alloy)'],
+            specs: ['ASTM B928', 'AMS 4290', 'EN AC-43000', 'ISO/ASTM 52921'],
+            left: ['Low melting point limits service to <150 °C', 'Ductility anisotropy (XY vs Z)', 'Spatter and porosity if parameters drift', 'Surface oxidation in humid environments'],
+            right: ['Lowest density of all metal AM alloys', 'Excellent specific strength', 'Good thermal conductivity for heat exchangers', 'Widest automotive/UAV AM dataset'],
+            draw: function(ctx, w, h) {
+                ctx.fillStyle = '#181c20';
+                ctx.fillRect(0, 0, w, h);
+                var rng = seeded(w * 23 + h * 9);
+                var cellR = 5;
+                var numC = Math.ceil(w / (cellR * 1.72)) + 1;
+                var numR = Math.ceil(h / (cellR * 1.5)) + 1;
+                for (var row = 0; row < numR; row++) {
+                    for (var col = 0; col < numC; col++) {
+                        var cellX = col * cellR * 1.72 + (row % 2) * cellR * 0.86;
+                        var cellY = row * cellR * 1.5;
+                        var v = 0.28 + rng() * 0.24;
+                        ctx.beginPath();
+                        ctx.arc(cellX, cellY, cellR * 0.68, 0, 6.283);
+                        ctx.fillStyle = 'rgba(175,185,198,' + v + ')';
+                        ctx.fill();
+                        ctx.beginPath();
+                        ctx.arc(cellX, cellY, cellR * 0.68, 0, 6.283);
+                        ctx.strokeStyle = 'rgba(218,198,118,' + (0.38 + rng() * 0.42) + ')';
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+                // Melt pool boundaries
+                for (var mp = 0; mp < 4; mp++) {
+                    var mpy = mp * h / 4 + rng() * 8;
+                    ctx.beginPath();
+                    ctx.ellipse(w / 2, mpy, w * 0.44, h * 0.078, 0, 0, 6.283);
+                    ctx.strokeStyle = 'rgba(255,215,95,0.22)';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+                ctx.font = '8px sans-serif';
+                ctx.fillStyle = 'rgba(218,198,118,0.9)';
+                ctx.fillText('Si cell network', 3, h - 18);
+                ctx.fillStyle = 'rgba(175,185,198,0.8)';
+                ctx.fillText('Al cells ~0.5µm', 3, h - 7);
+            }
+        },
+
+        // ── GE ADDITIVE CASE STUDIES ─────────────────────────────────────────
+        {
+            id: 'AM-G100',
+            name: 'LEAP Engine Fuel Nozzle',
+            cat: 'case-study',
+            desc: 'The CFM International LEAP fuel nozzle is the landmark aerospace metal AM case study. GE Aviation consolidated 20 separately machined parts into a single LPBF Co-Cr component, printed on Concept Laser machines (now GE Additive). The nozzle is 25% lighter and 5× more durable than the predecessor machined nozzle. Complex internal fuel channels — impossible to machine — are printed in a single build. By 2021, GE had produced over 100,000 nozzles for delivery to airlines worldwide, making it the highest-volume certified metal AM aerospace component ever produced.',
+            detection: ['Material: Co-Cr alloy', 'Process: LPBF', 'Part count: 20 → 1', '100,000+ units produced (2021)'],
+            specs: ['FAA Part 33', 'EASA CS-E', 'AMS 5801', 'AS9100D'],
+            left: ['Co-Cr harder to print than Ti-6Al-4V', 'Qualification and certification took ~3 years', 'CT scan inspection required per nozzle', 'Complex internal channel cleaning validation'],
+            right: ['25% weight reduction', '5× durability improvement', 'Part consolidation 20 → 1', 'Enables complex internal cooling passages'],
+            draw: function(ctx, w, h) {
+                var cx = w / 2, cy = h / 2;
+                // Nozzle body
+                var og = ctx.createLinearGradient(cx - 28, cy - 32, cx + 28, cy + 32);
+                og.addColorStop(0, '#8a9ab0');
+                og.addColorStop(0.5, '#6a7a90');
+                og.addColorStop(1, '#485870');
+                ctx.fillStyle = og;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy - 36);
+                ctx.bezierCurveTo(cx + 19, cy - 30, cx + 26, cy + 8, cx + 13, cy + 36);
+                ctx.lineTo(cx - 13, cy + 36);
+                ctx.bezierCurveTo(cx - 26, cy + 8, cx - 19, cy - 30, cx, cy - 36);
+                ctx.fill();
+                // Internal channels
+                for (var ch = -1; ch <= 1; ch++) {
+                    ctx.beginPath();
+                    ctx.moveTo(cx + ch * 6, cy - 28);
+                    ctx.quadraticCurveTo(cx + ch * 9, cy, cx + ch * 5, cy + 31);
+                    ctx.strokeStyle = 'rgba(175,218,255,0.5)';
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+                }
+                // Fuel spray
+                for (var sp = 0; sp < 9; sp++) {
+                    var ang = ((sp / 9) * 6.283) - 1.5708;
+                    var sr = 5 + sp * 1.2;
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy + 36);
+                    ctx.lineTo(cx + Math.cos(ang) * sr * 0.7, cy + 36 + Math.abs(Math.sin(ang)) * sr * 1.3 + 3);
+                    ctx.strokeStyle = 'rgba(95,178,255,0.38)';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+                // Flame glow
+                var fg = ctx.createRadialGradient(cx, cy + 44, 0, cx, cy + 44, 15);
+                fg.addColorStop(0, 'rgba(255,198,45,0.85)');
+                fg.addColorStop(0.4, 'rgba(255,98,15,0.52)');
+                fg.addColorStop(1, 'rgba(255,45,0,0)');
+                ctx.fillStyle = fg;
+                ctx.beginPath();
+                ctx.arc(cx, cy + 44, 15, 0, 6.283);
+                ctx.fill();
+                ctx.font = 'bold 8px sans-serif';
+                ctx.fillStyle = 'rgba(255,215,95,0.95)';
+                ctx.textAlign = 'center';
+                ctx.fillText('Co-Cr LPBF', cx, 12);
+                ctx.fillText('20 → 1 parts', cx, h - 5);
+                ctx.textAlign = 'left';
+            }
+        },
+
+        {
+            id: 'AM-G200',
+            name: 'GE Catalyst / ATP Engine',
+            cat: 'case-study',
+            desc: 'The GE Catalyst Advanced Turboprop (ATP) for the Cessna Denali aircraft consolidated 855 legacy parts into 12 AM-produced components, representing 35% of the engine by part count. The 1,240 shp turboprop delivers 20% better specific fuel consumption and 10% more power than comparable turboprops. Key AM components include the combustor liner, compressor case, and diffuser. EASA-certified in 2020. America Makes supported early development through the National Additive Manufacturing Innovation Institute, and GE cited the Catalyst as proof that AM can redesign an entire propulsion system.',
+            detection: ['Part count: 855 → 12 AM components', 'Power: 1,240 shp', 'Fuel efficiency: +20%', 'Certification: EASA 2020'],
+            specs: ['EASA CS-E', 'FAA Part 33', 'AS9100D', 'AMS 5663 (IN718)'],
+            left: ['Multi-material AM qualification across all stages', 'Longest AM engine certification in aviation history', 'AM hot-section thermal management novel', 'Replaced mature 855-part supply chain'],
+            right: ['20% fuel efficiency improvement', '10% power increase vs prior turboprops', 'Part count reduced from 855 to 12', 'First turboprop engine with AM combustor'],
+            draw: function(ctx, w, h) {
+                var cy = h / 2;
+                // Intake bell
+                ctx.fillStyle = '#5a6878';
+                ctx.beginPath();
+                ctx.moveTo(6, cy + 16);
+                ctx.lineTo(6, cy - 16);
+                ctx.bezierCurveTo(12, cy - 21, 24, cy - 15, 28, cy - 11);
+                ctx.lineTo(28, cy + 11);
+                ctx.bezierCurveTo(24, cy + 15, 12, cy + 21, 6, cy + 16);
+                ctx.fill();
+                // Compressor stages (3)
+                for (var s = 0; s < 3; s++) {
+                    var sx = 28 + s * 17;
+                    var sh = 11 - s * 1.5;
+                    ctx.fillStyle = (s === 1) ? '#7a8da0' : '#6a7d90';
+                    ctx.fillRect(sx, cy - sh, 13, sh * 2);
+                    for (var bl = -2; bl <= 2; bl++) {
+                        ctx.beginPath();
+                        ctx.moveTo(sx + 3, cy + bl * 4);
+                        ctx.lineTo(sx + 13, cy + bl * 4 - 1);
+                        ctx.strokeStyle = 'rgba(195,218,238,0.45)';
+                        ctx.lineWidth = 0.7;
+                        ctx.stroke();
+                    }
+                }
+                // Combustor (amber highlight — AM part)
+                ctx.fillStyle = 'rgba(175,115,35,0.65)';
+                ctx.fillRect(79, cy - 17, 27, 34);
+                ctx.strokeStyle = '#f59e0b';
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(79, cy - 17, 27, 34);
+                var cflame = ctx.createLinearGradient(79, cy, 106, cy);
+                cflame.addColorStop(0, 'rgba(255,145,25,0.58)');
+                cflame.addColorStop(1, 'rgba(255,75,0,0.18)');
+                ctx.fillStyle = cflame;
+                ctx.fillRect(79, cy - 13, 27, 26);
+                // Turbine stages (2)
+                for (var t = 0; t < 2; t++) {
+                    var tx = 108 + t * 15;
+                    var th = 13 - t * 2;
+                    ctx.fillStyle = '#8a7060';
+                    ctx.fillRect(tx, cy - th, 11, th * 2);
+                    for (var tbl = -2; tbl <= 2; tbl++) {
+                        ctx.beginPath();
+                        ctx.moveTo(tx + 2, cy + tbl * 4);
+                        ctx.lineTo(tx + 11, cy + tbl * 4 + 1);
+                        ctx.strokeStyle = 'rgba(255,195,145,0.38)';
+                        ctx.lineWidth = 0.7;
+                        ctx.stroke();
+                    }
+                }
+                // Exhaust
+                ctx.fillStyle = '#565f6c';
+                ctx.beginPath();
+                ctx.moveTo(138, cy - 8);
+                ctx.lineTo(w - 3, cy - 18);
+                ctx.lineTo(w - 3, cy + 18);
+                ctx.lineTo(138, cy + 8);
+                ctx.fill();
+                var exh = ctx.createLinearGradient(140, cy, w, cy);
+                exh.addColorStop(0, 'rgba(255,115,0,0.28)');
+                exh.addColorStop(1, 'rgba(255,75,0,0)');
+                ctx.fillStyle = exh;
+                ctx.beginPath();
+                ctx.moveTo(138, cy - 8);
+                ctx.lineTo(w - 3, cy - 18);
+                ctx.lineTo(w - 3, cy + 18);
+                ctx.lineTo(138, cy + 8);
+                ctx.fill();
+                ctx.font = '7px sans-serif';
+                ctx.fillStyle = '#f59e0b';
+                ctx.fillText('AM combustor', 79, cy - 20);
+                ctx.fillStyle = 'rgba(195,218,238,0.78)';
+                ctx.fillText('855→12 parts · +20% SFC', 3, h - 5);
+            }
+        },
+
+        {
+            id: 'AM-G300',
+            name: 'T25 Sensor Housing',
+            cat: 'case-study',
+            desc: 'The T25 temperature and pressure sensor housing for GE\'s CF6-80C2 engine (Boeing 777) received FAA airworthiness approval in 2015, making it one of the first FAA-certified metal AM aerospace parts in revenue service. Made from titanium (Ti-6Al-4V) by LPBF, the housing was redesigned specifically for AM to improve aerodynamic performance and reduce cost. America Makes cited the T25 approval as the watershed regulatory moment demonstrating that the FAA Part 33 certification pathway for AM propulsion parts was viable, paving the way for all subsequent GE AM programmes.',
+            detection: ['Material: Ti-6Al-4V LPBF', 'Platform: Boeing 777 / CF6-80C2', 'FAA Part 33 approval: 2015', 'Inspection: CT scan per unit'],
+            specs: ['FAA Part 33', 'AMS 4999', 'AS9100D', 'ASTM F2924'],
+            left: ['First-of-kind FAA AM certification required extensive testing', 'CT scan required for every flight-article unit', 'Post-process HIP required for density assurance', 'Part traceability and serialisation per FAA'],
+            right: ['First FAA-certified metal AM aerospace part', 'Improved aerodynamic profile vs original', 'Lower cost than machined titanium housing', 'Regulatory template for all subsequent GE AM parts'],
+            draw: function(ctx, w, h) {
+                var cx = w / 2, cy = h / 2;
+                // Housing body
+                var sg = ctx.createLinearGradient(cx - 22, cy - 27, cx + 22, cy + 27);
+                sg.addColorStop(0, '#9aaabb');
+                sg.addColorStop(0.5, '#788898');
+                sg.addColorStop(1, '#586878');
+                ctx.fillStyle = sg;
+                ctx.beginPath();
+                ctx.moveTo(cx - 20, cy - 28);
+                ctx.lineTo(cx + 20, cy - 28);
+                ctx.lineTo(cx + 20, cy + 22);
+                ctx.lineTo(cx, cy + 22);
+                ctx.lineTo(cx - 20, cy + 22);
+                ctx.closePath();
+                ctx.fill();
+                // Airfoil strut below
+                ctx.fillStyle = '#687888';
+                ctx.beginPath();
+                ctx.ellipse(cx, cy + 34, 6, 14, 0, 0, 6.283);
+                ctx.fill();
+                // Sensing ports
+                for (var p = 0; p < 3; p++) {
+                    var ppy = cy - 17 + p * 13;
+                    ctx.beginPath(); ctx.arc(cx - 20, ppy, 3, 0, 6.283);
+                    ctx.fillStyle = '#2d3748'; ctx.fill();
+                    ctx.beginPath(); ctx.arc(cx + 20, ppy, 3, 0, 6.283);
+                    ctx.fillStyle = '#2d3748'; ctx.fill();
+                }
+                // Internal channel
+                ctx.beginPath();
+                ctx.moveTo(cx - 14, cy - 18);
+                ctx.bezierCurveTo(cx - 4, cy, cx + 4, cy, cx + 14, cy - 18);
+                ctx.strokeStyle = 'rgba(175,218,255,0.42)';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+                // FAA certification badge
+                ctx.fillStyle = 'rgba(34,197,94,0.85)';
+                ctx.beginPath();
+                ctx.arc(cx + 14, cy - 22, 9, 0, 6.283);
+                ctx.fill();
+                ctx.font = 'bold 6px sans-serif';
+                ctx.fillStyle = '#fff';
+                ctx.textAlign = 'center';
+                ctx.fillText('FAA', cx + 14, cy - 19);
+                ctx.textAlign = 'left';
+                ctx.font = '7px sans-serif';
+                ctx.fillStyle = 'rgba(195,218,238,0.9)';
+                ctx.textAlign = 'center';
+                ctx.fillText('Ti-6Al-4V LPBF', cx, 12);
+                ctx.fillText('First FAA-certified AM part', cx, h - 5);
+                ctx.textAlign = 'left';
+            }
+        },
+
+        {
+            id: 'AM-G400',
+            name: 'GE9X Engine Components',
+            cat: 'case-study',
+            desc: 'The GE9X is the world\'s largest commercial turbofan engine, powering the Boeing 777X. It incorporates 28 fuel nozzles (LPBF Co-Cr, same family as LEAP) and TiAl (titanium aluminide) low-pressure turbine blades produced by Arcam EBM — a material so brittle it cannot be forged conventionally, yet EBM\'s preheated 1000 °C build chamber keeps it above the brittle-ductile transition temperature during build. TiAl offers ~50% weight saving vs nickel superalloys at LPT temperatures. The GE9X achieved FAA certification in 2020 and is ~600 lb lighter than the GE90 it partially replaces.',
+            detection: ['Thrust: 100,000–105,000 lbf', 'TiAl LPT blades via EBM (Arcam Q20plus)', 'Weight saving vs GE90: ~600 lb', 'FAA certification: 2020'],
+            specs: ['FAA Part 33', 'ASTM F3001 (EBM Ti)', 'AMS 4999', 'AMS 2774'],
+            left: ['TiAl brittle at room temp — EBM preheat mandatory', 'World\'s largest engine = most complex certification', 'TiAl powder highly reactive — inert handling required', 'Post-process HIP required for EBM TiAl blades'],
+            right: ['~600 lb lighter than GE90', '10% better fuel burn', 'TiAl only viable via EBM for LPT', 'Powers Boeing 777X flagship aircraft'],
+            draw: function(ctx, w, h) {
+                var cx = w / 2, cy = h / 2;
+                // Engine nacelle outer ring
+                ctx.beginPath();
+                ctx.arc(cx, cy, 40, 0, 6.283);
+                ctx.strokeStyle = '#3a4a60';
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+                // Fan blades (18 blades)
+                var numBlades = 18;
+                for (var b = 0; b < numBlades; b++) {
+                    var ang = (b / numBlades) * 6.283;
+                    ctx.save();
+                    ctx.translate(cx, cy);
+                    ctx.rotate(ang);
+                    var bg = ctx.createLinearGradient(0, -40, 0, -9);
+                    bg.addColorStop(0, 'rgba(138,158,183,0.92)');
+                    bg.addColorStop(1, 'rgba(88,108,133,0.72)');
+                    ctx.fillStyle = bg;
+                    ctx.beginPath();
+                    ctx.moveTo(-2, -9);
+                    ctx.bezierCurveTo(-5, -20, -4, -36, 0, -40);
+                    ctx.bezierCurveTo(4, -36, 5, -20, 2, -9);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.restore();
+                }
+                // Hub
+                var hg = ctx.createRadialGradient(cx, cy, 0, cx, cy, 9);
+                hg.addColorStop(0, '#9ab0c8');
+                hg.addColorStop(1, '#586e88');
+                ctx.fillStyle = hg;
+                ctx.beginPath();
+                ctx.arc(cx, cy, 9, 0, 6.283);
+                ctx.fill();
+                // Fan tip ring
+                ctx.beginPath();
+                ctx.arc(cx, cy, 40, 0, 6.283);
+                ctx.strokeStyle = '#586878';
+                ctx.lineWidth = 3.5;
+                ctx.stroke();
+                ctx.font = '7px sans-serif';
+                ctx.fillStyle = 'rgba(195,218,238,0.9)';
+                ctx.textAlign = 'center';
+                ctx.fillText('GE9X · 105,000 lbf thrust', cx, 12);
+                ctx.fillText('TiAl EBM LPT blades', cx, h - 5);
+                ctx.textAlign = 'left';
+            }
+        },
+
+        {
+            id: 'AM-G500',
+            name: '7HA Gas Turbine',
+            cat: 'case-study',
+            desc: 'GE\'s 7HA.02 (High efficiency, Air-cooled) gas turbine for power generation achieves over 64% combined-cycle efficiency — the world\'s most efficient large gas turbine at its introduction. AM enables combustor and hot-gas-path components with complex internal cooling geometries that are impossible to cast. The 7HA.02 combined-cycle plant outputs 1,310 MW with two turbines. GE Additive uses both LPBF for new manufacture of combustor components and DED for on-site repair of hot-section parts, reducing overhaul downtime for utility operators.',
+            detection: ['Output: 400+ MW per turbine (CC: 1,310 MW with 2)', 'Efficiency: >64% combined cycle', 'Turbine Inlet Temp: >1600 °C', 'AM use: combustor + DED hot-section repair'],
+            specs: ['ASME B31.1', 'ISO 3977', 'IEC 60034', 'NFPA 37'],
+            left: ['Extreme thermal cycling stresses AM combustor parts', 'Scale demands largest AM hot-section qualification', 'DED repair qualification must be site-specific', 'High-value parts require CT verification after repair'],
+            right: ['>64% combined-cycle efficiency (world record)', 'AM cooling channels impossible to invest-cast', 'Lower combustion NOₓ emissions', 'DED enables on-site repair — reduces outage time'],
+            draw: function(ctx, w, h) {
+                var cy = h / 2;
+                // Turbine casing (cylindrical)
+                var tg = ctx.createLinearGradient(0, cy - 26, 0, cy + 26);
+                tg.addColorStop(0, '#8a9ab0');
+                tg.addColorStop(0.5, '#6a7a90');
+                tg.addColorStop(1, '#485870');
+                ctx.fillStyle = tg;
+                ctx.fillRect(18, cy - 26, 80, 52);
+                ctx.beginPath();
+                ctx.ellipse(18, cy, 10, 26, 0, 0, 6.283);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(98, cy, 10, 26, 0, 0, 6.283);
+                ctx.fill();
+                // Turbine blade stages
+                for (var st = 0; st < 3; st++) {
+                    var stx = 28 + st * 22;
+                    ctx.fillStyle = '#3a4a5c';
+                    ctx.beginPath();
+                    ctx.ellipse(stx, cy, 3.5, 18, 0, 0, 6.283);
+                    ctx.fill();
+                    for (var bl = -3; bl <= 3; bl++) {
+                        ctx.fillStyle = 'rgba(155,178,200,0.68)';
+                        ctx.beginPath();
+                        ctx.moveTo(stx, cy + bl * 5.5);
+                        ctx.lineTo(stx + 11, cy + bl * 5.5 - 1.5);
+                        ctx.lineTo(stx + 11, cy + bl * 5.5 + 1.5);
+                        ctx.closePath();
+                        ctx.fill();
+                    }
+                }
+                // Hot gas gradient
+                var hg = ctx.createLinearGradient(18, cy, 98, cy);
+                hg.addColorStop(0, 'rgba(255,95,15,0.28)');
+                hg.addColorStop(0.5, 'rgba(255,145,25,0.18)');
+                hg.addColorStop(1, 'rgba(200,75,0,0.08)');
+                ctx.fillStyle = hg;
+                ctx.fillRect(18, cy - 22, 80, 44);
+                // Generator block
+                ctx.fillStyle = '#3a4858';
+                ctx.fillRect(108, cy - 9, 22, 18);
+                ctx.fillStyle = '#2a3848';
+                ctx.fillRect(130, cy - 6, 14, 12);
+                // Efficiency label
+                ctx.font = 'bold 8px sans-serif';
+                ctx.fillStyle = '#22c55e';
+                ctx.textAlign = 'center';
+                ctx.fillText('>64% CC efficiency', w / 2, h - 5);
+                ctx.fillStyle = 'rgba(195,218,238,0.85)';
+                ctx.fillText('7HA.02 · 400+ MW', w / 2, 12);
+                ctx.textAlign = 'left';
+            }
+        },
+
+        {
+            id: 'AM-G600',
+            name: 'T901 ITEP Engine',
+            cat: 'case-study',
+            desc: 'The GE Aviation T901-GE-900 won the US Army Improved Turbine Engine Program (ITEP) and will replace the GE T700 in UH-60 Black Hawk and AH-64 Apache helicopters across 6,000+ engine retrofits. The T901 delivers 3,000 shp — 50% more power than the T700 — with 25% fuel savings and 20% increased range. GE Additive produced AM components for the compressor, combustor, and turbine. America Makes highlighted the T901 contract as the largest defence metal AM engine programme in history, validating AM for US Army rotorcraft propulsion.',
+            detection: ['Power: 3,000 shp (+50% vs T700)', 'Fuel savings: 25%', 'Range increase: 20%', 'Platform: UH-60 Black Hawk + AH-64 Apache'],
+            specs: ['MIL-E-8593', 'AS9100D', 'AMS 5663 (IN718)', 'DEF STAN 00-970'],
+            left: ['MIL-SPEC qualification is extremely rigorous', 'Rotorcraft vibration environment stresses AM parts', 'Foreign object damage resistance requirements', '6,000-engine retrofit programme has long fleet life'],
+            right: ['50% power increase vs T700', '25% fuel savings in combat operations', 'Largest defence AM engine programme', 'Proves AM readiness for US Army rotorcraft'],
+            draw: function(ctx, w, h) {
+                var cy = h / 2;
+                // Intake
+                ctx.fillStyle = '#5a6878';
+                ctx.beginPath();
+                ctx.moveTo(6, cy + 14);
+                ctx.lineTo(6, cy - 14);
+                ctx.bezierCurveTo(12, cy - 19, 22, cy - 14, 26, cy - 10);
+                ctx.lineTo(26, cy + 10);
+                ctx.bezierCurveTo(22, cy + 14, 12, cy + 19, 6, cy + 14);
+                ctx.fill();
+                // Engine body
+                var eg = ctx.createLinearGradient(26, cy - 16, 26, cy + 16);
+                eg.addColorStop(0, '#7e8ea6');
+                eg.addColorStop(1, '#4e5e72');
+                ctx.fillStyle = eg;
+                ctx.fillRect(26, cy - 16, 95, 32);
+                // Compressor (4 stages)
+                for (var c = 0; c < 4; c++) {
+                    ctx.fillStyle = 'rgba(155,178,200,0.38)';
+                    ctx.fillRect(26 + c * 10, cy - 16, 8, 32);
+                    ctx.strokeStyle = 'rgba(195,218,238,0.25)';
+                    ctx.lineWidth = 0.5;
+                    ctx.beginPath();
+                    ctx.moveTo(26 + c * 10 + 4, cy - 16);
+                    ctx.lineTo(26 + c * 10 + 4, cy + 16);
+                    ctx.stroke();
+                }
+                // Combustor (amber)
+                ctx.fillStyle = 'rgba(175,108,28,0.58)';
+                ctx.fillRect(68, cy - 14, 22, 28);
+                var cf = ctx.createLinearGradient(68, cy, 90, cy);
+                cf.addColorStop(0, 'rgba(255,135,18,0.52)');
+                cf.addColorStop(1, 'rgba(255,55,0,0.18)');
+                ctx.fillStyle = cf;
+                ctx.fillRect(68, cy - 10, 22, 20);
+                // Turbine stages (2)
+                for (var t = 0; t < 2; t++) {
+                    ctx.fillStyle = '#7a6858';
+                    ctx.fillRect(92 + t * 13, cy - 12 + t * 2, 9, 24 - t * 4);
+                }
+                // Output shaft
+                ctx.fillStyle = '#48586a';
+                ctx.fillRect(118, cy - 4, w - 118 - 4, 8);
+                // Rotor disc (helicopter) top
+                ctx.save();
+                ctx.translate(w * 0.58, 10);
+                ctx.fillStyle = '#374151';
+                ctx.fillRect(-2, 0, 4, 8);
+                for (var r = 0; r < 4; r++) {
+                    ctx.save();
+                    ctx.rotate(r * 1.5708);
+                    ctx.fillStyle = 'rgba(75,98,118,0.72)';
+                    ctx.fillRect(-20, -2, 20, 4);
+                    ctx.restore();
+                }
+                ctx.restore();
+                ctx.font = 'bold 8px sans-serif';
+                ctx.fillStyle = '#60a5fa';
+                ctx.textAlign = 'center';
+                ctx.fillText('T901 · 3,000 shp', w / 2, 12);
+                ctx.fillStyle = '#22c55e';
+                ctx.fillText('+50% power · −25% fuel', w / 2, h - 5);
+                ctx.textAlign = 'left';
+            }
+        }
+
+    ]; // end entries
+
+    var currentFilter = 'all';
+
+    function buildCards() {
+        var grid = document.getElementById('cardGrid');
+        grid.innerHTML = '';
+        var filtered = entries.filter(function(e) {
+            return currentFilter === 'all' || e.cat === currentFilter;
+        });
+        if (!filtered.length) {
+            grid.innerHTML = '<div class="no-results">No entries match this filter.</div>';
+            return;
+        }
+        filtered.forEach(function(d) {
+            var card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML =
+                '<div class="card-body">' +
+                '<div class="card-id">' + d.id + '</div>' +
+                '<div class="card-name">' + d.name + '</div>' +
+                '<span class="cat-badge cat-' + d.cat + '">' + d.cat.replace('-', ' ') + '</span>' +
+                '</div>';
+            var canvas = document.createElement('canvas');
+            canvas.width = 200;
+            canvas.height = 100;
+            card.insertBefore(canvas, card.firstChild);
+            grid.appendChild(card);
+            try {
+                var ctx = canvas.getContext('2d');
+                d.draw(ctx, 200, 100);
+            } catch (e2) { /* skip failed draw */ }
+            card.addEventListener('click', (function(entry, cardEl) {
+                return function() {
+                    document.querySelectorAll('.card').forEach(function(c) { c.classList.remove('selected'); });
+                    cardEl.classList.add('selected');
+                    showDetail(entry);
+                };
+            })(d, card));
+        });
+    }
+
+    function showDetail(d) {
+        var panel = document.getElementById('detailPanel');
+        panel.classList.add('open');
+        var dc = document.getElementById('detailCanvas');
+        dc.width = dc.offsetWidth || 300;
+        dc.height = 160;
+        var ctx = dc.getContext('2d');
+        ctx.clearRect(0, 0, dc.width, dc.height);
+        try { d.draw(ctx, dc.width, dc.height); } catch (e2) {}
+
+        document.getElementById('dId').textContent = d.id;
+        document.getElementById('dName').textContent = d.name;
+        document.getElementById('dCat').innerHTML =
+            '<span class="cat-badge cat-' + d.cat + '">' + d.cat.replace('-', ' ') + '</span>';
+        document.getElementById('dDesc').textContent = d.desc;
+
+        var det = document.getElementById('dDet');
+        det.innerHTML = '';
+        d.detection.forEach(function(t) {
+            var b = document.createElement('span');
+            b.className = 'det-badge';
+            b.textContent = t;
+            det.appendChild(b);
+        });
+
+        var sp = document.getElementById('dSpec');
+        sp.innerHTML = '';
+        d.specs.forEach(function(t) {
+            var b = document.createElement('span');
+            b.className = 'spec-badge';
+            b.textContent = t;
+            sp.appendChild(b);
+        });
+
+        var leftTitle = document.getElementById('dLeftTitle');
+        var rightTitle = document.getElementById('dRightTitle');
+        if (d.cat === 'case-study') {
+            leftTitle.textContent = 'Challenges';
+            rightTitle.textContent = 'Outcomes';
+        } else {
+            leftTitle.textContent = 'Limitations';
+            rightTitle.textContent = 'Advantages';
+        }
+
+        var l = document.getElementById('dLeft');
+        l.innerHTML = '';
+        d.left.forEach(function(t) {
+            var li = document.createElement('li');
+            li.textContent = t;
+            l.appendChild(li);
+        });
+        var r = document.getElementById('dRight');
+        r.innerHTML = '';
+        d.right.forEach(function(t) {
+            var li = document.createElement('li');
+            li.textContent = t;
+            r.appendChild(li);
+        });
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            currentFilter = btn.getAttribute('data-cat');
+            document.getElementById('detailPanel').classList.remove('open');
+            buildCards();
+        });
+    });
+
+    buildCards();
+
+})();
+</script>
+
+
+<p style="text-align: center; padding: 16px; font-size: 0.85rem;"><a href="index.html">Back to Reference Tables &amp; Diagrams</a></p>
+
+</body>
+</html>
