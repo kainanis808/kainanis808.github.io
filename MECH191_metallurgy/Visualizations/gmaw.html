@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GMAW – Transfer Modes &amp; Droplet Mechanics</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0a1628; color: #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; }
+
+  header { background: linear-gradient(135deg, #0f2040 0%, #1a3a5c 100%); padding: 24px 32px 20px; border-bottom: 2px solid #f97316; }
+  header h1 { font-size: 1.75rem; color: #f97316; letter-spacing: 0.5px; }
+  header p  { color: #94a3b8; font-size: 0.88rem; margin-top: 5px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #1e3a5c; background: #0d1f38; padding: 0 24px; overflow-x: auto; }
+  .tab-btn { padding: 14px 22px; background: none; border: none; color: #94a3b8; font-size: 0.9rem; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: color 0.2s, border-color 0.2s; white-space: nowrap; }
+  .tab-btn:hover { color: #fdba74; }
+  .tab-btn.active { color: #f97316; border-bottom-color: #f97316; font-weight: 600; }
+
+  .tab-content { display: none; padding: 28px 32px; max-width: 1140px; }
+  .tab-content.active { display: block; }
+
+  h2 { font-size: 1.2rem; color: #f97316; margin-bottom: 14px; margin-top: 24px; }
+  h2:first-child { margin-top: 0; }
+  h3 { font-size: 0.95rem; color: #fdba74; margin-bottom: 8px; }
+
+  canvas { display: block; }
+
+  .card { background: #0f2040; border: 1px solid #1e3a5c; border-radius: 10px; padding: 18px; margin-bottom: 22px; }
+
+  .anim-wrap  { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .anim-cv    { background: #0a1628; border: 1px solid #1e3a5c; border-radius: 8px; overflow: hidden; }
+  .anim-ctrls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .anim-ctrls button { background: #1a3a5c; color: #e2e8f0; border: 1px solid #f97316; border-radius: 6px; padding: 7px 18px; font-size: 0.85rem; cursor: pointer; transition: background 0.18s; }
+  .anim-ctrls button:hover { background: #f97316; color: #0a1628; }
+  .stage-lbl  { font-size: 0.98rem; color: #fdba74; font-weight: 600; text-align: center; min-height: 22px; }
+  .stage-dsc  { font-size: 0.82rem; color: #94a3b8; text-align: center; max-width: 720px; min-height: 42px; line-height: 1.55; }
+
+  .mode-select { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 6px; }
+  .mode-btn { padding: 8px 22px; border-radius: 20px; border: 2px solid #1e3a5c; background: #0f2040; color: #94a3b8; font-size: 0.85rem; cursor: pointer; transition: all 0.18s; font-weight: 600; }
+  .mode-btn:hover { border-color: #f97316; color: #fdba74; }
+  .mode-btn.active { background: #1a3a5c; border-color: #f97316; color: #f97316; }
+
+  .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  .ref-table th { background: #1a3a5c; color: #f97316; padding: 8px 11px; text-align: left; border: 1px solid #1e3a5c; }
+  .ref-table td { padding: 7px 11px; border: 1px solid #1e3a5c; color: #cbd5e1; vertical-align: top; }
+  .ref-table tr:nth-child(odd)  td { background: #0a1628; }
+  .ref-table tr:nth-child(even) td { background: #0f2040; }
+  .ref-table tr:hover td { background: #132338; }
+  .tbl-wrap { overflow-x: auto; }
+
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-bottom: 22px; }
+  .two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 22px; }
+  @media (max-width: 800px) { .three-col { grid-template-columns: 1fr; } .two-col { grid-template-columns: 1fr; } }
+
+  .mode-card { background: #0f2040; border: 1px solid #1e3a5c; border-radius: 10px; padding: 16px; }
+  .mode-card.sc  { border-top: 3px solid #60a5fa; }
+  .mode-card.sp  { border-top: 3px solid #4ade80; }
+  .mode-card.pu  { border-top: 3px solid #c084fc; }
+  .mode-title { font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
+  .sc .mode-title { color: #60a5fa; }
+  .sp .mode-title { color: #4ade80; }
+  .pu .mode-title { color: #c084fc; }
+  .kv { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+  .kv-row { display: flex; justify-content: space-between; font-size: 0.79rem; border-bottom: 1px solid #1e3a5c; padding-bottom: 4px; }
+  .kv-row span:first-child { color: #94a3b8; }
+  .kv-row span:last-child  { color: #e2e8f0; font-weight: 600; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; background: #1e3a5c; color: #94a3b8; }
+  .tag.good { background: #14532d; color: #86efac; }
+  .tag.bad  { background: #450a0a; color: #fca5a5; }
+
+  .alert { background: #0a1628; border: 1px solid #f97316; border-radius: 8px; padding: 14px 18px; margin-top: 16px; font-size: 0.82rem; color: #94a3b8; line-height: 1.6; }
+  .alert b { color: #f97316; }
+
+  .src { font-size: 0.74rem; color: #64748b; margin-top: 8px; font-style: italic; }
+
+  .back-link { text-align: center; padding: 28px; }
+  .back-link a { color: #f97316; text-decoration: none; font-size: 0.9rem; }
+  .back-link a:hover { text-decoration: underline; }
+
+  .waveform-legend { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; font-size: 0.78rem; color: #94a3b8; margin-top: 6px; }
+  .wl-item { display: flex; align-items: center; gap: 6px; }
+  .wl-dot  { width: 12px; height: 4px; border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>GMAW – Gas Metal Arc Welding: Transfer Modes &amp; Droplet Mechanics</h1>
+  <p>Sources: Lincoln Electric — <em>GMAW Welding Guide</em> &nbsp;·&nbsp; Miller Electric — <em>Guidelines for Gas Metal Arc Welding</em> &nbsp;·&nbsp; AWS C5.6 (GMAW Recommended Practices) &nbsp;·&nbsp; Lincoln Electric <em>Welders' Handbook</em></p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="overview">Transfer Mode Overview</button>
+  <button class="tab-btn" data-tab="droplet">Droplet Transfer Animation</button>
+  <button class="tab-btn" data-tab="params">Process Parameters</button>
+</div>
+
+<!-- ═══════════════════════════════ TAB 1 ══════════════════════════════════ -->
+<div class="tab-content active" id="tab-overview">
+
+  <h2>Side-by-Side Arc Comparison</h2>
+  <div class="card anim-wrap">
+    <div class="anim-cv"><canvas id="c-compare" width="780" height="420"></canvas></div>
+    <div class="stage-lbl" id="cmp-lbl">Animating all three transfer modes simultaneously</div>
+    <div class="stage-dsc" id="cmp-dsc">Short-circuit (left) touches the puddle repeatedly at 20–200 Hz. Spray (center) streams fine droplets axially without contact. Pulsed (right) synchronizes one droplet per background→peak current cycle.</div>
+    <div class="anim-ctrls">
+      <button id="cmp-play-btn" onclick="cmpToggle()">⏸ Pause</button>
+    </div>
+    <p class="src">Lincoln Electric <em>GMAW Welding Guide</em>; AWS C5.6 §4; Miller Electric <em>GMAW Application Guidelines</em>.</p>
+  </div>
+
+  <h2>Mode Characteristics at a Glance</h2>
+  <div class="three-col">
+    <div class="mode-card sc">
+      <div class="mode-title">Short-Circuit Transfer</div>
+      <div class="kv">
+        <div class="kv-row"><span>Voltage</span><span>15 – 22 V</span></div>
+        <div class="kv-row"><span>Current</span><span>50 – 150 A</span></div>
+        <div class="kv-row"><span>Wire diameter</span><span>0.023 – 0.045 in</span></div>
+        <div class="kv-row"><span>Frequency</span><span>20 – 200 shorts/sec</span></div>
+        <div class="kv-row"><span>Shield gas</span><span>C25, C8, 100% CO₂</span></div>
+        <div class="kv-row"><span>Arc length</span><span>Very short (wire contacts)</span></div>
+      </div>
+      <div class="tag-row">
+        <span class="tag good">Thin gauge (≤ 3/16 in)</span>
+        <span class="tag good">All positions</span>
+        <span class="tag good">Low heat input</span>
+        <span class="tag bad">Spatter</span>
+        <span class="tag bad">Cold lap risk</span>
+        <span class="tag bad">Not for thick sections</span>
+      </div>
+    </div>
+    <div class="mode-card sp">
+      <div class="mode-title">Spray Transfer</div>
+      <div class="kv">
+        <div class="kv-row"><span>Voltage</span><span>24 – 40 V</span></div>
+        <div class="kv-row"><span>Current</span><span>Above transition (~200 A+)</span></div>
+        <div class="kv-row"><span>Wire diameter</span><span>0.035 – 0.062 in</span></div>
+        <div class="kv-row"><span>Rate</span><span>Hundreds of droplets/sec</span></div>
+        <div class="kv-row"><span>Shield gas</span><span>≥ 80% Ar (Ar/CO₂ or pure Ar)</span></div>
+        <div class="kv-row"><span>Arc length</span><span>Long, stable, no contact</span></div>
+      </div>
+      <div class="tag-row">
+        <span class="tag good">High deposition</span>
+        <span class="tag good">Spatter-free</span>
+        <span class="tag good">Good fusion on thick plate</span>
+        <span class="tag bad">Flat/horizontal only</span>
+        <span class="tag bad">High heat input</span>
+        <span class="tag bad">Requires ≥ 80% Ar</span>
+      </div>
+    </div>
+    <div class="mode-card pu">
+      <div class="mode-title">Pulsed-Spray Transfer</div>
+      <div class="kv">
+        <div class="kv-row"><span>Voltage</span><span>Avg 18 – 32 V</span></div>
+        <div class="kv-row"><span>Current</span><span>Avg 100 – 300 A (peak &gt; transition)</span></div>
+        <div class="kv-row"><span>Pulse freq.</span><span>30 – 400 Hz</span></div>
+        <div class="kv-row"><span>Droplets</span><span>One per pulse (ODPP)</span></div>
+        <div class="kv-row"><span>Shield gas</span><span>75–95% Ar / balance CO₂</span></div>
+        <div class="kv-row"><span>Arc length</span><span>Controlled, no contact</span></div>
+      </div>
+      <div class="tag-row">
+        <span class="tag good">All positions</span>
+        <span class="tag good">Spatter-free</span>
+        <span class="tag good">Thin + thick</span>
+        <span class="tag good">Lower avg heat than spray</span>
+        <span class="tag bad">Requires pulsed power source</span>
+        <span class="tag bad">Higher cost equipment</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert">
+    <b>Transition Current:</b> The boundary between short-circuit and spray transfer depends on wire composition and diameter, and shielding gas. For 0.045 in ER70S-6 in Ar/CO₂ (C25), transition occurs near <b>220–250 A</b>. Below this, globular or short-circuit mode dominates even with high voltage. Pulsed power sources circumvent this by driving brief <b>peak pulses above</b> transition current while keeping the <b>average current below</b> it — enabling spray-like droplet detachment at lower average heat inputs.
+  </div>
+  <p class="src" style="margin-top:12px;">Lincoln Electric <em>GMAW Welding Guide</em> pp. 14–18; Miller Electric <em>Pulsed MIG Welding Application Guide</em>; AWS C5.6:2003 §4.1.</p>
+</div>
+
+<!-- ═══════════════════════════════ TAB 2 ══════════════════════════════════ -->
+<div class="tab-content" id="tab-droplet">
+
+  <h2>Droplet Transfer Mechanism — Animated Detail</h2>
+
+  <div class="mode-select">
+    <button class="mode-btn active" id="mbtn-sc" onclick="setMode('sc')">Short-Circuit</button>
+    <button class="mode-btn"        id="mbtn-sp" onclick="setMode('sp')">Spray</button>
+    <button class="mode-btn"        id="mbtn-pu" onclick="setMode('pu')">Pulsed</button>
+  </div>
+
+  <div class="card anim-wrap">
+    <div class="anim-cv"><canvas id="c-detail" width="720" height="420"></canvas></div>
+    <div class="stage-lbl" id="det-lbl"></div>
+    <div class="stage-dsc" id="det-dsc"></div>
+    <div class="anim-ctrls">
+      <button id="det-play-btn" onclick="detToggle()">⏸ Pause</button>
+    </div>
+    <p class="src" id="det-src"></p>
+  </div>
+
+  <h2>Force Balance on a Droplet</h2>
+  <div class="card">
+    <canvas id="c-forces" width="720" height="290"></canvas>
+    <p class="src" style="margin-top:8px;">Kim &amp; Eagar (1993) <em>Weld. J.</em> 72(7) 269-s – 278-s; Rhee &amp; Kannatey-Asibu (1992) <em>Weld. J.</em> 71(11) 381-s – 386-s. Electromagnetic (Lorentz) pinch and gravity drive detachment; surface tension resists it. In spray mode, electromagnetic pinch dominates, producing fine axial droplets.</p>
+  </div>
+
+  <h2>Short-Circuit Cycle Phases</h2>
+  <div class="card">
+    <canvas id="c-sccycle" width="720" height="220"></canvas>
+    <p class="src" style="margin-top:8px;">Lincoln Electric <em>GMAW Welding Guide</em>; Modenesi &amp; de Abreu (1999) cycle-time analysis. Typical cycle: arc phase (wire melts) → short phase (contact, surface tension pulls) → arc reignition. Inductance setting controls di/dt at reignition to limit spatter.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ TAB 3 ══════════════════════════════════ -->
+<div class="tab-content" id="tab-params">
+
+  <h2>Process Parameter Ranges by Transfer Mode</h2>
+  <div class="card">
+    <div class="tbl-wrap">
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th style="color:#60a5fa;">Short-Circuit</th>
+            <th style="color:#4ade80;">Spray</th>
+            <th style="color:#c084fc;">Pulsed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Voltage (V)</td><td>15 – 22</td><td>24 – 40</td><td>18 – 32 (avg)</td></tr>
+          <tr><td>Current (A)</td><td>50 – 150</td><td>200 – 500+</td><td>100 – 350 avg; peak &gt; 300</td></tr>
+          <tr><td>Wire feed speed (in/min)</td><td>100 – 250</td><td>300 – 700+</td><td>200 – 500</td></tr>
+          <tr><td>Travel speed (in/min)</td><td>10 – 25</td><td>20 – 60</td><td>15 – 45</td></tr>
+          <tr><td>Electrode dia. (in)</td><td>0.023 – 0.045</td><td>0.035 – 0.062</td><td>0.030 – 0.045</td></tr>
+          <tr><td>Shielding gas</td><td>C25 (75Ar/25CO₂), C8, 100% CO₂</td><td>≥ 80% Ar: 90/10, 95/5, pure Ar</td><td>75–95% Ar / CO₂</td></tr>
+          <tr><td>Shield flow rate (CFH)</td><td>25 – 35</td><td>30 – 45</td><td>30 – 45</td></tr>
+          <tr><td>CTWD (in)</td><td>3/8 – 1/2</td><td>3/4 – 1</td><td>1/2 – 3/4</td></tr>
+          <tr><td>Droplet size</td><td>≥ wire dia. (large)</td><td>&lt;&lt; wire dia. (fine)</td><td>≈ wire dia. (controlled)</td></tr>
+          <tr><td>Transfer frequency</td><td>20 – 200 Hz (shorts/sec)</td><td>Hundreds/sec</td><td>30 – 400 Hz (one drop/pulse)</td></tr>
+          <tr><td>Positions</td><td>All (1G/2G/3G/4G)</td><td>Flat &amp; horizontal only</td><td>All</td></tr>
+          <tr><td>Material thickness</td><td>Sheet: 0.018 in – 3/16 in</td><td>Plate: 1/8 in and up</td><td>Sheet + plate, versatile</td></tr>
+          <tr><td>Spatter level</td><td>Moderate – High</td><td>Very low</td><td>Very low</td></tr>
+          <tr><td>Heat input (kJ/in)</td><td>5 – 20</td><td>25 – 80+</td><td>10 – 40</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="src" style="margin-top:8px;">Lincoln Electric <em>GMAW Welding Guide</em>; Miller <em>Guidelines for GMAW</em>; AWS C5.6:2003 Table 1. CTWD = contact-tip-to-workpiece distance.</p>
+  </div>
+
+  <h2>Shielding Gas Selection</h2>
+  <div class="two-col">
+    <div class="card">
+      <h3>Effect of CO₂ Content on Transfer Mode</h3>
+      <canvas id="c-gas" width="330" height="230"></canvas>
+      <p class="src" style="margin-top:8px;">Increasing CO₂ raises the transition current and oxidizing potential. Above ~20% CO₂, spray transfer requires very high currents and produces more spatter. Pure CO₂ is limited to short-circuit or globular.</p>
+    </div>
+    <div class="card">
+      <h3>Common Shielding Gas Blends</h3>
+      <table class="ref-table">
+        <thead><tr><th>Blend</th><th>Transfer Modes</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>100% CO₂</td><td>Short-circuit, Globular</td><td>Low cost, deep penetration, higher spatter, no spray possible</td></tr>
+          <tr><td>C25 (75Ar/25CO₂)</td><td>Short-circuit (best), Globular</td><td>Most common blend for SC; good wetting</td></tr>
+          <tr><td>C8 / C10 (Ar/8-10% CO₂)</td><td>Spray, Pulsed, SC</td><td>Versatile; moderate oxidizing; good for pulsed</td></tr>
+          <tr><td>90Ar/10CO₂</td><td>Spray, Pulsed</td><td>Common for structural spray; good fusion</td></tr>
+          <tr><td>95Ar/5CO₂</td><td>Spray, Pulsed</td><td>Low spatter, good bead appearance</td></tr>
+          <tr><td>98Ar/2O₂</td><td>Spray (stainless)</td><td>Low oxidation; stainless and Ni alloys</td></tr>
+          <tr><td>100% Ar</td><td>Spray (Al, Cu, Ti)</td><td>Non-ferrous metals; no CO₂ for reactive metals</td></tr>
+        </tbody>
+      </table>
+      <p class="src" style="margin-top:8px;">AWS C5.6 §5; Lincoln Electric <em>Shielding Gas Selection Guide</em>.</p>
+    </div>
+  </div>
+
+  <h2>AWS ER-Number Wire Classification</h2>
+  <div class="card">
+    <p style="text-align:center;font-size:0.85rem;color:#94a3b8;margin-bottom:14px;">Example: <b style="color:#e2e8f0;">ER70S-6</b> — click a segment to decode it</p>
+    <div style="display:flex;justify-content:center;gap:0;margin-bottom:16px;flex-wrap:wrap;" id="er-display">
+      <div class="er-seg" id="er-E" onclick="showER('E')" style="padding:12px 16px;font-size:2rem;font-weight:700;cursor:pointer;border-radius:8px;border:2px solid transparent;color:#60a5fa;transition:all 0.15s;">ER</div>
+      <div class="er-seg" id="er-str" onclick="showER('str')" style="padding:12px 16px;font-size:2rem;font-weight:700;cursor:pointer;border-radius:8px;border:2px solid transparent;color:#4ade80;transition:all 0.15s;">70</div>
+      <div class="er-seg" id="er-S" onclick="showER('S')" style="padding:12px 16px;font-size:2rem;font-weight:700;cursor:pointer;border-radius:8px;border:2px solid transparent;color:#fbbf24;transition:all 0.15s;">S</div>
+      <div class="er-seg" id="er-chem" onclick="showER('chem')" style="padding:12px 16px;font-size:2rem;font-weight:700;cursor:pointer;border-radius:8px;border:2px solid transparent;color:#f87171;transition:all 0.15s;">-6</div>
+    </div>
+    <div style="background:#0a1628;border:1px solid #1e3a5c;border-radius:8px;padding:14px 18px;min-height:72px;" id="er-info">
+      <div style="font-size:0.85rem;font-weight:700;color:#fdba74;margin-bottom:5px;" id="er-title">Click a segment above to decode it</div>
+      <div style="font-size:0.82rem;color:#94a3b8;line-height:1.6;" id="er-body">AWS A5.18 classifies solid carbon steel GMAW wires. The designation encodes electrode/rod type, tensile strength, process, and chemical composition class.</div>
+    </div>
+    <p class="src" style="margin-top:10px;">AWS A5.18:2021 (carbon steel); AWS A5.28 (low-alloy); AWS A5.9 (stainless); AWS A5.10 (aluminum — ER4043, ER5356).</p>
+  </div>
+
+  <h2>Common ER70S Wire Grades</h2>
+  <div class="card">
+    <div class="tbl-wrap">
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>AWS Class</th>
+            <th>Si %</th>
+            <th>Mn %</th>
+            <th>Key Characteristic</th>
+            <th>Best Application</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>ER70S-2</td><td>0.40 – 0.70</td><td>0.90 – 1.40</td><td>Triple-deoxidized (Al+Ti+Zr); welds through mill scale</td><td>Pipe root passes, rusty/oily surfaces</td></tr>
+          <tr><td>ER70S-3</td><td>0.45 – 0.75</td><td>0.90 – 1.40</td><td>Low Si; clean weld appearance</td><td>Clean base metal, general shop fabrication</td></tr>
+          <tr><td>ER70S-6</td><td>0.80 – 1.15</td><td>1.40 – 1.85</td><td>High Si + Mn deoxidizers; tolerates mill scale</td><td>Most common; structural, automotive, general</td></tr>
+          <tr><td>ER70S-7</td><td>0.50 – 0.80</td><td>1.50 – 2.00</td><td>Higher Mn; good impact toughness at low temperature</td><td>Low-temperature service, pipe</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="src" style="margin-top:8px;">AWS A5.18:2021 Table 1 &amp; A1. ER70S-6 dominates general GMAW due to deoxidizer package tolerating hot-rolled mill scale common in fabrication shops.</p>
+  </div>
+</div>
+
+<!-- back link -->
+<div class="back-link"><a href="index.html">← Back to Visualizations</a></div>
+
+<script>
+// ─── Shared utilities ────────────────────────────────────────────────────────
+function rng(seed) {
+  const s = Math.abs(seed) | 1;
+  let x = s;
+  return () => { x = (x * 1664525 + 1013904223) & 0xffffffff; return (x >>> 0) / 4294967296; };
+}
+
+// ─── TAB SWITCHING ───────────────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'droplet') { drawForces(); drawSCCycle(); }
+    if (btn.dataset.tab === 'params') { drawGasChart(); }
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TAB 1 — SIDE-BY-SIDE COMPARISON CANVAS
+// ═══════════════════════════════════════════════════════════════════════════
+const cmp = document.getElementById('c-compare');
+const cmpCtx = cmp.getContext('2d');
+let cmpRaf = null, cmpRunning = true, cmpT = 0;
+
+// Panel geometry: three equal panels
+const PANELS = [
+  { x: 0,   label: 'Short-Circuit', color: '#60a5fa', mode: 'sc' },
+  { x: 260, label: 'Spray',         color: '#4ade80', mode: 'sp' },
+  { x: 520, label: 'Pulsed',        color: '#c084fc', mode: 'pu' },
+];
+const PW = 260, PH = 420;
+
+// State per panel
+const pState = {
+  sc: { phase: 'arc', t: 0, dropY: 0, dropR: 4, puddle: [] },
+  sp: { droplets: [], t: 0 },
+  pu: { phase: 'bg', t: 0, dropY: 0, dropR: 3.5, pulseT: 0, droplets: [] },
+};
+
+// Seeded RNG for sparkles
+const scSparkRng  = rng(77);
+const spSparkRng  = rng(42);
+const puSparkRng  = rng(99);
+
+function drawPanel(ctx, px, mode, t) {
+  const cx = px + PW / 2;
+  const wireTop = 40, wireBottom = 140;
+  const pudY = 310;
+
+  // Panel background
+  ctx.fillStyle = '#060e1c';
+  ctx.fillRect(px, 0, PW, PH);
+
+  // Label bar
+  const col = PANELS.find(p => p.mode === mode).color;
+  ctx.fillStyle = col + '22';
+  ctx.fillRect(px, 0, PW, 36);
+  ctx.fillStyle = col;
+  ctx.font = 'bold 13px Segoe UI, Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText(PANELS.find(p => p.mode === mode).label, cx, 23);
+
+  // Divider
+  if (px > 0) { ctx.strokeStyle = '#1e3a5c'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, PH); ctx.stroke(); }
+
+  if (mode === 'sc') drawSCPanel(ctx, px, cx, wireTop, wireBottom, pudY, t);
+  if (mode === 'sp') drawSPPanel(ctx, px, cx, wireTop, wireBottom, pudY, t);
+  if (mode === 'pu') drawPUPanel(ctx, px, cx, wireTop, wireBottom, pudY, t);
+}
+
+function drawWire(ctx, cx, wireTop, tip, color) {
+  // Contact tube
+  ctx.fillStyle = '#94a3b8';
+  ctx.fillRect(cx - 6, wireTop, 12, 30);
+  // Wire
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(cx, wireTop + 30); ctx.lineTo(cx, tip); ctx.stroke();
+}
+
+function drawPuddle(ctx, cx, pudY, width, color) {
+  const g = ctx.createRadialGradient(cx, pudY, 2, cx, pudY, width);
+  g.addColorStop(0, color);
+  g.addColorStop(0.5, color + 'aa');
+  g.addColorStop(1, color + '00');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.ellipse(cx, pudY, width, width * 0.28, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Base plate
+  ctx.fillStyle = '#1e3a5c';
+  ctx.fillRect(cx - 70, pudY + 6, 140, 22);
+}
+
+// ─── SHORT-CIRCUIT PANEL ─────────────────────────────────────────────────────
+function drawSCPanel(ctx, px, cx, wireTop, wireBottom, pudY, t) {
+  const st = pState.sc;
+  const CYCLE = 60; // frames per SC cycle
+  const phase_t = t % CYCLE;
+
+  let tipY, showArc, showShort;
+  if (phase_t < 35) {
+    // arc phase: wire melts, droplet grows at tip
+    tipY = wireBottom + Math.min(phase_t, 30) * 0.5;
+    showArc = true; showShort = false;
+    st.dropR = 4 + phase_t * 0.12;
+  } else {
+    // short phase: wire touches puddle
+    tipY = pudY - 12;
+    showArc = false; showShort = true;
+    st.dropR = 4;
+  }
+
+  drawWire(ctx, cx, wireTop, tipY - st.dropR, '#cbd5e1');
+
+  // Growing droplet at wire tip
+  if (showArc && st.dropR > 0) {
+    const dg = ctx.createRadialGradient(cx, tipY, 1, cx, tipY, st.dropR);
+    dg.addColorStop(0, '#fde68a');
+    dg.addColorStop(0.6, '#f97316');
+    dg.addColorStop(1, '#9a3412');
+    ctx.fillStyle = dg;
+    ctx.beginPath(); ctx.arc(cx, tipY, st.dropR, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // Arc column
+  if (showArc) {
+    const arcLen = pudY - tipY - 10;
+    const steps = 12;
+    ctx.save();
+    for (let i = 0; i < steps; i++) {
+      const frac = i / steps;
+      const ax = cx + (scSparkRng() - 0.5) * 14 * Math.sin(frac * Math.PI);
+      const ay = tipY + arcLen * frac;
+      const r = 2 + scSparkRng() * 3;
+      const ag = ctx.createRadialGradient(ax, ay, 0, ax, ay, r);
+      ag.addColorStop(0, '#fef3c7');
+      ag.addColorStop(1, '#60a5fa00');
+      ctx.fillStyle = ag;
+      ctx.beginPath(); ctx.arc(ax, ay, r, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+
+    // Arc label
+    ctx.fillStyle = '#60a5fa99';
+    ctx.font = '10px Segoe UI';
+    ctx.textAlign = 'left';
+    ctx.fillText('arc on', cx + 12, tipY + arcLen * 0.5);
+  }
+
+  if (showShort) {
+    // Short flash
+    ctx.fillStyle = '#fef3c7';
+    ctx.beginPath(); ctx.arc(cx, pudY - 15, 8 + scSparkRng() * 4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#f97316';
+    ctx.font = '10px Segoe UI';
+    ctx.textAlign = 'left';
+    ctx.fillText('SHORT', cx + 12, pudY - 10);
+  }
+
+  drawPuddle(ctx, cx, pudY, 48, '#f97316');
+
+  // Current waveform mini-chart
+  drawMiniWaveform(ctx, px + 10, 348, PW - 20, 58, t, 'sc', '#60a5fa');
+}
+
+// ─── SPRAY PANEL ─────────────────────────────────────────────────────────────
+function drawSPPanel(ctx, px, cx, wireTop, wireBottom, pudY, t) {
+  const tipY = wireBottom - 10;
+  drawWire(ctx, cx, wireTop, tipY, '#cbd5e1');
+
+  // Stable long arc
+  const arcLen = pudY - tipY - 14;
+  ctx.save();
+  for (let i = 0; i < 18; i++) {
+    const frac = i / 18;
+    const ax = cx + (spSparkRng() - 0.5) * 6 * Math.sin(frac * Math.PI);
+    const ay = tipY + arcLen * frac;
+    const r = 1.5 + spSparkRng() * 2.5;
+    const ag = ctx.createRadialGradient(ax, ay, 0, ax, ay, r);
+    ag.addColorStop(0, '#fefce8');
+    ag.addColorStop(1, '#4ade8000');
+    ctx.fillStyle = ag;
+    ctx.beginPath(); ctx.arc(ax, ay, r, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+
+  // Spray droplets flying axially
+  const sp = pState.sp;
+  if (t % 3 === 0) {
+    sp.droplets.push({ y: tipY + 10, vy: 2.2 + spSparkRng() * 1.2, x: cx + (spSparkRng() - 0.5) * 3, r: 1.2 + spSparkRng() * 1 });
+  }
+  sp.droplets = sp.droplets.filter(d => d.y < pudY - 10);
+  sp.droplets.forEach(d => {
+    d.y += d.vy;
+    ctx.fillStyle = '#fde68a';
+    ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2); ctx.fill();
+  });
+
+  ctx.fillStyle = '#4ade8099';
+  ctx.font = '10px Segoe UI';
+  ctx.textAlign = 'left';
+  ctx.fillText('fine axial spray', cx + 8, tipY + arcLen * 0.4);
+
+  drawPuddle(ctx, cx, pudY, 52, '#4ade80');
+  drawMiniWaveform(ctx, px + 10, 348, PW - 20, 58, t, 'sp', '#4ade80');
+}
+
+// ─── PULSED PANEL ─────────────────────────────────────────────────────────────
+function drawPUPanel(ctx, px, cx, wireTop, wireBottom, pudY, t) {
+  const PULSE_CYCLE = 40;
+  const phase_t = t % PULSE_CYCLE;
+  const isPeak = phase_t < 14;
+  const tipY = wireBottom - 5;
+
+  drawWire(ctx, cx, wireTop, tipY, '#cbd5e1');
+
+  const arcLen = pudY - tipY - 14;
+  const arcGlow = isPeak ? 22 : 9;
+  ctx.save();
+  for (let i = 0; i < (isPeak ? 18 : 10); i++) {
+    const frac = i / 18;
+    const ax = cx + (puSparkRng() - 0.5) * (isPeak ? 8 : 4) * Math.sin(frac * Math.PI);
+    const ay = tipY + arcLen * frac;
+    const r = (isPeak ? 2.5 : 1.2) + puSparkRng() * 2;
+    const ag = ctx.createRadialGradient(ax, ay, 0, ax, ay, r);
+    ag.addColorStop(0, isPeak ? '#fefce8' : '#e0e7ff');
+    ag.addColorStop(1, '#c084fc00');
+    ctx.fillStyle = ag;
+    ctx.beginPath(); ctx.arc(ax, ay, r, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+
+  // Droplet forms during peak, releases at end of peak
+  const pu = pState.pu;
+  if (isPeak) {
+    const dropR = 2 + (phase_t / 14) * 4;
+    const dg = ctx.createRadialGradient(cx, tipY, 1, cx, tipY, dropR);
+    dg.addColorStop(0, '#fde68a');
+    dg.addColorStop(0.7, '#c084fc');
+    dg.addColorStop(1, '#6b21a800');
+    ctx.fillStyle = dg;
+    ctx.beginPath(); ctx.arc(cx, tipY, dropR, 0, Math.PI * 2); ctx.fill();
+  }
+  if (phase_t === 14) {
+    pu.droplets.push({ y: tipY + 8, vy: 3, x: cx, r: 3.5 });
+  }
+  pu.droplets = pu.droplets.filter(d => d.y < pudY - 8);
+  pu.droplets.forEach(d => {
+    d.y += d.vy;
+    const dg = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.r);
+    dg.addColorStop(0, '#fde68a');
+    dg.addColorStop(1, '#c084fc88');
+    ctx.fillStyle = dg;
+    ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2); ctx.fill();
+  });
+
+  ctx.fillStyle = '#c084fc99';
+  ctx.font = '10px Segoe UI';
+  ctx.textAlign = 'left';
+  ctx.fillText(isPeak ? 'PEAK — detach' : 'background', cx + 8, tipY + arcLen * 0.4);
+
+  drawPuddle(ctx, cx, pudY, 50, '#c084fc');
+  drawMiniWaveform(ctx, px + 10, 348, PW - 20, 58, t, 'pu', '#c084fc');
+}
+
+// ─── Mini current waveform ────────────────────────────────────────────────────
+// Scrolls so the RIGHT edge always shows the CURRENT animation phase.
+// cycleLen matches the actual animation loop in each panel so they stay in sync.
+function drawMiniWaveform(ctx, x, y, w, h, t, mode, color) {
+  ctx.fillStyle = '#0a1628';
+  ctx.strokeStyle = '#1e3a5c';
+  ctx.lineWidth = 1;
+  ctx.fillRect(x, y, w, h);
+  ctx.strokeRect(x, y, w, h);
+
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '9px Segoe UI';
+  ctx.textAlign = 'left';
+  ctx.fillText('Current', x + 2, y + 10);
+
+  // Cycle lengths must match the animation loops:
+  //   SC: CYCLE=60, Pulsed: PULSE_CYCLE=40, Spray: treated as 80 (visually flat)
+  const cycleLen = mode === 'sc' ? 60 : mode === 'pu' ? 40 : 80;
+  // Show ~2.5 full cycles across the chart width
+  const pxPerFrame = w / (cycleLen * 2.5);
+
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  for (let i = 0; i <= w; i++) {
+    // Right edge (i=w) = NOW (frame t); left edge = history
+    const frameAt = t - (w - i) / pxPerFrame;
+    const phase = (((frameAt % cycleLen) + cycleLen) % cycleLen) / cycleLen;
+    let amp = 0;
+    if (mode === 'sc') {
+      // Arc phase (0–0.583 of cycle): moderate current
+      // Contact/drop (0.583–0.63): current falls on wire touching puddle
+      // Short (0.63–1.0): low current
+      // Animation: arc = t%60 < 35 (phase < 0.583); short = t%60 >= 35
+      if (phase < 0.583) {
+        amp = 0.45;
+      } else if (phase < 0.63) {
+        amp = 0.45 - ((phase - 0.583) / 0.047) * 0.37; // drop at contact
+      } else {
+        amp = 0.08;
+      }
+    } else if (mode === 'sp') {
+      // Steady high current with minor ripple — no contact events
+      amp = 0.78 + Math.sin(frameAt * 0.9) * 0.04;
+    } else {
+      // Pulsed: peak (0–0.35 of cycle) then background (0.35–1.0)
+      // Animation: isPeak = t%40 < 14  (14/40 = 0.35)
+      amp = phase < 0.35 ? 0.92 : 0.22;
+    }
+    const py = y + h - 6 - amp * (h - 14);
+    if (i === 0) ctx.moveTo(x + i, py); else ctx.lineTo(x + i, py);
+  }
+  ctx.stroke();
+
+  // "NOW" cursor at right edge
+  ctx.strokeStyle = '#ffffff33';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([2, 2]);
+  ctx.beginPath(); ctx.moveTo(x + w - 1, y + 4); ctx.lineTo(x + w - 1, y + h - 4); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Phase label aligned to cursor
+  const nowPhase = (((t % cycleLen) + cycleLen) % cycleLen) / cycleLen;
+  let phaseLabel = '';
+  if (mode === 'sc') phaseLabel = nowPhase < 0.583 ? 'arc' : 'short';
+  else if (mode === 'sp') phaseLabel = 'spray';
+  else phaseLabel = nowPhase < 0.35 ? 'PEAK' : 'bg';
+  ctx.fillStyle = color;
+  ctx.font = 'bold 8px Segoe UI';
+  ctx.textAlign = 'right';
+  ctx.fillText(phaseLabel, x + w - 4, y + h - 4);
+}
+
+// ─── Comparison animation loop ────────────────────────────────────────────────
+function cmpLoop() {
+  cmpCtx.clearRect(0, 0, cmp.width, cmp.height);
+  PANELS.forEach(p => drawPanel(cmpCtx, p.x, p.mode, cmpT));
+  cmpT++;
+  if (cmpRunning) cmpRaf = requestAnimationFrame(cmpLoop);
+}
+
+function cmpToggle() {
+  cmpRunning = !cmpRunning;
+  document.getElementById('cmp-play-btn').textContent = cmpRunning ? '⏸ Pause' : '▶ Play';
+  if (cmpRunning) cmpLoop();
+}
+
+cmpLoop();
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TAB 2 — DETAIL ANIMATION
+// ═══════════════════════════════════════════════════════════════════════════
+const det = document.getElementById('c-detail');
+const detCtx = det.getContext('2d');
+let detRaf = null, detRunning = true, detT = 0, currentMode = 'sc';
+
+const modeInfo = {
+  sc: {
+    lbl: 'Short-Circuit Transfer',
+    dsc: 'Wire feed rate and surface tension drive the cycle. The wire contacts the weld puddle (short), current spikes, surface tension pinches off the molten droplet into the puddle, the arc reignites, and the cycle repeats at 20–200 Hz. Inductance in the power source controls how fast current rises at reignition — low inductance → hard arc, high spatter; high inductance → soft arc, good wetting.',
+    src: 'Lincoln Electric GMAW Welding Guide pp. 8–11; Modenesi et al. (1999) Weld. J. 78(9); AWS C5.6:2003 §4.1.'
+  },
+  sp: {
+    lbl: 'Spray Transfer',
+    dsc: 'Above the transition current (≈200 A for ER70S-6, 0.045 in, in 90/10 Ar/CO₂), the electromagnetic pinch force overcomes surface tension. Droplets are smaller than wire diameter and stream axially at high frequency — no contact with the puddle. The arc is long, stable, and nearly spatter-free. Requires ≥80% Ar in shielding gas.',
+    src: 'Kim & Eagar (1993) Weld. J. 72(7) 269-s; Lancaster (1984) Physics of Welding §5; AWS C5.6 §4.2.'
+  },
+  pu: {
+    lbl: 'Pulsed-Spray Transfer',
+    dsc: 'The power source alternates between a low background current (maintains arc, does not detach droplet) and a high peak current (above transition, pinches off exactly one droplet — ODPP: one drop per pulse). Average heat input is controlled independently of wire feed rate. Enables spray-quality transfer in all positions and on thin material.',
+    src: 'Miller Electric Pulsed MIG Application Guide; Ueguri et al. (1985) Weld. J. 64(8) 242-s; AWS C5.6 §4.3.'
+  }
+};
+
+function setMode(m) {
+  currentMode = m;
+  ['sc','sp','pu'].forEach(id => {
+    document.getElementById('mbtn-' + id).classList.toggle('active', id === m);
+  });
+  document.getElementById('det-lbl').textContent = modeInfo[m].lbl;
+  document.getElementById('det-dsc').textContent = modeInfo[m].dsc;
+  document.getElementById('det-src').textContent = modeInfo[m].src;
+  detT = 0;
+  if (!detRunning) { detRunning = true; document.getElementById('det-play-btn').textContent = '⏸ Pause'; detLoop(); }
+}
+
+// Initial label
+setMode('sc');
+
+const DW = 720, DH = 420;
+const DCX = 200, WIRE_TOP = 30, WIRE_BOT = 160, PUDY = 360;
+const detSparkRng = rng(55);
+
+function drawDetailSC(ctx, t) {
+  const CYCLE = 80;
+  const pt = t % CYCLE;
+  const arcPhase = pt < 50;
+
+  ctx.fillStyle = '#060e1c';
+  ctx.fillRect(0, 0, DW, DH);
+
+  // Title annotations column (right side)
+  const phases = [
+    { label: '① Arc Phase', active: arcPhase, desc: 'Wire melts, droplet grows at tip', color: '#60a5fa' },
+    { label: '② Contact (Short)', active: !arcPhase && pt < 65, desc: 'Wire touches puddle — arc extinguished', color: '#fbbf24' },
+    { label: '③ Pinch & Transfer', active: pt >= 65, desc: 'Current spike + surface tension pull droplet off', color: '#f87171' },
+  ];
+  phases.forEach((ph, i) => {
+    const py = 70 + i * 80;
+    ctx.fillStyle = ph.active ? ph.color + '22' : '#0f204080';
+    ctx.strokeStyle = ph.active ? ph.color : '#1e3a5c';
+    ctx.lineWidth = 1.5;
+    roundRect(ctx, 380, py, 310, 60, 8);
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle = ph.active ? ph.color : '#475569';
+    ctx.font = `bold 12px Segoe UI`;
+    ctx.textAlign = 'left';
+    ctx.fillText(ph.label, 395, py + 20);
+    ctx.fillStyle = ph.active ? '#e2e8f0' : '#64748b';
+    ctx.font = '11px Segoe UI';
+    ctx.fillText(ph.desc, 395, py + 40);
+  });
+
+  // Wire
+  let tipY;
+  if (arcPhase) {
+    tipY = WIRE_BOT + pt * 0.6;
+  } else {
+    tipY = PUDY - 18;
+  }
+  ctx.fillStyle = '#94a3b8'; ctx.fillRect(DCX - 8, WIRE_TOP, 16, 35);
+  ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(DCX, WIRE_TOP + 35); ctx.lineTo(DCX, tipY - (arcPhase ? Math.min(pt * 0.15, 5) : 0)); ctx.stroke();
+
+  // Droplet
+  if (arcPhase) {
+    const dr = 3 + pt * 0.13;
+    const dg = ctx.createRadialGradient(DCX, tipY, 1, DCX, tipY, dr);
+    dg.addColorStop(0, '#fef9c3'); dg.addColorStop(0.5, '#f97316'); dg.addColorStop(1, '#7c2d1200');
+    ctx.fillStyle = dg;
+    ctx.beginPath(); ctx.arc(DCX, tipY, dr, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // Arc column
+  if (arcPhase) {
+    const aLen = PUDY - tipY - 30;
+    for (let i = 0; i < 14; i++) {
+      const frac = i / 14;
+      const ax = DCX + (detSparkRng() - 0.5) * 20 * Math.sin(frac * Math.PI);
+      const ay = tipY + 4 + aLen * frac;
+      const r = 2 + detSparkRng() * 3;
+      const ag = ctx.createRadialGradient(ax, ay, 0, ax, ay, r);
+      ag.addColorStop(0, '#fef3c7'); ag.addColorStop(1, '#60a5fa00');
+      ctx.fillStyle = ag; ctx.beginPath(); ctx.arc(ax, ay, r, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+
+  // Short flash
+  if (!arcPhase && pt < 65) {
+    ctx.save();
+    for (let i = 0; i < 6; i++) {
+      const a = detSparkRng() * Math.PI * 2;
+      const r = 4 + detSparkRng() * 12;
+      ctx.fillStyle = `rgba(254,243,199,${0.4 + detSparkRng() * 0.5})`;
+      ctx.beginPath(); ctx.arc(DCX + Math.cos(a)*r*0.3, PUDY - 18 + Math.sin(a)*r*0.3, 2 + detSparkRng()*3, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // Puddle
+  const puddleR = 60 + (arcPhase ? 0 : Math.sin(pt * 0.3) * 3);
+  const pg = ctx.createRadialGradient(DCX, PUDY, 4, DCX, PUDY, puddleR);
+  pg.addColorStop(0, '#fde68a'); pg.addColorStop(0.3, '#f97316aa'); pg.addColorStop(1, '#9a341200');
+  ctx.fillStyle = pg;
+  ctx.beginPath(); ctx.ellipse(DCX, PUDY, puddleR, puddleR * 0.22, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#1e3a5c';
+  ctx.fillRect(DCX - 90, PUDY + 14, 180, 28);
+
+  // Annotations
+  ctx.fillStyle = '#94a3b8'; ctx.font = '11px Segoe UI'; ctx.textAlign = 'left';
+  ctx.fillText('Contact tip', DCX + 14, WIRE_TOP + 20);
+  ctx.fillText('Electrode wire', DCX + 14, WIRE_TOP + 85);
+  ctx.fillText('Weld puddle', DCX + 14, PUDY + 5);
+  ctx.fillText('Base plate', DCX + 14, PUDY + 26);
+
+  // Arrow lines
+  ctx.strokeStyle = '#47556955'; ctx.lineWidth = 1;
+  [[DCX + 10, WIRE_TOP + 16, DCX + 4, WIRE_TOP + 22],
+   [DCX + 10, WIRE_TOP + 80, DCX + 4, WIRE_TOP + 65],
+   [DCX + 10, PUDY + 2, DCX + 4, PUDY - 4],
+   [DCX + 10, PUDY + 22, DCX + 4, PUDY + 18]].forEach(([x1,y1,x2,y2]) => {
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  });
+
+  // Current label
+  ctx.textAlign = 'left';
+  ctx.fillStyle = arcPhase ? '#60a5fa' : '#fbbf24';
+  ctx.font = 'bold 12px Segoe UI';
+  ctx.fillText(arcPhase ? `I ≈ 80–130 A  (arc)` : `I SPIKE  → surface tension pinch`, 30, DH - 20);
+}
+
+function drawDetailSP(ctx, t) {
+  ctx.fillStyle = '#060e1c'; ctx.fillRect(0, 0, DW, DH);
+
+  const tipY = WIRE_BOT - 5;
+  ctx.fillStyle = '#94a3b8'; ctx.fillRect(DCX - 8, WIRE_TOP, 16, 35);
+  ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(DCX, WIRE_TOP + 35); ctx.lineTo(DCX, tipY); ctx.stroke();
+
+  // Long stable arc
+  const aLen = PUDY - tipY - 20;
+  for (let i = 0; i < 22; i++) {
+    const frac = i / 22;
+    const ax = DCX + (detSparkRng() - 0.5) * 8 * Math.sin(frac * Math.PI);
+    const ay = tipY + 4 + aLen * frac;
+    const r = 2 + detSparkRng() * 3.5;
+    const ag = ctx.createRadialGradient(ax, ay, 0, ax, ay, r);
+    ag.addColorStop(0, '#fefce8'); ag.addColorStop(1, '#4ade8000');
+    ctx.fillStyle = ag; ctx.beginPath(); ctx.arc(ax, ay, r, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // Spray droplets
+  if (!pState.sp._det) pState.sp._det = [];
+  const det_sp = pState.sp._det;
+  if (t % 2 === 0) {
+    det_sp.push({ y: tipY + 12, vy: 2.8 + detSparkRng() * 1.5, x: DCX + (detSparkRng() - 0.5) * 4, r: 1.5 + detSparkRng() * 1.2 });
+  }
+  pState.sp._det = det_sp.filter(d => d.y < PUDY - 10);
+  det_sp.forEach(d => {
+    d.y += d.vy;
+    const dg = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.r);
+    dg.addColorStop(0, '#fef9c3'); dg.addColorStop(1, '#4ade8088');
+    ctx.fillStyle = dg; ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2); ctx.fill();
+  });
+
+  // Puddle
+  const pg = ctx.createRadialGradient(DCX, PUDY, 4, DCX, PUDY, 68);
+  pg.addColorStop(0, '#bbf7d0'); pg.addColorStop(0.4, '#4ade80aa'); pg.addColorStop(1, '#14532d00');
+  ctx.fillStyle = pg;
+  ctx.beginPath(); ctx.ellipse(DCX, PUDY, 68, 68 * 0.23, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#1e3a5c'; ctx.fillRect(DCX - 90, PUDY + 14, 180, 28);
+
+  // Annotations column
+  const notes = [
+    { t: '> Transition Current', d: 'I > ~220 A for ER70S-6 / 0.045 in / 90/10 Ar-CO₂', c: '#4ade80' },
+    { t: 'Electromagnetic Pinch', d: 'Lorentz force (J×B) dominates surface tension — fine droplets', c: '#4ade80' },
+    { t: 'Axial Spray', d: 'Droplets < wire dia., directed axially — zero puddle contact', c: '#4ade80' },
+    { t: '≥ 80% Ar required', d: 'CO₂ raises transition current; pure CO₂ → globular, no spray', c: '#fbbf24' },
+  ];
+  notes.forEach((n, i) => {
+    const py = 55 + i * 72;
+    ctx.fillStyle = n.c + '18'; ctx.strokeStyle = n.c + '55'; ctx.lineWidth = 1.2;
+    roundRect(ctx, 370, py, 320, 56, 8); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = n.c; ctx.font = 'bold 11.5px Segoe UI'; ctx.textAlign = 'left';
+    ctx.fillText(n.t, 382, py + 20);
+    ctx.fillStyle = '#94a3b8'; ctx.font = '11px Segoe UI';
+    ctx.fillText(n.d, 382, py + 40);
+  });
+
+  ctx.fillStyle = '#4ade80'; ctx.font = 'bold 12px Segoe UI'; ctx.textAlign = 'left';
+  ctx.fillText('I > 200 A  |  continuous spray  |  no puddle contact', 30, DH - 20);
+}
+
+function drawDetailPU(ctx, t) {
+  ctx.fillStyle = '#060e1c'; ctx.fillRect(0, 0, DW, DH);
+
+  const PULSE_CYCLE = 50;
+  const pt = t % PULSE_CYCLE;
+  const isPeak = pt < 18;
+  const tipY = WIRE_BOT - 5;
+
+  ctx.fillStyle = '#94a3b8'; ctx.fillRect(DCX - 8, WIRE_TOP, 16, 35);
+  ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(DCX, WIRE_TOP + 35); ctx.lineTo(DCX, tipY); ctx.stroke();
+
+  // Arc — brighter on peak
+  const aLen = PUDY - tipY - 20;
+  const arcPts = isPeak ? 20 : 10;
+  for (let i = 0; i < arcPts; i++) {
+    const frac = i / arcPts;
+    const ax = DCX + (detSparkRng() - 0.5) * (isPeak ? 10 : 5) * Math.sin(frac * Math.PI);
+    const ay = tipY + 4 + aLen * frac;
+    const r = (isPeak ? 3 : 1.5) + detSparkRng() * 2.5;
+    const ag = ctx.createRadialGradient(ax, ay, 0, ax, ay, r);
+    ag.addColorStop(0, isPeak ? '#fefce8' : '#ddd6fe');
+    ag.addColorStop(1, '#c084fc00');
+    ctx.fillStyle = ag; ctx.beginPath(); ctx.arc(ax, ay, r, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // Droplet growing at peak
+  if (isPeak) {
+    const dr = 2 + (pt / 18) * 5;
+    const dg = ctx.createRadialGradient(DCX, tipY, 0, DCX, tipY, dr);
+    dg.addColorStop(0, '#fef9c3'); dg.addColorStop(0.6, '#c084fc'); dg.addColorStop(1, '#6b21a800');
+    ctx.fillStyle = dg; ctx.beginPath(); ctx.arc(DCX, tipY, dr, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // Flying droplet
+  if (!pState.pu._det) pState.pu._det = [];
+  if (pt === 18) pState.pu._det.push({ y: tipY + 10, vy: 3.2, x: DCX, r: 4 });
+  pState.pu._det = pState.pu._det.filter(d => d.y < PUDY - 8);
+  pState.pu._det.forEach(d => {
+    d.y += d.vy;
+    const dg = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.r);
+    dg.addColorStop(0, '#fef9c3'); dg.addColorStop(1, '#c084fc88');
+    ctx.fillStyle = dg; ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2); ctx.fill();
+  });
+
+  // Puddle
+  const pg = ctx.createRadialGradient(DCX, PUDY, 4, DCX, PUDY, 62);
+  pg.addColorStop(0, '#e9d5ff'); pg.addColorStop(0.4, '#c084fcaa'); pg.addColorStop(1, '#6b21a800');
+  ctx.fillStyle = pg;
+  ctx.beginPath(); ctx.ellipse(DCX, PUDY, 62, 62 * 0.22, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#1e3a5c'; ctx.fillRect(DCX - 90, PUDY + 14, 180, 28);
+
+  // Annotations
+  const phase_labels = [
+    { t: `${isPeak ? '▶ PEAK current' : '◀ Background current'}`, d: isPeak ? 'I_peak > transition → pinch off droplet (ODPP)' : 'I_bg < transition → maintains arc, no transfer', c: isPeak ? '#c084fc' : '#818cf8' },
+    { t: 'ODPP — One Drop Per Pulse', d: 'Frequency = droplet rate. f = 30–400 Hz per WFS', c: '#c084fc' },
+    { t: 'All-position capable', d: 'Avg current & heat input decoupled from WFS', c: '#c084fc' },
+  ];
+  phase_labels.forEach((n, i) => {
+    const py = 70 + i * 88;
+    ctx.fillStyle = n.c + '18'; ctx.strokeStyle = n.c + '55'; ctx.lineWidth = 1.2;
+    roundRect(ctx, 370, py, 320, 66, 8); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = n.c; ctx.font = 'bold 12px Segoe UI'; ctx.textAlign = 'left';
+    ctx.fillText(n.t, 382, py + 22);
+    ctx.fillStyle = '#94a3b8'; ctx.font = '11px Segoe UI';
+    ctx.fillText(n.d, 382, py + 44);
+  });
+
+  ctx.fillStyle = '#c084fc'; ctx.font = 'bold 12px Segoe UI'; ctx.textAlign = 'left';
+  ctx.fillText(isPeak ? 'PEAK pulse — droplet detaches' : 'Background — arc maintained, no transfer', 30, DH - 20);
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function detLoop() {
+  detCtx.clearRect(0, 0, DW, DH);
+  if (currentMode === 'sc') drawDetailSC(detCtx, detT);
+  else if (currentMode === 'sp') drawDetailSP(detCtx, detT);
+  else drawDetailPU(detCtx, detT);
+  detT++;
+  if (detRunning) detRaf = requestAnimationFrame(detLoop);
+}
+
+function detToggle() {
+  detRunning = !detRunning;
+  document.getElementById('det-play-btn').textContent = detRunning ? '⏸ Pause' : '▶ Play';
+  if (detRunning) detLoop();
+}
+
+detLoop();
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TAB 2 — Force diagram (static)
+// ═══════════════════════════════════════════════════════════════════════════
+function drawForces() {
+  const c = document.getElementById('c-forces');
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  ctx.fillStyle = '#060e1c'; ctx.fillRect(0, 0, W, H);
+
+  // Central droplet
+  const CX = 200, CY = 145, DR = 38;
+  const dg = ctx.createRadialGradient(CX, CY, 4, CX, CY, DR);
+  dg.addColorStop(0, '#fef9c3'); dg.addColorStop(0.5, '#f97316'); dg.addColorStop(1, '#7c2d1200');
+  ctx.fillStyle = dg; ctx.beginPath(); ctx.arc(CX, CY, DR, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = '#f9731666'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(CX, CY, DR, 0, Math.PI * 2); ctx.stroke();
+
+  // Wire above
+  ctx.fillStyle = '#94a3b8'; ctx.fillRect(CX - 5, 40, 10, CY - DR - 45);
+  ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(CX, 40); ctx.lineTo(CX, CY - DR - 5); ctx.stroke();
+
+  // Force arrows
+  const forces = [
+    { dx: 0, dy: 80, color: '#4ade80', label: 'Gravity (Fg)', desc: 'Downward; assists detachment in flat pos.', from: [CX, CY + DR] },
+    { dx: 0, dy: -80, color: '#f87171', label: 'Surface Tension (Fσ)', desc: 'Opposes detachment; holds droplet to wire tip', from: [CX, CY - DR] },
+    { dx: -70, dy: 0, color: '#60a5fa', label: 'Plasma drag (Fd)', desc: 'Shielding gas plasma pushes droplet downward/sideways', from: [CX - DR, CY] },
+    { dx: 0, dy: 60, color: '#c084fc', label: 'Lorentz / EM Pinch (Fem)', desc: 'J × B electromagnetic pinch — dominant in spray mode', from: [CX + 20, CY + 20] },
+  ];
+
+  forces.forEach((f, i) => {
+    const x0 = f.from[0], y0 = f.from[1];
+    const x1 = x0 + f.dx, y1 = y0 + f.dy;
+    ctx.strokeStyle = f.color; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+    // Arrowhead
+    const angle = Math.atan2(f.dy, f.dx);
+    ctx.fillStyle = f.color;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x1 - 10 * Math.cos(angle - 0.4), y1 - 10 * Math.sin(angle - 0.4));
+    ctx.lineTo(x1 - 10 * Math.cos(angle + 0.4), y1 - 10 * Math.sin(angle + 0.4));
+    ctx.closePath(); ctx.fill();
+  });
+
+  // Legend
+  ctx.font = 'bold 13px Segoe UI'; ctx.textAlign = 'left';
+  ctx.fillStyle = '#e2e8f0'; ctx.fillText('Forces on a Pendant Droplet', 340, 35);
+  forces.forEach((f, i) => {
+    const ly = 60 + i * 52;
+    ctx.fillStyle = f.color + '22'; ctx.strokeStyle = f.color + '66'; ctx.lineWidth = 1;
+    roundRect(ctx, 340, ly, 360, 44, 6); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = f.color; ctx.font = 'bold 11.5px Segoe UI';
+    ctx.fillText(f.label, 352, ly + 17);
+    ctx.fillStyle = '#94a3b8'; ctx.font = '10.5px Segoe UI';
+    ctx.fillText(f.desc, 352, ly + 35);
+  });
+
+  // Detachment label
+  ctx.fillStyle = '#f9731688';
+  ctx.font = 'italic 11px Segoe UI';
+  ctx.textAlign = 'center';
+  ctx.fillText('Detachment occurs when Fg + Fem + Fd > Fσ', CX, H - 18);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TAB 2 — SC cycle waveform (static)
+// ═══════════════════════════════════════════════════════════════════════════
+function drawSCCycle() {
+  const c = document.getElementById('c-sccycle');
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  ctx.fillStyle = '#060e1c'; ctx.fillRect(0, 0, W, H);
+
+  const L = 50, R = W - 30, T = 20, B = H - 50;
+  const chartH = B - T, chartW = R - L;
+
+  // Axes
+  ctx.strokeStyle = '#1e3a5c'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(L, T); ctx.lineTo(L, B); ctx.lineTo(R, B); ctx.stroke();
+
+  ctx.fillStyle = '#64748b'; ctx.font = '11px Segoe UI'; ctx.textAlign = 'right';
+  ctx.fillText('Current (A)', L - 5, T + 5);
+  ctx.textAlign = 'center';
+  ctx.fillText('Time →', (L + R) / 2, H - 8);
+
+  // One full SC cycle
+  const cycles = 3;
+  const cw = chartW / cycles;
+  const arcFrac = 0.58, shortFrac = 0.22, reignFrac = 0.20;
+
+  for (let c2 = 0; c2 < cycles; c2++) {
+    const ox = L + c2 * cw;
+
+    // Arc phase — moderate I
+    ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(ox, B - chartH * 0.42);
+    ctx.lineTo(ox + cw * arcFrac, B - chartH * 0.42);
+    ctx.stroke();
+
+    // Short phase — I drops then spikes
+    ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(ox + cw * arcFrac, B - chartH * 0.42);
+    ctx.lineTo(ox + cw * arcFrac + 2, B - chartH * 0.08); // drop
+    ctx.lineTo(ox + cw * (arcFrac + shortFrac), B - chartH * 0.08);
+    ctx.stroke();
+
+    // Reignition spike
+    ctx.strokeStyle = '#f87171'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(ox + cw * (arcFrac + shortFrac), B - chartH * 0.08);
+    ctx.lineTo(ox + cw * (arcFrac + shortFrac) + 3, B - chartH * 0.95); // spike
+    ctx.lineTo(ox + cw * (arcFrac + shortFrac + reignFrac * 0.3), B - chartH * 0.55);
+    ctx.lineTo(ox + cw, B - chartH * 0.42);
+    ctx.stroke();
+
+    // Phase dividers
+    ctx.strokeStyle = '#1e3a5c55'; ctx.lineWidth = 1; ctx.setLineDash([3,3]);
+    [arcFrac, arcFrac + shortFrac].forEach(f => {
+      ctx.beginPath(); ctx.moveTo(ox + cw * f, T); ctx.lineTo(ox + cw * f, B); ctx.stroke();
+    });
+    ctx.setLineDash([]);
+
+    // Labels (first cycle only)
+    if (c2 === 0) {
+      ctx.fillStyle = '#60a5fa'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'center';
+      ctx.fillText('Arc phase', ox + cw * arcFrac * 0.5, B + 14);
+      ctx.fillStyle = '#fbbf24';
+      ctx.fillText('Short', ox + cw * (arcFrac + shortFrac * 0.5), B + 14);
+      ctx.fillStyle = '#f87171';
+      ctx.fillText('Reignite', ox + cw * (arcFrac + shortFrac + reignFrac * 0.5), B + 14);
+    }
+  }
+
+  // Y-axis ticks
+  [[0.42, '~100 A'], [0.08, '~10 A'], [0.95, 'Spike']].forEach(([frac, lbl]) => {
+    const y = B - chartH * frac;
+    ctx.strokeStyle = '#1e3a5c'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(L - 3, y); ctx.lineTo(L, y); ctx.stroke();
+    ctx.fillStyle = '#64748b'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'right';
+    ctx.fillText(lbl, L - 5, y + 4);
+  });
+
+  // Legend
+  [['#60a5fa','Arc phase'],['#fbbf24','Short (contact)'],['#f87171','Reignition spike']].forEach(([col, lbl], i) => {
+    const lx = L + 10 + i * 210;
+    ctx.fillStyle = col; ctx.fillRect(lx, T + 2, 16, 4);
+    ctx.fillStyle = '#94a3b8'; ctx.font = '10.5px Segoe UI'; ctx.textAlign = 'left';
+    ctx.fillText(lbl, lx + 20, T + 8);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TAB 3 — Gas chart
+// ═══════════════════════════════════════════════════════════════════════════
+function drawGasChart() {
+  const c = document.getElementById('c-gas');
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  ctx.fillStyle = '#060e1c'; ctx.fillRect(0, 0, W, H);
+
+  const L = 55, R = W - 20, T = 20, B = H - 40;
+  const cW = R - L, cH = B - T;
+
+  // Axes
+  ctx.strokeStyle = '#1e3a5c'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(L, T); ctx.lineTo(L, B); ctx.lineTo(R, B); ctx.stroke();
+
+  ctx.fillStyle = '#64748b'; ctx.font = '10px Segoe UI';
+  ctx.textAlign = 'center'; ctx.fillText('CO₂ % in shielding gas', (L + R) / 2, H - 5);
+  ctx.save(); ctx.translate(12, (T + B) / 2); ctx.rotate(-Math.PI / 2);
+  ctx.fillText('Transition Current (A)', 0, 0); ctx.restore();
+
+  // Data: transition current vs CO₂ % (approximate from literature)
+  const data = [[0,180],[5,190],[8,200],[10,210],[15,225],[20,245],[25,270],[50,340],[75,400],[100,460]];
+  const maxX = 100, maxY = 500;
+
+  function px(x) { return L + (x / maxX) * cW; }
+  function py(y) { return B - (y / maxY) * cH; }
+
+  // Shaded spray zone
+  ctx.fillStyle = '#4ade8022';
+  ctx.beginPath();
+  ctx.moveTo(L, py(180)); ctx.lineTo(R, py(460));
+  ctx.lineTo(R, B); ctx.lineTo(L, B); ctx.closePath(); ctx.fill();
+
+  ctx.fillStyle = '#4ade8044'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'left';
+  ctx.fillText('← Spray possible', px(2), py(150));
+
+  ctx.fillStyle = '#f8717122';
+  ctx.beginPath();
+  ctx.moveTo(L, T); ctx.lineTo(R, T);
+  ctx.lineTo(R, py(460)); ctx.lineTo(L, py(180)); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#f8717188'; ctx.textAlign = 'left';
+  ctx.fillText('No spray →', px(55), py(300));
+
+  // Curve
+  ctx.strokeStyle = '#f97316'; ctx.lineWidth = 2;
+  ctx.beginPath();
+  data.forEach(([x, y], i) => { if (i === 0) ctx.moveTo(px(x), py(y)); else ctx.lineTo(px(x), py(y)); });
+  ctx.stroke();
+
+  // Points
+  data.forEach(([x, y]) => {
+    ctx.fillStyle = '#f97316'; ctx.beginPath(); ctx.arc(px(x), py(y), 3, 0, Math.PI * 2); ctx.fill();
+  });
+
+  // X ticks
+  [0,25,50,75,100].forEach(v => {
+    ctx.strokeStyle = '#1e3a5c'; ctx.beginPath(); ctx.moveTo(px(v), B); ctx.lineTo(px(v), B+4); ctx.stroke();
+    ctx.fillStyle = '#64748b'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'center';
+    ctx.fillText(v + '%', px(v), B + 14);
+  });
+  // Y ticks
+  [200,300,400,500].forEach(v => {
+    ctx.strokeStyle = '#1e3a5c'; ctx.beginPath(); ctx.moveTo(L-3, py(v)); ctx.lineTo(L, py(v)); ctx.stroke();
+    ctx.fillStyle = '#64748b'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'right';
+    ctx.fillText(v, L - 5, py(v) + 4);
+  });
+
+  // Common blend markers
+  [['C25',25,'#60a5fa'],['C8',8,'#4ade80'],['95/5',5,'#c084fc']].forEach(([lbl,x,col]) => {
+    ctx.strokeStyle = col + '88'; ctx.setLineDash([3,3]); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(px(x), T); ctx.lineTo(px(x), B); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = col; ctx.font = 'bold 9px Segoe UI'; ctx.textAlign = 'center';
+    ctx.fillText(lbl, px(x), T + 10);
+  });
+}
+
+// ─── ER Number decoder ──────────────────────────────────────────────────────
+const erData = {
+  E:   { title: 'ER — Electrode/Rod', body: 'Designates a solid filler wire usable as both an electrode (GMAW) and a filler rod (GTAW). Per AWS A5.18. Distinguishes solid wire from flux-cored wire (E prefix only) or bare rod (R prefix only).' },
+  str: { title: '70 — Minimum Tensile Strength', body: 'Minimum tensile strength of the deposited weld metal in the as-welded condition: 70 ksi (480 MPa). Other common grades: ER80S (80 ksi), ER90S (90 ksi) for higher-strength steels.' },
+  S:   { title: 'S — Solid Wire', body: '"S" designates a solid (non-flux-cored) wire. Flux-cored wires use "T" (FCAW). Composite or metal-cored wires may use "C" suffixes under separate AWS specs.' },
+  chem: { title: '-6 — Chemical Composition Class', body: '-2: triple-deoxidized (Al+Ti+Zr); tolerates rusty/oily surfaces.\n-3: low Si; clean base metal.\n-6: high Si (0.80–1.15%) + Mn (1.40–1.85%); best deoxidizer package; tolerates mill scale; most widely used.\n-7: higher Mn; improved notch toughness at low temp.' },
+};
+
+function showER(seg) {
+  document.querySelectorAll('.er-seg').forEach(s => s.style.borderColor = 'transparent');
+  document.getElementById('er-' + seg).style.borderColor = '#f97316';
+  document.getElementById('er-' + seg).style.background = '#1a3a5c';
+  document.getElementById('er-title').textContent = erData[seg].title;
+  document.getElementById('er-body').textContent  = erData[seg].body;
+  setTimeout(() => { document.getElementById('er-' + seg).style.background = ''; }, 200);
+}
+</script>
+</body>
+</html>

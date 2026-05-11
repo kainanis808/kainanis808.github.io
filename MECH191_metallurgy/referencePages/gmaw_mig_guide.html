@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GMAW / MIG Welding — Transfer Modes, Wire, Gas &amp; Parameters</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fff; color: #1a1a1a; }
+
+header { background: #1e3a5f; color: #fff; padding: 28px 24px 22px; text-align: center; }
+header h1 { font-size: 1.9rem; font-weight: 700; }
+header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
+
+.source-note {
+    background: #eff6ff; border-left: 4px solid #1e3a5f;
+    padding: 10px 18px; font-size: 0.82rem; color: #1e40af; line-height: 1.55;
+}
+
+/* ─── Nav tabs ─── */
+.tab-bar {
+    display: flex; flex-wrap: wrap; gap: 0;
+    background: #f1f5f9; border-bottom: 2px solid #e2e8f0;
+    padding: 0 20px; position: sticky; top: 0; z-index: 10;
+}
+.tab-btn {
+    padding: 10px 18px; font-size: 0.84rem; font-weight: 600;
+    border: none; background: none; cursor: pointer; color: #64748b;
+    border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.15s;
+}
+.tab-btn:hover { color: #1e3a5f; }
+.tab-btn.active { color: #1e3a5f; border-bottom-color: #1e3a5f; }
+
+/* ─── Panels ─── */
+.panel { display: none; max-width: 1080px; margin: 0 auto; padding: 28px 20px 60px; }
+.panel.active { display: block; }
+
+/* ─── Section cards ─── */
+.section {
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
+    padding: 22px 24px; margin-bottom: 26px;
+}
+.section h2 { font-size: 1.25rem; color: #1e3a5f; margin-bottom: 6px; }
+.section p { font-size: 0.9rem; color: #4b5563; line-height: 1.65; margin-bottom: 10px; }
+.section-label {
+    font-weight: 700; color: #1e3a5f; font-size: 0.87rem;
+    margin: 18px 0 7px; text-transform: uppercase; letter-spacing: 0.05em;
+}
+
+/* ─── Tables ─── */
+.ref-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin: 10px 0; }
+.ref-table th {
+    background: #1e3a5f; color: #fff; padding: 7px 10px; text-align: left; font-weight: 600;
+}
+.ref-table td { padding: 6px 10px; border-bottom: 1px solid #e2e8f0; color: #374151; vertical-align: top; }
+.ref-table tr:nth-child(even) td { background: #f8fafc; }
+.ref-table tr:hover td { background: #eff6ff; }
+
+/* ─── Transfer mode cards ─── */
+.mode-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; margin: 16px 0; }
+.mode-card {
+    border-radius: 10px; border: 2px solid var(--mc);
+    background: #fff; overflow: hidden;
+}
+.mode-card-head {
+    background: var(--mc); color: #fff;
+    padding: 8px 14px; font-weight: 700; font-size: 0.88rem;
+}
+.mode-card-body { padding: 12px 14px; font-size: 0.82rem; color: #374151; line-height: 1.65; }
+.mode-card-body strong { color: #1e3a5f; }
+.m-sc  { --mc: #0369a1; }
+.m-gl  { --mc: #dc2626; }
+.m-sp  { --mc: #059669; }
+.m-ps  { --mc: #7c3aed; }
+
+/* ─── Gas comparison cards ─── */
+.gas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; margin: 16px 0; }
+.gas-card {
+    border: 1px solid #e2e8f0; border-radius: 10px; background: #fff;
+    padding: 14px; border-top: 4px solid var(--gc);
+}
+.gas-card .gc-name { font-weight: 700; color: var(--gc); font-size: 0.92rem; margin-bottom: 4px; }
+.gas-card .gc-comp { font-size: 0.78rem; color: #6b7280; margin-bottom: 8px; }
+.gas-card ul { list-style: none; font-size: 0.8rem; }
+.gas-card li { padding: 2px 0; color: #374151; }
+.gas-card li::before { content: "• "; color: #94a3b8; }
+.g-co2   { --gc: #dc2626; }
+.g-c25   { --gc: #1d4ed8; }
+.g-c10   { --gc: #0891b2; }
+.g-aro2  { --gc: #059669; }
+.g-he    { --gc: #7c3aed; }
+.g-tri   { --gc: #d97706; }
+
+/* ─── Rating bars ─── */
+.rating-row { display: flex; align-items: center; gap: 8px; margin: 3px 0; font-size: 0.78rem; }
+.rating-label { width: 90px; color: #6b7280; flex-shrink: 0; }
+.rating-bar { flex: 1; background: #e2e8f0; border-radius: 4px; height: 8px; overflow: hidden; }
+.rating-fill { height: 100%; border-radius: 4px; background: var(--gc); }
+
+/* ─── Wire type badges ─── */
+.wire-badge {
+    display: inline-block; padding: 2px 9px; border-radius: 12px;
+    font-size: 0.76rem; font-weight: 700; letter-spacing: 0.03em; margin: 1px 2px;
+}
+.wb-cs { background: #dbeafe; color: #1d4ed8; }
+.wb-ss { background: #d1fae5; color: #065f46; }
+.wb-al { background: #fef9c3; color: #854d0e; }
+
+/* ─── SVG diagrams ─── */
+.diagram-wrap { overflow-x: auto; margin: 14px 0; }
+.diagram-wrap svg { display: block; max-width: 100%; height: auto; }
+
+/* ─── Penetration SVG row ─── */
+.pen-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 16px 0; }
+.pen-box { text-align: center; }
+.pen-box .pen-label { font-size: 0.78rem; font-weight: 700; color: #1e3a5f; margin-top: 6px; }
+.pen-box .pen-sub { font-size: 0.7rem; color: #6b7280; margin-top: 2px; }
+
+/* ─── Formula box ─── */
+.formula-box {
+    background: #1e3a5f; color: #e2e8f0;
+    border-radius: 8px; padding: 14px 20px;
+    font-family: 'Courier New', monospace; font-size: 0.92rem;
+    margin: 12px 0;
+}
+.formula-box .fml-note { font-family: 'Segoe UI', sans-serif; font-size: 0.78rem; color: #93c5fd; margin-top: 6px; }
+
+/* ─── Note / warning boxes ─── */
+.note-box {
+    background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px;
+    padding: 12px 16px; font-size: 0.83rem; color: #78350f; margin: 12px 0; line-height: 1.55;
+}
+.info-box {
+    background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;
+    padding: 12px 16px; font-size: 0.83rem; color: #1e40af; margin: 12px 0; line-height: 1.55;
+}
+
+/* ─── Troubleshoot ─── */
+.trouble-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin: 10px 0; }
+.trouble-table th { background: #374151; color: #fff; padding: 7px 10px; text-align: left; }
+.trouble-table td { padding: 6px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+.trouble-table tr:nth-child(even) td { background: #f9fafb; }
+.defect-tag { font-weight: 700; color: #b91c1c; white-space: nowrap; }
+.cause-col { color: #374151; }
+.fix-col { color: #065f46; font-weight: 600; }
+
+footer { text-align: center; padding: 18px; font-size: 0.8rem; color: #94a3b8; border-top: 1px solid #e2e8f0; }
+footer a { color: #1e3a5f; }
+</style>
+</head>
+<body>
+
+<header>
+    <h1>GMAW / MIG Welding — In-Depth Reference</h1>
+    <div class="subtitle">Miller Electric &middot; Airgas Welding Gas Selection Guide &middot; Linde Gas Technology &middot; AWS A5.18</div>
+</header>
+
+<div class="source-note">
+    Sources: <strong>Miller Electric</strong> — <em>MIG Welding Guide</em> &amp; <em>Owner's Manual Parameter Charts</em> &middot;
+    <strong>Airgas</strong> — <em>Welding Gas Selection Guide</em> &amp; <em>Arc Characteristics Reference</em> &middot;
+    <strong>Linde Gas</strong> — <em>GMAW Shielding Gas Technology Bulletin</em> &middot;
+    <strong>AWS A5.18</strong> — <em>Carbon Steel Electrodes and Rods for GMAW</em> &middot;
+    <strong>AWS A5.9 / A5.10</strong> — <em>Stainless &amp; Aluminum Filler Metals</em>
+</div>
+
+<nav class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('transfer')">Transfer Modes</button>
+    <button class="tab-btn" onclick="showTab('wire')">Wire Selection</button>
+    <button class="tab-btn" onclick="showTab('gas-cs')">Gas: Carbon Steel</button>
+    <button class="tab-btn" onclick="showTab('gas-ss')">Gas: SS &amp; Aluminum</button>
+    <button class="tab-btn" onclick="showTab('gas-effects')">Gas → Properties</button>
+    <button class="tab-btn" onclick="showTab('params')">Parameter Setting</button>
+    <button class="tab-btn" onclick="showTab('trouble')">Troubleshooting</button>
+</nav>
+
+<!-- ═══════════════════════════ TRANSFER MODES ═══════════════════════════ -->
+<div id="panel-transfer" class="panel active">
+
+    <div class="section">
+        <h2>Metal Transfer Modes in GMAW</h2>
+        <p>The manner in which molten metal transfers from the wire electrode to the weld pool determines arc stability, spatter level, position capability, and penetration profile. Transfer mode is primarily controlled by <strong>current (wire feed speed)</strong> and <strong>voltage</strong>, and is also influenced by shielding gas composition and wire diameter.</p>
+
+        <div class="mode-grid">
+            <div class="mode-card m-sc">
+                <div class="mode-card-head">Short-Circuit Transfer (GMAW-S)</div>
+                <div class="mode-card-body">
+                    <strong>How it works:</strong> Wire physically contacts the pool 20–200 times/sec. Current spikes, surface tension pulls droplet into pool, arc re-ignites.<br><br>
+                    <strong>Current:</strong> 50–175 A<br>
+                    <strong>Voltage:</strong> 15–22 V<br>
+                    <strong>Wire:</strong> 0.023–0.035 in<br>
+                    <strong>Gas:</strong> CO₂ or C25 (75Ar/25CO₂)<br>
+                    <strong>Positions:</strong> All positions<br>
+                    <strong>Ideal for:</strong> Sheet metal &lt;3/16 in, root passes, out-of-position<br>
+                    <strong>Caution:</strong> Risk of cold lap / lack of fusion on thick material
+                </div>
+            </div>
+            <div class="mode-card m-gl">
+                <div class="mode-card-head">Globular Transfer</div>
+                <div class="mode-card-body">
+                    <strong>How it works:</strong> Droplets larger than wire diameter fall into pool under gravity irregularly. Not axially directed.<br><br>
+                    <strong>Current:</strong> 150–250 A<br>
+                    <strong>Voltage:</strong> 22–28 V<br>
+                    <strong>Wire:</strong> 0.035–0.045 in<br>
+                    <strong>Gas:</strong> CO₂ or low-Ar blends (&lt;80% Ar)<br>
+                    <strong>Positions:</strong> Flat &amp; horizontal only<br>
+                    <strong>Ideal for:</strong> Generally avoided — occurs as transition with CO₂ or when too low for spray<br>
+                    <strong>Characteristics:</strong> High spatter, irregular bead
+                </div>
+            </div>
+            <div class="mode-card m-sp">
+                <div class="mode-card-head">Spray Transfer</div>
+                <div class="mode-card-body">
+                    <strong>How it works:</strong> Above transition current, droplets smaller than wire diameter transfer axially in a fine stream — no short circuits.<br><br>
+                    <strong>Current:</strong> 200–500 A (above transition)<br>
+                    <strong>Voltage:</strong> 26–36 V<br>
+                    <strong>Wire:</strong> 0.035–0.062 in<br>
+                    <strong>Gas:</strong> ≥80% Ar required<br>
+                    <strong>Positions:</strong> Flat &amp; horizontal only (gravity-dependent pool)<br>
+                    <strong>Ideal for:</strong> High deposition on thick plate, structural, heavy fabrication<br>
+                    <strong>Characteristics:</strong> Smooth arc, very low spatter, deep penetration
+                </div>
+            </div>
+            <div class="mode-card m-ps">
+                <div class="mode-card-head">Pulsed Spray (GMAW-P)</div>
+                <div class="mode-card-body">
+                    <strong>How it works:</strong> Power source alternates between high peak current (one droplet/pulse) and low background current. One droplet per pulse at 30–400 Hz.<br><br>
+                    <strong>Peak current:</strong> 350–450 A<br>
+                    <strong>Background current:</strong> 50–100 A<br>
+                    <strong>Avg. current:</strong> 100–250 A<br>
+                    <strong>Gas:</strong> ≥75% Ar<br>
+                    <strong>Positions:</strong> All positions<br>
+                    <strong>Ideal for:</strong> Thin-to-medium sheet, stainless, aluminum, any position at spray-like quality<br>
+                    <strong>Requires:</strong> Pulsed-capable inverter power source
+                </div>
+            </div>
+        </div>
+
+        <div class="section-label">Transition Current by Wire Diameter (Miller Electric)</div>
+        <p style="font-size:0.83rem;color:#6b7280;margin-bottom:8px;">Below transition current → short-circuit or globular; above → spray. Values shown for 75%Ar/25%CO₂ (C25). Transition current rises with increasing CO₂.</p>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr>
+                <th>Wire Diameter</th>
+                <th>Transition Current (C25)</th>
+                <th>Transition Current (C10)</th>
+                <th>Transition Current (100% CO₂)</th>
+                <th>Typical spray WFS range</th>
+            </tr>
+            <tr><td>0.023 in (0.6 mm)</td><td>~95 A</td><td>~90 A</td><td>Spray not achievable</td><td>300–600 ipm</td></tr>
+            <tr><td>0.030 in (0.8 mm)</td><td>~130 A</td><td>~120 A</td><td>Spray not achievable</td><td>250–500 ipm</td></tr>
+            <tr><td>0.035 in (0.9 mm)</td><td>~170 A</td><td>~155 A</td><td>Spray not achievable</td><td>200–450 ipm</td></tr>
+            <tr><td>0.045 in (1.1 mm)</td><td>~205 A</td><td>~185 A</td><td>Spray not achievable</td><td>150–350 ipm</td></tr>
+            <tr><td>0.052 in (1.3 mm)</td><td>~240 A</td><td>~215 A</td><td>Spray not achievable</td><td>120–280 ipm</td></tr>
+            <tr><td>1/16 in (1.6 mm)</td><td>~290 A</td><td>~260 A</td><td>Spray not achievable</td><td>100–220 ipm</td></tr>
+        </table>
+        </div>
+        <div class="note-box">
+            <strong>Key rule (Miller Electric):</strong> 100% CO₂ cannot achieve spray transfer at any current — it forces globular transfer due to its high surface tension and reactive nature. A minimum of ~80% Ar in the shielding gas is required to cross the transition into spray.
+        </div>
+
+        <div class="section-label">Transfer Mode — Schematic Cross-Sections (Arc Column View)</div>
+        <div class="diagram-wrap">
+        <svg width="780" height="260" viewBox="0 0 780 260" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" font-size="11">
+
+            <!-- ── Short-Circuit ── -->
+            <text x="97" y="18" text-anchor="middle" font-weight="700" fill="#0369a1" font-size="12">Short-Circuit</text>
+            <!-- base plate -->
+            <rect x="30" y="190" width="134" height="28" rx="3" fill="#94a3b8"/>
+            <rect x="30" y="190" width="134" height="6" rx="2" fill="#cbd5e1"/>
+            <!-- pool -->
+            <ellipse cx="97" cy="190" rx="35" ry="11" fill="#fb923c" opacity="0.9"/>
+            <!-- wire -->
+            <rect x="91" y="50" width="12" height="138" rx="3" fill="#b45309"/>
+            <rect x="93" y="52" width="8" height="80" rx="2" fill="#fbbf24"/>
+            <!-- wire tip touching pool -->
+            <ellipse cx="97" cy="188" rx="6" ry="5" fill="#fb923c"/>
+            <!-- droplet forming -->
+            <ellipse cx="97" cy="178" rx="7" ry="7" fill="#f97316" opacity="0.8"/>
+            <!-- label: wire -->
+            <text x="115" y="60" fill="#92400e">Wire</text>
+            <line x1="113" y1="63" x2="103" y2="80" stroke="#92400e" stroke-width="1" stroke-dasharray="3,2"/>
+            <!-- label: short -->
+            <text x="28" y="182" fill="#0369a1">Short</text>
+            <text x="22" y="193" fill="#0369a1">circuit</text>
+            <!-- current range -->
+            <text x="97" y="242" text-anchor="middle" fill="#374151" font-size="10">50–175 A · 15–22 V</text>
+            <text x="97" y="254" text-anchor="middle" fill="#6b7280" font-size="9">All positions</text>
+
+            <!-- ── Globular ── -->
+            <text x="277" y="18" text-anchor="middle" font-weight="700" fill="#dc2626" font-size="12">Globular</text>
+            <rect x="210" y="190" width="134" height="28" rx="3" fill="#94a3b8"/>
+            <rect x="210" y="190" width="134" height="6" rx="2" fill="#cbd5e1"/>
+            <ellipse cx="277" cy="190" rx="38" ry="12" fill="#fb923c" opacity="0.9"/>
+            <rect x="271" y="50" width="12" height="105" rx="3" fill="#b45309"/>
+            <rect x="273" y="52" width="8" height="70" rx="2" fill="#fbbf24"/>
+            <!-- large globule -->
+            <ellipse cx="277" cy="164" rx="16" ry="16" fill="#f97316" opacity="0.85"/>
+            <!-- spatter drops -->
+            <circle cx="245" cy="175" r="4" fill="#f97316" opacity="0.6"/>
+            <circle cx="312" cy="168" r="3" fill="#f97316" opacity="0.5"/>
+            <circle cx="235" cy="162" r="3" fill="#f97316" opacity="0.4"/>
+            <circle cx="320" cy="178" r="2.5" fill="#f97316" opacity="0.4"/>
+            <text x="277" y="242" text-anchor="middle" fill="#374151" font-size="10">150–250 A · 22–28 V</text>
+            <text x="277" y="254" text-anchor="middle" fill="#6b7280" font-size="9">Flat/horizontal only</text>
+
+            <!-- ── Spray ── -->
+            <text x="457" y="18" text-anchor="middle" font-weight="700" fill="#059669" font-size="12">Spray</text>
+            <rect x="390" y="190" width="134" height="28" rx="3" fill="#94a3b8"/>
+            <rect x="390" y="190" width="134" height="6" rx="2" fill="#cbd5e1"/>
+            <ellipse cx="457" cy="190" rx="42" ry="14" fill="#fb923c" opacity="0.9"/>
+            <ellipse cx="457" cy="188" rx="28" ry="9" fill="#fde68a"/>
+            <rect x="451" y="50" width="12" height="100" rx="3" fill="#b45309"/>
+            <rect x="453" y="52" width="8" height="65" rx="2" fill="#fbbf24"/>
+            <!-- fine droplet stream -->
+            <circle cx="457" cy="162" r="3.5" fill="#f97316"/>
+            <circle cx="456" cy="152" r="3" fill="#f97316" opacity="0.85"/>
+            <circle cx="458" cy="142" r="2.5" fill="#f97316" opacity="0.7"/>
+            <circle cx="457" cy="133" r="2" fill="#f97316" opacity="0.55"/>
+            <circle cx="456" cy="125" r="1.5" fill="#f97316" opacity="0.4"/>
+            <!-- cone -->
+            <path d="M451 150 L430 190" stroke="#059669" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+            <path d="M463 150 L484 190" stroke="#059669" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+            <text x="457" y="242" text-anchor="middle" fill="#374151" font-size="10">200–500 A · 26–36 V</text>
+            <text x="457" y="254" text-anchor="middle" fill="#6b7280" font-size="9">Flat/horiz only · ≥80% Ar</text>
+
+            <!-- ── Pulsed ── -->
+            <text x="637" y="18" text-anchor="middle" font-weight="700" fill="#7c3aed" font-size="12">Pulsed Spray</text>
+            <rect x="570" y="190" width="134" height="28" rx="3" fill="#94a3b8"/>
+            <rect x="570" y="190" width="134" height="6" rx="2" fill="#cbd5e1"/>
+            <ellipse cx="637" cy="190" rx="36" ry="12" fill="#fb923c" opacity="0.9"/>
+            <ellipse cx="637" cy="189" rx="24" ry="8" fill="#fde68a"/>
+            <rect x="631" y="50" width="12" height="108" rx="3" fill="#b45309"/>
+            <rect x="633" y="52" width="8" height="72" rx="2" fill="#fbbf24"/>
+            <!-- one large droplet per pulse -->
+            <circle cx="637" cy="164" r="8" fill="#a78bfa" opacity="0.9"/>
+            <text x="648" y="162" fill="#7c3aed" font-size="9">1 drop/pulse</text>
+            <!-- pulse waveform mini -->
+            <polyline points="575,90 575,78 583,78 583,90 591,90 591,78 599,78 599,90 607,90" fill="none" stroke="#7c3aed" stroke-width="1.5"/>
+            <text x="574" y="104" fill="#7c3aed" font-size="8">Peak/Bg waveform</text>
+            <text x="637" y="242" text-anchor="middle" fill="#374151" font-size="10">Avg 100–250 A · all positions</text>
+            <text x="637" y="254" text-anchor="middle" fill="#6b7280" font-size="9">Requires pulsed power source</text>
+        </svg>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Transfer Mode Selection Guide (Miller Electric)</h2>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr>
+                <th>Transfer Mode</th>
+                <th>Material Thickness</th>
+                <th>Welding Positions</th>
+                <th>Shielding Gas</th>
+                <th>Deposition Rate</th>
+                <th>Spatter</th>
+                <th>Best Applications</th>
+            </tr>
+            <tr>
+                <td><strong>Short-Circuit</strong></td>
+                <td>22 ga – 3/16 in</td>
+                <td>All (1G–4G, 1F–4F)</td>
+                <td>C25 or CO₂</td>
+                <td>2–8 lb/hr</td>
+                <td>Low–Med</td>
+                <td>Sheet metal, auto body, root passes, maintenance</td>
+            </tr>
+            <tr>
+                <td><strong>Globular</strong></td>
+                <td>1/4 in+</td>
+                <td>Flat &amp; horizontal only</td>
+                <td>CO₂ (forced); or transitional with C25</td>
+                <td>8–15 lb/hr</td>
+                <td>High</td>
+                <td>Generally avoided — use spray or short-circuit instead</td>
+            </tr>
+            <tr>
+                <td><strong>Spray</strong></td>
+                <td>3/16 in+</td>
+                <td>Flat &amp; horizontal only</td>
+                <td>≥80% Ar (C10, C25, ArO₂)</td>
+                <td>10–25 lb/hr</td>
+                <td>Very Low</td>
+                <td>Structural plate, heavy fabrication, high-speed production</td>
+            </tr>
+            <tr>
+                <td><strong>Pulsed Spray</strong></td>
+                <td>22 ga – unlimited</td>
+                <td>All positions</td>
+                <td>≥75% Ar</td>
+                <td>5–20 lb/hr</td>
+                <td>Very Low</td>
+                <td>Stainless, aluminum, thin sheet in all positions, pipe</td>
+            </tr>
+        </table>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════ WIRE SELECTION ═══════════════════════════ -->
+<div id="panel-wire" class="panel">
+
+    <div class="section">
+        <h2>Carbon Steel Wire Electrodes (AWS A5.18)</h2>
+        <p>AWS A5.18 classifies carbon steel GMAW wire as <strong>ER70S-X</strong>, where 70 = minimum tensile strength in ksi, S = solid wire, and the suffix number indicates chemistry grade. ER70S-6 is the most commonly used all-purpose wire in North America.</p>
+
+        <div class="section-label">Carbon Steel — AWS A5.18 Classification (Miller Electric)</div>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr>
+                <th>AWS Class</th>
+                <th>Min. Tensile (ksi)</th>
+                <th>Si Content</th>
+                <th>Mn Content</th>
+                <th>Deoxidizers</th>
+                <th>Shielding Gas Compatibility</th>
+                <th>Best Application</th>
+            </tr>
+            <tr>
+                <td><span class="wire-badge wb-cs">ER70S-2</span></td>
+                <td>70</td>
+                <td>Low (0.40–0.60%)</td>
+                <td>Low–Med (0.90–1.40%)</td>
+                <td>Al + Ti + Zr (triple-deox)</td>
+                <td>CO₂, C25, C10, 100% Ar</td>
+                <td>Pipe root passes, out-of-position, very clean base metal, structural code work</td>
+            </tr>
+            <tr>
+                <td><span class="wire-badge wb-cs">ER70S-3</span></td>
+                <td>70</td>
+                <td>Med (0.45–0.70%)</td>
+                <td>Med (1.00–1.40%)</td>
+                <td>Si + Mn only</td>
+                <td>CO₂, C25</td>
+                <td>Clean (no scale/rust) base metal; general fabrication; lower dilution applications</td>
+            </tr>
+            <tr>
+                <td><span class="wire-badge wb-cs">ER70S-6</span> ★ Most Common</td>
+                <td>70</td>
+                <td>High (0.80–1.15%)</td>
+                <td>High (1.40–1.85%)</td>
+                <td>Si + Mn (high)</td>
+                <td>CO₂, C25, C10, all Ar blends</td>
+                <td>Mill scale, rust-covered steel; all positions; automotive; shipbuilding; general purpose</td>
+            </tr>
+            <tr>
+                <td><span class="wire-badge wb-cs">ER70S-7</span></td>
+                <td>70</td>
+                <td>Med–High (0.50–0.80%)</td>
+                <td>Very High (1.50–2.00%)</td>
+                <td>Higher Mn</td>
+                <td>CO₂, C25</td>
+                <td>Higher CVN toughness than S-6; structural, pressure vessel; where impact properties matter</td>
+            </tr>
+        </table>
+        </div>
+
+        <div class="note-box">
+            <strong>Why does Si matter?</strong> Silicon acts as a deoxidizer and slag former. Higher Si (ER70S-6) compensates for oxidizing shielding gases (CO₂) and dirty base metal by removing oxygen from the weld pool, preventing porosity. However, excess Si forms glassy silica islands on the bead surface that must be removed between passes in multi-pass welds.
+        </div>
+
+        <div class="section-label">Wire Diameter Selection (Miller Electric)</div>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr>
+                <th>Wire Diameter</th>
+                <th>Metric</th>
+                <th>Transfer Mode</th>
+                <th>Plate Thickness Range</th>
+                <th>Amperage Range</th>
+                <th>Deposition Rate</th>
+                <th>Typical Application</th>
+            </tr>
+            <tr><td>0.023 in</td><td>0.6 mm</td><td>Short-circuit only</td><td>22 ga – 1/8 in</td><td>30–90 A</td><td>1–3 lb/hr</td><td>Auto body, thin sheet, galvanized</td></tr>
+            <tr><td>0.030 in</td><td>0.8 mm</td><td>Short-circuit</td><td>1/16 – 3/16 in</td><td>60–150 A</td><td>2–6 lb/hr</td><td>Light fabrication, general sheet</td></tr>
+            <tr><td>0.035 in</td><td>0.9 mm</td><td>SC, Globular, Spray</td><td>3/32 – 1/2 in</td><td>80–300 A</td><td>3–14 lb/hr</td><td>Most common: fabrication shops, structural, production</td></tr>
+            <tr><td>0.045 in</td><td>1.1 mm</td><td>SC, Globular, Spray</td><td>3/16 – 1 in+</td><td>120–400 A</td><td>6–22 lb/hr</td><td>Heavy fabrication, shipbuilding, structural plate</td></tr>
+            <tr><td>0.052 in</td><td>1.3 mm</td><td>Spray primarily</td><td>1/4 in+</td><td>200–500 A</td><td>10–28 lb/hr</td><td>Heavy plate, high-deposition structural</td></tr>
+            <tr><td>1/16 in</td><td>1.6 mm</td><td>Spray primarily</td><td>1/2 in+</td><td>250–600 A</td><td>15–35 lb/hr</td><td>Heavy fabrication, automation, high-production</td></tr>
+        </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Stainless Steel Wire Electrodes (AWS A5.9)</h2>
+        <p>Stainless GMAW wire is classified by weld metal composition. <strong>L-grade</strong> (low carbon, ≤0.03% C) is preferred to minimize carbide precipitation (sensitization) in the HAZ of austenitic stainless steels.</p>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr>
+                <th>AWS Class</th>
+                <th>Base Metal Match</th>
+                <th>Carbon</th>
+                <th>Ni</th>
+                <th>Cr</th>
+                <th>Mo</th>
+                <th>Shielding Gas</th>
+                <th>Application</th>
+            </tr>
+            <tr>
+                <td><span class="wire-badge wb-ss">ER308L</span></td>
+                <td>304, 304L</td>
+                <td>≤0.03%</td>
+                <td>9–11%</td>
+                <td>19–21%</td>
+                <td>—</td>
+                <td>98Ar/2O₂ or tri-mix</td>
+                <td>Food/bev, dairy, general SS fabrication, tanks</td>
+            </tr>
+            <tr>
+                <td><span class="wire-badge wb-ss">ER308LSi</span></td>
+                <td>304, 304L</td>
+                <td>≤0.03%</td>
+                <td>9–11%</td>
+                <td>19–21%</td>
+                <td>—</td>
+                <td>98Ar/2O₂ or tri-mix</td>
+                <td>Same as 308L but higher Si for better wetting/less spatter in spray</td>
+            </tr>
+            <tr>
+                <td><span class="wire-badge wb-ss">ER309L</span></td>
+                <td>Dissimilar metals</td>
+                <td>≤0.03%</td>
+                <td>12–14%</td>
+                <td>23–25%</td>
+                <td>—</td>
+                <td>98Ar/2O₂ or tri-mix</td>
+                <td>304/316 to carbon steel; overlay/cladding buffer layers; 309 base metal</td>
+            </tr>
+            <tr>
+                <td><span class="wire-badge wb-ss">ER316L</span></td>
+                <td>316, 316L</td>
+                <td>≤0.03%</td>
+                <td>11–14%</td>
+                <td>18–20%</td>
+                <td>2–3%</td>
+                <td>98Ar/2O₂ or tri-mix</td>
+                <td>Marine, chemical process, pharmaceutical (Mo improves pitting resistance)</td>
+            </tr>
+            <tr>
+                <td><span class="wire-badge wb-ss">ER347</span></td>
+                <td>347, 321</td>
+                <td>≤0.08%</td>
+                <td>9–11%</td>
+                <td>19–21%</td>
+                <td>—</td>
+                <td>98Ar/2O₂</td>
+                <td>High-temperature service; Nb-stabilized, resists sensitization at 800–1500°F</td>
+            </tr>
+        </table>
+        </div>
+        <div class="info-box">
+            <strong>L-grade rule:</strong> Always use L-grade (308L, 316L, 309L) for service temperatures above 800°F or for any multi-pass weld where repeated heat cycles could sensitize the HAZ. Standard grade (308, 316) may be used for single-pass welds on clean base metal not subject to corrosive service.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Aluminum Wire Electrodes (AWS A5.10)</h2>
+        <p>Aluminum GMAW uses two main filler alloy families. Choice depends on base metal alloy, required strength, and whether parts will be anodized after welding.</p>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr>
+                <th>AWS Class</th>
+                <th>Alloy Type</th>
+                <th>Min. Tensile (ksi)</th>
+                <th>Base Metal Match</th>
+                <th>Shielding Gas</th>
+                <th>Characteristics &amp; Application</th>
+            </tr>
+            <tr>
+                <td><span class="wire-badge wb-al">ER4043</span></td>
+                <td>Al-Si (5% Si)</td>
+                <td>25</td>
+                <td>1xxx, 3xxx, 6xxx, some 5xxx</td>
+                <td>100% Ar</td>
+                <td>Excellent flow/wetting, low crack sensitivity, silvery-gray anodized finish — good for 6061. Lower strength than 5356.</td>
+            </tr>
+            <tr>
+                <td><span class="wire-badge wb-al">ER4047</span></td>
+                <td>Al-Si (12% Si)</td>
+                <td>24</td>
+                <td>6xxx, brazing</td>
+                <td>100% Ar</td>
+                <td>Lowest melting range, high fluidity — automotive brazing/welding, heat exchangers. Narrow fusion zone.</td>
+            </tr>
+            <tr>
+                <td><span class="wire-badge wb-al">ER5356</span></td>
+                <td>Al-Mg (5% Mg)</td>
+                <td>38</td>
+                <td>5xxx, 6xxx (structural)</td>
+                <td>100% Ar or Ar/He</td>
+                <td>Higher strength than 4043, better color match for anodizing on 5xxx base. Not for service &gt;150°F (Mg sensitization risk). Marine, structural Al.</td>
+            </tr>
+            <tr>
+                <td><span class="wire-badge wb-al">ER5183</span></td>
+                <td>Al-Mg (4.3–5.2% Mg)</td>
+                <td>40</td>
+                <td>5083, 5086, 5456</td>
+                <td>100% Ar or Ar/He</td>
+                <td>Highest strength Al filler, matching 5083/5086 hull plate. Shipbuilding, cryogenic vessels, LNG storage.</td>
+            </tr>
+        </table>
+        </div>
+        <div class="note-box">
+            <strong>4043 vs 5356:</strong> Use ER4043 on 6061-T6 (automotive, structural extrusions) — it has better flow and less hot-crack sensitivity. Use ER5356 when strength and anodizing appearance matter (5xxx series). Never use ER5356 for service above 150°F — the Mg content can cause stress-corrosion cracking in long-term hot/wet environments.
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════ GAS: CARBON STEEL ═══════════════════════════ -->
+<div id="panel-gas-cs" class="panel">
+
+    <div class="section">
+        <h2>Carbon Steel Shielding Gas Selection (Miller Electric + Airgas)</h2>
+        <p>Shielding gas composition is the single most important variable affecting transfer mode, arc stability, penetration profile, spatter level, and weld metal mechanical properties. For carbon steel, the choice is always some combination of Ar, CO₂, and/or O₂.</p>
+
+        <div class="gas-grid">
+            <div class="gas-card g-co2">
+                <div class="gc-name">100% CO₂</div>
+                <div class="gc-comp">Carbon Dioxide — "C100"</div>
+                <div class="rating-row"><span class="rating-label">Penetration</span><div class="rating-bar"><div class="rating-fill" style="width:95%"></div></div></div>
+                <div class="rating-row"><span class="rating-label">Spatter</span><div class="rating-bar"><div class="rating-fill" style="width:95%"></div></div></div>
+                <div class="rating-row"><span class="rating-label">Arc Stability</span><div class="rating-bar"><div class="rating-fill" style="width:40%"></div></div></div>
+                <div class="rating-row"><span class="rating-label">Weld Toughness</span><div class="rating-bar"><div class="rating-fill" style="width:40%"></div></div></div>
+                <ul style="margin-top:10px">
+                    <li>Deepest, narrowest "finger" penetration</li>
+                    <li>Forces globular transfer above S/C range</li>
+                    <li>Spray transfer NOT possible</li>
+                    <li>Cheapest gas — economy structural work</li>
+                    <li>Use ER70S-6 to offset oxidation loss</li>
+                </ul>
+            </div>
+
+            <div class="gas-card g-c25">
+                <div class="gc-name">C25 (M21)</div>
+                <div class="gc-comp">75% Ar / 25% CO₂ — Industry Standard</div>
+                <div class="rating-row"><span class="rating-label">Penetration</span><div class="rating-bar"><div class="rating-fill" style="width:65%"></div></div></div>
+                <div class="rating-row"><span class="rating-label">Spatter</span><div class="rating-bar"><div class="rating-fill" style="width:55%"></div></div></div>
+                <div class="rating-row"><span class="rating-label">Arc Stability</span><div class="rating-bar"><div class="rating-fill" style="width:72%"></div></div></div>
+                <div class="rating-row"><span class="rating-label">Weld Toughness</span><div class="rating-bar"><div class="rating-fill" style="width:65%"></div></div></div>
+                <ul style="margin-top:10px">
+                    <li>Most widely used gas in the industry</li>
+                    <li>Supports all three GMAW modes</li>
+                    <li>Spray achievable above transition current</li>
+                    <li>Good bead appearance, moderate spatter</li>
+                    <li>AWS D1.1 &amp; D1.6 structural qualification</li>
+                </ul>
+            </div>
+
+            <div class="gas-card g-c10">
+                <div class="gc-name">C10 / C15 / C20</div>
+                <div class="gc-comp">90/85/80% Ar + 10/15/20% CO₂</div>
+                <div class="rating-row"><span class="rating-label">Penetration</span><div class="rating-bar"><div class="rating-fill" style="width:52%"></div></div></div>
+                <div class="rating-row"><span class="rating-label">Spatter</span><div class="rating-bar"><div class="rating-fill" style="width:38%"></div></div></div>
+                <div class="rating-row"><span class="rating-label">Arc Stability</span><div class="rating-bar"><div class="rating-fill" style="width:82%"></div></div></div>
+                <div class="rating-row"><span class="rating-label">Weld Toughness</span><div class="rating-bar"><div class="rating-fill" style="width:75%"></div></div></div>
+                <ul style="margin-top:10px">
+                    <li>Lower spatter than C25 — better cosmetics</li>
+                    <li>Better spray arc stability than C25</li>
+                    <li>Lower transition current than C25</li>
+                    <li>Preferred for automotive &amp; thin sheet</li>
+                    <li>Slightly lower penetration than C25</li>
+                </ul>
+            </div>
+
+            <div class="gas-card g-aro2">
+                <div class="gc-name">ArO2 / ArO5</div>
+                <div class="gc-comp">98% Ar / 2% O₂ or 95% Ar / 5% O₂</div>
+                <div class="rating-row"><span class="rating-label">Penetration</span><div class="rating-bar"><div class="rating-fill" style="width:48%"></div></div></div>
+                <div class="rating-row"><span class="rating-label">Spatter</span><div class="rating-bar"><div class="rating-fill" style="width:25%"></div></div></div>
+                <div class="rating-row"><span class="rating-label">Arc Stability</span><div class="rating-bar"><div class="rating-fill" style="width:90%"></div></div></div>
+                <div class="rating-row"><span class="rating-label">Weld Toughness</span><div class="rating-bar"><div class="rating-fill" style="width:70%"></div></div></div>
+                <ul style="margin-top:10px">
+                    <li>Spray transfer only — NOT for SC/globular</li>
+                    <li>O₂ improves puddle wetting and bead shape</li>
+                    <li>Very flat, smooth bead profile</li>
+                    <li>ArO2 = primary stainless steel gas</li>
+                    <li>ArO5 used for carbon steel spray (higher deox wire required)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section-label">Penetration Profile Cross-Sections (Airgas / Linde)</div>
+        <p style="font-size:0.83rem;color:#6b7280;margin-bottom:12px;">Cross-sectional fusion profiles for same current and voltage with different shielding gases. Higher CO₂ → deeper, narrower, more oxidizing arc. Higher Ar → wider, shallower, cleaner weld metal.</p>
+
+        <div class="pen-row">
+            <!-- 100% CO2 -->
+            <div class="pen-box">
+                <svg width="130" height="140" viewBox="0 0 130 140" xmlns="http://www.w3.org/2000/svg">
+                    <!-- base plate -->
+                    <rect x="5" y="65" width="120" height="60" rx="3" fill="#94a3b8"/>
+                    <!-- penetration finger -->
+                    <ellipse cx="65" cy="65" rx="28" ry="8" fill="#f97316"/>
+                    <rect x="57" y="65" width="16" height="45" rx="8" fill="#f97316"/>
+                    <ellipse cx="65" cy="110" rx="8" ry="10" fill="#f97316"/>
+                    <!-- HAZ halo -->
+                    <ellipse cx="65" cy="65" rx="38" ry="11" fill="none" stroke="#fde68a" stroke-width="1.5" stroke-dasharray="3,2"/>
+                    <rect x="58" y="65" width="14" height="44" rx="7" fill="none" stroke="#fde68a" stroke-width="1.5" stroke-dasharray="3,2"/>
+                    <ellipse cx="65" cy="108" rx="10" ry="11" fill="none" stroke="#fde68a" stroke-width="1.5" stroke-dasharray="3,2"/>
+                    <!-- bead cap -->
+                    <ellipse cx="65" cy="60" rx="28" ry="10" fill="#fb923c"/>
+                </svg>
+                <div class="pen-label">100% CO₂</div>
+                <div class="pen-sub">Deep finger · Narrow · High spatter</div>
+            </div>
+
+            <!-- C25 -->
+            <div class="pen-box">
+                <svg width="130" height="140" viewBox="0 0 130 140" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="5" y="65" width="120" height="60" rx="3" fill="#94a3b8"/>
+                    <!-- moderate penetration -->
+                    <ellipse cx="65" cy="65" rx="34" ry="8" fill="#1d4ed8" opacity="0.85"/>
+                    <rect x="58" y="65" width="14" height="30" rx="7" fill="#1d4ed8" opacity="0.85"/>
+                    <ellipse cx="65" cy="94" rx="10" ry="8" fill="#1d4ed8" opacity="0.85"/>
+                    <!-- HAZ -->
+                    <ellipse cx="65" cy="65" rx="44" ry="12" fill="none" stroke="#93c5fd" stroke-width="1.5" stroke-dasharray="3,2"/>
+                    <!-- bead -->
+                    <ellipse cx="65" cy="58" rx="34" ry="12" fill="#3b82f6"/>
+                </svg>
+                <div class="pen-label">75Ar/25CO₂ (C25)</div>
+                <div class="pen-sub">Moderate depth · Balanced</div>
+            </div>
+
+            <!-- C10 -->
+            <div class="pen-box">
+                <svg width="130" height="140" viewBox="0 0 130 140" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="5" y="65" width="120" height="60" rx="3" fill="#94a3b8"/>
+                    <!-- wider, shallower -->
+                    <ellipse cx="65" cy="65" rx="40" ry="8" fill="#0891b2" opacity="0.85"/>
+                    <rect x="59" y="65" width="12" height="20" rx="6" fill="#0891b2" opacity="0.85"/>
+                    <ellipse cx="65" cy="83" rx="10" ry="7" fill="#0891b2" opacity="0.85"/>
+                    <!-- HAZ -->
+                    <ellipse cx="65" cy="65" rx="50" ry="12" fill="none" stroke="#a5f3fc" stroke-width="1.5" stroke-dasharray="3,2"/>
+                    <!-- bead -->
+                    <ellipse cx="65" cy="56" rx="40" ry="13" fill="#06b6d4"/>
+                </svg>
+                <div class="pen-label">90Ar/10CO₂ (C10)</div>
+                <div class="pen-sub">Wider · Shallower · Low spatter</div>
+            </div>
+
+            <!-- 98Ar/2O2 spray -->
+            <div class="pen-box">
+                <svg width="130" height="140" viewBox="0 0 130 140" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="5" y="65" width="120" height="60" rx="3" fill="#94a3b8"/>
+                    <!-- broadest, uniform -->
+                    <ellipse cx="65" cy="65" rx="46" ry="9" fill="#059669" opacity="0.85"/>
+                    <rect x="60" y="65" width="10" height="15" rx="5" fill="#059669" opacity="0.85"/>
+                    <ellipse cx="65" cy="79" rx="10" ry="7" fill="#059669" opacity="0.85"/>
+                    <!-- HAZ -->
+                    <ellipse cx="65" cy="65" rx="55" ry="13" fill="none" stroke="#6ee7b7" stroke-width="1.5" stroke-dasharray="3,2"/>
+                    <!-- bead — flatter -->
+                    <ellipse cx="65" cy="57" rx="46" ry="11" fill="#10b981"/>
+                </svg>
+                <div class="pen-label">98Ar/2O₂ (Spray)</div>
+                <div class="pen-sub">Widest · Shallowest · Very flat bead</div>
+            </div>
+        </div>
+
+        <div class="section-label">Carbon Steel Gas Selection by Application (Airgas Welding Gas Guide)</div>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr>
+                <th>Application</th>
+                <th>Recommended Gas</th>
+                <th>Transfer Mode</th>
+                <th>Why This Gas</th>
+            </tr>
+            <tr><td>Economy structural / code work</td><td>C25 (75Ar/25CO₂)</td><td>SC, Spray</td><td>Industry standard for AWS D1.1; balances cost, penetration, and arc stability</td></tr>
+            <tr><td>Thin-gauge auto body / sheet (≤12 ga)</td><td>C10 or C15 (90–85Ar/CO₂)</td><td>Short-circuit</td><td>Lower spatter, better bead appearance, reduced burn-through risk on thin material</td></tr>
+            <tr><td>Economy / outdoors (structural)</td><td>100% CO₂</td><td>SC, Globular</td><td>Lowest cost; wind-resistant (dense gas); accepts ER70S-6; expect high spatter cleanup</td></tr>
+            <tr><td>High-deposition flat plate welding</td><td>C25 or C10 (spray range)</td><td>Spray</td><td>≥80% Ar enables spray for maximum deposition rate and smooth appearance</td></tr>
+            <tr><td>Pulsed welding (all position)</td><td>C10 or C25</td><td>Pulsed Spray</td><td>High Ar content stabilizes pulsed arc; CO₂ provides penetration and oxidizing potential</td></tr>
+            <tr><td>High-strength steel (HY-80/100, A514)</td><td>C10 (90Ar/10CO₂)</td><td>SC or Pulsed</td><td>Reduced oxidation → better CVN toughness; use low-H wire (ER100S-2)</td></tr>
+            <tr><td>Pipe root (open butt)</td><td>C25 or CO₂</td><td>Short-circuit (RMD/STT)</td><td>Low voltage SC control needed; C25 gives better bead shape than 100% CO₂</td></tr>
+        </table>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════ GAS: SS & ALUMINUM ═══════════════════════════ -->
+<div id="panel-gas-ss" class="panel">
+
+    <div class="section">
+        <h2>Stainless Steel Shielding Gas Selection (Airgas / Linde)</h2>
+        <p>Stainless steel is highly sensitive to oxidation — CO₂ content must be kept very low (&lt;5%) to prevent carbide precipitation (sensitization) and maintain corrosion resistance. Oxygen additions (&lt;2%) improve wetting and bead shape without significantly affecting chemistry.</p>
+
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr>
+                <th>Gas Mixture</th>
+                <th>Composition</th>
+                <th>Transfer Mode</th>
+                <th>Arc Characteristics</th>
+                <th>Bead Appearance</th>
+                <th>Best For</th>
+            </tr>
+            <tr>
+                <td><strong>98Ar/2O₂</strong></td>
+                <td>98% Ar, 2% O₂</td>
+                <td>Spray only</td>
+                <td>Very stable; low spatter; excellent arc directionality</td>
+                <td>Very flat, bright, smooth; minimal oxidation tint</td>
+                <td>Primary choice for SS spray; flat &amp; horizontal; food/dairy/pharmaceutical</td>
+            </tr>
+            <tr>
+                <td><strong>Tri-mix (HeAr-CO₂)</strong></td>
+                <td>90% He / 7.5% Ar / 2.5% CO₂</td>
+                <td>Spray or Pulsed</td>
+                <td>Hotter arc; faster travel speeds; excellent fusion</td>
+                <td>Bright, low spatter; good appearance</td>
+                <td>All-position SS; thick plate; high-production; pipe welding</td>
+            </tr>
+            <tr>
+                <td><strong>97.5Ar/2.5CO₂</strong></td>
+                <td>97.5% Ar, 2.5% CO₂</td>
+                <td>Spray, Pulsed, SC</td>
+                <td>Stable arc; slightly more fluid puddle than 98Ar/2O₂</td>
+                <td>Good; slight darkening more than O₂ mix</td>
+                <td>General SS fabrication; less oxidation concern than higher CO₂</td>
+            </tr>
+            <tr>
+                <td><strong>100% Ar</strong></td>
+                <td>100% Argon</td>
+                <td>SC / Pulsed</td>
+                <td>Erratic in spray mode; less stable; no oxidizing component</td>
+                <td>Good on thin SS; erratic bead with spray</td>
+                <td>Pulsed process on thin SS when O₂/CO₂ must be avoided</td>
+            </tr>
+        </table>
+        </div>
+
+        <div class="note-box">
+            <strong>Sensitization caution:</strong> CO₂ in shielding gas reacts with the weld pool and HAZ. At elevated temperatures, Cr reacts with C to form Cr₂₃C₆ at grain boundaries — depleting chromium and destroying corrosion resistance (sensitization). Keep CO₂ ≤2.5% for austenitic SS (308L, 316L). Use 98Ar/2O₂ whenever possible. Never use C25 or 100% CO₂ on stainless steel.
+        </div>
+
+        <div class="section-label">Gas Torch Angle and Flow Rate for Stainless (Airgas)</div>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr><th>Parameter</th><th>Recommendation</th><th>Reason</th></tr>
+            <tr><td>Gas flow rate</td><td>25–40 cfh (cup size 5/8 in or larger)</td><td>Higher flow than CS — prevents atmospheric contamination of sensitive SS weld metal</td></tr>
+            <tr><td>Nozzle type</td><td>Large cup (3/4–7/8 in), gas lens preferred</td><td>Laminar flow prevents turbulence and air entrainment</td></tr>
+            <tr><td>Post-flow time</td><td>5–10 sec after arc stop</td><td>Prevents oxidation of hot weld crater and HAZ</td></tr>
+            <tr><td>CTWD (stick-out)</td><td>1/2–5/8 in for spray; 3/8–1/2 in for SC/pulsed</td><td>Short stick-out minimizes wire preheating resistance to preserve accurate amperage</td></tr>
+        </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Aluminum Shielding Gas Selection (Miller Electric / Airgas)</h2>
+        <p>Aluminum GMAW always requires Ar-based shielding. CO₂ cannot be used — it reacts with aluminum and produces aluminum oxide porosity. Helium additions increase heat input and travel speed, useful for thick plate and conductive alloys.</p>
+
+        <div class="gas-grid">
+            <div class="gas-card g-aro2" style="--gc:#d97706;">
+                <div class="gc-name">100% Argon</div>
+                <div class="gc-comp">Aluminum standard</div>
+                <div class="rating-row"><span class="rating-label">Heat Input</span><div class="rating-bar"><div class="rating-fill" style="width:42%"></div></div></div>
+                <div class="rating-row"><span class="rating-label">Cleaning Action</span><div class="rating-bar"><div class="rating-fill" style="width:95%"></div></div></div>
+                <div class="rating-row"><span class="rating-label">Arc Stability</span><div class="rating-bar"><div class="rating-fill" style="width:90%"></div></div></div>
+                <ul style="margin-top:10px">
+                    <li>Best oxide cleaning action (DCEP cathodic)</li>
+                    <li>Standard for most Al thicknesses</li>
+                    <li>Use ER4043 or ER5356</li>
+                    <li>Spray or pulsed transfer</li>
+                </ul>
+            </div>
+            <div class="gas-card g-he">
+                <div class="gc-name">25–75% He + Ar</div>
+                <div class="gc-comp">He/Ar blends for thick Al</div>
+                <div class="rating-row"><span class="rating-label">Heat Input</span><div class="rating-bar"><div class="rating-fill" style="width:82%"></div></div></div>
+                <div class="rating-row"><span class="rating-label">Cleaning Action</span><div class="rating-bar"><div class="rating-fill" style="width:70%"></div></div></div>
+                <div class="rating-row"><span class="rating-label">Arc Stability</span><div class="rating-bar"><div class="rating-fill" style="width:75%"></div></div></div>
+                <ul style="margin-top:10px">
+                    <li>Higher heat input → wider penetration profile</li>
+                    <li>Faster travel speeds on thick Al (&gt;1/2 in)</li>
+                    <li>Heavier He → better wind resistance</li>
+                    <li>Reduces porosity in thick sections (better fusion)</li>
+                    <li>Use 25%He for general; 75%He for thick plate</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr>
+                <th>Al Plate Thickness</th>
+                <th>Recommended Gas</th>
+                <th>Transfer Mode</th>
+                <th>Wire</th>
+                <th>Notes</th>
+            </tr>
+            <tr><td>&lt;1/8 in (thin sheet)</td><td>100% Ar</td><td>Pulsed spray</td><td>ER4043 0.030–0.035 in</td><td>Pulsed avoids burn-through; use push technique (10–15° lead angle)</td></tr>
+            <tr><td>1/8 – 3/8 in</td><td>100% Ar</td><td>Spray</td><td>ER4043 or ER5356 0.035–0.045 in</td><td>Standard spray; maintain clean base metal (acetone wipe + stainless wire brush)</td></tr>
+            <tr><td>3/8 – 3/4 in</td><td>75%Ar/25%He</td><td>Spray</td><td>ER5356 0.045–1/16 in</td><td>He increases heat input for better fusion through thick oxide</td></tr>
+            <tr><td>&gt;3/4 in</td><td>50–75%He/Ar blend</td><td>Spray</td><td>ER5183 or ER5356 1/16 in</td><td>Preheat 200–350°F; high-He blend for maximum penetration</td></tr>
+        </table>
+        </div>
+
+        <div class="note-box">
+            <strong>Always push on aluminum:</strong> Use a 5–15° push (forehand) technique to allow the arc to break up the aluminum oxide layer ahead of the weld pool. Dragging on aluminum traps oxide and causes porosity. Clean all surfaces with acetone and a stainless steel wire brush (dedicated to Al only) immediately before welding.
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════ GAS → PROPERTIES ═══════════════════════════ -->
+<div id="panel-gas-effects" class="panel">
+
+    <div class="section">
+        <h2>How Gas Composition Affects Arc Characteristics (Airgas / Linde)</h2>
+        <p>Each gas component plays a distinct role in shaping the arc physics. Understanding these effects allows you to choose the gas that meets your priority — whether that is cost, spatter control, toughness, penetration depth, or bead appearance.</p>
+
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr>
+                <th>Gas Component</th>
+                <th>Ionization Potential</th>
+                <th>Effect on Arc Stability</th>
+                <th>Effect on Arc Temperature</th>
+                <th>Effect on Transfer Mode</th>
+                <th>Effect on Oxidation</th>
+            </tr>
+            <tr>
+                <td><strong>Argon (Ar)</strong></td>
+                <td>15.76 eV</td>
+                <td>Excellent — low IP promotes easy arc ignition and re-ignition</td>
+                <td>Moderate arc temperature; narrow arc column</td>
+                <td>Enables spray transfer above transition current</td>
+                <td>Inert — no oxidation of weld metal</td>
+            </tr>
+            <tr>
+                <td><strong>Carbon Dioxide (CO₂)</strong></td>
+                <td>14.01 eV (dissociates)</td>
+                <td>Lower stability — CO₂ dissociates to CO + O, creating arc turbulence</td>
+                <td>Higher arc energy from recombination; promotes oxidizing reactions</td>
+                <td>Prevents spray — forces globular at high current</td>
+                <td>Highly oxidizing — burns off Mn, Si, and C from weld pool</td>
+            </tr>
+            <tr>
+                <td><strong>Helium (He)</strong></td>
+                <td>24.6 eV</td>
+                <td>Good but requires higher voltage for same arc length</td>
+                <td>Highest arc temperature of the three — best for heat conductive metals (Al, Cu)</td>
+                <td>No effect on transfer mode category; can widen spray cone</td>
+                <td>Inert — no oxidation</td>
+            </tr>
+            <tr>
+                <td><strong>Oxygen (O₂, 1–5%)</strong></td>
+                <td>13.62 eV</td>
+                <td>Improves arc stability and puddle wetting via small oxidation; lower surface tension</td>
+                <td>Slight increase from exothermic oxidation</td>
+                <td>Enables spray on carbon and SS; small O₂ lowers transition current</td>
+                <td>Oxidizing — small amounts improve wetting; above 5% damages weld metal</td>
+            </tr>
+        </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Gas Composition vs. Penetration Profile (Airgas / Linde)</h2>
+        <p>Penetration profile (the cross-sectional shape of fusion into the base metal) changes significantly with CO₂ content. Higher CO₂ concentrates arc energy at the root, creating deep narrow penetration. Higher Ar distributes arc energy more broadly.</p>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr>
+                <th>Gas Mixture</th>
+                <th>Penetration Depth (relative)</th>
+                <th>Penetration Width (relative)</th>
+                <th>Bead Profile</th>
+                <th>Fusion Zone Shape</th>
+            </tr>
+            <tr><td>100% CO₂</td><td>Deepest (100%)</td><td>Narrowest</td><td>Convex / humped</td><td>Narrow finger; high HAZ at root</td></tr>
+            <tr><td>75Ar/25CO₂ (C25)</td><td>High (~80%)</td><td>Moderate</td><td>Slightly convex</td><td>Moderate finger; balanced HAZ</td></tr>
+            <tr><td>90Ar/10CO₂ (C10)</td><td>Medium (~65%)</td><td>Wider</td><td>Flat</td><td>Broad, rounded; minimal finger</td></tr>
+            <tr><td>95Ar/5CO₂</td><td>Medium-low (~55%)</td><td>Wide</td><td>Flat to concave</td><td>Broad; very little root concentration</td></tr>
+            <tr><td>98Ar/2O₂ (spray)</td><td>Moderate (~60%)</td><td>Widest</td><td>Flat / slightly concave</td><td>Very broad; almost uniform</td></tr>
+            <tr><td>100% Ar (Al)</td><td>Low (~45%)</td><td>Widest</td><td>Smooth, flat</td><td>Wide parabolic; no finger</td></tr>
+            <tr><td>75Ar/25He</td><td>Medium-high (~75%)</td><td>Wide</td><td>Flat</td><td>Broader than pure Ar; more uniform</td></tr>
+        </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Gas Composition vs. Spatter Level (Airgas / Linde)</h2>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr>
+                <th>Gas Mixture</th>
+                <th>Relative Spatter Level</th>
+                <th>Primary Mechanism</th>
+                <th>Spatter Control Strategy</th>
+            </tr>
+            <tr><td>100% CO₂</td><td>Very High</td><td>CO₂ dissociation creates violent plasma, preventing stable spray; large globules explode on contact</td><td>Reduce voltage 1–2V below optimum; use RMD/STT process; apply anti-spatter</td></tr>
+            <tr><td>75Ar/25CO₂ (C25)</td><td>Moderate</td><td>Partial suppression of spray transfer; globular zone between SC and spray is wide</td><td>Stay in short-circuit range OR go above transition into spray; avoid the 175–200A globular zone</td></tr>
+            <tr><td>90Ar/10CO₂ (C10)</td><td>Low–Moderate</td><td>Narrower globular zone; transitions to spray at lower current</td><td>Good arc control; pulsed GMAW with C10 gives very low spatter</td></tr>
+            <tr><td>98Ar/2O₂ (spray)</td><td>Very Low</td><td>True spray transfer; droplets transfer axially with no short-circuit events</td><td>Maintain above transition current; flat/horizontal position only</td></tr>
+            <tr><td>75Ar/25He (Al)</td><td>Low</td><td>Inert gases; stable arc; no oxidation-induced explosions</td><td>Use push technique; proper CTWD; clean base metal</td></tr>
+        </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Gas Composition vs. Mechanical Properties (Airgas / Linde — Carbon Steel, ER70S-6)</h2>
+        <p>Oxidizing components (CO₂, O₂) react with the weld pool and burn off deoxidizing elements (Mn, Si), reducing their content in the solidified weld metal. This affects tensile strength, ductility, and especially Charpy V-notch (CVN) impact toughness.</p>
+
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr>
+                <th>Shielding Gas</th>
+                <th>Min. UTS (ksi)</th>
+                <th>Min. Yield (ksi)</th>
+                <th>Elongation (%)</th>
+                <th>CVN Impact @ 0°F (ft-lb)</th>
+                <th>Mn+Si Recovery (%)</th>
+                <th>Notes</th>
+            </tr>
+            <tr>
+                <td>100% CO₂</td>
+                <td>71–73</td><td>59–61</td><td>25–27</td><td>20–30</td><td>Low (~70–75%)</td>
+                <td>Highest oxidation loss of Mn/Si; lowest CVN; economy applications only</td>
+            </tr>
+            <tr>
+                <td>75Ar/25CO₂ (C25)</td>
+                <td>73–76</td><td>61–63</td><td>26–28</td><td>35–50</td><td>Medium (~80–85%)</td>
+                <td>Industry standard; CVN suitable for most structural (AWS D1.1)</td>
+            </tr>
+            <tr>
+                <td>90Ar/10CO₂ (C10)</td>
+                <td>75–78</td><td>62–64</td><td>27–29</td><td>45–60</td><td>High (~88–92%)</td>
+                <td>Better CVN — preferred for low-temperature or toughness-critical applications</td>
+            </tr>
+            <tr>
+                <td>98Ar/2O₂</td>
+                <td>76–79</td><td>63–65</td><td>27–30</td><td>50–70</td><td>Very High (~90–95%)</td>
+                <td>Best mechanical properties; spray mode only; use high-deox wire (S-6)</td>
+            </tr>
+            <tr>
+                <td>100% Ar + no O₂ (hypothetical)</td>
+                <td>78–80</td><td>64–66</td><td>28–31</td><td>60–80</td><td>Highest (~95–100%)</td>
+                <td>Not practical for carbon steel — erratic arc, poor wetting; for reference only</td>
+            </tr>
+        </table>
+        </div>
+        <div class="info-box">
+            <strong>Design implication (Linde Gas):</strong> For applications requiring CVN &gt;40 ft-lb at 0°F (AWS D1.1 notch-toughness zones, bridge welding per AASHTO/AWS D1.5), specify C10 or C15 gas and ER70S-6 or ER70S-7 wire minimum. Avoid 100% CO₂ for any fracture-critical application. Verify with a WPS that includes Charpy testing per the applicable code.
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════ PARAMETER SETTING ═══════════════════════════ -->
+<div id="panel-params" class="panel">
+
+    <div class="section">
+        <h2>Setting GMAW Parameters — Miller Electric Approach</h2>
+        <p>Miller Electric's "golden rule" for GMAW setup: <strong>Wire Feed Speed (WFS)</strong> controls amperage (and thus penetration); <strong>Voltage</strong> controls arc length and bead width. Start with the WFS for the desired current, then tune voltage for bead shape.</p>
+
+        <div class="section-label">Step-by-Step Setup (Miller Electric MIG Guide)</div>
+        <ol style="font-size:0.87rem;color:#374151;line-height:2;padding-left:20px;">
+            <li>Select wire diameter based on material thickness (see Wire Selection tab)</li>
+            <li>Set shielding gas and flow rate (25–35 cfh for indoor; 35–50 cfh if any air movement)</li>
+            <li>Set WFS to target amperage — verify with tip chart or synergic table</li>
+            <li>Calculate starting voltage: <strong>V ≈ 0.04 × A + 16</strong> (±2 V adjustment from there)</li>
+            <li>Set CTWD (contact-tip-to-work distance)</li>
+            <li>Run a test bead; adjust voltage ±1V steps for arc sound and bead shape</li>
+            <li>Check for proper fusion at toes; adjust travel speed last</li>
+        </ol>
+
+        <div class="formula-box">
+            Starting Voltage = 0.04 × (Amperage) + 16  [± 2 V]
+            <div class="fml-note">Example: 150 A → V = 0.04(150) + 16 = 22 V starting point. Adjust for wire diameter, gas, and bead shape.</div>
+        </div>
+
+        <div class="section-label">WFS → Amperage Approximations (Miller Electric, ER70S-6)</div>
+        <p style="font-size:0.83rem;color:#6b7280;margin-bottom:8px;">Amperage is a function of WFS and wire diameter. Rule of thumb: ~1 A per 1 ipm for 0.035 in wire. Larger wire requires less ipm for same amperage.</p>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr>
+                <th>WFS (ipm)</th>
+                <th>0.023 in wire (A)</th>
+                <th>0.030 in wire (A)</th>
+                <th>0.035 in wire (A)</th>
+                <th>0.045 in wire (A)</th>
+                <th>Typical Mode (0.035 + C25)</th>
+            </tr>
+            <tr><td>50</td><td>30–40</td><td>40–55</td><td>50–65</td><td>70–90</td><td>Short-circuit</td></tr>
+            <tr><td>100</td><td>55–70</td><td>70–90</td><td>90–110</td><td>110–140</td><td>Short-circuit</td></tr>
+            <tr><td>150</td><td>75–95</td><td>100–125</td><td>130–155</td><td>155–185</td><td>Short-circuit / transitional</td></tr>
+            <tr><td>200</td><td>95–115</td><td>130–155</td><td>170–195</td><td>195–235</td><td>Spray (above transition)</td></tr>
+            <tr><td>250</td><td>110–135</td><td>155–185</td><td>210–240</td><td>240–280</td><td>Spray</td></tr>
+            <tr><td>300</td><td>125–155</td><td>180–215</td><td>250–285</td><td>280–330</td><td>Spray</td></tr>
+            <tr><td>400</td><td>—</td><td>220–260</td><td>320–360</td><td>360–410</td><td>Spray (high-deposition)</td></tr>
+        </table>
+        </div>
+
+        <div class="section-label">CTWD (Contact-Tip-to-Work Distance) Guide (Miller Electric)</div>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr><th>Transfer Mode</th><th>CTWD Range</th><th>Effect of Too Long</th><th>Effect of Too Short</th></tr>
+            <tr><td>Short-circuit</td><td>1/4 – 1/2 in (6–13 mm)</td><td>Increased resistive preheating → less actual amperage → cold weld, LOF risk</td><td>Spatter in nozzle; tip burnback; erratic arc</td></tr>
+            <tr><td>Spray / Globular</td><td>5/8 – 1 in (16–25 mm)</td><td>Unstable arc; wide, flat bead; reduced penetration</td><td>Arc too short; spatter; nozzle clogging</td></tr>
+            <tr><td>Pulsed</td><td>1/2 – 3/4 in (13–19 mm)</td><td>Reduced average current; incomplete fusion</td><td>Tip burnback; arc instability</td></tr>
+        </table>
+        </div>
+
+        <div class="section-label">Travel Speed, Angle, and Position (Miller Electric)</div>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr><th>Parameter</th><th>Typical Range</th><th>Effect of Increasing</th><th>Effect of Decreasing</th></tr>
+            <tr><td>Travel speed</td><td>10–30 ipm (4–12 mm/s)</td><td>Narrower bead, less reinforcement, less heat input; risk of undercut</td><td>Wider bead, more reinforcement; risk of overlap, excessive heat input</td></tr>
+            <tr><td>Work angle (CS, butt)</td><td>0–15° from perpendicular</td><td>Tilting too far → poor toes on one side</td><td>Perpendicular = symmetric bead profile</td></tr>
+            <tr><td>Travel angle (drag/push)</td><td>5–15° drag (steel); 5–15° push (Al)</td><td>More drag → deeper penetration, convex bead</td><td>More push → shallower, cleaner; required for Al (oxide cleaning)</td></tr>
+            <tr><td>Gas flow rate</td><td>25–35 cfh (12–17 L/min)</td><td>Excess flow → turbulence → porosity</td><td>Too low → atmospheric contamination → porosity</td></tr>
+        </table>
+        </div>
+
+        <div class="section-label">Voltage Effects on Bead Shape (Miller Electric)</div>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr><th>Voltage Setting</th><th>Arc Length</th><th>Bead Width</th><th>Reinforcement</th><th>Penetration</th><th>Arc Sound</th></tr>
+            <tr><td>Too low (–3V)</td><td>Very short / stubbing</td><td>Narrow, convex</td><td>High (ropy bead)</td><td>Less</td><td>Irregular pops / sticking</td></tr>
+            <tr><td>Optimal</td><td>Controlled, consistent</td><td>Flat, smooth toes</td><td>Flush to slight crown</td><td>Correct for mode</td><td>Steady frying/hissing</td></tr>
+            <tr><td>Too high (+3V)</td><td>Long, wandering</td><td>Wide, flat / undercut</td><td>Low (flat or concave)</td><td>Less / erratic</td><td>Spitting, arc wandering</td></tr>
+        </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Parameter Charts by Material &amp; Thickness (Miller Electric)</h2>
+
+        <div class="section-label">Carbon Steel — Short-Circuit (C25, ER70S-6)</div>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr><th>Material Thickness</th><th>Wire Diam.</th><th>WFS (ipm)</th><th>Voltage (V)</th><th>Current (A)</th><th>Gas Flow (cfh)</th></tr>
+            <tr><td>22 gauge (0.030 in)</td><td>0.023 in</td><td>60–90</td><td>13–15</td><td>35–55</td><td>25</td></tr>
+            <tr><td>18 gauge (0.048 in)</td><td>0.023 in</td><td>80–130</td><td>14–17</td><td>50–80</td><td>25</td></tr>
+            <tr><td>16 gauge (0.060 in)</td><td>0.030 in</td><td>100–150</td><td>15–18</td><td>65–100</td><td>25</td></tr>
+            <tr><td>1/8 in (0.125 in)</td><td>0.030–0.035 in</td><td>150–200</td><td>17–20</td><td>100–140</td><td>25–30</td></tr>
+            <tr><td>3/16 in (0.188 in)</td><td>0.035 in</td><td>180–250</td><td>18–22</td><td>130–170</td><td>25–30</td></tr>
+        </table>
+        </div>
+
+        <div class="section-label">Carbon Steel — Spray (C25 or C10, ER70S-6, flat/horiz)</div>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+            <tr><th>Material Thickness</th><th>Wire Diam.</th><th>WFS (ipm)</th><th>Voltage (V)</th><th>Current (A)</th><th>Gas Flow (cfh)</th></tr>
+            <tr><td>3/16 in</td><td>0.035 in</td><td>210–250</td><td>26–28</td><td>175–210</td><td>30–35</td></tr>
+            <tr><td>1/4 in</td><td>0.035–0.045 in</td><td>240–300</td><td>27–30</td><td>200–260</td><td>30–35</td></tr>
+            <tr><td>3/8 in</td><td>0.045 in</td><td>200–280</td><td>28–32</td><td>220–300</td><td>30–35</td></tr>
+            <tr><td>1/2 in</td><td>0.045–0.052 in</td><td>230–310</td><td>29–34</td><td>270–360</td><td>35</td></tr>
+            <tr><td>3/4 in+</td><td>0.052–1/16 in</td><td>200–300</td><td>30–36</td><td>330–480</td><td>35–40</td></tr>
+        </table>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════ TROUBLESHOOTING ═══════════════════════════ -->
+<div id="panel-trouble" class="panel">
+
+    <div class="section">
+        <h2>GMAW Troubleshooting Guide (Miller Electric MIG Guide)</h2>
+
+        <div class="section-label">Arc &amp; Process Problems</div>
+        <table class="trouble-table">
+            <tr><th>Problem</th><th>Likely Causes</th><th>Corrective Action</th></tr>
+            <tr>
+                <td class="defect-tag">Excessive spatter</td>
+                <td class="cause-col">Voltage too high or too low; wrong gas (too much CO₂); CTWD too long; contaminated wire; working in globular transition zone</td>
+                <td class="fix-col">Tune voltage ±1V; switch to higher-Ar gas blend; reduce CTWD; increase WFS to exit globular zone into spray; verify gas flow is not turbulent</td>
+            </tr>
+            <tr>
+                <td class="defect-tag">Arc wandering / erratic arc</td>
+                <td class="cause-col">Contaminated base metal; wrong CTWD; damaged/wrong contact tip; gas flow too high (turbulence); pulsed parameter mismatch</td>
+                <td class="fix-col">Clean base metal; set CTWD per mode; replace contact tip; reduce gas flow to 25–35 cfh; re-synergize pulsed parameters</td>
+            </tr>
+            <tr>
+                <td class="defect-tag">Wire burnback to tip</td>
+                <td class="cause-col">CTWD too short; WFS too low; voltage too high; contact tip worn/undersized</td>
+                <td class="fix-col">Increase CTWD; increase WFS; lower voltage; replace tip (match wire size precisely)</td>
+            </tr>
+            <tr>
+                <td class="defect-tag">Wire birdnesting (tangle at drive rolls)</td>
+                <td class="cause-col">Drive roll pressure too high; liner clogged/kinked; contact tip blocked; incorrect liner diameter</td>
+                <td class="fix-col">Reduce drive roll pressure (wire should slip before birdnesting); clean/replace liner; ream tip; verify liner and tip match wire diameter</td>
+            </tr>
+        </table>
+
+        <div class="section-label">Weld Defects</div>
+        <table class="trouble-table">
+            <tr><th>Defect</th><th>Likely Causes</th><th>Corrective Action</th></tr>
+            <tr>
+                <td class="defect-tag">Porosity</td>
+                <td class="cause-col">Gas coverage loss (low flow, leak, wind); contaminated base metal (oil, moisture, paint, zinc); CTWD too long; gas nozzle clogged with spatter</td>
+                <td class="fix-col">Increase gas flow; check for leaks; clean base metal with acetone; reduce CTWD; clean/replace nozzle; shield from wind (&gt;5 mph)</td>
+            </tr>
+            <tr>
+                <td class="defect-tag">Lack of fusion (LOF)</td>
+                <td class="cause-col">Short-circuit on thick material (cold weld); amperage too low; CTWD too long; travel speed too fast; wrong joint prep angle</td>
+                <td class="fix-col">Increase WFS/amperage; switch to spray or pulsed on thicker material; reduce CTWD; slow travel; open joint bevel to ≥30° included angle</td>
+            </tr>
+            <tr>
+                <td class="defect-tag">Undercut</td>
+                <td class="cause-col">Voltage too high; amperage too high; travel speed too fast; wrong gun angle; arc not dwelling at toe</td>
+                <td class="fix-col">Reduce voltage 1–2V; reduce WFS; slow travel speed; adjust work angle to direct arc to toe; use slight weave pause at toes</td>
+            </tr>
+            <tr>
+                <td class="defect-tag">Overlap / cold lap</td>
+                <td class="cause-col">Travel too slow; voltage too high; puddle flowing ahead of arc; wrong gun angle</td>
+                <td class="fix-col">Increase travel speed; reduce voltage; adjust gun angle; use drag technique to keep arc ahead of puddle</td>
+            </tr>
+            <tr>
+                <td class="defect-tag">Convex / ropy bead</td>
+                <td class="cause-col">Voltage too low; CTWD too short; travel too fast; wrong gas</td>
+                <td class="fix-col">Increase voltage 1–2V; adjust CTWD; slow down; verify correct gas blend</td>
+            </tr>
+            <tr>
+                <td class="defect-tag">Burn-through (thin sheet)</td>
+                <td class="cause-col">Amperage too high; travel too slow; wire diameter too large; poor fit-up (gap too wide)</td>
+                <td class="fix-col">Reduce WFS; increase travel speed; drop to smaller wire diameter (0.023 or 0.030); tighten fit-up; use pulsed transfer</td>
+            </tr>
+            <tr>
+                <td class="defect-tag">Silica islands on bead (CS)</td>
+                <td class="cause-col">Normal with ER70S-6 + CO₂; Si oxidizes and rises to surface as glassy inclusions</td>
+                <td class="fix-col">Wire brush between passes (multi-pass); switch to ER70S-3 if Si islands are excessive; or switch to lower-CO₂ gas</td>
+            </tr>
+            <tr>
+                <td class="defect-tag">Distortion</td>
+                <td class="cause-col">Heat concentrated in one area; excessive passes; no preheat sequence planning</td>
+                <td class="fix-col">Use backstep or skip welding sequence; clamp/tack frequently; reduce heat input; balance welds on both sides of joint</td>
+            </tr>
+        </table>
+
+        <div class="section-label">Gas-Specific Issues (Airgas)</div>
+        <table class="trouble-table">
+            <tr><th>Symptom</th><th>Gas-Related Cause</th><th>Solution</th></tr>
+            <tr>
+                <td class="defect-tag">Porosity on Al</td>
+                <td class="cause-col">Moisture in Ar; CO₂ or CO₂-blend used on Al; base metal not cleaned of Al oxide</td>
+                <td class="fix-col">Use dry 100% Ar (dewpoint ≤–40°F); never use CO₂ or CO₂ blends on Al; clean with acetone + SS brush immediately before welding</td>
+            </tr>
+            <tr>
+                <td class="defect-tag">Sensitization on SS (corrosion failure)</td>
+                <td class="cause-col">CO₂ &gt;3% in shielding gas for austenitic SS; high heat input multi-pass</td>
+                <td class="fix-col">Switch to 98Ar/2O₂ or tri-mix; use L-grade wire (308L, 316L); control interpass temp ≤350°F</td>
+            </tr>
+            <tr>
+                <td class="defect-tag">Spray not achievable (high Ar gas on hand)</td>
+                <td class="cause-col">Too much CO₂ (must be &lt;20% for spray)</td>
+                <td class="fix-col">Switch to ≥80% Ar blend; use C10 or 98Ar/2O₂; or switch to pulsed GMAW</td>
+            </tr>
+            <tr>
+                <td class="defect-tag">Hydrogen porosity (HIC risk)</td>
+                <td class="cause-col">Moisture in shielding gas, wire, or on base metal (coatings, rust, oil)</td>
+                <td class="fix-col">Store wire sealed; clean base metal; verify gas dewpoint; avoid welding on wet/cold material without preheat</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<footer>
+    <p>
+        Based on: <strong>Miller Electric</strong> — <em>MIG Welding Guide (ITW)</em> &middot;
+        <strong>Airgas</strong> — <em>Welding Gas Selection Guide</em> &middot;
+        <strong>Linde Gas</strong> — <em>GMAW Shielding Gas Technology</em> &middot;
+        <strong>AWS A5.18 / A5.9 / A5.10</strong> &middot;
+        <strong>AWS D1.1</strong> Structural Welding Code
+    </p>
+    <p style="margin-top:8px;"><a href="index.html">← Back to Reference Index</a> &nbsp;|&nbsp; <a href="../index.html">Back to Course Page</a></p>
+</footer>
+
+<script>
+function showTab(id) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>
