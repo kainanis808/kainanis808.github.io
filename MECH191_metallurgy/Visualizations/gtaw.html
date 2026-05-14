@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GTAW – TIG Welding Guidance, Root Pass &amp; AWS Filler Classification</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0a1628; color: #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; }
+
+  header { background: linear-gradient(135deg, #0f2040 0%, #1a3a5c 100%); padding: 24px 32px 20px; border-bottom: 2px solid #38bdf8; }
+  header h1 { font-size: 1.75rem; color: #38bdf8; letter-spacing: 0.5px; }
+  header p  { color: #94a3b8; font-size: 0.88rem; margin-top: 5px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #1e3a5c; background: #0d1f38; padding: 0 24px; overflow-x: auto; }
+  .tab-btn { padding: 14px 22px; background: none; border: none; color: #94a3b8; font-size: 0.9rem; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: color 0.2s, border-color 0.2s; white-space: nowrap; }
+  .tab-btn:hover { color: #7dd3fc; }
+  .tab-btn.active { color: #38bdf8; border-bottom-color: #38bdf8; font-weight: 600; }
+
+  .tab-content { display: none; padding: 28px 32px; max-width: 1140px; }
+  .tab-content.active { display: block; }
+
+  h2 { font-size: 1.2rem; color: #38bdf8; margin-bottom: 14px; margin-top: 24px; }
+  h2:first-child { margin-top: 0; }
+  h3 { font-size: 0.95rem; color: #7dd3fc; margin-bottom: 8px; }
+
+  canvas { display: block; }
+
+  .card { background: #0f2040; border: 1px solid #1e3a5c; border-radius: 10px; padding: 18px; margin-bottom: 22px; }
+
+  .anim-wrap  { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .anim-cv    { background: #0a1628; border: 1px solid #1e3a5c; border-radius: 8px; overflow: hidden; }
+  .anim-ctrls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .anim-ctrls button { background: #1a3a5c; color: #e2e8f0; border: 1px solid #38bdf8; border-radius: 6px; padding: 7px 18px; font-size: 0.85rem; cursor: pointer; transition: background 0.18s; }
+  .anim-ctrls button:hover { background: #38bdf8; color: #0a1628; }
+  .stage-lbl  { font-size: 0.98rem; color: #7dd3fc; font-weight: 600; text-align: center; min-height: 22px; }
+  .stage-dsc  { font-size: 0.82rem; color: #94a3b8; text-align: center; max-width: 720px; min-height: 42px; line-height: 1.55; }
+  .stage-dots { display: flex; gap: 8px; }
+  .sdot { width: 10px; height: 10px; border-radius: 50%; background: #1e3a5c; border: 1px solid #38bdf8; cursor: pointer; transition: background 0.15s; }
+  .sdot.active { background: #38bdf8; }
+
+  .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  .ref-table th { background: #1a3a5c; color: #38bdf8; padding: 8px 11px; text-align: left; border: 1px solid #1e3a5c; }
+  .ref-table td { padding: 7px 11px; border: 1px solid #1e3a5c; color: #cbd5e1; vertical-align: top; }
+  .ref-table tr:nth-child(odd)  td { background: #0a1628; }
+  .ref-table tr:nth-child(even) td { background: #0f2040; }
+  .ref-table tr:hover td { background: #132338; }
+  .tbl-wrap { overflow-x: auto; }
+
+  .two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 22px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-bottom: 22px; }
+  @media (max-width: 860px) { .two-col { grid-template-columns: 1fr; } .three-col { grid-template-columns: 1fr; } }
+
+  .alert { background: #0a1628; border: 1px solid #38bdf8; border-radius: 8px; padding: 14px 18px; margin-top: 16px; font-size: 0.82rem; color: #94a3b8; line-height: 1.6; }
+  .alert b { color: #38bdf8; }
+  .warn  { border-color: #fbbf24; }
+  .warn b { color: #fbbf24; }
+
+  /* Polarity selector */
+  .pol-select { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 18px; }
+  .pol-btn { padding: 8px 22px; border-radius: 20px; border: 2px solid #1e3a5c; background: #0f2040; color: #94a3b8; font-size: 0.85rem; cursor: pointer; transition: all 0.18s; font-weight: 600; }
+  .pol-btn:hover { border-color: #38bdf8; color: #7dd3fc; }
+  .pol-btn.active { background: #1a3a5c; border-color: #38bdf8; color: #38bdf8; }
+
+  /* Decoder */
+  .er-display { display: flex; justify-content: center; gap: 0; margin-bottom: 16px; flex-wrap: wrap; }
+  .er-seg { padding: 12px 20px; font-size: 2rem; font-weight: 700; cursor: pointer; border-radius: 8px; border: 2px solid transparent; transition: border-color 0.15s, background 0.15s; user-select: none; }
+  .er-seg:hover  { border-color: #38bdf8; }
+  .er-seg.active { border-color: #38bdf8; background: #1a3a5c; }
+  .seg-er   { color: #60a5fa; }
+  .seg-xx   { color: #4ade80; }
+  .seg-s    { color: #fbbf24; }
+  .seg-cls  { color: #c084fc; }
+  .seg-suf  { color: #f87171; }
+  .er-info { background: #0a1628; border: 1px solid #1e3a5c; border-radius: 8px; padding: 14px 18px; min-height: 78px; }
+  .er-info-title { font-size: 0.85rem; font-weight: 700; color: #7dd3fc; margin-bottom: 5px; }
+  .er-info-body  { font-size: 0.82rem; color: #94a3b8; line-height: 1.6; }
+
+  /* Filter row */
+  .filter-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; align-items: flex-end; }
+  .fgrp { display: flex; flex-direction: column; gap: 4px; }
+  .fgrp label { font-size: 0.76rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
+  .fgrp select { background: #0f2040; color: #e2e8f0; border: 1px solid #1e3a5c; border-radius: 6px; padding: 7px 12px; font-size: 0.84rem; cursor: pointer; }
+  .fgrp select:focus { outline: 1px solid #38bdf8; }
+
+  /* Steps */
+  .steps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; margin-top: 14px; }
+  .step-card  { background: #0f2040; border: 1px solid #1e3a5c; border-radius: 9px; padding: 15px; }
+  .step-num   { display: inline-flex; align-items: center; justify-content: center; background: #38bdf8; color: #0a1628; font-weight: 700; font-size: 0.82rem; width: 24px; height: 24px; border-radius: 50%; margin-bottom: 8px; }
+  .step-title { font-size: 0.88rem; color: #7dd3fc; font-weight: 600; margin-bottom: 5px; }
+  .step-text  { font-size: 0.79rem; color: #94a3b8; line-height: 1.5; }
+
+  .kv-row { display: flex; justify-content: space-between; font-size: 0.79rem; border-bottom: 1px solid #1e3a5c; padding-bottom: 4px; margin-bottom: 4px; }
+  .kv-row span:first-child { color: #94a3b8; }
+  .kv-row span:last-child  { color: #e2e8f0; font-weight: 600; }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; background: #1e3a5c; color: #94a3b8; }
+  .tag.good { background: #14532d; color: #86efac; }
+  .tag.bad  { background: #450a0a; color: #fca5a5; }
+  .tag.warn { background: #451a03; color: #fdba74; }
+
+  .src { font-size: 0.74rem; color: #64748b; margin-top: 8px; font-style: italic; }
+  .back-link { text-align: center; padding: 28px; }
+  .back-link a { color: #38bdf8; text-decoration: none; font-size: 0.9rem; }
+  .back-link a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>GTAW (TIG Welding)</h1>
+  <p>Tungsten Electrode Selection · AC vs DCEN · Shielding Gas · Filler Selection · Root Pass Pipe Technique · AWS ER Filler Classification — Miller Electric &amp; AWS</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('tig-guidance')">TIG Welding Guidance</button>
+  <button class="tab-btn" onclick="showTab('ac-cleaning')">AC &amp; Cathodic Cleaning</button>
+  <button class="tab-btn" onclick="showTab('root-pass')">Root Pass Pipe Welding</button>
+  <button class="tab-btn" onclick="showTab('filler-class')">AWS Filler Classification</button>
+</div>
+
+<!-- ═══════════════════ TAB 1: TIG WELDING GUIDANCE ═══════════════════ -->
+<div id="tig-guidance" class="tab-content active">
+
+  <h2>GTAW Process Overview</h2>
+  <div class="card">
+    <p style="font-size:0.85rem;color:#94a3b8;line-height:1.7;">
+      Gas Tungsten Arc Welding (GTAW), commonly called TIG (Tungsten Inert Gas), uses a <b style="color:#7dd3fc">non-consumable tungsten electrode</b>
+      to establish the arc. A separate filler rod is fed manually (or omitted for autogenous welds). An inert shielding gas
+      (argon, helium, or blends) protects both the weld pool and the electrode from atmospheric contamination.
+      GTAW produces the <b style="color:#7dd3fc">highest-quality, cleanest welds</b> of any fusion process, making it the
+      preferred choice for aerospace, food-grade, and critical pipe applications.
+    </p>
+    <div class="alert" style="margin-top:14px;">
+      <b>Key advantage:</b> No flux, no spatter, no slag — weld quality depends almost entirely on welder skill and parameter selection.
+    </div>
+  </div>
+
+  <!-- Polarity Selector -->
+  <h2>Polarity Selection</h2>
+  <div class="pol-select">
+    <button class="pol-btn active" onclick="showPol('dcen')">DCEN (DC Electrode Negative)</button>
+    <button class="pol-btn" onclick="showPol('dcep')">DCEP (DC Electrode Positive)</button>
+    <button class="pol-btn" onclick="showPol('ac')">AC (Alternating Current)</button>
+  </div>
+
+  <div id="pol-dcen" class="card">
+    <h3>DCEN — DC Electrode Negative (Straight Polarity)</h3>
+    <div class="two-col">
+      <div>
+        <div class="kv-row"><span>Electron flow</span><span>Electrode → Workpiece</span></div>
+        <div class="kv-row"><span>Heat distribution</span><span>~70% at workpiece, 30% at electrode</span></div>
+        <div class="kv-row"><span>Penetration profile</span><span>Deep, narrow</span></div>
+        <div class="kv-row"><span>Electrode diameter</span><span>Smaller (less heat at tip)</span></div>
+        <div class="kv-row"><span>Oxide cleaning</span><span>None</span></div>
+        <div class="kv-row"><span>Primary materials</span><span>Carbon steel, stainless steel, titanium, nickel alloys</span></div>
+      </div>
+      <div>
+        <div class="tag-row" style="margin-bottom:10px;">
+          <span class="tag good">Deepest penetration</span>
+          <span class="tag good">Longest electrode life</span>
+          <span class="tag good">Most common polarity</span>
+          <span class="tag bad">No oxide removal</span>
+        </div>
+        <p class="step-text">With DCEN, electrons leave the tungsten tip and strike the base metal at high velocity. This concentrates the majority of arc energy into the workpiece rather than the electrode, allowing smaller tungsten diameters to carry high amperages. The tungsten tip retains a tapered point, which focuses the arc and produces a stable, narrow bead with excellent depth-to-width ratio.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="pol-dcep" class="card" style="display:none;">
+    <h3>DCEP — DC Electrode Positive (Reverse Polarity)</h3>
+    <div class="two-col">
+      <div>
+        <div class="kv-row"><span>Electron flow</span><span>Workpiece → Electrode</span></div>
+        <div class="kv-row"><span>Heat distribution</span><span>~70% at electrode, 30% at workpiece</span></div>
+        <div class="kv-row"><span>Penetration profile</span><span>Wide, shallow</span></div>
+        <div class="kv-row"><span>Electrode diameter</span><span>Much larger (heavy heating of tip)</span></div>
+        <div class="kv-row"><span>Oxide cleaning</span><span>Strong cathodic cleaning action</span></div>
+        <div class="kv-row"><span>Primary materials</span><span>Rarely used in GTAW; SMAW only</span></div>
+      </div>
+      <div>
+        <div class="tag-row" style="margin-bottom:10px;">
+          <span class="tag good">Cathodic cleaning</span>
+          <span class="tag bad">Electrode overheats rapidly</span>
+          <span class="tag bad">Low amperage limit</span>
+          <span class="tag bad">Shallow penetration</span>
+        </div>
+        <p class="step-text">DCEP is almost never used for GTAW in practice. The electrode absorbs ~70% of the arc heat, requiring a very large tungsten ball to avoid burnback. Maximum current is severely limited (e.g., a 3/32" tungsten maxes around 15 A in DCEP vs. 150 A in DCEN). The cathodic cleaning effect is present but AC is preferred for cleaning without these electrode penalties.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="pol-ac" class="card" style="display:none;">
+    <h3>AC — Alternating Current</h3>
+    <div class="two-col">
+      <div>
+        <div class="kv-row"><span>Electron flow</span><span>Reverses each half-cycle</span></div>
+        <div class="kv-row"><span>Cleaning half-cycle</span><span>EP half → oxide removal</span></div>
+        <div class="kv-row"><span>Penetration half-cycle</span><span>EN half → fusion</span></div>
+        <div class="kv-row"><span>Electrode tip shape</span><span>Balled end (pure or zirconia tungsten)</span></div>
+        <div class="kv-row"><span>Primary materials</span><span>Aluminum, magnesium</span></div>
+        <div class="kv-row"><span>Balance control</span><span>Adjustable EN/EP ratio on inverters</span></div>
+      </div>
+      <div>
+        <div class="tag-row" style="margin-bottom:10px;">
+          <span class="tag good">Removes Al₂O₃ oxide layer</span>
+          <span class="tag good">Essential for aluminum</span>
+          <span class="tag warn">More electrode heat than DCEN</span>
+          <span class="tag warn">Wider, shallower bead</span>
+        </div>
+        <p class="step-text">AC combines cathodic cleaning (EP half-cycle) with fusion penetration (EN half-cycle). Modern inverter-based TIG machines allow adjustment of the EN/EP balance — increasing EN% deepens penetration and reduces electrode heating; increasing EP% enhances oxide cleaning but builds more heat in the tungsten. See the AC Cathodic Cleaning tab for full detail.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tungsten Electrode Selection -->
+  <h2>Tungsten Electrode Selection</h2>
+  <div class="tbl-wrap">
+    <table class="ref-table">
+      <thead>
+        <tr>
+          <th>Color Code</th><th>Type</th><th>Composition</th><th>Best Polarity</th><th>Primary Applications</th><th>Tip Prep</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span style="color:#4ade80;font-weight:700;">● Green</span></td>
+          <td>Pure Tungsten (EWP)</td>
+          <td>99.5% W</td>
+          <td>AC</td>
+          <td>Aluminum, magnesium (AC); legacy machines</td>
+          <td>Balled (AC)</td>
+        </tr>
+        <tr>
+          <td><span style="color:#f87171;font-weight:700;">● Red</span></td>
+          <td>2% Thoriated (EWTh-2)</td>
+          <td>97.3% W + 2% ThO₂</td>
+          <td>DCEN</td>
+          <td>Carbon steel, SS, titanium, nickel — excellent arc starts</td>
+          <td>Sharp point</td>
+        </tr>
+        <tr>
+          <td><span style="color:#c084fc;font-weight:700;">● Purple / Violet</span></td>
+          <td>Rare Earth (E3, EWLa-1.5)</td>
+          <td>W + lanthanum/cerium/mixed oxides</td>
+          <td>AC or DCEN</td>
+          <td>Universal — preferred replacement for thoriated; no radioactivity</td>
+          <td>Balled (AC) or pointed (DCEN)</td>
+        </tr>
+        <tr>
+          <td><span style="color:#60a5fa;font-weight:700;">● Grey</span></td>
+          <td>Ceriated (EWCe-2)</td>
+          <td>97.3% W + 2% CeO₂</td>
+          <td>AC or DCEN</td>
+          <td>Low-amperage DCEN; thin materials; aluminum AC</td>
+          <td>Balled (AC) or pointed (DCEN)</td>
+        </tr>
+        <tr>
+          <td><span style="color:#e2e8f0;font-weight:700;">● White</span></td>
+          <td>Zirconia (EWZr-1)</td>
+          <td>99.1% W + 0.8% ZrO₂</td>
+          <td>AC</td>
+          <td>Aluminum and magnesium AC; resists contamination better than pure</td>
+          <td>Balled (AC)</td>
+        </tr>
+        <tr>
+          <td><span style="color:#fbbf24;font-weight:700;">● Gold</span></td>
+          <td>1.5% Lanthanated (EWLa-1.5)</td>
+          <td>98.3% W + 1.5% La₂O₃</td>
+          <td>AC or DCEN</td>
+          <td>Excellent for AC aluminum; good current capacity; non-radioactive</td>
+          <td>Balled (AC) or pointed (DCEN)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="src">Source: Miller Electric – TIG Welding Tungsten Selection Guide; AWS A5.12 Specification for Tungsten and Tungsten Alloy Electrodes</p>
+
+  <!-- Shielding Gas -->
+  <h2>Shielding Gas Selection</h2>
+  <div class="tbl-wrap">
+    <table class="ref-table">
+      <thead>
+        <tr><th>Gas</th><th>Composition</th><th>Ionization Potential</th><th>Thermal Conductivity</th><th>Arc Characteristics</th><th>Applications</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Argon (Ar)</td><td>100% Ar</td><td>15.8 eV</td><td>Low</td><td>Smooth, stable arc; easy starting</td><td>Most GTAW applications — carbon steel, SS, Al, Ti</td>
+        </tr>
+        <tr>
+          <td>Helium (He)</td><td>100% He</td><td>24.6 eV</td><td>High (6× Ar)</td><td>Hotter arc, deeper penetration, less stable</td><td>Thick section copper, aluminum; high-speed welding</td>
+        </tr>
+        <tr>
+          <td>Ar + 25–75% He</td><td>Blend</td><td>Intermediate</td><td>Intermediate</td><td>Increased energy with Ar stability</td><td>Stainless steel, nickel alloys, aluminum above 1/4"</td>
+        </tr>
+        <tr>
+          <td>Ar + 2–5% H₂</td><td>Blend</td><td>—</td><td>Higher</td><td>Hotter, faster travel; better cleaning on SS</td><td>Austenitic stainless steel only — do NOT use on carbon steel or Al</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="alert warn">
+    <b>Warning:</b> Never use hydrogen-containing shielding gas on carbon steel or aluminum. Hydrogen causes porosity and cold cracking (hydrogen embrittlement) in carbon steels and is explosive when combined with oxygen at welding temperatures.
+  </div>
+  <p class="src">Source: Miller Electric – Gas Selection for TIG Welding; AWS C5.5 Recommended Practices for GTAW</p>
+
+  <!-- Filler Rod Selection -->
+  <h2>Filler Rod Selection &amp; Technique</h2>
+  <div class="two-col">
+    <div class="card">
+      <h3>Selecting Filler Rod Diameter</h3>
+      <div class="kv-row"><span>General rule</span><span>Filler ≤ base metal thickness</span></div>
+      <div class="kv-row"><span>Thin sheet (&lt;1/8")</span><span>1/16" (1.6 mm) rod</span></div>
+      <div class="kv-row"><span>Medium section</span><span>3/32" (2.4 mm) rod</span></div>
+      <div class="kv-row"><span>Heavy section (&gt;1/4")</span><span>1/8" (3.2 mm) rod</span></div>
+      <div class="kv-row" style="margin-top:10px;"><span>Too large a rod</span><span>Chills pool, poor fusion, contamination risk</span></div>
+      <div class="kv-row"><span>Too small a rod</span><span>Excessive dipping frequency, oxidation of rod tip</span></div>
+    </div>
+    <div class="card">
+      <h3>Filler Addition Technique</h3>
+      <p class="step-text" style="margin-bottom:10px;">
+        Proper technique prevents the most common TIG defects. The filler rod tip must remain inside the argon shielding cone at all times to prevent oxidation.
+      </p>
+      <div class="kv-row"><span>Torch-rod angle</span><span>15°–20° between filler and work surface</span></div>
+      <div class="kv-row"><span>Feed method</span><span>Dab — quick small additions at pool leading edge</span></div>
+      <div class="kv-row"><span>Rod tip position</span><span>Always inside shielding gas envelope</span></div>
+      <div class="kv-row"><span>Common mistake</span><span>Touching rod to tungsten → contamination → grind and re-prep</span></div>
+    </div>
+  </div>
+
+  <!-- Torch angles -->
+  <h2>Torch Angles &amp; Travel Direction</h2>
+  <div class="card">
+    <div class="two-col">
+      <div>
+        <h3>Work Angle</h3>
+        <p class="step-text">The angle between the torch and the workpiece surface in a plane perpendicular to the weld direction. For flat butt welds: 90°. For fillet welds: 45° into the joint. For pipe: varies with position.</p>
+      </div>
+      <div>
+        <h3>Travel Angle (Push)</h3>
+        <p class="step-text">GTAW almost universally uses a <b style="color:#7dd3fc">push (forehand) technique</b> — torch tilted 5°–15° in the direction of travel. Push provides better gas coverage ahead of the pool and good visibility. Unlike SMAW/GMAW, there is no slag to push out, so drag technique offers no advantage.</p>
+      </div>
+    </div>
+    <div class="two-col" style="margin-top:14px;">
+      <div>
+        <h3>Torch-to-Work Distance (Arc Length)</h3>
+        <p class="step-text">Optimal arc length ≈ tungsten diameter. Short arc (1× diameter) gives narrow, focused bead. Long arc increases arc voltage, widens bead, reduces penetration, and risks atmospheric contamination of the shielding envelope.</p>
+      </div>
+      <div>
+        <h3>Travel Speed</h3>
+        <p class="step-text">Must be consistent to maintain uniform bead width. Too slow: excessive heat input, wider bead, burn-through risk. Too fast: incomplete fusion, undercut, narrow underfilled bead. Experienced welders match travel speed to pool size visually.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Canvas animation: GTAW setup cross-section -->
+  <h2>GTAW Setup — Animated Cross-Section</h2>
+  <div class="anim-wrap">
+    <canvas id="gtawSetupCv" class="anim-cv" width="760" height="380"></canvas>
+    <div class="anim-ctrls">
+      <button onclick="prevSetupStage()">◀ Prev</button>
+      <div class="stage-dots" id="setupDots"></div>
+      <button onclick="nextSetupStage()">Next ▶</button>
+    </div>
+    <div class="stage-lbl" id="setupLbl"></div>
+    <div class="stage-dsc" id="setupDsc"></div>
+  </div>
+
+</div><!-- end tab 1 -->
+
+<!-- ═══════════════════ TAB 2: AC CATHODIC CLEANING ═══════════════════ -->
+<div id="ac-cleaning" class="tab-content">
+
+  <h2>Why AC is Required for Aluminum</h2>
+  <div class="card">
+    <p style="font-size:0.85rem;color:#94a3b8;line-height:1.7;">
+      Aluminum rapidly forms a tenacious <b style="color:#7dd3fc">aluminum oxide (Al₂O₃)</b> surface layer in air. This oxide has a melting point of
+      approximately <b style="color:#7dd3fc">2,072°C (3,762°F)</b> — far above aluminum's melting point of 660°C (1,220°F). If the oxide is not
+      removed, the welder sees a "muddy" pool that won't wet out properly, producing cold laps, incomplete fusion, and oxide inclusions.
+      DCEN alone cannot remove this oxide. AC welding provides <b style="color:#7dd3fc">cathodic cleaning</b> during every EP (electrode positive) half-cycle.
+    </p>
+  </div>
+
+  <h2>How Cathodic Cleaning Works</h2>
+  <div class="two-col">
+    <div class="card">
+      <h3>EP Half-Cycle — Cleaning Phase</h3>
+      <p class="step-text" style="margin-bottom:10px;">During the electrode-positive (EP) half-cycle, electrons flow from the workpiece to the electrode. Positive argon ions accelerate toward the workpiece and bombard the oxide surface. This ion bombardment physically blasts away the Al₂O₃ crust, exposing clean aluminum beneath.</p>
+      <div class="tag-row">
+        <span class="tag warn">High electrode heating</span>
+        <span class="tag good">Oxide removal</span>
+        <span class="tag">Wide, shallow arc</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>EN Half-Cycle — Fusion Phase</h3>
+      <p class="step-text" style="margin-bottom:10px;">During the electrode-negative (EN) half-cycle, electrons flow from electrode to workpiece, just like DCEN. This concentrates arc energy into the base metal, establishing a weld pool in the cleaned zone. The electrode cools slightly, recovering from EP heating.</p>
+      <div class="tag-row">
+        <span class="tag good">Deep penetration</span>
+        <span class="tag good">Electrode cooling</span>
+        <span class="tag">Standard fusion</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- AC Cleaning animation -->
+  <h2>AC Cathodic Cleaning — Animated Cycle</h2>
+  <div class="anim-wrap">
+    <canvas id="acCleanCv" class="anim-cv" width="760" height="420"></canvas>
+    <div class="anim-ctrls">
+      <button onclick="toggleAcAnim()">▶ / ■ Play/Pause</button>
+      <button onclick="resetAcAnim()">↺ Reset</button>
+    </div>
+    <div class="stage-lbl" id="acLbl">AC Cathodic Cleaning — Press Play</div>
+    <div class="stage-dsc" id="acDsc">The animation shows argon ion bombardment during the EP half-cycle removing the Al₂O₃ oxide skin, alternating with the EN fusion half-cycle.</div>
+  </div>
+
+  <!-- Balance Control -->
+  <h2>AC Balance Control</h2>
+  <div class="card">
+    <p style="font-size:0.85rem;color:#94a3b8;line-height:1.7;margin-bottom:14px;">
+      Modern inverter TIG machines allow adjustment of the <b style="color:#7dd3fc">EN/EP balance</b> — the percentage of the AC cycle spent in each polarity.
+      The default is typically 70–75% EN / 25–30% EP. This ratio is the primary control for balancing cleaning action against electrode life and penetration.
+    </p>
+    <div class="tbl-wrap">
+      <table class="ref-table">
+        <thead>
+          <tr><th>EN% Setting</th><th>EP% Setting</th><th>Cleaning Width</th><th>Penetration</th><th>Electrode Heat</th><th>Use When…</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>60%</td><td>40%</td><td>Very wide</td><td>Shallow</td><td>Very high (large ball)</td><td>Heavy oxide contamination; very dirty metal</td></tr>
+          <tr><td>70%</td><td>30%</td><td>Wide</td><td>Moderate</td><td>High</td><td>Standard aluminum — general-purpose setting</td></tr>
+          <tr><td>75%</td><td>25%</td><td>Moderate</td><td>Good</td><td>Moderate</td><td>Clean aluminum; thicker sections needing penetration</td></tr>
+          <tr><td>80%</td><td>20%</td><td>Narrow</td><td>Deep</td><td>Low</td><td>High-purity aluminum; maximum penetration needed</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Bright cleaning ring -->
+  <h2>Reading the Cleaning Zone</h2>
+  <div class="two-col">
+    <div class="card">
+      <h3>Bright Cleaning Band</h3>
+      <p class="step-text">A properly set AC weld on aluminum shows a <b style="color:#7dd3fc">shiny, bright band</b> on each side of the bead where the oxide has been blasted away. This is called the <b>cleaning zone</b> or <b>bright zone</b>. Width: typically 1–3× the bead width.</p>
+      <p class="step-text" style="margin-top:8px;"><b style="color:#4ade80;">Too wide cleaning zone:</b> EP% is too high — reduce EP, increase EN. Electrode is overheating.</p>
+      <p class="step-text" style="margin-top:6px;"><b style="color:#f87171;">No or narrow cleaning zone:</b> Insufficient EP — oxide may not be fully removed. Check balance setting and gas flow.</p>
+    </div>
+    <div class="card">
+      <h3>Frequency Effects</h3>
+      <p class="step-text">AC frequency (typically 20–150 Hz on inverters) also affects bead shape:</p>
+      <div class="kv-row" style="margin-top:10px;"><span>Low frequency (20–40 Hz)</span><span>Wider bead, more cleaning, hotter tungsten</span></div>
+      <div class="kv-row"><span>Standard (60 Hz)</span><span>General purpose balance</span></div>
+      <div class="kv-row"><span>High frequency (80–150 Hz)</span><span>Narrower, focused bead; less electrode heating; great for tight joints</span></div>
+      <p class="step-text" style="margin-top:10px;">Higher frequency also softens the AC transition (less zero-crossing instability), improving arc stability, especially at lower amperages.</p>
+    </div>
+  </div>
+
+  <h2>Aluminum TIG — Key Parameters (Miller Reference)</h2>
+  <div class="tbl-wrap">
+    <table class="ref-table">
+      <thead>
+        <tr><th>Thickness</th><th>Tungsten Dia.</th><th>Filler Dia.</th><th>Amperage (AC)</th><th>Shielding Gas</th><th>Flow Rate</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>0.063" (1.6 mm)</td><td>1/16" (1.6 mm)</td><td>1/16"</td><td>60–90 A</td><td>100% Ar</td><td>12–15 CFH</td></tr>
+        <tr><td>0.125" (3.2 mm)</td><td>3/32" (2.4 mm)</td><td>3/32"</td><td>90–130 A</td><td>100% Ar</td><td>15–20 CFH</td></tr>
+        <tr><td>0.188" (4.8 mm)</td><td>3/32" (2.4 mm)</td><td>3/32"–1/8"</td><td>130–170 A</td><td>100% Ar</td><td>15–20 CFH</td></tr>
+        <tr><td>0.250" (6.4 mm)</td><td>1/8" (3.2 mm)</td><td>1/8"</td><td>160–210 A</td><td>100% Ar or Ar/He</td><td>20–25 CFH</td></tr>
+        <tr><td>0.375" (9.5 mm)</td><td>5/32" (4.0 mm)</td><td>5/32"–3/16"</td><td>200–275 A</td><td>Ar/He blend</td><td>20–30 CFH</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="src">Source: Miller Electric – TIG Welding Aluminum Guide; Hobart Institute of Welding Technology – GTAW of Aluminum</p>
+
+</div><!-- end tab 2 -->
+
+<!-- ═══════════════════ TAB 3: ROOT PASS PIPE WELDING ═══════════════════ -->
+<div id="root-pass" class="tab-content">
+
+  <h2>TIG Root Pass — Why It Matters</h2>
+  <div class="card">
+    <p style="font-size:0.85rem;color:#94a3b8;line-height:1.7;">
+      In open-root pipe welding, the <b style="color:#7dd3fc">root pass</b> is the most critical weld bead — it establishes complete joint penetration (CJP)
+      and is impossible to repair without removing all subsequent fill and cap passes. The root pass must achieve full fusion at the root
+      without burn-through, and it must produce a smooth, uniform <b style="color:#7dd3fc">inside bead (root bead)</b> free from cold laps, icicles, or
+      excessive reinforcement. GTAW is the preferred process for root passes in critical pipe (process, nuclear, and aerospace piping)
+      because of its precise arc control and clean, slag-free deposit.
+    </p>
+  </div>
+
+  <!-- Joint Prep -->
+  <h2>Joint Preparation</h2>
+  <div class="two-col">
+    <div class="card">
+      <h3>Standard Open-Root Groove Geometry</h3>
+      <div class="kv-row"><span>Bevel angle (each side)</span><span>37.5° (total included angle: 75°)</span></div>
+      <div class="kv-row"><span>Root face (land)</span><span>1/16" – 3/32" (1.6–2.4 mm)</span></div>
+      <div class="kv-row"><span>Root opening (gap)</span><span>1/16" – 3/32" (1.6–2.4 mm)</span></div>
+      <div class="kv-row"><span>Root face purpose</span><span>Controls melt-through; too thin → burn-through; too thick → cold lap</span></div>
+      <p class="step-text" style="margin-top:10px;">Consistent root face dimension is the single most important joint prep variable. It must be machined or carefully ground — not cut with a torch.</p>
+    </div>
+    <div class="card">
+      <h3>Tack Weld Placement</h3>
+      <p class="step-text" style="margin-bottom:8px;">Tacks maintain root gap and alignment during welding. For 2G/5G/6G positions:</p>
+      <div class="kv-row"><span>Tack count (typical)</span><span>3–4 tacks evenly spaced (clock positions)</span></div>
+      <div class="kv-row"><span>Tack length</span><span>3/4" – 1" (19–25 mm)</span></div>
+      <div class="kv-row"><span>Tacking sequence</span><span>3 o'clock, 9 o'clock, 6 o'clock, 12 o'clock</span></div>
+      <div class="kv-row"><span>Tack feathering</span><span>Grind ends to a feather — allows root pass to blend</span></div>
+      <div class="kv-row"><span>Tack inspection</span><span>No cracks, porosity, or undercut before proceeding</span></div>
+    </div>
+  </div>
+
+  <!-- Torch Angle -->
+  <h2>Torch Angle &amp; Technique</h2>
+  <div class="three-col">
+    <div class="card">
+      <h3>Work Angle</h3>
+      <p class="step-text">Torch held at <b style="color:#7dd3fc">0°–5° from perpendicular</b> to the pipe surface in the transverse plane. The torch should split the groove angle exactly, keeping the arc centered on the root opening. Drift to one side preferentially heats that bevel face, causing asymmetric fusion and potential lack-of-fusion on the opposite side.</p>
+    </div>
+    <div class="card">
+      <h3>Travel Angle</h3>
+      <p class="step-text">Push technique: torch tilted <b style="color:#7dd3fc">5°–10° in the direction of travel</b>. In the 5G (pipe horizontal, fixed) position, this means constant adjustment as the welder progresses around the pipe. At the 6 o'clock position, the torch may go slightly vertical to maintain shielding coverage.</p>
+    </div>
+    <div class="card">
+      <h3>Arc Length</h3>
+      <p class="step-text">Extremely short arc is critical for root passes — <b style="color:#7dd3fc">approximately 1/16" to 3/32"</b> (1.6–2.4 mm), equal to the tungsten diameter. A longer arc deflects toward the bevel faces instead of the root, reducing penetration and risking cold laps at the root line.</p>
+    </div>
+  </div>
+
+  <!-- Filler addition technique -->
+  <h2>Filler Addition Technique — Root Pass</h2>
+  <div class="card">
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-title">Establish Pool</div>
+        <div class="step-text">Start arc, allow a pool to form at the root opening. The root face will begin to melt back and a small "keyhole" opening appears — this is the indicator of full penetration.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-title">Identify Keyhole</div>
+        <div class="step-text">The keyhole is a small teardrop-shaped opening at the leading edge of the pool. It confirms the arc is burning through the root. No keyhole = incomplete penetration. Keyhole too large = burn-through risk.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-title">Dab Filler</div>
+        <div class="step-text">Feed filler into the <b>front</b> of the pool (not directly into the keyhole). Small, consistent dabs — rod never leaves the shielding gas cone. Each dab partially fills and slightly collapses the keyhole.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <div class="step-title">Advance Arc</div>
+        <div class="step-text">After each dab, pause briefly to let the pool solidify slightly, then advance the torch. This prevents the pool from becoming too large and sagging (especially in 5G vertical-down sections).</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">5</div>
+        <div class="step-title">Maintain Keyhole</div>
+        <div class="step-text">The goal is consistent keyhole size throughout. Adjust travel speed and amperage (with foot pedal) to compensate for heat build-up as the pipe warms up during the pass.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">6</div>
+        <div class="step-title">Tie-In / Stop</div>
+        <div class="step-text">At a stop, taper the amperage down using the foot pedal, add a final dab, and withdraw the torch slowly to avoid crater cracks. Grind crater to a feather before restarting.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Keyhole canvas animation -->
+  <h2>Keyhole Root Pass — Animated View</h2>
+  <div class="anim-wrap">
+    <canvas id="keyholeCV" class="anim-cv" width="760" height="300"></canvas>
+    <div class="anim-ctrls">
+      <button onclick="prevKH()">◀ Prev</button>
+      <div class="stage-dots" id="khDots"></div>
+      <button onclick="nextKH()">Next ▶</button>
+    </div>
+    <div class="stage-lbl" id="khLbl"></div>
+    <div class="stage-dsc" id="khDsc"></div>
+  </div>
+
+  <!-- Back Purging -->
+  <h2>Back Purging</h2>
+  <div class="two-col">
+    <div class="card">
+      <h3>Why Back Purge?</h3>
+      <p class="step-text" style="margin-bottom:10px;">Without back purge, atmospheric oxygen contacts the inside of the root bead while it is molten. On stainless steel and reactive metals (titanium, chromium alloys), this causes severe oxidation — the root bead discolors, loses chromium from the HAZ, and the corrosion resistance is compromised. On carbon steel it causes excessive oxidation slag on the inside surface.</p>
+      <div class="tag-row">
+        <span class="tag bad">Without purge: oxidized root, sugaring, corrosion failure</span>
+      </div>
+      <div class="tag-row" style="margin-top:4px;">
+        <span class="tag good">With purge: clean silver/gold tint, full corrosion resistance preserved</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Back Purge Setup</h3>
+      <div class="kv-row"><span>Gas</span><span>100% Argon (most common); nitrogen for some stainless</span></div>
+      <div class="kv-row"><span>Flow rate</span><span>5–15 CFH; fill pipe slowly to displace O₂</span></div>
+      <div class="kv-row"><span>Purge dams</span><span>Foam plugs, paper/tape, commercial inflatable dams</span></div>
+      <div class="kv-row"><span>O₂ level target</span><span>&lt;50 ppm for stainless; &lt;10 ppm for titanium</span></div>
+      <div class="kv-row"><span>Purge time</span><span>Allow 3–5 pipe volumes of gas before welding</span></div>
+      <div class="kv-row"><span>Maintain during welding</span><span>Keep flow until root pass and first fill pass cool below 300°C</span></div>
+      <p class="src" style="margin-top:10px;">Monitor with oxygen analyzer for critical applications (pharmaceutical, nuclear)</p>
+    </div>
+  </div>
+
+  <!-- Purge color chart -->
+  <h2>Stainless Steel — Inside Bead Color Guide</h2>
+  <div class="tbl-wrap">
+    <table class="ref-table">
+      <thead>
+        <tr><th>Color</th><th>O₂ Level</th><th>Oxide Layer</th><th>Interpretation</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span style="color:#e2e8f0;font-weight:700;">Bright Silver</span></td><td>&lt;20 ppm</td><td>None</td><td><span class="tag good">Ideal — full Cr₂O₃ passive layer intact</span></td></tr>
+        <tr><td><span style="color:#fbbf24;font-weight:700;">Light Gold / Straw</span></td><td>20–50 ppm</td><td>Thin TiO₂-like</td><td><span class="tag good">Acceptable for most applications</span></td></tr>
+        <tr><td><span style="color:#d97706;font-weight:700;">Dark Gold / Bronze</span></td><td>50–100 ppm</td><td>Thicker oxide</td><td><span class="tag warn">Marginal — improve purge; acceptable for non-critical</span></td></tr>
+        <tr><td><span style="color:#dc2626;font-weight:700;">Dark Blue</span></td><td>100–300 ppm</td><td>Fe₂O₃ / Cr₂O₃ mixed</td><td><span class="tag bad">Reject — significant Cr depletion in sensitized zone</span></td></tr>
+        <tr><td><span style="color:#6b7280;font-weight:700;">Grey / Black ("Sugaring")</span></td><td>&gt;500 ppm</td><td>Heavy FeO/Fe₂O₃</td><td><span class="tag bad">Reject — severe oxidation; must be removed and re-welded</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="src">Source: AWS D18.1 Specification for Welding of Austenitic Stainless Steel Tube and Pipe Systems in Sanitary Applications; ASME B31.3 Process Piping</p>
+
+  <!-- Positions -->
+  <h2>Pipe Welding Positions — 5G &amp; 6G</h2>
+  <div class="two-col">
+    <div class="card">
+      <h3>5G — Pipe Horizontal Fixed</h3>
+      <p class="step-text" style="margin-bottom:8px;">Pipe axis is horizontal; pipe does not rotate. Welder must weld in all positions (flat at top, vertical on sides, overhead at bottom). The root pass is the most demanding in 5G because the welder must maintain consistent technique through gravity changes.</p>
+      <div class="kv-row"><span>Top (12 o'clock)</span><span>Flat — easiest; pool tends to sag if over-heated</span></div>
+      <div class="kv-row"><span>Sides (3 &amp; 9 o'clock)</span><span>Vertical — pool flows toward 6 o'clock; use faster travel</span></div>
+      <div class="kv-row"><span>Bottom (6 o'clock)</span><span>Overhead — most difficult; risk of drip; reduce amperage</span></div>
+    </div>
+    <div class="card">
+      <h3>6G — Pipe Inclined 45°, Fixed</h3>
+      <p class="step-text" style="margin-bottom:8px;">Pipe axis inclined at 45°; pipe does not rotate. This position combines all others simultaneously and is the qualification standard for pipe welders — a 6G qualification is universally accepted for all positions.</p>
+      <div class="kv-row"><span>Qualification scope</span><span>Qualifies welder for all pipe positions (2G, 5G, 6G)</span></div>
+      <div class="kv-row"><span>Root pass challenge</span><span>Constant position change every few inches of travel</span></div>
+      <div class="kv-row"><span>Amperage control</span><span>Foot pedal essential — reduce at high-heat overhead zone</span></div>
+    </div>
+  </div>
+
+</div><!-- end tab 3 -->
+
+<!-- ═══════════════════ TAB 4: AWS FILLER CLASSIFICATION ═══════════════════ -->
+<div id="filler-class" class="tab-content">
+
+  <h2>AWS ER Filler Metal Classification System</h2>
+  <div class="card">
+    <p style="font-size:0.85rem;color:#94a3b8;line-height:1.7;">
+      The AWS filler metal classification system uses alphanumeric designators that encode the filler's form, mechanical properties,
+      base metal compatibility, and chemical composition. The <b style="color:#7dd3fc">ER prefix</b> (Electrode/Rod) indicates the filler
+      can be used as either a TIG rod or MIG wire. Understanding the system allows welders and engineers to quickly select
+      the correct consumable from any manufacturer.
+    </p>
+  </div>
+
+  <!-- Selector for material class -->
+  <h2>Select Filler Metal System</h2>
+  <div class="pol-select">
+    <button class="pol-btn active" onclick="showFiller('cs')">Carbon Steel (A5.18)</button>
+    <button class="pol-btn" onclick="showFiller('ss')">Stainless Steel (A5.9)</button>
+    <button class="pol-btn" onclick="showFiller('al')">Aluminum (A5.10)</button>
+  </div>
+
+  <!-- Carbon Steel Decoder -->
+  <div id="filler-cs">
+    <h2>Carbon Steel — AWS A5.18</h2>
+    <div class="card">
+      <h3>Designation Decoder — Example: ER70S-6</h3>
+      <div class="er-display">
+        <div class="er-seg seg-er active" id="cs-er" onclick="showCSSeg('er')">ER</div>
+        <div class="er-seg seg-xx" id="cs-xx" onclick="showCSSeg('xx')">70</div>
+        <div class="er-seg seg-s"  id="cs-s"  onclick="showCSSeg('s')">S</div>
+        <div class="er-seg seg-cls" id="cs-cls" onclick="showCSSeg('cls')">-6</div>
+      </div>
+      <div class="er-info" id="cs-info">
+        <div class="er-info-title">ER — Electrode/Rod</div>
+        <div class="er-info-body">Indicates the filler can be used as a welding electrode (MIG wire) or as a welding rod (TIG). Filler classified as "E" only are electrodes (SMAW). "R" only are rods only.</div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="ref-table">
+        <thead>
+          <tr><th>Classification</th><th>Min. Tensile (psi)</th><th>Si %</th><th>Mn %</th><th>Deoxidizer Level</th><th>Best Applications</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>ER70S-2</td><td>70,000</td><td>0.40–0.70</td><td>0.90–1.40</td><td>Triple-deox (Ti, Zr, Al added)</td><td>Pipe root passes; killed/semi-killed steels; excellent wetting</td></tr>
+          <tr><td>ER70S-3</td><td>70,000</td><td>0.45–0.75</td><td>0.90–1.40</td><td>Moderate</td><td>Clean base metals; general MIG; light scale OK</td></tr>
+          <tr><td>ER70S-6</td><td>70,000</td><td>0.80–1.15</td><td>1.40–1.85</td><td>High (high Si + Mn)</td><td>Most common MIG/TIG wire; works on mill scale, rust, light contamination</td></tr>
+          <tr><td>ER80S-D2</td><td>80,000</td><td>0.50–0.80</td><td>1.60–2.10</td><td>High + Mo</td><td>Low-alloy, higher-strength steels; chrome-moly pipe</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="src">Source: AWS A5.18 Specification for Carbon Steel Electrodes and Rods for Gas Shielded Arc Welding</p>
+  </div>
+
+  <!-- Stainless Steel Decoder -->
+  <div id="filler-ss" style="display:none;">
+    <h2>Stainless Steel — AWS A5.9</h2>
+    <div class="card">
+      <h3>Designation Decoder — Example: ER308L</h3>
+      <div class="er-display">
+        <div class="er-seg seg-er active" id="ss-er" onclick="showSSSeg('er')">ER</div>
+        <div class="er-seg seg-xx" id="ss-xx" onclick="showSSSeg('xx')">308</div>
+        <div class="er-seg seg-s"  id="ss-s"  onclick="showSSSeg('s')">L</div>
+      </div>
+      <div class="er-info" id="ss-info">
+        <div class="er-info-title">ER — Electrode/Rod</div>
+        <div class="er-info-body">Same prefix as carbon steel — this filler can be used as TIG rod or MIG wire.</div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="ref-table">
+        <thead>
+          <tr><th>Classification</th><th>Base Metal Match</th><th>C % Max</th><th>Notes</th><th>Typical Applications</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>ER308/308L</td><td>304, 304L</td><td>0.03 (L)</td><td>Most common SS filler; L grade reduces sensitization risk</td><td>Food processing, dairy, chemical equipment</td></tr>
+          <tr><td>ER309/309L</td><td>Dissimilar joints</td><td>0.03 (L)</td><td>Higher Cr/Ni for joining SS to carbon steel or for overlay cladding</td><td>Transition joints, cladding, repair of carbon steel with SS overlay</td></tr>
+          <tr><td>ER316/316L</td><td>316, 316L</td><td>0.03 (L)</td><td>2–3% Mo adds pitting/crevice corrosion resistance</td><td>Marine, pharmaceutical, chloride environments</td></tr>
+          <tr><td>ER347</td><td>321, 347</td><td>0.08</td><td>Nb/Cb stabilized — resists sensitization without low carbon</td><td>High-temp service (jet engines, furnace parts)</td></tr>
+          <tr><td>ER2209</td><td>2205 Duplex</td><td>0.03</td><td>Duplex (austenitic/ferritic); high strength + corrosion resistance</td><td>Offshore, oil &amp; gas, seawater systems</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert" style="margin-top:16px;">
+      <b>"L" grade rule:</b> Always prefer the "L" (low-carbon) grade for service below 800°F. The higher carbon in the standard grade can sensitize (chromium carbide precipitation at grain boundaries) during welding, creating a chromium-depleted zone susceptible to intergranular corrosion.
+    </div>
+    <p class="src">Source: AWS A5.9 Specification for Bare Stainless Steel Welding Electrodes and Rods</p>
+  </div>
+
+  <!-- Aluminum Decoder -->
+  <div id="filler-al" style="display:none;">
+    <h2>Aluminum — AWS A5.10</h2>
+    <div class="card">
+      <h3>Designation Decoder — Example: ER4043</h3>
+      <div class="er-display">
+        <div class="er-seg seg-er active" id="al-er" onclick="showALSeg('er')">ER</div>
+        <div class="er-seg seg-xx" id="al-xx" onclick="showALSeg('xx')">4</div>
+        <div class="er-seg seg-s"  id="al-s"  onclick="showALSeg('s')">0</div>
+        <div class="er-seg seg-cls" id="al-cls" onclick="showALSeg('cls')">43</div>
+      </div>
+      <div class="er-info" id="al-info">
+        <div class="er-info-title">ER — Electrode/Rod</div>
+        <div class="er-info-body">Prefix is the same as steel fillers — indicates electrode or rod form. Aluminum MIG wire and TIG rod share the same classification under AWS A5.10.</div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="ref-table">
+        <thead>
+          <tr><th>Classification</th><th>Primary Alloying</th><th>Matching Base Metal</th><th>Crack Sensitivity</th><th>Anodizing</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>ER1100</td><td>Pure Al (99.0%+)</td><td>1xxx series</td><td>Very low</td><td>Bright silver</td><td>Food equipment; electrical; highest conductivity</td></tr>
+          <tr><td>ER4043</td><td>5% Si</td><td>6061, 6063, 2xxx, 3xxx</td><td>Low</td><td>Grey/dark</td><td>Most popular general-purpose Al filler; fluid pool; good appearance</td></tr>
+          <tr><td>ER4047</td><td>12% Si</td><td>6061, 6063</td><td>Very low</td><td>Dark grey</td><td>More fluid than 4043; excellent for brazeable joints; less wire feed needed</td></tr>
+          <tr><td>ER5356</td><td>5% Mg</td><td>5xxx series, 6061</td><td>Moderate</td><td>White/bright</td><td>Higher strength than 4043; saltwater resistance; do NOT use on alloys &gt;3% Mg at elevated temp</td></tr>
+          <tr><td>ER5183</td><td>4.3–5.2% Mg</td><td>5083, 5086</td><td>Moderate</td><td>White/bright</td><td>Marine hull welding; higher strength than 5356 for thick 5xxx</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="two-col" style="margin-top:20px;">
+      <div class="card">
+        <h3>4043 vs 5356 — How to Choose</h3>
+        <div class="kv-row"><span>Base metal 6061/6063</span><span>Either — 4043 has better crack resistance</span></div>
+        <div class="kv-row"><span>Base metal 5052/5083</span><span>5356 required (Mg-compatible)</span></div>
+        <div class="kv-row"><span>Elevated temp service (&gt;150°F)</span><span>4043 — 5356 sensitizes at high Mg%</span></div>
+        <div class="kv-row"><span>Anodizing after welding</span><span>5356 — matches 6xxx and 5xxx appearance</span></div>
+        <div class="kv-row"><span>Salt/marine service</span><span>5356 — higher corrosion resistance</span></div>
+        <div class="kv-row"><span>Thin material, appearance</span><span>4043 — more fluid, self-cleaning pool</span></div>
+      </div>
+      <div class="card">
+        <h3>Aluminum Alloy Series Quick Ref</h3>
+        <div class="kv-row"><span>1xxx</span><span>Pure Al — 1100, 1350</span></div>
+        <div class="kv-row"><span>2xxx</span><span>Al-Cu — 2024 (aircraft)</span></div>
+        <div class="kv-row"><span>3xxx</span><span>Al-Mn — 3003 (sheet metal)</span></div>
+        <div class="kv-row"><span>4xxx</span><span>Al-Si — filler alloys</span></div>
+        <div class="kv-row"><span>5xxx</span><span>Al-Mg — 5052, 5083, 5086 (marine)</span></div>
+        <div class="kv-row"><span>6xxx</span><span>Al-Mg-Si — 6061, 6063 (structural)</span></div>
+        <div class="kv-row"><span>7xxx</span><span>Al-Zn — 7075 (high strength, poor weldability)</span></div>
+      </div>
+    </div>
+
+    <p class="src">Source: AWS A5.10 Specification for Bare Aluminum and Aluminum-Alloy Welding Electrodes and Rods; Lincoln Electric – Aluminum Welding Guide</p>
+  </div>
+
+  <!-- Sensitization note -->
+  <h2>Cross-Material Filler Summary</h2>
+  <div class="tbl-wrap">
+    <table class="ref-table">
+      <thead>
+        <tr><th>Base Metal</th><th>Recommended TIG Filler</th><th>AWS Spec</th><th>Key Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>A36 / A572 Carbon Steel</td><td>ER70S-2 or ER70S-6</td><td>A5.18</td><td>S-2 for root passes; S-6 for fill/cap on dirty base metal</td></tr>
+        <tr><td>4130 Chrome-Moly</td><td>ER80S-D2 or ER70S-2</td><td>A5.18</td><td>Preheat required; ER80S-D2 for matching strength</td></tr>
+        <tr><td>304 / 304L Stainless</td><td>ER308L</td><td>A5.9</td><td>Low-carbon grade preferred for all thicknesses</td></tr>
+        <tr><td>316 / 316L Stainless</td><td>ER316L</td><td>A5.9</td><td>Mo required for matching pitting resistance</td></tr>
+        <tr><td>304 → Carbon Steel (dissimilar)</td><td>ER309L</td><td>A5.9</td><td>Higher alloy content bridges chemical dilution</td></tr>
+        <tr><td>6061-T6 Aluminum</td><td>ER4043 or ER5356</td><td>A5.10</td><td>4043 for lower crack sensitivity; 5356 for anodizing</td></tr>
+        <tr><td>5083 / 5086 Aluminum</td><td>ER5356 or ER5183</td><td>A5.10</td><td>Must match Mg content; 4043 not recommended</td></tr>
+        <tr><td>Commercially Pure Titanium</td><td>ERTi-1, ERTi-2</td><td>A5.16</td><td>Full back purge + trailing shield required; argon only</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- end tab 4 -->
+
+<div class="back-link">
+  <a href="index.html">← Back to MECH191 Visualizations</a>
+</div>
+
+<script>
+/* ═══════════════════════════════ TAB SWITCHING ═══════════════════════════════ */
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+/* ═══════════════════════════════ POLARITY SELECTOR ═══════════════════════════════ */
+function showPol(pol) {
+  ['dcen','dcep','ac'].forEach(p => {
+    document.getElementById('pol-' + p).style.display = (p === pol) ? '' : 'none';
+  });
+  document.querySelectorAll('.pol-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', ['dcen','dcep','ac'][i] === pol);
+  });
+}
+
+/* ═══════════════════════════════ FILLER SYSTEM ═══════════════════════════════ */
+function showFiller(sys) {
+  ['cs','ss','al'].forEach(s => {
+    document.getElementById('filler-' + s).style.display = (s === sys) ? '' : 'none';
+  });
+  document.querySelectorAll('#filler-class .pol-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', ['cs','ss','al'][i] === sys);
+  });
+}
+
+/* ── Carbon Steel Decoder ── */
+const CS_SEGS = {
+  er:  { title: 'ER — Electrode/Rod', body: 'Indicates this filler can be used as a welding electrode (GMAW wire) or a filler rod (GTAW). Fillers classified as "E" only are electrodes; "R" only are rods.' },
+  xx:  { title: '70 — Minimum Tensile Strength', body: 'The two-digit number indicates the minimum as-deposited tensile strength in ksi (thousands of psi). ER70S = 70,000 psi (483 MPa) minimum. ER80S = 80,000 psi.' },
+  s:   { title: 'S — Solid Wire/Rod', body: 'Indicates a solid (non-flux-cored) form. All GTAW (TIG) rods are solid. GMAW uses both solid (S) and flux-cored (C) wires under separate AWS specs.' },
+  cls: { title: '-6 — Chemical Composition Suffix', body: 'The suffix digit (2, 3, 6, etc.) indicates the chemical composition class — primarily the deoxidizer (silicon + manganese) levels. Higher numbers generally mean higher silicon content, providing better pool fluidity and wetting on dirty base metals. ER70S-6 is the most widely used general-purpose carbon steel filler.' }
+};
+function showCSSeg(seg) {
+  document.querySelectorAll('#filler-cs .er-seg').forEach(el => el.classList.remove('active'));
+  document.getElementById('cs-' + seg).classList.add('active');
+  document.getElementById('cs-info').innerHTML =
+    `<div class="er-info-title">${CS_SEGS[seg].title}</div><div class="er-info-body">${CS_SEGS[seg].body}</div>`;
+}
+
+/* ── Stainless Steel Decoder ── */
+const SS_SEGS = {
+  er: { title: 'ER — Electrode/Rod', body: 'Same prefix as carbon steel fillers — indicates the filler can be used as a TIG rod or GMAW wire.' },
+  xx: { title: '308 — Stainless Steel Alloy Designation', body: 'The three-digit number indicates the stainless steel alloy class. 308 deposits metal compatible with 304/304L base metal. 316 adds molybdenum. 309 is used for dissimilar joints (SS to carbon steel). These numbers correlate to AISI/SAE stainless steel designations but are not identical.' },
+  s:  { title: 'L — Low Carbon Suffix', body: 'The "L" suffix indicates a low-carbon grade (0.03% max C). Low carbon reduces the risk of sensitization — chromium carbide precipitation at grain boundaries during welding that depletes the HAZ of chromium and reduces corrosion resistance. Always specify "L" grade unless high-temperature strength above ~800°F is specifically required.' }
+};
+function showSSSeg(seg) {
+  document.querySelectorAll('#filler-ss .er-seg').forEach(el => el.classList.remove('active'));
+  document.getElementById('ss-' + seg).classList.add('active');
+  document.getElementById('ss-info').innerHTML =
+    `<div class="er-info-title">${SS_SEGS[seg].title}</div><div class="er-info-body">${SS_SEGS[seg].body}</div>`;
+}
+
+/* ── Aluminum Decoder ── */
+const AL_SEGS = {
+  er:  { title: 'ER — Electrode/Rod', body: 'Same prefix as steel fillers — indicates electrode or rod form. Aluminum MIG wire and TIG rod share the same classification under AWS A5.10.' },
+  xx:  { title: '4 — Alloy Series', body: 'The first digit indicates the primary alloying element series. 1xxx = pure Al; 4xxx = Al-Si (common fillers); 5xxx = Al-Mg. The number 4043 belongs to the 4xxx (silicon) series, making it fluid and crack-resistant.' },
+  s:   { title: '0 — Modification Indicator', body: 'The second digit (0) indicates the original alloy. Modifications to the base alloy are denoted by 1–9. Zero means this is the original composition of the alloy series.' },
+  cls: { title: '43 — Specific Alloy Designation', body: 'The last two digits identify the specific alloy within the series. 4043 = 4.5–6% Si alloy. 4047 = 11–13% Si alloy. These numbers are assigned by the Aluminum Association and are internationally recognized.' }
+};
+function showALSeg(seg) {
+  document.querySelectorAll('#filler-al .er-seg').forEach(el => el.classList.remove('active'));
+  document.getElementById('al-' + seg).classList.add('active');
+  document.getElementById('al-info').innerHTML =
+    `<div class="er-info-title">${AL_SEGS[seg].title}</div><div class="er-info-body">${AL_SEGS[seg].body}</div>`;
+}
+
+/* ═══════════════════════════════ SETUP ANIMATION ═══════════════════════════════ */
+const SETUP_STAGES = [
+  {
+    lbl: 'Stage 1 — GTAW Equipment Components',
+    dsc: 'The GTAW torch carries shielding gas and current to the non-consumable tungsten electrode. A separate filler rod is fed manually with the off-hand.',
+    draw: drawSetup1
+  },
+  {
+    lbl: 'Stage 2 — Arc Establishment & Shielding Gas Coverage',
+    dsc: 'An inert shielding gas (argon/helium) flows concentrically around the tungsten through the gas cup (nozzle), displacing air and protecting the weld pool and electrode from oxidation.',
+    draw: drawSetup2
+  },
+  {
+    lbl: 'Stage 3 — DCEN Current Path & Heat Distribution',
+    dsc: 'With DCEN, electrons leave the tungsten (-) and travel to the workpiece (+). ~70% of arc heat concentrates in the base metal, producing deep, narrow penetration while the electrode stays relatively cool.',
+    draw: drawSetup3
+  },
+  {
+    lbl: 'Stage 4 — Filler Rod Addition Technique',
+    dsc: 'The filler rod enters the leading edge of the weld pool at a shallow angle (15°–20° to the work surface). The rod tip remains inside the shielding gas cone at all times to prevent oxidation of the hot rod tip.',
+    draw: drawSetup4
+  }
+];
+
+const DPR = window.devicePixelRatio || 1;
+function initHiDPI(cv, logW, logH) {
+  cv.width  = logW * DPR;
+  cv.height = logH * DPR;
+  cv.style.width  = logW + 'px';
+  cv.style.height = logH + 'px';
+  const ctx = cv.getContext('2d');
+  ctx.scale(DPR, DPR);
+  return ctx;
+}
+
+let setupStage = 0;
+const setupCv  = document.getElementById('gtawSetupCv');
+const setupCtx = initHiDPI(setupCv, 760, 380);
+
+function buildSetupDots() {
+  const container = document.getElementById('setupDots');
+  container.innerHTML = '';
+  SETUP_STAGES.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'sdot' + (i === setupStage ? ' active' : '');
+    d.onclick = () => { setupStage = i; renderSetup(); };
+    container.appendChild(d);
+  });
+}
+function renderSetup() {
+  buildSetupDots();
+  document.getElementById('setupLbl').textContent = SETUP_STAGES[setupStage].lbl;
+  document.getElementById('setupDsc').textContent = SETUP_STAGES[setupStage].dsc;
+  const ctx = setupCtx, W = 760, H = 380;
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#0a1628';
+  ctx.fillRect(0, 0, W, H);
+  SETUP_STAGES[setupStage].draw(ctx, W, H);
+}
+function prevSetupStage() { setupStage = (setupStage - 1 + SETUP_STAGES.length) % SETUP_STAGES.length; renderSetup(); }
+function nextSetupStage() { setupStage = (setupStage + 1) % SETUP_STAGES.length; renderSetup(); }
+
+function drawSetup1(ctx, W, H) {
+  const cx = 360, workY = H - 72;
+
+  /* ── Workpiece ── */
+  ctx.fillStyle = '#334155'; ctx.fillRect(60, workY, W - 120, 60);
+  ctx.fillStyle = '#475569'; ctx.fillRect(60, workY, W - 120, 12);
+  label(ctx, 'Base Metal (Workpiece)', cx, workY + 36, '#64748b', 11);
+
+  /* ── Torch body (upright) ── */
+  ctx.fillStyle = '#1e3a5c'; ctx.fillRect(cx - 20, 18, 40, 105);
+  ctx.fillStyle = '#2d4f7c';  ctx.fillRect(cx - 8, 18, 12, 105);
+
+  /* ── Gas cup ── */
+  ctx.fillStyle = '#64748b';
+  ctx.beginPath();
+  ctx.moveTo(cx - 16, 123); ctx.lineTo(cx + 16, 123);
+  ctx.lineTo(cx + 22, 200); ctx.lineTo(cx - 22, 200);
+  ctx.closePath(); ctx.fill();
+
+  /* ── Tungsten electrode ── */
+  ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(cx, 130); ctx.lineTo(cx, 220); ctx.stroke();
+  ctx.fillStyle = '#cbd5e1';
+  ctx.beginPath();
+  ctx.moveTo(cx - 5, 220); ctx.lineTo(cx + 5, 220); ctx.lineTo(cx, 233);
+  ctx.closePath(); ctx.fill();
+
+  /* ── Filler rod ── */
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3;
+  const rodX1 = cx + 185, rodY1 = 95, rodX2 = cx + 28, rodY2 = 285;
+  ctx.beginPath(); ctx.moveTo(rodX1, rodY1); ctx.lineTo(rodX2, rodY2); ctx.stroke();
+  ctx.fillStyle = '#fbbf24';
+  ctx.beginPath(); ctx.arc(rodX2, rodY2, 5, 0, Math.PI * 2); ctx.fill();
+
+  /* ── Arc gap (dashed) ── */
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 4]);
+  ctx.beginPath(); ctx.moveTo(cx, 233); ctx.lineTo(cx, workY); ctx.stroke();
+  ctx.setLineDash([]);
+
+  /* ── Left labels (right-aligned) ── */
+  const LX = 200;
+  leaderLine(ctx, LX + 2, 70, cx - 20, 70);
+  label(ctx, 'Torch Body', LX, 74, '#7dd3fc', 11, 'right');
+
+  leaderLine(ctx, LX + 2, 162, cx - 22, 162);
+  label(ctx, 'Gas Cup / Nozzle', LX, 166, '#94a3b8', 11, 'right');
+
+  leaderLine(ctx, LX + 2, 213, cx - 5, 213);
+  label(ctx, 'Tungsten Electrode', LX, 217, '#e2e8f0', 11, 'right');
+
+  /* ── Right labels (left-aligned) ── */
+  const RX = 530;
+  leaderLine(ctx, (rodX1 + rodX2) / 2 + 2, (rodY1 + rodY2) / 2, RX - 2, 188);
+  label(ctx, 'Filler Rod', RX, 192, '#fbbf24', 11, 'left');
+
+  leaderLine(ctx, cx + 2, 278, RX - 2, 288);
+  label(ctx, 'Arc Gap', RX, 292, '#38bdf8', 11, 'left');
+}
+
+function drawSetup2(ctx, W, H) {
+  const cx = 360, workY = H - 72;
+
+  /* ── Workpiece ── */
+  ctx.fillStyle = '#334155'; ctx.fillRect(60, workY, W - 120, 60);
+  ctx.fillStyle = '#475569'; ctx.fillRect(60, workY, W - 120, 12);
+
+  /* ── Gas cup ── */
+  ctx.fillStyle = '#64748b';
+  ctx.beginPath();
+  ctx.moveTo(cx - 14, 100); ctx.lineTo(cx + 14, 100);
+  ctx.lineTo(cx + 24, 185); ctx.lineTo(cx - 24, 185);
+  ctx.closePath(); ctx.fill();
+
+  /* ── Tungsten ── */
+  ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(cx, 105); ctx.lineTo(cx, 205); ctx.stroke();
+
+  /* ── Shielding gas cone (gradient fill) ── */
+  const coneGrd = ctx.createRadialGradient(cx, 250, 0, cx, 250, 115);
+  coneGrd.addColorStop(0,   'rgba(56,189,248,0.20)');
+  coneGrd.addColorStop(0.7, 'rgba(56,189,248,0.06)');
+  coneGrd.addColorStop(1,   'rgba(56,189,248,0.00)');
+  ctx.fillStyle = coneGrd;
+  ctx.beginPath(); ctx.ellipse(cx, 262, 105, 90, 0, 0, Math.PI * 2); ctx.fill();
+
+  ctx.strokeStyle = 'rgba(56,189,248,0.55)'; ctx.lineWidth = 1; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(cx - 24, 185); ctx.lineTo(cx - 88, workY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx + 24, 185); ctx.lineTo(cx + 88, workY); ctx.stroke();
+  ctx.setLineDash([]);
+
+  /* ── Arc column ── */
+  ctx.strokeStyle = '#7dd3fc'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(cx, 205); ctx.lineTo(cx, workY); ctx.stroke();
+
+  /* ── Weld pool ── */
+  const pg = ctx.createRadialGradient(cx, workY, 0, cx, workY, 46);
+  pg.addColorStop(0, '#f97316'); pg.addColorStop(0.5, '#fbbf24'); pg.addColorStop(1, 'rgba(251,191,36,0)');
+  ctx.fillStyle = pg;
+  ctx.beginPath(); ctx.ellipse(cx, workY, 46, 16, 0, 0, Math.PI * 2); ctx.fill();
+
+  /* ── Labels ── */
+  label(ctx, 'Gas Cup / Nozzle', cx, 84, '#94a3b8', 11);
+
+  const LX = 190, RX = 540;
+  leaderLine(ctx, LX + 2, 242, cx - 90, 242);
+  label(ctx, 'Shielding gas cone (Ar)', LX, 234, '#38bdf8', 11, 'right');
+  label(ctx, 'displaces O₂ & N₂', LX, 250, '#64748b', 10, 'right');
+
+  const arcMid = (205 + workY) / 2;
+  leaderLine(ctx, cx + 2, arcMid, RX - 2, arcMid);
+  label(ctx, 'Arc column', RX, arcMid - 2, '#7dd3fc', 11, 'left');
+
+  leaderLine(ctx, cx + 46 + 2, workY, RX - 2, workY - 8);
+  label(ctx, 'Weld Pool', RX, workY - 12, '#fbbf24', 11, 'left');
+}
+
+function drawSetup3(ctx, W, H) {
+  const cx = 360, workY = H - 72;
+
+  /* ── Workpiece ── */
+  ctx.fillStyle = '#334155'; ctx.fillRect(60, workY, W - 120, 60);
+  ctx.fillStyle = '#475569'; ctx.fillRect(60, workY, W - 120, 12);
+
+  /* ── Tungsten ── */
+  ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(cx, 90); ctx.lineTo(cx, 200); ctx.stroke();
+
+  /* ── Electron flow arrows ── */
+  const arrowTop = 205, arrowBot = workY - 4;
+  for (let i = -2; i <= 2; i++) {
+    arrow(ctx, cx + i * 22, arrowTop, cx + i * 22, arrowBot, '#4ade80');
+  }
+
+  /* ── Weld pool ── */
+  const pg = ctx.createRadialGradient(cx, workY, 0, cx, workY, 52);
+  pg.addColorStop(0, '#f97316'); pg.addColorStop(0.6, '#fbbf24'); pg.addColorStop(1, 'rgba(251,191,36,0)');
+  ctx.fillStyle = pg;
+  ctx.beginPath(); ctx.ellipse(cx, workY, 52, 20, 0, 0, Math.PI * 2); ctx.fill();
+
+  /* ── Penetration zone ── */
+  ctx.strokeStyle = 'rgba(249,115,22,0.55)'; ctx.lineWidth = 1.5; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.ellipse(cx, workY + 4, 24, 30, 0, 0, Math.PI * 2); ctx.stroke();
+  ctx.setLineDash([]);
+
+  /* ── Left labels (right-aligned at LX) ── */
+  const LX = 168;
+  label(ctx, 'DCEN: Electrode (−)', LX, 106, '#7dd3fc', 11, 'right');
+  leaderLine(ctx, LX + 2, 102, cx - 5, 144);
+
+  const arrowMid = (arrowTop + arrowBot) / 2;
+  label(ctx, 'Electrons flow (−)→(+)', LX, arrowMid - 5, '#4ade80', 11, 'right');
+  leaderLine(ctx, LX + 2, arrowMid, cx - 44, arrowMid);
+
+  label(ctx, 'Workpiece (+)', LX, workY + 30, '#7dd3fc', 11, 'right');
+  leaderLine(ctx, LX + 2, workY + 26, cx - 52, workY + 26);
+
+  /* ── Right labels (left-aligned at RX) ── */
+  const RX = 552;
+  label(ctx, '~30% heat at electrode', RX, 138, '#f87171', 11, 'left');
+  leaderLine(ctx, cx + 5, 144, RX - 2, 142);
+
+  label(ctx, '~70% heat at workpiece', RX, workY - 38, '#f97316', 11, 'left');
+  leaderLine(ctx, cx + 52, workY, RX - 2, workY - 34);
+
+  label(ctx, 'Deep, narrow penetration', RX, workY + 32, '#fbbf24', 11, 'left');
+  leaderLine(ctx, cx + 24, workY + 20, RX - 2, workY + 28);
+}
+
+function drawSetup4(ctx, W, H) {
+  const cx = 360, workY = H - 72;
+
+  /* ── Workpiece ── */
+  ctx.fillStyle = '#334155'; ctx.fillRect(60, workY, W - 120, 60);
+  ctx.fillStyle = '#475569'; ctx.fillRect(60, workY, W - 120, 12);
+
+  /* ── Torch (slightly tilted) ── */
+  ctx.save();
+  ctx.translate(cx + 5, 92); ctx.rotate(0.10);
+  ctx.fillStyle = '#1e3a5c'; ctx.fillRect(-18, -72, 36, 110);
+  ctx.fillStyle = '#64748b';
+  ctx.beginPath();
+  ctx.moveTo(-14, 38); ctx.lineTo(14, 38); ctx.lineTo(18, 100); ctx.lineTo(-18, 100);
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+
+  /* ── Tungsten ── */
+  ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(cx + 12, 188); ctx.lineTo(cx + 14, 252); ctx.stroke();
+
+  /* ── Shielding cone boundary ── */
+  ctx.strokeStyle = 'rgba(56,189,248,0.45)'; ctx.lineWidth = 1; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(cx - 4, 215); ctx.lineTo(cx - 75, workY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx + 30, 215); ctx.lineTo(cx + 92, workY); ctx.stroke();
+  ctx.setLineDash([]);
+
+  /* ── Filler rod ── */
+  const rodX1 = cx + 192, rodY1 = 138, rodX2 = cx + 30, rodY2 = 278;
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(rodX1, rodY1); ctx.lineTo(rodX2, rodY2); ctx.stroke();
+  ctx.fillStyle = '#fbbf24';
+  ctx.beginPath(); ctx.arc(rodX2, rodY2, 5, 0, Math.PI * 2); ctx.fill();
+
+  /* ── Horizontal angle reference from rod tip ── */
+  ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(rodX2, rodY2); ctx.lineTo(rodX2 + 52, rodY2); ctx.stroke();
+
+  /* ── Weld pool ── */
+  const pg = ctx.createRadialGradient(cx, workY, 0, cx, workY, 44);
+  pg.addColorStop(0, '#f97316'); pg.addColorStop(0.5, '#fbbf24'); pg.addColorStop(1, 'rgba(251,191,36,0)');
+  ctx.fillStyle = pg;
+  ctx.beginPath(); ctx.ellipse(cx, workY, 44, 16, 0, 0, Math.PI * 2); ctx.fill();
+
+  /* ── Left labels ── */
+  const LX = 172;
+  label(ctx, '← Push direction', LX, 50, '#7dd3fc', 11, 'right');
+
+  label(ctx, 'Shielding gas cone', LX, workY - 40, '#38bdf8', 10, 'right');
+  leaderLine(ctx, LX + 2, workY - 44, cx - 42, workY - 16);
+
+  label(ctx, 'Weld Pool', LX, workY + 28, '#fbbf24', 11, 'right');
+  leaderLine(ctx, LX + 2, workY + 24, cx - 44, workY + 10);
+
+  /* ── Right labels (spread vertically, no overlap) ── */
+  const RX = 578;
+  label(ctx, 'Filler Rod', RX, 118, '#fbbf24', 11, 'left');
+  leaderLine(ctx, (rodX1 + rodX2) / 2 + 2, (rodY1 + rodY2) / 2, RX - 2, 122);
+
+  label(ctx, '15°–20° entry angle', RX, 195, '#94a3b8', 10, 'left');
+  leaderLine(ctx, rodX2 + 28, rodY2, RX - 2, 199);
+
+  label(ctx, 'Rod tip inside', RX, 258, '#4ade80', 10, 'left');
+  label(ctx, 'shielding cone', RX, 272, '#4ade80', 10, 'left');
+  leaderLine(ctx, rodX2 + 4, rodY2, RX - 2, 265);
+
+  label(ctx, 'Arc length ≈ electrode dia.', RX, 335, '#38bdf8', 10, 'left');
+  leaderLine(ctx, cx + 14 + 4, 225, RX - 2, 339);
+}
+
+/* ═══════════════════════════════ AC ANIMATION ═══════════════════════════════ */
+let acAnimId = null, acT = 0, acPlaying = false;
+
+function toggleAcAnim() {
+  if (acPlaying) {
+    cancelAnimationFrame(acAnimId);
+    acPlaying = false;
+    document.getElementById('acLbl').textContent = 'Paused';
+  } else {
+    acPlaying = true;
+    acLoop();
+  }
+}
+function resetAcAnim() {
+  cancelAnimationFrame(acAnimId);
+  acPlaying = false; acT = 0;
+  drawAC(acT);
+  document.getElementById('acLbl').textContent = 'AC Cathodic Cleaning — Press Play';
+  document.getElementById('acDsc').textContent = 'The animation shows argon ion bombardment during the EP half-cycle removing the Al₂O₃ oxide skin, alternating with the EN fusion half-cycle.';
+}
+function acLoop() {
+  acT += 0.018;
+  drawAC(acT);
+  acAnimId = requestAnimationFrame(acLoop);
+}
+function drawAC(t) {
+  const cv = document.getElementById('acCleanCv');
+  const ctx = cv.getContext('2d');
+  const W = 760, H = 420;
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+
+  const cx = W / 2;
+  const phase = Math.sin(t * Math.PI * 2);
+  const isEP = phase > 0;
+
+  /* Half-cycle tint */
+  ctx.fillStyle = isEP ? 'rgba(251,191,36,0.12)' : 'rgba(56,189,248,0.08)';
+  ctx.fillRect(0, 0, W, H);
+
+  /* ── Layout constants ── */
+  const workTop = H - 120;   /* y=300: top of workpiece / oxide surface */
+  const waveY   = H - 52;    /* y=368: top of waveform strip (below workpiece) */
+  const waveH   = 36, waveW = W - 140;
+
+  /* ── Workpiece ── */
+  ctx.fillStyle = '#b0bec5'; ctx.fillRect(80, workTop, W - 160, 60);
+
+  /* ── Oxide layer ── */
+  const oxideAlpha = 0.3 + 0.5 * Math.max(0, Math.cos(t * 0.4));
+  ctx.fillStyle = `rgba(120,80,20,${oxideAlpha})`;
+  ctx.fillRect(80, workTop - 4, W - 160, 9);
+
+  /* ── Weld pool glow (EN only) ── */
+  if (!isEP) {
+    const pg = ctx.createRadialGradient(cx, workTop, 0, cx, workTop, 58);
+    pg.addColorStop(0, 'rgba(56,189,248,0.45)'); pg.addColorStop(1, 'rgba(56,189,248,0)');
+    ctx.fillStyle = pg;
+    ctx.beginPath(); ctx.ellipse(cx, workTop, 58, 18, 0, 0, Math.PI * 2); ctx.fill();
+  }
+
+  /* ── Tungsten electrode shaft ── */
+  ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 5;
+  ctx.beginPath(); ctx.moveTo(cx, 32); ctx.lineTo(cx, 130); ctx.stroke();
+
+  /* ── Tungsten tip ── */
+  const ballR = isEP ? 13 : 6;
+  ctx.fillStyle = isEP ? '#fbbf24' : '#cbd5e1';
+  ctx.beginPath(); ctx.arc(cx, 130 + ballR, ballR, 0, Math.PI * 2); ctx.fill();
+
+  /* ── Arc column ── */
+  const arcTop = 130 + ballR * 2 + 2;
+  const arcBot = workTop - 4;
+  const arcColor = isEP ? '#fbbf24' : '#38bdf8';
+  const arcGrd = ctx.createLinearGradient(cx, arcTop, cx, arcBot);
+  arcGrd.addColorStop(0, arcColor); arcGrd.addColorStop(1, 'rgba(56,189,248,0.08)');
+  ctx.strokeStyle = arcGrd; ctx.lineWidth = isEP ? 7 : 4;
+  ctx.beginPath();
+  const wiggle = Math.sin(t * 30) * (isEP ? 4 : 2);
+  ctx.moveTo(cx, arcTop);
+  ctx.quadraticCurveTo(cx + wiggle, (arcTop + arcBot) / 2, cx, arcBot);
+  ctx.stroke();
+
+  /* ── Particles (always electrode→workpiece, top→bottom) ── */
+  const nParticles = 10;
+  for (let i = 0; i < nParticles; i++) {
+    const frac = ((t * 2 + i / nParticles) % 1);
+    const px = cx + Math.sin(t * 5 + i) * 20;
+    const py = arcTop + frac * (arcBot - arcTop);
+    ctx.fillStyle = isEP ? '#fbbf24' : '#4ade80';
+    ctx.beginPath(); ctx.arc(px, py, 3, 0, Math.PI * 2); ctx.fill();
+  }
+
+  /* ── Waveform strip (below workpiece, clear of arc) ── */
+  ctx.strokeStyle = '#1e3a5c'; ctx.lineWidth = 1;
+  ctx.strokeRect(70, waveY, waveW, waveH);
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  for (let x = 0; x <= waveW; x++) {
+    const wt = (x / waveW) * 4;
+    const wy = waveY + waveH / 2 - Math.sin(wt * Math.PI * 2) * (waveH / 2 - 3);
+    x === 0 ? ctx.moveTo(70 + x, wy) : ctx.lineTo(70 + x, wy);
+  }
+  ctx.stroke();
+  const curX = 70 + (t % 1) * waveW;
+  ctx.strokeStyle = '#f97316'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(curX, waveY); ctx.lineTo(curX, waveY + waveH); ctx.stroke();
+  label(ctx, 'AC Waveform  (orange cursor = current phase position)', cx, waveY - 9, '#64748b', 9);
+
+  /* ── Labels — left side (right-aligned at LX=215) ── */
+  const LX = 215, RX = cx + 32;
+  label(ctx, 'Tungsten', LX, 74, '#e2e8f0', 11, 'right');
+  label(ctx, 'Electrode', LX, 88, '#94a3b8', 10, 'right');
+  leaderLine(ctx, LX + 2, 81, cx - 3, 81);
+
+  const arcMid = (arcTop + arcBot) / 2;
+  const pLbl  = isEP ? 'Ar⁺ ions → oxide' : 'e⁻ flow → fusion';
+  const pColor = isEP ? '#fbbf24' : '#4ade80';
+  label(ctx, pLbl, LX, arcMid - 4, pColor, 10, 'right');
+  leaderLine(ctx, LX + 2, arcMid, cx - 24, arcMid, pColor);
+
+  /* ── Labels — right side (left-aligned at RX) ── */
+  const tipLbl   = isEP ? 'Balled tip (EP heating)' : 'Pointed tip (EN cooling)';
+  const tipColor = isEP ? '#fbbf24' : '#e2e8f0';
+  label(ctx, tipLbl, RX, 130 + ballR, tipColor, 10, 'left');
+
+  label(ctx, 'Al₂O₃ Oxide Layer', RX, workTop - 18, '#b45309', 10, 'left');
+  leaderLine(ctx, RX - 2, workTop - 13, cx + 3, workTop - 2);
+
+  label(ctx, 'Aluminum Base Metal', cx, workTop + 36, '#7d96ae', 11);
+
+  /* ── Update DOM label ── */
+  const domLbl   = isEP ? 'EP Half-Cycle — Ar⁺ Ion Bombardment → Oxide Removal' : 'EN Half-Cycle — Electron Flow → Fusion & Penetration';
+  document.getElementById('acLbl').textContent = domLbl;
+  document.getElementById('acLbl').style.color  = isEP ? '#fbbf24' : '#38bdf8';
+}
+
+/* ═══════════════════════════════ KEYHOLE ANIMATION ═══════════════════════════════ */
+const KH_STAGES = [
+  {
+    lbl: 'Step 1 — Establish Arc & Begin Pool',
+    dsc: 'The arc strikes at the root opening. The root face begins to melt back from both sides. At this stage, no keyhole yet — the pool is still forming.',
+    draw: drawKH1
+  },
+  {
+    lbl: 'Step 2 — Keyhole Opens (Full Penetration Indicator)',
+    dsc: 'As the pool grows, surface tension holds a liquid bridge across the root opening. A "keyhole" — a small teardrop opening visible at the arc\'s leading edge — confirms the arc is burning completely through the root face. This is the indicator of complete joint penetration.',
+    draw: drawKH2
+  },
+  {
+    lbl: 'Step 3 — Filler Addition at Leading Pool Edge',
+    dsc: 'The welder dabs filler rod into the front of the pool (not into the keyhole itself). Each dab partially collapses the keyhole as metal fills in. The welder then advances the arc slightly, maintaining a consistent keyhole size.',
+    draw: drawKH3
+  },
+  {
+    lbl: 'Step 4 — Inside Bead (Root Bead) Formation',
+    dsc: 'Behind the moving arc, the completed root bead is visible inside the pipe — a slightly convex bead with 1/16"–3/32" reinforcement. The back purge argon protects this inside surface from oxidation until it cools.',
+    draw: drawKH4
+  }
+];
+
+let khStage = 0;
+const khCV  = document.getElementById('keyholeCV');
+const khCtx = initHiDPI(khCV, 760, 300);
+
+function buildKHDots() {
+  const c = document.getElementById('khDots'); c.innerHTML = '';
+  KH_STAGES.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'sdot' + (i === khStage ? ' active' : '');
+    d.onclick = () => { khStage = i; renderKH(); };
+    c.appendChild(d);
+  });
+}
+function renderKH() {
+  buildKHDots();
+  document.getElementById('khLbl').textContent = KH_STAGES[khStage].lbl;
+  document.getElementById('khDsc').textContent = KH_STAGES[khStage].dsc;
+  const ctx = khCtx, W = 760, H = 300;
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  KH_STAGES[khStage].draw(ctx, W, H);
+}
+function prevKH() { khStage = (khStage - 1 + KH_STAGES.length) % KH_STAGES.length; renderKH(); }
+function nextKH() { khStage = (khStage + 1) % KH_STAGES.length; renderKH(); }
+
+function drawPipeCrossSection(ctx, W, H) {
+  /* Pipe cross-section top view (longitudinal) */
+  const py = H / 2, pW = W - 100;
+  const left = 50, right = left + pW;
+  /* pipe walls */
+  ctx.fillStyle = '#334155';
+  ctx.fillRect(left, py - 55, pW, 20);  /* top wall */
+  ctx.fillRect(left, py + 35, pW, 20);  /* bottom wall */
+  ctx.fillStyle = '#475569';
+  ctx.fillRect(left, py - 55, pW, 5);
+  ctx.fillRect(left, py + 35, pW, 5);
+  label(ctx, 'Pipe Wall (top)', W / 2, py - 70, '#64748b', 9);
+  label(ctx, 'Pipe Wall (bottom)', W / 2, py + 70, '#64748b', 9);
+  /* root gap */
+  ctx.fillStyle = '#0a1628';
+  ctx.fillRect(left, py - 35, pW, 70);  /* inside of pipe / root gap */
+  /* bevel faces */
+  ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 1.5; ctx.setLineDash([4,3]);
+  /* left bevel approx */
+  ctx.beginPath(); ctx.moveTo(left, py - 35); ctx.lineTo(left + 60, py - 35); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(left, py + 35); ctx.lineTo(left + 60, py + 35); ctx.stroke();
+  ctx.setLineDash([]);
+  return { left, right, pW, py };
+}
+
+function drawKH1(ctx, W, H) {
+  const { left, right, pW, py } = drawPipeCrossSection(ctx, W, H);
+  const cx = W / 2 + 80;
+  /* pool forming, no keyhole */
+  const pg = ctx.createRadialGradient(cx, py, 0, cx, py, 35);
+  pg.addColorStop(0, '#f97316'); pg.addColorStop(0.7, '#fbbf24'); pg.addColorStop(1, 'rgba(251,191,36,0)');
+  ctx.fillStyle = pg;
+  ctx.beginPath(); ctx.ellipse(cx, py, 35, 20, 0, 0, Math.PI * 2); ctx.fill();
+  /* arc */
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(cx, py - 55); ctx.lineTo(cx, py - 35); ctx.stroke();
+  leaderLine(ctx, 570, 67, cx, py - 55);
+  label(ctx, 'Arc', 572, 65, '#38bdf8', 10, 'left');
+  leaderLine(ctx, 570, py, cx + 35, py);
+  label(ctx, 'Pool forming', 572, py - 4, '#fbbf24', 10, 'left');
+  label(ctx, '(no keyhole yet)', 572, py + 10, '#94a3b8', 9, 'left');
+  /* root face melt */
+  ctx.fillStyle = '#fbbf24';
+  ctx.fillRect(cx - 30, py - 35, 60, 5);
+  ctx.fillRect(cx - 30, py + 30, 60, 5);
+  leaderLine(ctx, 193, py - 10, cx - 30, py - 33);
+  label(ctx, 'Root face melting', 193, py - 7, '#fbbf24', 9, 'right');
+}
+
+function drawKH2(ctx, W, H) {
+  const { left, right, pW, py } = drawPipeCrossSection(ctx, W, H);
+  const cx = W / 2 + 80;
+  /* pool with keyhole */
+  const pg = ctx.createRadialGradient(cx, py, 0, cx, py, 40);
+  pg.addColorStop(0, '#f97316'); pg.addColorStop(0.6, '#fbbf24'); pg.addColorStop(1, 'rgba(251,191,36,0)');
+  ctx.fillStyle = pg;
+  ctx.beginPath(); ctx.ellipse(cx, py, 40, 22, 0, 0, Math.PI * 2); ctx.fill();
+  /* keyhole opening */
+  ctx.fillStyle = '#0a1628';
+  ctx.beginPath(); ctx.ellipse(cx + 28, py, 10, 7, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.ellipse(cx + 28, py, 10, 7, 0, 0, Math.PI * 2); ctx.stroke();
+  /* arc */
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(cx, py - 55); ctx.lineTo(cx, py - 35); ctx.stroke();
+  /* annotation */
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(cx + 38, py); ctx.lineTo(570, py - 88); ctx.stroke();
+  label(ctx, 'Keyhole', 572, py - 90, '#38bdf8', 11, 'left');
+  label(ctx, '(full penetration confirmed)', 572, py - 75, '#94a3b8', 9, 'left');
+  /* inside bead start */
+  ctx.fillStyle = 'rgba(251,191,36,0.3)';
+  ctx.beginPath(); ctx.ellipse(cx - 20, py, 18, 7, 0, 0, Math.PI * 2); ctx.fill();
+  leaderLine(ctx, 193, py + 10, cx - 38, py);
+  label(ctx, 'Inside bead forming', 193, py + 13, '#fbbf24', 9, 'right');
+}
+
+function drawKH3(ctx, W, H) {
+  const { left, right, pW, py } = drawPipeCrossSection(ctx, W, H);
+  const cx = W / 2 + 60;
+  /* pool */
+  const pg = ctx.createRadialGradient(cx, py, 0, cx, py, 38);
+  pg.addColorStop(0, '#f97316'); pg.addColorStop(0.6, '#fbbf24'); pg.addColorStop(1, 'rgba(251,191,36,0)');
+  ctx.fillStyle = pg;
+  ctx.beginPath(); ctx.ellipse(cx, py, 38, 22, 0, 0, Math.PI * 2); ctx.fill();
+  /* keyhole */
+  ctx.fillStyle = '#0a1628';
+  ctx.beginPath(); ctx.ellipse(cx + 26, py, 9, 6, 0, 0, Math.PI * 2); ctx.fill();
+  /* filler rod */
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(cx - 20, py - 60); ctx.lineTo(cx - 6, py - 36); ctx.stroke();
+  ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(cx - 6, py - 36, 5, 0, Math.PI * 2); ctx.fill();
+  label(ctx, 'Filler dab → leading edge', cx - 200, py - 60, '#fbbf24', 10);
+  /* arc */
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(cx, py - 55); ctx.lineTo(cx, py - 36); ctx.stroke();
+  /* inside bead */
+  ctx.fillStyle = '#b45309';
+  ctx.beginPath(); ctx.ellipse(cx - 30, py, 26, 8, 0, 0, Math.PI * 2); ctx.fill();
+  label(ctx, 'Completed root bead', cx - 180, py + 28, '#b45309', 9);
+}
+
+function drawKH4(ctx, W, H) {
+  const { left, right, pW, py } = drawPipeCrossSection(ctx, W, H);
+  /* completed root bead running along full length */
+  const bx = left + 20, bW = right - left - 120;
+  const bg = ctx.createLinearGradient(bx, py - 8, bx, py + 8);
+  bg.addColorStop(0, '#92400e'); bg.addColorStop(0.5, '#b45309'); bg.addColorStop(1, '#92400e');
+  ctx.fillStyle = bg;
+  ctx.beginPath(); ctx.roundRect(bx, py - 8, bW, 16, 6); ctx.fill();
+  label(ctx, 'Completed Root Bead (inside bead)', left + bW / 2, py + 28, '#b45309', 10);
+  /* purge gas flow */
+  ctx.strokeStyle = 'rgba(56,189,248,0.4)'; ctx.lineWidth = 1; ctx.setLineDash([3,3]);
+  for (let x = left + 30; x < right - 100; x += 40) {
+    ctx.beginPath(); ctx.moveTo(x, py + 18); ctx.lineTo(x + 20, py + 18); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+  label(ctx, 'Back purge Ar flow →', left + 120, py + 10, '#38bdf8', 9);
+  /* arc still going on right side */
+  const cx = right - 55;
+  const pg = ctx.createRadialGradient(cx, py, 0, cx, py, 35);
+  pg.addColorStop(0, '#f97316'); pg.addColorStop(0.6, '#fbbf24'); pg.addColorStop(1, 'rgba(251,191,36,0)');
+  ctx.fillStyle = pg;
+  ctx.beginPath(); ctx.ellipse(cx, py, 35, 20, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(cx, py - 55); ctx.lineTo(cx, py - 36); ctx.stroke();
+  label(ctx, '1/16"–3/32" reinforcement', left + bW / 2, py - 24, '#fbbf24', 9);
+  label(ctx, '← Travel direction', cx - 80, py - 62, '#7dd3fc', 9);
+}
+
+/* ═══════════════════════════════ HELPERS ═══════════════════════════════ */
+function label(ctx, text, x, y, color, size, align) {
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.font = `${size}px 'Segoe UI', Arial, sans-serif`;
+  ctx.textAlign = align || 'center';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText(text, x, y);
+  ctx.restore();
+}
+function leaderLine(ctx, x1, y1, x2, y2, color) {
+  ctx.save();
+  ctx.strokeStyle = color || '#475569';
+  ctx.lineWidth = 0.75;
+  ctx.setLineDash([3, 3]);
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  ctx.restore();
+}
+function arrow(ctx, x1, y1, x2, y2, color) {
+  const angle = Math.atan2(y2 - y1, x2 - x1);
+  const len = Math.hypot(x2 - x1, y2 - y1);
+  ctx.save();
+  ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  for (let d = 40; d < len - 10; d += 40) {
+    const ax = x1 + Math.cos(angle) * d;
+    const ay = y1 + Math.sin(angle) * d;
+    ctx.beginPath();
+    ctx.moveTo(ax - Math.cos(angle - 0.4) * 7, ay - Math.sin(angle - 0.4) * 7);
+    ctx.lineTo(ax, ay);
+    ctx.lineTo(ax - Math.cos(angle + 0.4) * 7, ay - Math.sin(angle + 0.4) * 7);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+/* ═══════════════════════════════ INIT ═══════════════════════════════ */
+initHiDPI(document.getElementById('acCleanCv'), 760, 420);
+renderSetup();
+renderKH();
+drawAC(0);
+</script>
+</body>
+</html>

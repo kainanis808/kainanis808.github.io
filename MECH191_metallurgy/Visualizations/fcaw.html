@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FCAW – Flux-Cored Arc Welding</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a1628; color: #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; }
+    .header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 24px 32px; border-bottom: 2px solid #a78bfa; }
+    .header h1 { font-size: 1.8rem; color: #a78bfa; font-weight: 700; }
+    .header p { color: #94a3b8; margin-top: 6px; font-size: 0.95rem; }
+    .tabs { display: flex; background: #1e293b; border-bottom: 1px solid #334155; padding: 0 16px; flex-wrap: wrap; }
+    .tab { padding: 14px 22px; cursor: pointer; color: #94a3b8; font-size: 0.9rem; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
+    .tab:hover { color: #e2e8f0; }
+    .tab.active { color: #a78bfa; border-bottom-color: #a78bfa; font-weight: 600; }
+    .content { display: none; padding: 28px 32px; max-width: 1100px; margin: 0 auto; }
+    .content.active { display: block; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 20px 24px; margin-bottom: 20px; }
+    .card h2 { color: #a78bfa; font-size: 1.1rem; font-weight: 600; margin-bottom: 14px; }
+    .card h3 { color: #c4b5fd; font-size: 0.95rem; font-weight: 600; margin-bottom: 10px; }
+    .canvas-wrap { background: #0a1628; border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
+    canvas { display: block; }
+    .step-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .step-btn { background: #334155; color: #e2e8f0; border: none; border-radius: 6px; padding: 7px 16px; cursor: pointer; font-size: 0.88rem; transition: background 0.2s; }
+    .step-btn:hover { background: #475569; }
+    .step-dots { display: flex; gap: 6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #334155; transition: background 0.2s; }
+    .dot.active { background: #a78bfa; }
+    .step-lbl { color: #a78bfa; font-weight: 600; font-size: 0.9rem; }
+    .step-dsc { color: #94a3b8; font-size: 0.85rem; margin-top: 4px; line-height: 1.5; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th { background: #0f172a; color: #a78bfa; padding: 9px 12px; text-align: left; border-bottom: 1px solid #334155; }
+    td { padding: 8px 12px; border-bottom: 1px solid #1e293b; color: #e2e8f0; vertical-align: top; }
+    tr:hover td { background: #0f172a; }
+    .selector-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+    .selector-group { flex: 1; min-width: 160px; }
+    .selector-group label { display: block; color: #94a3b8; font-size: 0.8rem; margin-bottom: 6px; }
+    .selector-group select { width: 100%; background: #0f172a; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px; padding: 8px 10px; font-size: 0.88rem; }
+    .cls-seg { background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; min-width: 38px; text-align: center; }
+    .cls-seg .val { font-size: 1.1rem; font-weight: 700; color: #a78bfa; }
+    .cls-seg .lbl { font-size: 0.68rem; color: #64748b; margin-top: 2px; }
+    .classifier { display: flex; gap: 4px; flex-wrap: wrap; margin: 12px 0; }
+    .cls-input { background: #0f172a; color: #e2e8f0; border: 1px solid #475569; border-radius: 6px; padding: 8px 12px; font-size: 1rem; width: 180px; letter-spacing: 2px; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.78rem; font-weight: 600; }
+    .badge-s { background: #1d4ed8; color: #bfdbfe; }
+    .badge-g { background: #065f46; color: #a7f3d0; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+    .info-box { background: #0f172a; border-left: 3px solid #a78bfa; padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: 0.84rem; color: #cbd5e1; }
+    .warn-box  { background: #0f172a; border-left: 3px solid #f59e0b; padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: 0.84rem; color: #cbd5e1; }
+    .back { text-align: center; padding: 24px; }
+    .back a { color: #a78bfa; text-decoration: none; font-size: 0.9rem; }
+    .back a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>FCAW – Flux-Cored Arc Welding</h1>
+  <p>Self-Shielded vs Gas-Shielded Process · Wire Selection · Parameter Setting · Slag Removal · FCAW-S vs FCAW-G Comparison (Lincoln Electric &amp; AWS A5.20/A5.36)</p>
+</div>
+
+<div class="tabs">
+  <div class="tab active"  onclick="showTab('process',this)">Process Overview</div>
+  <div class="tab"         onclick="showTab('wire',this)">Wire Selection</div>
+  <div class="tab"         onclick="showTab('params',this)">Parameter Setting</div>
+  <div class="tab"         onclick="showTab('slag',this)">Slag &amp; Quality</div>
+</div>
+
+<!-- ── TAB 1: Process Overview ── -->
+<div id="tab-process" class="content active">
+  <div class="card">
+    <h2>FCAW-S vs FCAW-G – Process Animation</h2>
+    <div class="step-nav">
+      <button class="step-btn" onclick="prevProc()">&#8592; Prev</button>
+      <div class="step-dots" id="procDots"></div>
+      <button class="step-btn" onclick="nextProc()">Next &#8594;</button>
+    </div>
+    <div class="step-lbl" id="procLbl"></div>
+    <div class="step-dsc" id="procDsc"></div>
+    <div class="canvas-wrap" style="margin-top:12px;">
+      <canvas id="processCv"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>FCAW-S vs FCAW-G – Comparison Table</h2>
+    <table>
+      <tr><th>Property</th><th>FCAW-S (Self-Shielded)</th><th>FCAW-G (Gas-Shielded)</th></tr>
+      <tr><td>Shielding Source</td><td>Flux core only — no gas cylinder needed</td><td>External 75Ar/25CO₂ or 100% CO₂ at 35–50 CFH</td></tr>
+      <tr><td>Wind Resistance</td><td>Excellent — suitable outdoors &gt;35 mph winds</td><td>Poor — drafts disrupt gas coverage; use windscreen</td></tr>
+      <tr><td>Weld Quality</td><td>Good; higher inclusion risk; more spatter</td><td>Better appearance; low spatter; cleaner bead</td></tr>
+      <tr><td>Deposition Rate</td><td>High (E70T-7 especially); high efficiency</td><td>High; often higher efficiency than FCAW-S</td></tr>
+      <tr><td>Slag Type</td><td>Heavy, multi-layer; must chip thoroughly</td><td>Thinner; some T-1 wires near self-releasing</td></tr>
+      <tr><td>Notch Toughness</td><td>Moderate; T-8 exceeds T-11</td><td>High — T-5 basic slag; T-1 class all-position</td></tr>
+      <tr><td>Polarity</td><td>DCEN (electrode negative) for most wires</td><td>DCEP (electrode positive)</td></tr>
+      <tr><td>Typical Wires</td><td>E71T-8, E71T-11, E70T-7</td><td>E70T-1C/M, E71T-1C/M, E70T-5C</td></tr>
+      <tr><td>Typical Applications</td><td>Structural steel, bridges, field erection</td><td>Fabrication shops, pressure vessels, pipe</td></tr>
+      <tr><td>Equipment</td><td>Wire feeder + CV power source only</td><td>Wire feeder + CV power source + gas system</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ── TAB 2: Wire Selection ── -->
+<div id="tab-wire" class="content">
+  <div class="card">
+    <h2>Wire Selection Guide</h2>
+    <div class="selector-row">
+      <div class="selector-group">
+        <label>Shielding Type</label>
+        <select id="selShield" onchange="updateWireTable()">
+          <option value="both">Both (FCAW-S &amp; FCAW-G)</option>
+          <option value="s">FCAW-S (Self-Shielded only)</option>
+          <option value="g">FCAW-G (Gas-Shielded only)</option>
+        </select>
+      </div>
+      <div class="selector-group">
+        <label>Welding Position</label>
+        <select id="selPos" onchange="updateWireTable()">
+          <option value="all">All Positions</option>
+          <option value="fh">Flat / Horizontal Only</option>
+        </select>
+      </div>
+      <div class="selector-group">
+        <label>Priority</label>
+        <select id="selPriority" onchange="updateWireTable()">
+          <option value="any">Any</option>
+          <option value="toughness">Notch Toughness</option>
+          <option value="speed">Deposition Rate</option>
+          <option value="outdoor">Outdoor / Wind Resistance</option>
+        </select>
+      </div>
+    </div>
+    <div id="wireTableWrap"></div>
+  </div>
+
+  <div class="card">
+    <h2>AWS A5.20 / A5.36 Classification Decoder</h2>
+    <p style="color:#94a3b8;font-size:0.85rem;margin-bottom:12px;">Type a wire designation (e.g. E71T-1C, E70T-8, E71T-11) to decode each segment.</p>
+    <input class="cls-input" id="clsInput" value="E71T-1C" oninput="decodeWire()" maxlength="14" placeholder="e.g. E71T-1C">
+    <div class="classifier" id="clsDisplay" style="margin-top:14px;"></div>
+    <div id="clsDesc" style="margin-top:12px;font-size:0.84rem;color:#cbd5e1;line-height:1.8;"></div>
+  </div>
+</div>
+
+<!-- ── TAB 3: Parameter Setting ── -->
+<div id="tab-params" class="content">
+  <div class="card">
+    <h2>Parameter Setting – Operating Window</h2>
+    <div class="selector-row">
+      <div class="selector-group">
+        <label>Wire Type &amp; Diameter</label>
+        <select id="paramWire" onchange="renderParamChart()">
+          <option value="e71t1_035">E71T-1 (G) · 0.035"</option>
+          <option value="e71t1_045" selected>E71T-1 (G) · 0.045"</option>
+          <option value="e71t1_052">E71T-1 (G) · 0.052"</option>
+          <option value="e71t8_045">E71T-8 (S) · 0.045"</option>
+          <option value="e71t11_035">E71T-11 (S) · 0.035"</option>
+          <option value="e71t11_045">E71T-11 (S) · 0.045"</option>
+        </select>
+      </div>
+      <div class="selector-group">
+        <label>Welding Position</label>
+        <select id="paramPos" onchange="renderParamChart()">
+          <option value="flat">Flat (1F / 1G)</option>
+          <option value="horiz">Horizontal (2F / 2G)</option>
+          <option value="vup">Vertical Up (3F / 3G)</option>
+          <option value="over">Overhead (4F / 4G)</option>
+        </select>
+      </div>
+    </div>
+    <div class="canvas-wrap">
+      <canvas id="paramCv"></canvas>
+    </div>
+    <div id="paramInfo" class="info-box"></div>
+  </div>
+
+  <div class="card">
+    <h2>Key Parameters – Lincoln Electric Guidelines</h2>
+    <div class="two-col">
+      <div>
+        <h3>Contact-Tip-to-Work Distance (CTWD)</h3>
+        <table>
+          <tr><th>Wire Dia.</th><th>FCAW-G CTWD</th><th>FCAW-S CTWD</th></tr>
+          <tr><td>0.035"</td><td>½"–¾"</td><td>¾"–1"</td></tr>
+          <tr><td>0.045"</td><td>¾"–1"</td><td>1"–1¼"</td></tr>
+          <tr><td>0.052"</td><td>¾"–1"</td><td>1"–1½"</td></tr>
+          <tr><td>1/16"</td><td>1"–1¼"</td><td>1¼"–1¾"</td></tr>
+        </table>
+        <div class="warn-box" style="margin-top:10px;">FCAW-S is CTWD-sensitive — too short causes porosity; too long causes spatter and loss of shielding.</div>
+      </div>
+      <div>
+        <h3>Polarity by Wire Classification</h3>
+        <table>
+          <tr><th>Wire</th><th>Polarity</th></tr>
+          <tr><td>E70T-1, E71T-1 (FCAW-G)</td><td>DCEP</td></tr>
+          <tr><td>E70T-5 (FCAW-G)</td><td>DCEP</td></tr>
+          <tr><td>E71T-8 (FCAW-S)</td><td>DCEN</td></tr>
+          <tr><td>E71T-11 (FCAW-S)</td><td>DCEN or AC</td></tr>
+          <tr><td>E70T-7 (FCAW-S)</td><td>DCEN</td></tr>
+        </table>
+        <h3 style="margin-top:14px;">Shielding Gas Flow (FCAW-G only)</h3>
+        <table>
+          <tr><th>Condition</th><th>Flow Rate</th></tr>
+          <tr><td>Indoor / calm</td><td>35–40 CFH</td></tr>
+          <tr><td>Light air movement</td><td>40–45 CFH</td></tr>
+          <tr><td>Use windscreen</td><td>35–40 CFH</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TAB 4: Slag & Quality ── -->
+<div id="tab-slag" class="content">
+  <div class="card">
+    <h2>Slag Removal Technique</h2>
+    <div class="step-nav">
+      <button class="step-btn" onclick="prevSlag()">&#8592; Prev</button>
+      <div class="step-dots" id="slagDots"></div>
+      <button class="step-btn" onclick="nextSlag()">Next &#8594;</button>
+    </div>
+    <div class="step-lbl" id="slagLbl"></div>
+    <div class="step-dsc" id="slagDsc"></div>
+    <div class="canvas-wrap" style="margin-top:12px;">
+      <canvas id="slagCv"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Common FCAW Defects &amp; Prevention</h2>
+    <table>
+      <tr><th>Defect</th><th>Cause</th><th>Prevention</th></tr>
+      <tr><td>Porosity</td><td>CTWD too long (FCAW-S); gas loss or draft (FCAW-G); moisture in flux</td><td>Correct CTWD; verify gas flow; store wire sealed and dry</td></tr>
+      <tr><td>Slag Inclusion</td><td>Incomplete slag removal between passes; undercut traps slag</td><td>Chip and wire-brush every pass; correct undercut first</td></tr>
+      <tr><td>Undercut</td><td>Travel speed too fast; voltage too high; improper torch angle</td><td>Slow travel speed; reduce voltage 1–2 V; maintain 5°–15° drag</td></tr>
+      <tr><td>Cold Lap / LOF</td><td>WFS too low; travel too fast; wrong torch angle</td><td>Increase WFS; slow travel; aim arc at leading edge of pool</td></tr>
+      <tr><td>Excessive Spatter</td><td>Voltage too high; CTWD too short; wrong polarity</td><td>Reduce voltage; adjust CTWD; verify polarity per wire spec</td></tr>
+      <tr><td>Worm Tracking (FCAW-S)</td><td>CTWD too long — shielding gas tunnels back through slag</td><td>Shorten CTWD to spec; increase WFS slightly</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Bead Quality Indicators</h2>
+    <div class="two-col">
+      <div>
+        <h3>Good Weld Indicators</h3>
+        <ul style="font-size:0.85rem;color:#cbd5e1;line-height:2.1;padding-left:18px;">
+          <li>Smooth, uniform ripple pattern along bead</li>
+          <li>Slag lifts cleanly in one or few pieces</li>
+          <li>Consistent bead width (within ±1 wire diameter)</li>
+          <li>No visible porosity after slag removal</li>
+          <li>Proper toe blending — no undercut groove</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Problem Indicators</h3>
+        <ul style="font-size:0.85rem;color:#cbd5e1;line-height:2.1;padding-left:18px;">
+          <li>Pitted slag surface → porosity likely beneath</li>
+          <li>Slag bonded to bead toes → undercut or cold lap</li>
+          <li>Irregular ripple → arc instability or wrong polarity</li>
+          <li>Wide, flat bead with excessive spatter → voltage too high</li>
+          <li>Narrow, high-crowned bead → voltage too low or WFS too high</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="back"><a href="index.html">&#8592; Back to MECH191 Visualizations</a></div>
+
+<script>
+// ── Utilities ─────────────────────────────────────────────────────────────────
+const DPR = window.devicePixelRatio || 1;
+function initHiDPI(cv, logW, logH) {
+  cv.width  = logW * DPR;
+  cv.height = logH * DPR;
+  cv.style.width  = logW + 'px';
+  cv.style.height = logH + 'px';
+  const ctx = cv.getContext('2d');
+  ctx.scale(DPR, DPR);
+  return ctx;
+}
+function label(ctx, text, x, y, color, size, align) {
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.font = `${size}px 'Segoe UI', Arial, sans-serif`;
+  ctx.textAlign = align || 'center';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText(text, x, y);
+  ctx.restore();
+}
+function leaderLine(ctx, x1, y1, x2, y2, color) {
+  ctx.save();
+  ctx.strokeStyle = color || '#475569';
+  ctx.lineWidth = 0.75;
+  ctx.setLineDash([3, 3]);
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  ctx.restore();
+}
+
+// ── Tab switching ─────────────────────────────────────────────────────────────
+function showTab(name, el) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  el.classList.add('active');
+  if (name === 'params') renderParamChart();
+}
+
+// ── TAB 1: Process Animation ──────────────────────────────────────────────────
+const PW = 760, PH = 400;
+const LCX = 190, RCX = 570;   // left (FCAW-S) center, right (FCAW-G) center
+const WORK_Y = 290, WORK_H = 55;
+
+const PROC_STAGES = [
+  { lbl: 'Step 1 – Wire Feed & Arc Establishment',
+    dsc: 'Both FCAW-S (left) and FCAW-G (right) feed a continuously-driven flux-cored tubular wire electrode through a contact tip. A constant-voltage (CV) power source maintains a stable arc. The wire is the electrode — it melts into the weld pool.',
+    draw: drawProc1 },
+  { lbl: 'Step 2 – Shielding Generation',
+    dsc: 'FCAW-S (left): the flux inside the wire core decomposes in the arc to generate shielding gases (CO, CO₂, N₂) and a slag blanket — no external gas needed, making it ideal for outdoor/windy conditions. FCAW-G (right): an external shielding gas (75%Ar/25%CO₂ or 100%CO₂) at 35–50 CFH is delivered through the nozzle to protect the arc.',
+    draw: drawProc2 },
+  { lbl: 'Step 3 – Weld Pool & Slag Formation',
+    dsc: 'In both processes the arc melts the base metal and wire to form a weld pool. Flux decomposes and floats to the surface as slag, protecting the solidifying metal from atmospheric contamination. FCAW-S slag is heavier and multi-layered; FCAW-G slag is thinner.',
+    draw: drawProc3 },
+  { lbl: 'Step 4 – Completed Bead Profiles',
+    dsc: 'After the arc passes, the pool solidifies beneath the slag. FCAW-S typically produces a wider, slightly more convex bead with heavier slag requiring thorough chipping and brushing. FCAW-G produces a smoother, flatter bead profile with less spatter and easier slag removal.',
+    draw: drawProc4 }
+];
+let procStage = 0, procCtx;
+
+function buildProcDots() {
+  document.getElementById('procDots').innerHTML =
+    PROC_STAGES.map((_, i) => `<div class="dot${i===procStage?' active':''}"></div>`).join('');
+}
+function prevProc() { procStage = (procStage - 1 + PROC_STAGES.length) % PROC_STAGES.length; renderProc(); }
+function nextProc() { procStage = (procStage + 1) % PROC_STAGES.length; renderProc(); }
+
+function renderProc() {
+  buildProcDots();
+  document.getElementById('procLbl').textContent = PROC_STAGES[procStage].lbl;
+  document.getElementById('procDsc').textContent = PROC_STAGES[procStage].dsc;
+  procCtx.clearRect(0, 0, PW, PH);
+  procCtx.fillStyle = '#0a1628'; procCtx.fillRect(0, 0, PW, PH);
+  // Divider
+  procCtx.save();
+  procCtx.strokeStyle = '#334155'; procCtx.lineWidth = 1; procCtx.setLineDash([5,4]);
+  procCtx.beginPath(); procCtx.moveTo(PW/2, 30); procCtx.lineTo(PW/2, PH-20); procCtx.stroke();
+  procCtx.restore();
+  label(procCtx, 'FCAW-S  (Self-Shielded)', PW/4, 24, '#818cf8', 11);
+  label(procCtx, 'FCAW-G  (Gas-Shielded)',  3*PW/4, 24, '#34d399', 11);
+  PROC_STAGES[procStage].draw(procCtx, PW, PH);
+}
+
+function drawGun(ctx, cx, topY, hasCup) {
+  ctx.save();
+  // Body
+  ctx.fillStyle = '#334155';
+  ctx.beginPath();
+  ctx.roundRect(cx-18, topY, 36, 52, 4);
+  ctx.fill();
+  // Handle grip lines
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 1; ctx.setLineDash([2,2]);
+  for (let dy = 12; dy < 45; dy += 8) {
+    ctx.beginPath(); ctx.moveTo(cx-15, topY+dy); ctx.lineTo(cx+15, topY+dy); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+  // Contact tip
+  ctx.fillStyle = '#d97706';
+  ctx.fillRect(cx-5, topY+50, 10, 12);
+  // Wire
+  ctx.strokeStyle = hasCup ? '#34d399' : '#818cf8';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(cx, topY+58); ctx.lineTo(cx, topY+100); ctx.stroke();
+  if (hasCup) {
+    // Gas nozzle
+    ctx.fillStyle = '#475569';
+    ctx.fillRect(cx-16, topY+54, 4, 36);
+    ctx.fillRect(cx+12, topY+54, 4, 36);
+    ctx.fillStyle = '#64748b';
+    ctx.fillRect(cx-16, topY+54, 32, 5);
+  }
+  ctx.restore();
+}
+
+function drawPlate(ctx, x, y, w, h) {
+  ctx.save();
+  ctx.fillStyle = '#1e3a5f'; ctx.fillRect(x, y, w, h);
+  ctx.fillStyle = '#2563eb'; ctx.fillRect(x, y, w, 5);
+  ctx.restore();
+}
+
+function drawArcLine(ctx, cx, y1, y2, color) {
+  ctx.save();
+  ctx.strokeStyle = color; ctx.lineWidth = 2.5; ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(cx, y1); ctx.lineTo(cx, y2); ctx.stroke();
+  // Glow at arc base
+  const grd = ctx.createRadialGradient(cx, y2, 0, cx, y2, 18);
+  grd.addColorStop(0, color.replace(')', ',0.4)').replace('rgb', 'rgba'));
+  grd.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = grd;
+  ctx.beginPath(); ctx.arc(cx, y2, 18, 0, Math.PI*2); ctx.fill();
+  ctx.restore();
+}
+
+function drawProc1(ctx, W, H) {
+  drawGun(ctx, LCX, 40, false);
+  drawGun(ctx, RCX, 40, true);
+  drawPlate(ctx, 50, WORK_Y, 300, WORK_H);
+  drawPlate(ctx, 410, WORK_Y, 300, WORK_H);
+  // Labels — left
+  leaderLine(ctx, 95, 65, LCX-18, 65);
+  label(ctx, 'Gun body', 93, 68, '#94a3b8', 9, 'right');
+  leaderLine(ctx, 95, 95, LCX-5, 92);
+  label(ctx, 'Flux-cored wire', 93, 98, '#818cf8', 9, 'right');
+  leaderLine(ctx, 95, 110, LCX-5, 108);
+  label(ctx, 'Contact tip', 93, 113, '#d97706', 9, 'right');
+  // Labels — right
+  leaderLine(ctx, 665, 95, RCX+5, 92);
+  label(ctx, 'Flux-cored wire', 667, 98, '#34d399', 9, 'left');
+  leaderLine(ctx, 665, 75, RCX+16, 70);
+  label(ctx, 'Gas nozzle', 667, 78, '#94a3b8', 9, 'left');
+  // Workpiece labels
+  label(ctx, 'Base metal (steel)', PW/4, WORK_Y+30, '#64748b', 9);
+  label(ctx, 'Base metal (steel)', 3*PW/4, WORK_Y+30, '#64748b', 9);
+  label(ctx, 'CV power source — constant-voltage arc for both processes', PW/2, H-10, '#475569', 9);
+}
+
+function drawFluxCloud(ctx, cx, y1, y2) {
+  ctx.save();
+  ctx.fillStyle = '#6d28d9'; ctx.globalAlpha = 0.65;
+  const pts = [[-10,0.25],[8,0.38],[-14,0.5],[12,0.62],[-6,0.75],[10,0.88]];
+  for (const [dx, f] of pts) {
+    ctx.beginPath(); ctx.arc(cx+dx, y1+(y2-y1)*f, 3, 0, Math.PI*2); ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawGasFlow(ctx, cx, y1, y2) {
+  ctx.save();
+  ctx.strokeStyle = '#34d399'; ctx.lineWidth = 1; ctx.globalAlpha = 0.45; ctx.setLineDash([3,3]);
+  for (const dx of [-20, -12, 12, 20]) {
+    ctx.beginPath();
+    ctx.moveTo(cx + dx*0.25, y1);
+    ctx.bezierCurveTo(cx + dx*0.8, y1+(y2-y1)*0.35, cx+dx, y1+(y2-y1)*0.65, cx+dx*0.4, y2);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawProc2(ctx, W, H) {
+  drawGun(ctx, LCX, 40, false);
+  drawGun(ctx, RCX, 40, true);
+  drawPlate(ctx, 50, WORK_Y, 300, WORK_H);
+  drawPlate(ctx, 410, WORK_Y, 300, WORK_H);
+  // FCAW-S arc + flux particles
+  drawArcLine(ctx, LCX, 140, WORK_Y, '#818cf8');
+  drawFluxCloud(ctx, LCX, 145, WORK_Y-5);
+  label(ctx, 'Flux decomposes:', LCX-10, 175, '#c4b5fd', 9, 'right');
+  label(ctx, '→ shielding gases (CO, CO₂)',  LCX-10, 188, '#a78bfa', 9, 'right');
+  label(ctx, '→ slag blanket',               LCX-10, 201, '#7c3aed', 9, 'right');
+  label(ctx, 'No external gas needed', LCX, WORK_Y+35, '#818cf8', 9);
+  // FCAW-G arc + gas flow
+  drawArcLine(ctx, RCX, 140, WORK_Y, '#34d399');
+  drawGasFlow(ctx, RCX, 90, WORK_Y);
+  leaderLine(ctx, 665, 165, RCX+22, 165);
+  label(ctx, '75Ar/25CO₂', 667, 168, '#34d399', 9, 'left');
+  label(ctx, 'or 100% CO₂', 667, 180, '#34d399', 9, 'left');
+  label(ctx, '35–50 CFH', 667, 192, '#64748b', 9, 'left');
+  label(ctx, 'Shielding gas required', RCX, WORK_Y+35, '#34d399', 9);
+}
+
+function drawPool(ctx, cx, py, rx, ry) {
+  const pg = ctx.createRadialGradient(cx, py, 0, cx, py, rx);
+  pg.addColorStop(0,'#f97316'); pg.addColorStop(0.6,'#fbbf24'); pg.addColorStop(1,'rgba(251,191,36,0)');
+  ctx.fillStyle = pg;
+  ctx.beginPath(); ctx.ellipse(cx, py, rx, ry, 0, 0, Math.PI*2); ctx.fill();
+}
+
+function drawProc3(ctx, W, H) {
+  drawGun(ctx, LCX, 40, false);
+  drawGun(ctx, RCX, 40, true);
+  drawPlate(ctx, 50, WORK_Y, 300, WORK_H);
+  drawPlate(ctx, 410, WORK_Y, 300, WORK_H);
+  drawArcLine(ctx, LCX, 140, WORK_Y, '#818cf8');
+  drawArcLine(ctx, RCX, 140, WORK_Y, '#34d399');
+  // Pools
+  drawPool(ctx, LCX, WORK_Y, 42, 14);
+  drawPool(ctx, RCX, WORK_Y, 42, 14);
+  // FCAW-S heavy slag
+  ctx.fillStyle = '#6d28d9';
+  ctx.beginPath(); ctx.ellipse(LCX, WORK_Y-5, 38, 9, 0, 0, Math.PI*2); ctx.fill();
+  // FCAW-G thin slag
+  ctx.fillStyle = '#374151';
+  ctx.beginPath(); ctx.ellipse(RCX, WORK_Y-4, 32, 5, 0, 0, Math.PI*2); ctx.fill();
+  label(ctx, 'FCAW-S: heavy slag', LCX, WORK_Y+WORK_H+20, '#7c3aed', 10);
+  label(ctx, 'multi-layer — chip & brush every pass', LCX, WORK_Y+WORK_H+34, '#94a3b8', 9);
+  label(ctx, 'FCAW-G: thin slag', RCX, WORK_Y+WORK_H+20, '#34d399', 10);
+  label(ctx, 'thinner — easier to remove', RCX, WORK_Y+WORK_H+34, '#94a3b8', 9);
+}
+
+function drawProc4(ctx, W, H) {
+  drawPlate(ctx, 50, WORK_Y, 300, WORK_H);
+  drawPlate(ctx, 410, WORK_Y, 300, WORK_H);
+  // FCAW-S bead — slightly higher crown
+  ctx.save();
+  ctx.fillStyle = '#92400e';
+  ctx.beginPath(); ctx.ellipse(LCX, WORK_Y, 60, 11, 0, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#6d28d9';
+  ctx.beginPath(); ctx.ellipse(LCX, WORK_Y-6, 55, 7, 0, 0, Math.PI*2); ctx.fill();
+  ctx.restore();
+  // FCAW-G bead — flatter, cleaner
+  ctx.save();
+  ctx.fillStyle = '#92400e';
+  ctx.beginPath(); ctx.ellipse(RCX, WORK_Y, 60, 9, 0, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#374151';
+  ctx.beginPath(); ctx.ellipse(RCX, WORK_Y-4, 48, 5, 0, 0, Math.PI*2); ctx.fill();
+  ctx.restore();
+  // Ripple marks on beads
+  ctx.save();
+  ctx.setLineDash([]);
+  for (const [bcx, col] of [[LCX,'#78350f'],[RCX,'#78350f']]) {
+    ctx.strokeStyle = col; ctx.lineWidth = 1;
+    for (let dx = -45; dx <= 45; dx += 12) {
+      ctx.beginPath(); ctx.arc(bcx+dx, WORK_Y, 7, Math.PI*0.1, Math.PI*0.9); ctx.stroke();
+    }
+  }
+  ctx.restore();
+  leaderLine(ctx, 158, WORK_Y-28, LCX-55, WORK_Y-6);
+  label(ctx, 'Heavier slag (FCAW-S)', 156, WORK_Y-25, '#7c3aed', 9, 'right');
+  leaderLine(ctx, 158, WORK_Y+20, LCX, WORK_Y+11);
+  label(ctx, 'Slightly higher crown', 156, WORK_Y+23, '#94a3b8', 9, 'right');
+  leaderLine(ctx, 602, WORK_Y-28, RCX+55, WORK_Y-5);
+  label(ctx, 'Thinner slag (FCAW-G)', 604, WORK_Y-25, '#34d399', 9, 'left');
+  leaderLine(ctx, 602, WORK_Y+20, RCX, WORK_Y+9);
+  label(ctx, 'Flatter, smoother profile', 604, WORK_Y+23, '#94a3b8', 9, 'left');
+}
+
+// ── TAB 2: Wire Selection ─────────────────────────────────────────────────────
+const WIRE_DATA = [
+  { name:'E71T-1C',   type:'g', pos:'all', tough:'Good',      dep:'High',      outdoor:false, notes:'Rutile; 100% CO₂; smooth arc; all-position; general fabrication' },
+  { name:'E71T-1M',   type:'g', pos:'all', tough:'Good',      dep:'High',      outdoor:false, notes:'Rutile; 75Ar/25CO₂; low spatter; excellent bead appearance' },
+  { name:'E70T-5C',   type:'g', pos:'fh',  tough:'Excellent', dep:'High',      outdoor:false, notes:'Basic slag; CO₂; DCEP; excellent toughness; low hydrogen' },
+  { name:'E71T-8',    type:'s', pos:'all', tough:'Excellent', dep:'High',      outdoor:true,  notes:'DCEN; excellent CVN toughness; structural steel; bridge welding' },
+  { name:'E71T-11',   type:'s', pos:'all', tough:'Moderate',  dep:'Moderate',  outdoor:true,  notes:'DCEN or AC; general purpose; good outdoor wind resistance' },
+  { name:'E70T-7',    type:'s', pos:'fh',  tough:'Moderate',  dep:'Very High', outdoor:true,  notes:'DCEN; very high deposition; flat/horiz only; sheet & structural' },
+  { name:'E71T8-Ni1', type:'s', pos:'all', tough:'Excellent', dep:'High',      outdoor:true,  notes:'DCEN; 1% Ni; CVN toughness at −40°F; bridge & structural' },
+];
+
+function updateWireTable() {
+  const shield = document.getElementById('selShield').value;
+  const pos    = document.getElementById('selPos').value;
+  const prio   = document.getElementById('selPriority').value;
+  let data = WIRE_DATA.filter(w => {
+    if (shield==='s' && w.type!=='s') return false;
+    if (shield==='g' && w.type!=='g') return false;
+    if (pos==='fh' && w.pos!=='fh' && w.pos!=='all') return false;
+    if (prio==='toughness' && w.tough!=='Excellent') return false;
+    if (prio==='speed' && !['High','Very High'].includes(w.dep)) return false;
+    if (prio==='outdoor' && !w.outdoor) return false;
+    return true;
+  });
+  const rows = data.map(w => `<tr>
+    <td><strong>${w.name}</strong></td>
+    <td><span class="badge ${w.type==='s'?'badge-s':'badge-g'}">${w.type==='s'?'FCAW-S':'FCAW-G'}</span></td>
+    <td>${w.pos==='all'?'All Positions':'Flat / Horiz'}</td>
+    <td>${w.tough}</td>
+    <td>${w.dep}</td>
+    <td style="color:#94a3b8">${w.notes}</td>
+  </tr>`).join('');
+  document.getElementById('wireTableWrap').innerHTML = `<table>
+    <tr><th>Designation</th><th>Type</th><th>Position</th><th>Toughness</th><th>Dep. Rate</th><th>Notes</th></tr>
+    ${rows || '<tr><td colspan="6" style="color:#64748b;text-align:center;padding:16px;">No wires match selected criteria.</td></tr>'}
+  </table>`;
+}
+
+// AWS Classifier
+const USE_DESC = {
+  '1':'Gas-shielded; rutile slag; DCEP; smooth arc; all-position (T-1) or F/H (T-2/3)',
+  '2':'Gas-shielded; rutile; flat & horizontal; high deposition rate',
+  '3':'Gas-shielded; rutile; flat position only; very high deposition',
+  '4':'Gas-shielded; rutile; all-position; fast-freeze; out-of-position',
+  '5':'Gas-shielded; basic slag; DCEP; excellent CVN toughness; low hydrogen',
+  '6':'Gas-shielded; rutile/titania; all-position',
+  '7':'Self-shielded; DCEN; flat & horizontal; high deposition',
+  '8':'Self-shielded; DCEN; all-position; good CVN toughness',
+  '11':'Self-shielded; DCEN or AC; all-position; general purpose',
+  '12':'Gas-shielded; DCEP; low spatter; smooth arc transfer',
+  '13':'Self-shielded; AC or DCEN; all-position',
+  '14':'Self-shielded; DCEN; all-position; low fume',
+};
+const SUF_DESC = {
+  'C':'100% CO₂ shielding gas required',
+  'M':'Mixed Ar/CO₂ gas required (typically 75%Ar/25%CO₂)',
+  'Ni1':'1% Ni — improved CVN toughness at low temperature (−40°F)',
+  'Ni2':'2% Ni — improved CVN toughness at lower temperature',
+  'K2':'Killed steel; controlled Si + Mn for toughness',
+  'J':'Qualifies for CVN impact at −40°F',
+  'H4':'Max 4 mL/100g diffusible hydrogen (ultra-low)',
+  'H8':'Max 8 mL/100g diffusible hydrogen',
+  'H16':'Max 16 mL/100g diffusible hydrogen',
+};
+
+function decodeWire() {
+  const raw = document.getElementById('clsInput').value.toUpperCase().trim();
+  const m = raw.match(/^E(\d)(\d)T-?(\d{1,2})(-?[A-Z0-9\-]*)?$/);
+  const display = document.getElementById('clsDisplay');
+  const desc = document.getElementById('clsDesc');
+  if (!m) {
+    display.innerHTML = `<div class="cls-seg"><div class="val" style="color:#ef4444">?</div><div class="lbl">invalid</div></div>`;
+    desc.innerHTML = '<span style="color:#ef4444">Cannot parse. Try E71T-1C, E70T-8, or E71T-11.</span>';
+    return;
+  }
+  const [, str, pos, use, suf=''] = m;
+  const sufClean = suf.replace(/^-/,'');
+  const segs = [
+    {val:'E',     lbl:'Electrode'},
+    {val:str,     lbl:`${str}0 ksi tensile`},
+    {val:pos,     lbl:pos==='1'?'All positions':'F/H only'},
+    {val:'T',     lbl:'Tubular wire'},
+    {val:use,     lbl:'Usability'},
+  ];
+  if (sufClean) segs.push({val:sufClean, lbl:'Gas / alloy'});
+  display.innerHTML = segs.map(s=>
+    `<div class="cls-seg"><div class="val">${s.val}</div><div class="lbl">${s.lbl}</div></div>`
+  ).join('');
+  const lines = [
+    `<b style="color:#a78bfa">E</b> = Electrode (filler wire)`,
+    `<b style="color:#a78bfa">${str}</b> = Minimum tensile strength ${str}0,000 psi (${str}0 ksi)`,
+    `<b style="color:#a78bfa">${pos}</b> = Welding position — ${pos==='1'?'all positions':'flat and horizontal only'}`,
+    `<b style="color:#a78bfa">T</b> = Tubular electrode (flux-cored)`,
+    `<b style="color:#a78bfa">${use}</b> = ${USE_DESC[use]||'Usability designation '+use}`,
+  ];
+  if (sufClean) {
+    const entry = Object.entries(SUF_DESC).find(([k])=>sufClean.startsWith(k));
+    lines.push(`<b style="color:#a78bfa">${sufClean}</b> = ${entry?entry[1]:'Shielding gas or alloy suffix'}`);
+  }
+  desc.innerHTML = lines.join('<br>');
+}
+
+// ── TAB 3: Parameter Chart ────────────────────────────────────────────────────
+const PARAM_DATA = {
+  e71t1_035: {
+    flat:  {wfs:[200,400],v:[18,24],a:[100,180],notes:'E71T-1 0.035" — 75Ar/25CO₂; DCEP; CTWD ½"–¾"'},
+    horiz: {wfs:[180,360],v:[17,23],a:[95,170], notes:'E71T-1 0.035" — reduce voltage ~1V vs flat'},
+    vup:   {wfs:[130,230],v:[16,20],a:[70,130], notes:'E71T-1 0.035" — all-position; drag angle 5°–15°'},
+    over:  {wfs:[120,210],v:[16,20],a:[65,120], notes:'E71T-1 0.035" — reduce WFS 10% vs vertical up'},
+  },
+  e71t1_045: {
+    flat:  {wfs:[250,450],v:[22,28],a:[150,280],notes:'E71T-1 0.045" — 75Ar/25CO₂; DCEP; CTWD ¾"–1"'},
+    horiz: {wfs:[220,400],v:[21,27],a:[140,260],notes:'E71T-1 0.045" — reduce voltage 1–2V vs flat'},
+    vup:   {wfs:[150,280],v:[18,22],a:[100,180],notes:'E71T-1 0.045" — all-position; steady drag'},
+    over:  {wfs:[140,250],v:[18,22],a:[90,165], notes:'E71T-1 0.045" — keep WFS toward low end of range'},
+  },
+  e71t1_052: {
+    flat:  {wfs:[250,430],v:[24,30],a:[180,320],notes:'E71T-1 0.052" — 75Ar/25CO₂; DCEP; CTWD ¾"–1"'},
+    horiz: {wfs:[220,390],v:[23,28],a:[160,290],notes:'E71T-1 0.052" — horizontal'},
+    vup:   {wfs:[160,280],v:[19,23],a:[110,200],notes:'E71T-1 0.052" — all-position'},
+    over:  {wfs:[150,260],v:[19,23],a:[100,185],notes:'E71T-1 0.052" — overhead'},
+  },
+  e71t8_045: {
+    flat:  {wfs:[150,280],v:[19,23],a:[130,230],notes:'E71T-8 0.045" — DCEN; no gas; CTWD 1"–1¼"'},
+    horiz: {wfs:[140,260],v:[18,22],a:[120,210],notes:'E71T-8 0.045" — DCEN; horizontal'},
+    vup:   {wfs:[100,200],v:[17,21],a:[85,170], notes:'E71T-8 0.045" — DCEN; all-position; reduce WFS for vertical'},
+    over:  {wfs:[100,180],v:[17,21],a:[80,155], notes:'E71T-8 0.045" — DCEN; keep low end of range overhead'},
+  },
+  e71t11_035: {
+    flat:  {wfs:[150,300],v:[17,21],a:[80,160], notes:'E71T-11 0.035" — DCEN; no gas; CTWD ¾"–1"'},
+    horiz: {wfs:[140,270],v:[16,20],a:[75,145], notes:'E71T-11 0.035" — DCEN; horizontal'},
+    vup:   {wfs:[100,200],v:[15,19],a:[60,120], notes:'E71T-11 0.035" — all-position; fast-freeze slag'},
+    over:  {wfs:[90,180], v:[15,19],a:[55,110], notes:'E71T-11 0.035" — overhead'},
+  },
+  e71t11_045: {
+    flat:  {wfs:[150,320],v:[18,22],a:[110,200],notes:'E71T-11 0.045" — DCEN; no gas; CTWD 1"–1¼"'},
+    horiz: {wfs:[140,290],v:[17,21],a:[100,185],notes:'E71T-11 0.045" — DCEN; horizontal'},
+    vup:   {wfs:[100,210],v:[16,20],a:[75,155], notes:'E71T-11 0.045" — all-position'},
+    over:  {wfs:[90,190], v:[16,20],a:[70,140], notes:'E71T-11 0.045" — DCEN or AC; overhead'},
+  },
+};
+
+let paramCtx;
+function renderParamChart() {
+  const wire = document.getElementById('paramWire').value;
+  const pos  = document.getElementById('paramPos').value;
+  const d    = PARAM_DATA[wire][pos];
+  const W = 760, H = 300;
+  const pad = {l:75, r:50, t:45, b:55};
+  const gW = W-pad.l-pad.r, gH = H-pad.t-pad.b;
+  const gx = pad.l, gy = pad.t;
+  const ctx = paramCtx;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#0a1628'; ctx.fillRect(0,0,W,H);
+
+  const vMin=13, vMax=33, wMin=0, wMax=500;
+  const mx = wfs => gx + (wfs-wMin)/(wMax-wMin)*gW;
+  const my = v   => gy + gH - (v-vMin)/(vMax-vMin)*gH;
+
+  // Grid
+  ctx.save();
+  ctx.strokeStyle='#1e293b'; ctx.lineWidth=0.5; ctx.setLineDash([2,4]);
+  for (let v=vMin; v<=vMax; v+=2) {
+    ctx.beginPath(); ctx.moveTo(gx,my(v)); ctx.lineTo(gx+gW,my(v)); ctx.stroke();
+  }
+  for (let w=0; w<=wMax; w+=100) {
+    ctx.beginPath(); ctx.moveTo(mx(w),gy); ctx.lineTo(mx(w),gy+gH); ctx.stroke();
+  }
+  ctx.restore();
+
+  // Axis border
+  ctx.save();
+  ctx.strokeStyle='#475569'; ctx.lineWidth=1.5; ctx.setLineDash([]);
+  ctx.strokeRect(gx,gy,gW,gH);
+  ctx.restore();
+
+  // Axis tick labels
+  for (let v=vMin; v<=vMax; v+=2) {
+    label(ctx, v, gx-8, my(v)+4, '#64748b', 9, 'right');
+  }
+  for (let w=0; w<=wMax; w+=100) {
+    label(ctx, w, mx(w), gy+gH+16, '#64748b', 9, 'center');
+  }
+
+  // Axis titles
+  ctx.save();
+  ctx.translate(gx-52, gy+gH/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillStyle='#94a3b8'; ctx.font="10px 'Segoe UI', Arial, sans-serif";
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('Voltage (V)', 0, 0);
+  ctx.restore();
+  label(ctx, 'Wire Feed Speed (ipm)', gx+gW/2, gy+gH+38, '#94a3b8', 10);
+
+  // Operating window
+  const x1=mx(d.wfs[0]), x2=mx(d.wfs[1]);
+  const y1=my(d.v[1]),   y2=my(d.v[0]);
+  ctx.save();
+  ctx.fillStyle='rgba(167,139,250,0.12)';
+  ctx.fillRect(x1,y1,x2-x1,y2-y1);
+  ctx.strokeStyle='#a78bfa'; ctx.lineWidth=1.5; ctx.setLineDash([]);
+  ctx.strokeRect(x1,y1,x2-x1,y2-y1);
+  ctx.restore();
+
+  // Ideal point
+  const ix=mx((d.wfs[0]+d.wfs[1])/2), iy=my((d.v[0]+d.v[1])/2);
+  ctx.save();
+  ctx.fillStyle='#a78bfa';
+  ctx.beginPath(); ctx.arc(ix,iy,5,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+
+  // Window label
+  label(ctx, `WFS: ${d.wfs[0]}–${d.wfs[1]} ipm`, gx+gW/2, gy+16, '#c4b5fd', 9);
+  label(ctx, `Voltage: ${d.v[0]}–${d.v[1]} V  |  Amps: ${d.a[0]}–${d.a[1]} A`, gx+gW/2, gy+30, '#94a3b8', 9);
+  label(ctx, '● Ideal operating point', ix+10, iy-8, '#a78bfa', 9, 'left');
+
+  document.getElementById('paramInfo').textContent = d.notes;
+}
+
+// ── TAB 4: Slag Removal ───────────────────────────────────────────────────────
+const SW = 760, SH = 280;
+const S_PLATE_Y = SH - 90;
+
+const SLAG_STAGES = [
+  { lbl: 'Step 1 – Allow to Cool to Black Heat',
+    dsc: 'After welding, let the bead cool until the slag turns dark (black heat, below ~900°F / 480°C). Removing slag while still glowing red can smear molten slag across the bead and cause burn injuries. The bead should be dark but still warm to the touch.',
+    draw: drawSlag1 },
+  { lbl: 'Step 2 – Chipping',
+    dsc: 'Strike the slag at a 30°–45° angle using a chipping hammer. Work from the weld toes inward toward the crown. Heavy FCAW-S slag may require several firm strikes. Always wear a face shield — hot slag chips can cause severe eye injury.',
+    draw: drawSlag2 },
+  { lbl: 'Step 3 – Wire Brushing',
+    dsc: 'Use a stainless steel wire brush to remove residual slag fragments and scale. Brush across the weld first (perpendicular), then along the bead length. For multi-pass welds, complete this step between every pass to prevent slag inclusions.',
+    draw: drawSlag3 },
+  { lbl: 'Step 4 – Inspect the Cleaned Bead',
+    dsc: 'Visually inspect the clean bead for undercut, porosity pits, incomplete fusion at the toes, and surface cracks. A good FCAW bead shows a uniform ripple pattern, smooth tie-in at the toes, and no pitting or voids after slag removal.',
+    draw: drawSlag4 },
+];
+let slagStage = 0, slagCtx;
+
+function buildSlagDots() {
+  document.getElementById('slagDots').innerHTML =
+    SLAG_STAGES.map((_,i) => `<div class="dot${i===slagStage?' active':''}"></div>`).join('');
+}
+function prevSlag() { slagStage=(slagStage-1+SLAG_STAGES.length)%SLAG_STAGES.length; renderSlag(); }
+function nextSlag() { slagStage=(slagStage+1)%SLAG_STAGES.length; renderSlag(); }
+function renderSlag() {
+  buildSlagDots();
+  document.getElementById('slagLbl').textContent = SLAG_STAGES[slagStage].lbl;
+  document.getElementById('slagDsc').textContent = SLAG_STAGES[slagStage].dsc;
+  slagCtx.clearRect(0,0,SW,SH);
+  slagCtx.fillStyle='#0a1628'; slagCtx.fillRect(0,0,SW,SH);
+  SLAG_STAGES[slagStage].draw(slagCtx, SW, SH);
+}
+
+function drawSPlate(ctx, W, H) {
+  ctx.save();
+  ctx.fillStyle='#1e3a5f'; ctx.fillRect(80, S_PLATE_Y, W-160, 55);
+  ctx.fillStyle='#2563eb'; ctx.fillRect(80, S_PLATE_Y, W-160, 5);
+  ctx.restore();
+}
+
+function drawSlag1(ctx, W, H) {
+  drawSPlate(ctx, W, H);
+  const cx=W/2, py=S_PLATE_Y;
+  // Glowing slag
+  const grd = ctx.createRadialGradient(cx,py,5,cx,py,70);
+  grd.addColorStop(0,'rgba(109,40,217,0.5)');
+  grd.addColorStop(1,'rgba(109,40,217,0)');
+  ctx.fillStyle=grd;
+  ctx.beginPath(); ctx.ellipse(cx,py,80,28,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#6d28d9';
+  ctx.beginPath(); ctx.ellipse(cx,py,70,14,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#7c3aed';
+  ctx.beginPath(); ctx.ellipse(cx,py-4,55,9,0,0,Math.PI*2); ctx.fill();
+  label(ctx,'Slag — still hot (glowing)',cx,py-28,'#a78bfa',10);
+  label(ctx,'Do NOT chip yet — allow to cool to black heat below 900°F / 480°C',cx,py-44,'#f59e0b',9);
+  label(ctx,'Cooling…',cx,py+32,'#64748b',9);
+}
+
+function drawSlag2(ctx, W, H) {
+  drawSPlate(ctx, W, H);
+  const cx=W/2, py=S_PLATE_Y;
+  // Partial slag remaining on left
+  ctx.fillStyle='#6d28d9';
+  ctx.beginPath(); ctx.ellipse(cx-25,py,48,11,0,0,Math.PI*2); ctx.fill();
+  // Exposed bead on right
+  ctx.fillStyle='#92400e';
+  ctx.beginPath(); ctx.ellipse(cx+42,py,28,10,0,0,Math.PI*2); ctx.fill();
+  // Chipping hammer
+  ctx.save();
+  ctx.translate(cx+55,py-58);
+  ctx.rotate(0.38);
+  ctx.fillStyle='#475569'; ctx.fillRect(-4,-32,8,32);
+  ctx.fillStyle='#94a3b8'; ctx.fillRect(-11,-42,22,12);
+  ctx.restore();
+  // Flying chip
+  ctx.save();
+  ctx.fillStyle='#a78bfa'; ctx.globalAlpha=0.85;
+  ctx.beginPath(); ctx.arc(cx+82,py-35,4,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx+96,py-24,3,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx+75,py-48,2.5,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+  leaderLine(ctx,95,py-15,cx-48,py-5);
+  label(ctx,'Slag breaking free',93,py-12,'#7c3aed',9,'right');
+  leaderLine(ctx,665,py-15,cx+68,py-4);
+  label(ctx,'Bead exposed',667,py-12,'#f59e0b',9,'left');
+  leaderLine(ctx,665,py-48,cx+64,py-58);
+  label(ctx,'Chipping hammer',667,py-45,'#94a3b8',9,'left');
+  label(ctx,'30°–45° angle',667,py-33,'#64748b',9,'left');
+}
+
+function drawSlag3(ctx, W, H) {
+  drawSPlate(ctx, W, H);
+  const cx=W/2, py=S_PLATE_Y;
+  // Mostly clean bead
+  ctx.fillStyle='#92400e';
+  ctx.beginPath(); ctx.ellipse(cx,py,70,10,0,0,Math.PI*2); ctx.fill();
+  // Small residual bits
+  ctx.fillStyle='#4c1d95';
+  for (const [dx,dy] of [[-45,-3],[15,-4],[-12,-5],[38,-2]]) {
+    ctx.beginPath(); ctx.arc(cx+dx,py+dy,3,0,Math.PI*2); ctx.fill();
+  }
+  // Wire brush
+  ctx.save();
+  ctx.translate(cx-5,py-50);
+  ctx.rotate(-0.22);
+  ctx.fillStyle='#334155'; ctx.fillRect(-22,-8,44,8);
+  ctx.strokeStyle='#94a3b8'; ctx.lineWidth=1; ctx.setLineDash([]);
+  for (let x=-20; x<22; x+=4) {
+    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,14); ctx.stroke();
+  }
+  ctx.restore();
+  leaderLine(ctx,95,py-50,cx-25,py-50);
+  label(ctx,'Stainless wire brush',93,py-47,'#94a3b8',9,'right');
+  leaderLine(ctx,665,py-10,cx+44,py-3);
+  label(ctx,'Residual slag bits',667,py-7,'#7c3aed',9,'left');
+  label(ctx,'Brush across bead, then along bead length',cx,py+35,'#64748b',9);
+}
+
+function drawSlag4(ctx, W, H) {
+  drawSPlate(ctx, W, H);
+  const cx=W/2, py=S_PLATE_Y;
+  // Clean bead
+  ctx.fillStyle='#92400e';
+  ctx.beginPath(); ctx.ellipse(cx,py,72,10,0,0,Math.PI*2); ctx.fill();
+  // Ripple marks
+  ctx.save();
+  ctx.strokeStyle='#78350f'; ctx.lineWidth=1; ctx.setLineDash([]);
+  for (let dx=-55; dx<=55; dx+=12) {
+    ctx.beginPath(); ctx.arc(cx+dx,py,7,Math.PI*0.1,Math.PI*0.9); ctx.stroke();
+  }
+  ctx.restore();
+  leaderLine(ctx,95,py-6,cx-72,py);
+  label(ctx,'✓ Uniform ripple',93,py-3,'#34d399',9,'right');
+  leaderLine(ctx,95,py+10,cx-65,py+8);
+  label(ctx,'✓ Clean toe fusion',93,py+13,'#34d399',9,'right');
+  leaderLine(ctx,665,py-6,cx+72,py);
+  label(ctx,'✓ No undercut',667,py-3,'#34d399',9,'left');
+  leaderLine(ctx,665,py+10,cx+65,py+8);
+  label(ctx,'✓ No visible porosity',667,py+13,'#34d399',9,'left');
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+procCtx  = initHiDPI(document.getElementById('processCv'), 760, 400);
+paramCtx = initHiDPI(document.getElementById('paramCv'),   760, 300);
+slagCtx  = initHiDPI(document.getElementById('slagCv'),    760, 280);
+
+renderProc();
+updateWireTable();
+decodeWire();
+renderParamChart();
+renderSlag();
+</script>
+</body>
+</html>
