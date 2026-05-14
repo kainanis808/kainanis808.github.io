@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS D1.1 Pre-Qualified Filler Metals – Structural Steel Welding</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fff; color: #1a1a1a; }
+
+header { background: #1e3a5f; color: #fff; padding: 28px 24px 22px; text-align: center; }
+header h1 { font-size: 1.85rem; font-weight: 700; }
+header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
+
+.source-note {
+  background: #eff6ff; border-left: 4px solid #1e3a5f;
+  padding: 10px 18px; font-size: 0.82rem; color: #1e40af; line-height: 1.55;
+}
+
+.tab-bar {
+  display: flex; flex-wrap: wrap; gap: 0;
+  background: #f1f5f9; border-bottom: 2px solid #e2e8f0;
+  padding: 0 20px; position: sticky; top: 0; z-index: 10;
+}
+.tab-btn {
+  padding: 10px 16px; font-size: 0.83rem; font-weight: 600;
+  border: none; background: none; cursor: pointer; color: #64748b;
+  border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.15s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: #1e3a5f; }
+.tab-btn.active { color: #1e3a5f; border-bottom-color: #1e3a5f; }
+
+.panel { display: none; max-width: 1100px; margin: 0 auto; padding: 28px 20px 60px; }
+.panel.active { display: block; }
+
+.section {
+  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
+  padding: 22px 24px; margin-bottom: 26px;
+}
+.section h2 { font-size: 1.2rem; color: #1e3a5f; margin-bottom: 10px; }
+.section h3 { font-size: 0.97rem; color: #334155; margin: 16px 0 8px; font-weight: 700; }
+.section p { font-size: 0.88rem; color: #4b5563; line-height: 1.65; margin-bottom: 8px; }
+
+.section-label {
+  font-weight: 700; color: #1e3a5f; font-size: 0.85rem;
+  margin: 18px 0 7px; text-transform: uppercase; letter-spacing: 0.05em;
+}
+
+.ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin: 10px 0; }
+.ref-table th {
+  background: #1e3a5f; color: #fff; padding: 8px 10px; text-align: left; font-weight: 600;
+}
+.ref-table td { padding: 7px 10px; border-bottom: 1px solid #e2e8f0; color: #374151; vertical-align: top; }
+.ref-table tr:nth-child(even) td { background: #f8fafc; }
+.ref-table tr:hover td { background: #eff6ff; }
+
+.note-box {
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px;
+  padding: 12px 16px; font-size: 0.83rem; color: #78350f; margin: 12px 0; line-height: 1.6;
+}
+.info-box {
+  background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;
+  padding: 12px 16px; font-size: 0.83rem; color: #1e40af; margin: 12px 0; line-height: 1.6;
+}
+.warn-box {
+  background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px;
+  padding: 12px 16px; font-size: 0.83rem; color: #991b1b; margin: 12px 0; line-height: 1.6;
+}
+
+.badge {
+  display: inline-block; padding: 2px 9px; border-radius: 12px;
+  font-size: 0.74rem; font-weight: 700; letter-spacing: 0.02em;
+}
+.b-lh  { background: #d1fae5; color: #065f46; }
+.b-nlh { background: #fee2e2; color: #991b1b; }
+.b-all { background: #dbeafe; color: #1d4ed8; }
+.b-fh  { background: #ede9fe; color: #5b21b6; }
+.b-s   { background: #d1fae5; color: #065f46; }
+.b-g   { background: #dbeafe; color: #1d4ed8; }
+.b-cvn { background: #fef9c3; color: #92400e; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 720px) { .two-col { grid-template-columns: 1fr; } }
+
+.process-card {
+  background: #fff; border: 2px solid var(--pc); border-radius: 10px; overflow: hidden;
+}
+.process-card-head {
+  background: var(--pc); color: #fff; padding: 8px 14px;
+  font-weight: 700; font-size: 0.88rem;
+}
+.process-card-body { padding: 12px 14px; font-size: 0.82rem; color: #374151; line-height: 1.7; }
+.process-card-body strong { color: #1e3a5f; }
+.pc-smaw  { --pc: #b91c1c; }
+.pc-gmaw  { --pc: #0369a1; }
+.pc-fcaw  { --pc: #7c3aed; }
+.pc-saw   { --pc: #047857; }
+
+.heat-cell-hot  { background: #fee2e2 !important; color: #991b1b; font-weight: 600; }
+.heat-cell-warm { background: #fffbeb !important; color: #78350f; font-weight: 600; }
+.heat-cell-none { background: #f0fdf4 !important; color: #166534; }
+
+.filter-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; }
+.filter-bar label { font-size: 0.82rem; color: #475569; font-weight: 600; }
+.filter-bar select {
+  background: #fff; border: 1px solid #cbd5e1; border-radius: 6px;
+  padding: 6px 10px; font-size: 0.82rem; color: #1e293b;
+}
+
+.class-box {
+  background: #1e3a5f; color: #e2e8f0; border-radius: 8px;
+  padding: 14px 18px; font-family: 'Courier New', monospace; font-size: 0.9rem; margin: 10px 0;
+}
+.class-box .seg { display: inline-block; border-bottom: 2px solid #93c5fd; margin: 0 1px; padding-bottom: 2px; }
+.class-box .seg-note { font-family: 'Segoe UI', sans-serif; font-size: 0.75rem; color: #93c5fd; display: block; margin-top: 8px; }
+
+.back { text-align: center; padding: 24px; font-size: 0.9rem; }
+.back a { color: #1e3a5f; text-decoration: none; }
+.back a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>AWS D1.1 – Pre-Qualified Filler Metals</h1>
+  <div class="subtitle">Structural Steel Welding Code · Pre-qualified WPS Filler Metals by Process · Base Metal Groups · Preheat &amp; Hydrogen Requirements</div>
+</header>
+
+<div class="source-note">
+  <strong>Source:</strong> AWS D1.1/D1.1M:2020 <em>Structural Welding Code – Steel</em>, Clause 4 (Pre-qualified WPS), Tables 4.5, 4.4, 4.1, and Annex I. Supporting filler metal standards: AWS A5.1, A5.5 (SMAW); A5.18 (GMAW); A5.20, A5.36 (FCAW); A5.17, A5.23 (SAW).
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('overview',this)">Overview &amp; Base Metals</button>
+  <button class="tab-btn" onclick="showTab('smaw',this)">SMAW Electrodes</button>
+  <button class="tab-btn" onclick="showTab('gmaw',this)">GMAW / Metal-Cored</button>
+  <button class="tab-btn" onclick="showTab('fcaw',this)">FCAW Wire</button>
+  <button class="tab-btn" onclick="showTab('saw',this)">SAW Combinations</button>
+  <button class="tab-btn" onclick="showTab('preheat',this)">Preheat &amp; Hydrogen</button>
+</div>
+
+<!-- ── OVERVIEW ── -->
+<div id="panel-overview" class="panel active">
+
+  <div class="section">
+    <h2>What Are Pre-Qualified Filler Metals?</h2>
+    <p>AWS D1.1 allows a Welding Procedure Specification (WPS) to be designated <strong>pre-qualified</strong> — exempt from procedure qualification testing — when it meets all requirements of Clause 4. One requirement is that only <strong>approved filler metals</strong> from Table 4.5 are used. Using a filler metal not listed in Table 4.5 requires a qualified WPS with full qualification testing.</p>
+    <div class="info-box">
+      <strong>Key rule:</strong> The filler metal must provide at least <em>matching strength</em> to the base metal group being welded. Under-matching is not permitted for pre-qualified WPS (except specific FCAW-S limitations noted in D1.1 Clause 4).
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Pre-Qualified Base Metal Groups (D1.1 Table 4.5)</h2>
+    <p>D1.1 classifies base metals into strength groups. The filler metal must match the lowest-strength base metal in the joint.</p>
+    <table class="ref-table">
+      <tr>
+        <th>Group</th>
+        <th>Min Fy (ksi)</th>
+        <th>Min Fu (ksi)</th>
+        <th>Representative ASTM Grades</th>
+        <th>Required Filler Strength</th>
+      </tr>
+      <tr>
+        <td><strong>I</strong></td>
+        <td>36</td>
+        <td>58–80</td>
+        <td>A36, A53-B, A106-B/C, A139-B, A500-A/B, A501, A516 Gr.55/65, A524, A529, A570 Gr.36–45</td>
+        <td>60 or 70 ksi (E60XX or E70XX series)</td>
+      </tr>
+      <tr>
+        <td><strong>II</strong></td>
+        <td>42–50</td>
+        <td>60–70</td>
+        <td>A572 Gr.42/50, A588 Gr.A/B/C, A606, A618, A709 Gr.36/50/50W, A852</td>
+        <td>70 ksi (E70XX, ER70S-X, E70T-X)</td>
+      </tr>
+      <tr>
+        <td><strong>III</strong></td>
+        <td>60–65</td>
+        <td>75–90</td>
+        <td>A514 Gr.A–S (t ≤ 2.5"), A517, A709 Gr.100/100W, A852 (≤ 4")</td>
+        <td>80–100 ksi; heat input &amp; preheat restrictions apply</td>
+      </tr>
+    </table>
+    <div class="note-box">
+      <strong>Group III note:</strong> A514 and A517 quenched-and-tempered steels have significant restrictions in D1.1 — heat input limits, maximum interpass temperature (400°F / 205°C), and mandatory low-hydrogen electrodes (H8 or lower). Filler metals matching Group III typically require separate AWS A5.5 or A5.28 specifications.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Process Summary</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:10px;">
+      <div class="process-card pc-smaw">
+        <div class="process-card-head">SMAW — Shielded Metal Arc</div>
+        <div class="process-card-body">
+          <strong>Standard:</strong> AWS A5.1 (carbon steel), A5.5 (low-alloy)<br>
+          <strong>Pre-qual wires:</strong> E6010, E6011, E7014–E7048 series<br>
+          <strong>Low-H required:</strong> When thickness &gt; ¾" or Group III base metal<br>
+          <strong>Positions:</strong> All (varies by electrode)
+        </div>
+      </div>
+      <div class="process-card pc-gmaw">
+        <div class="process-card-head">GMAW — Gas Metal Arc (MIG)</div>
+        <div class="process-card-body">
+          <strong>Standard:</strong> AWS A5.18 (solid &amp; metal-cored)<br>
+          <strong>Pre-qual wires:</strong> ER70S-2 through ER70S-7; E70C-3M, E70C-6M<br>
+          <strong>Shielding gas:</strong> 75Ar/25CO₂ or 100% CO₂ (per wire spec)<br>
+          <strong>Positions:</strong> All (varies by transfer mode)
+        </div>
+      </div>
+      <div class="process-card pc-fcaw">
+        <div class="process-card-head">FCAW — Flux-Cored Arc</div>
+        <div class="process-card-body">
+          <strong>Standard:</strong> AWS A5.20 / A5.36<br>
+          <strong>Pre-qual wires:</strong> E70T-1C/M, E70T-5C/M (gas); E70T-4, E71T-8 (self)<br>
+          <strong>FCAW-S limits:</strong> Restricted to specific applications; CVN may apply<br>
+          <strong>Positions:</strong> All or F/H depending on wire type
+        </div>
+      </div>
+      <div class="process-card pc-saw">
+        <div class="process-card-head">SAW — Submerged Arc</div>
+        <div class="process-card-body">
+          <strong>Standard:</strong> AWS A5.17 (carbon steel), A5.23 (low-alloy)<br>
+          <strong>Pre-qual combos:</strong> F6A-EL12, F7A0-EL12, F7A2-EM12K, etc.<br>
+          <strong>Positions:</strong> Flat and horizontal only<br>
+          <strong>Note:</strong> Both wire and flux classification required
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── SMAW ── -->
+<div id="panel-smaw" class="panel">
+
+  <div class="section">
+    <h2>SMAW Classification System (AWS A5.1)</h2>
+    <div class="class-box">
+      <span class="seg">E</span><span class="seg">70</span><span class="seg">1</span><span class="seg">8</span>
+      <span class="seg-note">
+        E = Electrode &nbsp;|&nbsp; 70 = 70,000 psi min tensile (× 1000) &nbsp;|&nbsp;
+        1 = All positions (0 = F &amp; H only) &nbsp;|&nbsp;
+        8 = Flux/coating type &amp; current (8 = low-H, DCEP or AC)
+      </span>
+    </div>
+    <p>For A5.5 low-alloy electrodes, a suffix is added (e.g. E8018-C3 for 1% Ni addition). The first two digits after E are the tensile strength in ksi.</p>
+  </div>
+
+  <div class="section">
+    <h2>Pre-Qualified SMAW Electrodes — AWS D1.1 Table 4.5</h2>
+    <div class="filter-bar">
+      <label>Filter:</label>
+      <select id="smawFilter" onchange="filterSmaw()">
+        <option value="all">All electrodes</option>
+        <option value="lh">Low hydrogen only</option>
+        <option value="60">60 ksi class</option>
+        <option value="70">70 ksi class</option>
+      </select>
+    </div>
+    <table class="ref-table" id="smawTable">
+      <tr>
+        <th>Electrode</th>
+        <th>Class</th>
+        <th>H-Level</th>
+        <th>Polarity</th>
+        <th>Position</th>
+        <th>Flux Type / Coating</th>
+        <th>Typical Applications</th>
+      </tr>
+      <tr data-class="60" data-lh="n">
+        <td><strong>E6010</strong></td>
+        <td>60 ksi</td>
+        <td><span class="badge b-nlh">Non-LH</span></td>
+        <td>DCEP</td>
+        <td><span class="badge b-all">All</span></td>
+        <td>High cellulosic sodium</td>
+        <td>Root passes, pipe, vertical-down, forced-position; good arc force &amp; penetration</td>
+      </tr>
+      <tr data-class="60" data-lh="n">
+        <td><strong>E6011</strong></td>
+        <td>60 ksi</td>
+        <td><span class="badge b-nlh">Non-LH</span></td>
+        <td>AC or DCEP</td>
+        <td><span class="badge b-all">All</span></td>
+        <td>High cellulosic potassium</td>
+        <td>Root passes where AC machine only; similar performance to E6010; rusty or contaminated steel</td>
+      </tr>
+      <tr data-class="60" data-lh="n">
+        <td><strong>E6013</strong></td>
+        <td>60 ksi</td>
+        <td><span class="badge b-nlh">Non-LH</span></td>
+        <td>AC, DCEP, or DCEN</td>
+        <td><span class="badge b-all">All</span></td>
+        <td>High titania potassium</td>
+        <td>Sheet metal, light structural; easy slag removal; not recommended for thick restrained joints</td>
+      </tr>
+      <tr data-class="60" data-lh="n">
+        <td><strong>E6020</strong></td>
+        <td>60 ksi</td>
+        <td><span class="badge b-nlh">Non-LH</span></td>
+        <td>AC or DCEN</td>
+        <td><span class="badge b-fh">F / H</span></td>
+        <td>High iron oxide</td>
+        <td>Fillet welds, flat groove welds; high deposition rate; heavy slag</td>
+      </tr>
+      <tr data-class="60" data-lh="n">
+        <td><strong>E6022</strong></td>
+        <td>60 ksi</td>
+        <td><span class="badge b-nlh">Non-LH</span></td>
+        <td>AC or DCEP</td>
+        <td><span class="badge b-fh">F only</span></td>
+        <td>High iron oxide</td>
+        <td>Single-pass flat groove welds in thin material; very high deposition</td>
+      </tr>
+      <tr data-class="60" data-lh="n">
+        <td><strong>E6027</strong></td>
+        <td>60 ksi</td>
+        <td><span class="badge b-nlh">Non-LH</span></td>
+        <td>AC or DCEN</td>
+        <td><span class="badge b-fh">F / H</span></td>
+        <td>Iron powder, iron oxide</td>
+        <td>High deposition flat/horizontal fillet and groove; heavy iron-powder coating</td>
+      </tr>
+      <tr data-class="70" data-lh="n">
+        <td><strong>E7014</strong></td>
+        <td>70 ksi</td>
+        <td><span class="badge b-nlh">Non-LH</span></td>
+        <td>AC, DCEP, or DCEN</td>
+        <td><span class="badge b-all">All</span></td>
+        <td>Iron powder, titania</td>
+        <td>General fabrication; higher deposition than E6013; easy arc control</td>
+      </tr>
+      <tr data-class="70" data-lh="y">
+        <td><strong>E7015</strong></td>
+        <td>70 ksi</td>
+        <td><span class="badge b-lh">Low-H</span></td>
+        <td>DCEP</td>
+        <td><span class="badge b-all">All</span></td>
+        <td>Low hydrogen sodium</td>
+        <td>Restrained joints, high-sulfur or high-carbon steels; requires baking if exposed</td>
+      </tr>
+      <tr data-class="70" data-lh="y">
+        <td><strong>E7016</strong></td>
+        <td>70 ksi</td>
+        <td><span class="badge b-lh">Low-H</span></td>
+        <td>AC or DCEP</td>
+        <td><span class="badge b-all">All</span></td>
+        <td>Low hydrogen potassium</td>
+        <td>Similar to E7015; AC-capable; restrained structural joints</td>
+      </tr>
+      <tr data-class="70" data-lh="y">
+        <td><strong>E7018</strong></td>
+        <td>70 ksi</td>
+        <td><span class="badge b-lh">Low-H</span></td>
+        <td>AC or DCEP</td>
+        <td><span class="badge b-all">All</span></td>
+        <td>Low hydrogen, iron powder</td>
+        <td><strong>Most common structural electrode.</strong> Bridges, buildings, pressure vessels; excellent notch toughness; requires dry storage (H8 or H4 version available)</td>
+      </tr>
+      <tr data-class="70" data-lh="n">
+        <td><strong>E7024</strong></td>
+        <td>70 ksi</td>
+        <td><span class="badge b-nlh">Non-LH</span></td>
+        <td>AC, DCEP, or DCEN</td>
+        <td><span class="badge b-fh">F / H</span></td>
+        <td>Iron powder, titania (heavy)</td>
+        <td>Very high deposition flat/horizontal fillet welds; drag technique</td>
+      </tr>
+      <tr data-class="70" data-lh="y">
+        <td><strong>E7028</strong></td>
+        <td>70 ksi</td>
+        <td><span class="badge b-lh">Low-H</span></td>
+        <td>AC or DCEP</td>
+        <td><span class="badge b-fh">F / H</span></td>
+        <td>Low hydrogen, iron powder (heavy)</td>
+        <td>High deposition flat/horizontal; low-H version of E7024 for restrained joints</td>
+      </tr>
+      <tr data-class="70" data-lh="y">
+        <td><strong>E7048</strong></td>
+        <td>70 ksi</td>
+        <td><span class="badge b-lh">Low-H</span></td>
+        <td>AC or DCEP</td>
+        <td><span class="badge b-all">All + V↓</span></td>
+        <td>Low hydrogen, iron powder</td>
+        <td>Vertical-down capability added vs E7018; structural work where vertical-down is preferred</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Low Hydrogen Electrode — Storage &amp; Reconditioning (D1.1 Table 4.1)</h2>
+    <table class="ref-table">
+      <tr><th>Condition</th><th>E7015, E7016, E7018, E7028, E7048</th></tr>
+      <tr><td>Undamaged hermetically sealed container</td><td>No baking required before use</td></tr>
+      <tr><td>Exposed at jobsite (out of container)</td><td>Use within 4 hours; then bake or discard</td></tr>
+      <tr><td>Reconditioning oven temperature</td><td>700–800°F (370–430°C) for 1 hour minimum</td></tr>
+      <tr><td>Holding oven (after reconditioning or opening)</td><td>Maintain at 250–300°F (120–150°C) minimum</td></tr>
+      <tr><td>Number of reconditionings allowed</td><td>Maximum 1 time per electrode lot</td></tr>
+    </table>
+    <div class="warn-box">
+      Moisture-contaminated low-hydrogen electrodes are a leading cause of hydrogen-induced cracking (HIC) in structural welds. D1.1 Clause 7.3.2 requires that all electrodes be free of oil, grease, and excessive rust on the coating.
+    </div>
+  </div>
+
+</div>
+
+<!-- ── GMAW ── -->
+<div id="panel-gmaw" class="panel">
+
+  <div class="section">
+    <h2>GMAW Solid Wire Classification (AWS A5.18)</h2>
+    <div class="class-box">
+      <span class="seg">ER</span><span class="seg">70</span><span class="seg">S</span><span class="seg">-6</span>
+      <span class="seg-note">
+        ER = Electrode/Rod &nbsp;|&nbsp; 70 = 70 ksi min tensile &nbsp;|&nbsp;
+        S = Solid wire &nbsp;|&nbsp; 6 = Chemistry/deoxidizer classification (higher Si + Mn than S-3)
+      </span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Pre-Qualified GMAW Solid Wire — AWS D1.1 Table 4.5</h2>
+    <table class="ref-table">
+      <tr>
+        <th>Wire</th>
+        <th>Deoxidizers</th>
+        <th>Shielding Gas</th>
+        <th>Tensile (ksi)</th>
+        <th>Key Characteristics</th>
+        <th>Typical Use</th>
+      </tr>
+      <tr>
+        <td><strong>ER70S-2</strong></td>
+        <td>Ti + Zr + Al (triple)</td>
+        <td>CO₂ or Ar/CO₂</td>
+        <td>72–82</td>
+        <td>Multiple deoxidizers; excellent for rimmed, semi-killed, killed steels; good porosity resistance</td>
+        <td>Pipe root passes, contaminated or rusty base metal</td>
+      </tr>
+      <tr>
+        <td><strong>ER70S-3</strong></td>
+        <td>Si + Mn (moderate)</td>
+        <td>CO₂ or Ar/CO₂</td>
+        <td>70–82</td>
+        <td>Balanced deoxidation; clean killed steel required; general purpose</td>
+        <td>Clean structural fabrication; light gauge sheet</td>
+      </tr>
+      <tr>
+        <td><strong>ER70S-4</strong></td>
+        <td>Si + Mn (higher Mn)</td>
+        <td>CO₂ or Ar/CO₂</td>
+        <td>70–82</td>
+        <td>Higher Mn than S-3; improved deposition; low spatter</td>
+        <td>Structural steel, general fabrication</td>
+      </tr>
+      <tr>
+        <td><strong>ER70S-6</strong></td>
+        <td>Si + Mn (highest)</td>
+        <td>CO₂ or Ar/CO₂</td>
+        <td>72–90</td>
+        <td><strong>Most widely used GMAW wire.</strong> High Si+Mn; tolerates mill scale and light rust; excellent wetting; fine bead appearance</td>
+        <td>Structural steel, automotive, general fabrication; especially with CO₂ or 75Ar/25CO₂</td>
+      </tr>
+      <tr>
+        <td><strong>ER70S-7</strong></td>
+        <td>Si + Mn (highest Mn)</td>
+        <td>CO₂ or Ar/CO₂</td>
+        <td>72–90</td>
+        <td>Highest Mn of S-series; minimal spatter; very clean bead; similar to S-6 with even better porosity resistance</td>
+        <td>Demanding structural and pressure vessel work</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Pre-Qualified Metal-Cored Wire (AWS A5.18)</h2>
+    <div class="class-box">
+      <span class="seg">E</span><span class="seg">70</span><span class="seg">C</span><span class="seg">-6M</span>
+      <span class="seg-note">
+        E = Electrode &nbsp;|&nbsp; 70 = 70 ksi min tensile &nbsp;|&nbsp;
+        C = Composite (metal-cored, not solid) &nbsp;|&nbsp; 6M = Chemistry; M = Ar/CO₂ mixed gas
+      </span>
+    </div>
+    <table class="ref-table" style="margin-top:12px;">
+      <tr>
+        <th>Wire</th>
+        <th>Shielding Gas</th>
+        <th>Position</th>
+        <th>Tensile (ksi)</th>
+        <th>Key Characteristics</th>
+      </tr>
+      <tr>
+        <td><strong>E70C-3M</strong></td>
+        <td>75Ar/25CO₂ or richer Ar</td>
+        <td><span class="badge b-all">All</span></td>
+        <td>70–85</td>
+        <td>Metal-cored; higher deposition rate than solid wire; good out-of-position with spray; minimal slag</td>
+      </tr>
+      <tr>
+        <td><strong>E70C-6M</strong></td>
+        <td>75Ar/25CO₂ or richer Ar</td>
+        <td><span class="badge b-all">All</span></td>
+        <td>72–90</td>
+        <td><strong>Most common metal-cored wire.</strong> High Si+Mn like ER70S-6; tolerates mill scale; spray or pulsed transfer; fast travel speeds</td>
+      </tr>
+    </table>
+    <div class="info-box">
+      Metal-cored wires fill the tubular sheath with metallic powder (not flux). They produce little to no slag, behave like solid wire in appearance, but achieve deposition rates closer to FCAW. D1.1 requires DCEP polarity and Ar-rich shielding gas (≥75% Ar) for metal-cored wires.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>ER70S-X Deoxidizer Comparison</h2>
+    <table class="ref-table">
+      <tr><th>Grade</th><th>Si (%)</th><th>Mn (%)</th><th>Other</th><th>Surface Tolerance</th></tr>
+      <tr><td>ER70S-2</td><td>0.40–0.70</td><td>0.90–1.40</td><td>Ti+Zr+Al</td><td>Excellent — triple deox</td></tr>
+      <tr><td>ER70S-3</td><td>0.45–0.75</td><td>0.90–1.40</td><td>—</td><td>Good — requires clean steel</td></tr>
+      <tr><td>ER70S-4</td><td>0.65–0.85</td><td>1.00–1.50</td><td>—</td><td>Good</td></tr>
+      <tr><td>ER70S-6</td><td>0.80–1.15</td><td>1.40–1.85</td><td>—</td><td>Very good — handles mill scale</td></tr>
+      <tr><td>ER70S-7</td><td>0.50–0.80</td><td>1.50–2.00</td><td>—</td><td>Excellent — highest Mn</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- ── FCAW ── -->
+<div id="panel-fcaw" class="panel">
+
+  <div class="section">
+    <h2>FCAW Classification System (AWS A5.20)</h2>
+    <div class="class-box">
+      <span class="seg">E</span><span class="seg">71</span><span class="seg">T</span><span class="seg">-1</span><span class="seg">C</span>
+      <span class="seg-note">
+        E = Electrode &nbsp;|&nbsp; 7 = 70 ksi min tensile (×10 ksi) &nbsp;|&nbsp;
+        1 = All positions (0 = F/H only) &nbsp;|&nbsp; T = Tubular (flux-cored) &nbsp;|&nbsp;
+        1 = Usability designation &nbsp;|&nbsp; C = CO₂ shielding / M = Ar/CO₂ mix / (none) = self-shielded
+      </span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Pre-Qualified FCAW-G (Gas-Shielded) — AWS D1.1 Table 4.5</h2>
+    <table class="ref-table">
+      <tr>
+        <th>Wire</th>
+        <th>Type</th>
+        <th>Shielding Gas</th>
+        <th>Polarity</th>
+        <th>Position</th>
+        <th>CVN</th>
+        <th>Notes</th>
+      </tr>
+      <tr>
+        <td><strong>E70T-1C</strong></td>
+        <td><span class="badge b-g">FCAW-G</span></td>
+        <td>100% CO₂</td>
+        <td>DCEP</td>
+        <td><span class="badge b-fh">F / H</span></td>
+        <td>—</td>
+        <td>Rutile; smooth spray-like transfer; excellent bead appearance; high deposition</td>
+      </tr>
+      <tr>
+        <td><strong>E70T-1M</strong></td>
+        <td><span class="badge b-g">FCAW-G</span></td>
+        <td>75Ar/25CO₂</td>
+        <td>DCEP</td>
+        <td><span class="badge b-fh">F / H</span></td>
+        <td>—</td>
+        <td>Rutile; lower spatter than T-1C; better arc stability with Ar mix</td>
+      </tr>
+      <tr>
+        <td><strong>E71T-1C</strong></td>
+        <td><span class="badge b-g">FCAW-G</span></td>
+        <td>100% CO₂</td>
+        <td>DCEP</td>
+        <td><span class="badge b-all">All</span></td>
+        <td>—</td>
+        <td>All-position rutile; fast-freeze slag; very common structural wire</td>
+      </tr>
+      <tr>
+        <td><strong>E71T-1M</strong></td>
+        <td><span class="badge b-g">FCAW-G</span></td>
+        <td>75Ar/25CO₂</td>
+        <td>DCEP</td>
+        <td><span class="badge b-all">All</span></td>
+        <td>—</td>
+        <td>All-position rutile; lower spatter; preferred for visible structural welds</td>
+      </tr>
+      <tr>
+        <td><strong>E70T-5C</strong></td>
+        <td><span class="badge b-g">FCAW-G</span></td>
+        <td>100% CO₂</td>
+        <td>DCEP</td>
+        <td><span class="badge b-fh">F / H</span></td>
+        <td><span class="badge b-cvn">CVN req.</span></td>
+        <td>Basic slag; globular transfer; excellent CVN toughness &amp; low hydrogen; seismic and bridge applications</td>
+      </tr>
+      <tr>
+        <td><strong>E70T-5M</strong></td>
+        <td><span class="badge b-g">FCAW-G</span></td>
+        <td>75Ar/25CO₂</td>
+        <td>DCEP</td>
+        <td><span class="badge b-fh">F / H</span></td>
+        <td><span class="badge b-cvn">CVN req.</span></td>
+        <td>Basic slag with Ar mix; same toughness benefits as T-5C; slightly reduced spatter</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Pre-Qualified FCAW-S (Self-Shielded) — AWS D1.1 Table 4.5</h2>
+    <div class="note-box">
+      <strong>D1.1 Restriction:</strong> FCAW-S wires are pre-qualified only for non-cyclically loaded (static) structures unless specific CVN requirements are met. E71T-11 is <em>not</em> pre-qualified under D1.1 for structural applications without WPS qualification. E70T-4 is limited to single-pass or specific multi-pass applications.
+    </div>
+    <table class="ref-table">
+      <tr>
+        <th>Wire</th>
+        <th>Type</th>
+        <th>Polarity</th>
+        <th>Position</th>
+        <th>CVN</th>
+        <th>D1.1 Applicability</th>
+      </tr>
+      <tr>
+        <td><strong>E70T-4</strong></td>
+        <td><span class="badge b-s">FCAW-S</span></td>
+        <td>DCEN</td>
+        <td><span class="badge b-fh">F / H</span></td>
+        <td>—</td>
+        <td>Very high deposition flat/horiz; single-pass or limited multi-pass; not for CVN-required joints</td>
+      </tr>
+      <tr>
+        <td><strong>E70T-7</strong></td>
+        <td><span class="badge b-s">FCAW-S</span></td>
+        <td>DCEN</td>
+        <td><span class="badge b-fh">F / H</span></td>
+        <td>—</td>
+        <td>High deposition self-shielded; good outdoor performance; not for CVN-required structural joints</td>
+      </tr>
+      <tr>
+        <td><strong>E71T-8</strong></td>
+        <td><span class="badge b-s">FCAW-S</span></td>
+        <td>DCEN</td>
+        <td><span class="badge b-all">All</span></td>
+        <td><span class="badge b-cvn">CVN capable</span></td>
+        <td><strong>Preferred FCAW-S for structural applications.</strong> All-position; good CVN toughness; bridge and building erection; AWS D1.5 approved with CVN testing</td>
+      </tr>
+      <tr>
+        <td><strong>E71T8-Ni1</strong></td>
+        <td><span class="badge b-s">FCAW-S</span></td>
+        <td>DCEN</td>
+        <td><span class="badge b-all">All</span></td>
+        <td><span class="badge b-cvn">CVN −40°F</span></td>
+        <td>1% Ni addition; excellent low-temperature CVN; bridge welding in cold climates; D1.5 approved</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>FCAW-G vs FCAW-S Summary for D1.1 Work</h2>
+    <table class="ref-table">
+      <tr><th>Requirement</th><th>FCAW-G (T-1C/M, T-5C/M)</th><th>FCAW-S (E71T-8, T-4, T-7)</th></tr>
+      <tr><td>Pre-qualified under D1.1</td><td>Yes — all listed wires</td><td>Yes — with restrictions; T-11 is NOT pre-qualified</td></tr>
+      <tr><td>Seismic / CVN applications</td><td>T-5 wires; CVN designation required</td><td>E71T-8, E71T8-Ni1 with CVN certification</td></tr>
+      <tr><td>Outdoor / windy conditions</td><td>Windscreen required; &gt;5 mph = stop FCAW-G</td><td>Suitable outdoors; no gas to disrupt</td></tr>
+      <tr><td>AWS D1.5 Bridge Welding</td><td>Permitted with CVN-tested wires</td><td>Permitted; E71T-8 / E71T8-Ni1 commonly specified</td></tr>
+      <tr><td>Notch toughness (CVN −20°F)</td><td>T-5 wires typically pass; T-1 may or may not</td><td>E71T-8 passes; T-4, T-7 typically do not</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- ── SAW ── -->
+<div id="panel-saw" class="panel">
+
+  <div class="section">
+    <h2>SAW Classification System (AWS A5.17 — Carbon Steel)</h2>
+    <div class="class-box">
+      <span class="seg">F</span><span class="seg">7</span><span class="seg">A</span><span class="seg">2</span><span class="seg">-</span><span class="seg">EM12K</span>
+      <span class="seg-note">
+        F = Flux &nbsp;|&nbsp; 7 = 70 ksi min tensile of weld metal &nbsp;|&nbsp;
+        A = As-welded (P = post-weld heat treated) &nbsp;|&nbsp;
+        2 = CVN test temp designation (2 = −20°F; 0 = 0°F; 4 = −40°F) &nbsp;|&nbsp;
+        EM12K = Wire electrode classification (E = electrode; M = Mn; 12 = C content; K = killed)
+      </span>
+    </div>
+    <p style="margin-top:8px;">SAW requires both the <strong>flux</strong> and the <strong>electrode wire</strong> to be classified together. The complete designation (flux + wire) appears in D1.1 Table 4.5. Either the wire or the flux may be the "variable" depending on the combination tested.</p>
+  </div>
+
+  <div class="section">
+    <h2>Pre-Qualified SAW Electrode-Flux Combinations — AWS D1.1 Table 4.5</h2>
+    <table class="ref-table">
+      <tr>
+        <th>Combination</th>
+        <th>Flux Type</th>
+        <th>Wire</th>
+        <th>CVN Temp</th>
+        <th>Tensile (ksi)</th>
+        <th>Notes</th>
+      </tr>
+      <tr>
+        <td><strong>F6A0-EL12</strong></td>
+        <td>Active (A)</td>
+        <td>EL12 (low C, low Mn)</td>
+        <td>0°F</td>
+        <td>≥62</td>
+        <td>60 ksi class; mild flux; Group I base metals; single or multi-pass</td>
+      </tr>
+      <tr>
+        <td><strong>F7A0-EL12</strong></td>
+        <td>Active (A)</td>
+        <td>EL12</td>
+        <td>0°F</td>
+        <td>≥70</td>
+        <td>Higher strength flux; good for single-pass; light Mn pickup from flux</td>
+      </tr>
+      <tr>
+        <td><strong>F7A2-EL12</strong></td>
+        <td>Active (A)</td>
+        <td>EL12</td>
+        <td>−20°F</td>
+        <td>≥70</td>
+        <td>CVN at −20°F; active flux adds Mn+Si; avoid multi-pass (Si/Mn buildup)</td>
+      </tr>
+      <tr>
+        <td><strong>F7A2-EM12K</strong></td>
+        <td>Active (A)</td>
+        <td>EM12K (med C, med Mn, killed)</td>
+        <td>−20°F</td>
+        <td>≥70</td>
+        <td><strong>Most common SAW combination for structural work.</strong> Good bead shape; multi-pass capable with care; bridge and building steel</td>
+      </tr>
+      <tr>
+        <td><strong>F7A4-EM12K</strong></td>
+        <td>Active (A)</td>
+        <td>EM12K</td>
+        <td>−40°F</td>
+        <td>≥70</td>
+        <td>Higher CVN requirement; cold-climate structural steel; AWS D1.5 bridge applications</td>
+      </tr>
+      <tr>
+        <td><strong>F7A6-EH14</strong></td>
+        <td>Active (A)</td>
+        <td>EH14 (high Mn)</td>
+        <td>−60°F</td>
+        <td>≥70</td>
+        <td>High-Mn wire; very low temperature CVN; limited to fewer passes due to Mn buildup risk</td>
+      </tr>
+      <tr>
+        <td><strong>F7P2-EM12K</strong></td>
+        <td>Passive (P)</td>
+        <td>EM12K</td>
+        <td>−20°F</td>
+        <td>≥70</td>
+        <td>Passive (neutral) flux; consistent chemistry in multi-pass; preferred when Si/Mn control is critical</td>
+      </tr>
+      <tr>
+        <td><strong>F7P4-EM12K</strong></td>
+        <td>Passive (P)</td>
+        <td>EM12K</td>
+        <td>−40°F</td>
+        <td>≥70</td>
+        <td>Passive flux with CVN at −40°F; best for multi-pass thick-section work</td>
+      </tr>
+    </table>
+    <div class="info-box">
+      <strong>Active vs Passive Flux:</strong> Active fluxes add Si and Mn to the weld metal during multi-pass welding, causing chemistry buildup that can degrade toughness in later passes. Passive (neutral) fluxes do not significantly alter weld metal chemistry — preferred for multi-pass and CVN-critical work.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>SAW Wire Electrode Types (AWS A5.17)</h2>
+    <table class="ref-table">
+      <tr><th>Wire Class</th><th>C (%)</th><th>Mn (%)</th><th>Si (%)</th><th>Notes</th></tr>
+      <tr><td><strong>EL12</strong></td><td>0.10 max</td><td>0.25–0.60</td><td>0.10 max</td><td>Low C, low Mn; used with active flux to achieve 70 ksi; most forgiving for single-pass</td></tr>
+      <tr><td><strong>EM12</strong></td><td>0.10 max</td><td>0.85–1.25</td><td>0.10 max</td><td>Medium Mn; good deposition; multi-pass structural</td></tr>
+      <tr><td><strong>EM12K</strong></td><td>0.05–0.15</td><td>0.85–1.25</td><td>0.15–0.35</td><td>Killed (K = Si added); most widely used SAW wire; excellent toughness &amp; bead profile</td></tr>
+      <tr><td><strong>EH14</strong></td><td>0.10–0.18</td><td>1.75–2.25</td><td>0.05 max</td><td>High Mn; used with lower-activity fluxes; good toughness without Si buildup</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- ── PREHEAT ── -->
+<div id="panel-preheat" class="panel">
+
+  <div class="section">
+    <h2>Minimum Preheat &amp; Interpass Temperature — D1.1 Table 4.4</h2>
+    <p>Preheat reduces the cooling rate, minimizes hydrogen-induced cracking (HIC), and reduces residual stresses. D1.1 requires preheat when base metal thickness or carbon equivalent (CE) exceeds thresholds. Interpass temperature must not fall below the minimum preheat once welding starts.</p>
+    <div class="note-box">
+      <strong>D1.1 Rule:</strong> When base metal temperature is below 32°F (0°C), preheat to a minimum of 70°F (21°C) regardless of the values in Table 4.4.
+    </div>
+
+    <h3>Group I &amp; II Base Metals (A36, A572 Gr.50, A588, etc.)</h3>
+    <table class="ref-table">
+      <tr>
+        <th>Thickness of Thickest Part</th>
+        <th>SMAW — Low-H (E7015/16/18/28)</th>
+        <th>SMAW — Non-LH (E6010/11/13)</th>
+        <th>GMAW / FCAW-G</th>
+        <th>FCAW-S</th>
+        <th>SAW</th>
+      </tr>
+      <tr>
+        <td>Up to ¾" (19 mm)</td>
+        <td class="heat-cell-none">32°F (0°C)</td>
+        <td class="heat-cell-none">32°F (0°C)</td>
+        <td class="heat-cell-none">32°F (0°C)</td>
+        <td class="heat-cell-none">32°F (0°C)</td>
+        <td class="heat-cell-none">32°F (0°C)</td>
+      </tr>
+      <tr>
+        <td>Over ¾" to 1½" (19–38 mm)</td>
+        <td class="heat-cell-none">32°F (0°C)</td>
+        <td class="heat-cell-warm">150°F (65°C)</td>
+        <td class="heat-cell-none">32°F (0°C)</td>
+        <td class="heat-cell-none">32°F (0°C)</td>
+        <td class="heat-cell-none">32°F (0°C)</td>
+      </tr>
+      <tr>
+        <td>Over 1½" to 2½" (38–64 mm)</td>
+        <td class="heat-cell-warm">150°F (65°C)</td>
+        <td class="heat-cell-hot">225°F (107°C)</td>
+        <td class="heat-cell-warm">150°F (65°C)</td>
+        <td class="heat-cell-warm">150°F (65°C)</td>
+        <td class="heat-cell-warm">150°F (65°C)</td>
+      </tr>
+      <tr>
+        <td>Over 2½" (64 mm)</td>
+        <td class="heat-cell-hot">225°F (107°C)</td>
+        <td class="heat-cell-hot">300°F (150°C)</td>
+        <td class="heat-cell-hot">225°F (107°C)</td>
+        <td class="heat-cell-hot">225°F (107°C)</td>
+        <td class="heat-cell-hot">225°F (107°C)</td>
+      </tr>
+    </table>
+
+    <h3 style="margin-top:18px;">Group III — A514 / A517 / A709 Gr.100 (Quenched &amp; Tempered)</h3>
+    <table class="ref-table">
+      <tr>
+        <th>Thickness of Thickest Part</th>
+        <th>All Low-H Processes</th>
+        <th>Max Interpass Temp</th>
+        <th>Notes</th>
+      </tr>
+      <tr>
+        <td>Up to ¾" (19 mm)</td>
+        <td class="heat-cell-warm">50°F (10°C)</td>
+        <td class="heat-cell-hot">400°F (205°C) MAX</td>
+        <td>Low-H mandatory; non-LH not permitted on A514/A517</td>
+      </tr>
+      <tr>
+        <td>Over ¾" to 2½" (19–64 mm)</td>
+        <td class="heat-cell-warm">125°F (52°C)</td>
+        <td class="heat-cell-hot">400°F (205°C) MAX</td>
+        <td>H8 or lower hydrogen designation required</td>
+      </tr>
+      <tr>
+        <td>Over 2½" (64 mm)</td>
+        <td class="heat-cell-hot">200°F (93°C)</td>
+        <td class="heat-cell-hot">400°F (205°C) MAX</td>
+        <td>Heat input also limited; consult filler manufacturer PQR data</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Diffusible Hydrogen Designators (AWS A5 Standards)</h2>
+    <p>Hydrogen-induced cracking (HIC) risk increases with hydrogen content in the weld metal. AWS classifies wires by maximum diffusible hydrogen (mL/100g deposited weld metal):</p>
+    <table class="ref-table">
+      <tr><th>Designator</th><th>Max H₂ (mL/100g)</th><th>Classification Name</th><th>D1.1 Application</th></tr>
+      <tr><td><strong>H4</strong></td><td>4.0</td><td>Ultra-low hydrogen</td><td>A514/A517 Group III; highest restraint joints; seismic SFRS connections</td></tr>
+      <tr><td><strong>H8</strong></td><td>8.0</td><td>Low hydrogen</td><td>Required for Group III; preferred for thick Group I/II in high restraint</td></tr>
+      <tr><td><strong>H16</strong></td><td>16.0</td><td>Standard low hydrogen</td><td>Group I and II moderate thickness; minimum designation for "low-hydrogen" SMAW (E7018 without H suffix)</td></tr>
+      <tr><td><em>(none)</em></td><td>&gt;16</td><td>Non-low hydrogen</td><td>E6010, E6011, E6013 cellulosic/titania coatings; restricted by D1.1 at higher thickness</td></tr>
+    </table>
+
+    <h3>Electrode Examples by Hydrogen Level</h3>
+    <div class="two-col" style="margin-top:10px;">
+      <div>
+        <table class="ref-table">
+          <tr><th colspan="2">SMAW Electrode Hydrogen Levels</th></tr>
+          <tr><td>E7018-H4R</td><td>H4 — ultra-low; R = moisture-resistant coating</td></tr>
+          <tr><td>E7018-H8</td><td>H8 — low hydrogen, standard E7018</td></tr>
+          <tr><td>E7016</td><td>H16 — low hydrogen by coating type</td></tr>
+          <tr><td>E6010, E6011</td><td>&gt;H16 — cellulosic, non-LH</td></tr>
+        </table>
+      </div>
+      <div>
+        <table class="ref-table">
+          <tr><th colspan="2">GMAW / FCAW Wire Hydrogen Levels</th></tr>
+          <tr><td>ER70S-6-H4</td><td>H4 — ultra-low; dry storage required</td></tr>
+          <tr><td>E71T-1C-H8</td><td>H8 — flux-cored FCAW-G low-H</td></tr>
+          <tr><td>E70T-5C-H4</td><td>H4 — basic slag FCAW-G; CVN + low-H</td></tr>
+          <tr><td>E70T-4 (FCAW-S)</td><td>No H designation — not low-hydrogen</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="warn-box" style="margin-top:12px;">
+      <strong>Storage reminder:</strong> H4 and H8 electrodes and wires require sealed packaging or heated storage. Once opened, use within 4 hours or return to a holding oven at 250–300°F. GMAW/FCAW wire spools exposed to high humidity for extended periods should be discarded or tested before use on critical welds.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Carbon Equivalent (CE) — Weldability Estimate</h2>
+    <p>CE is used to estimate preheat requirements when not directly listed in D1.1. Higher CE = greater HIC risk = higher preheat required.</p>
+    <div class="class-box">
+      CE = C + Mn/6 + (Cr + Mo + V)/5 + (Ni + Cu)/15
+      <span class="seg-note">(IIW formula — from AWS D1.1 Annex I and AWS D1.1:2020 Commentary)</span>
+    </div>
+    <table class="ref-table" style="margin-top:12px;">
+      <tr><th>CE Range</th><th>Weldability</th><th>Preheat Guidance</th></tr>
+      <tr><td>&lt; 0.35</td><td>Excellent</td><td>Generally no preheat needed for thin sections</td></tr>
+      <tr><td>0.35–0.45</td><td>Good</td><td>Preheat may be needed for thicker sections or high restraint</td></tr>
+      <tr><td>0.45–0.60</td><td>Fair</td><td>Preheat typically required; use low-H electrodes</td></tr>
+      <tr><td>&gt; 0.60</td><td>Poor</td><td>High preheat essential; mandatory LH; consider post-weld heat treatment</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<div class="back"><a href="index.html">&#8592; Back to Reference Tables</a></div>
+
+<script>
+function showTab(name, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+function filterSmaw() {
+  const val = document.getElementById('smawFilter').value;
+  document.querySelectorAll('#smawTable tr[data-class]').forEach(row => {
+    const cls = row.dataset.class;
+    const lh  = row.dataset.lh;
+    let show = true;
+    if (val === 'lh'  && lh  !== 'y') show = false;
+    if (val === '60'  && cls !== '60') show = false;
+    if (val === '70'  && cls !== '70') show = false;
+    row.style.display = show ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>
