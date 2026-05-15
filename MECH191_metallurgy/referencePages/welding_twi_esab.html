@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welding Process Guide — TWI &amp; ESAB</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:#1a1a1a;}
+header{background:#1e3a5f;color:#fff;padding:28px 24px 22px;text-align:center;}
+header h1{font-size:1.85rem;font-weight:700;}
+header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
+.source-note{background:#eff6ff;border-left:4px solid #1e3a5f;padding:10px 18px;font-size:0.82rem;color:#1e40af;line-height:1.55;}
+.tab-bar{display:flex;flex-wrap:wrap;background:#f1f5f9;border-bottom:2px solid #e2e8f0;padding:0 20px;position:sticky;top:0;z-index:10;}
+.tab-btn{padding:10px 18px;font-size:0.84rem;font-weight:600;border:none;background:none;cursor:pointer;color:#64748b;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all 0.15s;white-space:nowrap;}
+.tab-btn:hover{color:#1e3a5f;}
+.tab-btn.active{color:#1e3a5f;border-bottom-color:#1e3a5f;}
+.panel{display:none;max-width:1100px;margin:0 auto;padding:28px 20px 60px;}
+.panel.active{display:block;}
+.section{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:22px 24px;margin-bottom:26px;}
+.section h2{font-size:1.2rem;color:#1e3a5f;margin-bottom:10px;}
+.section h3{font-size:0.97rem;color:#334155;font-weight:700;margin:16px 0 8px;}
+.section p{font-size:0.88rem;color:#4b5563;line-height:1.65;margin-bottom:8px;}
+.ref-table{width:100%;border-collapse:collapse;font-size:0.82rem;margin:10px 0;}
+.ref-table th{background:#1e3a5f;color:#fff;padding:8px 10px;text-align:left;font-weight:600;}
+.ref-table td{padding:7px 10px;border-bottom:1px solid #e2e8f0;color:#374151;vertical-align:top;}
+.ref-table tr:nth-child(even) td{background:#f8fafc;}
+.ref-table tr:hover td{background:#eff6ff;}
+.note-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;font-size:0.83rem;color:#78350f;margin:12px 0;line-height:1.6;}
+.info-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;font-size:0.83rem;color:#1e40af;margin:12px 0;line-height:1.6;}
+.warn-box{background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:12px 16px;font-size:0.83rem;color:#991b1b;margin:12px 0;line-height:1.6;}
+/* process cards */
+.proc-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:14px;}
+.proc-card{background:#fff;border:2px solid #e2e8f0;border-radius:12px;padding:20px;}
+.proc-card-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.proc-badge{font-size:0.78rem;font-weight:700;padding:4px 10px;border-radius:20px;white-space:nowrap;}
+.proc-card h3{font-size:1rem;color:#1e3a5f;font-weight:700;margin:0;}
+.proc-card p{font-size:0.82rem;color:#4b5563;line-height:1.6;margin-bottom:6px;}
+.proc-card ul{font-size:0.82rem;color:#4b5563;padding-left:18px;line-height:1.7;}
+.proc-specs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
+.spec-item{background:#f8fafc;border-radius:6px;padding:7px 10px;}
+.spec-label{font-size:0.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.03em;}
+.spec-value{font-size:0.82rem;color:#1e293b;margin-top:2px;}
+/* process selector buttons */
+.proc-sel{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+.proc-sel-btn{padding:8px 20px;border:2px solid #e2e8f0;border-radius:8px;font-size:0.84rem;font-weight:600;cursor:pointer;background:#fff;color:#64748b;transition:all 0.15s;}
+.proc-sel-btn:hover{border-color:#1e3a5f;color:#1e3a5f;}
+.proc-sel-btn.active{background:#1e3a5f;color:#fff;border-color:#1e3a5f;}
+.proc-section{display:none;}
+.proc-section.active{display:block;}
+/* defect table badges */
+.def-cause{color:#b91c1c;font-size:0.8rem;}
+.def-remedy{color:#166534;font-size:0.8rem;}
+/* case study cards */
+.case-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:14px;}
+.case-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:18px;}
+.case-card .case-title{font-size:0.9rem;font-weight:700;color:#1e3a5f;margin-bottom:4px;}
+.case-card .case-process{font-size:0.75rem;font-weight:700;padding:2px 8px;border-radius:12px;display:inline-block;margin-bottom:10px;}
+.case-card p{font-size:0.8rem;color:#4b5563;line-height:1.6;margin-bottom:6px;}
+.case-card .case-result{font-size:0.8rem;font-weight:600;color:#166534;background:#f0fdf4;border-radius:6px;padding:6px 10px;margin-top:8px;}
+/* wire selection table highlight */
+.process-smaw{background:#fef3c7!important;}
+.process-gmaw{background:#dbeafe!important;}
+.process-gtaw{background:#dcfce7!important;}
+.process-fcaw{background:#fce7f3!important;}
+@media(max-width:700px){
+  .proc-grid,.case-grid{grid-template-columns:1fr;}
+  .proc-specs{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Welding Process Guide</h1>
+  <div class="subtitle">The Welding Institute (TWI) &nbsp;&middot;&nbsp; ESAB Welding &amp; Cutting</div>
+</header>
+<div class="source-note">
+  Sources: <strong>TWI (The Welding Institute)</strong> — Process Knowledge, FAQ Library &amp; Defect Guides &nbsp;&middot;&nbsp;
+  <strong>ESAB Welding &amp; Cutting</strong> — Process Guide, Consumable Selection &amp; Application Case Studies
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('overview',this)">Process Overview</button>
+  <button class="tab-btn" onclick="showTab('params',this)">Parameter Guidance</button>
+  <button class="tab-btn" onclick="showTab('defects',this)">Defect Troubleshooting</button>
+  <button class="tab-btn" onclick="showTab('esab',this)">ESAB Selection Guide</button>
+</div>
+
+
+<!-- ═══════════ TAB 1: PROCESS OVERVIEW ═══════════ -->
+<div id="overview" class="panel active">
+
+  <div class="section">
+    <h2>Arc Welding Processes — TWI Overview</h2>
+    <p>TWI defines arc welding as a group of processes that use an electric arc as the heat source to melt and join metals. The four primary arc welding processes used in fabrication and structural work are SMAW, GMAW, GTAW, and FCAW. Each uses a different approach to arc protection, electrode type, and positional capability.</p>
+  </div>
+
+  <div class="proc-grid">
+
+    <!-- SMAW -->
+    <div class="proc-card" style="border-color:#f59e0b;">
+      <div class="proc-card-header">
+        <span class="proc-badge" style="background:#fef3c7;color:#92400e;">SMAW</span>
+        <h3>Shielded Metal Arc Welding (Stick)</h3>
+      </div>
+      <p>An arc is struck between a flux-coated consumable electrode and the base metal. The flux coating decomposes in the arc to produce shielding gas and slag, protecting the weld pool from atmospheric contamination. No external shielding gas cylinder is required.</p>
+      <p><strong>How it works:</strong> Current flows through the electrode core, generating an arc that melts both the electrode tip and the base metal. Molten flux floats to the surface and solidifies as slag, which must be chipped away after each pass.</p>
+      <h3>Applications</h3>
+      <ul>
+        <li>Structural steel — bridges, buildings, pressure vessels</li>
+        <li>Pipeline field girth welds (cellulosic electrodes)</li>
+        <li>Repair and maintenance welding</li>
+        <li>Outdoor / wind-exposed sites where gas shielding is impractical</li>
+      </ul>
+      <div class="proc-specs">
+        <div class="spec-item"><div class="spec-label">Polarity</div><div class="spec-value">DCEP (most); AC or DCEN for specific grades</div></div>
+        <div class="spec-item"><div class="spec-label">Positions</div><div class="spec-value">All positions (1G–4G, 1F–4F)</div></div>
+        <div class="spec-item"><div class="spec-label">Shielding</div><div class="spec-value">Flux coating only — no external gas</div></div>
+        <div class="spec-item"><div class="spec-label">Deposition rate</div><div class="spec-value">Low–medium (1–5 lb/hr)</div></div>
+        <div class="spec-item"><div class="spec-label">Skill level</div><div class="spec-value">High — arc gap control critical</div></div>
+        <div class="spec-item"><div class="spec-label">Materials</div><div class="spec-value">Carbon steel, low-alloy, stainless, cast iron, hard-facing</div></div>
+      </div>
+    </div>
+
+    <!-- GMAW -->
+    <div class="proc-card" style="border-color:#3b82f6;">
+      <div class="proc-card-header">
+        <span class="proc-badge" style="background:#dbeafe;color:#1e40af;">GMAW / MIG</span>
+        <h3>Gas Metal Arc Welding (MIG/MAG)</h3>
+      </div>
+      <p>A continuously fed solid wire electrode is melted by an arc and the weld pool is shielded by an externally supplied gas or gas mixture. The semi-automatic nature of continuous wire feeding gives higher productivity than SMAW and eliminates slag removal (except on FCAW).</p>
+      <p><strong>How it works:</strong> Wire is fed from a spool through a gun and contact tip where electrical contact is made. Shielding gas flows concentrically around the wire through the nozzle. Metal transfer occurs as short-circuit, globular, spray, or pulsed spray depending on parameters.</p>
+      <h3>Applications</h3>
+      <ul>
+        <li>Sheet metal fabrication and automotive</li>
+        <li>Structural steel in shop environments</li>
+        <li>Aluminum and stainless steel fabrication</li>
+        <li>Robotic and automated welding lines</li>
+      </ul>
+      <div class="proc-specs">
+        <div class="spec-item"><div class="spec-label">Polarity</div><div class="spec-value">DCEP (constant voltage)</div></div>
+        <div class="spec-item"><div class="spec-label">Positions</div><div class="spec-value">All (short-circuit); F &amp; H preferred for spray</div></div>
+        <div class="spec-item"><div class="spec-label">Shielding</div><div class="spec-value">Ar, CO₂, or Ar/CO₂ mix (75/25 most common)</div></div>
+        <div class="spec-item"><div class="spec-label">Deposition rate</div><div class="spec-value">Medium–high (5–15 lb/hr)</div></div>
+        <div class="spec-item"><div class="spec-label">Skill level</div><div class="spec-value">Medium — machine setup critical</div></div>
+        <div class="spec-item"><div class="spec-label">Materials</div><div class="spec-value">Carbon steel, stainless, aluminum, nickel alloys</div></div>
+      </div>
+    </div>
+
+    <!-- GTAW -->
+    <div class="proc-card" style="border-color:#10b981;">
+      <div class="proc-card-header">
+        <span class="proc-badge" style="background:#dcfce7;color:#166534;">GTAW / TIG</span>
+        <h3>Gas Tungsten Arc Welding (TIG)</h3>
+      </div>
+      <p>An arc is maintained between a non-consumable tungsten electrode and the base metal. Filler metal is added separately by hand or mechanically. The process produces the highest quality, cleanest welds of any arc process — with no spatter and minimal distortion when properly applied.</p>
+      <p><strong>How it works:</strong> The tungsten electrode carries current without melting. Argon shielding gas flows from the ceramic cup around the electrode. The welder manually dips filler rod into the leading edge of the pool. Current may be AC (aluminum) or DCEN (steel, stainless).</p>
+      <h3>Applications</h3>
+      <ul>
+        <li>Root passes in pipe welding (food, pharma, power)</li>
+        <li>Thin-gauge stainless and aluminum sheet</li>
+        <li>Aerospace and nuclear components</li>
+        <li>Exotic alloys — titanium, Inconel, Hastelloy</li>
+      </ul>
+      <div class="proc-specs">
+        <div class="spec-item"><div class="spec-label">Polarity</div><div class="spec-value">DCEN (steel/SS); AC (aluminum)</div></div>
+        <div class="spec-item"><div class="spec-label">Positions</div><div class="spec-value">All positions</div></div>
+        <div class="spec-item"><div class="spec-label">Shielding</div><div class="spec-value">Argon (most); He or Ar/He for deeper penetration</div></div>
+        <div class="spec-item"><div class="spec-label">Deposition rate</div><div class="spec-value">Low (0.5–2 lb/hr)</div></div>
+        <div class="spec-item"><div class="spec-label">Skill level</div><div class="spec-value">Very high — two-handed coordination</div></div>
+        <div class="spec-item"><div class="spec-label">Materials</div><div class="spec-value">All weldable metals; especially stainless, Al, Ti, Ni</div></div>
+      </div>
+    </div>
+
+    <!-- FCAW -->
+    <div class="proc-card" style="border-color:#ec4899;">
+      <div class="proc-card-header">
+        <span class="proc-badge" style="background:#fce7f3;color:#9d174d;">FCAW</span>
+        <h3>Flux-Cored Arc Welding</h3>
+      </div>
+      <p>Similar to GMAW in setup, but uses a tubular wire with a flux core instead of a solid wire. The flux provides additional shielding and slag-forming compounds. FCAW-G uses supplemental shielding gas; FCAW-S (self-shielded) relies on the flux core alone — allowing outdoor use in wind.</p>
+      <p><strong>How it works:</strong> The tubular wire is fed continuously like GMAW. The flux inside the wire decomposes in the arc, generating shielding gas and slag. Higher deposition rates than GMAW solid wire are achieved, making FCAW the preferred process for heavy structural fabrication.</p>
+      <h3>Applications</h3>
+      <ul>
+        <li>Heavy structural fabrication — bridges, offshore platforms</li>
+        <li>Shipbuilding (high deposition, out-of-position capability)</li>
+        <li>Construction field welding (FCAW-S in wind)</li>
+        <li>Hardfacing and wear-resistant overlays</li>
+      </ul>
+      <div class="proc-specs">
+        <div class="spec-item"><div class="spec-label">Polarity</div><div class="spec-value">DCEP (FCAW-G); DCEN (most FCAW-S)</div></div>
+        <div class="spec-item"><div class="spec-label">Positions</div><div class="spec-value">All (with T-1 / T-8 type wires)</div></div>
+        <div class="spec-item"><div class="spec-label">Shielding</div><div class="spec-value">75Ar/25CO₂ or CO₂ (FCAW-G); none (FCAW-S)</div></div>
+        <div class="spec-item"><div class="spec-label">Deposition rate</div><div class="spec-value">High (8–25 lb/hr)</div></div>
+        <div class="spec-item"><div class="spec-label">Skill level</div><div class="spec-value">Medium — slag removal required every pass</div></div>
+        <div class="spec-item"><div class="spec-label">Materials</div><div class="spec-value">Carbon steel and low-alloy steel primarily</div></div>
+      </div>
+    </div>
+
+  </div><!-- proc-grid -->
+
+  <div class="section" style="margin-top:26px;">
+    <h2>Process Selection Summary</h2>
+    <table class="ref-table">
+      <thead><tr><th>Factor</th><th>SMAW</th><th>GMAW</th><th>GTAW</th><th>FCAW</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Portability</strong></td><td>Excellent — simple equipment</td><td>Good — gas cylinder needed</td><td>Good — gas cylinder needed</td><td>Good — cylinder if FCAW-G</td></tr>
+        <tr><td><strong>Outdoor / wind</strong></td><td>Excellent</td><td>Poor — gas blown away</td><td>Poor — gas blown away</td><td>Excellent (FCAW-S) / Poor (FCAW-G)</td></tr>
+        <tr><td><strong>Thin material</strong></td><td>Difficult &lt;3mm</td><td>Good (short-circuit mode)</td><td>Excellent — finest control</td><td>Difficult &lt;4mm</td></tr>
+        <tr><td><strong>Thick material</strong></td><td>Good</td><td>Good</td><td>Slow — low deposition</td><td>Excellent — highest deposition</td></tr>
+        <tr><td><strong>Weld quality</strong></td><td>Good</td><td>Good–very good</td><td>Excellent</td><td>Good (more slag inclusions risk)</td></tr>
+        <tr><td><strong>Productivity</strong></td><td>Low</td><td>High</td><td>Very low</td><td>Very high</td></tr>
+        <tr><td><strong>Aluminum</strong></td><td>Limited (specialist rods)</td><td>Good (ER4043/5356)</td><td>Excellent (AC)</td><td>Not suitable</td></tr>
+        <tr><td><strong>Stainless steel</strong></td><td>Good</td><td>Good</td><td>Excellent</td><td>Limited grades</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /overview -->
+
+
+<!-- ═══════════ TAB 2: PARAMETER GUIDANCE ═══════════ -->
+<div id="params" class="panel">
+
+  <!-- SMAW -->
+  <div class="section">
+    <h2>SMAW — Parameter Guidance (TWI)</h2>
+    <p>SMAW parameters depend primarily on electrode classification, diameter, and position. Current is the primary control variable — voltage is self-regulating through arc length.</p>
+    <table class="ref-table">
+      <thead><tr><th>Electrode Class</th><th>Diameter</th><th>Current (A)</th><th>Polarity</th><th>Position</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>E6010</td><td>3/32" (2.4mm)</td><td>60–90</td><td>DCEP</td><td>All</td><td>Cellulosic; deep penetration; pipeline root pass</td></tr>
+        <tr><td>E6010</td><td>1/8" (3.2mm)</td><td>75–125</td><td>DCEP</td><td>All</td><td>Forceful arc; fast-freeze slag; vertical down capable</td></tr>
+        <tr><td>E6011</td><td>1/8" (3.2mm)</td><td>80–130</td><td>AC or DCEP</td><td>All</td><td>Similar to E6010 but AC-capable; lower hydrogen than cellulosic</td></tr>
+        <tr><td>E6013</td><td>1/8" (3.2mm)</td><td>80–130</td><td>AC or DC±</td><td>All</td><td>Easy-slag; good for beginners; lower penetration</td></tr>
+        <tr><td>E7018</td><td>1/8" (3.2mm)</td><td>100–150</td><td>DCEP or AC</td><td>All</td><td>Low-hydrogen; iron powder; structural code work</td></tr>
+        <tr><td>E7018</td><td>5/32" (4mm)</td><td>130–190</td><td>DCEP or AC</td><td>F, H</td><td>Higher deposition; flat &amp; horizontal preferred</td></tr>
+        <tr><td>E7018</td><td>3/16" (4.8mm)</td><td>175–250</td><td>DCEP or AC</td><td>F</td><td>Flat only; highest deposition for SMAW</td></tr>
+        <tr><td>E308L-16</td><td>1/8" (3.2mm)</td><td>70–120</td><td>DCEP or AC</td><td>All</td><td>304/304L stainless; slag control critical for stainless</td></tr>
+        <tr><td>E7016</td><td>1/8" (3.2mm)</td><td>95–145</td><td>DCEP or AC</td><td>All</td><td>Low-hydrogen; slightly less fluid than E7018</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box"><strong>Arc length rule (SMAW):</strong> Maintain arc length approximately equal to electrode diameter. Short arcing increases penetration and narrows the bead; long arcing promotes spatter, porosity, and undercut.</div>
+    <h3>Travel Speed &amp; Bead Width Guidelines</h3>
+    <table class="ref-table">
+      <thead><tr><th>Condition</th><th>Travel Speed</th><th>Bead Width</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td>Normal</td><td>4–8 in/min</td><td>2–3× electrode dia.</td><td>Balanced penetration and reinforcement</td></tr>
+        <tr><td>Too slow</td><td>&lt;4 in/min</td><td>Wide, high crown</td><td>Excess reinforcement; burn-through risk on thin material</td></tr>
+        <tr><td>Too fast</td><td>&gt;10 in/min</td><td>Narrow, irregular</td><td>Undercut; lack of fusion; porosity</td></tr>
+        <tr><td>Vertical-up weave</td><td>2–4 in/min</td><td>Up to 4× dia.</td><td>Slower travel needed to control pool; pause at toes</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- GMAW -->
+  <div class="section">
+    <h2>GMAW — Parameter Guidance (TWI)</h2>
+    <p>GMAW uses constant voltage (CV) power. Voltage and wire feed speed (WFS) are the primary settings; amperage is self-adjusting. Transfer mode is determined by the combination of voltage and wire diameter.</p>
+    <table class="ref-table">
+      <thead><tr><th>Transfer Mode</th><th>Wire Dia.</th><th>Voltage (V)</th><th>WFS (in/min)</th><th>Current (A)</th><th>Gas</th><th>Position</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Short-Circuit</strong></td><td>0.023"–0.035"</td><td>14–21</td><td>100–300</td><td>60–160</td><td>75Ar/25CO₂ or CO₂</td><td>All</td></tr>
+        <tr><td><strong>Globular</strong></td><td>0.035"–0.045"</td><td>21–25</td><td>150–300</td><td>150–250</td><td>CO₂</td><td>F only</td></tr>
+        <tr><td><strong>Spray</strong></td><td>0.035"–0.052"</td><td>24–32</td><td>250–600</td><td>200–450</td><td>≥80% Ar</td><td>F, H</td></tr>
+        <tr><td><strong>Pulsed Spray</strong></td><td>0.030"–0.045"</td><td>22–30</td><td>150–500</td><td>100–350</td><td>≥75% Ar</td><td>All</td></tr>
+      </tbody>
+    </table>
+    <h3>Contact-Tip-to-Work Distance (CTWD) &amp; Gas Flow</h3>
+    <table class="ref-table">
+      <thead><tr><th>Parameter</th><th>Short-Circuit</th><th>Spray / Pulse</th><th>Effect of Deviation</th></tr></thead>
+      <tbody>
+        <tr><td>CTWD</td><td>3/8"–5/8" (10–16mm)</td><td>5/8"–1" (16–25mm)</td><td>Too long → high resistance, voltage drop, porosity. Too short → burnback.</td></tr>
+        <tr><td>Gas flow</td><td>25–35 CFH</td><td>35–50 CFH</td><td>Too low → porosity. Too high → turbulence, atmospheric pickup.</td></tr>
+        <tr><td>Torch angle</td><td>5–15° push or drag</td><td>5–15° push preferred</td><td>Excessive drag → slag entrapment (FCAW). Excessive push → reduced penetration.</td></tr>
+      </tbody>
+    </table>
+    <div class="info-box"><strong>Shielding gas selection:</strong> 75Ar/25CO₂ (C25) is the most versatile for carbon steel — good arc stability, penetration, and low spatter. 100% CO₂ gives deeper penetration but more spatter. ≥90% Ar blends required for spray transfer and for aluminum/stainless to avoid oxidation.</div>
+  </div>
+
+  <!-- GTAW -->
+  <div class="section">
+    <h2>GTAW — Parameter Guidance (TWI)</h2>
+    <p>GTAW uses constant current (CC). Amperage is set on the machine; the welder controls heat input by arc length and travel speed. Tungsten selection and preparation are critical for arc stability and weld quality.</p>
+    <h3>Tungsten Electrode Selection</h3>
+    <table class="ref-table">
+      <thead><tr><th>Tungsten Type</th><th>Color Band</th><th>Polarity / Material</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Pure (EWP)</td><td>Green</td><td>AC — aluminum, magnesium</td><td>Forms balled tip on AC; good arc stability for AC Al welding</td></tr>
+        <tr><td>2% Ceriated (EWCe-2)</td><td>Grey</td><td>DCEN — steel, SS, Ti; AC</td><td>Best general-purpose; easy arc starting; long tip life; replaces thoriated for most use</td></tr>
+        <tr><td>2% Thoriated (EWTh-2)</td><td>Red</td><td>DCEN — steel, SS</td><td>Excellent electron emission; slightly radioactive — use ceriated where possible</td></tr>
+        <tr><td>Zirconiated (EWZr-1)</td><td>White</td><td>AC — aluminum heavy plate</td><td>Retains balled tip on AC better than pure; higher current capacity</td></tr>
+        <tr><td>Lanthanated (EWLa-1.5)</td><td>Gold</td><td>AC or DCEN — all metals</td><td>Good arc starting; low burn-off rate; increasingly common as thoriated replacement</td></tr>
+      </tbody>
+    </table>
+    <h3>Current &amp; Shielding Gas by Material</h3>
+    <table class="ref-table">
+      <thead><tr><th>Base Metal</th><th>Polarity</th><th>Current Range (A)</th><th>Tungsten Dia.</th><th>Shielding Gas</th><th>Filler</th></tr></thead>
+      <tbody>
+        <tr><td>Carbon steel</td><td>DCEN</td><td>50–200</td><td>3/32"–1/8"</td><td>100% Ar, 15–25 CFH</td><td>ER70S-2 or ER70S-6</td></tr>
+        <tr><td>304/304L Stainless</td><td>DCEN</td><td>50–180</td><td>1/16"–3/32"</td><td>100% Ar, 15–20 CFH</td><td>ER308L</td></tr>
+        <tr><td>316/316L Stainless</td><td>DCEN</td><td>50–180</td><td>1/16"–3/32"</td><td>100% Ar, 15–20 CFH</td><td>ER316L</td></tr>
+        <tr><td>Aluminum (6061)</td><td>AC</td><td>80–200</td><td>1/8"–3/16"</td><td>100% Ar, 20–30 CFH</td><td>ER4043 (crack-prone joints) or ER5356</td></tr>
+        <tr><td>Aluminum (5083)</td><td>AC</td><td>100–250</td><td>3/32"–3/16"</td><td>100% Ar, 20–35 CFH</td><td>ER5356 (better strength, color match)</td></tr>
+        <tr><td>Titanium (CP / 6Al-4V)</td><td>DCEN</td><td>50–150</td><td>1/16"–3/32"</td><td>100% Ar + trailing shield + back purge</td><td>ERTi-1 / ERTi-5</td></tr>
+        <tr><td>Inconel 625</td><td>DCEN</td><td>60–160</td><td>3/32"</td><td>100% Ar, 20 CFH</td><td>ERNiCrMo-3</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box"><strong>Stainless steel back purge:</strong> For pipe root passes and thin-gauge stainless, an argon back purge on the ID prevents oxidation ("sugaring") of the root bead. Purge oxygen level must be below 50 ppm before striking the arc. An oxygen monitor is recommended.</div>
+  </div>
+
+  <!-- FCAW -->
+  <div class="section">
+    <h2>FCAW — Parameter Guidance (TWI)</h2>
+    <p>FCAW uses CV power like GMAW. The larger wire diameters and higher deposition rates require careful attention to CTWD and interpass temperature to avoid excessive heat input and slag entrapment between passes.</p>
+    <table class="ref-table">
+      <thead><tr><th>Wire Classification</th><th>Wire Dia.</th><th>Voltage (V)</th><th>WFS (in/min)</th><th>Approx. Current (A)</th><th>Gas</th><th>Polarity</th></tr></thead>
+      <tbody>
+        <tr><td>E71T-1 (FCAW-G)</td><td>0.045"</td><td>22–28</td><td>200–450</td><td>150–280</td><td>75Ar/25CO₂ or CO₂</td><td>DCEP</td></tr>
+        <tr><td>E71T-1 (FCAW-G)</td><td>1/16"</td><td>24–30</td><td>150–350</td><td>200–350</td><td>75Ar/25CO₂ or CO₂</td><td>DCEP</td></tr>
+        <tr><td>E70T-4 (FCAW-S)</td><td>7/64"</td><td>22–28</td><td>80–160</td><td>300–500</td><td>None</td><td>DCEP</td></tr>
+        <tr><td>E71T-8 (FCAW-S)</td><td>0.045"</td><td>17–21</td><td>100–200</td><td>100–200</td><td>None</td><td>DCEN</td></tr>
+        <tr><td>E71T-8 (FCAW-S)</td><td>5/64"</td><td>18–23</td><td>80–150</td><td>150–280</td><td>None</td><td>DCEN</td></tr>
+        <tr><td>E81T1-Ni1 (FCAW-G)</td><td>0.045"</td><td>22–28</td><td>180–400</td><td>140–270</td><td>75Ar/25CO₂</td><td>DCEP</td></tr>
+      </tbody>
+    </table>
+    <h3>CTWD, Gas Flow &amp; Interpass Guidance</h3>
+    <table class="ref-table">
+      <thead><tr><th>Parameter</th><th>FCAW-G</th><th>FCAW-S</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>CTWD</td><td>3/4"–1" (19–25mm)</td><td>1"–2" (25–50mm)</td><td>FCAW-S requires longer CTWD for flux preheating in the tube</td></tr>
+        <tr><td>Gas flow rate</td><td>35–50 CFH</td><td>N/A</td><td>Increase to 50+ CFH for drafty conditions; never exceed 60 CFH (turbulence)</td></tr>
+        <tr><td>Interpass temp.</td><td>Max 400°F (205°C) typical</td><td>Max 400°F (205°C) typical</td><td>Higher interpass → wider HAZ, reduced toughness; monitor with contact pyrometer</td></tr>
+        <tr><td>Slag removal</td><td>Chip all slag before next pass</td><td>Chip all slag before next pass</td><td>Incomplete slag removal is the primary cause of slag inclusions in multi-pass FCAW</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /params -->
+
+
+<!-- ═══════════ TAB 3: DEFECT TROUBLESHOOTING ═══════════ -->
+<div id="defects" class="panel">
+
+  <div class="section">
+    <h2>Process-Specific Defect Troubleshooting (TWI)</h2>
+    <p>Select a process to view its defect guide. Each defect is listed with probable causes and corrective actions sourced from TWI's welding knowledge base and FAQ library.</p>
+  </div>
+
+  <div class="proc-sel">
+    <button class="proc-sel-btn active" onclick="showProc('dSMAW',this)">SMAW</button>
+    <button class="proc-sel-btn" onclick="showProc('dGMAW',this)">GMAW</button>
+    <button class="proc-sel-btn" onclick="showProc('dGTAW',this)">GTAW</button>
+    <button class="proc-sel-btn" onclick="showProc('dFCAW',this)">FCAW</button>
+  </div>
+
+  <!-- SMAW defects -->
+  <div id="dSMAW" class="proc-section active">
+    <table class="ref-table">
+      <thead><tr><th width="160">Defect</th><th>Probable Causes</th><th>Corrective Actions</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Porosity</strong></td>
+          <td class="def-cause">Moisture in electrode coating (especially low-hydrogen types); contaminated base metal (oil, rust, paint, moisture); arc length too long; damaged or cracked coating</td>
+          <td class="def-remedy">Redry E7018/E7016 at 250–350°C for 1–2 hr; store in heated rod oven; clean and degrease joint; reduce arc length; inspect and discard damaged electrodes</td>
+        </tr>
+        <tr>
+          <td><strong>Undercut</strong></td>
+          <td class="def-cause">Current too high; travel speed too fast; incorrect electrode angle (arc force directed toward toe); excessive arc length</td>
+          <td class="def-remedy">Reduce amperage; reduce travel speed; adjust electrode angle to direct arc into the joint center; shorten arc length; use a slight weave to re-wet toes</td>
+        </tr>
+        <tr>
+          <td><strong>Slag Inclusion</strong></td>
+          <td class="def-cause">Failure to remove all slag between passes; incorrect electrode angle trapping slag; too-narrow groove geometry; undercut from previous pass trapping slag</td>
+          <td class="def-remedy">Remove 100% of slag with chipping hammer and wire brush before each pass; open groove angle; grind out undercut before filling; use a narrow wash pass to clean toes</td>
+        </tr>
+        <tr>
+          <td><strong>Lack of Fusion</strong></td>
+          <td class="def-cause">Low heat input (amperage too low or travel too fast); incorrect electrode angle missing the fusion face; joint gap too tight; base metal too cold</td>
+          <td class="def-remedy">Increase amperage; slow travel speed; direct arc to include fusion face; widen joint preparation; apply preheat for thick or high-carbon material</td>
+        </tr>
+        <tr>
+          <td><strong>Overlap (Cold Lap)</strong></td>
+          <td class="def-cause">Travel speed too slow; current too low; arc length too short causing metal to pile up; incorrect angle depositing weld metal outside the fusion zone</td>
+          <td class="def-remedy">Increase travel speed; increase amperage; lengthen arc slightly; correct electrode angle</td>
+        </tr>
+        <tr>
+          <td><strong>Hot Cracking (Solidification)</strong></td>
+          <td class="def-cause">High dilution with high-sulfur or high-phosphorus base metal; concave bead profile (narrow-deep); high restraint; insufficient filler metal manganese</td>
+          <td class="def-remedy">Reduce heat input; use convex bead profile; select higher-Mn electrode (E7018 vs E6010); use buttering passes to reduce dilution; ensure joint is free to contract</td>
+        </tr>
+        <tr>
+          <td><strong>Hydrogen-Induced Cracking (HAZ)</strong></td>
+          <td class="def-cause">High diffusible hydrogen from non-low-hydrogen electrodes; high CE base metal without preheat; high restraint; rapid post-weld cooling</td>
+          <td class="def-remedy">Use E7018 (H4 or H8 designator); apply minimum preheat per AWS D1.1 Table 4.4; maintain interpass temperature; use PWHT where required; slow cooling with insulating blanket</td>
+        </tr>
+        <tr>
+          <td><strong>Arc Blow</strong></td>
+          <td class="def-cause">Magnetic fields in DC welding deflecting the arc; ground cable location; welding near end of member; residual magnetism in steel</td>
+          <td class="def-remedy">Switch to AC (E6011, E7016); reposition ground closer to weld; weld toward the ground; demagnetize base metal; use backstep technique</td>
+        </tr>
+        <tr>
+          <td><strong>Spatter</strong></td>
+          <td class="def-cause">Amperage too high; arc length too long; damp electrodes; magnetic arc blow</td>
+          <td class="def-remedy">Reduce amperage; shorten arc; dry electrodes; address arc blow as above; use iron-powder electrodes which produce less spatter</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- GMAW defects -->
+  <div id="dGMAW" class="proc-section">
+    <table class="ref-table">
+      <thead><tr><th width="160">Defect</th><th>Probable Causes</th><th>Corrective Actions</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Porosity</strong></td>
+          <td class="def-cause">Shielding gas contamination (air, moisture, CO in cylinder); gas flow too low or too high (turbulence); wind draft at weld area; contaminated wire (oil, moisture, rust on spool); base metal contamination; CTWD too long</td>
+          <td class="def-remedy">Increase flow to 30–50 CFH; shield work area from wind; clean and degrease base metal; replace contaminated wire spool; reduce CTWD; purge hose after cylinder change</td>
+        </tr>
+        <tr>
+          <td><strong>Excessive Spatter</strong></td>
+          <td class="def-cause">Voltage too low for WFS (short-circuit instability); CO₂-rich gas (globular transfer spatter); CTWD too short; wire/base metal contamination; incorrect inductance setting</td>
+          <td class="def-remedy">Increase voltage or reduce WFS; switch to 75Ar/25CO₂; increase CTWD; clean wire and base metal; increase inductance (on machines with this control)</td>
+        </tr>
+        <tr>
+          <td><strong>Lack of Fusion</strong></td>
+          <td class="def-cause">Voltage too low; travel speed too fast; torch angle directing arc away from fusion face; CTWD too long (reducing current); preheat insufficient on thick plate</td>
+          <td class="def-remedy">Increase voltage; reduce travel speed; aim arc at leading edge of pool and into fusion face; reduce CTWD; apply preheat for plate &gt;25mm</td>
+        </tr>
+        <tr>
+          <td><strong>Burn-Through</strong></td>
+          <td class="def-cause">Excessive heat input on thin material; WFS too high; travel speed too slow; CTWD too short</td>
+          <td class="def-remedy">Switch to short-circuit mode or pulsed GMAW; reduce WFS; increase travel speed; increase CTWD; consider copper backing bar to conduct heat away</td>
+        </tr>
+        <tr>
+          <td><strong>Undercut</strong></td>
+          <td class="def-cause">Voltage too high (spray mode); travel speed too fast; incorrect torch angle directing arc at toe; CTWD too long</td>
+          <td class="def-remedy">Reduce voltage; slow travel speed; correct torch angle; reduce CTWD; use slight weave motion with pause at toes</td>
+        </tr>
+        <tr>
+          <td><strong>Wire Stubbing (Short)</strong></td>
+          <td class="def-cause">Voltage too low for wire feed speed; machine inductance too low; drive roll tension too high causing bird-nesting</td>
+          <td class="def-remedy">Increase voltage; check inductance setting; adjust drive roll tension; ensure liner is clean and correct diameter</td>
+        </tr>
+        <tr>
+          <td><strong>Burnback</strong></td>
+          <td class="def-cause">WFS too low; CTWD too short (wire melts before clearing contact tip); extended pause at end of weld with arc still energized</td>
+          <td class="def-remedy">Increase WFS; increase CTWD; release trigger promptly when weld ends; check tip for wear or spatter buildup</td>
+        </tr>
+        <tr>
+          <td><strong>Cold Lap (Overlap)</strong></td>
+          <td class="def-cause">Insufficient heat input (voltage/WFS too low); travel speed too high; out-of-position weld with pool flowing ahead of arc</td>
+          <td class="def-remedy">Increase voltage and/or WFS; reduce travel speed; control pool with gun angle; use pulsed mode for better out-of-position control</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- GTAW defects -->
+  <div id="dGTAW" class="proc-section">
+    <table class="ref-table">
+      <thead><tr><th width="160">Defect</th><th>Probable Causes</th><th>Corrective Actions</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Tungsten Inclusion</strong></td>
+          <td class="def-cause">Tungsten electrode dipping into the weld pool; current exceeding tungsten capacity (overheating causes spitting); wrong electrode type for polarity (e.g., pure tungsten on DCEN); improper arc starting (scratch start)</td>
+          <td class="def-remedy">Maintain arc length 1–3mm; reduce current or increase tungsten diameter; use correct electrode type for polarity; use HF start or lift-arc start — never scratch start; regrind contaminated tungsten with a dedicated grinding wheel</td>
+        </tr>
+        <tr>
+          <td><strong>Porosity</strong></td>
+          <td class="def-cause">Contaminated base metal (oil, moisture, oxide film); contaminated filler rod (moisture, oxide); insufficient shielding gas flow or coverage; drafts; gas hose leak or contaminated cylinder</td>
+          <td class="def-remedy">Solvent-degrease and mechanically clean base metal immediately before welding; wipe filler rods with clean cloth; increase gas flow and cup size; shield from drafts; check all gas fittings for leaks</td>
+        </tr>
+        <tr>
+          <td><strong>Oxidation / Discoloration (Stainless)</strong></td>
+          <td class="def-cause">Inadequate shielding gas coverage (light gold is acceptable; blue/grey/black is oxidation); trailing shield missing; arc length too long allowing air entrainment; base metal or filler contaminated</td>
+          <td class="def-remedy">Add trailing shield (purge cup); increase gas flow; shorten arc length; clean all surfaces thoroughly; acceptable colors: silver &gt; light gold &gt; dark gold; blue/black = reject and rework</td>
+        </tr>
+        <tr>
+          <td><strong>Root Oxidation / Sugaring (Pipe)</strong></td>
+          <td class="def-cause">Inadequate back purge on pipe ID; oxygen level too high during root pass; purge gas flow started too late or purge volume insufficient</td>
+          <td class="def-remedy">Purge pipe ID with 100% Ar; wait until O₂ drops below 50 ppm (use O₂ monitor); maintain purge throughout root pass and until weld has cooled below 300°C; dam purge zone with soluble dams</td>
+        </tr>
+        <tr>
+          <td><strong>Lack of Fusion</strong></td>
+          <td class="def-cause">Arc length too long (arc energy dissipated before reaching fusion face); travel speed too fast; filler rod added too far from leading edge of pool; insufficient current for plate thickness</td>
+          <td class="def-remedy">Reduce arc length to 1–3mm; slow travel speed; add filler at leading edge; increase amperage; use foot pedal to manage heat at fit-up gaps</td>
+        </tr>
+        <tr>
+          <td><strong>Crater Cracking</strong></td>
+          <td class="def-cause">Abrupt arc termination leaving a concave crater that cracks on cooling; insufficient crater fill; high-restraint joints</td>
+          <td class="def-remedy">Use slope-out function (reduce current gradually); fill crater completely before breaking arc; use a runoff tab at end of weld; grind out craters and reweld if found</td>
+        </tr>
+        <tr>
+          <td><strong>Wandering / Unstable Arc</strong></td>
+          <td class="def-cause">Contaminated tungsten (oxide layer, spatter); tungsten not ground to correct point angle; asymmetric grind leaving flat spot; moisture in argon or hose</td>
+          <td class="def-remedy">Re-grind tungsten to fine point (DCEN) or re-ball tip (AC); grind parallel to electrode axis, not circumferentially; check argon purity and hose integrity</td>
+        </tr>
+        <tr>
+          <td><strong>Excessive Heat Input / Distortion</strong></td>
+          <td class="def-cause">Travel speed too slow; amperage too high; no back-stepping technique on thin material; no clamping or fixturing</td>
+          <td class="def-remedy">Increase travel speed; reduce amperage (use foot pedal); use pulsed current; backstep welding sequence; clamp to copper or steel fixture; tack weld frequently</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FCAW defects -->
+  <div id="dFCAW" class="proc-section">
+    <table class="ref-table">
+      <thead><tr><th width="160">Defect</th><th>Probable Causes</th><th>Corrective Actions</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Porosity</strong></td>
+          <td class="def-cause">CTWD too long (reducing shielding effectiveness or flux preheat for FCAW-S); wind disturbing FCAW-G shield; moisture in wire (wet spool); base metal contamination; gas flow too low (FCAW-G); damaged wire coating</td>
+          <td class="def-remedy">Reduce CTWD to spec; shield weld area from wind or switch to FCAW-S; replace wet wire spool; clean base metal; increase gas flow to 40–50 CFH; inspect wire for damage before use</td>
+        </tr>
+        <tr>
+          <td><strong>Slag Inclusion</strong></td>
+          <td class="def-cause">Incomplete slag removal between passes (most common cause); convex pass profile trapping slag at toes; undercut from previous pass; narrow joint groove preventing access for slag removal</td>
+          <td class="def-remedy">Remove 100% of slag with chipping hammer and wire brush before each pass — do not rely on heat from the next pass to melt out slag; grind convex beads flat; open groove angle; use smaller diameter wire to access tight grooves</td>
+        </tr>
+        <tr>
+          <td><strong>Hydrogen-Induced Cracking</strong></td>
+          <td class="def-cause">FCAW-S wires carry higher diffusible hydrogen than FCAW-G; high CE base metal; high restraint; rapid cooling</td>
+          <td class="def-remedy">Select low-hydrogen FCAW-S designator (e.g., E71T-8 H8); preheat per AWS D1.1; maintain interpass temperature; consider PWHT on critical joints; switch to FCAW-G with low-H wire where possible</td>
+        </tr>
+        <tr>
+          <td><strong>Undercut</strong></td>
+          <td class="def-cause">Voltage too high; travel speed too fast; gun angle directing arc at toe; excessive oscillation width</td>
+          <td class="def-remedy">Reduce voltage 1–2V; slow travel speed; angle gun into joint; reduce weave width; pause at toes if weaving</td>
+        </tr>
+        <tr>
+          <td><strong>Lack of Fusion</strong></td>
+          <td class="def-cause">WFS too low (insufficient current); travel speed too fast; CTWD too long; incorrect gun angle missing fusion face; thick slag from previous pass not fully removed</td>
+          <td class="def-remedy">Increase WFS; reduce travel speed; reduce CTWD; direct arc at fusion face; remove all slag completely before next pass</td>
+        </tr>
+        <tr>
+          <td><strong>Excessive Spatter</strong></td>
+          <td class="def-cause">Voltage too high; CTWD too short; CO₂ shielding gas (more spatter than Ar blends); wire feed irregularity (kinks, drive roll slip)</td>
+          <td class="def-remedy">Reduce voltage; increase CTWD; switch from CO₂ to 75Ar/25CO₂; check wire path and drive roll tension; inspect liner for wear</td>
+        </tr>
+        <tr>
+          <td><strong>Worm Tracking (Surface)</strong></td>
+          <td class="def-cause">Moisture absorbed into flux core of wire (improper storage); CTWD too long causing flux to outgas excessively before arc; wire stored in humid conditions</td>
+          <td class="def-remedy">Store FCAW wire in sealed packages; discard wire exposed to moisture; reduce CTWD; some manufacturers allow low-temperature wire drying — check data sheet; always use wire from sealed packaging</td>
+        </tr>
+        <tr>
+          <td><strong>Convex Bead Profile</strong></td>
+          <td class="def-cause">Voltage too low; travel speed too fast; CTWD too long; welding vertical-down on code work (causes high crown)</td>
+          <td class="def-remedy">Increase voltage 1–2V; reduce travel speed slightly; reduce CTWD; weld vertical-up for code-qualified welds; grind convex passes before next layer</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /defects -->
+
+
+<!-- ═══════════ TAB 4: ESAB SELECTION GUIDE ═══════════ -->
+<div id="esab" class="panel">
+
+  <div class="section">
+    <h2>ESAB Electrode &amp; Wire Selection Chart</h2>
+    <p>ESAB is one of the world's leading manufacturers of welding consumables and equipment. The chart below covers the primary AWS-classified consumables organized by process, base material, and typical application — reflecting ESAB's product guidance for process and material selection.</p>
+
+    <table class="ref-table">
+      <thead>
+        <tr>
+          <th>Process</th><th>AWS Class</th><th>Base Material</th><th>Position</th><th>Application</th><th>Key Characteristics</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="process-smaw">
+          <td><strong>SMAW</strong></td><td>E6010</td><td>Carbon steel</td><td>All</td><td>Pipeline root pass; open root joints</td><td>Deep penetration; fast-freeze slag; cellulosic; DCEP; vertical-down capable</td>
+        </tr>
+        <tr class="process-smaw">
+          <td><strong>SMAW</strong></td><td>E6011</td><td>Carbon steel</td><td>All</td><td>General repair; AC available sites</td><td>Similar to E6010 but AC-capable; iron powder in coating; moderate penetration</td>
+        </tr>
+        <tr class="process-smaw">
+          <td><strong>SMAW</strong></td><td>E6013</td><td>Carbon steel, light gauge</td><td>All</td><td>Sheet metal; general fabrication; training</td><td>Easy slag; soft arc; lower penetration; AC or DC; best for beginners</td>
+        </tr>
+        <tr class="process-smaw">
+          <td><strong>SMAW</strong></td><td>E7018 H4R</td><td>Carbon &amp; low-alloy steel</td><td>All</td><td>Structural steel; code-qualified welds; pressure vessels</td><td>Low-hydrogen (H4); iron powder; moisture-resistant coating; DCEP or AC</td>
+        </tr>
+        <tr class="process-smaw">
+          <td><strong>SMAW</strong></td><td>E7016 H4R</td><td>Carbon &amp; low-alloy steel</td><td>All</td><td>Structural; low-hydrogen where AC only available</td><td>Low-hydrogen; slightly less fluid than E7018; good vertical-up performance</td>
+        </tr>
+        <tr class="process-smaw">
+          <td><strong>SMAW</strong></td><td>E308L-16</td><td>304/304L stainless steel</td><td>All</td><td>Chemical vessels; food equipment; cryogenic</td><td>Low carbon (&lt;0.03%) prevents sensitization; AC or DCEP</td>
+        </tr>
+        <tr class="process-smaw">
+          <td><strong>SMAW</strong></td><td>E316L-16</td><td>316/316L stainless steel</td><td>All</td><td>Marine; pharmaceutical; seawater-exposed piping</td><td>Mo addition for pitting resistance; low carbon; AC or DCEP</td>
+        </tr>
+        <tr class="process-gmaw">
+          <td><strong>GMAW</strong></td><td>ER70S-6</td><td>Carbon steel (oily/rusty)</td><td>All</td><td>General structural; automotive; shipbuilding</td><td>High Mn &amp; Si deoxidizers; tolerates mill scale and light contamination; C25 gas</td>
+        </tr>
+        <tr class="process-gmaw">
+          <td><strong>GMAW</strong></td><td>ER70S-2</td><td>Carbon steel (clean)</td><td>All</td><td>Root passes; pipe welding; critical joints</td><td>Triple-deoxidized; excellent on clean, killed steel; GTAW filler also</td>
+        </tr>
+        <tr class="process-gmaw">
+          <td><strong>GMAW</strong></td><td>ER308L</td><td>304/304L stainless steel</td><td>All</td><td>Chemical processing; food-grade vessels</td><td>Low carbon; 100% Ar or 98Ar/2%O₂ shielding; no CO₂ (oxidizes alloys)</td>
+        </tr>
+        <tr class="process-gmaw">
+          <td><strong>GMAW</strong></td><td>ER316L</td><td>316/316L stainless steel</td><td>All</td><td>Marine; pharmaceutical piping; seawater service</td><td>Mo for pitting corrosion resistance; low carbon; 100% Ar shielding</td>
+        </tr>
+        <tr class="process-gmaw">
+          <td><strong>GMAW</strong></td><td>ER4043</td><td>6061, 6063, 6082 aluminum</td><td>All</td><td>Structural aluminum; automotive; architectural extrusions</td><td>Lower crack sensitivity than ER5356 on 6xxx alloys; good flow; 100% Ar</td>
+        </tr>
+        <tr class="process-gmaw">
+          <td><strong>GMAW</strong></td><td>ER5356</td><td>5052, 5083, 5086 aluminum</td><td>All</td><td>Marine; pressure vessels; structural 5xxx alloys</td><td>Higher strength than ER4043; better color match after anodizing; 100% Ar</td>
+        </tr>
+        <tr class="process-gmaw">
+          <td><strong>GMAW</strong></td><td>ER309L</td><td>304 SS to carbon steel (dissimilar)</td><td>All</td><td>Dissimilar metal joints; SS cladding on carbon steel</td><td>High Cr/Ni buffer; prevents dilution-induced cracking at dissimilar interface</td>
+        </tr>
+        <tr class="process-gtaw">
+          <td><strong>GTAW</strong></td><td>ER70S-2</td><td>Carbon steel</td><td>All</td><td>Pipe root passes; precision welds</td><td>Triple-deoxidized; clean smooth root; also used as GMAW solid wire</td>
+        </tr>
+        <tr class="process-gtaw">
+          <td><strong>GTAW</strong></td><td>ER308L</td><td>304/304L stainless</td><td>All</td><td>Sanitary piping; pharmaceutical tubing; cryogenic vessels</td><td>Low carbon; smooth bead; ID purge required for pipe root</td>
+        </tr>
+        <tr class="process-gtaw">
+          <td><strong>GTAW</strong></td><td>ER316L</td><td>316/316L stainless</td><td>All</td><td>Chemical process piping; offshore topside piping</td><td>Mo addition; used for ASME B31.3 process piping in corrosive service</td>
+        </tr>
+        <tr class="process-gtaw">
+          <td><strong>GTAW</strong></td><td>ER4043</td><td>6061-T6 aluminum</td><td>All</td><td>Heat-treated aluminum structures; aerospace frames</td><td>Good weldability; reduces hot-cracking risk on 6061; lower as-welded strength</td>
+        </tr>
+        <tr class="process-gtaw">
+          <td><strong>GTAW</strong></td><td>ER5356</td><td>5083, 5086, 5052 aluminum</td><td>All</td><td>Marine hull welding; pressure vessels</td><td>Higher strength (≥38 ksi) and better corrosion resistance in marine service</td>
+        </tr>
+        <tr class="process-gtaw">
+          <td><strong>GTAW</strong></td><td>ERNiCrMo-3</td><td>Inconel 625 / nickel alloys</td><td>All</td><td>Subsea; chemical; high-temperature service</td><td>Matches Inconel 625 composition; excellent elevated-temperature strength</td>
+        </tr>
+        <tr class="process-fcaw">
+          <td><strong>FCAW-G</strong></td><td>E71T-1C H8</td><td>Carbon &amp; low-alloy steel</td><td>All</td><td>Structural fabrication; general construction</td><td>All-position; CO₂ or C25; H8 low-hydrogen designator; smooth slag removal</td>
+        </tr>
+        <tr class="process-fcaw">
+          <td><strong>FCAW-G</strong></td><td>E71T-1M H8</td><td>Carbon &amp; low-alloy steel</td><td>All</td><td>Structural; bridges; offshore</td><td>Mixed-gas (M suffix); 75Ar/25CO₂; less spatter; better mechanical properties than C grade</td>
+        </tr>
+        <tr class="process-fcaw">
+          <td><strong>FCAW-G</strong></td><td>E81T1-Ni1M H4</td><td>Low-alloy, high-strength steel</td><td>All</td><td>Offshore platforms; Arctic structures; API 2Y-50</td><td>1% Ni for improved CVN toughness at low temperature; H4 designator</td>
+        </tr>
+        <tr class="process-fcaw">
+          <td><strong>FCAW-S</strong></td><td>E71T-8 H8</td><td>Carbon steel</td><td>All</td><td>Construction field welding in wind; bridge erection</td><td>Self-shielded; DCEN; all-position; low-hydrogen H8; no gas cylinder needed</td>
+        </tr>
+        <tr class="process-fcaw">
+          <td><strong>FCAW-S</strong></td><td>E70T-4</td><td>Carbon steel</td><td>F, H only</td><td>High-deposition flat/horizontal structural welds</td><td>Very high deposition rate (15–25 lb/hr); self-shielded; not low-hydrogen</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;font-size:0.78rem;">
+      <span style="padding:3px 10px;border-radius:12px;background:#fef3c7;color:#92400e;font-weight:700;">■ SMAW</span>
+      <span style="padding:3px 10px;border-radius:12px;background:#dbeafe;color:#1e40af;font-weight:700;">■ GMAW</span>
+      <span style="padding:3px 10px;border-radius:12px;background:#dcfce7;color:#166534;font-weight:700;">■ GTAW</span>
+      <span style="padding:3px 10px;border-radius:12px;background:#fce7f3;color:#9d174d;font-weight:700;">■ FCAW</span>
+    </div>
+  </div>
+
+  <!-- Case studies -->
+  <div class="section">
+    <h2>Application Case Studies (ESAB)</h2>
+    <p>The following case studies reflect the type of application scenarios and outcomes documented in ESAB's process and productivity guides. They illustrate how process and consumable selection decisions translate to real-world fabrication outcomes.</p>
+
+    <div class="case-grid">
+
+      <div class="case-card">
+        <div class="case-title">Offshore Jacket Structure — API 2Y-50 Steel</div>
+        <span class="case-process" style="background:#fce7f3;color:#9d174d;">SMAW Root + FCAW-G Fill/Cap</span>
+        <p><strong>Challenge:</strong> Welding tubular nodes on an offshore jacket in API 2Y-50 high-strength steel. AWS D1.1 Annex K structural requirements. CVN toughness required at −20°F. Field erection with wind exposure.</p>
+        <p><strong>Solution:</strong> E7010-P1 SMAW cellulosic electrodes for root pass (penetration and vertical-down speed); E81T1-Ni1M H4 FCAW-G fill and cap passes with 75Ar/25CO₂. Preheat 150°F minimum (CE = 0.44). Interpass maximum 400°F monitored by contact pyrometer.</p>
+        <p><strong>Process controls:</strong> Low-hydrogen filler throughout; heat input within 40–65 kJ/in; PWHT not required due to H4 hydrogen control and preheat protocol. NDT: 100% UT on primary nodes.</p>
+        <div class="case-result">Result: 40% productivity gain over all-SMAW approach; all welds met AWS D1.1 and CVN toughness requirements at −20°F.</div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-title">Pharmaceutical Process Piping — 316L Stainless</div>
+        <span class="case-process" style="background:#dcfce7;color:#166534;">GTAW Full Penetration</span>
+        <p><strong>Challenge:</strong> ASME B31.3 process piping in 2" and 4" schedule 10 316L stainless. ASME BPE surface finish requirement: Ra ≤ 32 µin. ID. Zero contamination tolerance — welds will be in contact with API pharmaceutical product.</p>
+        <p><strong>Solution:</strong> GTAW autogenous root pass with ID argon back purge (O₂ &lt; 20 ppm, verified by in-line monitor). ER316L filler for fill passes. Electropolish to Ra ≤ 20 µin after welding. 100% visual and endoscopic ID inspection per ASME BPE SF-1 criteria.</p>
+        <p><strong>Process controls:</strong> Ceriated tungsten (EWCe-2) 3/32"; 80–140A DCEN; 15–20 CFH argon; cup size #8; purge maintained until weld cools below 300°C. Filler rod wiped with acetone-dampened cloth immediately before use.</p>
+        <div class="case-result">Result: Zero weld rework on 340 spools. All welds passed visual, PMI, and borescope inspection. Passed FDA process validation audit.</div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-title">Highway Bridge Fabrication — A709 Grade 50W Steel</div>
+        <span class="case-process" style="background:#dbeafe;color:#1e40af;">GMAW Tack + SAW Fill</span>
+        <p><strong>Challenge:</strong> Fabricating girder flanges (up to 3" thick) for a highway bridge per AWS D1.5 Bridge Welding Code. High deposition rates required for economical production; CVN impact testing at +40°F required on all weld metal.</p>
+        <p><strong>Solution:</strong> ER70S-6 GMAW tack welds and short assembly passes; F7A6-EM13K SAW flux-electrode combination for primary flange-to-web fillet welds (flat position). Preheat 125°F minimum; interpass maximum 400°F.</p>
+        <p><strong>Process controls:</strong> SAW at 600–900A, 30–36V; travel speed 18–24 in/min; single or tandem wire. All SAW procedures qualified per AWS D1.5 with CVN testing. Flux dried at 300°F for 2 hr before use.</p>
+        <div class="case-result">Result: 3.2× deposition rate increase versus SMAW. All PQRs passed CVN at +40°F. Girder delivery schedule reduced by 6 weeks.</div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-title">Aluminum Marine Superstructure — 5083-H116</div>
+        <span class="case-process" style="background:#dbeafe;color:#1e40af;">Pulsed GMAW (GMAW-P)</span>
+        <p><strong>Challenge:</strong> Welding 6mm and 10mm 5083-H116 aluminum plate for a fast ferry superstructure. Distortion control critical — thin plate in long panel sections. Burn-through risk on 6mm; conventional spray transfer impractical out-of-position.</p>
+        <p><strong>Solution:</strong> Pulsed GMAW (GMAW-P) with ER5356 wire (0.035") and 100% argon at 40–50 CFH. Pulsed mode allows spray-quality transfer at reduced average current, enabling out-of-position welding without burn-through. ER4043 used for internal web-to-plate T-joints prone to hot cracking.</p>
+        <p><strong>Process controls:</strong> Pulse parameters: peak current 300A, background 50A, pulse frequency 120 Hz; average current 130–180A. Gun angle: 5–10° push (forehand). Interpass cleaning: stainless steel wire brush (aluminum-dedicated).</p>
+        <div class="case-result">Result: Burn-through eliminated on 6mm plate. Distortion reduced 35% vs. conventional GMAW. All welds passed DNV-GL Class survey visual and UT inspection.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>ESAB Process Comparison — Quick Reference</h2>
+    <table class="ref-table">
+      <thead><tr><th>Criterion</th><th>SMAW</th><th>GMAW</th><th>GTAW</th><th>FCAW-G</th><th>FCAW-S</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Equipment cost</strong></td><td>Lowest</td><td>Moderate</td><td>Moderate–high</td><td>Moderate</td><td>Moderate</td></tr>
+        <tr><td><strong>Consumable cost</strong></td><td>Low–moderate</td><td>Low</td><td>Low (filler); moderate (tungsten)</td><td>Moderate</td><td>Moderate–high</td></tr>
+        <tr><td><strong>Operator factor (%)</strong></td><td>20–35%</td><td>40–60%</td><td>10–20%</td><td>50–70%</td><td>45–65%</td></tr>
+        <tr><td><strong>Deposition efficiency</strong></td><td>60–75%</td><td>90–97%</td><td>98–100%</td><td>82–90%</td><td>78–87%</td></tr>
+        <tr><td><strong>Post-weld cleanup</strong></td><td>Slag chip + brush</td><td>Minimal (spatter)</td><td>None</td><td>Slag chip + brush</td><td>Slag chip + brush</td></tr>
+        <tr><td><strong>Best for automation</strong></td><td>No</td><td>Yes — robotic GMAW</td><td>Yes — orbital GTAW</td><td>Yes — semi-auto</td><td>Limited</td></tr>
+        <tr><td><strong>Diffusible hydrogen</strong></td><td>H4–H16 (varies by grade)</td><td>H4–H8</td><td>H2–H4</td><td>H4–H8</td><td>H8–H16 typical</td></tr>
+        <tr><td><strong>Typical joint efficiency</strong></td><td>High (code-qualified)</td><td>High (code-qualified)</td><td>Highest</td><td>High (code-qualified)</td><td>High (code-qualified)</td></tr>
+      </tbody>
+    </table>
+    <div class="info-box"><strong>Operator factor</strong> is the percentage of arc-on time per hour of work. FCAW's high operator factor is why it dominates heavy structural fabrication: more weld metal deposited per hour of labor than any other semi-automatic process.</div>
+  </div>
+
+</div><!-- /esab -->
+
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+function showProc(id, btn) {
+  document.querySelectorAll('.proc-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.proc-sel-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+</script>
+</body>
+</html>
