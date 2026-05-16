@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Failure Analysis Methodology — ASM / NTSB / AAIB / TWI</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fff; color: #1a1a1a; }
+
+header { background: #1e3a5f; color: #fff; padding: 28px 24px 22px; text-align: center; }
+header h1 { font-size: 1.85rem; font-weight: 700; }
+header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
+
+.source-note {
+  background: #eff6ff; border-left: 4px solid #1e3a5f;
+  padding: 10px 18px; font-size: 0.82rem; color: #1e40af; line-height: 1.55;
+}
+
+.tab-bar {
+  display: flex; flex-wrap: wrap; gap: 0;
+  background: #f1f5f9; border-bottom: 2px solid #e2e8f0;
+  padding: 0 20px; position: sticky; top: 0; z-index: 10;
+}
+.tab-btn {
+  padding: 10px 18px; font-size: 0.84rem; font-weight: 600;
+  border: none; background: none; cursor: pointer; color: #64748b;
+  border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.15s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: #1e3a5f; }
+.tab-btn.active { color: #1e3a5f; border-bottom-color: #1e3a5f; }
+
+.panel { display: none; max-width: 1100px; margin: 0 auto; padding: 28px 20px 60px; }
+.panel.active { display: block; }
+
+.section {
+  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
+  padding: 22px 24px; margin-bottom: 26px;
+}
+.section h2 { font-size: 1.2rem; color: #1e3a5f; margin-bottom: 10px; }
+.section h3 { font-size: 0.97rem; color: #334155; font-weight: 700; margin: 16px 0 8px; }
+.section p  { font-size: 0.88rem; color: #4b5563; line-height: 1.65; margin-bottom: 8px; }
+.section ul { font-size: 0.88rem; color: #4b5563; line-height: 1.65; margin: 6px 0 8px 20px; }
+.section li { margin-bottom: 4px; }
+
+.ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin: 10px 0; }
+.ref-table th { background: #1e3a5f; color: #fff; padding: 8px 10px; text-align: left; font-weight: 600; }
+.ref-table td { padding: 7px 10px; border-bottom: 1px solid #e2e8f0; color: #374151; vertical-align: top; }
+.ref-table tr:nth-child(even) td { background: #f8fafc; }
+.ref-table tr:hover td { background: #eff6ff; }
+
+.note-box {
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px;
+  padding: 12px 16px; font-size: 0.83rem; color: #78350f; margin: 12px 0; line-height: 1.6;
+}
+.info-box {
+  background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;
+  padding: 12px 16px; font-size: 0.83rem; color: #1e40af; margin: 12px 0; line-height: 1.6;
+}
+.warn-box {
+  background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px;
+  padding: 12px 16px; font-size: 0.83rem; color: #991b1b; margin: 12px 0; line-height: 1.6;
+}
+.green-box {
+  background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;
+  padding: 12px 16px; font-size: 0.83rem; color: #14532d; margin: 12px 0; line-height: 1.6;
+}
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 680px) { .two-col { grid-template-columns: 1fr; } }
+
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+@media (max-width: 760px) { .three-col { grid-template-columns: 1fr; } }
+
+.step-card {
+  display: flex; gap: 14px; align-items: flex-start;
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 10px;
+  padding: 14px 16px; margin-bottom: 12px;
+}
+.step-num {
+  background: #1e3a5f; color: #fff; border-radius: 50%;
+  width: 30px; height: 30px; font-size: 0.85rem; font-weight: 800;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+}
+.step-body { flex: 1; }
+.step-body strong { font-size: 0.93rem; color: #1e3a5f; display: block; margin-bottom: 4px; }
+.step-body p { font-size: 0.83rem; color: #4b5563; line-height: 1.6; margin: 0; }
+.step-body ul { font-size: 0.83rem; color: #4b5563; line-height: 1.6; margin: 4px 0 0 16px; }
+
+.case-card {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 10px;
+  padding: 16px 18px; margin-bottom: 14px;
+}
+.case-card .case-header { display: flex; gap: 10px; align-items: baseline; margin-bottom: 8px; flex-wrap: wrap; }
+.case-card .case-industry {
+  font-size: 0.72rem; font-weight: 700; padding: 2px 9px; border-radius: 12px; flex-shrink: 0;
+}
+.case-card .case-title { font-size: 0.95rem; font-weight: 700; color: #1e3a5f; }
+.case-card .case-body { font-size: 0.83rem; color: #4b5563; line-height: 1.65; }
+.case-card .case-findings { margin-top: 8px; }
+.case-card .case-findings span { font-weight: 700; color: #334155; }
+
+.ind-aero  { background: #dbeafe; color: #1d4ed8; }
+.ind-auto  { background: #d1fae5; color: #065f46; }
+.ind-civil { background: #ffe4e6; color: #9f1239; }
+.ind-pres  { background: #fef3c7; color: #92400e; }
+.ind-mfg   { background: #f3e8ff; color: #6b21a8; }
+.ind-rail  { background: #e0f2fe; color: #0369a1; }
+
+.source-tag {
+  display: inline-block; padding: 3px 11px; background: #1e3a5f; color: #93c5fd;
+  border-radius: 6px; font-size: 0.75rem; font-weight: 600; margin-bottom: 12px;
+}
+
+.section-label {
+  font-weight: 700; color: #1e3a5f; font-size: 0.84rem;
+  margin: 18px 0 7px; text-transform: uppercase; letter-spacing: 0.05em;
+}
+
+.checklist { list-style: none; margin: 6px 0 10px 0; padding: 0; }
+.checklist li { font-size: 0.85rem; color: #374151; line-height: 1.65; padding: 3px 0 3px 22px; position: relative; }
+.checklist li::before { content: '☐'; position: absolute; left: 0; color: #1e3a5f; font-size: 0.9rem; }
+
+.phase-bar {
+  background: #1e3a5f; color: #fff; border-radius: 10px;
+  padding: 14px 18px; margin-bottom: 10px;
+}
+.phase-bar .ph-title { font-size: 0.93rem; font-weight: 700; color: #93c5fd; margin-bottom: 6px; }
+.phase-bar .ph-body { font-size: 0.83rem; line-height: 1.65; }
+.phase-bar .ph-body ul { margin: 6px 0 0 18px; color: #fff; }
+.phase-bar .ph-body li { color: #fff; }
+
+.diagram-wrap { display: flex; justify-content: center; margin: 20px 0; overflow-x: auto; }
+
+.report-section {
+  border-left: 4px solid #1e3a5f; padding: 10px 16px; margin: 10px 0; background: #f8fafc;
+}
+.report-section .rs-heading { font-weight: 700; color: #1e3a5f; font-size: 0.88rem; margin-bottom: 4px; }
+.report-section .rs-body { font-size: 0.83rem; color: #4b5563; line-height: 1.6; }
+
+.back { text-align: center; padding: 24px; font-size: 0.9rem; }
+.back a { color: #1e3a5f; text-decoration: none; margin: 0 10px; }
+.back a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Failure Analysis Methodology</h1>
+  <div class="subtitle">ASM International — Case Studies &amp; Vol. 11 Method &nbsp;&middot;&nbsp; NTSB &amp; AAIB — Accident Investigation Reports &nbsp;&middot;&nbsp; TWI — Step-by-Step Investigation Guide</div>
+</header>
+
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('asm',this)">ASM — Methodology &amp; Cases</button>
+  <button class="tab-btn" onclick="showTab('ntsb',this)">NTSB &amp; AAIB — Accident Reports</button>
+  <button class="tab-btn" onclick="showTab('twi',this)">TWI — Investigation Protocol</button>
+</nav>
+
+<!-- ═══════════════════════════════════════════════ TAB 1: ASM ═══ -->
+<div id="panel-asm" class="panel active">
+
+  <div class="section">
+    <div class="source-tag">ASM International — Handbook Vol. 11: Failure Analysis and Prevention</div>
+    <h2>The ASM Seven-Step Failure Analysis Process</h2>
+    <p>ASM Handbook Vol. 11 defines a systematic seven-step process for failure analysis. Each step must be completed before advancing, and findings at later steps often require revisiting earlier ones. The process is iterative, not strictly linear.</p>
+
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <strong>Background Information Collection</strong>
+        <p>Gather design drawings, material specifications, service history, operating conditions, maintenance records, and operator accounts. Establish the component's function, load history, environment, and any prior repairs or modifications.</p>
+        <ul>
+          <li>Design drawings and tolerances</li>
+          <li>Material certification records (mill certs, heat treat records)</li>
+          <li>Service life and load cycle history</li>
+          <li>Environmental exposure (temperature, corrosives, humidity)</li>
+          <li>Prior maintenance, modifications, or known defects</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <strong>Visual and Macroscopic Examination</strong>
+        <p>Examine the component without sectioning. Document all visible damage — deformation, corrosion, wear, fracture surface topography, and fracture plane orientation relative to the applied load. Use low-power stereo microscopy (1–50×).</p>
+        <ul>
+          <li>Fracture surface: flat/fibrous/chevron/beach marks</li>
+          <li>Deformation: necking, bending, torsion evidence</li>
+          <li>Corrosion: location, type (pitting, SCC, galvanic)</li>
+          <li>Origin identification: convergence of river marks / ratchet marks</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <strong>Non-Destructive Testing (NDT)</strong>
+        <p>Apply NDT before any sectioning to detect secondary cracks, subsurface defects, or additional damage not visible to the naked eye. Results guide where to section.</p>
+        <ul>
+          <li>Dye penetrant (PT) — surface-open cracks</li>
+          <li>Magnetic particle (MT) — near-surface cracks in ferromagnetics</li>
+          <li>Radiography (RT) — internal voids, inclusions, shrinkage</li>
+          <li>Ultrasonic (UT) — subsurface cracks, delaminations</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <strong>Mechanical Testing</strong>
+        <p>Test material from the failed component against specification requirements. Select locations away from the fracture to avoid heat-affected or deformed material.</p>
+        <ul>
+          <li>Tensile testing (UTS, yield, elongation, reduction of area)</li>
+          <li>Hardness surveys (macro and micro — Vickers, Rockwell)</li>
+          <li>Charpy impact (ductile-to-brittle transition)</li>
+          <li>Fracture toughness (K<sub>IC</sub>) if applicable</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <strong>Metallurgical and Chemical Analysis</strong>
+        <p>Section, mount, polish, and etch specimens from key locations. Verify chemistry, microstructure, heat treatment condition, and detect any manufacturing or material defects.</p>
+        <ul>
+          <li>Optical metallography: grain size, phase identification, inclusion content</li>
+          <li>SEM / EDS: fractographic features + elemental analysis</li>
+          <li>OES or wet chemistry: alloy composition verification</li>
+          <li>EPMA: local composition at initiation site</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <strong>Fracture Mechanics Assessment</strong>
+        <p>Apply linear-elastic fracture mechanics (LEFM) to verify that the observed crack size, geometry, and material properties are consistent with the proposed failure mode. Check whether the critical crack size at fracture matches the fracture surface evidence.</p>
+        <ul>
+          <li>Calculate critical crack size: a<sub>c</sub> = (1/π)(K<sub>IC</sub>/σ·F)²</li>
+          <li>Estimate da/dN from striation spacing (fatigue)</li>
+          <li>Assess crack growth life from initial defect to a<sub>c</sub></li>
+          <li>Compare calculated vs observed final fracture zone size</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">7</div>
+      <div class="step-body">
+        <strong>Root Cause Determination &amp; Report</strong>
+        <p>Synthesise all findings into a root cause (primary), contributing causes (secondary), and recommendations. All conclusions must be supported by physical evidence — not assumed. The report must distinguish between what is known, what is inferred, and what remains uncertain.</p>
+        <ul>
+          <li>Root cause: single initiating condition without which failure would not occur</li>
+          <li>Contributing factors: conditions that accelerated or enabled failure</li>
+          <li>Corrective actions: design, material, process, or maintenance changes</li>
+          <li>Preventive actions: broader system-level improvements</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Fracture Mode Identification — ASM Vol. 11 / Vol. 12</h2>
+    <div style="overflow-x:auto;">
+    <table class="ref-table" style="min-width:700px;">
+      <thead><tr><th>Fracture Mode</th><th>Macroscopic Features</th><th>SEM Features</th><th>Load / Condition</th><th>Example ASM Case</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Ductile Overload</strong></td>
+          <td>Grey, fibrous; 45° shear lip; visible necking</td>
+          <td>Equiaxed dimples (MVC); parabolic dimples at shear lip</td>
+          <td>Single-event tensile overload; high-ductility material</td>
+          <td>Crane hook overload (ASM Vol. 11, p. 438)</td>
+        </tr>
+        <tr>
+          <td><strong>Brittle Cleavage</strong></td>
+          <td>Flat, bright, crystalline; chevron pattern; no shear lip</td>
+          <td>Cleavage facets; river marks converging to origin; tongues</td>
+          <td>Low temp; high strain rate; BCC steel below NDT</td>
+          <td>Pressure vessel brittle fracture (Vol. 11, p. 462)</td>
+        </tr>
+        <tr>
+          <td><strong>Intergranular</strong></td>
+          <td>Bright, faceted; grain boundary exposed; rock-candy texture</td>
+          <td>Smooth grain facets; no cleavage steps; secondary particles</td>
+          <td>Temper embrittlement; HIC; SCC; liquid metal embrittlement</td>
+          <td>Temper embrittled shaft (Vol. 11, p. 496)</td>
+        </tr>
+        <tr>
+          <td><strong>Fatigue</strong></td>
+          <td>Two zones: smooth progression + rough overload; beach marks; ratchet marks</td>
+          <td>Striations (1/cycle); secondary cracks; beach marks</td>
+          <td>Cyclic loading; initiation at surface stress concentration</td>
+          <td>Aircraft crankshaft fatigue (Vol. 11, p. 521)</td>
+        </tr>
+        <tr>
+          <td><strong>Stress Corrosion (SCC)</strong></td>
+          <td>Limited deformation; branching crack path; corrosion products</td>
+          <td>Mixed: intergranular or transgranular depending on alloy/environment</td>
+          <td>Tensile stress + corrosive environment simultaneously</td>
+          <td>Stainless steel pipe SCC (Vol. 11, p. 587)</td>
+        </tr>
+        <tr>
+          <td><strong>Creep</strong></td>
+          <td>Intercrystalline cracking; cavitation voids along grain boundaries; significant deformation</td>
+          <td>Grain boundary voids; wedge cracks; oxidation products</td>
+          <td>High temperature (&gt;0.4 T<sub>m</sub>) + sustained stress</td>
+          <td>Turbine blade creep rupture (Vol. 11, p. 618)</td>
+        </tr>
+        <tr>
+          <td><strong>Hydrogen Embrittlement</strong></td>
+          <td>Brittle; intergranular or quasi-cleavage; delayed fracture</td>
+          <td>Intergranular facets; occasional quasi-cleavage; no ductile dimples</td>
+          <td>High-strength steel + diffusible hydrogen + tensile stress</td>
+          <td>High-strength bolt HE (Vol. 11, p. 643)</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Industry Case Studies — ASM Failure Analysis</h2>
+
+    <div class="case-card">
+      <div class="case-header">
+        <span class="case-industry ind-aero">Aerospace</span>
+        <span class="case-title">Turbine Blade Fatigue — High-Cycle Thermal-Mechanical</span>
+      </div>
+      <div class="case-body">
+        <p><strong>Component:</strong> Ni-based superalloy compressor blade, stage 3, 8,200 hr service. <strong>Failure:</strong> High-cycle fatigue (HCF) initiated at a film cooling hole edge, propagated across 70% of chord before liberation.</p>
+        <div class="case-findings">
+          <span>Fractographic evidence:</span> Fine striations at ~0.05 μm spacing near origin (very high ΔK regime); multiple ratchet marks at cooling hole edge. Final fracture zone shows intergranular fracture consistent with hot corrosion weakening of grain boundaries.
+        </div>
+        <div class="case-findings" style="margin-top:6px;">
+          <span>Root cause:</span> Stress concentration at cooling hole (Kt ≈ 2.8) combined with vibratory stress from compressor surge event. Hot corrosion (Type I, 850°C) reduced grain boundary strength. <span>Corrective action:</span> Film cooling hole radius increased; inlet filtration improved; compressor surge protection re-calibrated.
+        </div>
+      </div>
+    </div>
+
+    <div class="case-card">
+      <div class="case-header">
+        <span class="case-industry ind-auto">Automotive</span>
+        <span class="case-title">Crankshaft Fatigue — Torsional Resonance at Fillet Radius</span>
+      </div>
+      <div class="case-body">
+        <p><strong>Component:</strong> Forged 4340 steel crankshaft, 6-cylinder diesel engine, 180,000 km. <strong>Failure:</strong> Fatigue fracture at journal fillet radius; single initiation site at a machining mark.</p>
+        <div class="case-findings">
+          <span>Fractographic evidence:</span> Beach marks occupying 85% of cross-section (low nominal stress, long crack growth period). Single ratchet mark at fillet. Striations at 0.3–1.2 μm spacing indicate torsional cyclic loading. Final fracture zone (15%) shows ductile dimples — adequate material toughness.
+        </div>
+        <div class="case-findings" style="margin-top:6px;">
+          <span>Root cause:</span> Machining mark at fillet (Rz 12 μm vs specified Rz 4 μm) acted as stress concentration under torsional resonance. Torsional vibration damper had failed 30,000 km prior. <span>Corrective action:</span> Surface finish specification tightened; periodic damper inspection interval added.
+        </div>
+      </div>
+    </div>
+
+    <div class="case-card">
+      <div class="case-header">
+        <span class="case-industry ind-civil">Civil / Structural</span>
+        <span class="case-title">Bridge Eyebar Brittle Fracture — Silver Bridge Collapse (1967)</span>
+      </div>
+      <div class="case-body">
+        <p><strong>Component:</strong> High-strength steel eyebar, main suspension chain, Silver Bridge, OH/WV, USA. <strong>Failure:</strong> Brittle fracture of one eyebar triggered progressive collapse; 46 fatalities.</p>
+        <div class="case-findings">
+          <span>Fractographic evidence:</span> Corrosion-fatigue crack initiated at fretting pit at eyebar pin contact. Crack propagated by stress corrosion cracking (SCC) through high-strength steel (UTS ~950 MPa) in river environment. Final fracture: cleavage, no shear lip — temperature was 4°C, below NDT.
+        </div>
+        <div class="case-findings" style="margin-top:6px;">
+          <span>Root cause:</span> Design provided zero redundancy — single-pin eyebar chain with no alternative load path. Material susceptible to SCC. Absence of inspection access prevented detection of growing crack (est. 2.5 mm deep at fracture). <span>Legacy:</span> Led to bridge inspection standards and fracture-critical member (FCM) designation in AASHTO.
+        </div>
+      </div>
+    </div>
+
+    <div class="case-card">
+      <div class="case-header">
+        <span class="case-industry ind-pres">Pressure Equipment</span>
+        <span class="case-title">Ammonia Storage Tank SCC — Polythionic Acid Environment</span>
+      </div>
+      <div class="case-body">
+        <p><strong>Component:</strong> 304 stainless steel ammonia storage vessel, chemical plant, 12 yr service. <strong>Failure:</strong> SCC resulting in leakage during shutdown; no fatalities but $4M damage.</p>
+        <div class="case-findings">
+          <span>Fractographic evidence:</span> Intergranular SCC from inner surface. Sensitized grain boundaries (carbide precipitation at 550–750°C during welding) provided short-circuit diffusion paths. Polythionic acid formed from H₂S + SO₂ + H₂O during shutdown and plant washout.
+        </div>
+        <div class="case-findings" style="margin-top:6px;">
+          <span>Root cause:</span> Welding created sensitized HAZ without post-weld solution anneal. Polythionic acid environment formed only during shutdown — not anticipated in original design. <span>Corrective action:</span> Post-weld anneal or use low-carbon grade (304L) for all future vessels; nitrogen purge during shutdowns; shutdown procedure revised.
+        </div>
+      </div>
+    </div>
+
+    <div class="case-card">
+      <div class="case-header">
+        <span class="case-industry ind-mfg">Manufacturing</span>
+        <span class="case-title">Carbide Tool Insert Chipping — Thermal Shock + Adhesive Wear</span>
+      </div>
+      <div class="case-body">
+        <p><strong>Component:</strong> WC-Co cemented carbide insert, interrupted turning of 4140 steel, 300 m/min. <strong>Failure:</strong> Edge chipping after 45 seconds cutting time.</p>
+        <div class="case-findings">
+          <span>Fractographic evidence:</span> Comb cracks (thermal fatigue) on rake face from cyclic heating/cooling. Adhesive wear (built-up edge, BUE) on flank at low cutting speed. Chipping initiated from comb crack intersection with edge.
+        </div>
+        <div class="case-findings" style="margin-top:6px;">
+          <span>Root cause:</span> Interrupted cut produced thermal cycling; intermittent coolant application worsened thermal shock. Grade too brittle (low Co binder). <span>Corrective action:</span> Higher Co content grade (tougher); dry cutting or continuous flood coolant — not intermittent.
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:20px;">Common Root Cause Categories — ASM Vol. 11</div>
+    <div style="overflow-x:auto;">
+    <table class="ref-table" style="min-width:560px;">
+      <thead><tr><th>Category</th><th>Typical Causes</th><th>Detected By</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Design deficiency</strong></td><td>Stress concentration; inadequate section; no redundancy; wrong material selection</td><td>FEA review; drawing audit; stress analysis</td></tr>
+        <tr><td><strong>Material defect</strong></td><td>Inclusions; seams; laps; segregation; wrong alloy supplied</td><td>Metallography; OES chemistry; cert review</td></tr>
+        <tr><td><strong>Manufacturing defect</strong></td><td>Poor surface finish; machining damage; improper heat treat; weld defects</td><td>Hardness survey; metallography; NDT</td></tr>
+        <tr><td><strong>Assembly error</strong></td><td>Misalignment; improper torque; missing fasteners; wrong parts</td><td>Dimensional inspection; torque audit</td></tr>
+        <tr><td><strong>Service overload</strong></td><td>Load exceeded design; impact; abuse; environment not anticipated</td><td>Service records; fractography (overload zone)</td></tr>
+        <tr><td><strong>Maintenance failure</strong></td><td>Missed inspection; lubricant starvation; improper repair; wrong parts fitted</td><td>Maintenance records; visual examination</td></tr>
+        <tr><td><strong>Environmental</strong></td><td>Corrosion; SCC; fretting; erosion; hydrogen embrittlement</td><td>SEM/EDS; corrosion products analysis; environment review</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════ TAB 2: NTSB / AAIB ═══ -->
+<div id="panel-ntsb" class="panel">
+
+  <div class="section">
+    <div class="source-tag">NTSB — National Transportation Safety Board (USA)</div>
+    <h2>NTSB Investigation Structure and Phases</h2>
+    <p>The NTSB investigates accidents in aviation, rail, highway, marine, and pipeline transportation. All NTSB investigations focus on safety improvement — not fault assignment or liability. Published reports are public and freely available at ntsb.gov.</p>
+
+    <div class="phase-bar">
+      <div class="ph-title">Phase 1 — Go-Team Deployment &amp; Scene Documentation</div>
+      <div class="ph-body">
+        Investigators arrive within hours of notification. The primary task is scene documentation before any evidence is disturbed: total-station mapping, photography, wreckage distribution diagrams, witness interviews. For aviation, the flight data recorder (FDR) and cockpit voice recorder (CVR) are secured immediately.
+        <ul>
+          <li>Wreckage documentation: GPS-mapped, photographed, catalogued</li>
+          <li>Chain of custody established for all physical evidence</li>
+          <li>Witness statements taken; flight/voyage records secured</li>
+          <li>Weather data, ATC recordings, radar tracks obtained</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase-bar">
+      <div class="ph-title">Phase 2 — Factual Investigation (Working Groups)</div>
+      <div class="ph-body">
+        The investigation is divided into working groups, each led by an NTSB investigator with participation from parties (manufacturers, operators, unions, regulatory agencies). Working groups cover: structures, powerplant, systems, operations, human performance, meteorology, survival factors.
+        <ul>
+          <li>Structures group: wreckage reconstruction, fracture analysis, load analysis</li>
+          <li>Powerplant group: engine teardown, component inspection, borescope</li>
+          <li>Systems group: flight control, hydraulics, avionics data</li>
+          <li>Human performance: crew history, fatigue, training, decision-making</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase-bar">
+      <div class="ph-title">Phase 3 — Laboratory Analysis</div>
+      <div class="ph-body">
+        Fracture surfaces, fasteners, components, and materials are analysed at NTSB's Washington D.C. laboratory or contracted labs. Fractographic techniques mirror those in ASM Vol. 11/12. Independent metallurgical experts may be called.
+        <ul>
+          <li>SEM / EDS fractography: fracture mode, crack origin, crack growth direction</li>
+          <li>Fatigue life estimation from striation spacing</li>
+          <li>Material verification: chemistry, hardness, microstructure vs. spec</li>
+          <li>NDT of similar components still in service (fleet-wide action)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase-bar">
+      <div class="ph-title">Phase 4 — Probable Cause Determination &amp; Safety Recommendations</div>
+      <div class="ph-body">
+        The NTSB Board meets to vote on the probable cause and contributing factors. Safety recommendations (addressed to FAA, NHTSA, DOT, manufacturers, etc.) are issued as separate letters — these are binding in the sense that recipients must formally respond but are not legal mandates.
+        <ul>
+          <li>Probable cause: the most direct causal chain leading to the accident</li>
+          <li>Contributing factors: conditions that influenced the probable cause</li>
+          <li>Safety recommendations: specific, actionable, addressed to named recipients</li>
+          <li>Most-Wanted List: recurring systemic safety issues tracked publicly</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="source-tag">AAIB — Air Accidents Investigation Branch (UK)</div>
+    <h2>AAIB Investigation Structure</h2>
+    <p>The AAIB (UK Department for Transport) investigates civil aviation accidents and serious incidents in the UK. Like the NTSB, AAIB investigations are safety-focused, not fault-based. Reports are published in full at gov.uk/aaib-reports. The AAIB operates under ICAO Annex 13 standards and EU Regulation 996/2010.</p>
+
+    <div class="two-col">
+      <div>
+        <h3>AAIB Report Types</h3>
+        <table class="ref-table">
+          <thead><tr><th>Report Type</th><th>When Issued</th><th>Typical Length</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Formal Report</strong></td><td>Major accidents; complex investigations</td><td>50–200+ pages</td></tr>
+            <tr><td><strong>Special Bulletin</strong></td><td>Urgent safety issues requiring immediate action</td><td>5–15 pages</td></tr>
+            <tr><td><strong>Field Investigation Report</strong></td><td>Serious incidents; lesser accidents</td><td>10–30 pages</td></tr>
+            <tr><td><strong>Monthly Bulletin</strong></td><td>Compilation of lower-severity accidents</td><td>Summary format</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3>AAIB vs NTSB — Key Differences</h3>
+        <table class="ref-table">
+          <thead><tr><th>Attribute</th><th>AAIB</th><th>NTSB</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Jurisdiction</strong></td><td>Aviation only (UK)</td><td>All transport modes (USA)</td></tr>
+            <tr><td><strong>Legal basis</strong></td><td>ICAO Annex 13 / EU 996/2010</td><td>Independent Safety Board Act</td></tr>
+            <tr><td><strong>Party system</strong></td><td>Accredited representatives</td><td>Party system (manufacturers, operators)</td></tr>
+            <tr><td><strong>Interim reports</strong></td><td>Special Bulletins (days)</td><td>Interim factual reports (months)</td></tr>
+            <tr><td><strong>Recommendations</strong></td><td>To CAA, EASA, manufacturers</td><td>To FAA, DOT, manufacturers</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>How to Read an Accident Investigation Report — Structural Failures</h2>
+    <p>Accident reports contain far more information than their executive summary. For materials-related failures, the most technically detailed content is in the appendices and working group factual reports.</p>
+
+    <div class="section-label">Key Sections for Material / Structural Failures</div>
+    <table class="ref-table">
+      <thead><tr><th>Report Section</th><th>Content Relevant to Failure Analysis</th><th>Where to Find It</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Factual Information</strong></td><td>Component description, material specification, service history, damage documentation</td><td>Early sections; structures factual appendix</td></tr>
+        <tr><td><strong>Laboratory Examination</strong></td><td>SEM fractography, chemical analysis, hardness, microstructure — raw results</td><td>Appendices (often 30–100 pages)</td></tr>
+        <tr><td><strong>Analysis</strong></td><td>Interpretation of evidence: how the failure progressed, what initiated it</td><td>Middle sections; sometimes titled "Analysis of Structural Evidence"</td></tr>
+        <tr><td><strong>Conclusions</strong></td><td>Probable cause statement; contributing factors — each must be evidence-based</td><td>Near end of main report</td></tr>
+        <tr><td><strong>Safety Recommendations</strong></td><td>Specific engineering, inspection, or regulatory changes recommended</td><td>Final section; NTSB: separate letters online</td></tr>
+        <tr><td><strong>Docket / Public Record</strong></td><td>NTSB: full working group reports, party submissions, lab data (dms.ntsb.gov)</td><td>NTSB Docket Management System — separate from published report</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-label" style="margin-top:18px;">Selected Material Failure Findings from Published Reports</div>
+
+    <div class="case-card">
+      <div class="case-header">
+        <span class="case-industry ind-aero">NTSB — Aviation</span>
+        <span class="case-title">Aloha Airlines Flight 243 (1988) — Fuselage Fatigue / MSD</span>
+      </div>
+      <div class="case-body">
+        <p><strong>NTSB Report AAR-89/03.</strong> 737-200 suffered explosive decompression at 24,000 ft; 18-foot section of fuselage separated. <strong>Material finding:</strong> Multiple-site damage (MSD) — simultaneous fatigue cracks at multiple fastener holes in the lap joint. Each crack individually subcritical, but their link-up produced a critical flaw length much faster than single-crack growth models predicted.</p>
+        <div class="case-findings" style="margin-top:6px;">
+          <span>Metallurgical key findings:</span> Disbonding of adhesive bond between fuselage skin layers (moisture-induced) removed the bond's crack-arrest function. Crevice corrosion at the lap joint accelerated crack initiation at each fastener hole. Fatigue striations confirmed high-cycle fatigue; 89,680 flight cycles on the airframe.
+        </div>
+        <div class="case-findings" style="margin-top:6px;">
+          <span>Legacy:</span> Led to USAF and FAA aging aircraft programs; lap-joint inspection requirements; damage-tolerance analysis mandated for high-cycle aircraft.
+        </div>
+      </div>
+    </div>
+
+    <div class="case-card">
+      <div class="case-header">
+        <span class="case-industry ind-rail">AAIB — Rail (RAIB)</span>
+        <span class="case-title">Hatfield Rail Crash (2000) — Rolling Contact Fatigue / Gauge Corner Cracking</span>
+      </div>
+      <div class="case-body">
+        <p><strong>HSE / HMRI report.</strong> High-speed derailment caused by rail fracture from rolling contact fatigue (RCF) — specifically gauge corner cracking (GCC). Four fatalities. The rail had been identified as needing replacement 21 months earlier but was not changed.</p>
+        <div class="case-findings" style="margin-top:6px;">
+          <span>Metallurgical key findings:</span> RCF cracks initiated at gauge corner under wheel contact stress (hertzian contact). Cracks grew at ~35° below surface, branching transversely. Rail fragmented into multiple pieces — 300+ fragments recovered. Hardness of failed rail matched specification; failure was RCF-mode, not material defect.
+        </div>
+        <div class="case-findings" style="margin-top:6px;">
+          <span>Legacy:</span> Led to mandatory RCF inspection programs, grinding schedules, and improved track maintenance management systems in UK. Railtrack company restructured.
+        </div>
+      </div>
+    </div>
+
+    <div class="case-card">
+      <div class="case-header">
+        <span class="case-industry ind-civil">NTSB — Pipeline</span>
+        <span class="case-title">Pacific Gas &amp; Electric San Bruno Pipeline Explosion (2010)</span>
+      </div>
+      <div class="case-body">
+        <p><strong>NTSB Report PAR-11/01.</strong> Natural gas pipeline rupture and fire; 8 fatalities, 58 homes destroyed. <strong>Material finding:</strong> Seam weld defect in 1956-vintage ERW pipe acted as the flaw. Defect had existed since manufacture; pipeline records were incorrect about pipe specification and seam type.</p>
+        <div class="case-findings" style="margin-top:6px;">
+          <span>Metallurgical key findings:</span> ERW seam weld had a cold weld zone (lack of fusion) ~72mm long × 3mm deep — a manufacturing defect from 1956. Pressure cycle fatigue grew the defect over 54 years. Final fracture: brittle, through-thickness rupture propagating ~51m along the seam. No hydrostatic test had been performed at sufficient pressure to detect the defect.
+        </div>
+        <div class="case-findings" style="margin-top:6px;">
+          <span>Legacy:</span> PHMSA rules requiring pipeline operators to verify records, perform pressure tests on untested pipe segments, and replace or verify pre-1970 ERW pipe.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Key Terminology in Accident Investigation Reports</h2>
+    <div style="overflow-x:auto;">
+    <table class="ref-table" style="min-width:500px;">
+      <thead><tr><th>Term</th><th>Definition in Report Context</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Probable Cause</strong></td><td>The primary causal chain established by evidence. Not a legal finding of fault. NTSB uses "The probable cause of this accident was…"; AAIB uses "Causal Factor."</td></tr>
+        <tr><td><strong>Contributing Factor</strong></td><td>A condition that influenced the accident but was not the primary cause. Multiple contributing factors are common.</td></tr>
+        <tr><td><strong>Safety Recommendation</strong></td><td>Specific, actionable recommendation addressed to a named authority. Graded: Open-Acceptable, Open-Unacceptable, Closed-Acceptable, Closed-Unacceptable.</td></tr>
+        <tr><td><strong>Factual Report</strong></td><td>Uninterpreted data compiled by each working group. Published separately from the analytical report in NTSB docket.</td></tr>
+        <tr><td><strong>Fracture-Critical Member (FCM)</strong></td><td>A structural member whose single failure would cause collapse — no redundancy. Requires special inspection protocols (AASHTO/FAA terminology).</td></tr>
+        <tr><td><strong>Damage Tolerance</strong></td><td>Design philosophy ensuring a structure can sustain a specific defect size and still carry limit load until next inspection.</td></tr>
+        <tr><td><strong>Multiple-Site Damage (MSD)</strong></td><td>Simultaneous fatigue cracks at multiple locations (e.g., fastener holes) that reduce the critical crack length for link-up fracture.</td></tr>
+        <tr><td><strong>Initiating Event</strong></td><td>The first event in the accident sequence — often distinguished from the root cause (the underlying condition that allowed the initiating event to occur).</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════ TAB 3: TWI ═══ -->
+<div id="panel-twi" class="panel">
+
+  <div class="section">
+    <div class="source-tag">TWI — The Welding Institute — Failure Analysis Methodology Guide</div>
+    <h2>TWI Systematic Failure Investigation — Overview</h2>
+    <p>TWI's failure analysis methodology is used for engineering components across welded structures, pressure equipment, pipelines, and rotating machinery. The approach prioritises evidence preservation and sequential examination so that later destructive tests do not destroy evidence needed for earlier conclusions. Each stage produces a written record before proceeding.</p>
+    <div class="warn-box">
+      <strong>Critical Rule:</strong> Never perform destructive examination (sectioning, hardness indents, chemical etch) before completing all non-destructive examination. Evidence lost by premature sectioning cannot be recovered. Document everything at each stage before proceeding.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>TWI Examination Sequence — Flowchart</h2>
+    <div class="diagram-wrap">
+      <svg width="520" height="680" viewBox="0 0 520 680" style="font-family:'Segoe UI',Arial,sans-serif; max-width:100%;">
+
+        <!-- Stage boxes -->
+        <!-- 1 -->
+        <rect x="120" y="10" width="280" height="52" rx="8" fill="#1e3a5f"/>
+        <text x="260" y="32" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="700">STAGE 1</text>
+        <text x="260" y="48" text-anchor="middle" fill="#e2e8f0" font-size="10.5">Background Information &amp; Preservation</text>
+        <!-- Arrow -->
+        <line x1="260" y1="62" x2="260" y2="80" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+        <!-- 2 -->
+        <rect x="120" y="80" width="280" height="52" rx="8" fill="#1e3a5f"/>
+        <text x="260" y="102" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="700">STAGE 2</text>
+        <text x="260" y="118" text-anchor="middle" fill="#e2e8f0" font-size="10.5">Visual &amp; Macroscopic Examination</text>
+        <!-- Arrow -->
+        <line x1="260" y1="132" x2="260" y2="150" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+        <!-- 3 -->
+        <rect x="120" y="150" width="280" height="52" rx="8" fill="#1e3a5f"/>
+        <text x="260" y="172" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="700">STAGE 3</text>
+        <text x="260" y="188" text-anchor="middle" fill="#e2e8f0" font-size="10.5">Non-Destructive Testing (NDT)</text>
+        <!-- Arrow -->
+        <line x1="260" y1="202" x2="260" y2="220" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+        <!-- 4 -->
+        <rect x="120" y="220" width="280" height="52" rx="8" fill="#1e3a5f"/>
+        <text x="260" y="242" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="700">STAGE 4</text>
+        <text x="260" y="258" text-anchor="middle" fill="#e2e8f0" font-size="10.5">Stress Analysis &amp; Fracture Mechanics</text>
+        <!-- Arrow -->
+        <line x1="260" y1="272" x2="260" y2="290" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+        <!-- 5 -->
+        <rect x="120" y="290" width="280" height="52" rx="8" fill="#c2410c"/>
+        <text x="260" y="312" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">STAGE 5 — DESTRUCTIVE</text>
+        <text x="260" y="328" text-anchor="middle" fill="#fde68a" font-size="10.5">Mechanical Testing</text>
+        <!-- Arrow -->
+        <line x1="260" y1="342" x2="260" y2="360" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+        <!-- 6 -->
+        <rect x="120" y="360" width="280" height="52" rx="8" fill="#c2410c"/>
+        <text x="260" y="382" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">STAGE 6 — DESTRUCTIVE</text>
+        <text x="260" y="398" text-anchor="middle" fill="#fde68a" font-size="10.5">Metallurgical &amp; Chemical Analysis</text>
+        <!-- Arrow -->
+        <line x1="260" y1="412" x2="260" y2="430" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+        <!-- 7 -->
+        <rect x="120" y="430" width="280" height="52" rx="8" fill="#1e3a5f"/>
+        <text x="260" y="452" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="700">STAGE 7</text>
+        <text x="260" y="468" text-anchor="middle" fill="#e2e8f0" font-size="10.5">Root Cause Synthesis</text>
+        <!-- Arrow -->
+        <line x1="260" y1="482" x2="260" y2="500" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
+        <!-- 8 -->
+        <rect x="120" y="500" width="280" height="52" rx="8" fill="#14532d"/>
+        <text x="260" y="522" text-anchor="middle" fill="#86efac" font-size="11" font-weight="700">STAGE 8</text>
+        <text x="260" y="538" text-anchor="middle" fill="#e2e8f0" font-size="10.5">Report Writing &amp; Recommendations</text>
+
+        <!-- Loop-back arrow (if evidence requires revisiting) -->
+        <path d="M 120 456 Q 60 456 60 260 Q 60 102 120 102" fill="none" stroke="#f59e0b" stroke-width="1.4" stroke-dasharray="5,3" marker-end="url(#arr-y)"/>
+        <text x="30" y="250" text-anchor="middle" fill="#f59e0b" font-size="9" transform="rotate(-90,30,250)">Iterate if needed</text>
+
+        <!-- Markers -->
+        <defs>
+          <marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+            <path d="M1,1 L7,4 L1,7 Z" fill="#64748b"/>
+          </marker>
+          <marker id="arr-y" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+            <path d="M1,1 L7,4 L1,7 Z" fill="#f59e0b"/>
+          </marker>
+        </defs>
+
+        <!-- Legend -->
+        <rect x="10" y="590" width="14" height="14" rx="3" fill="#1e3a5f"/>
+        <text x="30" y="602" fill="#334155" font-size="10">Non-destructive stage</text>
+        <rect x="10" y="612" width="14" height="14" rx="3" fill="#c2410c"/>
+        <text x="30" y="624" fill="#334155" font-size="10">Destructive stage — cannot be undone</text>
+        <rect x="10" y="634" width="14" height="14" rx="3" fill="#14532d"/>
+        <text x="30" y="646" fill="#334155" font-size="10">Output stage</text>
+        <line x1="10" y1="657" x2="24" y2="657" stroke="#f59e0b" stroke-width="1.4" stroke-dasharray="4,2"/>
+        <text x="30" y="661" fill="#334155" font-size="10">Iteration loop (findings may require revisiting earlier stages)</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Stage 1 — Background Information &amp; Evidence Preservation</h2>
+    <p>Preservation of the failed component in its post-failure state is the first and most critical step. Any cleaning, handling damage, or premature sectioning permanently destroys evidence. TWI's protocol requires written authorisation before any component is touched beyond initial documentation.</p>
+
+    <div class="two-col">
+      <div>
+        <h3>Evidence Preservation Checklist</h3>
+        <ul class="checklist">
+          <li>Photograph the component in-situ before removal</li>
+          <li>Bag and label all fracture fragments — do not re-assemble mating surfaces</li>
+          <li>Seal fracture faces in dry nitrogen or desiccant bag to prevent further oxidation</li>
+          <li>Do NOT clean fracture surfaces — corrosion products contain chemical evidence</li>
+          <li>Do NOT wire-brush, grit-blast, or apply penetrant to fracture surface</li>
+          <li>Mark the orientation of every piece relative to installation direction</li>
+          <li>Collect any debris, wear particles, or fluid in the area</li>
+          <li>Record temperature, humidity, and environment at time of failure if possible</li>
+          <li>Preserve lubricant samples and any process fluids present</li>
+          <li>Secure any mating components or counterfaces (gears, bearings, seals)</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Background Information Collection Checklist</h3>
+        <ul class="checklist">
+          <li>Design drawings, material specification, and tolerances</li>
+          <li>Mill certificates and heat treatment records</li>
+          <li>Welding procedure specifications (WPS) and welder qualification records</li>
+          <li>Manufacturing inspection records and NDT reports</li>
+          <li>Service history: total life, load cycles, overhauls, repairs</li>
+          <li>Operating conditions at time of failure (load, speed, temperature, pressure)</li>
+          <li>Maintenance log entries — any recent repairs or modifications</li>
+          <li>Similar failures on the same or sister components</li>
+          <li>Environmental conditions (temperature, humidity, corrosive chemicals)</li>
+          <li>Operator accounts and any known pre-failure symptoms</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Stage 2 — Visual &amp; Macroscopic Examination</h2>
+    <p>The first examination of the component uses only the unaided eye and low-power stereo microscope (up to 50×). This stage establishes the overall failure geometry, fracture mode, and origin location before any magnification or destructive work.</p>
+
+    <table class="ref-table">
+      <thead><tr><th>Examination Point</th><th>What to Look For</th><th>Inference</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Fracture plane orientation</strong></td><td>Angle to applied stress axis: 90° = Mode I; 45° = shear; mixed = combined loading</td><td>Loading mode identification</td></tr>
+        <tr><td><strong>Fracture face texture</strong></td><td>Flat/crystalline = brittle; fibrous/grey = ductile; two-zone = fatigue</td><td>Fracture mode</td></tr>
+        <tr><td><strong>Beach marks</strong></td><td>Concentric arcs of smooth surface; focus toward origin</td><td>Fatigue; crack was intermittent</td></tr>
+        <tr><td><strong>Chevron / river marks</strong></td><td>Herringbone pattern pointing upstream toward origin</td><td>Brittle fracture; locate origin</td></tr>
+        <tr><td><strong>Ratchet marks</strong></td><td>Radial steps between adjacent initiation sites at surface</td><td>Multiple fatigue initiation sites; often indicates high stress or corrosion</td></tr>
+        <tr><td><strong>Shear lip</strong></td><td>Angled (45°) rim at fracture edge</td><td>Plane-stress ductile fracture at free surface; absent in fully brittle fracture</td></tr>
+        <tr><td><strong>Deformation</strong></td><td>Necking; bending; torsional twist; wear marks</td><td>Overload direction and magnitude; assembly condition</td></tr>
+        <tr><td><strong>Corrosion</strong></td><td>Location, colour, depth, morphology (pitting, uniform, filiform)</td><td>Corrosion type; pre-existing vs. post-fracture</td></tr>
+        <tr><td><strong>Secondary cracks</strong></td><td>Additional cracking near primary fracture</td><td>SCC (branching), fatigue (parallel), HIC (underbead)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Stages 3 &amp; 4 — NDT and Stress Analysis</h2>
+    <div class="two-col">
+      <div>
+        <h3>Stage 3 — NDT Method Selection</h3>
+        <table class="ref-table">
+          <thead><tr><th>Method</th><th>Defect Type</th><th>Limitations</th></tr></thead>
+          <tbody>
+            <tr><td><strong>PT (dye penetrant)</strong></td><td>Surface-open cracks</td><td>Surface must be clean; destroys corrosion evidence if cleaned</td></tr>
+            <tr><td><strong>MT (magnetic particle)</strong></td><td>Surface &amp; near-surface cracks (ferromagnetic only)</td><td>Not applicable to austenitic SS or non-ferrous</td></tr>
+            <tr><td><strong>RT (radiography)</strong></td><td>Internal voids, inclusions, weld porosity</td><td>Poor sensitivity to planar defects perpendicular to beam</td></tr>
+            <tr><td><strong>UT (ultrasonic)</strong></td><td>Subsurface cracks, delaminations, wall thickness</td><td>Requires good surface; complex geometry is difficult</td></tr>
+            <tr><td><strong>ACFM / ACPD</strong></td><td>Surface crack sizing</td><td>Specialist equipment; best for weld inspection</td></tr>
+            <tr><td><strong>CT scan (X-ray CT)</strong></td><td>Internal defect 3D mapping</td><td>Cost; size limitation; typically lab-based</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3>Stage 4 — Stress Analysis Considerations</h3>
+        <p>Before destructive work, TWI recommends estimating the stress state at the failure location to determine whether the observed failure mode is consistent with service loads.</p>
+        <div class="note-box">
+          <strong>Fracture mechanics check:</strong> Calculate the critical crack size a<sub>c</sub> = (K<sub>IC</sub>/σ·F)²/π. If the initial defect size (from NDT or fractographic estimation) is &gt; a<sub>c</sub>, failure was inevitable at that load. If a<sub>c</sub> is large (cm-scale), fatigue crack growth over extended time is implicated.
+        </div>
+        <ul>
+          <li>FEA or analytical stress at failure location vs. nominal design stress</li>
+          <li>Stress concentration factors (Kt) at origin geometry</li>
+          <li>Residual stress from welding or manufacturing (may add or subtract from service stress)</li>
+          <li>Cyclic stress range and R-ratio for fatigue life estimation</li>
+          <li>Threshold K (K<sub>th</sub>) for fatigue crack propagation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Stage 5 &amp; 6 — Destructive Examination</h2>
+    <div class="warn-box"><strong>Irreversible:</strong> Plan the entire sectioning strategy before making the first cut. Identify and mark all regions of interest. Cut specimens in a sequence that preserves the most critical evidence longest. Photograph each cross-section immediately after cutting.</div>
+
+    <h3>Mechanical Testing — Selection by Failure Mode Hypothesis</h3>
+    <table class="ref-table">
+      <thead><tr><th>Suspected Failure Mode</th><th>Tests Required</th><th>Specimen Location</th></tr></thead>
+      <tbody>
+        <tr><td>Overload (material too weak)</td><td>Tensile (UTS, yield, %El, %RA); hardness</td><td>Away from fracture; longitudinal and transverse</td></tr>
+        <tr><td>Brittle fracture at low temperature</td><td>Charpy impact series (−60 to +20°C); DBTT determination</td><td>Base metal; HAZ; weld metal if weld-related</td></tr>
+        <tr><td>Fatigue (material endurance)</td><td>Hardness survey; surface residual stress (XRD if available)</td><td>At initiation site; comparison location</td></tr>
+        <tr><td>SCC</td><td>Slow strain rate test (SSRT) in suspect environment; hardness</td><td>Base metal adjacent to failure</td></tr>
+        <tr><td>Creep</td><td>Elevated-temperature tensile; microhardness traverse</td><td>Undamaged region; comparison to virgin material</td></tr>
+        <tr><td>Hydrogen embrittlement</td><td>Sustained load test; delayed failure test; diffusible H measurement</td><td>Fasteners or similar components from same batch</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top:16px;">Metallurgical Examination — Sequence of Specimen Preparation</h3>
+    <div class="step-card">
+      <div class="step-num">A</div>
+      <div class="step-body">
+        <strong>Fracture Surface Examination (Before Sectioning)</strong>
+        <p>Examine fracture surface in SEM before any sectioning or etching. Record: fracture mode (dimples/cleavage/striations), crack origin location, crack growth direction, evidence of corrosion or contamination. EDS at initiation site to identify any embrittling species.</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">B</div>
+      <div class="step-body">
+        <strong>Transverse Section Through Origin</strong>
+        <p>Section perpendicular to the fracture face through the initiation site. Mount, polish, examine unetched (inclusion content, second-phase particles, voids) then etched (microstructure, grain size, phase identification, HAZ extent if welded).</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">C</div>
+      <div class="step-body">
+        <strong>Longitudinal Section</strong>
+        <p>Provides grain flow direction (wrought products), decarburisation depth, surface treatment depth (case depth, plating, coatings), and through-thickness microstructural gradients.</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">D</div>
+      <div class="step-body">
+        <strong>Chemistry Verification</strong>
+        <p>OES (optical emission spectrometry) on a ground surface remote from the failure — verifies alloy composition against certification. EDS in SEM identifies inclusions at origin site. EPMA for quantitative local chemistry if segregation or contamination is suspected.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Stage 7 — Root Cause Synthesis</h2>
+    <p>TWI uses a structured cause-and-effect analysis to move from observations to root cause. All proposed causes must be consistent with ALL physical evidence. Any single piece of evidence that contradicts a proposed root cause disqualifies that hypothesis.</p>
+
+    <div class="info-box">
+      <strong>Hypothesis Testing Rule (TWI):</strong> For each proposed root cause, list the physical evidence that supports it AND the evidence that would be expected if this were the cause but is absent. If expected evidence is absent, the hypothesis is weakened or eliminated.
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h3>Root Cause vs. Contributing Factor</h3>
+        <table class="ref-table">
+          <thead><tr><th>Type</th><th>Definition</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Root Cause</strong></td><td>Single underlying condition; removing it would have prevented failure</td><td>Insufficient preheat → HIC crack → brittle fracture initiation</td></tr>
+            <tr><td><strong>Contributing Factor</strong></td><td>Increased susceptibility or severity; alone would not cause failure</td><td>High restraint joint geometry; wet electrodes; cold ambient</td></tr>
+            <tr><td><strong>Immediate Cause</strong></td><td>The proximate event triggering failure</td><td>Start-up load applied before preheat soak completed</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3>Common Analysis Pitfalls (TWI)</h3>
+        <div class="warn-box" style="margin-top:0;">
+          <ul style="margin:0 0 0 16px;">
+            <li><strong>Confirmation bias:</strong> Seeking evidence to support a pre-formed conclusion; ignoring contradictory evidence</li>
+            <li><strong>Single-cause thinking:</strong> Most failures have multiple causes; stopping at the first plausible explanation</li>
+            <li><strong>Blaming the operator:</strong> Human error is rarely a root cause — it is usually a symptom of a system deficiency</li>
+            <li><strong>Missing latent causes:</strong> Design or management system failures that enabled the immediate cause to occur</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Stage 8 — Report Writing</h2>
+    <p>The TWI failure analysis report must be self-contained, evidence-based, and written for a technically competent reader who was not present during the investigation. Conclusions must never go beyond what the evidence supports. Uncertainty must be explicitly stated.</p>
+
+    <div class="report-section">
+      <div class="rs-heading">1. Executive Summary (1 page)</div>
+      <div class="rs-body">Component identity; failure date and consequence; root cause statement (one sentence); key recommendations. Sufficient for a non-technical manager to understand the outcome.</div>
+    </div>
+    <div class="report-section">
+      <div class="rs-heading">2. Background and Component Description</div>
+      <div class="rs-body">Drawing references; material specification; function; service history; operating conditions; maintenance records. Photographs of the component in service condition if available.</div>
+    </div>
+    <div class="report-section">
+      <div class="rs-heading">3. Visual and Macroscopic Examination</div>
+      <div class="rs-body">Annotated photographs of all significant features. Description of fracture surface, deformation, corrosion. Origin location (with scale reference). Fracture mode hypothesis at this stage.</div>
+    </div>
+    <div class="report-section">
+      <div class="rs-heading">4. NDT Results</div>
+      <div class="rs-body">Method used; conditions; findings with locations. Photographs of indications. Interpretation of NDT findings (secondary cracks, subsurface defects).</div>
+    </div>
+    <div class="report-section">
+      <div class="rs-heading">5. Mechanical Testing Results</div>
+      <div class="rs-body">All results tabulated with specification requirements alongside. Pass/fail against specification. Hardness survey maps. Charpy transition curves if applicable.</div>
+    </div>
+    <div class="report-section">
+      <div class="rs-heading">6. Metallurgical and Chemical Analysis</div>
+      <div class="rs-body">SEM fractographs annotated with scale bars; EDS spectra; optical micrographs of microstructure with etching conditions; chemistry table vs. specification; grain size measurements.</div>
+    </div>
+    <div class="report-section">
+      <div class="rs-heading">7. Stress and Fracture Mechanics Analysis</div>
+      <div class="rs-body">Calculated service stress; stress concentration factor at origin; critical crack size calculation; consistency check between calculated a<sub>c</sub> and observed final fracture zone size.</div>
+    </div>
+    <div class="report-section">
+      <div class="rs-heading">8. Discussion and Root Cause</div>
+      <div class="rs-body">Synthesis of all evidence. Fracture sequence narrative. Root cause and contributing factors stated explicitly. Any alternative hypotheses considered and eliminated (with reason). Uncertainty statements where evidence is incomplete.</div>
+    </div>
+    <div class="report-section">
+      <div class="rs-heading">9. Conclusions</div>
+      <div class="rs-body">Numbered list. Each conclusion must be directly supported by evidence cited in sections 3–7. No new information in the conclusions section.</div>
+    </div>
+    <div class="report-section">
+      <div class="rs-heading">10. Recommendations</div>
+      <div class="rs-body">Corrective actions (fix the specific failure) and preventive actions (address the system condition that allowed it). Each recommendation is specific, actionable, and addressed to a named responsible party. Prioritised by urgency and safety criticality.</div>
+    </div>
+
+    <div class="green-box" style="margin-top:16px;">
+      <strong>TWI Report Quality Check:</strong> Before issuing, verify — (1) every conclusion is supported by cited evidence; (2) the root cause eliminates all other hypotheses; (3) recommendations address both the immediate cause and the underlying system condition; (4) the report has been reviewed by an independent engineer not involved in the investigation.
+    </div>
+  </div>
+
+</div>
+
+<div class="back">
+  <a href="index.html">← Back to Reference Tables</a>
+  <a href="../index.html">← Back to Main Course Page</a>
+</div>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

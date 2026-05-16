@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weld Cracking Types</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:#0a1628; color:#e2e8f0; }
+
+header { background:linear-gradient(135deg,#0f2040,#1e3a5f); padding:28px 24px 22px; text-align:center; border-bottom:1px solid #1e3a5f; }
+header h1 { font-size:1.75rem; font-weight:700; color:#f1f5f9; }
+header .subtitle { color:#38bdf8; margin-top:6px; font-size:0.88rem; }
+
+.tab-bar { display:flex; flex-wrap:wrap; background:#0f2040; border-bottom:2px solid #1e3a5f; padding:0 20px; position:sticky; top:0; z-index:10; }
+.tab-btn { padding:11px 18px; font-size:0.84rem; font-weight:600; border:none; background:none; cursor:pointer; color:#64748b; border-bottom:3px solid transparent; margin-bottom:-2px; transition:all 0.15s; white-space:nowrap; }
+.tab-btn:hover { color:#38bdf8; }
+.tab-btn.active { color:#38bdf8; border-bottom-color:#38bdf8; }
+
+.panel { display:none; max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
+.panel.active { display:block; }
+
+.card { background:#0f2040; border:1px solid #1e3a5f; border-radius:12px; padding:20px 22px; margin-bottom:22px; }
+.card h2 { font-size:1.1rem; color:#38bdf8; margin-bottom:10px; }
+.card h3 { font-size:0.94rem; color:#7dd3fc; font-weight:700; margin:14px 0 7px; }
+.card p  { font-size:0.86rem; color:#94a3b8; line-height:1.65; margin-bottom:8px; }
+.card ul { font-size:0.86rem; color:#94a3b8; line-height:1.65; margin:6px 0 8px 18px; }
+.card li { margin-bottom:4px; }
+
+canvas { display:block; border-radius:8px; }
+
+.three-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+@media(max-width:820px){ .three-grid { grid-template-columns:1fr; } }
+.two-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:660px){ .two-grid { grid-template-columns:1fr; } }
+.six-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
+@media(max-width:760px){ .six-grid { grid-template-columns:1fr; } }
+
+.canvas-label { font-size:0.8rem; font-weight:700; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.05em; }
+
+.ann-list .ann-item { display:flex; gap:10px; align-items:flex-start; margin-bottom:7px; }
+.ann-list .ann-dot { width:11px; height:11px; border-radius:50%; flex-shrink:0; margin-top:3px; }
+.ann-list .ann-text { font-size:0.83rem; color:#94a3b8; line-height:1.55; }
+
+.source-tag { display:inline-block; padding:3px 10px; background:#1e3a5f; color:#93c5fd; border-radius:6px; font-size:0.75rem; font-weight:600; margin-bottom:12px; }
+
+.ref-table { width:100%; border-collapse:collapse; font-size:0.81rem; margin:10px 0; }
+.ref-table th { background:#1e3a5f; color:#7dd3fc; padding:8px 10px; text-align:left; font-weight:600; }
+.ref-table td { padding:7px 10px; border-bottom:1px solid #1e3a5f; color:#94a3b8; vertical-align:top; }
+.ref-table tr:hover td { background:#0a1628; }
+
+.back { text-align:center; padding:24px; font-size:0.9rem; }
+.back a { color:#38bdf8; text-decoration:none; }
+.back a:hover { text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Weld Cracking Types</h1>
+  <div class="subtitle">Lincoln Electric — Hot / Cold / Lamellar Tearing &nbsp;&middot;&nbsp; AWS — Visual Crack Morphology Reference &nbsp;&middot;&nbsp; TWI — Lamellar Tearing Mechanism &amp; Stepped Morphology</div>
+</header>
+
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('lincoln',this)">Lincoln Electric — Crack Types</button>
+  <button class="tab-btn" onclick="showTab('aws',this)">AWS — Visual Comparison</button>
+  <button class="tab-btn" onclick="showTab('twi',this)">TWI — Lamellar Tearing</button>
+</nav>
+
+<!-- ═══════ TAB 1: LINCOLN ═══════ -->
+<div id="panel-lincoln" class="panel active">
+  <div class="card">
+    <div class="source-tag">Lincoln Electric — Weld Discontinuity Reference</div>
+    <h2>The Three Principal Weld Cracking Mechanisms</h2>
+    <p>Weld cracking can occur during solidification (hot cracking), after cooling (cold cracking), or through the base metal thickness under through-thickness weld stress (lamellar tearing). Each has a distinct mechanism, location, temperature range, and set of causes. Correct identification drives the right prevention strategy.</p>
+    <div class="three-grid" style="margin-top:16px;">
+      <div>
+        <div class="canvas-label" style="color:#f97316;">Hot Cracking — Solidification</div>
+        <canvas id="cv-hot" width="300" height="290"></canvas>
+        <div class="ann-list" style="margin-top:10px;">
+          <div class="ann-item"><div class="ann-dot" style="background:#ef4444;"></div><div class="ann-text"><strong style="color:#ef4444;">Solidification crack</strong> — centerline of weld; forms as dendrites solidify and inter-dendritic liquid film tears under shrinkage stress</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#f97316;"></div><div class="ann-text"><strong style="color:#f97316;">HAZ liquation crack</strong> — at fusion line; grain boundary liquation in HAZ during high heat input</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#fbbf24;"></div><div class="ann-text"><strong style="color:#fbbf24;">Temperature range</strong> — occurs at solidification temp (~1400°C for carbon steel); crack is open at high temperature</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="canvas-label" style="color:#38bdf8;">Cold Cracking — HIC / Hydrogen-Induced</div>
+        <canvas id="cv-cold" width="300" height="290"></canvas>
+        <div class="ann-list" style="margin-top:10px;">
+          <div class="ann-item"><div class="ann-dot" style="background:#38bdf8;"></div><div class="ann-text"><strong style="color:#38bdf8;">Underbead crack</strong> — in HAZ parallel to fusion line; most common HIC location in susceptible microstructure</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#7dd3fc;"></div><div class="ann-text"><strong style="color:#7dd3fc;">Toe crack</strong> — initiates at weld toe stress concentration; propagates into plate under residual stress</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#93c5fd;"></div><div class="ann-text"><strong style="color:#93c5fd;">Delayed fracture</strong> — occurs &lt;150°C, often hours or days after welding; requires susceptible microstructure + H + stress simultaneously</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="canvas-label" style="color:#a78bfa;">Lamellar Tearing — Z-Direction</div>
+        <canvas id="cv-lamellar" width="300" height="290"></canvas>
+        <div class="ann-list" style="margin-top:10px;">
+          <div class="ann-item"><div class="ann-dot" style="background:#a78bfa;"></div><div class="ann-text"><strong style="color:#a78bfa;">Stepped crack</strong> — staircase morphology below fusion line; terraces along MnS stringers, risers through ferrite</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#c4b5fd;"></div><div class="ann-text"><strong style="color:#c4b5fd;">MnS inclusions</strong> — elongated parallel to rolling direction; low through-thickness ductility (%RA<sub>Z</sub>)</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#ddd6fe;"></div><div class="ann-text"><strong style="color:#ddd6fe;">Through-thickness stress</strong> — weld shrinkage forces act in Z-direction (through plate); worst in T-joints and corner joints</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Comparison — Causes, Detection &amp; Prevention</h2>
+    <div style="overflow-x:auto;">
+    <table class="ref-table" style="min-width:700px;">
+      <thead><tr><th>Attribute</th><th style="color:#f97316;">Hot Cracking</th><th style="color:#38bdf8;">Cold Cracking (HIC)</th><th style="color:#a78bfa;">Lamellar Tearing</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Temperature range</strong></td><td>At solidification; ~1200–1400°C</td><td>&lt;150°C; hours–days after welding</td><td>Near ambient; during or after welding</td></tr>
+        <tr><td><strong>Location</strong></td><td>Weld metal centreline; HAZ fusion line</td><td>HAZ (underbead, toe, root); occasionally weld metal</td><td>Base metal below HAZ; parallel to plate surface</td></tr>
+        <tr><td><strong>Primary cause</strong></td><td>High S/P impurities; low-melting eutectic; high heat input; concave bead</td><td>Diffusible hydrogen + susceptible HAZ microstructure (martensite) + tensile stress</td><td>Elongated MnS inclusions + through-thickness weld stress (Z-direction)</td></tr>
+        <tr><td><strong>Critical material factors</strong></td><td>High S, P (weld metal); high C; high restraint; low Mn/S ratio</td><td>High CE (martensite HAZ); high diffusible H; high restraint</td><td>Low Z-direction ductility (%RA<sub>Z</sub> &lt;20%); thick plate; high MnS content</td></tr>
+        <tr><td><strong>Morphology</strong></td><td>Intergranular; follows grain boundaries; open at solidification temp</td><td>Transgranular or intergranular; angular; sharp; tight</td><td>Stepped/staircase; terraces parallel to surface; visible macro features</td></tr>
+        <tr><td><strong>NDT detection</strong></td><td>PT, MT (if open to surface); RT for subsurface</td><td>MT, PT after delay (min. 24 hr); UT for subsurface</td><td>UT (best); PT if surface breaking; RT for severe cases</td></tr>
+        <tr><td><strong>Prevention — material</strong></td><td>Control S ≤0.015%; use Mn/S &gt;25; control P; clean electrodes</td><td>Low-hydrogen electrodes (H4/H8); control CE; preheat</td><td>Specify Z-grade steel (Z25, Z35); %RA<sub>Z</sub> &gt;25–35%</td></tr>
+        <tr><td><strong>Prevention — procedure</strong></td><td>Convex bead profile; limit heat input; no crater cracks; backfill craters</td><td>Preheat per AWS D1.1; PWHT; min interpass temp; control restraint</td><td>Redesign joint (avoid Z-loading); buttering; balanced welding sequence</td></tr>
+        <tr><td><strong>Lincoln Electric reference</strong></td><td>Weld Discontinuities — Hot Cracks (Lincoln Procedure Handbook)</td><td>Hydrogen-Induced Cracking — CE / Preheat Guide (Lincoln)</td><td>Lamellar Tearing — Joint Design Guide (Lincoln &amp; AWS D1.1)</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ TAB 2: AWS ═══════ -->
+<div id="panel-aws" class="panel">
+  <div class="card">
+    <div class="source-tag">AWS — Weld Defect Visual Comparison Reference</div>
+    <h2>Six Principal Weld Crack Types — Location &amp; Morphology</h2>
+    <p>AWS D1.1, AWS B4.0, and the AWS Welding Inspection Handbook categorise weld cracks by location and orientation. Understanding where each crack appears in a cross-section — and how it looks — guides both non-destructive testing method selection and root cause analysis.</p>
+    <div class="six-grid" style="margin-top:16px;">
+      <div>
+        <div class="canvas-label" style="color:#ef4444;">Centreline Crack</div>
+        <canvas id="cv-aws-1" width="240" height="188"></canvas>
+        <p style="font-size:0.78rem; color:#64748b; margin-top:6px;">Cross-section view. Crack splits weld bead down the centre. Hot cracking mechanism. High S/P; concave bead; high restraint.</p>
+      </div>
+      <div>
+        <div class="canvas-label" style="color:#f97316;">Crater Crack</div>
+        <canvas id="cv-aws-2" width="240" height="188"></canvas>
+        <p style="font-size:0.78rem; color:#64748b; margin-top:6px;">Plan view (top). Star crack at weld end crater. Hot cracking; insufficient crater fill at arc stop. Prevent: backfill crater before stopping arc.</p>
+      </div>
+      <div>
+        <div class="canvas-label" style="color:#fbbf24;">Transverse Crack</div>
+        <canvas id="cv-aws-3" width="240" height="188"></canvas>
+        <p style="font-size:0.78rem; color:#64748b; margin-top:6px;">Longitudinal section (side view). Crack perpendicular to weld axis. Hot or cold; high restraint transverse to weld; high-strength weld metal.</p>
+      </div>
+      <div>
+        <div class="canvas-label" style="color:#38bdf8;">Underbead Crack</div>
+        <canvas id="cv-aws-4" width="240" height="188"></canvas>
+        <p style="font-size:0.78rem; color:#64748b; margin-top:6px;">Cross-section view. HAZ crack parallel to fusion line. Cold cracking (HIC); requires hydrogen + susceptible martensite + tensile stress. Most common HIC form.</p>
+      </div>
+      <div>
+        <div class="canvas-label" style="color:#7dd3fc;">Toe Crack</div>
+        <canvas id="cv-aws-5" width="240" height="188"></canvas>
+        <p style="font-size:0.78rem; color:#64748b; margin-top:6px;">Cross-section view. Initiates at weld toe stress concentration (Kt ≈ 2–4). Cold cracking; propagates diagonally into plate under residual stress. Surface-breaking — detectable by MT/PT.</p>
+      </div>
+      <div>
+        <div class="canvas-label" style="color:#a78bfa;">Root Crack</div>
+        <canvas id="cv-aws-6" width="240" height="188"></canvas>
+        <p style="font-size:0.78rem; color:#64748b; margin-top:6px;">Cross-section view. At weld root — highest restraint location and often smallest cross-section. Cold or hot. Groove welds: insufficient root opening or penetration. Fillet welds: lack of fusion at root.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>AWS Classification Summary</h2>
+    <div style="overflow-x:auto;">
+    <table class="ref-table" style="min-width:620px;">
+      <thead><tr><th>Crack Type</th><th>AWS Category</th><th>Typical Size</th><th>Primary NDT Method</th><th>AWS D1.1 Reference</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Centreline</strong></td><td>Hot crack — solidification</td><td>Full weld length; mm–cm depth</td><td>RT (if buried); PT/MT if surface-open</td><td>Clause 6.8.1 — visual; Annex B cracks</td></tr>
+        <tr><td><strong>Crater</strong></td><td>Hot crack — solidification</td><td>2–15 mm diameter star pattern</td><td>Visual + PT/MT (surface)</td><td>Clause 6.8.1; prohibited in all welds</td></tr>
+        <tr><td><strong>Transverse</strong></td><td>Hot or cold; high restraint</td><td>Extends across full weld width</td><td>RT (transverse to weld axis); UT</td><td>Annex B; prohibited</td></tr>
+        <tr><td><strong>Underbead</strong></td><td>Cold crack — HIC</td><td>1–20 mm; subsurface</td><td>UT (phased array preferred); MT (if near surface)</td><td>Table 4.4 preheat; Annex A CE calc</td></tr>
+        <tr><td><strong>Toe</strong></td><td>Cold crack — HIC or fatigue</td><td>Surface-breaking; 1–10 mm depth</td><td>MT (preferred); PT; ACFM</td><td>Clause 6.8.1; fatigue provisions Annex K</td></tr>
+        <tr><td><strong>Root</strong></td><td>Cold crack — HIC or LOF</td><td>Subsurface; tight</td><td>RT; UT; TOFD</td><td>Clause 6.9; penetration requirements</td></tr>
+        <tr><td><strong>Lamellar tear</strong></td><td>Base metal Z-direction failure</td><td>mm–cm stepped morphology; below HAZ</td><td>UT (best for detecting); surface PT if breaking</td><td>Commentary C-4; Z-grade steel reference</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ TAB 3: TWI ═══════ -->
+<div id="panel-twi" class="panel">
+  <div class="card">
+    <div class="source-tag">TWI — The Welding Institute — Lamellar Tearing Guide</div>
+    <h2>Lamellar Tearing — Mechanism, Stepped Morphology &amp; Inclusion Role</h2>
+    <p>TWI's research on lamellar tearing established the role of elongated MnS inclusions as the primary material factor. Weld shrinkage loads act through the plate thickness (Z-direction). Where inclusions provide planes of weakness parallel to the plate surface, cracks propagate along inclusions (terraces) and jump between bands (risers), creating the characteristic stepped or staircase fracture path below the HAZ.</p>
+    <canvas id="cv-twi" width="540" height="340" style="margin:16px auto; display:block;"></canvas>
+
+    <div class="two-grid" style="margin-top:18px;">
+      <div>
+        <h3>Three Conditions for Lamellar Tearing (TWI)</h3>
+        <div class="ann-list">
+          <div class="ann-item"><div class="ann-dot" style="background:#a78bfa;"></div><div class="ann-text"><strong style="color:#a78bfa;">Through-thickness stress</strong> — weld shrinkage loading acting in Z-direction; worst in T-joints, corner joints, cruciform joints where the plate is loaded through its thickness</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#c4b5fd;"></div><div class="ann-text"><strong style="color:#c4b5fd;">Low Z-direction ductility</strong> — %RA<sub>Z</sub> &lt;20% (measured by Z-test, BS 6443 / ISO 7778); caused by elongated MnS, oxide, or silicate inclusions parallel to plate rolling surface</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#ddd6fe;"></div><div class="ann-text"><strong style="color:#ddd6fe;">Location below HAZ</strong> — crack initiates just below the fusion line in the base metal; HAZ thermal cycle reduces inclusion–matrix bond strength further</div></div>
+        </div>
+      </div>
+      <div>
+        <h3>Fractographic Features (TWI / ASM Vol. 11)</h3>
+        <div class="ann-list">
+          <div class="ann-item"><div class="ann-dot" style="background:#f59e0b;"></div><div class="ann-text"><strong style="color:#f59e0b;">Terrace</strong> — flat, elongated fracture surface parallel to plate surface; corresponds to crack propagation along one MnS stringer band; woody or fibrous texture in SEM</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#fbbf24;"></div><div class="ann-text"><strong style="color:#fbbf24;">Riser</strong> — short, steep fracture segment connecting two terraces; ductile dimple fracture through the ferritic matrix between stringer bands</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#94a3b8;"></div><div class="ann-text"><strong style="color:#94a3b8;">MnS inclusions</strong> — identified by SEM/EDS; grey, elongated ellipsoidal morphology in unetched cross-section; decohesion at MnS–ferrite interface initiates terrace</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Susceptibility Assessment &amp; Prevention — TWI / BS 7910 / AWS D1.1</h2>
+    <div style="overflow-x:auto;">
+    <table class="ref-table" style="min-width:600px;">
+      <thead><tr><th>Factor</th><th>Low Risk</th><th>Moderate Risk</th><th>High Risk</th><th>Prevention Action</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Z-direction ductility (%RA<sub>Z</sub>)</strong></td><td>&gt;35%</td><td>20–35%</td><td>&lt;20%</td><td>Specify Z25 (≥25%) or Z35 (≥35%) to BS EN 10164 / ASTM A770</td></tr>
+        <tr><td><strong>Plate thickness</strong></td><td>&lt;20 mm</td><td>20–40 mm</td><td>&gt;40 mm</td><td>Design for reduced through-thickness restraint; use thinner plates where possible</td></tr>
+        <tr><td><strong>Joint type</strong></td><td>Butt weld (no Z-loading)</td><td>T-joint (moderate)</td><td>Corner joint, cruciform (severe Z-loading)</td><td>Redesign to reduce through-thickness stress; use alternative joint geometry</td></tr>
+        <tr><td><strong>Inclusion type</strong></td><td>Globular (Ca-treated steel)</td><td>Fine dispersed</td><td>Elongated MnS stringers</td><td>Specify calcium-treated or sulphur-controlled steel (S ≤0.005%)</td></tr>
+        <tr><td><strong>Weld leg size</strong></td><td>Small (≤8 mm)</td><td>10–16 mm</td><td>&gt;20 mm</td><td>Multiple-pass welds; balanced deposition sequence; reduce single-pass leg size</td></tr>
+        <tr><td><strong>Preheat</strong></td><td>&gt;150°C</td><td>75–150°C</td><td>None</td><td>Preheat reduces restraint intensity at early cooling; slows residual stress build-up</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 style="margin-top:16px;">Joint Redesign Strategies (TWI)</h3>
+    <div style="overflow-x:auto;">
+    <table class="ref-table" style="min-width:560px;">
+      <thead><tr><th>Strategy</th><th>How It Works</th><th>Typical Application</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Buttering</strong></td><td>Apply 1–3 ductile weld runs to the susceptible plate face before assembly; crack-prone base metal is no longer at the fusion line — only ductile weld butter layer is</td><td>Very susceptible plates; retrofit; high-restraint corner joints</td></tr>
+        <tr><td><strong>Balanced welding sequence</strong></td><td>Deposit weld passes alternately on each side to balance shrinkage stresses; reduces net Z-direction residual stress build-up</td><td>Both sides of T-joint or cruciform; symmetric joints</td></tr>
+        <tr><td><strong>Reduce weld size</strong></td><td>Smaller fillet reduces shrinkage force; use minimum adequate fillet to load requirements (AWS D1.1 Table 8.8)</td><td>All fillet-welded T-joints and corner joints</td></tr>
+        <tr><td><strong>Change joint type</strong></td><td>Convert T-joint to full-penetration butt weld (load transfer parallel to plate); eliminates Z-direction loading entirely</td><td>High-stress structural connections; primary load path members</td></tr>
+        <tr><td><strong>Specify Z-grade plate</strong></td><td>BS EN 10164 Z15 / Z25 / Z35: guaranteed minimum %RA<sub>Z</sub> of 15, 25, or 35% respectively; calcium treatment shapes inclusions to globular morphology</td><td>Any joint where Z-direction ductility cannot be improved by design</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<div class="back"><a href="../index.html">← Back to MECH191 Visualizations</a></div>
+
+<script>
+// ── Seeded RNG (Math.abs per project memory — negative seed → negative rng() → canvas errors)
+function seeded(seed) {
+  let s = Math.abs(Math.round(seed)) || 1;
+  return function() { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
+}
+
+// ── HiDPI setup: scale canvas buffer to devicePixelRatio, keep CSS size unchanged
+function setupCanvas(id) {
+  const cv = document.getElementById(id);
+  const dpr = window.devicePixelRatio || 1;
+  const W = parseInt(cv.getAttribute('width'));
+  const H = parseInt(cv.getAttribute('height'));
+  cv.width = Math.round(W * dpr);
+  cv.height = Math.round(H * dpr);
+  cv.style.width = W + 'px';
+  cv.style.height = H + 'px';
+  const ctx = cv.getContext('2d');
+  ctx.scale(dpr, dpr);
+  return { cv, ctx, W, H };
+}
+
+// ── Label helper: draw bg rect then text
+function lbl(ctx, text, x, y, col, font, align, bgAlpha) {
+  ctx.save();
+  ctx.font = font || 'bold 9px Segoe UI,Arial';
+  ctx.textAlign = align || 'center';
+  const tw = ctx.measureText(text).width;
+  const bx = align === 'left' ? x - 2 : align === 'right' ? x - tw - 2 : x - tw / 2 - 2;
+  ctx.fillStyle = `rgba(6,14,28,${bgAlpha !== undefined ? bgAlpha : 0.85})`;
+  ctx.fillRect(bx, y - 11, tw + 4, 13);
+  ctx.fillStyle = col;
+  ctx.fillText(text, x, y);
+  ctx.restore();
+}
+
+// ── Draw standard butt-weld cross-section base
+// Returns geometry object for subsequent crack drawing
+function weldBase(ctx, W, H, pY, capY, rootY, hwT, hwR, hazW) {
+  const CX = W / 2;
+
+  // Plates
+  ctx.fillStyle = '#1a2d44';
+  ctx.fillRect(0, pY, CX - hwT, H - pY);
+  ctx.fillRect(CX + hwT, pY, W - CX - hwT, H - pY);
+
+  // HAZ
+  ctx.fillStyle = '#1e3352';
+  ctx.fillRect(CX - hwT - hazW, pY, hazW, H - pY);
+  ctx.fillRect(CX + hwT, pY, hazW, H - pY);
+
+  // Weld metal
+  const wg = ctx.createLinearGradient(CX, capY, CX, H);
+  wg.addColorStop(0, '#253c56'); wg.addColorStop(1, '#1e3049');
+  ctx.fillStyle = wg;
+  ctx.beginPath();
+  ctx.moveTo(CX - hwT, pY);
+  ctx.lineTo(CX - hwR, rootY);
+  ctx.lineTo(CX + hwR, rootY);
+  ctx.lineTo(CX + hwT, pY);
+  ctx.bezierCurveTo(CX + hwT - 14, capY + 3, CX - hwT + 14, capY + 3, CX - hwT, pY);
+  ctx.closePath();
+  ctx.fill();
+
+  // Borders
+  ctx.strokeStyle = '#2d4a6a'; ctx.lineWidth = 0.8;
+  ctx.strokeRect(0, pY, CX - hwT, H - pY);
+  ctx.strokeRect(CX + hwT, pY, W - CX - hwT, H - pY);
+  ctx.beginPath();
+  ctx.moveTo(CX - hwT, pY); ctx.lineTo(CX - hwR, rootY);
+  ctx.lineTo(CX + hwR, rootY); ctx.lineTo(CX + hwT, pY);
+  ctx.bezierCurveTo(CX + hwT - 14, capY + 3, CX - hwT + 14, capY + 3, CX - hwT, pY);
+  ctx.closePath(); ctx.stroke();
+
+  // Fusion lines (dashed)
+  ctx.save(); ctx.setLineDash([3, 2]);
+  ctx.strokeStyle = 'rgba(100,180,220,0.3)'; ctx.lineWidth = 0.7;
+  ctx.beginPath();
+  ctx.moveTo(CX - hwT, pY); ctx.lineTo(CX - hwR, rootY);
+  ctx.moveTo(CX + hwT, pY); ctx.lineTo(CX + hwR, rootY);
+  ctx.stroke(); ctx.restore();
+
+  return { CX, hwT, hwR, hazW, pY, capY, rootY };
+}
+
+// ════════════════ LINCOLN: HOT CRACKING ════════════════
+function drawHotCracking() {
+  const { cv, ctx, W, H } = setupCanvas('cv-hot');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#0f2040'; ctx.fillRect(0, 0, W, 22);
+  ctx.fillStyle = '#f97316'; ctx.font = 'bold 10px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText('HOT CRACKING — Solidification', 6, 15);
+
+  const g = weldBase(ctx, W, H, 128, 106, 262, 62, 8, 20);
+  const CX = g.CX;
+
+  // Dendrites — V-shaped growth from fusion lines toward centerline
+  const rng = seeded(401);
+  ctx.strokeStyle = 'rgba(120,160,200,0.22)'; ctx.lineWidth = 0.75;
+  for (let i = 0; i < 20; i++) {
+    const t = rng();
+    const ox = (CX - g.hwT) + t * (g.hwT - g.hwR);
+    const oy = g.pY + t * (g.rootY - g.pY);
+    const tipX = CX - 2 + rng() * 5;
+    ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(tipX, oy + (rng() - 0.5) * 18); ctx.stroke();
+  }
+  for (let i = 0; i < 20; i++) {
+    const t = rng();
+    const ox = (CX + g.hwT) - t * (g.hwT - g.hwR);
+    const oy = g.pY + t * (g.rootY - g.pY);
+    const tipX = CX + 2 - rng() * 5;
+    ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(tipX, oy + (rng() - 0.5) * 18); ctx.stroke();
+  }
+
+  // Solidification crack — centerline, jagged, from cap to 90% depth
+  const rngC = seeded(55);
+  ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 1.6;
+  ctx.beginPath(); ctx.moveTo(CX, g.capY + 4);
+  for (let y = g.capY + 8; y < g.rootY - 22; y += 5) ctx.lineTo(CX + (rngC() - 0.5) * 6, y);
+  ctx.stroke();
+
+  // HAZ liquation crack (small, left fusion line region)
+  const rngL = seeded(199);
+  ctx.strokeStyle = '#f97316'; ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(CX - g.hwT - 3, g.pY + 28);
+  for (let y = g.pY + 32; y < g.pY + 60; y += 4)
+    ctx.lineTo(CX - g.hwT + (rngL() - 0.5) * 4, y);
+  ctx.stroke();
+
+  // Labels
+  lbl(ctx, 'Solidification Crack', CX, g.capY + 14, '#ef4444', 'bold 9px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Dendrites', CX + 28, 175, 'rgba(120,160,200,0.9)', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Weld Metal', CX, 210, '#93c5fd', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'HAZ liquation', CX - g.hwT - 4, g.pY + 40, '#f97316', '8px Segoe UI,Arial', 'right');
+  lbl(ctx, 'HAZ', CX - g.hwT - g.hazW / 2, 185, '#7dd3fc', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Base Metal', 30, 200, '#64748b', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, '~1400°C — during solidification', W / 2, H - 8, '#f97316', '8px Segoe UI,Arial', 'center');
+}
+
+// ════════════════ LINCOLN: COLD CRACKING ════════════════
+function drawColdCracking() {
+  const { cv, ctx, W, H } = setupCanvas('cv-cold');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#0f2040'; ctx.fillRect(0, 0, W, 22);
+  ctx.fillStyle = '#38bdf8'; ctx.font = 'bold 10px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText('COLD CRACKING — Hydrogen-Induced (HIC)', 5, 15);
+
+  const g = weldBase(ctx, W, H, 128, 106, 262, 62, 8, 20);
+  const CX = g.CX;
+
+  // Hydrogen H symbols scattered in weld metal
+  const rngH = seeded(222);
+  ctx.fillStyle = 'rgba(147,197,253,0.45)'; ctx.font = 'bold 9px Segoe UI,Arial'; ctx.textAlign = 'center';
+  for (let i = 0; i < 12; i++) {
+    const hx = CX + (rngH() - 0.5) * 80;
+    const hy = g.pY + 12 + rngH() * 80;
+    ctx.fillText('H', hx, hy);
+  }
+
+  // Underbead crack — in left HAZ, parallel to and just below fusion line
+  const rngU = seeded(77);
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5;
+  const ubY = g.pY + 32;
+  ctx.beginPath(); ctx.moveTo(CX - g.hwT - 2, ubY);
+  for (let x = CX - g.hwT - 4; x > CX - g.hwT - g.hazW + 2; x -= 4)
+    ctx.lineTo(x, ubY + (rngU() - 0.5) * 3);
+  ctx.stroke();
+
+  // Toe crack — diagonal from left weld toe into plate
+  const rngT = seeded(333);
+  ctx.strokeStyle = '#7dd3fc'; ctx.lineWidth = 1.4;
+  ctx.beginPath(); ctx.moveTo(CX - g.hwT, g.pY);
+  for (let i = 0; i < 8; i++) {
+    const px = CX - g.hwT - 6 - i * 4 + (rngT() - 0.5) * 2;
+    const py = g.pY + 5 + i * 7;
+    ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+
+  // Root crack — small horizontal at root
+  const rngR = seeded(444);
+  ctx.strokeStyle = '#93c5fd'; ctx.lineWidth = 1.3;
+  ctx.beginPath(); ctx.moveTo(CX - 10, g.rootY - 4);
+  for (let x = CX - 10; x <= CX + 10; x += 3)
+    ctx.lineTo(x, g.rootY - 4 + (rngR() - 0.5) * 2);
+  ctx.stroke();
+
+  // Labels
+  lbl(ctx, 'Diffusible H₂', CX + 22, 165, '#93c5fd', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Underbead Crack (HIC)', CX - g.hwT - g.hazW / 2, ubY - 6, '#38bdf8', 'bold 9px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Toe Crack', CX - g.hwT - 30, g.pY + 50, '#7dd3fc', '8px Segoe UI,Arial', 'left');
+  lbl(ctx, 'Root Crack', CX, g.rootY - 12, '#93c5fd', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Weld Metal', CX, 210, '#94a3b8', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'HAZ', CX - g.hwT - g.hazW / 2, 215, '#7dd3fc', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, '<150°C — delayed, hours to days post-weld', W / 2, H - 8, '#38bdf8', '8px Segoe UI,Arial', 'center');
+}
+
+// ════════════════ LINCOLN: LAMELLAR TEARING ════════════════
+function drawLamellarLincoln() {
+  const { cv, ctx, W, H } = setupCanvas('cv-lamellar');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#0f2040'; ctx.fillRect(0, 0, W, 22);
+  ctx.fillStyle = '#a78bfa'; ctx.font = 'bold 10px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText('LAMELLAR TEARING — T-Joint', 6, 15);
+
+  // T-joint geometry
+  const FY = 138, FH = 108, FX = 12, FW = W - 24; // flange
+  const WBX = 118, WBW = 64, WBY = 28;             // web top → flange
+  const filH = 34;                                   // fillet leg height
+
+  // Flange plate
+  ctx.fillStyle = '#1a2d44';
+  ctx.fillRect(FX, FY, FW, FH);
+  ctx.strokeStyle = '#2d4a6a'; ctx.lineWidth = 0.8; ctx.strokeRect(FX, FY, FW, FH);
+
+  // Web plate
+  ctx.fillStyle = '#1a2d44';
+  ctx.fillRect(WBX, WBY, WBW, FY - WBY);
+  ctx.strokeStyle = '#2d4a6a'; ctx.strokeRect(WBX, WBY, WBW, FY - WBY);
+
+  // HAZ in flange (below each fillet)
+  ctx.fillStyle = '#1e3352';
+  ctx.fillRect(FX, FY, WBX - FX + filH + 4, FH);     // left HAZ region
+  ctx.fillRect(WBX + WBW - 4, FY, FW - (WBX + WBW - FX) + 4, FH); // right HAZ region
+  // Re-draw plate border over HAZ
+  ctx.fillStyle = '#1a2d44';
+  ctx.fillRect(FX + 1, FY + 1, WBX - FX - filH + 5, FH - 2);
+  ctx.fillRect(WBX + WBW + filH, FY + 1, FW - (WBX + WBW + filH) - FX + 10, FH - 2);
+  ctx.strokeStyle = '#2d4a6a'; ctx.strokeRect(FX, FY, FW, FH);
+
+  // Left fillet weld
+  const weldCol = '#253c56';
+  ctx.fillStyle = weldCol;
+  ctx.beginPath();
+  ctx.moveTo(WBX - filH, FY);
+  ctx.lineTo(WBX, FY);
+  ctx.lineTo(WBX, FY + filH);
+  ctx.quadraticCurveTo(WBX - filH / 2, FY + filH / 2, WBX - filH, FY);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#3a5a7a'; ctx.lineWidth = 0.8; ctx.stroke();
+
+  // Right fillet weld
+  ctx.fillStyle = weldCol;
+  ctx.beginPath();
+  ctx.moveTo(WBX + WBW + filH, FY);
+  ctx.lineTo(WBX + WBW, FY);
+  ctx.lineTo(WBX + WBW, FY + filH);
+  ctx.quadraticCurveTo(WBX + WBW + filH / 2, FY + filH / 2, WBX + WBW + filH, FY);
+  ctx.closePath(); ctx.fill(); ctx.stroke();
+
+  // MnS inclusion stringers in flange (elongated ovals, horizontal)
+  const rngI = seeded(501);
+  const bands = [FY + 18, FY + 34, FY + 50, FY + 66];
+  ctx.fillStyle = 'rgba(148,163,184,0.45)';
+  bands.forEach(by => {
+    for (let i = 0; i < 10; i++) {
+      const ix = FX + 8 + rngI() * (FW - 16);
+      const iw = 10 + rngI() * 22;
+      ctx.beginPath(); ctx.ellipse(ix, by, iw / 2, 2, 0, 0, Math.PI * 2); ctx.fill();
+    }
+  });
+
+  // Stepped lamellar tear (left side, below left fillet)
+  const rngCr = seeded(601);
+  const tearX0 = WBX - filH + 2, tearBands = bands;
+  ctx.strokeStyle = '#a78bfa'; ctx.lineWidth = 1.8; ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(tearX0, tearBands[0]);
+  // Terrace 1
+  for (let x = tearX0; x > 60; x -= 4) ctx.lineTo(x, tearBands[0] + (rngCr() - 0.5) * 1.5);
+  // Riser 1
+  for (let y = tearBands[0]; y < tearBands[1]; y += 3) ctx.lineTo(60 + (rngCr() - 0.5) * 1.5, y);
+  // Terrace 2
+  for (let x = 60; x > 30; x -= 4) ctx.lineTo(x, tearBands[1] + (rngCr() - 0.5) * 1.5);
+  // Riser 2
+  for (let y = tearBands[1]; y < tearBands[2]; y += 3) ctx.lineTo(30 + (rngCr() - 0.5) * 1.5, y);
+  // Terrace 3
+  for (let x = 30; x >= FX; x -= 4) ctx.lineTo(x, tearBands[2] + (rngCr() - 0.5) * 1.5);
+  ctx.stroke();
+
+  // Z-direction stress arrows (on web plate)
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.5;
+  [WBX + 14, WBX + WBW - 14].forEach(ax => {
+    ctx.beginPath(); ctx.moveTo(ax, WBY + 6); ctx.lineTo(ax, WBY + 22); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ax, WBY + 22); ctx.lineTo(ax - 4, WBY + 14); ctx.moveTo(ax, WBY + 22); ctx.lineTo(ax + 4, WBY + 14); ctx.stroke();
+  });
+
+  // Labels
+  lbl(ctx, 'Lamellar Tear', 55, bands[2] + 6, '#a78bfa', 'bold 9px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Terrace', 73, bands[0] + 4, '#c4b5fd', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Riser', 52, bands[1] + 6, '#c4b5fd', '8px Segoe UI,Arial', 'right');
+  lbl(ctx, 'MnS stringers', FX + FW / 2 + 20, bands[2] + 12, '#94a3b8', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'HAZ', WBX - filH / 2, FY + 80, '#7dd3fc', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Z-stress', WBX + WBW / 2, WBY + 14, '#fbbf24', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Fillet weld', WBX - filH / 2 - 4, FY - 7, '#93c5fd', '8px Segoe UI,Arial', 'center');
+}
+
+// ════════════════ AWS PANELS ════════════════
+// Helper: AWS canvas setup + return geometry
+function awsSetup(id, title, col) {
+  const { cv, ctx, W, H } = setupCanvas(id);
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#0f2040'; ctx.fillRect(0, 0, W, 20);
+  ctx.fillStyle = col; ctx.font = 'bold 9.5px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText(title, 5, 14);
+  return { ctx, W, H };
+}
+
+function drawAWS1() { // Centreline crack — cross-section
+  const { ctx, W, H } = awsSetup('cv-aws-1', 'CENTRELINE CRACK — Hot (Cross-Section)', '#ef4444');
+  const g = weldBase(ctx, W, H, 75, 58, 168, 42, 6, 14);
+  const rng = seeded(11);
+  ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 1.4;
+  ctx.beginPath(); ctx.moveTo(g.CX, g.capY + 3);
+  for (let y = g.capY + 6; y < g.rootY - 15; y += 4) ctx.lineTo(g.CX + (rng() - 0.5) * 5, y);
+  ctx.stroke();
+  lbl(ctx, 'Centreline crack', g.CX, g.capY + 2, '#ef4444', 'bold 8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Weld metal', g.CX, 122, '#94a3b8', '7.5px Segoe UI,Arial', 'center');
+  lbl(ctx, 'HAZ', g.CX - g.hwT - g.hazW / 2, 120, '#7dd3fc', '7.5px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Base metal', 5, 120, '#64748b', '7.5px Segoe UI,Arial', 'left');
+}
+
+function drawAWS2() { // Crater crack — plan view
+  const { ctx, W, H } = awsSetup('cv-aws-2', 'CRATER CRACK — Hot (Plan View)', '#f97316');
+  const CX = W / 2, CY = H / 2 + 10;
+  // Weld bead visible from above — elongated oval
+  const wbG = ctx.createLinearGradient(CX - 60, CY, CX + 60, CY);
+  wbG.addColorStop(0, '#2a4060'); wbG.addColorStop(0.5, '#253858'); wbG.addColorStop(1, '#2a4060');
+  ctx.fillStyle = '#1a2d44'; ctx.fillRect(0, 20, W, H - 20); // plate
+  ctx.fillStyle = wbG;
+  ctx.beginPath(); ctx.ellipse(CX - 30, CY, 25, 52, 0, 0, Math.PI * 2); ctx.fill(); // weld bead body
+  // Crater at weld end (right)
+  ctx.fillStyle = '#1e3555';
+  ctx.beginPath(); ctx.ellipse(CX + 40, CY, 22, 18, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = '#3a5a7a'; ctx.lineWidth = 0.8; ctx.stroke();
+  // Star cracks from crater
+  const rng = seeded(22);
+  ctx.strokeStyle = '#f97316'; ctx.lineWidth = 1.3;
+  for (let i = 0; i < 5; i++) {
+    const ang = (i / 5) * Math.PI * 2 + rng() * 0.3;
+    const len = 8 + rng() * 10;
+    ctx.beginPath();
+    ctx.moveTo(CX + 40, CY);
+    ctx.lineTo(CX + 40 + Math.cos(ang) * len, CY + Math.sin(ang) * len);
+    ctx.stroke();
+  }
+  lbl(ctx, 'Crater', CX + 40, CY + 28, '#f97316', 'bold 8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Star cracks', CX + 40, CY - 24, '#fbbf24', '7.5px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Weld bead (plan view)', CX - 30, CY + 58, '#94a3b8', '7.5px Segoe UI,Arial', 'center');
+}
+
+function drawAWS3() { // Transverse crack — longitudinal section (side view)
+  const { ctx, W, H } = awsSetup('cv-aws-3', 'TRANSVERSE CRACK — Hot/Cold (Side View)', '#fbbf24');
+  const pY = 82, CX = W / 2;
+  // Side view: plate + weld bead on top
+  ctx.fillStyle = '#1a2d44'; ctx.fillRect(0, pY, W, H - pY);
+  ctx.strokeStyle = '#2d4a6a'; ctx.lineWidth = 0.8; ctx.strokeRect(0, pY, W, H - pY);
+  // Weld bead (raised shape on plate surface)
+  const wbG = ctx.createLinearGradient(CX, pY - 28, CX, pY);
+  wbG.addColorStop(0, '#253c56'); wbG.addColorStop(1, '#1e3049');
+  ctx.fillStyle = wbG;
+  ctx.beginPath();
+  ctx.moveTo(30, pY); ctx.lineTo(W - 30, pY);
+  ctx.bezierCurveTo(W - 30, pY - 10, W - 50, pY - 28, CX, pY - 28);
+  ctx.bezierCurveTo(50, pY - 28, 30, pY - 10, 30, pY);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#3a5a7a'; ctx.lineWidth = 0.8; ctx.stroke();
+  // Transverse crack — vertical line cutting across the weld width
+  const rng = seeded(33);
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(CX, pY - 32);
+  for (let y = pY - 32; y < pY + 50; y += 4) ctx.lineTo(CX + (rng() - 0.5) * 3, y);
+  ctx.stroke();
+  lbl(ctx, 'Transverse crack', CX + 16, pY - 16, '#fbbf24', 'bold 8px Segoe UI,Arial', 'left');
+  lbl(ctx, '(⊥ to weld axis)', CX + 16, pY - 5, '#fbbf24', '7.5px Segoe UI,Arial', 'left');
+  lbl(ctx, 'Weld bead (side view)', CX, pY - 34, '#94a3b8', '7.5px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Base plate', CX, pY + 30, '#64748b', '7.5px Segoe UI,Arial', 'center');
+}
+
+function drawAWS4() { // Underbead crack — cross-section
+  const { ctx, W, H } = awsSetup('cv-aws-4', 'UNDERBEAD CRACK — Cold / HIC (Cross-Section)', '#38bdf8');
+  const g = weldBase(ctx, W, H, 75, 58, 168, 42, 6, 14);
+  const rng = seeded(44);
+  // Underbead crack: left HAZ, parallel to fusion line, ~15px below plate surface
+  const ubY = g.pY + 20;
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.4;
+  ctx.beginPath(); ctx.moveTo(g.CX - g.hwT - 2, ubY);
+  for (let x = g.CX - g.hwT - 2; x > g.CX - g.hwT - g.hazW + 2; x -= 3)
+    ctx.lineTo(x, ubY + (rng() - 0.5) * 2.5);
+  ctx.stroke();
+  // Right side underbead
+  const rng2 = seeded(444);
+  ctx.beginPath(); ctx.moveTo(g.CX + g.hwT + 2, ubY);
+  for (let x = g.CX + g.hwT + 2; x < g.CX + g.hwT + g.hazW - 2; x += 3)
+    ctx.lineTo(x, ubY + (rng2() - 0.5) * 2.5);
+  ctx.stroke();
+  lbl(ctx, 'Underbead crack', g.CX - g.hwT - g.hazW / 2, ubY - 6, '#38bdf8', 'bold 8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'HAZ', g.CX - g.hwT - g.hazW / 2, 130, '#7dd3fc', '7.5px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Weld metal', g.CX, 120, '#94a3b8', '7.5px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Fusion line', g.CX - g.hwT + 6, g.pY + 38, 'rgba(100,180,220,0.8)', '7px Segoe UI,Arial', 'left');
+}
+
+function drawAWS5() { // Toe crack — cross-section
+  const { ctx, W, H } = awsSetup('cv-aws-5', 'TOE CRACK — Cold / HIC (Cross-Section)', '#7dd3fc');
+  const g = weldBase(ctx, W, H, 75, 58, 168, 42, 6, 14);
+  const rng = seeded(55);
+  // Toe crack — diagonal from left weld toe into plate
+  ctx.strokeStyle = '#7dd3fc'; ctx.lineWidth = 1.4;
+  ctx.beginPath(); ctx.moveTo(g.CX - g.hwT, g.pY);
+  for (let i = 0; i < 9; i++) {
+    const px = g.CX - g.hwT - 5 - i * 4 + (rng() - 0.5) * 2;
+    const py = g.pY + 6 + i * 8;
+    ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+  // Weld toe marker (small dot)
+  ctx.beginPath(); ctx.arc(g.CX - g.hwT, g.pY, 3.5, 0, Math.PI * 2);
+  ctx.fillStyle = '#7dd3fc'; ctx.fill();
+  lbl(ctx, 'Weld toe', g.CX - g.hwT + 2, g.pY - 6, '#94a3b8', '7.5px Segoe UI,Arial', 'right');
+  lbl(ctx, 'Toe crack', g.CX - g.hwT - 34, g.pY + 52, '#7dd3fc', 'bold 8px Segoe UI,Arial', 'right');
+  lbl(ctx, 'HAZ', g.CX - g.hwT - g.hazW / 2, 130, '#7dd3fc', '7.5px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Weld metal', g.CX, 120, '#94a3b8', '7.5px Segoe UI,Arial', 'center');
+}
+
+function drawAWS6() { // Root crack — cross-section
+  const { ctx, W, H } = awsSetup('cv-aws-6', 'ROOT CRACK — Cold / HIC (Cross-Section)', '#a78bfa');
+  const g = weldBase(ctx, W, H, 75, 58, 168, 42, 6, 14);
+  const rng = seeded(66);
+  // Root crack — at weld root, horizontal
+  ctx.strokeStyle = '#a78bfa'; ctx.lineWidth = 1.4;
+  ctx.beginPath(); ctx.moveTo(g.CX - 12, g.rootY - 3);
+  for (let x = g.CX - 12; x <= g.CX + 12; x += 3)
+    ctx.lineTo(x, g.rootY - 3 + (rng() - 0.5) * 2);
+  ctx.stroke();
+  // Root marker
+  ctx.beginPath(); ctx.arc(g.CX, g.rootY, 3, 0, Math.PI * 2);
+  ctx.fillStyle = '#a78bfa'; ctx.fill();
+  lbl(ctx, 'Root crack', g.CX, g.rootY - 9, '#a78bfa', 'bold 8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Weld root', g.CX + 14, g.rootY + 8, '#94a3b8', '7.5px Segoe UI,Arial', 'left');
+  lbl(ctx, 'Weld metal', g.CX, 120, '#94a3b8', '7.5px Segoe UI,Arial', 'center');
+  lbl(ctx, 'HAZ', g.CX - g.hwT - g.hazW / 2, 125, '#7dd3fc', '7.5px Segoe UI,Arial', 'center');
+}
+
+// ════════════════ TWI: LAMELLAR TEARING DETAIL ════════════════
+function drawTWILamellar() {
+  const { cv, ctx, W, H } = setupCanvas('cv-twi');
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#0f2040'; ctx.fillRect(0, 0, W, 22);
+  ctx.fillStyle = '#a78bfa'; ctx.font = 'bold 10px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText('LAMELLAR TEARING — TWI Detailed Cross-Section', 6, 15);
+
+  // Geometry
+  const FY = 152, FH = 126;              // flange (horizontal plate): y=152 to 278
+  const FX = 10, FW = W - 20;           // flange x span
+  const WBX = 232, WBW = 76, WBY = 26;  // web (vertical plate)
+  const filH = 38;                        // fillet leg
+
+  // ── Flange plate
+  ctx.fillStyle = '#1a2d44';
+  ctx.fillRect(FX, FY, FW, FH);
+  ctx.strokeStyle = '#2d4a6a'; ctx.lineWidth = 0.8; ctx.strokeRect(FX, FY, FW, FH);
+
+  // ── Web plate
+  ctx.fillStyle = '#1a2d44';
+  ctx.fillRect(WBX, WBY, WBW, FY - WBY);
+  ctx.strokeRect(WBX, WBY, WBW, FY - WBY);
+
+  // ── HAZ in flange below fillets (lighter tint)
+  ctx.fillStyle = '#1e3452';
+  ctx.fillRect(WBX - filH - 30, FY, filH + 34, FH);       // left HAZ zone
+  ctx.fillRect(WBX + WBW - 4, FY, filH + 34, FH);          // right HAZ zone
+  // Overwrite interior base-metal area
+  ctx.fillStyle = '#1a2d44';
+  ctx.fillRect(FX + 1, FY + 1, WBX - filH - 32, FH - 2);
+  ctx.fillRect(WBX + WBW + filH + 32, FY + 1, FW - (WBX + WBW + filH + 32) - 1, FH - 2);
+  ctx.strokeStyle = '#2d4a6a'; ctx.strokeRect(FX, FY, FW, FH);
+
+  // ── Fillet welds
+  const drawFillet = (tx, side) => {
+    ctx.fillStyle = '#253c56';
+    ctx.beginPath();
+    if (side === 'left') {
+      ctx.moveTo(tx, FY); ctx.lineTo(tx + filH, FY); ctx.lineTo(tx, FY + filH);
+      ctx.quadraticCurveTo(tx + filH * 0.45, FY + filH * 0.45, tx, FY);
+    } else {
+      ctx.moveTo(tx, FY); ctx.lineTo(tx - filH, FY); ctx.lineTo(tx, FY + filH);
+      ctx.quadraticCurveTo(tx - filH * 0.45, FY + filH * 0.45, tx, FY);
+    }
+    ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = '#3a5a7a'; ctx.lineWidth = 0.8; ctx.stroke();
+  };
+  drawFillet(WBX, 'left');
+  drawFillet(WBX + WBW, 'right');
+
+  // ── MnS inclusion bands (4 bands in flange)
+  const rngI = seeded(701);
+  const bands = [FY + 20, FY + 40, FY + 60, FY + 82];
+  ctx.fillStyle = 'rgba(148,163,184,0.5)';
+  bands.forEach(by => {
+    for (let i = 0; i < 16; i++) {
+      const ix = FX + 6 + rngI() * (FW - 12);
+      const iw = 12 + rngI() * 28;
+      ctx.beginPath(); ctx.ellipse(ix, by, iw / 2, 2.2, 0, 0, Math.PI * 2); ctx.fill();
+    }
+  });
+
+  // ── Stepped lamellar tear (left side)
+  const rngCr = seeded(801);
+  const tearX0 = WBX - 2;
+  ctx.strokeStyle = '#a78bfa'; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(tearX0, bands[0]);
+  const seg = (x0, x1, y) => { for (let x = x0; x > x1; x -= 4) ctx.lineTo(x, y + (rngCr() - 0.5) * 1.5); };
+  const rse = (x, y0, y1) => { for (let y = y0; y < y1; y += 3) ctx.lineTo(x + (rngCr() - 0.5) * 1.5, y); };
+  seg(tearX0, 155, bands[0]); rse(155, bands[0], bands[1]);
+  seg(155, 88, bands[1]);    rse(88, bands[1], bands[2]);
+  seg(88, 30, bands[2]);     rse(30, bands[2], bands[3]);
+  seg(30, FX, bands[3]);
+  ctx.stroke();
+
+  // ── Stress arrows on web
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.8;
+  [WBX + 18, WBX + WBW - 18].forEach(ax => {
+    ctx.beginPath(); ctx.moveTo(ax, WBY + 8); ctx.lineTo(ax, WBY + 26); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(ax, WBY + 26); ctx.lineTo(ax - 5, WBY + 18);
+    ctx.moveTo(ax, WBY + 26); ctx.lineTo(ax + 5, WBY + 18);
+    ctx.stroke();
+  });
+
+  // ── SEM inset (bottom strip — clipped)
+  const SX = 10, SY = 284, SW = W - 20, SH = 48;
+  ctx.fillStyle = '#060e1c'; ctx.fillRect(SX, SY, SW, SH);
+  const rngS = seeded(901);
+  ctx.save(); ctx.beginPath(); ctx.rect(SX, SY + 14, SW, SH - 14); ctx.clip();
+  // MnS inclusions (visible from SEM)
+  ctx.fillStyle = 'rgba(120,140,160,0.6)';
+  for (let i = 0; i < 14; i++) {
+    const ix = SX + 8 + rngS() * (SW - 16), iy = SY + 20 + rngS() * (SH - 24);
+    const iw = 14 + rngS() * 30;
+    ctx.beginPath(); ctx.ellipse(ix, iy, iw / 2, 3, 0, 0, Math.PI * 2); ctx.fill();
+  }
+  // Crack path
+  ctx.strokeStyle = '#a78bfa'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(SX + 8, SY + 22);
+  let cx2 = SX + 8;
+  while (cx2 < SX + SW - 30) {
+    const segLen = 20 + rngS() * 30;
+    for (let x = cx2; x < cx2 + segLen; x += 3) ctx.lineTo(x, SY + 22 + (rngS() - 0.5) * 1.5);
+    cx2 += segLen;
+    if (cx2 < SX + SW - 30) { for (let y = 22; y < 34; y += 3) ctx.lineTo(cx2 + (rngS() - 0.5) * 1.5, SY + y); }
+  }
+  ctx.stroke();
+  ctx.restore();
+  // SEM border and labels (drawn after clip removed, so they're always on top)
+  ctx.strokeStyle = '#a78bfa'; ctx.lineWidth = 1; ctx.strokeRect(SX, SY, SW, SH);
+  ctx.fillStyle = 'rgba(6,14,28,0.88)'; ctx.fillRect(SX + 1, SY + 1, SW - 2, 15);
+  ctx.fillStyle = '#a78bfa'; ctx.font = 'bold 9px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText('SEM view: MnS stringers (grey ovals) + crack path (purple) — stepped terrace–riser morphology', SX + 4, SY + 12);
+
+  // ── Canvas labels (drawn last, always on top)
+  lbl(ctx, 'Lamellar Tear', 102, bands[0] - 8, '#a78bfa', 'bold 9px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Terrace', 120, bands[1] + 4, '#c4b5fd', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Riser', 150, (bands[0] + bands[1]) / 2 - 2, '#c4b5fd', '8px Segoe UI,Arial', 'right');
+  lbl(ctx, 'MnS Inclusion Stringers', FX + FW * 0.72, bands[3] + 14, '#94a3b8', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'HAZ', WBX - filH / 2 - 8, FY + 90, '#7dd3fc', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Fillet weld', WBX - filH / 2 + 2, FY + 18, '#93c5fd', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Web (vertical plate)', WBX + WBW / 2, WBY + 14, '#94a3b8', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Flange (horizontal plate) — through-thickness Z-loading', FX + FW / 2, FY - 6, '#94a3b8', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Z-stress ↓', WBX + WBW / 2, WBY + 28, '#fbbf24', '8px Segoe UI,Arial', 'center');
+  lbl(ctx, 'Base metal', FX + 60, FY + FH / 2, '#64748b', '8px Segoe UI,Arial', 'center');
+}
+
+// ════════════════ TAB SWITCHING ════════════════
+function showTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'lincoln') { drawHotCracking(); drawColdCracking(); drawLamellarLincoln(); }
+  if (id === 'aws')     { drawAWS1(); drawAWS2(); drawAWS3(); drawAWS4(); drawAWS5(); drawAWS6(); }
+  if (id === 'twi')     { drawTWILamellar(); }
+}
+
+// Initial draw
+window.addEventListener('DOMContentLoaded', () => {
+  drawHotCracking(); drawColdCracking(); drawLamellarLincoln();
+});
+</script>
+</body>
+</html>
