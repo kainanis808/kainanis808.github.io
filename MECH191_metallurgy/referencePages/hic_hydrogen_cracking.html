@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hydrogen-Induced Cracking (HIC) — TWI / Lincoln Electric / IIW</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fff; color: #1a1a1a; }
+
+header { background: #1e3a5f; color: #fff; padding: 28px 24px 22px; text-align: center; }
+header h1 { font-size: 1.85rem; font-weight: 700; }
+header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
+
+.source-note {
+  background: #eff6ff; border-left: 4px solid #1e3a5f;
+  padding: 10px 18px; font-size: 0.82rem; color: #1e40af; line-height: 1.55;
+}
+
+.tab-bar {
+  display: flex; flex-wrap: wrap; gap: 0;
+  background: #f1f5f9; border-bottom: 2px solid #e2e8f0;
+  padding: 0 20px; position: sticky; top: 0; z-index: 10;
+}
+.tab-btn {
+  padding: 10px 18px; font-size: 0.84rem; font-weight: 600;
+  border: none; background: none; cursor: pointer; color: #64748b;
+  border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.15s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: #1e3a5f; }
+.tab-btn.active { color: #1e3a5f; border-bottom-color: #1e3a5f; }
+
+.panel { display: none; max-width: 1100px; margin: 0 auto; padding: 28px 20px 60px; }
+.panel.active { display: block; }
+
+.section {
+  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
+  padding: 22px 24px; margin-bottom: 26px;
+}
+.section h2 { font-size: 1.2rem; color: #1e3a5f; margin-bottom: 10px; }
+.section h3 { font-size: 0.97rem; color: #334155; font-weight: 700; margin: 16px 0 8px; }
+.section p  { font-size: 0.88rem; color: #4b5563; line-height: 1.65; margin-bottom: 8px; }
+.section ul { font-size: 0.88rem; color: #4b5563; line-height: 1.65; margin: 6px 0 8px 20px; }
+.section li { margin-bottom: 4px; }
+
+.ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin: 10px 0; }
+.ref-table th { background: #1e3a5f; color: #fff; padding: 8px 10px; text-align: left; font-weight: 600; }
+.ref-table td { padding: 7px 10px; border-bottom: 1px solid #e2e8f0; color: #374151; vertical-align: top; }
+.ref-table tr:nth-child(even) td { background: #f8fafc; }
+.ref-table tr:hover td { background: #eff6ff; }
+
+.note-box {
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px;
+  padding: 12px 16px; font-size: 0.83rem; color: #78350f; margin: 12px 0; line-height: 1.6;
+}
+.info-box {
+  background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;
+  padding: 12px 16px; font-size: 0.83rem; color: #1e40af; margin: 12px 0; line-height: 1.6;
+}
+.warn-box {
+  background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px;
+  padding: 12px 16px; font-size: 0.83rem; color: #991b1b; margin: 12px 0; line-height: 1.6;
+}
+
+.formula-box {
+  background: #1e3a5f; color: #e2e8f0; border-radius: 8px;
+  padding: 14px 20px; font-family: 'Courier New', monospace; font-size: 0.9rem; margin: 10px 0;
+}
+.formula-box .fn { font-family: 'Segoe UI', sans-serif; font-size: 0.78rem; color: #93c5fd; margin-top: 6px; display: block; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 680px) { .two-col { grid-template-columns: 1fr; } }
+
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+@media (max-width: 760px) { .three-col { grid-template-columns: 1fr; } }
+
+.cond-card { border-radius: 10px; padding: 18px 18px; }
+.cond-card .cond-title { font-size: 0.97rem; font-weight: 700; margin-bottom: 8px; }
+.cond-card .cond-body { font-size: 0.83rem; line-height: 1.65; }
+
+.c-micro { background: #fff7ed; border: 2px solid #fb923c; }
+.c-micro .cond-title { color: #c2410c; }
+.c-micro .cond-body { color: #7c3526; }
+
+.c-h2 { background: #eff6ff; border: 2px solid #60a5fa; }
+.c-h2 .cond-title { color: #1d4ed8; }
+.c-h2 .cond-body { color: #1e40af; }
+
+.c-stress { background: #faf5ff; border: 2px solid #a78bfa; }
+.c-stress .cond-title { color: #6d28d9; }
+.c-stress .cond-body { color: #5b21b6; }
+
+.diagram-wrap { display: flex; justify-content: center; margin: 16px 0; overflow-x: auto; }
+
+.example-box {
+  background: #1e3a5f; color: #e2e8f0; border-radius: 12px;
+  padding: 22px 24px; margin: 16px 0;
+}
+.example-box h3 { color: #93c5fd; font-size: 1rem; margin-bottom: 14px; }
+.example-box .step { display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+.example-box .step-num {
+  background: #38bdf8; color: #0a1628; border-radius: 50%;
+  width: 26px; height: 26px; font-size: 0.82rem; font-weight: 800;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+}
+.example-box .step-body { font-size: 0.85rem; line-height: 1.68; }
+.example-box .step-body .mono { font-family: 'Courier New', monospace; color: #7dd3fc; }
+.example-box .step-body strong { color: #fbbf24; }
+
+.ce-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px; margin-bottom: 16px;
+}
+.ce-field label { display: block; font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 5px; }
+.ce-field label .sym { color: #1e3a5f; font-style: italic; font-weight: 700; }
+.ce-field input[type=number] {
+  width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 7px;
+  font-size: 0.9rem; font-family: 'Courier New', monospace; color: #1e293b; background: #fff;
+}
+
+.h-selector { display: flex; gap: 10px; flex-wrap: wrap; margin: 8px 0 14px; }
+.h-btn {
+  padding: 8px 16px; border: 2px solid #cbd5e1; border-radius: 8px;
+  font-size: 0.83rem; font-weight: 600; cursor: pointer; background: #fff; color: #475569; transition: all 0.15s;
+}
+.h-btn.active { border-color: #1e3a5f; background: #1e3a5f; color: #fff; }
+
+.thick-select {
+  padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 7px;
+  font-size: 0.88rem; color: #1e293b; background: #fff;
+}
+
+.calc-btn {
+  display: inline-block; padding: 10px 28px; background: #1e3a5f; color: #fff;
+  border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; transition: background 0.15s;
+}
+.calc-btn:hover { background: #1e40af; }
+
+.result-block {
+  display: none; border-radius: 12px; padding: 20px 24px; margin-top: 18px;
+  border: 2px solid #e2e8f0;
+}
+.result-block.show { display: block; }
+.result-temp { font-size: 2.4rem; font-weight: 800; font-family: 'Courier New', monospace; }
+.result-label { font-size: 0.82rem; color: #64748b; margin-top: 4px; }
+.result-detail { margin-top: 12px; font-size: 0.84rem; color: #374151; line-height: 1.75; }
+
+.ph-none  { background: #f0fdf4; border-color: #22c55e !important; }
+.ph-low   { background: #fffbeb; border-color: #f59e0b !important; }
+.ph-med   { background: #fff7ed; border-color: #f97316 !important; }
+.ph-high  { background: #fef2f2; border-color: #ef4444 !important; }
+.ph-vhigh { background: #faf5ff; border-color: #8b5cf6 !important; }
+
+.badge {
+  display: inline-block; padding: 2px 9px; border-radius: 12px;
+  font-size: 0.74rem; font-weight: 700;
+}
+.b-h4  { background: #d1fae5; color: #065f46; }
+.b-h8  { background: #dbeafe; color: #1d4ed8; }
+.b-h16 { background: #fffbeb; color: #92400e; }
+.b-nlh { background: #fee2e2; color: #991b1b; }
+
+.section-label {
+  font-weight: 700; color: #1e3a5f; font-size: 0.84rem;
+  margin: 18px 0 7px; text-transform: uppercase; letter-spacing: 0.05em;
+}
+
+.back { text-align: center; padding: 24px; font-size: 0.9rem; }
+.back a { color: #1e3a5f; text-decoration: none; margin: 0 10px; }
+.back a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Hydrogen-Induced Cracking (HIC) &amp; Cold Cracking Prevention</h1>
+  <div class="subtitle">TWI — Mechanisms, Three-Condition Model &amp; Case Studies &nbsp;&middot;&nbsp; Lincoln Electric — CE &amp; Preheat Guide &nbsp;&middot;&nbsp; IIW — International Standards</div>
+</header>
+
+<div class="source-note">
+  <strong>Sources:</strong>
+  <strong>TWI (The Welding Institute)</strong> — <em>HIC/Hydrogen Cracking: Mechanisms, Prevention &amp; Detection</em> &middot;
+  <strong>Lincoln Electric</strong> — <em>Avoiding Hydrogen Cracking, Carbon Equivalent &amp; Preheat Guide, AWS D1.1:2020 Table 4.4</em> &middot;
+  <strong>IIW (International Institute of Welding)</strong> — <em>IIW Doc. IX-2113-05, EN ISO 3690, EN 1011-2:2001, comparative code review</em>
+</div>
+
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('twi',this)">TWI — HIC Mechanisms</button>
+  <button class="tab-btn" onclick="showTab('le',this)">Lincoln Electric — CE &amp; Preheat</button>
+  <button class="tab-btn" onclick="showTab('iiw',this)">IIW — International Standards</button>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     TAB 1 — TWI
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div id="panel-twi" class="panel active">
+
+  <div class="section">
+    <h2>The Three-Condition Model</h2>
+    <p>Hydrogen-induced cracking (HIC) — also called cold cracking, hydrogen-assisted cracking (HAC), or delayed cracking — requires <strong>three conditions to coexist simultaneously</strong>. Eliminating any one of the three prevents cracking entirely. This is the foundation of every HIC control strategy in every major welding code.</p>
+
+    <div class="three-col" style="margin:20px 0 16px;">
+      <div class="cond-card c-micro">
+        <div class="cond-title">1 — Susceptible Microstructure</div>
+        <div class="cond-body">Hard, brittle HAZ microstructures — primarily martensite and lower bainite — formed when high-CE steels cool rapidly after welding. Dislocation density is high; fracture toughness is low. The critical hardness threshold is <strong>350 HV</strong> (referenced by AWS D1.1, EN 1011-2, AS/NZS 1554). Controlled via steel composition (CE) and cooling rate (preheat).</div>
+      </div>
+      <div class="cond-card c-h2">
+        <div class="cond-title">2 — Diffusible Hydrogen</div>
+        <div class="cond-body">Atomic hydrogen absorbed from moisture in flux, wire contamination, or surface grease during welding. Dissolves in the weld pool at high temperature (~30 mL/100g at 1600°C) but is nearly insoluble in solid steel (&lt;1 mL/100g at room temp). Excess hydrogen remains "trapped" and diffuses to stress concentration sites. Controlled via low-hydrogen consumables, drying, and preheat.</div>
+      </div>
+      <div class="cond-card c-stress">
+        <div class="cond-title">3 — Tensile Stress</div>
+        <div class="cond-body">Residual stresses from weld thermal contraction routinely approach yield strength in constrained joints. Stress concentrations at weld toes and roots amplify local stress by Kt ≈ 2–5. Applied loads add to residual stress. Controlled via joint design, weld sequence, PWHT, and post-weld stress relief.</div>
+      </div>
+    </div>
+
+    <div class="diagram-wrap">
+      <svg width="450" height="296" viewBox="0 0 450 296" xmlns="http://www.w3.org/2000/svg" style="border-radius:8px;background:#f0f4f8;">
+        <!-- Three overlapping circles -->
+        <circle cx="170" cy="118" r="78" fill="#fb923c" fill-opacity="0.22" stroke="#f97316" stroke-width="2"/>
+        <circle cx="270" cy="118" r="78" fill="#60a5fa" fill-opacity="0.22" stroke="#3b82f6" stroke-width="2"/>
+        <circle cx="220" cy="186" r="78" fill="#a78bfa" fill-opacity="0.22" stroke="#8b5cf6" stroke-width="2"/>
+        <!-- HIC label at triple-overlap centre -->
+        <text x="220" y="143" text-anchor="middle" font-family="Segoe UI,Arial" font-size="13" font-weight="800" fill="#1e293b">HIC</text>
+        <!-- Dashed leader lines from external labels to circle edges -->
+        <line x1="70" y1="44" x2="105" y2="76" stroke="#f97316" stroke-width="1.2" stroke-dasharray="3,2" opacity="0.75"/>
+        <line x1="380" y1="44" x2="336" y2="78" stroke="#3b82f6" stroke-width="1.2" stroke-dasharray="3,2" opacity="0.75"/>
+        <line x1="220" y1="264" x2="220" y2="274" stroke="#8b5cf6" stroke-width="1.2" stroke-dasharray="3,2" opacity="0.75"/>
+        <!-- External label — upper left: Susceptible Microstructure -->
+        <text x="8"   y="30" text-anchor="start" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#c2410c">Susceptible</text>
+        <text x="8"   y="44" text-anchor="start" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#c2410c">Microstructure</text>
+        <!-- External label — upper right: Diffusible Hydrogen -->
+        <text x="442" y="30" text-anchor="end" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#1d4ed8">Diffusible</text>
+        <text x="442" y="44" text-anchor="end" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#1d4ed8">Hydrogen</text>
+        <!-- External label — below bottom circle: Tensile Stress -->
+        <text x="220" y="285" text-anchor="middle" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#6d28d9">Tensile Stress</text>
+        <text x="6"   y="292" font-family="Segoe UI,Arial" font-size="8" fill="#94a3b8">Source: TWI HIC Guide</text>
+      </svg>
+    </div>
+
+    <div class="note-box"><strong>Key insight:</strong> HIC is a <em>threshold</em> phenomenon. Below a critical hydrogen content, or below a critical stress level, cracking will not occur even in susceptible microstructures. Preheat, low-hydrogen electrodes, and PWHT each act to keep one or more conditions below its threshold.</div>
+  </div>
+
+  <!-- Condition 1: Microstructure -->
+  <div class="section">
+    <h2>Condition 1 — Susceptible HAZ Microstructure</h2>
+    <p>The coarse-grained HAZ (CGHAZ) immediately adjacent to the fusion line is most susceptible. At peak temperatures above 1100°C, prior austenite grains coarsen significantly. On cooling, the transformation product — benign ferrite/bainite or brittle martensite — depends on CE and cooling rate.</p>
+
+    <table class="ref-table">
+      <thead><tr><th>Microstructure</th><th>Hardness (HV)</th><th>HIC Susceptibility</th><th>Typical CE Range</th></tr></thead>
+      <tbody>
+        <tr><td>Polygonal ferrite + pearlite</td><td>120–200</td><td style="color:#166534;font-weight:700;">Very low</td><td>&lt;0.30</td></tr>
+        <tr><td>Acicular ferrite (ideal weld metal)</td><td>180–250</td><td style="color:#166534;font-weight:700;">Low</td><td>0.30–0.40</td></tr>
+        <tr><td>Upper bainite</td><td>230–310</td><td style="color:#b45309;font-weight:700;">Moderate</td><td>0.35–0.50</td></tr>
+        <tr><td>Lower bainite</td><td>290–380</td><td style="color:#b91c1c;font-weight:700;">High</td><td>0.45–0.60</td></tr>
+        <tr><td>Lath martensite</td><td>350–600</td><td style="color:#7c3aed;font-weight:700;">Very high</td><td>&gt;0.45</td></tr>
+        <tr><td>Twinned martensite</td><td>550–700</td><td style="color:#7c3aed;font-weight:700;">Extreme</td><td>&gt;0.55 (high-C steels)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>HIC Crack Locations in the Weld Cross-Section</h3>
+    <p>HIC initiates at stress concentrations in the HAZ. Three morphologies are most commonly observed in cross-section macrographs and NDT reports:</p>
+
+    <div class="diagram-wrap">
+      <svg width="540" height="210" viewBox="0 0 540 210" xmlns="http://www.w3.org/2000/svg" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+        <!-- Base plate -->
+        <rect x="30" y="112" width="480" height="68" fill="#94a3b8" rx="2"/>
+        <!-- HAZ bands -->
+        <polygon points="148,112 182,112 262,52 220,52" fill="#fb923c" opacity="0.28"/>
+        <polygon points="342,112 376,112 302,52 262,52" fill="#fb923c" opacity="0.28"/>
+        <!-- Weld metal -->
+        <polygon points="182,112 262,52 342,112" fill="#60a5fa" opacity="0.75"/>
+        <!-- Fusion line dashes -->
+        <line x1="262" y1="52" x2="182" y2="112" stroke="#f97316" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <line x1="262" y1="52" x2="342" y2="112" stroke="#f97316" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <!-- Labels inside shapes -->
+        <text x="262" y="90"  text-anchor="middle" font-family="Segoe UI,Arial" font-size="11" font-weight="700" fill="#1d4ed8">Weld Metal</text>
+        <text x="157" y="102" text-anchor="middle" font-family="Segoe UI,Arial" font-size="9"  fill="#9a3412">HAZ</text>
+        <text x="368" y="102" text-anchor="middle" font-family="Segoe UI,Arial" font-size="9"  fill="#9a3412">HAZ</text>
+        <text x="262" y="142" text-anchor="middle" font-family="Segoe UI,Arial" font-size="9"  fill="#fff" font-weight="600">Base Metal</text>
+        <!-- Underbead crack -->
+        <path d="M 195 120 Q 262 115 330 120" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Toe crack (left) -->
+        <path d="M 182 112 L 164 132" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Root crack -->
+        <path d="M 247 112 Q 262 120 278 112" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Leader lines + labels -->
+        <line x1="262" y1="117" x2="262" y2="150" stroke="#dc2626" stroke-width="1"/>
+        <text x="262" y="163" text-anchor="middle" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#dc2626">Underbead Crack</text>
+        <text x="262" y="175" text-anchor="middle" font-family="Segoe UI,Arial" font-size="9" fill="#64748b">parallel to fusion line, subsurface</text>
+        <line x1="166" y1="128" x2="90"  y2="155" stroke="#dc2626" stroke-width="1"/>
+        <text x="72"  y="168" text-anchor="middle" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#dc2626">Toe Crack</text>
+        <text x="72"  y="180" text-anchor="middle" font-family="Segoe UI,Arial" font-size="9" fill="#64748b">at stress concentration</text>
+        <line x1="262" y1="116" x2="452" y2="155" stroke="#dc2626" stroke-width="1"/>
+        <text x="460" y="168" text-anchor="middle" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#dc2626">Root Crack</text>
+        <text x="460" y="180" text-anchor="middle" font-family="Segoe UI,Arial" font-size="9" fill="#64748b">in weld or root HAZ</text>
+        <text x="6"   y="206" font-family="Segoe UI,Arial" font-size="8" fill="#94a3b8">Source: TWI HIC Reference</text>
+      </svg>
+    </div>
+
+    <table class="ref-table" style="margin-top:12px;">
+      <thead><tr><th>Crack Type</th><th>Location</th><th>Orientation</th><th>Primary NDT Method</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Underbead (HAZ)</strong></td><td>CGHAZ parallel to fusion line</td><td>Horizontal, subsurface</td><td>UT, PAUT, RT</td></tr>
+        <tr><td><strong>Toe crack</strong></td><td>HAZ at weld toe — highest Kt</td><td>~45° into plate from toe</td><td>MPI, PT, PAUT</td></tr>
+        <tr><td><strong>Root crack</strong></td><td>Weld root or root-side HAZ</td><td>Transverse or longitudinal</td><td>RT, UT, PAUT</td></tr>
+        <tr><td><strong>Transverse weld metal</strong></td><td>Within weld metal, perpendicular to run</td><td>Transverse through beads</td><td>RT, MPI, UT</td></tr>
+        <tr><td><strong>Delamination (plate HIC)</strong></td><td>Laminar in base plate — sour service</td><td>Parallel to rolling plane</td><td>UT C-scan, macro section</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Condition 2: Hydrogen -->
+  <div class="section">
+    <h2>Condition 2 — Diffusible Hydrogen</h2>
+    <p>At weld pool temperatures, moisture dissociates — H₂O → 2H⁺ + O²⁻ — and atomic hydrogen dissolves in molten steel. On solidification, solubility drops sharply and excess hydrogen remains as diffusible H<sub>D</sub>, migrating toward stress concentration sites and microstructural traps (prior austenite grain boundaries, martensite lath interfaces).</p>
+
+    <table class="ref-table">
+      <thead><tr><th>AWS Designator</th><th>Max H<sub>D</sub> (mL/100g)</th><th>Typical Source</th><th>Example Classifications</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge b-h4">H4</span></td><td>&le;4</td><td>Redried basic electrodes; metal-cored wire</td><td>E7018-H4R, ER70S-3-H4, E71T-9C-H4</td></tr>
+        <tr><td><span class="badge b-h8">H8</span></td><td>&le;8</td><td>Properly stored basic electrodes</td><td>E7018-H8R, E7018-1-H8, ER70S-6</td></tr>
+        <tr><td><span class="badge b-h16">H16</span></td><td>&le;16</td><td>Basic electrodes, some FCAW wires</td><td>E7018-H16, E7024-H16</td></tr>
+        <tr><td><span class="badge b-nlh">NLH — Cellulosic</span></td><td>&gt;16 (typically 25–40)</td><td>E6010/E6011 cellulosic electrodes</td><td>E6010, E6011, E7010-A1</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Hydrogen Sources and Controls</h3>
+    <table class="ref-table">
+      <thead><tr><th>Source</th><th>Control Measure</th></tr></thead>
+      <tbody>
+        <tr><td>Flux moisture (SMAW)</td><td>Bake at 300–400°C for 1 hr; store in heated quiver ≥70°C; follow AWS D1.1 Table 4.5 reconditioning requirements</td></tr>
+        <tr><td>Flux moisture (SAW)</td><td>Dry at 260–320°C; seal partially-used bags; monitor per AWS A5.17</td></tr>
+        <tr><td>Wire surface (GMAW/FCAW)</td><td>Sealed packaging until use; no visible rust; verify H-designator on wire classification</td></tr>
+        <tr><td>Shielding gas impurity</td><td>Industrial/welding-grade gas; check dew point; replace hose if cracked</td></tr>
+        <tr><td>Surface contamination</td><td>Grind, wire-brush, or solvent-wipe joint area within 50mm; remove paint, zinc, grease, rust scale</td></tr>
+        <tr><td>Ambient humidity</td><td>Pre-dry joint by heating 50–75°C above ambient before welding in rain, fog, or dew conditions</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-box"><strong>Post-weld hydrogen bake-out:</strong> Holding the weldment at 150–250°C for 2–4 hours immediately after welding drives out ~80–90% of diffusible hydrogen before the joint cools below 100°C. This is recognised in EN 1011-2 Annex D and AS/NZS 1554.1 as an alternative to preheat for moderate-CE steels (CE 0.40–0.50).</div>
+  </div>
+
+  <!-- Condition 3: Stress -->
+  <div class="section">
+    <h2>Condition 3 — Tensile Stress</h2>
+    <p>Welding always introduces residual tensile stresses due to thermal contraction. In highly restrained joints, residual stresses reach or exceed yield strength. Stress concentrations at weld toes (Kt ≈ 2–5) amplify local stress substantially.</p>
+
+    <h3>Stress Sources</h3>
+    <ul>
+      <li><strong>Thermal contraction:</strong> Weld metal shrinks on cooling; surrounding cold base metal resists, creating biaxial or triaxial tensile stress</li>
+      <li><strong>Transformation volume change:</strong> Martensitic transformation expands the lattice by ~4%; this interacts with contraction to produce complex stress states</li>
+      <li><strong>Joint geometry:</strong> Weld toes and root notches concentrate stress; undercut and sharp profiles increase Kt further</li>
+      <li><strong>Restraint:</strong> Fully restrained repair welds or thick flange welds accumulate residual stress approaching Fy</li>
+    </ul>
+
+    <div class="warn-box"><strong>Delayed cracking timing:</strong> HIC typically initiates 24–72 hours after welding as hydrogen diffuses to critical sites and the joint temperature drops below 150°C. NDT performed immediately after welding will miss delayed cracks. For CE &gt;0.45, inspect no earlier than 48 hours; for CE &gt;0.55 or Q&T steels, 72 hours minimum (EN 1011-2 Annex A).</div>
+
+    <h3>Stress Mitigation</h3>
+    <table class="ref-table">
+      <thead><tr><th>Strategy</th><th>Mechanism</th><th>Code Basis</th></tr></thead>
+      <tbody>
+        <tr><td>Preheat &amp; interpass temperature</td><td>Slows cooling → reduces martensite fraction; accelerates hydrogen outgassing during welding</td><td>AWS D1.1 Table 4.4; EN 1011-2; AS/NZS 1554.1</td></tr>
+        <tr><td>Post-weld heat treatment (PWHT)</td><td>Stress relief at 580–650°C; simultaneous hydrogen bake-out; may temper martensite</td><td>ASME VIII Div.1 UCS-56; AWS D1.1 Annex K</td></tr>
+        <tr><td>Controlled weld sequence</td><td>Back-step, balanced, or block welding to reduce net restraint moment</td><td>AWS D1.1 Clause 5.22</td></tr>
+        <tr><td>Joint geometry optimisation</td><td>Full penetration over partial-penetration; wider toe angle; eliminate undercut</td><td>AWS D1.1 Clause 5.24; EN ISO 5817</td></tr>
+        <tr><td>Hydrogen bake-out</td><td>150–250°C, 2–4 hr immediately post-weld — drives out diffusible H before joint cools</td><td>Lincoln Electric guide; EN 1011-2 Annex D; AS/NZS 1554.1</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Detection -->
+  <div class="section">
+    <h2>HIC Detection Methods</h2>
+    <p>HIC cracks are often tight (no measurable opening displacement), subsurface, and delayed. A layered inspection strategy is required for susceptible joints.</p>
+
+    <table class="ref-table">
+      <thead><tr><th>Method</th><th>Best For</th><th>Limitations</th><th>Minimum Delay</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Magnetic Particle (MPI)</strong></td><td>Toe cracks, transverse weld metal cracks reaching or near surface</td><td>Only &lt;3mm depth; requires ferromagnetic material; tight cracks may not indicate well</td><td>48 hr (CE &gt;0.45)</td></tr>
+        <tr><td><strong>Penetrant Testing (PT)</strong></td><td>Surface-breaking cracks only — austenitic or non-magnetic materials</td><td>No depth info; tight HIC cracks may not draw penetrant; less sensitive than MPI on steel</td><td>48 hr</td></tr>
+        <tr><td><strong>Ultrasonic (UT)</strong></td><td>Subsurface underbead cracks; deep HAZ cracks beyond MPI reach</td><td>Skilled interpretation; complex geometries limit coverage; crack orientation matters</td><td>48 hr</td></tr>
+        <tr><td><strong>Phased Array UT (PAUT)</strong></td><td>Full HAZ volume coverage; imaging mode characterises depth and tilt of crack</td><td>Equipment cost; training required; calibration critical</td><td>48 hr</td></tr>
+        <tr><td><strong>Radiographic (RT)</strong></td><td>Transverse cracks with sufficient opening; root cracks in single-sided joints</td><td>Tight cracks may be invisible; crack plane must align with beam; radiation safety</td><td>As soon as cool enough</td></tr>
+        <tr><td><strong>Macro-section / Metallography</strong></td><td>Definitive — reveals all cracks in section plane; confirms microstructure and hardness</td><td>Destructive; one plane per cut; used for PQR qualification, not production inspection</td><td>After prep</td></tr>
+        <tr><td><strong>Vickers Hardness Traverse</strong></td><td>HAZ hardness profile — confirms whether microstructure exceeds 350 HV threshold</td><td>Predictive (susceptibility), not detection of existing cracks; requires macro access</td><td>PQR / procedure dev.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Case Studies -->
+  <div class="section">
+    <h2>TWI Case Studies</h2>
+    <p>The following cases are representative of published TWI investigation scenarios and illustrate how the three-condition model manifests in real fabrication environments.</p>
+
+    <h3>Case 1 — Structural Repair Weld: All Three Conditions Present</h3>
+    <p><strong>Material:</strong> ASTM A514 (T-1) Q&amp;T steel, 50mm plate, CE ≈ 0.54 (Group III/IV boundary)<br>
+    <strong>Situation:</strong> Emergency repair weld on an excavator boom arm under time pressure. No preheat applied. E7018 electrodes from a container left open for three days in a humid shop.<br>
+    <strong>Finding:</strong> Toe cracks detected by MPI 36 hours after welding. Cross-section confirmed lath martensite in CGHAZ, hardness 440–480 HV.<br>
+    <strong>Root cause:</strong> Susceptible microstructure (CE 0.54, rapid cooling → martensite); elevated hydrogen (~15 mL/100g estimated, open electrode storage); high restraint (repair weld in stiff structure).<br>
+    <strong>Corrective action:</strong> Minimum preheat 150°C per AWS D1.1 Table 4.4 (Group IV, 38–65mm). E7018-H4R from sealed hermetically-packed container stored in quiver at 120°C. 48-hour NDT hold imposed.</p>
+
+    <h3>Case 2 — Pipeline Girth Weld: Cellulosic Root Pass in Humid Conditions</h3>
+    <p><strong>Material:</strong> API 5L X70, 12mm wall, CE ≈ 0.42 (acceptable CE per pipeline standard)<br>
+    <strong>Situation:</strong> Offshore pipeline girth weld completed at 95% relative humidity. SMAW E6010 cellulosic root pass followed by E7018-H8 fill and cap (properly stored).<br>
+    <strong>Finding:</strong> Underbead crack below root pass detected by automated UT 24 hours after welding.<br>
+    <strong>Root cause:</strong> Despite acceptable CE, cellulosic E6010 introduced 30–40 mL/100g H<sub>D</sub> — well above the NLH threshold. Fast-cooled root pass HAZ (no preheat, thin section) and the hydrogen load were sufficient. Fill passes with H8 did not affect the already-cracked root HAZ.<br>
+    <strong>Corrective action:</strong> GTAW root pass required for all girth welds (H&lt;4 mL/100g). Alternatively, 50°C preheat with moisture protection where E6010 root is required by specification; NDT extended to 48 hours.</p>
+
+    <h3>Case 3 — Structural Steel: Nominal CE Used Instead of Actual</h3>
+    <p><strong>Material:</strong> EN S355JR structural steel, nominal max CE = 0.45 per EN 10025 spec; actual heat cert CE = 0.49<br>
+    <strong>Situation:</strong> Preheat calculated as 50°C using nominal CE. Welding stopped overnight at 5°C ambient. Work resumed next morning without re-heating joint.<br>
+    <strong>Finding:</strong> Transverse weld metal cracks found by RT 48 hours after welding.<br>
+    <strong>Root cause:</strong> Actual CE (0.49) placed the weld in a higher preheat requirement band than the nominal CE (0.45). The 5°C overnight ambient temperature further accelerated cooling rate and drove hydrogen into the joint during the interruption. Real required preheat was 100°C minimum.<br>
+    <strong>Lesson:</strong> Always use actual heat certificate chemistry. Account for ambient temperature per AWS D1.1 Clause 4.2.4 or EN 1011-2 temperature correction factor. Never restart a cooled weld without re-applying preheat.</p>
+
+    <div class="note-box"><strong>Common thread in TWI investigations:</strong> HIC is almost always preventable. The most frequent failure mode is not the code being wrong — it is the code being applied to incorrect inputs: nominal instead of actual CE, assumed instead of verified electrode hydrogen content, or inadequate inspection delay.</div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     TAB 2 — Lincoln Electric
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div id="panel-le" class="panel">
+
+  <div class="section">
+    <h2>Carbon Equivalent — What It Measures</h2>
+    <p>Carbon equivalent (CE) collapses a steel's full chemistry into a single hardenability index. Carbon contributes most to martensite formation; other alloying elements contribute proportionally. Two formulas are in widespread use:</p>
+
+    <div class="two-col">
+      <div>
+        <div class="section-label">IIW Formula (AWS D1.1, EN 1011-2)</div>
+        <div class="formula-box">
+          CE<sub>IIW</sub> = C + Mn/6 + (Cr+Mo+V)/5 + (Ni+Cu)/15
+          <span class="fn">Best for medium-to-high alloy steels (CE &gt;0.35). Reference: IIW Doc. IX-535-67 (Dearden &amp; O'Neill).</span>
+        </div>
+        <p style="font-size:0.82rem;color:#4b5563;margin-top:6px;">Manganese contributes ~1/6 per wt% relative to carbon. Cr/Mo/V are strong carbide formers grouped together. Ni/Cu are austenite stabilisers.</p>
+      </div>
+      <div>
+        <div class="section-label">Pcm Formula (JIS, Pipeline Steels)</div>
+        <div class="formula-box">
+          P<sub>cm</sub> = C + Si/30 + (Mn+Cu+Cr)/20 + Ni/60 + Mo/15 + V/10 + 5B
+          <span class="fn">Better for modern low-carbon HSLA steels (C &lt;0.12%, CE &lt;0.35). Reference: Ito &amp; Bessyo 1968.</span>
+        </div>
+        <p style="font-size:0.82rem;color:#4b5563;margin-top:6px;">The boron term (×5) captures the strong hardenability contribution of even trace boron additions (typical B = 10–30 ppm). Use for API 5L X52–X80 grades.</p>
+      </div>
+    </div>
+
+    <div class="info-box"><strong>Choosing the right formula:</strong> Use CE<sub>IIW</sub> for structural steels (A36, A572, A588, A514) per AWS D1.1. Use P<sub>cm</sub> for pipeline steels (API 5L) or any steel with C &lt;0.12% where CE<sub>IIW</sub> may underestimate cracking risk.</div>
+  </div>
+
+  <!-- Hydrogen designators -->
+  <div class="section">
+    <h2>Hydrogen Level — AWS H-Designator System</h2>
+    <p>AWS filler metal specifications (A5.1, A5.18, A5.20, A5.28, A5.36) require that electrodes and wires tested per AWS A4.3 achieve the hydrogen level of their designator. The measured diffusible hydrogen per 100g of deposited weld metal must not exceed the limit.</p>
+
+    <table class="ref-table">
+      <thead><tr><th>Designator</th><th>Max H<sub>D</sub></th><th>Example Classifications</th><th>Typical Application</th><th>Storage After Opening</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="badge b-h4">H4</span></td><td>≤4 mL/100g</td>
+          <td>E7018-H4R, ER70S-3-H4, E71T-9C-H4</td>
+          <td>CE &gt;0.50; Q&amp;T steels; thick sections (&gt;50mm); high restraint repair welds</td>
+          <td>Sealed hermetic packs only; once opened bake 300°C/1hr if exposed &gt;4hr; quiver ≥120°C</td>
+        </tr>
+        <tr>
+          <td><span class="badge b-h8">H8</span></td><td>≤8 mL/100g</td>
+          <td>E7018-H8R, E7018-1-H8, ER70S-6</td>
+          <td>CE 0.40–0.50; 25–50mm sections; standard low-hydrogen specification per D1.1</td>
+          <td>Bake 300°C/1hr if exposed; quiver ≥70°C; &lt;8hr open-air exposure allowed</td>
+        </tr>
+        <tr>
+          <td><span class="badge b-h16">H16</span></td><td>≤16 mL/100g</td>
+          <td>E7018-H16, E7024-H16</td>
+          <td>CE &lt;0.40; thin sections (&lt;19mm); low restraint fillet welds</td>
+          <td>Bake 260°C/1hr if exposed; keep can sealed when not in use</td>
+        </tr>
+        <tr>
+          <td><span class="badge b-nlh">Cellulosic (No H-desig.)</span></td><td>&gt;16 (typically 25–40)</td>
+          <td>E6010, E6011, E7010-A1</td>
+          <td>Pipeline root passes where arc characteristics required; not suitable for CE &gt;0.40 without significant preheat</td>
+          <td>Do NOT re-dry — ruins cellulosic coating. Store dry; replace if moisture-damaged</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="warn-box"><strong>R suffix (Moisture-Resistant):</strong> E7018-H4R and E7018-H8R meet the AWS A5.1 9-hour atmospheric exposure test. This means they tolerate brief exposure without needing reconditioning — it does NOT mean they never require baking. Sustained exposure in high-humidity environments still requires reconditioning per the manufacturer's schedule.</div>
+  </div>
+
+  <!-- AWS D1.1 Table 4.4 -->
+  <div class="section">
+    <h2>AWS D1.1:2020 — Minimum Preheat &amp; Interpass Temperature (Table 4.4)</h2>
+    <p>Table 4.4 assigns steels to CE groups and specifies minimum preheat based on plate thickness. These are <em>minimums</em> — high restraint, high hydrogen content, or ambient temperatures below 10°C may require additional preheat. The table assumes low-hydrogen process (H8 or better).</p>
+
+    <div class="note-box"><strong>Note:</strong> AWS D1.1 Clause 4.2.4 — when base metal temperature is below 0°C (32°F), do not weld. When base metal is between 0°C and 10°C, preheat base metal to at least 38°C (100°F) before welding, regardless of Table 4.4 requirements.</div>
+
+    <div style="overflow-x:auto;">
+    <table class="ref-table" style="min-width:600px;">
+      <thead>
+        <tr>
+          <th rowspan="2">Group</th>
+          <th rowspan="2">CE<sub>IIW</sub> Range</th>
+          <th rowspan="2">Example Grades</th>
+          <th colspan="4" style="text-align:center;">Minimum Preheat (°C) by Plate Thickness</th>
+        </tr>
+        <tr>
+          <th>T ≤ 19 mm</th>
+          <th>19 &lt; T ≤ 38 mm</th>
+          <th>38 &lt; T ≤ 65 mm</th>
+          <th>T &gt; 65 mm</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Group I</strong></td>
+          <td>CE ≤ 0.40</td>
+          <td>A36, A53-B, A106-B/C, A500 B/C, A501, A709 Gr.36</td>
+          <td>None</td><td>None</td><td>66°C</td><td>107°C</td>
+        </tr>
+        <tr>
+          <td><strong>Group II</strong></td>
+          <td>0.41–0.50</td>
+          <td>A572 Gr.42/50/55, A588, A709 Gr.50/50W, A992</td>
+          <td>None</td><td>66°C</td><td>107°C</td><td>150°C</td>
+        </tr>
+        <tr>
+          <td><strong>Group III</strong></td>
+          <td>0.51–0.60</td>
+          <td>A572 Gr.60/65, A709 Gr.70W, A852</td>
+          <td>10°C</td><td>107°C</td><td>150°C</td><td>177°C</td>
+        </tr>
+        <tr>
+          <td><strong>Group IV</strong></td>
+          <td>CE &gt; 0.60</td>
+          <td>A514, A517 (Q&amp;T); A709 Gr.100/100W</td>
+          <td>10°C</td><td>107°C</td><td>150°C</td><td>204°C</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:0.81rem;color:#64748b;margin-top:6px;">"None" = no minimum required by Table 4.4 for that combination when ambient ≥10°C and low-hydrogen process is used.</p>
+  </div>
+
+  <!-- CE Calculator -->
+  <div class="section">
+    <h2>Carbon Equivalent Calculator with Preheat Recommendation</h2>
+    <p>Enter chemistry from the mill or heat certificate. Leave unused elements at 0. Select plate thickness and electrode hydrogen level.</p>
+
+    <div class="section-label">Steel Chemistry (wt%) — from heat certificate</div>
+    <div class="ce-grid">
+      <div class="ce-field"><label><span class="sym">C</span> Carbon</label><input type="number" id="iC" value="0.18" step="0.01" min="0" max="1.0"></div>
+      <div class="ce-field"><label><span class="sym">Mn</span> Manganese</label><input type="number" id="iMn" value="1.10" step="0.01" min="0" max="3.0"></div>
+      <div class="ce-field"><label><span class="sym">Si</span> Silicon</label><input type="number" id="iSi" value="0.30" step="0.01" min="0" max="1.5"></div>
+      <div class="ce-field"><label><span class="sym">Cr</span> Chromium</label><input type="number" id="iCr" value="0.55" step="0.01" min="0" max="5.0"></div>
+      <div class="ce-field"><label><span class="sym">Mo</span> Molybdenum</label><input type="number" id="iMo" value="0.00" step="0.01" min="0" max="1.0"></div>
+      <div class="ce-field"><label><span class="sym">V</span> Vanadium</label><input type="number" id="iV" value="0.065" step="0.005" min="0" max="0.30"></div>
+      <div class="ce-field"><label><span class="sym">Ni</span> Nickel</label><input type="number" id="iNi" value="0.35" step="0.01" min="0" max="10.0"></div>
+      <div class="ce-field"><label><span class="sym">Cu</span> Copper</label><input type="number" id="iCu" value="0.40" step="0.01" min="0" max="1.0"></div>
+      <div class="ce-field"><label><span class="sym">B</span> Boron (ppm)</label><input type="number" id="iB" value="0" step="1" min="0" max="60"></div>
+    </div>
+
+    <div class="section-label">Joint Parameters</div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;margin-bottom:14px;">
+      <div>
+        <label style="font-size:0.8rem;font-weight:600;color:#475569;display:block;margin-bottom:6px;">Max Plate Thickness at Joint</label>
+        <select class="thick-select" id="iThick">
+          <option value="1">≤ 19 mm</option>
+          <option value="2">19 – 38 mm</option>
+          <option value="3" selected>38 – 65 mm</option>
+          <option value="4">≥ 65 mm</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:0.8rem;font-weight:600;color:#475569;display:block;margin-bottom:6px;">Electrode Hydrogen Level</label>
+        <div class="h-selector">
+          <button class="h-btn" onclick="setH('H4',this)">H4 ≤ 4 mL/100g</button>
+          <button class="h-btn active" onclick="setH('H8',this)">H8 ≤ 8 mL/100g</button>
+          <button class="h-btn" onclick="setH('H16',this)">H16 ≤ 16 mL/100g</button>
+          <button class="h-btn" onclick="setH('NLH',this)">Cellulosic (NLH)</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="calc-btn" onclick="calcCE()">Calculate CE &amp; Preheat</button>
+
+    <div id="ce-result" class="result-block"></div>
+  </div>
+
+  <!-- Worked example -->
+  <div class="section">
+    <h2>Worked Example — ASTM A588 Grade A (Weathering Steel, 40mm Plate)</h2>
+    <p>A588 Grade A is a commonly welded HSLA weathering steel used in bridges and exposed structural applications. Its copper, chromium, nickel, and vanadium additions push CE well above the nominal structural steel expectation. Default calculator values above are pre-loaded with this steel's typical ladle chemistry.</p>
+
+    <div class="example-box">
+      <h3>Step-by-Step: A588-A, 40mm plate, E7018-H8 SMAW electrode, ambient 15°C</h3>
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Steel chemistry from heat certificate:</strong><br>
+          <span class="mono">C=0.16, Mn=1.10, Si=0.30, Cu=0.40, Cr=0.55, Ni=0.35, Mo=0.00, V=0.065</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Calculate CE<sub>IIW</sub>:</strong><br>
+          <span class="mono">CE = C + Mn/6 + (Cr+Mo+V)/5 + (Ni+Cu)/15</span><br>
+          <span class="mono">CE = 0.16 + 1.10/6 + (0.55+0.00+0.065)/5 + (0.35+0.40)/15</span><br>
+          <span class="mono">CE = 0.160 + 0.183 + 0.123 + 0.050 = <strong>0.516</strong></span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Assign AWS D1.1 Group:</strong><br>
+          CE = 0.516 → falls in 0.51–0.60 range → <strong>Group III</strong>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>Look up Table 4.4 — Group III, 40mm plate (38–65mm column):</strong><br>
+          Minimum preheat = <strong>150°C</strong>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <strong>Hydrogen adjustment — E7018-H8:</strong><br>
+          H8 is the baseline assumed by Table 4.4 → no adjustment needed.<br>
+          If E7018-H4R were used: Lincoln Electric allows −25°C reduction → 125°C minimum.<br>
+          If E6010 cellulosic: add ≥50°C above table minimum — not recommended for Group III without engineering review.
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <strong>Ambient temperature check:</strong><br>
+          Ambient = 15°C — above 10°C threshold. No additional correction required.<br>
+          If ambient &lt;10°C: add minimum 38°C per AWS D1.1 Clause 4.2.4 → minimum 188°C.
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <strong>Final requirements:</strong><br>
+          Minimum preheat = <strong>150°C</strong>; maintain as interpass temperature throughout.<br>
+          NDT: no earlier than <strong>48 hours</strong> after final weld pass (CE = 0.516, Group III).
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box"><strong>Most common mistake:</strong> Using the nominal ASTM A588 max CE = 0.45 (from the grade specification) instead of the actual heat certificate CE = 0.516. This places the weld in Group II (107°C) instead of Group III (150°C) — a 43°C underestimate that creates real HIC risk on a 40mm plate. Always use actual heat certificate chemistry, not specification maximums.</div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     TAB 3 — IIW STANDARDS
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div id="panel-iiw" class="panel">
+
+  <div class="section">
+    <h2>IIW — Foundational HIC Documents</h2>
+    <p>The International Institute of Welding has produced the research underpinning most national HIC prevention codes since the 1950s. Key documents:</p>
+
+    <table class="ref-table">
+      <thead><tr><th>Document</th><th>Title / Scope</th><th>Key Contribution</th></tr></thead>
+      <tbody>
+        <tr><td>IIW Doc. IX-535-67</td><td>Carbon Equivalent Formula — Dearden &amp; O'Neill / IIW revision</td><td>Established CE<sub>IIW</sub> as international reference formula; adopted by AWS, EN, and AS standards worldwide</td></tr>
+        <tr><td>IIW Doc. IX-2113-05</td><td>Prevention of Cold Cracking — Literature Review &amp; Recommended Practice</td><td>Comprehensive mechanism review; formalises three-condition model; framework for code comparisons</td></tr>
+        <tr><td>EN ISO 3690:2018</td><td>Diffusible Hydrogen Measurement in Arc Welding</td><td>Standard test method for H<sub>D</sub> (mercury displacement or gas chromatography); defines mL/100g; referenced by AWS A4.3, EN 1011-2, ISO 15614</td></tr>
+        <tr><td>IIW Doc. II-1986-11</td><td>Preheat Requirements for Prevention of Hydrogen Cracking</td><td>Summarises preheat methods across standards; provides technical basis for EN 1011-2 Annex B formula</td></tr>
+        <tr><td>ISO/TR 17671-2:2002</td><td>Welding Recommendations — Steels (Thermal Methods)</td><td>Technical report consolidating IIW and CEN preheat research; parent document for EN 1011-2</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Standards comparison -->
+  <div class="section">
+    <h2>International Standards Comparison — HIC Prevention</h2>
+    <p>All major fabrication codes address HIC prevention, but differ significantly in methodology (table-based vs. formula-based), parameter scope, and conservatism.</p>
+
+    <div style="overflow-x:auto;">
+    <table class="ref-table" style="min-width:700px;">
+      <thead>
+        <tr>
+          <th>Attribute</th>
+          <th style="background:#1e3a5f;">AWS D1.1:2020 (USA)</th>
+          <th style="background:#1e5f3a;">EN 1011-2:2001 (Europe)</th>
+          <th style="background:#3a1e5f;">BS 7910:2019 (UK)</th>
+          <th style="background:#5f3a1e;">AS/NZS 1554.1:2014 (Aus/NZ)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Preheat method</strong></td>
+          <td>Table 4.4 — CE group × thickness (4 CE bands × 4 thickness bands)</td>
+          <td>Analytical formula: T<sub>p</sub> = f(CE, H<sub>D</sub>, Q, d) — Annex B; accounts for heat input and hydrogen level directly</td>
+          <td>Table B.1 based on Graville diagram; supplemented by fracture mechanics fitness-for-service assessment</td>
+          <td>Table 3.1 — CE group × thickness, with separate columns for H5, H10, H15 hydrogen levels</td>
+        </tr>
+        <tr>
+          <td><strong>CE formula</strong></td>
+          <td>CE<sub>IIW</sub> primary; P<sub>cm</sub> mentioned in Annex commentary</td>
+          <td>Both CE<sub>IIW</sub> and P<sub>cm</sub> defined; method selects based on carbon content (&lt;0.12% → Pcm preferred)</td>
+          <td>CE<sub>IIW</sub>; Annex A notes P<sub>cm</sub> for low-C HSLA steels</td>
+          <td>CE<sub>IIW</sub>; P<sub>cm</sub> permitted for pipeline compliance with AS 2885</td>
+        </tr>
+        <tr>
+          <td><strong>Heat input considered?</strong></td>
+          <td>No — preheat is independent of heat input in Table 4.4</td>
+          <td>Yes — higher Q allows lower T<sub>p</sub> (slower Δt₈/₅)</td>
+          <td>Partial — used in Δt₈/₅ calc for Graville zone assessment</td>
+          <td>No — table-based</td>
+        </tr>
+        <tr>
+          <td><strong>Hydrogen level input?</strong></td>
+          <td>Implicit — table assumes H8; footnote allows reduction for H4</td>
+          <td>Yes — H<sub>D</sub> enters formula directly (EN ISO 3690 Scale A–E)</td>
+          <td>Yes — four hydrogen classes (A: &lt;5; B: 5–10; C: 10–15; D: &gt;15 mL/100g)</td>
+          <td>Yes — table columns for H5, H10, H15 mL/100g levels</td>
+        </tr>
+        <tr>
+          <td><strong>Critical hardness limit</strong></td>
+          <td>No explicit HAZ hardness limit in Table 4.4; 248 HV noted in D1.1 commentary for some conditions</td>
+          <td>350 HV₁₀ HAZ hardness limit (Annex D); procedure qualification required above limit</td>
+          <td>350 HV per BS EN ISO 15614-1; fracture mechanics ECA route available for higher-hardness weld procedures</td>
+          <td>350 HV limit per AS/NZS 2980</td>
+        </tr>
+        <tr>
+          <td><strong>Inspection delay</strong></td>
+          <td>48 hr for CE &gt;0.45 in Annex K; otherwise D1.1 does not explicitly prohibit immediate NDT</td>
+          <td>48 hr minimum; 72 hr for Q&amp;T steels or CE &gt;0.55 (EN 1011-2 Annex A, also EN 1290/1291)</td>
+          <td>Defined in BS EN ISO 17635 (NDT inspection levels); 48–72 hr standard for susceptible steels</td>
+          <td>48 hr explicit in AS/NZS 1554.1 Clause 6.7.1 for CE &gt;0.40 or Q&amp;T steels</td>
+        </tr>
+        <tr>
+          <td><strong>Post-weld alternatives</strong></td>
+          <td>PWHT per Annex K may substitute for preheat (engineer approval required)</td>
+          <td>Immediate post-weld heat treatment at 200–350°C recognised; dehydrogenation also accepted</td>
+          <td>Stress relief + bake-out recognised; ECA fracture mechanics route available</td>
+          <td>Post-weld dehydrogenation heat treatment 150–250°C explicit alternative in Clause 5.4.4</td>
+        </tr>
+        <tr>
+          <td><strong>Primary scope</strong></td>
+          <td>Structural steel — bridges, buildings, general structural; not pressure vessels (use ASME)</td>
+          <td>General structural welding of steels per EN 1993/EN 10025; widely adopted in EU fabrication</td>
+          <td>Fitness-for-service assessment of flaws in welds; widely used offshore and pressure vessels in UK</td>
+          <td>Structural steel welding in Australia/NZ; mandatory in Australian building and bridge design codes</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- EN 1011-2 formula detail -->
+  <div class="section">
+    <h2>EN 1011-2 — Analytical Preheat Formula (Annex B)</h2>
+    <p>EN 1011-2 Annex B calculates minimum preheat temperature using a formula that accounts for CE, hydrogen content, heat input, and combined joint thickness. This allows preheat to be reduced when high heat input or an extra-low-hydrogen process is used — something AWS D1.1 Table 4.4 cannot capture.</p>
+
+    <div class="formula-box">
+      T<sub>p</sub> = 697 &times; CE<sub>IIW</sub> + 160 &times; tanh(d/35) + 62 &times; H<sub>D</sub><sup>0.35</sup> + (53 &times; CE<sub>IIW</sub> &minus; 32) &times; Q &minus; 328
+      <span class="fn">d = combined thickness, mm &nbsp;|&nbsp; H<sub>D</sub> = diffusible hydrogen, mL/100g (EN ISO 3690) &nbsp;|&nbsp; Q = arc energy, kJ/mm &nbsp;|&nbsp; Result in °C. &nbsp; Ref: EN 1011-2:2001 Annex B (CEN/TS method).</span>
+    </div>
+
+    <p>The four terms:</p>
+    <ul>
+      <li><strong>697 × CE:</strong> Composition term — linear in CE; hardenability drives the baseline preheat requirement</li>
+      <li><strong>160 × tanh(d/35):</strong> Thickness term — saturates at large d; characteristic thickness constant = 35mm; combined thickness d = sum of plate thicknesses meeting at joint</li>
+      <li><strong>62 × H<sub>D</sub><sup>0.35</sup>:</strong> Hydrogen term — diminishing-returns relationship at high H<sub>D</sub></li>
+      <li><strong>(53 × CE − 32) × Q − 328:</strong> Heat input correction — negative (subtractive) when Q is large; higher heat input → slower cooling → lower required preheat; the CE-dependent coefficient captures that high-CE steels benefit less from increased heat input</li>
+    </ul>
+
+    <div class="note-box">
+      <strong>Example calculation:</strong> CE = 0.45, d = 50mm, H<sub>D</sub> = 8 mL/100g (H8), Q = 1.5 kJ/mm (typical SMAW pass):<br><br>
+      T<sub>p</sub> = 697×0.45 + 160×tanh(50/35) + 62×8<sup>0.35</sup> + (53×0.45 − 32)×1.5 − 328<br>
+      = 313.7 + 160×0.878 + 62×2.14 + (23.85 − 32)×1.5 − 328<br>
+      = 313.7 + 140.5 + 132.7 − 12.2 − 328<br>
+      = <strong>247°C → round up to 250°C minimum preheat</strong>
+    </div>
+
+    <h3>EN 1011-2 Hydrogen Scale (vs. AWS Designators)</h3>
+    <table class="ref-table">
+      <thead><tr><th>EN Scale</th><th>H<sub>D</sub> Range (mL/100g)</th><th>AWS Approximate Equivalent</th></tr></thead>
+      <tbody>
+        <tr><td>A — Very low</td><td>&lt;3</td><td>H4 (extra-low hydrogen)</td></tr>
+        <tr><td>B — Low</td><td>3–5</td><td>Between H4 and H8</td></tr>
+        <tr><td>C — Medium</td><td>5–10</td><td>H8</td></tr>
+        <tr><td>D — High</td><td>10–15</td><td>H16</td></tr>
+        <tr><td>E — Very high</td><td>&gt;15</td><td>Cellulosic / NLH</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Other standards -->
+  <div class="section">
+    <h2>Other International Standards — Key HIC Provisions</h2>
+
+    <h3>ISO 15614-1:2017 — Welding Procedure Qualification (WPQT)</h3>
+    <p>ISO 15614-1 requires Vickers hardness testing of the HAZ during procedure qualification. A limit of <strong>350 HV</strong> must be demonstrated. If exceeded, the fabricator must either revise preheat (higher), revise heat input (higher), or demonstrate via CTOD/CVN fracture toughness testing that the harder HAZ is still fracture-safe — which requires engineering approval and a full toughness test programme.</p>
+
+    <h3>BS 7910:2019 — Fitness-for-Service Assessment</h3>
+    <p>BS 7910 is not a fabrication code but a fracture mechanics assessment standard — it determines whether a <em>discovered</em> hydrogen crack can remain in service or must be repaired. Key provisions relevant to HIC:</p>
+    <ul>
+      <li><strong>Level 1 (simplified):</strong> Flaw interaction rules + reference stress; gives a quick conservative acceptance decision for discovered cracks without full fracture mechanics</li>
+      <li><strong>Level 2 (normal):</strong> Full K<sub>I</sub> / CTOD analysis; requires known HAZ fracture toughness — critical for Q&amp;T steels where material characterisation is essential</li>
+      <li>Hydrogen embrittlement factor reduces effective fracture toughness for assessment while hydrogen is still present — mandates that FFS assessment be performed post-PWHT or after confirmed outgassing</li>
+    </ul>
+
+    <h3>AS/NZS 1554.1:2014 — Australian/NZ Structural Welding</h3>
+    <p>AS/NZS 1554.1 mirrors AWS D1.1 closely but adds several improvements for HIC prevention:</p>
+    <ul>
+      <li><strong>H-level columns in preheat table:</strong> Table 3.1 has separate columns for H5, H10, and H15 (mL/100g per EN ISO 3690) allowing preheat reduction when an H5 process is certified</li>
+      <li><strong>Dehydrogenation heat treatment:</strong> Clause 5.4.4 explicitly allows 150–200°C for 2–4 hr immediately post-weld as alternative to preheat for CE 0.40–0.50 steels</li>
+      <li><strong>Inspection timing:</strong> Clause 6.7.1 — NDT not permitted less than 48 hr after welding for CE &gt;0.40 or Q&amp;T steels welded under the standard</li>
+    </ul>
+
+    <h3>API 1104:2021 — Pipeline Welding</h3>
+    <p>API 1104 uses P<sub>cm</sub> (not CE<sub>IIW</sub>) for modern X52–X80 pipeline steels. Section 5.3 requires preheat maintenance until at least two fill passes are complete over a cellulosic root pass. For sour service pipelines, API Spec 5L Annex H applies — HIC-resistant grades require CE ≤ 0.43 and HAZ hardness ≤ 250 HV (versus the structural welding threshold of 350 HV).</p>
+
+    <div class="info-box"><strong>Sour Service (H₂S environments):</strong> Sulfide stress cracking (SSC) and hydrogen-induced cracking (HIC) in sour service are governed by <strong>NACE MR0175 / ISO 15156</strong>, not by structural welding codes. The embrittlement mechanism is identical but the hydrogen source is electrochemical (H₂S corrosion rather than welding). The HAZ hardness limit is 250 HV (stricter than the 350 HV welding threshold), and the material qualification procedure is entirely separate from WPQT under D1.1 or EN 1011-2.</div>
+  </div>
+
+  <!-- Priority hierarchy -->
+  <div class="section">
+    <h2>HIC Prevention — Priority Hierarchy (All Codes)</h2>
+    <p>When multiple controls are stacked, they provide multiplicative protection. For high-risk joints (CE &gt;0.45, thick section, high restraint), apply as many levels as practical:</p>
+
+    <table class="ref-table">
+      <thead><tr><th>Priority</th><th>Control</th><th>Condition Eliminated</th><th>Effectiveness</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1</strong></td><td>Specify low-CE steel (CE &lt;0.40 on actual heat cert)</td><td>Susceptible microstructure</td><td>Eliminates HIC risk at normal thicknesses — most powerful single measure at design stage</td></tr>
+        <tr><td><strong>2</strong></td><td>Low-hydrogen filler (H4 or H8), properly baked and stored</td><td>Hydrogen</td><td>Reduces H<sub>D</sub> by 4–10× vs. cellulosic; single most cost-effective process control</td></tr>
+        <tr><td><strong>3</strong></td><td>Preheat to code minimum — Table 4.4 (AWS), EN 1011-2 formula, or AS/NZS 1554 Table 3.1</td><td>Microstructure + stress</td><td>Slows cooling → avoids martensite; also accelerates hydrogen outgassing during welding</td></tr>
+        <tr><td><strong>4</strong></td><td>Maintain interpass temperature ≥ preheat throughout</td><td>Microstructure + stress</td><td>Prevents cold zones between passes where hydrogen can accumulate and trigger delayed cracking</td></tr>
+        <tr><td><strong>5</strong></td><td>Post-weld dehydrogenation bake-out (150–250°C, 2–4 hr)</td><td>Hydrogen</td><td>Removes ~80–90% of residual diffusible H before joint cools below 100°C</td></tr>
+        <tr><td><strong>6</strong></td><td>PWHT (580–650°C, per ASME or AWS D1.1 Annex K)</td><td>Stress + remaining hydrogen</td><td>Eliminates residual stress; drives out remaining H; may temper brittle martensite to tougher tempered state</td></tr>
+        <tr><td><strong>7</strong></td><td>Delay NDT ≥ 48 hr (≥ 72 hr for CE &gt;0.55 or Q&amp;T steels)</td><td>N/A — enables reliable detection</td><td>Ensures HIC, if it occurred, has progressed to detectable size before inspection sign-off is issued</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="back">
+  <a href="index.html">← Back to Reference Tables &amp; Diagrams</a> &nbsp;|&nbsp;
+  <a href="../index.html">← Back to Main Course Page</a>
+</div>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+let selH = 'H8';
+function setH(level, btn) {
+  selH = level;
+  document.querySelectorAll('.h-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function calcCE() {
+  const C  = +document.getElementById('iC').value  || 0;
+  const Mn = +document.getElementById('iMn').value || 0;
+  const Si = +document.getElementById('iSi').value || 0;
+  const Cr = +document.getElementById('iCr').value || 0;
+  const Mo = +document.getElementById('iMo').value || 0;
+  const V  = +document.getElementById('iV').value  || 0;
+  const Ni = +document.getElementById('iNi').value || 0;
+  const Cu = +document.getElementById('iCu').value || 0;
+  const Bppm = +document.getElementById('iB').value || 0;
+  const B  = Bppm / 10000;
+  const thick = +document.getElementById('iThick').value;
+
+  const ceIIW = C + Mn/6 + (Cr+Mo+V)/5 + (Ni+Cu)/15;
+  const pcm   = C + Si/30 + (Mn+Cu+Cr)/20 + Ni/60 + Mo/15 + V/10 + 5*B;
+
+  // AWS D1.1 Table 4.4 base preheat (null = none required)
+  const d11 = [
+    [null, null,  66, 107],  // Group I   CE ≤ 0.40
+    [null,   66, 107, 150],  // Group II  CE 0.41–0.50
+    [  10,  107, 150, 177],  // Group III CE 0.51–0.60
+    [  10,  107, 150, 204],  // Group IV  CE > 0.60
+  ];
+
+  const group = ceIIW <= 0.40 ? 0 : ceIIW <= 0.50 ? 1 : ceIIW <= 0.60 ? 2 : 3;
+  const groupName  = ['I','II','III','IV'][group];
+  const groupRange = ['≤0.40','0.41–0.50','0.51–0.60','>0.60'][group];
+  const thickLabel = ['≤19 mm','19–38 mm','38–65 mm','≥65 mm'][thick-1];
+
+  const basePH = d11[group][thick-1];
+  const baseText = basePH === null ? 'None required' : basePH + '°C';
+
+  let hAdj = 0, hNote = '';
+  if      (selH === 'H4')  { hAdj = -25; hNote = 'H4 electrode: Lincoln Electric allows −25°C reduction from Table 4.4 minimum.'; }
+  else if (selH === 'H8')  {              hNote = 'H8 electrode: Table 4.4 minimum applies directly.'; }
+  else if (selH === 'H16') { hAdj = +25;  hNote = 'H16 electrode: Table 4.4 assumes H8 as minimum. H16 may require +25°C or upgrade to H8 per engineering review.'; }
+  else                     { hAdj = +50;  hNote = 'Cellulosic (NLH) electrode: preheat must be substantially increased. Add ≥50°C above table minimum. Engineering review required for CE &gt;0.40.'; }
+
+  let finalPH = (basePH === null ? 0 : basePH) + hAdj;
+  if (basePH === null && hAdj <= 0) finalPH = 0;
+  finalPH = Math.max(0, finalPH);
+  const finalText = (finalPH === 0 && basePH === null && hAdj <= 0) ? 'None required' : finalPH + '°C';
+
+  let cls = 'ph-none', riskLabel = 'Low HIC risk — minimal precautions needed';
+  if      (finalPH >= 150) { cls = 'ph-vhigh'; riskLabel = 'High HIC risk — strict preheat and low-hydrogen practice mandatory'; }
+  else if (finalPH >= 100) { cls = 'ph-high';  riskLabel = 'Elevated HIC risk — preheat mandatory'; }
+  else if (finalPH >= 50)  { cls = 'ph-med';   riskLabel = 'Moderate HIC risk — preheat and low-hydrogen process required'; }
+  else if (finalPH > 0)    { cls = 'ph-low';   riskLabel = 'Low-moderate HIC risk — low-hydrogen process required'; }
+
+  const delay = ceIIW > 0.55 ? '72 hours (CE &gt;0.55 — Q&T steel protocol)' :
+                ceIIW > 0.45 ? '48 hours (CE &gt;0.45)' : '24 hours minimum';
+
+  document.getElementById('ce-result').className = 'result-block show ' + cls;
+  document.getElementById('ce-result').innerHTML =
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">' +
+      '<div>' +
+        '<div style="font-size:0.78rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">CE<sub>IIW</sub></div>' +
+        '<div class="result-temp">' + ceIIW.toFixed(3) + '</div>' +
+        '<div class="result-label">AWS D1.1 <strong>Group ' + groupName + '</strong> (CE ' + groupRange + ')</div>' +
+      '</div>' +
+      '<div>' +
+        '<div style="font-size:0.78rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">P<sub>cm</sub></div>' +
+        '<div class="result-temp">' + pcm.toFixed(3) + '</div>' +
+        '<div class="result-label">Ito-Bessyo index (pipeline / low-carbon steels)</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="result-temp" style="font-size:2.8rem;">' + finalText + '</div>' +
+    '<div class="result-label">Minimum preheat — AWS D1.1 Table 4.4, Group ' + groupName + ', ' + thickLabel + ', ' + selH + ' electrode</div>' +
+    '<div class="result-detail">' +
+      '<strong>Table 4.4 base (Group ' + groupName + ', ' + thickLabel + '):</strong> ' + baseText + '<br>' +
+      '<strong>Hydrogen adjustment (' + selH + '):</strong> ' + (hAdj >= 0 ? '+' : '') + hAdj + '°C — ' + hNote + '<br>' +
+      '<strong>Risk assessment:</strong> ' + riskLabel + '<br>' +
+      '<strong>Minimum NDT delay:</strong> ' + delay + ' after final weld pass<br>' +
+      '<strong>Ambient temperature:</strong> If ambient &lt;10°C, add 38°C minimum per AWS D1.1 Clause 4.2.4' +
+    '</div>';
+}
+</script>
+</body>
+</html>

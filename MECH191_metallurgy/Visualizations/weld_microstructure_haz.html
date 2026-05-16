@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weld Microstructure &amp; HAZ — TWI · Lincoln Electric · DoITPoMS</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0a1628; color: #e2e8f0; font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; }
+
+  header { background: linear-gradient(135deg, #0f2040 0%, #1a3a5c 100%); padding: 24px 32px 20px; border-bottom: 2px solid #38bdf8; }
+  header h1 { font-size: 1.75rem; color: #38bdf8; letter-spacing: 0.5px; }
+  header p  { color: #94a3b8; font-size: 0.88rem; margin-top: 5px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #1e3a5c; background: #0d1f38; padding: 0 24px; overflow-x: auto; }
+  .tab-btn { padding: 14px 22px; background: none; border: none; color: #94a3b8; font-size: 0.9rem; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: color 0.2s, border-color 0.2s; white-space: nowrap; }
+  .tab-btn:hover { color: #7dd3fc; }
+  .tab-btn.active { color: #38bdf8; border-bottom-color: #38bdf8; font-weight: 600; }
+
+  .tab-content { display: none; padding: 28px 32px; max-width: 1100px; }
+  .tab-content.active { display: block; }
+
+  h2 { font-size: 1.2rem; color: #38bdf8; margin-bottom: 14px; margin-top: 26px; }
+  h2:first-child { margin-top: 0; }
+  h3 { font-size: 0.95rem; color: #7dd3fc; margin-bottom: 8px; margin-top: 14px; }
+
+  .card { background: #0f2040; border: 1px solid #1e3a5c; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+
+  .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  .ref-table th { background: #1a3a5c; color: #38bdf8; padding: 8px 11px; text-align: left; border: 1px solid #1e3a5c; }
+  .ref-table td { padding: 7px 11px; border: 1px solid #1e3a5c; color: #cbd5e1; vertical-align: top; }
+  .ref-table tr:nth-child(odd)  td { background: #0a1628; }
+  .ref-table tr:nth-child(even) td { background: #0f2040; }
+  .tbl-wrap { overflow-x: auto; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } .three-col { grid-template-columns: 1fr; } }
+
+  .alert { border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 0.82rem; line-height: 1.6; }
+  .info   { background: #0c2a3d; border: 1px solid #0ea5e9; color: #7dd3fc; }
+  .warn   { background: #2d1b00; border: 1px solid #f59e0b; color: #fcd34d; }
+  .danger { background: #2d0a0a; border: 1px solid #ef4444; color: #fca5a5; }
+  .success{ background: #0a2a14; border: 1px solid #22c55e; color: #86efac; }
+
+  /* Zone selector buttons */
+  .zone-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .zone-btn { padding: 7px 16px; border-radius: 20px; border: 2px solid; background: transparent; font-size: 0.82rem; cursor: pointer; font-weight: 600; transition: all 0.18s; }
+  .zone-btn.active { color: #0a1628 !important; }
+
+  /* Info panel */
+  .zone-panel { background: #0a1628; border: 2px solid #1e3a5c; border-radius: 10px; padding: 18px; min-height: 180px; transition: border-color 0.25s; }
+  .zone-panel-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+  .zone-panel-temp  { font-size: 0.82rem; color: #94a3b8; margin-bottom: 12px; }
+  .zone-info-grid   { display: grid; grid-template-columns: 1fr 190px; gap: 18px; }
+  @media (max-width: 640px) { .zone-info-grid { grid-template-columns: 1fr; } }
+  .kv-row { display: flex; justify-content: space-between; font-size: 0.79rem; border-bottom: 1px solid #1e3a5c; padding-bottom: 4px; margin-bottom: 6px; gap: 12px; }
+  .kv-row span:first-child { color: #94a3b8; flex-shrink: 0; }
+  .kv-row span:last-child  { color: #e2e8f0; font-weight: 600; text-align: right; }
+
+  /* CE Calculator */
+  .ce-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .ce-inp  { display: flex; flex-direction: column; gap: 4px; }
+  .ce-inp label { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
+  .ce-inp input { background: #0f2040; color: #e2e8f0; border: 1px solid #1e3a5c; border-radius: 6px; padding: 8px 10px; font-size: 0.9rem; width: 100%; }
+  .ce-inp input:focus { outline: 1px solid #38bdf8; }
+  .ce-out   { background: #0a1628; border: 1px solid #1e3a5c; border-radius: 8px; padding: 16px; }
+  .ce-val   { font-size: 2rem; font-weight: 700; }
+  .ce-bar-wrap { height: 12px; background: #1e3a5c; border-radius: 6px; overflow: hidden; margin: 8px 0 3px; }
+  .ce-bar   { height: 100%; border-radius: 6px; transition: width 0.4s; }
+  .ce-label { font-size: 0.76rem; color: #94a3b8; }
+
+  /* Sliders */
+  .slider-row { display: flex; align-items: center; gap: 14px; margin: 12px 0; }
+  .slider-row label { font-size: 0.84rem; color: #94a3b8; white-space: nowrap; min-width: 110px; }
+  .slider-row input[type=range] { flex: 1; accent-color: #38bdf8; }
+  .slider-val { font-size: 0.9rem; font-weight: 700; color: #38bdf8; min-width: 75px; text-align: right; }
+
+  /* Canvas wrappers */
+  canvas { display: block; border-radius: 8px; }
+  .cv-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .cv-ctrls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .cv-btn { background: #1a3a5c; color: #e2e8f0; border: 1px solid #38bdf8; border-radius: 6px; padding: 6px 18px; font-size: 0.84rem; cursor: pointer; transition: background 0.18s; }
+  .cv-btn:hover { background: #38bdf8; color: #0a1628; }
+  .cv-lbl { font-size: 1rem; color: #38bdf8; font-weight: 700; text-align: left; margin-bottom: 6px; }
+  .cv-dsc { font-size: 0.86rem; color: #e2e8f0; text-align: left; max-width: 680px; line-height: 1.65; }
+
+  /* Legend */
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0; }
+  .leg-item { display: flex; align-items: center; gap: 6px; font-size: 0.79rem; color: #94a3b8; }
+  .leg-sw { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+
+  .tag { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; background: #1e3a5c; color: #94a3b8; margin: 2px; }
+  .tag.bad  { background: #450a0a; color: #fca5a5; }
+  .tag.good { background: #14532d; color: #86efac; }
+  .tag.warn { background: #451a03; color: #fdba74; }
+
+  .src { font-size: 0.74rem; color: #475569; margin-top: 12px; font-style: italic; }
+  .back-link { text-align: center; padding: 28px; }
+  .back-link a { color: #38bdf8; text-decoration: none; font-size: 0.9rem; }
+  .back-link a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Weld Microstructure &amp; HAZ</h1>
+  <p>HAZ Sub-Zones &amp; Grain Growth (TWI) · Weld Metal Solidification &amp; Carbon Equivalent (Lincoln Electric) · Thermal Cycles &amp; CCT Diagrams (DoITPoMS)</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('t-haz',this)">HAZ Sub-Zones</button>
+  <button class="tab-btn" onclick="showTab('t-solid',this)">Weld Solidification &amp; CE</button>
+  <button class="tab-btn" onclick="showTab('t-thermal',this)">Thermal Cycles &amp; CCT</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ TAB 1 -->
+<div id="t-haz" class="tab-content active">
+
+  <h2>Weld Cross-Section — HAZ Zones</h2>
+  <div class="card">
+    <div class="zone-btns">
+      <button class="zone-btn active" style="border-color:#f97316;color:#f97316" onclick="selectZone('fz',this)">Fusion Zone</button>
+      <button class="zone-btn" style="border-color:#dc2626;color:#dc2626" onclick="selectZone('cghaz',this)">CGHAZ</button>
+      <button class="zone-btn" style="border-color:#f59e0b;color:#f59e0b" onclick="selectZone('fghaz',this)">FGHAZ</button>
+      <button class="zone-btn" style="border-color:#22c55e;color:#22c55e" onclick="selectZone('ichaz',this)">ICHAZ</button>
+      <button class="zone-btn" style="border-color:#38bdf8;color:#38bdf8" onclick="selectZone('schaz',this)">SCHAZ</button>
+      <button class="zone-btn" style="border-color:#64748b;color:#64748b" onclick="selectZone('base',this)">Base Metal</button>
+    </div>
+
+    <!-- Cross-section SVG -->
+    <svg id="cross-svg" viewBox="0 0 600 268" xmlns="http://www.w3.org/2000/svg"
+         style="width:100%;max-width:600px;display:block;margin:0 auto 16px;cursor:pointer;">
+      <defs>
+        <clipPath id="plate-clip"><rect x="0" y="88" width="600" height="132"/></clipPath>
+        <linearGradient id="tg" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"   stop-color="#f97316"/>
+          <stop offset="28%"  stop-color="#dc2626"/>
+          <stop offset="52%"  stop-color="#f59e0b"/>
+          <stop offset="72%"  stop-color="#22c55e"/>
+          <stop offset="100%" stop-color="#38bdf8"/>
+        </linearGradient>
+      </defs>
+      <rect width="600" height="268" fill="#0a1628" rx="8"/>
+      <!-- Base plate fill -->
+      <rect x="0" y="88" width="600" height="132" fill="#1e293b"/>
+      <!-- SCHAZ -->
+      <ellipse id="z-schaz" cx="300" cy="154" rx="200" ry="140" fill="#0b2333" clip-path="url(#plate-clip)"
+        onclick="selectZone('schaz',null)" style="cursor:pointer"/>
+      <!-- ICHAZ -->
+      <ellipse id="z-ichaz" cx="300" cy="154" rx="158" ry="108" fill="#0d2212" clip-path="url(#plate-clip)"
+        onclick="selectZone('ichaz',null)" style="cursor:pointer"/>
+      <!-- FGHAZ -->
+      <ellipse id="z-fghaz" cx="300" cy="154" rx="118" ry="78" fill="#2c1800" clip-path="url(#plate-clip)"
+        onclick="selectZone('fghaz',null)" style="cursor:pointer"/>
+      <!-- CGHAZ -->
+      <ellipse id="z-cghaz" cx="300" cy="154" rx="82" ry="52" fill="#3c0808" clip-path="url(#plate-clip)"
+        onclick="selectZone('cghaz',null)" style="cursor:pointer"/>
+      <!-- FZ -->
+      <ellipse id="z-fz" cx="300" cy="154" rx="50" ry="30" fill="#7c2d12" clip-path="url(#plate-clip)"
+        onclick="selectZone('fz',null)" style="cursor:pointer"/>
+      <!-- Weld cap bead -->
+      <ellipse id="z-fz-cap" cx="300" cy="88" rx="58" ry="24" fill="#7c2d12"
+        onclick="selectZone('fz',null)" style="cursor:pointer"/>
+      <!-- Plate outline -->
+      <rect x="0" y="88" width="600" height="132" fill="none" stroke="#334155" stroke-width="1.5"/>
+      <!-- Plate surface (outside bead) -->
+      <line x1="0" y1="88" x2="242" y2="88" stroke="#475569" stroke-width="1.5"/>
+      <line x1="358" y1="88" x2="600" y2="88" stroke="#475569" stroke-width="1.5"/>
+      <!-- Weld centreline -->
+      <line x1="300" y1="112" x2="300" y2="220" stroke="#64748b" stroke-width="0.8" stroke-dasharray="4,3"/>
+
+      <!-- Labels LEFT side -->
+      <text x="6"  y="104" fill="#38bdf8" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif">SCHAZ</text>
+      <line x1="48" y1="102" x2="104" y2="112" stroke="#38bdf8" stroke-width="0.9" stroke-dasharray="3,2"/>
+      <text x="6"  y="126" fill="#22c55e" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif">ICHAZ</text>
+      <line x1="48" y1="124" x2="142" y2="132" stroke="#22c55e" stroke-width="0.9" stroke-dasharray="3,2"/>
+      <text x="6"  y="148" fill="#f59e0b" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif">FGHAZ</text>
+      <line x1="50" y1="146" x2="182" y2="148" stroke="#f59e0b" stroke-width="0.9" stroke-dasharray="3,2"/>
+      <text x="6"  y="170" fill="#dc2626" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif">CGHAZ</text>
+      <line x1="52" y1="168" x2="220" y2="158" stroke="#dc2626" stroke-width="0.9" stroke-dasharray="3,2"/>
+      <text x="218" y="74" fill="#f97316" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif" text-anchor="middle">Fusion Zone</text>
+      <line x1="218" y1="76" x2="264" y2="88" stroke="#f97316" stroke-width="0.9" stroke-dasharray="3,2"/>
+
+      <!-- Labels RIGHT side -->
+      <text x="594" y="104" fill="#38bdf8" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif" text-anchor="end">SCHAZ</text>
+      <line x1="550" y1="102" x2="496" y2="112" stroke="#38bdf8" stroke-width="0.9" stroke-dasharray="3,2"/>
+      <text x="594" y="126" fill="#22c55e" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif" text-anchor="end">ICHAZ</text>
+      <line x1="550" y1="124" x2="458" y2="132" stroke="#22c55e" stroke-width="0.9" stroke-dasharray="3,2"/>
+      <text x="594" y="148" fill="#f59e0b" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif" text-anchor="end">FGHAZ</text>
+      <line x1="548" y1="146" x2="418" y2="148" stroke="#f59e0b" stroke-width="0.9" stroke-dasharray="3,2"/>
+      <text x="594" y="170" fill="#dc2626" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif" text-anchor="end">CGHAZ</text>
+      <line x1="546" y1="168" x2="380" y2="158" stroke="#dc2626" stroke-width="0.9" stroke-dasharray="3,2"/>
+
+      <!-- Temperature gradient bar -->
+      <text x="360" y="240" fill="#94a3b8" font-size="9" font-family="Segoe UI,Arial,sans-serif">Peak temperature gradient →</text>
+      <rect x="360" y="244" width="230" height="8" fill="url(#tg)" rx="4"/>
+      <text x="360" y="260" fill="#f97316" font-size="9" font-family="Segoe UI,Arial,sans-serif">1520°C</text>
+      <text x="590" y="260" fill="#38bdf8" font-size="9" font-family="Segoe UI,Arial,sans-serif" text-anchor="end">↓ Ambient</text>
+
+      <text x="300" y="260" fill="#475569" font-size="9" font-family="Segoe UI,Arial,sans-serif" text-anchor="middle">Click a zone to explore</text>
+    </svg>
+
+    <!-- Zone info panel -->
+    <div id="zone-panel" class="zone-panel" style="border-color:#f97316">
+      <div id="zp-title" class="zone-panel-title" style="color:#f97316">Fusion Zone (FZ)</div>
+      <div id="zp-temp"  class="zone-panel-temp">Peak temperature: above liquidus (&gt;1520°C) — fully melted and resolidified</div>
+      <div class="zone-info-grid">
+        <div>
+          <div id="zp-rows"></div>
+          <div id="zp-tags" style="margin-top:10px"></div>
+        </div>
+        <div>
+          <canvas id="micro-canvas" width="182" height="144" style="background:#0a1628;border:1px solid #1e3a5c;border-radius:6px;"></canvas>
+          <div style="font-size:0.72rem;color:#475569;margin-top:4px;text-align:center;">Schematic microstructure</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Effect of Heat Input on Grain Growth</h2>
+  <div class="card">
+    <div class="slider-row">
+      <label>Heat Input</label>
+      <input type="range" min="3" max="30" value="10" step="1" oninput="updateHI(this.value)">
+      <span class="slider-val" id="hi-val">1.0 kJ/mm</span>
+    </div>
+    <div class="cv-wrap">
+      <canvas id="hi-canvas" width="560" height="262" style="background:#0a1628;border:1px solid #1e3a5c;max-width:100%;"></canvas>
+    </div>
+    <div class="legend" style="margin-top:10px">
+      <div class="leg-item"><div class="leg-sw" style="background:#f97316"></div>Fusion Zone</div>
+      <div class="leg-item"><div class="leg-sw" style="background:#dc2626"></div>CGHAZ (grain growth ↑ with Q)</div>
+      <div class="leg-item"><div class="leg-sw" style="background:#f59e0b"></div>FGHAZ</div>
+      <div class="leg-item"><div class="leg-sw" style="background:#22c55e"></div>ICHAZ</div>
+      <div class="leg-item"><div class="leg-sw" style="background:#0ea5e9"></div>SCHAZ</div>
+    </div>
+    <p class="src">TWI <em>Welding Metallurgy — HAZ Grain Growth</em>; heat input Q = (V × I × 60) / (1000 × v) kJ/mm.</p>
+  </div>
+
+  <h2>Zone Properties Summary</h2>
+  <div class="tbl-wrap">
+    <table class="ref-table">
+      <thead>
+        <tr>
+          <th>Zone</th><th>Peak Temp</th><th>Grain Size</th><th>Typical Hardness</th><th>Primary Concern</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:#f97316;font-weight:700">Fusion Zone</td>
+          <td>&gt;1520°C (liquidus)</td>
+          <td>Columnar solidification grains</td>
+          <td>200–550 Hv</td>
+          <td>Hot cracking, porosity, solidification segregation</td>
+        </tr>
+        <tr>
+          <td style="color:#dc2626;font-weight:700">CGHAZ</td>
+          <td>1100–1520°C</td>
+          <td>Very coarse (d &gt; 100 µm)</td>
+          <td>250–450 Hv</td>
+          <td>Hydrogen-induced cracking; poorest Charpy toughness</td>
+        </tr>
+        <tr>
+          <td style="color:#f59e0b;font-weight:700">FGHAZ</td>
+          <td>950–1100°C</td>
+          <td>Fine recrystallized (d ≈ 10–30 µm)</td>
+          <td>160–250 Hv</td>
+          <td>Generally best HAZ toughness; benign unless re-heated</td>
+        </tr>
+        <tr>
+          <td style="color:#22c55e;font-weight:700">ICHAZ</td>
+          <td>Ac1–Ac3 (723–910°C)</td>
+          <td>Mixed — large grains + MA islands</td>
+          <td>180–300 Hv</td>
+          <td>MA constituent embrittlement; intercritical embrittlement</td>
+        </tr>
+        <tr>
+          <td style="color:#38bdf8;font-weight:700">SCHAZ</td>
+          <td>&lt;723°C (below Ac1)</td>
+          <td>Parent size; carbide spheroidization</td>
+          <td>140–220 Hv</td>
+          <td>HAZ softening in Q&amp;T steels — reduces joint efficiency</td>
+        </tr>
+        <tr>
+          <td style="color:#94a3b8;font-weight:700">Base Metal</td>
+          <td>Ambient</td>
+          <td>As-received condition</td>
+          <td>120–350 Hv</td>
+          <td>Pre-existing defects; sets minimum qualification basis</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="src">The Welding Institute (TWI), <em>Job Knowledge for Welders</em> — Heat-Affected Zone microstructures; also TWI <em>Structural Integrity Research Report</em>.</p>
+</div><!-- end t-haz -->
+
+<!-- ═══════════════════════════════════════════════════════════════ TAB 2 -->
+<div id="t-solid" class="tab-content">
+
+  <h2>Weld Metal Solidification Stages</h2>
+  <div class="card">
+    <div class="cv-wrap">
+      <canvas id="solid-canvas" width="560" height="260" style="background:#0a1628;border:1px solid #1e3a5c;max-width:100%;border-radius:8px;"></canvas>
+      <div class="cv-ctrls">
+        <button class="cv-btn" id="solid-play-btn" onclick="solidToggle()">&#9654; Play</button>
+        <button class="cv-btn" onclick="solidStep(-1)">&#8592; Prev</button>
+        <button class="cv-btn" onclick="solidStep(1)">Next &#8594;</button>
+        <button class="cv-btn" onclick="solidReset()">&#8635; Reset</button>
+      </div>
+      <div style="background:#0f2040;border:1px solid #1e3a5c;border-radius:8px;padding:14px 20px;max-width:560px;width:100%;">
+        <div class="cv-lbl" id="solid-lbl">Stage 1 — Liquid Weld Pool</div>
+        <div class="cv-dsc" id="solid-dsc">The arc melts base metal and filler to form a liquid pool. Temperature at pool center can exceed 2000°C. The fusion boundary separates solid base metal from liquid weld metal.</div>
+      </div>
+    </div>
+    <p class="src">Lincoln Electric <em>Welding Metallurgy</em> (Chapter 3: Solidification of Weld Metal); after ASM Handbook Vol. 6, Weld Solidification.</p>
+  </div>
+
+  <h2>HAZ Microstructure — Critical Zones</h2>
+  <div class="three-col">
+    <div class="card" style="border-color:#dc2626">
+      <h3 style="color:#dc2626">CGHAZ — Most Critical</h3>
+      <p style="font-size:0.82rem;color:#94a3b8;line-height:1.55;margin-bottom:10px;">
+        Rapid grain growth occurs above ~1100°C as austenite grains are unpinned (carbides dissolve). Grains can exceed 200 µm. On cooling, the coarse prior-austenite grain (PAG) structure promotes upper bainite and Widmanstätten ferrite — or martensite if cooling is rapid.
+      </p>
+      <div class="kv-row"><span>PAG size</span><span>&gt;100 µm typical</span></div>
+      <div class="kv-row"><span>Dominant phase</span><span>Upper bainite / martensite</span></div>
+      <div class="kv-row"><span>CVN toughness</span><span>Lowest in HAZ</span></div>
+      <div style="margin-top:8px">
+        <span class="tag bad">HIC susceptible</span>
+        <span class="tag bad">Poor sub-zero toughness</span>
+        <span class="tag warn">Preheat critical</span>
+      </div>
+    </div>
+    <div class="card" style="border-color:#f59e0b">
+      <h3 style="color:#f59e0b">FGHAZ — Best Toughness</h3>
+      <p style="font-size:0.82rem;color:#94a3b8;line-height:1.55;margin-bottom:10px;">
+        Heated just above Ac3 allows full austenitization without grain growth (carbides remain as pinning particles). Recrystallized fine grains (10–30 µm) form on cooling as fine ferrite, acicular ferrite, or lower bainite depending on hardenability.
+      </p>
+      <div class="kv-row"><span>PAG size</span><span>10–30 µm</span></div>
+      <div class="kv-row"><span>Dominant phase</span><span>Fine ferrite / acicular ferrite</span></div>
+      <div class="kv-row"><span>CVN toughness</span><span>Equal or better than base</span></div>
+      <div style="margin-top:8px">
+        <span class="tag good">Best HAZ region</span>
+        <span class="tag warn">Multi-pass reheating risk</span>
+      </div>
+    </div>
+    <div class="card" style="border-color:#22c55e">
+      <h3 style="color:#22c55e">ICHAZ — MA Constituent Risk</h3>
+      <p style="font-size:0.82rem;color:#94a3b8;line-height:1.55;margin-bottom:10px;">
+        Partial transformation between Ac1 and Ac3 leaves a two-phase (ferrite + austenite) structure at peak temperature. On cooling, the austenite reverts to martensite-austenite (MA) islands — hard brittle particles in a soft ferrite matrix that degrade toughness.
+      </p>
+      <div class="kv-row"><span>Peak temp range</span><span>Ac1–Ac3 (723–910°C)</span></div>
+      <div class="kv-row"><span>Key constituent</span><span>MA islands</span></div>
+      <div class="kv-row"><span>CVN toughness</span><span>Variable — can be low</span></div>
+      <div style="margin-top:8px">
+        <span class="tag bad">MA embrittlement</span>
+        <span class="tag warn">Worst in multi-pass welds</span>
+      </div>
+    </div>
+  </div>
+
+  <h2>Carbon Equivalent &amp; HAZ Hardness Calculator</h2>
+  <div class="card">
+    <p style="font-size:0.82rem;color:#94a3b8;margin-bottom:14px;line-height:1.55;">
+      Enter weld metal or base metal composition (wt%). Carbon equivalent (CE) quantifies hardenability — the higher CE, the harder the HAZ and the greater the risk of hydrogen-induced cracking. Preheat is mandatory above the threshold values.
+    </p>
+    <div class="ce-grid">
+      <div class="ce-inp"><label>C (%)</label><input type="number" id="ce-C"  value="0.18" step="0.01" min="0" max="1.0" oninput="calcCE()"></div>
+      <div class="ce-inp"><label>Mn (%)</label><input type="number" id="ce-Mn" value="1.20" step="0.05" min="0" max="3.0" oninput="calcCE()"></div>
+      <div class="ce-inp"><label>Si (%)</label><input type="number" id="ce-Si" value="0.25" step="0.05" min="0" max="1.0" oninput="calcCE()"></div>
+      <div class="ce-inp"><label>Cr (%)</label><input type="number" id="ce-Cr" value="0.00" step="0.05" min="0" max="5.0" oninput="calcCE()"></div>
+      <div class="ce-inp"><label>Mo (%)</label><input type="number" id="ce-Mo" value="0.00" step="0.05" min="0" max="2.0" oninput="calcCE()"></div>
+      <div class="ce-inp"><label>V (%)</label><input type="number" id="ce-V"  value="0.00" step="0.01" min="0" max="0.5" oninput="calcCE()"></div>
+      <div class="ce-inp"><label>Ni (%)</label><input type="number" id="ce-Ni" value="0.00" step="0.05" min="0" max="5.0" oninput="calcCE()"></div>
+      <div class="ce-inp"><label>Cu (%)</label><input type="number" id="ce-Cu" value="0.00" step="0.05" min="0" max="1.0" oninput="calcCE()"></div>
+      <div class="ce-inp"><label>B (%)</label><input type="number" id="ce-B"  value="0.000" step="0.001" min="0" max="0.01" oninput="calcCE()"></div>
+    </div>
+    <div class="two-col">
+      <div class="ce-out">
+        <div style="font-size:0.78rem;color:#94a3b8;margin-bottom:4px;">IIW Carbon Equivalent</div>
+        <div style="font-size:0.72rem;color:#475569;margin-bottom:8px;">CE = C + Mn/6 + (Cr+Mo+V)/5 + (Ni+Cu)/15</div>
+        <div class="ce-val" id="ce-iiw-val" style="color:#38bdf8">0.38</div>
+        <div class="ce-bar-wrap"><div class="ce-bar" id="ce-iiw-bar" style="width:38%;background:#38bdf8"></div></div>
+        <div class="ce-label" id="ce-iiw-lbl">Moderate — preheat advisable for thick sections</div>
+      </div>
+      <div class="ce-out">
+        <div style="font-size:0.78rem;color:#94a3b8;margin-bottom:4px;">Pcm (Ito-Bessyo)</div>
+        <div style="font-size:0.72rem;color:#475569;margin-bottom:8px;">Pcm = C + Si/30 + (Mn+Cu+Cr)/20 + Ni/60 + Mo/15 + V/10 + 5B</div>
+        <div class="ce-val" id="ce-pcm-val" style="color:#a78bfa">0.21</div>
+        <div class="ce-bar-wrap"><div class="ce-bar" id="ce-pcm-bar" style="width:42%;background:#a78bfa"></div></div>
+        <div class="ce-label" id="ce-pcm-lbl">Moderate — preheat advisable for restrained joints</div>
+      </div>
+    </div>
+    <div class="ce-out" style="margin-top:14px">
+      <div style="font-size:0.78rem;color:#94a3b8;margin-bottom:8px;">Estimated Max HAZ Hardness (Hv)</div>
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px;">
+        <span class="ce-val" id="ce-hv-val" style="color:#fb923c">302</span>
+        <span style="font-size:0.82rem;color:#94a3b8;">Hv (max, CGHAZ region)</span>
+      </div>
+      <div class="ce-bar-wrap" style="height:18px">
+        <div class="ce-bar" id="ce-hv-bar" style="width:42%;background:linear-gradient(90deg,#22c55e,#f59e0b,#ef4444)"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:#475569;margin-top:3px;">
+        <span>Soft (&lt;200 Hv)</span><span>Moderate (250 Hv)</span><span>Hard — HIC risk (&gt;350 Hv)</span>
+      </div>
+      <div class="ce-label" id="ce-hv-lbl" style="margin-top:8px;"></div>
+    </div>
+    <p class="src">Lincoln Electric <em>The Procedure Handbook of Arc Welding</em> (14th ed.), Ch. 4 — Weldability &amp; Carbon Equivalent; IIW formula per AWS D1.1 Annex I; Ito-Bessyo Pcm formula; Hv estimate after Yurioka &amp; Suzuki (1990).</p>
+  </div>
+</div><!-- end t-solid -->
+
+<!-- ═══════════════════════════════════════════════════════════════ TAB 3 -->
+<div id="t-thermal" class="tab-content">
+
+  <h2>HAZ Thermal Cycle Diagram</h2>
+  <div class="card">
+    <p style="font-size:0.82rem;color:#94a3b8;margin-bottom:14px;line-height:1.55;">
+      Each location in the HAZ experiences a unique thermal cycle — a rapid rise to a peak temperature followed by cooling. The peak temperature determines which zone the material falls into; the cooling rate (especially ∆t<sub>8/5</sub>) determines the resulting microstructure.
+    </p>
+    <div class="cv-wrap">
+      <canvas id="thermal-canvas" width="560" height="300" style="background:#0a1628;border:1px solid #1e3a5c;max-width:100%;border-radius:8px;"></canvas>
+    </div>
+    <div class="legend" style="margin-top:10px">
+      <div class="leg-item"><div class="leg-sw" style="background:#f97316"></div>Fusion Zone boundary</div>
+      <div class="leg-item"><div class="leg-sw" style="background:#dc2626"></div>CGHAZ position</div>
+      <div class="leg-item"><div class="leg-sw" style="background:#f59e0b"></div>FGHAZ position</div>
+      <div class="leg-item"><div class="leg-sw" style="background:#22c55e"></div>ICHAZ position</div>
+      <div class="leg-item"><div class="leg-sw" style="background:#38bdf8"></div>SCHAZ position</div>
+    </div>
+    <div class="slider-row" style="margin-top:14px">
+      <label>Heat Input (kJ/mm)</label>
+      <input type="range" min="3" max="30" value="10" step="1" oninput="updateThermal(this.value)">
+      <span class="slider-val" id="therm-val">1.0 kJ/mm</span>
+    </div>
+    <div class="alert info" style="margin-top:12px">
+      <b>∆t<sub>8/5</sub></b> — the time (seconds) to cool from 800°C to 500°C — is the key parameter linking thermal cycle to microstructure via the CCT diagram. Higher heat input → longer ∆t<sub>8/5</sub> → softer transformation products.
+    </div>
+    <p class="src">DoITPoMS, University of Cambridge, <em>Weld Microstructures</em> TLP — Thermal cycles in HAZ; also Rosenthal's analytical heat-flow model (simplified).</p>
+  </div>
+
+  <h2>CCT Diagram with HAZ Cooling Curves</h2>
+  <div class="card">
+    <p style="font-size:0.82rem;color:#94a3b8;margin-bottom:14px;line-height:1.55;">
+      A continuous cooling transformation (CCT) diagram shows which phases form during cooling from austenite. Overlaying the HAZ thermal cycle cooling curves reveals the expected microstructure at each HAZ position. Fast cooling (CGHAZ near the fusion line) crosses into the martensite field; slower cooling enters bainite or ferrite regions.
+    </p>
+    <div class="cv-wrap">
+      <canvas id="cct-canvas" width="560" height="300" style="background:#0a1628;border:1px solid #1e3a5c;max-width:100%;border-radius:8px;"></canvas>
+    </div>
+    <div class="legend" style="margin-top:10px">
+      <div class="leg-item"><div class="leg-sw" style="background:rgba(99,102,241,0.4)"></div>Ferrite region</div>
+      <div class="leg-item"><div class="leg-sw" style="background:rgba(34,197,94,0.35)"></div>Pearlite region</div>
+      <div class="leg-item"><div class="leg-sw" style="background:rgba(245,158,11,0.4)"></div>Bainite region</div>
+      <div class="leg-item"><div class="leg-sw" style="background:rgba(239,68,68,0.4)"></div>Martensite region</div>
+      <div class="leg-item"><div class="leg-sw" style="background:#dc2626;border-radius:50%"></div>CGHAZ cooling curve</div>
+    </div>
+    <p class="src">DoITPoMS, University of Cambridge, <em>Phase Transformations and Complex Alloy Microstructures</em> TLP — CCT diagrams &amp; weld HAZ; schematic CCT for low-alloy structural steel (ASTM A36 / S355 equivalent).</p>
+  </div>
+
+  <h2>Phase Transformation Summary</h2>
+  <div class="tbl-wrap">
+    <table class="ref-table">
+      <thead>
+        <tr>
+          <th>HAZ Zone</th><th>∆t<sub>8/5</sub> Typical (s)</th><th>Cooling Rate</th><th>Resulting Phase(s)</th><th>Toughness Outcome</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:#dc2626;font-weight:700">CGHAZ</td>
+          <td>1–5 s (fast)</td>
+          <td>Very fast (&gt;50°C/s at 700°C)</td>
+          <td>Martensite, upper bainite, Widmanstätten ferrite</td>
+          <td style="color:#fca5a5">Poor — brittle at low temp</td>
+        </tr>
+        <tr>
+          <td style="color:#dc2626;font-weight:700">CGHAZ</td>
+          <td>10–30 s (mod.)</td>
+          <td>Moderate (10–50°C/s)</td>
+          <td>Upper bainite + ferrite</td>
+          <td style="color:#fdba74">Moderate</td>
+        </tr>
+        <tr>
+          <td style="color:#f59e0b;font-weight:700">FGHAZ</td>
+          <td>5–30 s</td>
+          <td>Moderate</td>
+          <td>Acicular ferrite, fine bainite</td>
+          <td style="color:#86efac">Good</td>
+        </tr>
+        <tr>
+          <td style="color:#22c55e;font-weight:700">ICHAZ</td>
+          <td>Any</td>
+          <td>Any</td>
+          <td>Ferrite + MA constituent (partial transformation)</td>
+          <td style="color:#fdba74">Variable — MA islands embrittle</td>
+        </tr>
+        <tr>
+          <td style="color:#38bdf8;font-weight:700">SCHAZ</td>
+          <td>N/A (no γ)</td>
+          <td>—</td>
+          <td>Tempered martensite / spheroidized carbides</td>
+          <td style="color:#86efac">Good — softened only</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="alert warn" style="margin-top:14px">
+    <b>Weld thermal simulator (Gleeble) note:</b> Laboratory Gleeble testing replicates specific HAZ thermal cycles on notch specimens to measure CVN toughness at each sub-zone — critical for qualifying high-strength structural steels and offshore applications.
+  </div>
+  <p class="src">DoITPoMS <em>Weld Microstructures</em> TLP, Cambridge University; also Easterling, <em>Introduction to the Physical Metallurgy of Welding</em> (2nd ed., Butterworth).</p>
+</div><!-- end t-thermal -->
+
+<div class="back-link"><a href="../index.html">&#8592; Back to Visualizations</a></div>
+
+<script>
+/* ─── Tab switching ──────────────────────────────────────────── */
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (id === 't-solid')   { drawSolid(0); }
+  if (id === 't-thermal') { drawThermal(1.0); drawCCT(1.0); }
+}
+
+/* ─── Zone data ─────────────────────────────────────────────── */
+const ZONES = {
+  fz: {
+    name:'Fusion Zone (FZ)', color:'#f97316',
+    temp:'Above liquidus (>1520°C) — fully melted and resolidified',
+    rows:[
+      ['Solidification mode','Epitaxial → columnar dendrites'],
+      ['Microstructure','Widmanstätten ferrite, bainite, or martensite (cooling-rate dependent)'],
+      ['Hardness range','200–550 Hv (martensite-prone at fast cooling)'],
+      ['Primary concern','Hot cracking; solidification segregation; porosity'],
+    ],
+    tags:[['Solidification cracking','bad'],['Porosity risk','bad'],['Filler dilution controlled','warn']]
+  },
+  cghaz: {
+    name:'Coarse Grain HAZ (CGHAZ)', color:'#dc2626',
+    temp:'~1100–1520°C — austenite grain growth unpinned as carbides dissolve',
+    rows:[
+      ['PAG size','> 100 µm (can reach 200–400 µm near fusion line)'],
+      ['Microstructure','Upper bainite, Widmanstätten ferrite, martensite'],
+      ['Hardness range','250–450 Hv'],
+      ['Primary concern','Hydrogen-induced cracking (HIC); sub-zero Charpy failure'],
+    ],
+    tags:[['HIC susceptible','bad'],['Poorest toughness in HAZ','bad'],['Preheat mandatory >0.45 CE','warn']]
+  },
+  fghaz: {
+    name:'Fine Grain HAZ (FGHAZ)', color:'#f59e0b',
+    temp:'~950–1100°C — just above Ac3; carbides still pin grain boundaries',
+    rows:[
+      ['PAG size','10–30 µm (fine recrystallized)'],
+      ['Microstructure','Acicular ferrite, fine equiaxed ferrite, lower bainite'],
+      ['Hardness range','160–250 Hv'],
+      ['Primary concern','Generally benign; risk of ICHAZ embrittlement in multi-pass welds'],
+    ],
+    tags:[['Best HAZ toughness','good'],['Equivalent to normalized','good'],['Multi-pass reheating risk','warn']]
+  },
+  ichaz: {
+    name:'Intercritical HAZ (ICHAZ)', color:'#22c55e',
+    temp:'~723–910°C (Ac1–Ac3) — partial austenitization; two-phase region',
+    rows:[
+      ['Peak phases at temp','Ferrite + austenite (partial γ)'],
+      ['Microstructure on cooling','Ferrite matrix + MA (martensite-austenite) islands'],
+      ['Hardness range','180–300 Hv (MA islands can be >400 Hv locally)'],
+      ['Primary concern','MA constituent embrittlement; tempered martensite embrittlement (Q&T steels)'],
+    ],
+    tags:[['MA island embrittlement','bad'],['Worst in multi-pass','bad'],['CTOD toughness reduced','warn']]
+  },
+  schaz: {
+    name:'Subcritical HAZ (SCHAZ)', color:'#38bdf8',
+    temp:'< 723°C (below Ac1) — no phase transformation; tempering only',
+    rows:[
+      ['Phase change','None — original microstructure is tempered'],
+      ['Microstructure','Carbide spheroidization; over-tempered martensite in Q&T steels'],
+      ['Hardness range','140–220 Hv (softened from parent in Q&T steels)'],
+      ['Primary concern','HAZ softening in high-strength Q&T steels; reduces joint efficiency'],
+    ],
+    tags:[['HAZ softening in Q&T','warn'],['Low HIC risk','good'],['Minimal toughness loss','good']]
+  },
+  base: {
+    name:'Base Metal (Unaffected)', color:'#64748b',
+    temp:'Ambient — no thermal influence from welding',
+    rows:[
+      ['Condition','As-received (normalized, TMCP, Q&T etc.)'],
+      ['Microstructure','Ferrite-pearlite, bainite, or tempered martensite per steel grade'],
+      ['Hardness range','120–350 Hv (grade-dependent)'],
+      ['Primary concern','Pre-existing laminations, inclusions, or hydrogen from storage/coating'],
+    ],
+    tags:[['Reference for qualification','good'],['Sets minimum CE basis','good'],['Pre-weld inspection required','warn']]
+  }
+};
+
+let activeZone = 'fz';
+function selectZone(z, btn) {
+  activeZone = z;
+  const d = ZONES[z];
+  document.getElementById('zone-panel').style.borderColor = d.color;
+  document.getElementById('zp-title').textContent = d.name;
+  document.getElementById('zp-title').style.color = d.color;
+  document.getElementById('zp-temp').textContent = 'Peak temperature: ' + d.temp;
+
+  const rowsEl = document.getElementById('zp-rows');
+  rowsEl.innerHTML = d.rows.map(([k,v]) =>
+    `<div class="kv-row"><span>${k}</span><span>${v}</span></div>`
+  ).join('');
+
+  document.getElementById('zp-tags').innerHTML =
+    d.tags.map(([t,c]) => `<span class="tag ${c}">${t}</span>`).join('');
+
+  // Update SVG highlights
+  ['fz','cghaz','fghaz','ichaz','schaz','base'].forEach(id => {
+    const el = document.getElementById('z-' + id);
+    const cap = document.getElementById('z-fz-cap');
+    if (el) el.style.filter = (id === z) ? 'brightness(1.8)' : 'brightness(1)';
+    if (id === 'fz' && cap) cap.style.filter = (z === 'fz') ? 'brightness(1.8)' : 'brightness(1)';
+  });
+
+  // Update zone buttons
+  document.querySelectorAll('.zone-btn').forEach(b => {
+    b.classList.remove('active');
+    b.style.background = 'transparent';
+    b.style.color = b.style.borderColor;
+  });
+  if (btn) {
+    btn.classList.add('active');
+    btn.style.background = d.color;
+    btn.style.color = '#0a1628';
+  } else {
+    document.querySelectorAll('.zone-btn').forEach(b => {
+      const zName = {fz:'Fusion Zone',cghaz:'CGHAZ',fghaz:'FGHAZ',ichaz:'ICHAZ',schaz:'SCHAZ',base:'Base Metal'};
+      if (b.textContent.trim() === zName[z]) {
+        b.classList.add('active');
+        b.style.background = d.color;
+        b.style.color = '#0a1628';
+      }
+    });
+  }
+
+  drawMicrograph(z);
+}
+
+/* ─── Micrograph canvas ─────────────────────────────────────── */
+function drawMicrograph(zone) {
+  const cv = document.getElementById('micro-canvas');
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#06101e';
+  ctx.fillRect(0, 0, W, H);
+
+  const rng = (seed) => { let s = seed; return () => { s = (s * 16807 + 0) % 2147483647; return (s - 1) / 2147483646; }; };
+  const r = rng(zone.charCodeAt(0) * 31 + zone.charCodeAt(1 % zone.length) * 7 + 42);
+
+  if (zone === 'fz') {
+    // Columnar grains growing upward
+    const colors = ['#7c2d12','#92400e','#78350f','#6b1d00','#8a3000'];
+    let x = 4;
+    while (x < W - 6) {
+      const wg = 11 + Math.floor(r() * 8);
+      const ystart = 4 + Math.floor(r() * 20);
+      const c = colors[Math.floor(r() * colors.length)];
+      ctx.fillStyle = c;
+      ctx.fillRect(x, ystart, wg - 1, H - ystart - 14);
+      ctx.strokeStyle = '#f97316';
+      ctx.lineWidth = 0.7;
+      ctx.strokeRect(x, ystart, wg - 1, H - ystart - 14);
+      x += wg;
+    }
+    ctx.fillStyle = '#f97316';
+    ctx.font = 'bold 8px Arial';
+    ctx.fillText('Columnar solidification grains', 3, H - 4);
+
+  } else if (zone === 'cghaz') {
+    // 4 large irregular grains
+    const polys = [
+      [[8,8],[90,4],[105,50],[85,105],[25,115],[4,75]],
+      [[90,4],[178,8],[178,70],[125,110],[85,105],[105,50]],
+      [[4,75],[25,115],[85,105],[75,136],[4,136]],
+      [[85,105],[125,110],[140,136],[75,136]],
+      [[125,110],[178,70],[178,136],[140,136]],
+    ];
+    const colors=['#3c0808','#4a0e0e','#380606','#3f0a0a','#420b0b'];
+    polys.forEach((pts,i) => {
+      ctx.beginPath();
+      ctx.moveTo(pts[0][0], pts[0][1]);
+      pts.slice(1).forEach(p => ctx.lineTo(p[0], p[1]));
+      ctx.closePath();
+      ctx.fillStyle = colors[i];
+      ctx.fill();
+      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    });
+    ctx.fillStyle = '#ef4444';
+    ctx.font = 'bold 8px Arial';
+    ctx.fillText('Coarse grains (d > 100 µm)', 3, H - 4);
+
+  } else if (zone === 'fghaz') {
+    // Many small grains
+    const seeds = [];
+    for (let i = 0; i < 18; i++) seeds.push([20 + r() * 142, 12 + r() * 118]);
+    // Simple Voronoi-like: for each pixel find nearest seed
+    const img = ctx.createImageData(W, H - 14);
+    const cols = [[78,38,12],[92,46,14],[110,54,0],[68,24,8],[85,42,10],[96,50,8]];
+    for (let y = 0; y < H - 14; y++) {
+      for (let x = 0; x < W; x++) {
+        let best = 0, bestD = 1e9;
+        seeds.forEach((s, i) => {
+          const d = (x-s[0])*(x-s[0]) + (y-s[1])*(y-s[1]);
+          if (d < bestD) { bestD = d; best = i; }
+        });
+        const c = cols[best % cols.length];
+        const idx = (y * W + x) * 4;
+        img.data[idx] = c[0]; img.data[idx+1] = c[1]; img.data[idx+2] = c[2]; img.data[idx+3] = 255;
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+    // Draw borders
+    const bImg = ctx.getImageData(0, 0, W, H - 14);
+    for (let y = 1; y < H - 15; y++) {
+      for (let x = 1; x < W - 1; x++) {
+        const i = (y * W + x) * 4;
+        const iR = (y * W + x + 1) * 4;
+        const iD = ((y+1) * W + x) * 4;
+        if (Math.abs(bImg.data[i] - bImg.data[iR]) > 8 || Math.abs(bImg.data[i] - bImg.data[iD]) > 8) {
+          ctx.fillStyle = '#f59e0b';
+          ctx.fillRect(x, y, 1, 1);
+        }
+      }
+    }
+    ctx.fillStyle = '#f59e0b';
+    ctx.font = 'bold 8px Arial';
+    ctx.fillText('Fine equiaxed grains (10–30 µm)', 3, H - 4);
+
+  } else if (zone === 'ichaz') {
+    // Medium grains with red MA islands
+    const seeds = [];
+    for (let i = 0; i < 10; i++) seeds.push([18 + r() * 144, 12 + r() * 118]);
+    const img = ctx.createImageData(W, H - 14);
+    const cols = [[34,85,34],[28,70,28],[20,60,20],[38,90,38],[25,65,25]];
+    for (let y = 0; y < H - 14; y++) {
+      for (let x = 0; x < W; x++) {
+        let best = 0, bestD = 1e9;
+        seeds.forEach((s, i) => {
+          const d = (x-s[0])*(x-s[0]) + (y-s[1])*(y-s[1]);
+          if (d < bestD) { bestD = d; best = i; }
+        });
+        const c = cols[best % cols.length];
+        const idx = (y * W + x) * 4;
+        img.data[idx] = c[0]; img.data[idx+1] = c[1]; img.data[idx+2] = c[2]; img.data[idx+3] = 255;
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+    // Grain borders
+    const bImg = ctx.getImageData(0, 0, W, H - 14);
+    for (let y = 1; y < H - 15; y++) {
+      for (let x = 1; x < W - 1; x++) {
+        const i = (y * W + x) * 4;
+        const iR = (y * W + x + 1) * 4;
+        const iD = ((y+1) * W + x) * 4;
+        if (Math.abs(bImg.data[i+1] - bImg.data[iR+1]) > 8 || Math.abs(bImg.data[i+1] - bImg.data[iD+1]) > 8) {
+          ctx.fillStyle = '#22c55e';
+          ctx.fillRect(x, y, 1, 1);
+        }
+      }
+    }
+    // MA islands
+    ctx.fillStyle = '#ef4444';
+    for (let i = 0; i < 8; i++) {
+      const xi = 12 + r() * 156;
+      const yi = 10 + r() * 115;
+      const rx = 2 + r() * 4;
+      const ry = 2 + r() * 4;
+      ctx.beginPath();
+      ctx.ellipse(xi, yi, rx, ry, r() * Math.PI, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.fillStyle = '#22c55e';
+    ctx.font = 'bold 8px Arial';
+    ctx.fillText('Ferrite + MA islands (red)', 3, H - 4);
+
+  } else if (zone === 'schaz') {
+    // Medium equiaxed + carbide dots
+    const seeds = [];
+    for (let i = 0; i < 12; i++) seeds.push([15 + r() * 148, 10 + r() * 122]);
+    const img = ctx.createImageData(W, H - 14);
+    const cols = [[20,45,75],[18,40,70],[22,50,80],[16,38,68],[24,52,82]];
+    for (let y = 0; y < H - 14; y++) {
+      for (let x = 0; x < W; x++) {
+        let best = 0, bestD = 1e9;
+        seeds.forEach((s, i) => {
+          const d = (x-s[0])*(x-s[0]) + (y-s[1])*(y-s[1]);
+          if (d < bestD) { bestD = d; best = i; }
+        });
+        const c = cols[best % cols.length];
+        const idx = (y * W + x) * 4;
+        img.data[idx] = c[0]; img.data[idx+1] = c[1]; img.data[idx+2] = c[2]; img.data[idx+3] = 255;
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+    const bImg = ctx.getImageData(0, 0, W, H - 14);
+    for (let y = 1; y < H - 15; y++) {
+      for (let x = 1; x < W - 1; x++) {
+        const i = (y * W + x) * 4;
+        const iR = (y * W + x + 1) * 4;
+        const iD = ((y+1) * W + x) * 4;
+        if (Math.abs(bImg.data[i+2] - bImg.data[iR+2]) > 6 || Math.abs(bImg.data[i+2] - bImg.data[iD+2]) > 6) {
+          ctx.fillStyle = '#38bdf8';
+          ctx.fillRect(x, y, 1, 1);
+        }
+      }
+    }
+    ctx.fillStyle = '#f8fafc';
+    ctx.font = 'bold 8px Arial';
+    ctx.fillText('Tempered / spheroidized carbides', 3, H - 4);
+
+  } else { // base
+    const seeds = [];
+    for (let i = 0; i < 14; i++) seeds.push([14 + r() * 150, 10 + r() * 120]);
+    const img = ctx.createImageData(W, H - 14);
+    const cols = [[55,65,80],[35,45,60],[50,60,76],[40,50,65],[30,40,56]];
+    const dark = [[20,20,25],[18,18,22],[22,22,28]]; // pearlite
+    for (let y = 0; y < H - 14; y++) {
+      for (let x = 0; x < W; x++) {
+        let best = 0, bestD = 1e9;
+        seeds.forEach((s, i) => {
+          const d = (x-s[0])*(x-s[0]) + (y-s[1])*(y-s[1]);
+          if (d < bestD) { bestD = d; best = i; }
+        });
+        const c = best % 3 === 0 ? dark[best % dark.length] : cols[best % cols.length];
+        const idx = (y * W + x) * 4;
+        img.data[idx] = c[0]; img.data[idx+1] = c[1]; img.data[idx+2] = c[2]; img.data[idx+3] = 255;
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+    const bImg = ctx.getImageData(0, 0, W, H - 14);
+    for (let y = 1; y < H - 15; y++) {
+      for (let x = 1; x < W - 1; x++) {
+        const i = (y * W + x) * 4;
+        const iR = (y * W + x + 1) * 4;
+        const iD = ((y+1) * W + x) * 4;
+        if (Math.abs(bImg.data[i] - bImg.data[iR]) > 10 || Math.abs(bImg.data[i] - bImg.data[iD]) > 10) {
+          ctx.fillStyle = '#94a3b8';
+          ctx.fillRect(x, y, 1, 1);
+        }
+      }
+    }
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = 'bold 8px Arial';
+    ctx.fillText('Ferrite (light) + pearlite (dark)', 3, H - 4);
+  }
+}
+
+/* ─── Heat input canvas ─────────────────────────────────────── */
+function updateHI(rawVal) {
+  const q = rawVal / 10;
+  document.getElementById('hi-val').textContent = q.toFixed(1) + ' kJ/mm';
+  drawHeatInput(q);
+}
+
+function drawHeatInput(q) {
+  const cv = document.getElementById('hi-canvas');
+  cv.height = 262;
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#0a1628';
+  ctx.fillRect(0, 0, W, H);
+
+  // ── half cross-section (left panel) ───────────────────────────
+  const CL  = 26;   // weld centreline x
+  const PY  = 68;   // plate top y
+  const PH  = 140;  // plate height
+  const SEC = 290;  // right edge of cross-section panel
+  const S   = 30;   // px per mm (fixed scale)
+  const base = Math.sqrt(q);
+
+  // Zone widths in mm (scale with √Q)
+  const fz_mm = 1.2 * base;
+  const cg_mm = 0.9 * base;
+  const fg_mm = 0.8 * base;
+  const ic_mm = 0.65 * base;
+  const sc_mm = 0.8 * base;
+
+  // Right edges in px from left canvas edge
+  const fz_r = CL + fz_mm * S;
+  const cg_r = fz_r + cg_mm * S;
+  const fg_r = cg_r + fg_mm * S;
+  const ic_r = fg_r + ic_mm * S;
+  const sc_r = ic_r + sc_mm * S;
+
+  const zones = [
+    { l: CL,    r: fz_r, fill:'#7c2d12', border:'#f97316', label:'Fusion\nZone', abbr:'FZ',    wMM: fz_mm, color:'#f97316' },
+    { l: fz_r,  r: cg_r, fill:'#3c0808', border:'#dc2626', label:'CGHAZ',        abbr:'CG',    wMM: cg_mm, color:'#dc2626' },
+    { l: cg_r,  r: fg_r, fill:'#2c1800', border:'#f59e0b', label:'FGHAZ',        abbr:'FG',    wMM: fg_mm, color:'#f59e0b' },
+    { l: fg_r,  r: ic_r, fill:'#0d2212', border:'#22c55e', label:'ICHAZ',        abbr:'IC',    wMM: ic_mm, color:'#22c55e' },
+    { l: ic_r,  r: sc_r, fill:'#0b2333', border:'#38bdf8', label:'SCHAZ',        abbr:'SC',    wMM: sc_mm, color:'#38bdf8' },
+  ];
+
+  // Base metal
+  ctx.fillStyle = '#1e293b';
+  ctx.fillRect(CL, PY, SEC - CL, PH);
+
+  // Zone fills
+  zones.forEach(z => {
+    const r2 = Math.min(z.r, SEC);
+    if (r2 <= z.l) return;
+    ctx.fillStyle = z.fill;
+    ctx.fillRect(z.l, PY, r2 - z.l, PH);
+    // right boundary dashed line
+    if (z.r <= SEC) {
+      ctx.strokeStyle = z.border;
+      ctx.lineWidth = 1.4;
+      ctx.setLineDash([4, 3]);
+      ctx.beginPath();
+      ctx.moveTo(z.r, PY - 4);
+      ctx.lineTo(z.r, PY + PH + 4);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  });
+
+  // Zone labels inside bands
+  const midY = PY + PH / 2;
+  zones.forEach(z => {
+    const r2 = Math.min(z.r, SEC);
+    const w = r2 - z.l;
+    if (w < 10) return;
+    const mx = (z.l + r2) / 2;
+    ctx.textAlign = 'center';
+    ctx.fillStyle = z.color;
+    if (w >= 34) {
+      ctx.font = 'bold 9px Segoe UI,Arial';
+      ctx.fillText(z.label, mx, midY - 8);
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = '8px Segoe UI,Arial';
+      ctx.fillText(z.wMM.toFixed(1) + ' mm', mx, midY + 5);
+    } else if (w >= 18) {
+      ctx.font = 'bold 8px Segoe UI,Arial';
+      ctx.fillText(z.abbr, mx, midY);
+    }
+  });
+
+  // Width brackets above plate
+  const BRY = PY - 22;
+  zones.forEach(z => {
+    const r2 = Math.min(z.r, SEC);
+    const w = r2 - z.l;
+    if (w < 22 || z.l >= SEC) return;
+    ctx.strokeStyle = z.color;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(z.l + 1, BRY); ctx.lineTo(r2 - 1, BRY);
+    ctx.moveTo(z.l + 1, BRY - 3); ctx.lineTo(z.l + 1, BRY + 3);
+    ctx.moveTo(r2 - 1, BRY - 3); ctx.lineTo(r2 - 1, BRY + 3);
+    ctx.stroke();
+    if (w >= 30) {
+      ctx.fillStyle = z.color;
+      ctx.font = '8px Segoe UI,Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(z.wMM.toFixed(1) + ' mm', (z.l + r2) / 2, BRY - 5);
+    }
+  });
+
+  // Centreline
+  ctx.strokeStyle = '#f97316';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(CL, PY - 36); ctx.lineTo(CL, PY + PH + 8);
+  ctx.stroke();
+  ctx.fillStyle = '#f97316';
+  ctx.font = '8px Segoe UI,Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('⊕ CL', CL, PY - 40);
+
+  // Weld cap
+  ctx.fillStyle = '#7c2d12';
+  ctx.beginPath();
+  ctx.ellipse(CL, PY, Math.min(fz_r - CL, 44) * 0.88, 15, 0, -Math.PI / 2, Math.PI / 2);
+  ctx.fill();
+  ctx.strokeStyle = '#f97316'; ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Plate outline
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(CL, PY); ctx.lineTo(SEC, PY);
+  ctx.moveTo(CL, PY + PH); ctx.lineTo(SEC, PY + PH);
+  ctx.stroke();
+
+  // "Base metal" label at right edge
+  ctx.fillStyle = '#64748b';
+  ctx.font = '9px Segoe UI,Arial';
+  ctx.textAlign = 'right';
+  ctx.fillText('Base', SEC - 4, midY - 5);
+  ctx.fillText('metal', SEC - 4, midY + 6);
+
+  // Scale bar
+  const sbY = PY + PH + 30;
+  ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(CL, sbY); ctx.lineTo(CL + S, sbY);
+  ctx.moveTo(CL, sbY - 3); ctx.lineTo(CL, sbY + 3);
+  ctx.moveTo(CL + S, sbY - 3); ctx.lineTo(CL + S, sbY + 3);
+  ctx.stroke();
+  ctx.fillStyle = '#94a3b8'; ctx.font = '8px Segoe UI,Arial'; ctx.textAlign = 'center';
+  ctx.fillText('1 mm', CL + S / 2, sbY + 11);
+
+  const totalMM = (fz_mm + cg_mm + fg_mm + ic_mm + sc_mm).toFixed(1);
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#64748b';
+  ctx.fillText(`Half-width: ${totalMM} mm`, CL, sbY + 25);
+
+  // ── right panel: CGHAZ grain size ─────────────────────────────
+  const GP = 305, GPY = 8, GW = 250, GH = 246;
+  ctx.fillStyle = '#0f2040';
+  ctx.strokeStyle = '#1e3a5c';
+  ctx.lineWidth = 1;
+  ctx.fillRect(GP, GPY, GW, GH);
+  ctx.strokeRect(GP, GPY, GW, GH);
+
+  ctx.fillStyle = '#dc2626';
+  ctx.font = 'bold 10px Segoe UI,Arial';
+  ctx.textAlign = 'left';
+  ctx.fillText('CGHAZ — Grain Size Magnification', GP + 8, GPY + 16);
+
+  const grainDiam_um = Math.round(50 + q * 160);
+  const dt85s = Math.max(1, q * q * 3.2);
+  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Segoe UI,Arial';
+  ctx.fillText(`d ≈ ${grainDiam_um} µm   |   ∆t₈₅ ≈ ${dt85s.toFixed(1)} s`, GP + 8, GPY + 30);
+
+  // Grain drawing area
+  const gax = GP + 6, gay = GPY + 36, gaw = GW - 12, gah = GH - 56;
+  ctx.fillStyle = '#3c0808';
+  ctx.fillRect(gax, gay, gaw, gah);
+
+  const grainPx = Math.min(58, Math.max(12, grainDiam_um / 200 * 36));
+
+  const rng2 = (seed) => {
+    let s = Math.abs(Math.round(seed)) || 1;
+    return () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
+  };
+  const r2 = rng2(Math.floor(q * 100) + 9);
+
+  const placed = [];
+  let attempts = 0;
+  while (placed.length < 30 && attempts < 500) {
+    attempts++;
+    const gx = gax + grainPx + r2() * (gaw - grainPx * 2);
+    const gy = gay + grainPx + r2() * (gah - grainPx * 2);
+    let ok = true;
+    for (const p of placed) {
+      if (Math.sqrt((gx - p.x) ** 2 + (gy - p.y) ** 2) < grainPx * 1.85) { ok = false; break; }
+    }
+    if (ok) placed.push({ x: gx, y: gy });
+  }
+
+  ctx.save();
+  ctx.beginPath(); ctx.rect(gax, gay, gaw, gah); ctx.clip();
+
+  const gCols = ['#4a0e0e', '#3c0808', '#520e0e', '#380606', '#480c0c'];
+  placed.forEach((g, i) => {
+    ctx.fillStyle = gCols[i % gCols.length];
+    ctx.strokeStyle = '#ef4444';
+    ctx.lineWidth = 0.9;
+    const sides = 5 + Math.floor(r2() * 4);
+    const ang0 = r2() * Math.PI * 2;
+    ctx.beginPath();
+    for (let s = 0; s < sides; s++) {
+      const a = ang0 + (s / sides) * Math.PI * 2;
+      const rad = grainPx * (0.68 + r2() * 0.55);
+      s === 0 ? ctx.moveTo(g.x + rad * Math.cos(a), g.y + rad * Math.sin(a))
+              : ctx.lineTo(g.x + rad * Math.cos(a), g.y + rad * Math.sin(a));
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+  });
+  ctx.restore();
+
+  // Scale bar in grain panel
+  const umPerPx = grainDiam_um / (grainPx * 2);
+  const barUM = grainDiam_um >= 300 ? 200 : 100;
+  const barPx = barUM / umPerPx;
+  const bx = gax + 8, by = gay + gah - 10;
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(bx, by); ctx.lineTo(bx + barPx, by);
+  ctx.moveTo(bx, by - 3); ctx.lineTo(bx, by + 1);
+  ctx.moveTo(bx + barPx, by - 3); ctx.lineTo(bx + barPx, by + 1);
+  ctx.stroke();
+  ctx.fillStyle = '#fff'; ctx.font = '8px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText(`${barUM} µm`, bx, by - 4);
+
+  // Bottom note
+  const note = q < 0.8 ? 'Low Q — finer grains, better CGHAZ toughness'
+             : q < 1.8 ? 'Moderate Q — coarse grains, preheat advisable'
+             :            'High Q — very coarse grains, HIC risk & poor toughness';
+  ctx.fillStyle = '#94a3b8'; ctx.font = '8px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText(note, GP + 8, GPY + GH - 6);
+}
+
+/* ─── Solidification animation ──────────────────────────────── */
+const SOLID_STAGES = [
+  { lbl:'Stage 1 — Liquid Weld Pool', dsc:'The arc melts base metal and filler to form a liquid pool. Temperature at pool center can exceed 2000°C. The fusion boundary separates solid base metal from liquid weld metal.' },
+  { lbl:'Stage 2 — Epitaxial Nucleation', dsc:'Solidification begins at the fusion boundary without nucleation — new grains grow epitaxially (continuously) from existing base metal grains, inheriting their crystallographic orientation.' },
+  { lbl:'Stage 3 — Competitive Growth', dsc:'Grains with preferred orientations (closest to the maximum thermal gradient, typically <100> for cubic metals) grow fastest and eliminate neighbours — columnar grains extend toward the pool center.' },
+  { lbl:'Stage 4 — Columnar-to-Equiaxed Transition (CET)', dsc:'Near the pool centerline, constitutional supercooling ahead of the solidification front may trigger equiaxed nucleation — low heat input and inoculation promote equiaxed grains; high heat input favours columnar grains meeting at centerline.' },
+  { lbl:'Stage 5 — Final Solidified Structure', dsc:'Columnar solidification grains are locked in. On cooling through Ac3 they transform to austenite then to the HAZ microstructures. Residual stresses develop as the weld metal contracts.' },
+];
+let solidStage = 0, solidPlaying = false, solidTimer = null;
+
+function solidToggle() {
+  solidPlaying = !solidPlaying;
+  document.getElementById('solid-play-btn').textContent = solidPlaying ? '⏸ Pause' : '▶ Play';
+  if (solidPlaying) solidAdvance();
+}
+function solidAdvance() {
+  if (!solidPlaying) return;
+  solidStep(1);
+  solidTimer = setTimeout(solidAdvance, 2200);
+}
+function solidStep(d) {
+  solidStage = (solidStage + d + SOLID_STAGES.length) % SOLID_STAGES.length;
+  drawSolid(solidStage);
+}
+function solidReset() {
+  solidPlaying = false;
+  clearTimeout(solidTimer);
+  document.getElementById('solid-play-btn').textContent = '▶ Play';
+  solidStage = 0;
+  drawSolid(0);
+}
+
+function labelBox(ctx, text, x, y, color, size) {
+  size = size || 12;
+  ctx.save();
+  ctx.font = 'bold ' + size + 'px Segoe UI, Arial';
+  ctx.textAlign = 'center';
+  const w = ctx.measureText(text).width;
+  const pad = 6;
+  ctx.fillStyle = 'rgba(6,14,28,0.86)';
+  ctx.fillRect(x - w / 2 - pad, y - size - 2, w + pad * 2, size + 9);
+  ctx.fillStyle = color;
+  ctx.fillText(text, x, y);
+  ctx.restore();
+}
+
+function labelBox2(ctx, line1, line2, x, y, color1, color2, size) {
+  size = size || 12;
+  const lh = size + 5;
+  ctx.save();
+  ctx.font = 'bold ' + size + 'px Segoe UI, Arial';
+  ctx.textAlign = 'center';
+  const w = Math.max(ctx.measureText(line1).width, ctx.measureText(line2).width);
+  const pad = 6;
+  ctx.fillStyle = 'rgba(6,14,28,0.86)';
+  ctx.fillRect(x - w / 2 - pad, y - size - 2, w + pad * 2, lh * 2 + 4);
+  ctx.fillStyle = color1;
+  ctx.fillText(line1, x, y);
+  ctx.font = (size - 1) + 'px Segoe UI, Arial';
+  ctx.fillStyle = color2 || '#94a3b8';
+  ctx.fillText(line2, x, y + lh);
+  ctx.restore();
+}
+
+function drawSolid(stage) {
+  document.getElementById('solid-lbl').textContent = SOLID_STAGES[stage].lbl;
+  document.getElementById('solid-dsc').textContent = SOLID_STAGES[stage].dsc;
+  const cv = document.getElementById('solid-canvas');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const CX = W / 2, CY = H / 2 + 10;
+  const PR = 90, PH = 56;
+
+  // Background base metal (left plate + right plate)
+  ctx.fillStyle = '#1e293b';
+  ctx.fillRect(0, CY - PH, W, PH * 2);
+
+  // Draw base metal grains (simplified)
+  const grainCols = ['#1e3a5c','#1a3356','#223f66','#1b3460'];
+  const rng = (s) => { let x = s; return () => { x = (x * 16807) % 2147483647; return (x-1)/2147483646; }; };
+  const r = rng(42);
+  for (let gx = 10; gx < W; gx += 36) {
+    for (let gy = CY - PH + 6; gy < CY + PH - 6; gy += 28) {
+      const dist = Math.sqrt((gx - CX) ** 2 + ((gy - CY) / (PH / PR)) ** 2);
+      if (dist < PR + 10) continue;
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 0.8;
+      const sz = 14 + r() * 8;
+      ctx.beginPath();
+      ctx.rect(gx, gy, sz, sz * 0.85);
+      ctx.stroke();
+      ctx.fillStyle = grainCols[Math.floor(r() * grainCols.length)];
+      ctx.fill();
+    }
+  }
+
+  // Fusion zone / pool
+  if (stage === 0) {
+    // Full liquid pool
+    const pg = ctx.createRadialGradient(CX, CY, 4, CX, CY, PR);
+    pg.addColorStop(0, '#fde68a');
+    pg.addColorStop(0.3, '#fb923c');
+    pg.addColorStop(0.7, '#ea580c');
+    pg.addColorStop(1, '#7c2d12');
+    ctx.fillStyle = pg;
+    ctx.beginPath();
+    ctx.ellipse(CX, CY, PR, PH, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#f97316';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Liquid motion ripples
+    ctx.strokeStyle = 'rgba(253,230,138,0.25)';
+    ctx.lineWidth = 1;
+    for (let ri = 1; ri <= 3; ri++) {
+      ctx.beginPath();
+      ctx.ellipse(CX, CY, PR * 0.3 * ri, PH * 0.3 * ri, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    labelBox2(ctx, 'Liquid weld pool', 'T > 1520°C', CX, CY - 6, '#fde68a', '#fb923c', 13);
+
+  } else if (stage === 1) {
+    // Pool + small nuclei at fusion boundary
+    ctx.fillStyle = '#7c2d12';
+    ctx.beginPath();
+    ctx.ellipse(CX, CY, PR, PH, 0, 0, Math.PI * 2);
+    ctx.fill();
+    const pg2 = ctx.createRadialGradient(CX, CY, 10, CX, CY, PR * 0.7);
+    pg2.addColorStop(0, 'rgba(253,230,138,0.8)');
+    pg2.addColorStop(1, 'rgba(253,230,138,0)');
+    ctx.fillStyle = pg2;
+    ctx.beginPath();
+    ctx.ellipse(CX, CY, PR * 0.7, PH * 0.7, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#f97316';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(CX, CY, PR, PH, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Nuclei dots on fusion boundary
+    ctx.fillStyle = '#fbbf24';
+    for (let a = 0; a < Math.PI * 2; a += 0.22) {
+      const nx = CX + PR * Math.cos(a);
+      const ny = CY + PH * Math.sin(a);
+      ctx.beginPath();
+      ctx.arc(nx, ny, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    labelBox(ctx, 'Epitaxial nucleation at fusion boundary', CX, CY - PH - 10, '#fbbf24', 12);
+
+  } else if (stage === 2) {
+    // Pool with columnar grains growing inward from boundary
+    ctx.fillStyle = '#7c2d12';
+    ctx.beginPath();
+    ctx.ellipse(CX, CY, PR * 0.55, PH * 0.55, 0, 0, Math.PI * 2);
+    ctx.fill();
+    const grainColors = ['#92400e','#78350f','#7c2d12','#6b1d00','#8a3000'];
+    const numGrains = 22;
+    for (let i = 0; i < numGrains; i++) {
+      const a = (i / numGrains) * Math.PI * 2;
+      const ox = CX + PR * Math.cos(a);
+      const oy = CY + PH * Math.sin(a);
+      const dx = CX - ox;
+      const dy = CY - oy;
+      const len = Math.sqrt(dx * dx + dy * dy);
+      const endFrac = 0.42;
+      const ex = ox + dx * endFrac;
+      const ey = oy + dy * endFrac;
+      ctx.strokeStyle = grainColors[i % grainColors.length];
+      ctx.lineWidth = 4 + (i % 3);
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(ex, ey);
+      ctx.stroke();
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 0.7;
+      ctx.stroke();
+    }
+    labelBox2(ctx, 'Competitive columnar growth', 'Favorably oriented grains win', CX, CY - PH - 8, '#f59e0b', '#94a3b8', 12);
+
+  } else if (stage === 3) {
+    // Mostly solidified — columnar grains filling, small equiaxed in center
+    const grainColors = ['#92400e','#78350f','#7c2d12','#6b1d00','#8a3000'];
+    const numGrains = 24;
+    for (let i = 0; i < numGrains; i++) {
+      const a = (i / numGrains) * Math.PI * 2;
+      const ox = CX + PR * Math.cos(a);
+      const oy = CY + PH * Math.sin(a);
+      const dx = CX - ox, dy = CY - oy;
+      const ex = ox + dx * 0.82;
+      const ey = oy + dy * 0.82;
+      ctx.strokeStyle = grainColors[i % grainColors.length];
+      ctx.lineWidth = 4 + (i % 3);
+      ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(ex, ey); ctx.stroke();
+      ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 0.5; ctx.stroke();
+    }
+    // Small equiaxed in center
+    ctx.fillStyle = '#6b1d00';
+    for (let j = 0; j < 8; j++) {
+      const ang = j * Math.PI / 4;
+      const ex = CX + Math.cos(ang) * 12;
+      const ey = CY + Math.sin(ang) * 8;
+      ctx.beginPath();
+      ctx.arc(ex, ey, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#f97316'; ctx.lineWidth = 0.6; ctx.stroke();
+    }
+    labelBox(ctx, 'CET — equiaxed grains nucleating at centerline', CX, CY - PH - 10, '#38bdf8', 12);
+
+  } else {
+    // Final structure — full columnar
+    const grainColors = ['#92400e','#78350f','#7c2d12','#6b1d00','#8a3000'];
+    const numGrains = 24;
+    for (let i = 0; i < numGrains; i++) {
+      const a = (i / numGrains) * Math.PI * 2;
+      const ox = CX + PR * Math.cos(a);
+      const oy = CY + PH * Math.sin(a);
+      ctx.strokeStyle = grainColors[i % grainColors.length];
+      ctx.lineWidth = 4 + (i % 3);
+      ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(CX, CY); ctx.stroke();
+      ctx.strokeStyle = '#f97316'; ctx.lineWidth = 0.5; ctx.stroke();
+    }
+    ctx.strokeStyle = '#f97316';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(CX, CY, PR, PH, 0, 0, Math.PI * 2);
+    ctx.stroke();
+    labelBox2(ctx, 'Final solidified weld metal — columnar grains', 'Now cools through Ac3 → HAZ transformation begins', CX, CY - PH - 8, '#22c55e', '#94a3b8', 12);
+  }
+
+  // Plate surface lines
+  ctx.strokeStyle = '#475569';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([]);
+  ctx.beginPath();
+  ctx.moveTo(0, CY - PH);
+  ctx.lineTo(CX - PR, CY - PH);
+  ctx.moveTo(CX + PR, CY - PH);
+  ctx.lineTo(W, CY - PH);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(0, CY + PH); ctx.lineTo(W, CY + PH); ctx.stroke();
+
+  // Label arrows
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = 'bold 11px Segoe UI,Arial';
+  ctx.textAlign = 'left';
+  ctx.fillText('Base metal', 8, CY - PH + 16);
+  ctx.textAlign = 'right';
+  ctx.fillText('Base metal', W - 8, CY - PH + 16);
+  labelBox(ctx, 'Fusion Line', CX - PR - 36, CY + 5, '#94a3b8', 10);
+}
+
+/* ─── CE Calculator ─────────────────────────────────────────── */
+function calcCE() {
+  const g = id => parseFloat(document.getElementById(id).value) || 0;
+  const C=g('ce-C'),Mn=g('ce-Mn'),Si=g('ce-Si'),Cr=g('ce-Cr'),Mo=g('ce-Mo'),
+        V=g('ce-V'),Ni=g('ce-Ni'),Cu=g('ce-Cu'),B=g('ce-B');
+  const iiw = C + Mn/6 + (Cr+Mo+V)/5 + (Ni+Cu)/15;
+  const pcm = C + Si/30 + (Mn+Cu+Cr)/20 + Ni/60 + Mo/15 + V/10 + 5*B;
+  const hv  = Math.max(100, Math.round(802*C + 305*pcm*2 + 120));
+
+  document.getElementById('ce-iiw-val').textContent = iiw.toFixed(3);
+  document.getElementById('ce-pcm-val').textContent = pcm.toFixed(3);
+  document.getElementById('ce-hv-val').textContent  = hv;
+
+  const iiwPct = Math.min(100, iiw / 0.8 * 100);
+  const pcmPct = Math.min(100, pcm / 0.5 * 100);
+  const hvPct  = Math.min(100, (hv - 100) / 450 * 100);
+  document.getElementById('ce-iiw-bar').style.width = iiwPct.toFixed(1) + '%';
+  document.getElementById('ce-pcm-bar').style.width = pcmPct.toFixed(1) + '%';
+  document.getElementById('ce-hv-bar').style.width  = hvPct.toFixed(1) + '%';
+
+  const iiwColor = iiw < 0.35 ? '#22c55e' : iiw < 0.45 ? '#f59e0b' : '#ef4444';
+  const pcmColor = pcm < 0.20 ? '#22c55e' : pcm < 0.28 ? '#f59e0b' : '#ef4444';
+  const hvColor  = hv  < 250  ? '#22c55e' : hv  < 350  ? '#f59e0b' : '#ef4444';
+  document.getElementById('ce-iiw-val').style.color = iiwColor;
+  document.getElementById('ce-pcm-val').style.color = pcmColor;
+  document.getElementById('ce-hv-val').style.color  = hvColor;
+
+  const iiwMsg = iiw < 0.35 ? 'Low — generally no preheat required for thin sections'
+                : iiw < 0.45 ? 'Moderate — preheat advisable for thick sections or high restraint'
+                :              'High — preheat mandatory; follow AWS D1.1 Table 4.4';
+  const pcmMsg = pcm < 0.20 ? 'Low — minimal cracking risk; standard procedure'
+                : pcm < 0.28 ? 'Moderate — preheat advisable for restrained joints'
+                :              'High — preheat and hydrogen control essential';
+  const hvMsg  = hv  < 250  ? 'Below threshold — low HIC risk'
+                : hv  < 350  ? 'Moderate — control hydrogen, consider preheat'
+                :              'High — significant HIC risk; preheat + PWHT likely required';
+  document.getElementById('ce-iiw-lbl').textContent = iiwMsg;
+  document.getElementById('ce-pcm-lbl').textContent = pcmMsg;
+  document.getElementById('ce-hv-lbl').textContent  = hvMsg;
+}
+
+/* ─── Thermal cycles canvas ─────────────────────────────────── */
+function updateThermal(rawVal) {
+  const q = rawVal / 10;
+  document.getElementById('therm-val').textContent = q.toFixed(1) + ' kJ/mm';
+  drawThermal(q);
+}
+
+function drawThermal(q) {
+  const cv = document.getElementById('thermal-canvas');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const ML = 60, MR = 18, MT = 22, MB = 38;
+  const PW = W - ML - MR, PH2 = H - MT - MB;
+  const Tmax = 1550, Tmin = 0;
+  const tmax = 70 * Math.sqrt(q);
+
+  function tx(t) { return ML + (t / tmax) * PW; }
+  function ty(T) { return MT + PH2 - (T - Tmin) / (Tmax - Tmin) * PH2; }
+
+  // Grid
+  ctx.strokeStyle = '#1e3a5c';
+  ctx.lineWidth = 0.6;
+  for (let T = 0; T <= Tmax; T += 200) {
+    ctx.beginPath(); ctx.moveTo(ML, ty(T)); ctx.lineTo(ML + PW, ty(T)); ctx.stroke();
+  }
+  for (let t = 0; t <= tmax; t += tmax / 6) {
+    ctx.beginPath(); ctx.moveTo(tx(t), MT); ctx.lineTo(tx(t), MT + PH2); ctx.stroke();
+  }
+
+  // Ac1 and Ac3 lines
+  ctx.setLineDash([6, 4]);
+  ctx.strokeStyle = '#64748b';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(ML, ty(723)); ctx.lineTo(ML+PW, ty(723)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(ML, ty(910)); ctx.lineTo(ML+PW, ty(910)); ctx.stroke();
+  ctx.setLineDash([]);
+  // Labels sit inside the plot on the right end of each line to avoid left-margin clipping
+  labelBox(ctx, 'Ac1  723°C', ML + PW - 48, ty(723) - 8, '#94a3b8', 10);
+  labelBox(ctx, 'Ac3  910°C', ML + PW - 48, ty(910) - 8, '#94a3b8', 10);
+
+  // Thermal cycle curves
+  const zoneCurves = [
+    { Tp: 1420, tpeak: 3, color:'#f97316', label:'Fusion boundary' },
+    { Tp: 1200, tpeak: 4, color:'#dc2626', label:'CGHAZ' },
+    { Tp: 980,  tpeak: 5, color:'#f59e0b', label:'FGHAZ' },
+    { Tp: 790,  tpeak: 7, color:'#22c55e', label:'ICHAZ' },
+    { Tp: 620,  tpeak: 9, color:'#38bdf8', label:'SCHAZ' },
+  ];
+
+  zoneCurves.forEach(z => {
+    ctx.strokeStyle = z.color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let t = 0; t <= tmax; t += 0.2) {
+      const T = t < z.tpeak
+        ? 20 + (z.Tp - 20) * (t / z.tpeak)
+        : 20 + (z.Tp - 20) * Math.exp(-0.055 * q * (t - z.tpeak));
+      const x = tx(t), y = ty(Math.max(Tmin, T));
+      t < 0.2 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // Peak label with background box
+    const lx = Math.min(tx(z.tpeak) + 6, W - 90);
+    const ly = Math.max(MT + 14, ty(z.Tp) - 2);
+    labelBox(ctx, z.label, lx + ctx.measureText(z.label).width / 2 + 4, ly, z.color, 11);
+  });
+
+  // Axes
+  ctx.strokeStyle = '#475569';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(ML, MT); ctx.lineTo(ML, MT + PH2); ctx.lineTo(ML + PW, MT + PH2);
+  ctx.stroke();
+
+  // Axis labels — skip any tick within 22 px of an Ac line to avoid overlap
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '11px Segoe UI,Arial';
+  const _ac1y = ty(723), _ac3y = ty(910);
+  for (let T = 0; T <= Tmax; T += 200) {
+    const _yp = ty(T);
+    if (Math.abs(_yp - _ac1y) < 22 || Math.abs(_yp - _ac3y) < 22) continue;
+    ctx.textAlign = 'right';
+    ctx.fillText(T, ML - 5, _yp + 4);
+  }
+  for (let i = 0; i <= 6; i++) {
+    const t = i * tmax / 6;
+    ctx.textAlign = 'center';
+    ctx.fillText(t.toFixed(0) + 's', tx(t), MT + PH2 + 15);
+  }
+  ctx.save();
+  ctx.translate(13, MT + PH2 / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = 'center';
+  ctx.fillText('Temperature (°C)', 0, 0);
+  ctx.restore();
+  ctx.textAlign = 'center';
+  ctx.fillText('Time (s)', ML + PW / 2, H - 4);
+
+  // dt85 bracket for CGHAZ
+  const cg = zoneCurves[1];
+  let t8 = null, t5 = null;
+  for (let t = cg.tpeak; t <= tmax; t += 0.1) {
+    const T = 20 + (cg.Tp - 20) * Math.exp(-0.055 * q * (t - cg.tpeak));
+    if (t8 === null && T <= 800) t8 = t;
+    if (t5 === null && T <= 500) t5 = t;
+  }
+  if (t8 && t5) {
+    const dt = t5 - t8;
+    ctx.strokeStyle = '#dc2626';
+    ctx.lineWidth = 1.4;
+    ctx.setLineDash([3, 2]);
+    ctx.beginPath();
+    ctx.moveTo(tx(t8), ty(800)); ctx.lineTo(tx(t5), ty(800));
+    ctx.stroke();
+    ctx.setLineDash([]);
+    labelBox(ctx, '∆t₈₅ = ' + dt.toFixed(1) + 's', (tx(t8)+tx(t5))/2, ty(800) - 8, '#dc2626', 11);
+  }
+}
+
+/* ─── CCT diagram ───────────────────────────────────────────── */
+function drawCCT(q) {
+  const cv = document.getElementById('cct-canvas');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const ML = 58, MR = 16, MT = 22, MB = 38;
+  const PW = W - ML - MR, PH2 = H - MT - MB;
+  const Tmin = 150, Tmax = 920;
+  const tmin = 0.1, tmax = 10000;
+
+  function tx(t) { return ML + (Math.log10(t) - Math.log10(tmin)) / (Math.log10(tmax) - Math.log10(tmin)) * PW; }
+  function ty(T) { return MT + PH2 - (T - Tmin) / (Tmax - Tmin) * PH2; }
+
+  // Phase regions (schematic, A36/S355-equivalent low-alloy steel)
+  // Ferrite start: rough boundary
+  ctx.fillStyle = 'rgba(99,102,241,0.18)';
+  ctx.beginPath();
+  ctx.moveTo(tx(0.5), ty(880)); ctx.lineTo(tx(5), ty(880));
+  ctx.lineTo(tx(60), ty(720)); ctx.lineTo(tx(500), ty(700));
+  ctx.lineTo(tx(500), ty(620)); ctx.lineTo(tx(8), ty(650));
+  ctx.lineTo(tx(0.5), ty(820)); ctx.closePath(); ctx.fill();
+
+  // Pearlite region
+  ctx.fillStyle = 'rgba(34,197,94,0.18)';
+  ctx.beginPath();
+  ctx.moveTo(tx(5), ty(720)); ctx.lineTo(tx(30), ty(700));
+  ctx.lineTo(tx(200), ty(680)); ctx.lineTo(tx(1000), ty(660));
+  ctx.lineTo(tx(1000), ty(580)); ctx.lineTo(tx(100), ty(590));
+  ctx.lineTo(tx(20), ty(610)); ctx.lineTo(tx(5), ty(640));
+  ctx.closePath(); ctx.fill();
+
+  // Bainite region
+  ctx.fillStyle = 'rgba(245,158,11,0.2)';
+  ctx.beginPath();
+  ctx.moveTo(tx(0.5), ty(620)); ctx.lineTo(tx(3), ty(600));
+  ctx.lineTo(tx(10), ty(580)); ctx.lineTo(tx(100), ty(560));
+  ctx.lineTo(tx(600), ty(540)); ctx.lineTo(tx(600), ty(330));
+  ctx.lineTo(tx(0.5), ty(330)); ctx.closePath(); ctx.fill();
+
+  // Martensite region
+  ctx.fillStyle = 'rgba(239,68,68,0.2)';
+  ctx.fillRect(tx(tmin), ty(330), PW, PH2 - (ty(330) - MT));
+
+  // Phase boundary lines
+  ctx.strokeStyle = '#4f46e5';
+  ctx.lineWidth = 1.2;
+  ctx.setLineDash([4, 3]);
+  ctx.beginPath();
+  ctx.moveTo(tx(0.5), ty(880)); ctx.lineTo(tx(5), ty(880));
+  ctx.lineTo(tx(60), ty(720)); ctx.lineTo(tx(500), ty(700));
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(tx(5), ty(640)); ctx.lineTo(tx(30), ty(620));
+  ctx.lineTo(tx(200), ty(600)); ctx.lineTo(tx(600), ty(580));
+  ctx.stroke();
+
+  ctx.strokeStyle = '#22c55e';
+  ctx.beginPath();
+  ctx.moveTo(tx(5), ty(720)); ctx.lineTo(tx(200), ty(680)); ctx.lineTo(tx(1000), ty(660)); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(tx(20), ty(610)); ctx.lineTo(tx(200), ty(600)); ctx.lineTo(tx(1000), ty(590)); ctx.stroke();
+
+  ctx.strokeStyle = '#f59e0b';
+  ctx.beginPath();
+  ctx.moveTo(tx(0.5), ty(620)); ctx.lineTo(tx(10), ty(580)); ctx.lineTo(tx(600), ty(540)); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(tx(0.5), ty(330)); ctx.lineTo(tx(600), ty(330)); ctx.stroke();
+
+  ctx.setLineDash([]);
+
+  // Ms line
+  ctx.strokeStyle = '#ef4444';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(tx(tmin), ty(330)); ctx.lineTo(tx(tmax), ty(330)); ctx.stroke();
+  labelBox(ctx, 'Ms 330°C', tx(tmin) + 44, ty(330) - 8, '#ef4444', 11);
+
+  // Phase labels — inside colored regions, need background boxes
+  const lbls = [
+    { t:1.2,  T:760, c:'#a5b4fc', txt:'Ferrite' },
+    { t:80,   T:640, c:'#6ee7b7', txt:'Pearlite' },
+    { t:4,    T:470, c:'#fcd34d', txt:'Bainite' },
+    { t:0.25, T:240, c:'#fca5a5', txt:'Martensite' },
+  ];
+  lbls.forEach(l => {
+    labelBox(ctx, l.txt, tx(l.t), ty(l.T), l.c, 13);
+  });
+
+  // Cooling curves — clipped to plot area so they don't bleed into the title
+  const zoneCurves = [
+    { Tp:1200, tpeak:4*Math.sqrt(q), color:'#dc2626', label:'CGHAZ' },
+    { Tp:980,  tpeak:5*Math.sqrt(q), color:'#f59e0b', label:'FGHAZ' },
+    { Tp:790,  tpeak:7*Math.sqrt(q), color:'#22c55e', label:'ICHAZ' },
+  ];
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(ML, MT, PW, PH2);
+  ctx.clip();
+  zoneCurves.forEach(z => {
+    ctx.strokeStyle = z.color;
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    let first = true;
+    for (let T = z.Tp; T >= Tmin; T -= 5) {
+      const elapsed = z.tpeak + (-1 / (0.055 * q)) * Math.log((T - 20) / (z.Tp - 20));
+      const t = Math.max(tmin, elapsed);
+      if (t > tmax) break;
+      const x = tx(t), y = ty(T);
+      first ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      first = false;
+    }
+    ctx.stroke();
+  });
+  ctx.restore();
+
+  // Curve legend — upper-right corner of the plot, avoids overlapping labels
+  const legW = 76, legLH = 20;
+  const legX = ML + PW - 6, legY = MT + 6;
+  const legH = zoneCurves.length * legLH + 8;
+  ctx.fillStyle = 'rgba(6,14,28,0.9)';
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 1;
+  ctx.fillRect(legX - legW, legY, legW, legH);
+  ctx.strokeRect(legX - legW, legY, legW, legH);
+  zoneCurves.forEach((z, i) => {
+    const ly = legY + 14 + i * legLH;
+    ctx.strokeStyle = z.color;
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.moveTo(legX - legW + 5, ly - 4);
+    ctx.lineTo(legX - legW + 20, ly - 4);
+    ctx.stroke();
+    ctx.fillStyle = z.color;
+    ctx.font = 'bold 10px Segoe UI,Arial';
+    ctx.textAlign = 'left';
+    ctx.fillText(z.label, legX - legW + 24, ly);
+  });
+
+  // Axes
+  ctx.strokeStyle = '#475569';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(ML, MT); ctx.lineTo(ML, MT + PH2); ctx.lineTo(ML + PW, MT + PH2);
+  ctx.stroke();
+
+  // T-axis labels
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '11px Segoe UI,Arial';
+  for (let T = 200; T <= 900; T += 100) {
+    ctx.textAlign = 'right';
+    ctx.fillText(T, ML - 5, ty(T) + 4);
+    ctx.strokeStyle = '#1e3a5c'; ctx.lineWidth = 0.5;
+    ctx.beginPath(); ctx.moveTo(ML, ty(T)); ctx.lineTo(ML+PW, ty(T)); ctx.stroke();
+  }
+  // t-axis labels
+  [0.1,1,10,100,1000,10000].forEach(t => {
+    const lbl = t < 1 ? t.toString() : t >= 1000 ? (t/1000)+'k' : t.toString();
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '11px Segoe UI,Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(lbl + 's', tx(t), MT + PH2 + 15);
+    ctx.strokeStyle = '#1e3a5c'; ctx.lineWidth = 0.5;
+    ctx.beginPath(); ctx.moveTo(tx(t), MT); ctx.lineTo(tx(t), MT+PH2); ctx.stroke();
+  });
+
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '11px Segoe UI,Arial';
+  ctx.save();
+  ctx.translate(13, MT + PH2/2); ctx.rotate(-Math.PI/2);
+  ctx.textAlign = 'center';
+  ctx.fillText('Temperature (°C)', 0, 0);
+  ctx.restore();
+  ctx.textAlign = 'center';
+  ctx.fillText('Time (log scale)', ML + PW/2, H - 4);
+  ctx.font = 'bold 12px Segoe UI,Arial';
+  ctx.fillStyle = '#38bdf8';
+  ctx.fillText('CCT Diagram — Low-Alloy Structural Steel (schematic)', ML + PW/2, MT - 7);
+}
+
+/* ─── Init ──────────────────────────────────────────────────── */
+window.addEventListener('load', () => {
+  selectZone('fz', document.querySelector('.zone-btn'));
+  drawHeatInput(1.0);
+  drawSolid(0);
+  calcCE();
+});
+</script>
+</body>
+</html>

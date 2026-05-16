@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fracture Types &amp; Fracture Surface Reading</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:#0a1628; color:#e2e8f0; }
+
+header { background:linear-gradient(135deg,#0f2040,#1e3a5f); padding:28px 24px 22px; text-align:center; border-bottom:1px solid #1e3a5f; }
+header h1 { font-size:1.75rem; font-weight:700; color:#f1f5f9; }
+header .subtitle { color:#38bdf8; margin-top:6px; font-size:0.88rem; }
+
+.tab-bar { display:flex; flex-wrap:wrap; background:#0f2040; border-bottom:2px solid #1e3a5f; padding:0 20px; position:sticky; top:0; z-index:10; }
+.tab-btn { padding:11px 18px; font-size:0.84rem; font-weight:600; border:none; background:none; cursor:pointer; color:#64748b; border-bottom:3px solid transparent; margin-bottom:-2px; transition:all 0.15s; white-space:nowrap; }
+.tab-btn:hover { color:#38bdf8; }
+.tab-btn.active { color:#38bdf8; border-bottom-color:#38bdf8; }
+
+.panel { display:none; max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
+.panel.active { display:block; }
+
+.card { background:#0f2040; border:1px solid #1e3a5f; border-radius:12px; padding:20px 22px; margin-bottom:22px; }
+.card h2 { font-size:1.1rem; color:#38bdf8; margin-bottom:10px; }
+.card h3 { font-size:0.94rem; color:#7dd3fc; font-weight:700; margin:14px 0 7px; }
+.card p  { font-size:0.86rem; color:#94a3b8; line-height:1.65; margin-bottom:8px; }
+.card ul { font-size:0.86rem; color:#94a3b8; line-height:1.65; margin:6px 0 8px 18px; }
+.card li { margin-bottom:4px; }
+
+canvas { display:block; border-radius:8px; }
+
+.three-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+@media (max-width:820px) { .three-grid { grid-template-columns:1fr; } }
+.two-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media (max-width:660px) { .two-grid { grid-template-columns:1fr; } }
+
+.canvas-label { font-size:0.8rem; font-weight:700; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.05em; }
+
+.ctrl-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:12px 0; }
+.ctrl-btn { padding:7px 16px; background:#1e3a5f; border:1px solid #38bdf8; border-radius:7px; color:#38bdf8; font-size:0.82rem; font-weight:600; cursor:pointer; transition:all 0.15s; }
+.ctrl-btn:hover { background:#38bdf8; color:#0a1628; }
+.ctrl-btn:disabled { opacity:0.35; cursor:default; background:#1e3a5f; color:#38bdf8; }
+.step-label { font-size:0.82rem; color:#7dd3fc; }
+
+.ref-table { width:100%; border-collapse:collapse; font-size:0.81rem; margin:10px 0; }
+.ref-table th { background:#1e3a5f; color:#7dd3fc; padding:8px 10px; text-align:left; font-weight:600; }
+.ref-table td { padding:7px 10px; border-bottom:1px solid #1e3a5f; color:#94a3b8; vertical-align:top; }
+.ref-table tr:hover td { background:#0a1628; }
+
+.ann-list .ann-item { display:flex; gap:10px; align-items:flex-start; margin-bottom:7px; }
+.ann-list .ann-dot { width:11px; height:11px; border-radius:50%; flex-shrink:0; margin-top:3px; }
+.ann-list .ann-text { font-size:0.83rem; color:#94a3b8; line-height:1.55; }
+
+.source-tag { display:inline-block; padding:3px 10px; background:#1e3a5f; color:#93c5fd; border-radius:6px; font-size:0.75rem; font-weight:600; margin-bottom:12px; }
+
+.zoom-row { display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 14px; }
+.zoom-btn { padding:6px 14px; background:#0f2040; border:1px solid #334155; border-radius:6px; color:#64748b; font-size:0.8rem; font-weight:600; cursor:pointer; transition:all 0.15s; }
+.zoom-btn.active { border-color:#38bdf8; color:#38bdf8; }
+
+.back { text-align:center; padding:24px; font-size:0.9rem; }
+.back a { color:#38bdf8; text-decoration:none; }
+.back a:hover { text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Fracture Types &amp; Fracture Surface Reading</h1>
+  <div class="subtitle">ASM International · DoITPoMS (Cambridge) · Fatigue Fracture Surface Atlas · NIST Failure Investigations</div>
+</header>
+
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('asm',this)">ASM — Fracture Types</button>
+  <button class="tab-btn" onclick="showTab('mech',this)">DoITPoMS — Mechanisms</button>
+  <button class="tab-btn" onclick="showTab('atlas',this)">Fatigue Atlas</button>
+  <button class="tab-btn" onclick="showTab('nist',this)">NIST — Failure Analysis</button>
+</nav>
+
+<!-- ═══════════════════════════════════════════ TAB 1: ASM ═══ -->
+<div id="panel-asm" class="panel active">
+
+  <div class="card">
+    <div class="source-tag">ASM International — Metals Handbook Vol. 12: Fractography</div>
+    <h2>The Three Principal Fracture Modes</h2>
+    <p>The fracture surface records the crack initiation site, propagation direction, and local failure mode. Reading a fracture surface (fractography) identifies whether failure was ductile overload, brittle cleavage, or cyclic fatigue — and points to the origin and contributing factors. ASM Handbook Vol. 12 is the primary reference atlas for fractographic features.</p>
+
+    <div class="three-grid" style="margin-top:18px;">
+      <div>
+        <div class="canvas-label" style="color:#22c55e;">Ductile Fracture</div>
+        <canvas id="cv-ductile" width="300" height="290"></canvas>
+        <div class="ann-list" style="margin-top:10px;">
+          <div class="ann-item"><div class="ann-dot" style="background:#22c55e;"></div><div class="ann-text"><strong style="color:#22c55e;">Fibrous zone</strong> — grey, rough centre; extensive plastic deformation before fracture</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#86efac;"></div><div class="ann-text"><strong style="color:#86efac;">Shear lip</strong> — 45° angled rim; plane-stress fracture at free surface</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#4ade80;"></div><div class="ann-text"><strong style="color:#4ade80;">Dimples</strong> (SEM) — equiaxed microvoids from microvoid coalescence (MVC)</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="canvas-label" style="color:#ef4444;">Brittle Fracture</div>
+        <canvas id="cv-brittle" width="300" height="290"></canvas>
+        <div class="ann-list" style="margin-top:10px;">
+          <div class="ann-item"><div class="ann-dot" style="background:#ef4444;"></div><div class="ann-text"><strong style="color:#ef4444;">River marks</strong> — fine lines converging toward origin; steps between parallel cleavage planes</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#fca5a5;"></div><div class="ann-text"><strong style="color:#fca5a5;">Cleavage facets</strong> — flat, bright, faceted; crack on {001} crystallographic planes</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#f87171;"></div><div class="ann-text"><strong style="color:#f87171;">Chevron pattern</strong> — macroscopic herringbone pointing to origin; visible to naked eye</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="canvas-label" style="color:#f59e0b;">Fatigue Fracture</div>
+        <canvas id="cv-fatigue" width="300" height="290"></canvas>
+        <div class="ann-list" style="margin-top:10px;">
+          <div class="ann-item"><div class="ann-dot" style="background:#38bdf8;"></div><div class="ann-text"><strong style="color:#38bdf8;">Initiation site</strong> — at surface stress concentration; point of crack nucleation</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#f59e0b;"></div><div class="ann-text"><strong style="color:#f59e0b;">Beach marks</strong> — macroscopic concentric arcs; record crack arrest or load changes</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#fcd34d;"></div><div class="ann-text"><strong style="color:#fcd34d;">Ratchet marks</strong> — radial steps between adjacent initiation sites</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#fbbf24;"></div><div class="ann-text"><strong style="color:#fbbf24;">Striations</strong> (SEM) — 1 striation = 1 load cycle; spacing ∝ ΔK</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#ef4444;"></div><div class="ann-text"><strong style="color:#ef4444;">Final fracture zone</strong> — rough overload; ductile dimples or cleavage</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Fractographic Feature Comparison — ASM Vol. 12</h2>
+    <div style="overflow-x:auto;">
+    <table class="ref-table" style="min-width:600px;">
+      <thead><tr><th>Feature</th><th style="color:#22c55e;">Ductile</th><th style="color:#ef4444;">Brittle</th><th style="color:#f59e0b;">Fatigue</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Macroscopic appearance</strong></td><td>Grey, fibrous, rough; shear lip at 45°</td><td>Flat, bright, crystalline; no shear lip</td><td>Two zones: smooth progression + rough overload</td></tr>
+        <tr><td><strong>Deformation before fracture</strong></td><td>Extensive — visible necking</td><td>None or minimal</td><td>None until final overload zone</td></tr>
+        <tr><td><strong>SEM features</strong></td><td>Equiaxed dimples (MVC)</td><td>Cleavage facets, river marks, tongues</td><td>Striations, secondary cracks, beach marks</td></tr>
+        <tr><td><strong>Crack propagation plane</strong></td><td>Normal to max principal stress; may rotate at shear lip</td><td>{001} crystallographic planes (BCC Fe); {0001} HCP</td><td>Stage I: ~45° shear; Stage II: Mode I tensile (∥ to beach marks)</td></tr>
+        <tr><td><strong>Origin identification</strong></td><td>Point of maximum fibrous zone; highest deformation</td><td>Follow river marks upstream; Chevron apex</td><td>Ratchet marks converge; beach mark focus; surface defect</td></tr>
+        <tr><td><strong>Temperature/rate dependency</strong></td><td>High T or slow rate favours ductile</td><td>Low T or high rate; BCC metals below NDT temperature</td><td>Cycle-dependent; not strongly T-sensitive (in air)</td></tr>
+        <tr><td><strong>ASM reference</strong></td><td>Vol. 12, pp. 12–22</td><td>Vol. 12, pp. 22–30</td><td>Vol. 12, pp. 100–125</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ TAB 2: DoITPoMS ═══ -->
+<div id="panel-mech" class="panel">
+
+  <div class="card">
+    <div class="source-tag">DoITPoMS — Fracture Module (University of Cambridge)</div>
+    <h2>Ductile Fracture — Microvoid Coalescence (MVC)</h2>
+    <p>Ductile fracture proceeds by nucleation, growth, and coalescence of microvoids at second-phase particles and inclusions. The process requires significant plastic work and produces the characteristic dimpled fracture surface seen in SEM. Higher inclusion content → shorter void spacing → lower fracture toughness.</p>
+    <div class="two-grid" style="margin-top:14px;">
+      <div>
+        <canvas id="cv-mvc" width="390" height="290"></canvas>
+        <div class="ctrl-row">
+          <button class="ctrl-btn" id="mvc-prev" onclick="mvcStep(-1)" disabled>◀ Prev</button>
+          <span class="step-label" id="mvc-label">Step 1 of 5</span>
+          <button class="ctrl-btn" id="mvc-next" onclick="mvcStep(1)">Next ▶</button>
+        </div>
+      </div>
+      <div>
+        <h3 id="mvc-title">1 — Nucleation at Inclusions</h3>
+        <p id="mvc-desc">Loading produces stress concentrations at second-phase particles and inclusions (MnS, Fe₃C, Al₂O₃). Decohesion occurs at the particle–matrix interface, or the particle itself fractures. A void forms around each particle when local stress exceeds interface cohesion strength.</p>
+        <div class="ann-list" id="mvc-notes">
+          <div class="ann-item"><div class="ann-dot" style="background:#94a3b8;"></div><div class="ann-text">Particles: MnS stringers, oxide inclusions, carbide particles</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#38bdf8;"></div><div class="ann-text">Interface decohesion or particle cracking initiates void</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#22c55e;"></div><div class="ann-text">Higher particle fraction → shorter inter-void spacing → lower ductility</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="source-tag">DoITPoMS — Fracture Module</div>
+    <h2>Brittle Fracture — Cleavage Mechanism</h2>
+    <p>Cleavage fracture occurs when local tensile stress exceeds the cohesive strength of specific low-index crystallographic planes — {001} in BCC iron, {0001} in HCP metals. No plastic deformation occurs at the crack tip. River marks form when the crack steps between parallel cleavage planes at grain boundaries.</p>
+    <div class="two-grid" style="margin-top:14px;">
+      <div>
+        <canvas id="cv-cleavage" width="390" height="290"></canvas>
+        <div class="ctrl-row">
+          <button class="ctrl-btn" id="cl-prev" onclick="clStep(-1)" disabled>◀ Prev</button>
+          <span class="step-label" id="cl-label">Step 1 of 4</span>
+          <button class="ctrl-btn" id="cl-next" onclick="clStep(1)">Next ▶</button>
+        </div>
+      </div>
+      <div>
+        <h3 id="cl-title">1 — Polycrystalline Structure Under Tensile Load</h3>
+        <p id="cl-desc">A polycrystalline BCC steel under tensile loading. Each grain has a different crystallographic orientation. The {001} cleavage plane is oriented differently in each grain. Fracture initiates in the grain where the resolved tensile stress normal to the cleavage plane is highest, often at a stress concentration or grain boundary triple point.</p>
+        <div class="ann-list" id="cl-notes">
+          <div class="ann-item"><div class="ann-dot" style="background:#7dd3fc;"></div><div class="ann-text">Grains with differing crystallographic orientations (colour-coded)</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#ef4444;"></div><div class="ann-text">Dashed ticks inside grains = local {001} cleavage plane orientation</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#fbbf24;"></div><div class="ann-text">Arrows: applied tensile stress direction</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ TAB 3: ATLAS ═══ -->
+<div id="panel-atlas" class="panel">
+
+  <div class="card">
+    <div class="source-tag">Fatigue Fracture Surface Atlas — ASM / Forsyth / Laird</div>
+    <h2>Fatigue Fracture Surface — Multi-Scale Atlas</h2>
+    <p>Fatigue fracture surfaces reveal different features at progressively higher magnification. Each scale provides different information about loading history, crack growth rate, and initiation conditions.</p>
+
+    <div class="zoom-row">
+      <button class="zoom-btn active" onclick="setZoom(0,this)">Macro (1×)</button>
+      <button class="zoom-btn" onclick="setZoom(1,this)">Low Mag (20×)</button>
+      <button class="zoom-btn" onclick="setZoom(2,this)">Med Mag (200×)</button>
+      <button class="zoom-btn" onclick="setZoom(3,this)">High Mag SEM (2000×)</button>
+    </div>
+
+    <div class="two-grid">
+      <div>
+        <canvas id="cv-atlas" width="430" height="350"></canvas>
+      </div>
+      <div>
+        <h3 id="atlas-title">Macro View — Complete Fracture Face</h3>
+        <p id="atlas-desc">The complete fracture face of a rotating-bending fatigue specimen. The initiation site is at the surface (lower-left), where a stress concentration started the crack. Beach marks radiate outward as concentric arcs. The final fracture zone (upper-right) is the rough overload region where the remaining cross-section was insufficient to carry the load.</p>
+        <div class="ann-list" id="atlas-notes">
+          <div class="ann-item"><div class="ann-dot" style="background:#38bdf8;"></div><div class="ann-text"><strong style="color:#38bdf8;">Initiation site</strong> — at surface; often at a stress concentration</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#f59e0b;"></div><div class="ann-text"><strong style="color:#f59e0b;">Beach marks</strong> — concentric arcs recording crack front at intervals</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#fcd34d;"></div><div class="ann-text"><strong style="color:#fcd34d;">Ratchet marks</strong> — steps between adjacent initiation sites</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#ef4444;"></div><div class="ann-text"><strong style="color:#ef4444;">Final fracture zone</strong> — rough overload; ductile dimples or cleavage</div></div>
+        </div>
+        <p id="atlas-src" style="font-size:0.78rem;color:#475569;margin-top:10px;">Source: ASM Handbook Vol. 12; Forsyth Fatigue Fractography Atlas</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Striation Counting — Crack Growth Rate from Fracture Surface</h2>
+    <p>At high SEM magnification, individual fatigue striations correspond to one load cycle each (Forsyth-Laird model). Measuring striation spacing gives crack growth rate <em>da/dN</em> directly from the fracture surface — enabling reconstruction of loading history in failure investigations.</p>
+    <div style="overflow-x:auto;">
+    <table class="ref-table" style="min-width:560px;">
+      <thead><tr><th>Magnification</th><th>Features Visible</th><th>Feature Spacing</th><th>Approximate ΔK Range</th></tr></thead>
+      <tbody>
+        <tr><td>10–50× (macro)</td><td>Beach marks, ratchet marks, initiation site, final fracture zone</td><td>Macroscopic (mm scale)</td><td>Qualitative only</td></tr>
+        <tr><td>100–500× (SEM)</td><td>Individual beach marks, secondary cracks</td><td>10–100 μm per beach mark</td><td>ΔK ≈ 15–30 MPa√m</td></tr>
+        <tr><td>500–5000× (SEM)</td><td>Fatigue striations — one per cycle</td><td>0.1–10 μm per striation</td><td>ΔK ≈ 10–40 MPa√m</td></tr>
+        <tr><td>&gt;5000× (TEM replica)</td><td>Micro-striations, dislocation substructure</td><td>0.01–0.5 μm</td><td>ΔK ≈ 5–20 MPa√m (near threshold)</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ TAB 4: NIST ═══ -->
+<div id="panel-nist" class="panel">
+
+  <div class="card">
+    <div class="source-tag">NIST — Failure Analysis Case Studies &amp; Fractographic Protocol</div>
+    <h2>Case Studies — Fracture Surface Reading in Failure Investigations</h2>
+
+    <div class="two-grid" style="margin-top:14px;">
+      <div>
+        <div class="canvas-label" style="color:#38bdf8;">Case A — High-Cycle Fatigue (Shaft at Keyway)</div>
+        <canvas id="cv-nist-a" width="390" height="290"></canvas>
+      </div>
+      <div>
+        <h3>Case A: Rotating Shaft — Fatigue at Keyway Corner</h3>
+        <p><strong>Component:</strong> 1040 steel shaft, 40mm dia, rotating bending, 2.3 × 10⁷ cycles<br>
+        <strong>Stress concentration:</strong> Keyway with sharp corner (Kt ≈ 3.2)</p>
+        <div class="ann-list" style="margin-top:10px;">
+          <div class="ann-item"><div class="ann-dot" style="background:#38bdf8;"></div><div class="ann-text"><strong style="color:#38bdf8;">Origin:</strong> Keyway corner — surface crack initiation at Kt = 3.2</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#f59e0b;"></div><div class="ann-text"><strong style="color:#f59e0b;">Propagation:</strong> Fine beach marks (high-cycle); striation spacing 0.3–0.8 μm</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#ef4444;"></div><div class="ann-text"><strong style="color:#ef4444;">Final fracture:</strong> Small overload zone (~15% of cross-section) — indicates low nominal stress, high-cycle regime</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#a78bfa;"></div><div class="ann-text"><strong style="color:#a78bfa;">Corrective action:</strong> Add radius ≥1mm at keyway corner + shot peen to introduce compressive residual stress</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-grid" style="margin-top:24px;">
+      <div>
+        <div class="canvas-label" style="color:#ef4444;">Case B — Brittle Fracture (Pressure Vessel Nozzle)</div>
+        <canvas id="cv-nist-b" width="390" height="290"></canvas>
+      </div>
+      <div>
+        <h3>Case B: Pressure Vessel Nozzle — Low-Temperature Brittle Fracture</h3>
+        <p><strong>Component:</strong> A516-70 nozzle weld, 25mm plate, ambient −15°C<br>
+        <strong>Failure stress:</strong> Well below yield strength (&lt;40% Fy) — single pressurisation event</p>
+        <div class="ann-list" style="margin-top:10px;">
+          <div class="ann-item"><div class="ann-dot" style="background:#ef4444;"></div><div class="ann-text"><strong style="color:#ef4444;">Chevron pattern:</strong> Points to origin at weld toe HAZ — pre-existing HIC underbead crack</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#fca5a5;"></div><div class="ann-text"><strong style="color:#fca5a5;">Cleavage facets:</strong> Bright, flat, crystalline — martensite in HAZ below NDT at −15°C</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#f87171;"></div><div class="ann-text"><strong style="color:#f87171;">No shear lip:</strong> Fully brittle fracture — confirms temperature was below nil-ductility transition</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#a78bfa;"></div><div class="ann-text"><strong style="color:#a78bfa;">Contributing factors:</strong> No preheat for CE 0.48 steel; HIC crack pre-existed; cold-temperature startup below NDT</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>NIST Systematic Fractography Protocol</h2>
+    <div style="overflow-x:auto;">
+    <table class="ref-table" style="min-width:560px;">
+      <thead><tr><th>Step</th><th>Action</th><th>Evidence Sought</th><th>Tools</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1</strong></td><td>Macro documentation</td><td>Overall fracture geometry, plane orientation, deformation extent</td><td>Photography; stereo microscopy 1–50×</td></tr>
+        <tr><td><strong>2</strong></td><td>Origin identification</td><td>Ratchet marks, river marks converging to origin; beach mark focus</td><td>Optical, SEM ×50–200</td></tr>
+        <tr><td><strong>3</strong></td><td>Mode determination</td><td>Dimples (ductile), cleavage facets / river marks (brittle), striations (fatigue)</td><td>SEM ×200–5000</td></tr>
+        <tr><td><strong>4</strong></td><td>Loading history</td><td>Beach mark spacing (load amplitude history); striation spacing (da/dN); overload zone size (final stress)</td><td>SEM + image analysis</td></tr>
+        <tr><td><strong>5</strong></td><td>Material verification</td><td>Chemistry, hardness, microstructure vs. specification — confirms correct material or identifies substitution/defect</td><td>OES / EDS; hardness; metallography</td></tr>
+        <tr><td><strong>6</strong></td><td>Contributing factors</td><td>Stress concentrations, surface condition, corrosion pits, manufacturing defects</td><td>All of above + dye penetrant, SEM EDS</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<div class="back"><a href="../index.html">← Back to MECH191 Visualizations</a></div>
+
+<script>
+// ── Utilities ──────────────────────────────────────────────────────────────
+function showTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'asm')  { drawDuctile(); drawBrittle(); drawFatigue(); }
+  if (id === 'mech') { drawMVC(mvcN); drawCleavage(clN); }
+  if (id === 'atlas'){ drawAtlas(atlasZ); }
+  if (id === 'nist') { drawNistA(); drawNistB(); }
+}
+
+// Seeded RNG — must use Math.abs on seed (project memory)
+function seeded(seed) {
+  let s = Math.abs(Math.round(seed)) || 1;
+  return function() {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+// ── DUCTILE FRACTURE ───────────────────────────────────────────────────────
+function drawDuctile() {
+  const cv = document.getElementById('cv-ductile');
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#0f2040'; ctx.fillRect(0, 0, W, 22);
+  ctx.fillStyle = '#22c55e'; ctx.font = 'bold 10px Segoe UI,Arial';
+  ctx.textAlign = 'left'; ctx.fillText('DUCTILE — Cup-and-Cone (Schematic)', 6, 15);
+
+  // Cross-section view
+  const CX = W / 2, CY = 100, RO = 68, RI = 36;
+  const rng = seeded(42);
+
+  // Outer circle (full section)
+  ctx.beginPath(); ctx.arc(CX, CY, RO, 0, Math.PI * 2);
+  ctx.fillStyle = '#1e293b'; ctx.fill();
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5; ctx.stroke();
+
+  // Shear lip band (45° zone at perimeter)
+  for (let ang = 0; ang < Math.PI * 2; ang += 0.05) {
+    const px = CX + (RO - 9) * Math.cos(ang);
+    const py = CY + (RO - 9) * Math.sin(ang);
+    const r2 = 2.5 + rng() * 1.5;
+    ctx.beginPath(); ctx.arc(px, py, r2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(134,239,172,${0.3 + rng() * 0.35})`; ctx.fill();
+  }
+
+  // Fibrous zone
+  const fib = ctx.createRadialGradient(CX, CY, 0, CX, CY, RI);
+  fib.addColorStop(0, '#4b5563'); fib.addColorStop(0.7, '#374151'); fib.addColorStop(1, '#1e293b');
+  ctx.beginPath(); ctx.arc(CX, CY, RI, 0, Math.PI * 2);
+  ctx.fillStyle = fib; ctx.fill();
+  for (let i = 0; i < 55; i++) {
+    const ang = rng() * Math.PI * 2, r = rng() * RI * 0.88;
+    ctx.beginPath(); ctx.arc(CX + r * Math.cos(ang), CY + r * Math.sin(ang), 1 + rng() * 3, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(100,116,139,${0.25 + rng() * 0.4})`; ctx.fill();
+  }
+
+  // Labels on cross-section
+  ctx.font = 'bold 9px Segoe UI,Arial'; ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(10,22,40,0.82)'; ctx.fillRect(CX - 37, CY - 8, 74, 14);
+  ctx.fillStyle = '#86efac'; ctx.fillText('Fibrous Zone', CX, CY + 3);
+  ctx.fillStyle = 'rgba(10,22,40,0.82)'; ctx.fillRect(CX + 22, CY - 53, 62, 14);
+  ctx.fillStyle = '#4ade80'; ctx.fillText('Shear Lip', CX + 53, CY - 42);
+  ctx.font = '8px Segoe UI,Arial';
+  ctx.fillStyle = 'rgba(10,22,40,0.82)'; ctx.fillRect(CX + 4, CY - 41, 98, 13);
+  ctx.fillStyle = '#86efac'; ctx.fillText('(45° plane-stress)', CX + 53, CY - 31);
+
+  // Neck schematic (small, right side)
+  const NX = W - 36, NW = 14;
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(NX, 32); ctx.lineTo(NX, 42);
+  ctx.bezierCurveTo(NX, 56, NX + NW, 68, NX + NW, 98);
+  ctx.bezierCurveTo(NX + NW, 126, NX, 136, NX, 148);
+  ctx.lineTo(NX, 162);
+  ctx.stroke();
+  ctx.fillStyle = '#334155';
+  ctx.fillRect(NX - 8, 24, NW + 8, 8);
+  ctx.fillRect(NX - 8, 162, NW + 8, 8);
+  ctx.fillStyle = '#94a3b8'; ctx.font = '8px Segoe UI,Arial'; ctx.textAlign = 'right';
+  ctx.fillText('neck', NX - 2, 98);
+
+  // SEM dimple inset (bottom)
+  const DIX = 8, DIY = 188, DIW = W - 16, DIH = 88;
+  ctx.fillStyle = '#060e1c'; ctx.fillRect(DIX, DIY, DIW, DIH);
+  ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 1; ctx.strokeRect(DIX, DIY, DIW, DIH);
+  ctx.fillStyle = '#22c55e'; ctx.font = 'bold 9px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText('SEM: Equiaxed Dimples (MVC)', DIX + 4, DIY + 13);
+
+  const rngD = seeded(77);
+  for (let i = 0; i < 30; i++) {
+    const dx = DIX + 6 + rngD() * (DIW - 12);
+    const dy = DIY + 20 + rngD() * (DIH - 26);
+    const dr = 4 + rngD() * 9;
+    const g = ctx.createRadialGradient(dx + dr * 0.25, dy - dr * 0.25, 0, dx, dy, dr);
+    g.addColorStop(0, '#7dd3fc'); g.addColorStop(0.35, '#334155'); g.addColorStop(1, '#1e293b');
+    ctx.beginPath(); ctx.arc(dx, dy, dr, 0, Math.PI * 2);
+    ctx.fillStyle = g; ctx.fill();
+    ctx.strokeStyle = 'rgba(71,85,105,0.5)'; ctx.lineWidth = 0.5; ctx.stroke();
+    if (rngD() > 0.55) {
+      ctx.beginPath(); ctx.arc(dx, dy, 1.5, 0, Math.PI * 2);
+      ctx.fillStyle = '#94a3b8'; ctx.fill();
+    }
+  }
+  ctx.fillStyle = '#475569'; ctx.font = '8px Segoe UI,Arial'; ctx.textAlign = 'right';
+  ctx.fillText('ASM Vol.12', DIX + DIW - 4, DIY + DIH - 4);
+}
+
+// ── BRITTLE FRACTURE ───────────────────────────────────────────────────────
+function drawBrittle() {
+  const cv = document.getElementById('cv-brittle');
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  const rng = seeded(123);
+
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#0f2040'; ctx.fillRect(0, 0, W, 22);
+  ctx.fillStyle = '#ef4444'; ctx.font = 'bold 10px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText('BRITTLE — Cleavage (Schematic)', 6, 15);
+
+  // Fracture face
+  const FX = 10, FY = 28, FW = W - 20, FH = 148;
+  const bg = ctx.createLinearGradient(FX, FY, FX + FW, FY + FH);
+  bg.addColorStop(0, '#192535'); bg.addColorStop(0.5, '#243344'); bg.addColorStop(1, '#182030');
+  ctx.fillStyle = bg; ctx.fillRect(FX, FY, FW, FH);
+
+  // Cleavage facets — clipped to fracture face rect to prevent overflow
+  const rngF = seeded(99);
+  ctx.save(); ctx.beginPath(); ctx.rect(FX, FY, FW, FH); ctx.clip();
+  for (let i = 0; i < 24; i++) {
+    const fx = FX + 8 + rngF() * (FW - 16);
+    const fy = FY + 8 + rngF() * (FH - 16);
+    const fs = 12 + rngF() * 18;
+    const nv = 4 + Math.floor(rngF() * 3);
+    const br = 0.1 + rngF() * 0.22;
+    const l = Math.floor(br * 255);
+    ctx.beginPath();
+    for (let j = 0; j < nv; j++) {
+      const ang = (j / nv) * Math.PI * 2 + rngF() * 0.5;
+      const r2 = fs * (0.55 + rngF() * 0.55);
+      if (j === 0) ctx.moveTo(fx + r2 * Math.cos(ang), fy + r2 * Math.sin(ang));
+      else ctx.lineTo(fx + r2 * Math.cos(ang), fy + r2 * Math.sin(ang));
+    }
+    ctx.closePath();
+    ctx.fillStyle = `rgb(${l + 28},${l + 38},${l + 58})`; ctx.fill();
+    ctx.strokeStyle = 'rgba(148,163,184,0.18)'; ctx.lineWidth = 0.5; ctx.stroke();
+  }
+  ctx.restore();
+
+  // Origin
+  const oX = FX + 22, oY = FY + FH * 0.52;
+  ctx.beginPath(); ctx.arc(oX, oY, 6, 0, Math.PI * 2);
+  ctx.fillStyle = '#ef4444'; ctx.fill();
+
+  // Chevron lines from origin
+  const rngC = seeded(55);
+  ctx.lineWidth = 1;
+  for (let i = 0; i < 5; i++) {
+    const armY = FY + FH * (0.3 + i * 0.08);
+    ctx.beginPath(); ctx.moveTo(oX + 6, oY);
+    ctx.lineTo(oX + 90, armY); ctx.strokeStyle = 'rgba(252,165,165,0.35)'; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(oX + 6, oY);
+    ctx.lineTo(oX + 90, FY * 2 + FH - armY); ctx.stroke();
+  }
+
+  // River marks (converging toward origin)
+  ctx.lineWidth = 0.7;
+  for (let i = 0; i < 22; i++) {
+    const ex = FX + 30 + rngC() * (FW - 40), ey = FY + 6 + rngC() * (FH - 12);
+    const sx = oX + rngC() * 20, sy = oY + (rngC() - 0.5) * 24;
+    ctx.beginPath(); ctx.moveTo(sx, sy);
+    ctx.quadraticCurveTo((sx + ex) * 0.5 + (rngC() - 0.5) * 20, (sy + ey) * 0.5 + (rngC() - 0.5) * 18, ex, ey);
+    ctx.strokeStyle = `rgba(248,113,113,${0.2 + rngC() * 0.38})`; ctx.stroke();
+  }
+
+  // Labels
+  ctx.font = 'bold 9px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillStyle = 'rgba(10,22,40,0.85)'; ctx.fillRect(oX + 8, oY - 9, 48, 14);
+  ctx.fillStyle = '#ef4444'; ctx.fillText('Origin', oX + 10, oY + 3);
+  ctx.fillStyle = 'rgba(10,22,40,0.85)'; ctx.fillRect(FX + FW - 118, FY + 5, 115, 14);
+  ctx.fillStyle = '#fca5a5'; ctx.fillText('Cleavage facets (bright)', FX + FW - 116, FY + 16);
+  ctx.fillStyle = 'rgba(10,22,40,0.85)'; ctx.fillRect(FX + FW - 118, FY + 23, 115, 14);
+  ctx.fillStyle = '#f87171'; ctx.fillText('River marks → origin', FX + FW - 116, FY + 34);
+
+  ctx.fillStyle = '#94a3b8'; ctx.font = '8px Segoe UI,Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Flat fracture — no necking, no shear lip (fully brittle)', W / 2, FY + FH + 14);
+
+  // SEM inset — draw background and content first, labels on top
+  const SX = 8, SY = 196, SW = W - 16, SH = 82;
+  ctx.fillStyle = '#060e1c'; ctx.fillRect(SX, SY, SW, SH);
+  const rngS = seeded(77);
+  ctx.save(); ctx.beginPath(); ctx.rect(SX, SY + 17, SW, SH - 17); ctx.clip();
+  for (let i = 0; i < 10; i++) {
+    const sx2 = SX + 8 + rngS() * (SW - 16), sy2 = SY + 22 + rngS() * (SH - 32);
+    const ss = 12 + rngS() * 18;
+    const br2 = 0.08 + rngS() * 0.18; const l2 = Math.floor(br2 * 255);
+    ctx.beginPath();
+    const nv2 = 5 + Math.floor(rngS() * 3);
+    for (let j = 0; j < nv2; j++) {
+      const a2 = (j / nv2) * Math.PI * 2 + rngS() * 0.6;
+      const r3 = ss * (0.5 + rngS() * 0.55);
+      if (j === 0) ctx.moveTo(sx2 + r3 * Math.cos(a2), sy2 + r3 * Math.sin(a2));
+      else ctx.lineTo(sx2 + r3 * Math.cos(a2), sy2 + r3 * Math.sin(a2));
+    }
+    ctx.closePath(); ctx.fillStyle = `rgb(${l2 + 22},${l2 + 32},${l2 + 52})`; ctx.fill();
+    ctx.strokeStyle = 'rgba(148,163,184,0.2)'; ctx.lineWidth = 0.5; ctx.stroke();
+  }
+  for (let i = 0; i < 14; i++) {
+    ctx.beginPath();
+    ctx.moveTo(SX + rngS() * SW * 0.25, SY + 22 + rngS() * (SH - 30));
+    ctx.lineTo(SX + SW * 0.35 + rngS() * SW * 0.6, SY + 22 + rngS() * (SH - 30));
+    ctx.strokeStyle = `rgba(248,113,113,${0.2 + rngS() * 0.35})`; ctx.lineWidth = 0.55; ctx.stroke();
+  }
+  ctx.restore();
+  // Border and labels drawn after content so they are never obscured
+  ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 1; ctx.strokeRect(SX, SY, SW, SH);
+  ctx.fillStyle = 'rgba(6,14,28,0.88)'; ctx.fillRect(SX + 1, SY + 1, SW - 2, 16);
+  ctx.fillStyle = '#ef4444'; ctx.font = 'bold 9px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText('SEM: Cleavage Facets + River Marks', SX + 4, SY + 13);
+  ctx.fillStyle = 'rgba(6,14,28,0.75)'; ctx.fillRect(SX + SW - 120, SY + SH - 14, 118, 12);
+  ctx.fillStyle = '#475569'; ctx.font = '8px Segoe UI,Arial'; ctx.textAlign = 'right';
+  ctx.fillText('ASM Vol.12 / DoITPoMS', SX + SW - 4, SY + SH - 4);
+}
+
+// ── FATIGUE FRACTURE ───────────────────────────────────────────────────────
+function drawFatigue() {
+  const cv = document.getElementById('cv-fatigue');
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  const rng = seeded(88);
+
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#0f2040'; ctx.fillRect(0, 0, W, 22);
+  ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 10px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText('FATIGUE — Rotating Bending (Schematic)', 6, 15);
+
+  const CX = W / 2, CY = 105, R = 76;
+  const iX = CX - R * 0.76, iY = CY + R * 0.32;
+
+  ctx.save();
+  ctx.beginPath(); ctx.arc(CX, CY, R, 0, Math.PI * 2); ctx.clip();
+  ctx.fillStyle = '#0d1928'; ctx.fillRect(0, 0, W, H);
+
+  // Beach marks from initiation
+  for (let i = 1; i <= 9; i++) {
+    const bR = i * R / 10;
+    const ang = Math.atan2(CY - iY, CX - iX);
+    const span = Math.PI * (0.52 + i * 0.028);
+    ctx.beginPath(); ctx.arc(iX, iY, bR, ang - span, ang + span);
+    ctx.strokeStyle = `rgba(${90 + i * 10},${120 + i * 8},${155 + i * 4},${0.38 + i * 0.03})`;
+    ctx.lineWidth = 0.8 + i * 0.12; ctx.stroke();
+  }
+
+  // Final fracture zone (rough overload)
+  const rngFF = seeded(33);
+  const ffX = CX + R * 0.22, ffY = CY - R * 0.32;
+  for (let i = 0; i < 32; i++) {
+    const fx = ffX + (rngFF() - 0.5) * R * 0.62;
+    const fy = ffY + (rngFF() - 0.5) * R * 0.5;
+    if ((fx - CX) ** 2 + (fy - CY) ** 2 > R * R * 0.92) continue;
+    const fr = 3 + rngFF() * 8;
+    const g = ctx.createRadialGradient(fx, fy, 0, fx, fy, fr);
+    g.addColorStop(0, '#4b5563'); g.addColorStop(1, '#1e293b');
+    ctx.beginPath(); ctx.arc(fx, fy, fr, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill();
+  }
+
+  // Ratchet marks
+  for (let i = 0; i < 3; i++) {
+    const ang = Math.PI * 0.56 + i * 0.13;
+    ctx.beginPath();
+    ctx.moveTo(CX + R * 0.84 * Math.cos(ang), CY + R * 0.84 * Math.sin(ang));
+    ctx.lineTo(CX + R * 0.97 * Math.cos(ang), CY + R * 0.97 * Math.sin(ang));
+    ctx.strokeStyle = '#fcd34d'; ctx.lineWidth = 2; ctx.stroke();
+  }
+  ctx.restore();
+
+  // Circle outline
+  ctx.beginPath(); ctx.arc(CX, CY, R, 0, Math.PI * 2);
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5; ctx.stroke();
+
+  // Initiation dot
+  ctx.beginPath(); ctx.arc(iX, iY, 5, 0, Math.PI * 2);
+  ctx.fillStyle = '#38bdf8'; ctx.fill();
+
+  // Labels
+  ctx.font = 'bold 9px Segoe UI,Arial';
+  ctx.fillStyle = 'rgba(10,22,40,0.85)'; ctx.fillRect(2, iY - 8, 52, 14);
+  ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left'; ctx.fillText('Initiation', 4, iY + 3);
+  ctx.fillStyle = 'rgba(10,22,40,0.85)'; ctx.fillRect(CX - 38, 34, 76, 14);
+  ctx.fillStyle = '#f59e0b'; ctx.textAlign = 'center'; ctx.fillText('Beach Marks', CX, 45);
+  ctx.fillStyle = 'rgba(10,22,40,0.85)'; ctx.fillRect(ffX - 34, ffY - 8, 68, 14);
+  ctx.fillStyle = '#ef4444'; ctx.textAlign = 'center'; ctx.fillText('Final Fracture', ffX, ffY + 3);
+  ctx.fillStyle = 'rgba(10,22,40,0.82)'; ctx.fillRect(iX + 6, iY - 23, 46, 14);
+  ctx.fillStyle = '#fcd34d'; ctx.font = '8px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText('Ratchet', iX + 8, iY - 12);
+
+  // SEM striations inset
+  const SX = 8, SY = 196, SW = W - 16, SH = 80;
+  ctx.fillStyle = '#060e1c'; ctx.fillRect(SX, SY, SW, SH);
+  ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1; ctx.strokeRect(SX, SY, SW, SH);
+  ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 9px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText('SEM: Fatigue Striations (1 striation = 1 cycle)', SX + 4, SY + 13);
+  const rngST = seeded(66);
+  for (let i = 0; i < 24; i++) {
+    const sy2 = SY + 20 + i * (SH - 26) / 24;
+    ctx.beginPath(); ctx.moveTo(SX + 6, sy2);
+    for (let x = SX + 6; x < SX + SW - 6; x += 4)
+      ctx.lineTo(x, sy2 + (rngST() - 0.5) * 1.4);
+    ctx.strokeStyle = `rgba(251,191,36,${0.18 + i * 0.033})`; ctx.lineWidth = 0.5 + i * 0.028; ctx.stroke();
+  }
+  ctx.fillStyle = '#64748b'; ctx.font = '8px Segoe UI,Arial'; ctx.textAlign = 'right';
+  ctx.fillText('← spacing ∝ da/dN', SX + SW - 4, SY + SH - 5);
+}
+
+// ── MVC ANIMATION ──────────────────────────────────────────────────────────
+let mvcN = 0;
+const mvcData = [
+  { title:'1 — Nucleation at Inclusions',
+    desc:'Loading concentrates stress at second-phase particles (MnS, Fe₃C, Al₂O₃). Decohesion occurs at the particle–matrix interface, or the particle itself fractures. A void forms around each particle when local stress exceeds interface cohesion strength.',
+    notes:[['#94a3b8','Particles: MnS stringers, oxide inclusions, carbide particles'],['#38bdf8','Interface decohesion or particle fracture initiates the void'],['#22c55e','Higher volume fraction → shorter void spacing → lower ductility']] },
+  { title:'2 — Void Growth',
+    desc:'Under continued loading, voids grow by plastic deformation of the surrounding matrix. Growth rate depends on the hydrostatic stress (triaxiality) — high constraint (notch) accelerates void growth. Voids grow in the maximum shear stress direction initially, then become more spherical.',
+    notes:[['#38bdf8','Void expands by plastic flow of matrix around it'],['#22c55e','High triaxiality (notch constraint) → rapid void growth'],['#fbbf24','Void shape: equiaxed initially; elongates under shear loading']] },
+  { title:'3 — Void Coalescence',
+    desc:'When adjacent voids approach a critical spacing, a neck forms between them. The neck fails by internal necking (plastic collapse) or by shear band linkage on a 45° plane. This is the fracture event that creates the dimpled surface.',
+    notes:[['#ef4444','Internal necking between adjacent voids — dominant at high triaxiality'],['#f97316','Shear band linkage on 45° plane — dominant at low triaxiality (shear lip)'],['#22c55e','Each coalesced void pair produces one dimple on final fracture surface']] },
+  { title:'4 — Fracture Surface Formation',
+    desc:'Complete fracture leaves a surface covered with equiaxed dimples in the fibrous zone (high triaxiality, centre) and elongated or parabolic dimples in the shear lip (plane-stress, 45°). Each dimple contains a particle fragment at its base.',
+    notes:[['#22c55e','Equiaxed dimples: biaxial stress state — centre of specimen'],['#86efac','Parabolic dimples: shear loading — at the 45° shear lip'],['#7dd3fc','Particle at dimple base: original nucleation site visible in SEM EDS']] },
+  { title:'5 — Final SEM Appearance',
+    desc:'In SEM, the fibrous zone shows equiaxed hemispherical dimples 1–50 μm in diameter depending on inclusion spacing. High-strength low-inclusion steels show smaller, more uniform dimples. Intergranular dimples indicate grain boundary weakness (temper embrittlement, sensitisation).',
+    notes:[['#22c55e','Dimple size inversely related to inclusion volume fraction'],['#7dd3fc','Shallow dimples: low ductility material; limited void growth before coalescence'],['#86efac','Deep dimples: high ductility; extensive void growth before fracture']] },
+];
+
+function drawMVC(step) {
+  const cv = document.getElementById('cv-mvc');
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#0f2040'; ctx.fillRect(0, 0, W, 22);
+  ctx.fillStyle = '#22c55e'; ctx.font = 'bold 10px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText('Microvoid Coalescence (MVC) — Step ' + (step + 1), 6, 15);
+
+  const matG = ctx.createLinearGradient(0, 22, 0, H);
+  matG.addColorStop(0, '#0f1e2f'); matG.addColorStop(1, '#0a1828');
+  ctx.fillStyle = matG; ctx.fillRect(0, 22, W, H - 22);
+
+  const particles = [
+    {x:70,y:100},{x:130,y:135},{x:195,y:88},{x:258,y:128},{x:318,y:95},
+    {x:105,y:188},{x:168,y:218},{x:232,y:192},{x:296,y:212},{x:350,y:172},
+    {x:58,y:248},{x:148,y:262},{x:215,y:255},{x:278,y:242},{x:338,y:256}
+  ];
+
+  particles.forEach((p, i) => {
+    const rngP = seeded(i * 77 + 5);
+    const vR = step === 0 ? 0 : step === 1 ? 6 + (i % 5) * 1.3 : step === 2 ? 11 + (i % 5) * 1.8 : 14 + (i % 5) * 2;
+
+    // Coalescence links (step 3+)
+    if (step >= 3 && i < particles.length - 1 && i % 3 !== 2) {
+      const p2 = particles[i + 1];
+      if (Math.hypot(p2.x - p.x, p2.y - p.y) < 92) {
+        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y);
+        ctx.strokeStyle = 'rgba(34,197,94,0.28)'; ctx.lineWidth = vR * 1.4; ctx.lineCap = 'round'; ctx.stroke();
+      }
+    }
+
+    // Void ring
+    if (step >= 1) {
+      const g2 = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, vR);
+      g2.addColorStop(0, 'rgba(34,197,94,0.22)'); g2.addColorStop(1, 'rgba(34,197,94,0.04)');
+      ctx.beginPath(); ctx.arc(p.x, p.y, vR, 0, Math.PI * 2);
+      ctx.fillStyle = g2; ctx.fill();
+      ctx.strokeStyle = 'rgba(34,197,94,0.45)'; ctx.lineWidth = 0.8; ctx.stroke();
+    }
+
+    // Particle
+    ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#94a3b8'; ctx.fill();
+  });
+
+  // Step 4+: dimpled surface view
+  if (step >= 4) {
+    ctx.fillStyle = 'rgba(6,14,28,0.75)'; ctx.fillRect(0, 22, W, H - 22);
+    ctx.font = 'bold 11px Segoe UI,Arial'; ctx.textAlign = 'center';
+    ctx.fillStyle = '#22c55e'; ctx.fillText('Fracture Surface — SEM Dimples', W / 2, 52);
+    const rngD = seeded(444);
+    for (let i = 0; i < 44; i++) {
+      const dx = 10 + rngD() * (W - 20), dy = 62 + rngD() * (H - 72);
+      const dr = 4 + rngD() * 11;
+      const g3 = ctx.createRadialGradient(dx + dr * 0.28, dy - dr * 0.28, 0, dx, dy, dr);
+      g3.addColorStop(0, '#7dd3fc'); g3.addColorStop(0.3, '#334155'); g3.addColorStop(1, '#1e293b');
+      ctx.beginPath(); ctx.arc(dx, dy, dr, 0, Math.PI * 2); ctx.fillStyle = g3; ctx.fill();
+      ctx.strokeStyle = 'rgba(71,85,105,0.4)'; ctx.lineWidth = 0.4; ctx.stroke();
+      if (rngD() > 0.58) { ctx.beginPath(); ctx.arc(dx, dy, 1.5, 0, Math.PI * 2); ctx.fillStyle = '#94a3b8'; ctx.fill(); }
+    }
+  }
+
+  if (step < 4) {
+    ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'center'; ctx.font = 'bold 11px Segoe UI,Arial';
+    ctx.fillText('▲ σ applied', W / 2, H - 10);
+    ctx.fillText('▼ σ applied', W / 2, 36);
+  }
+}
+
+function mvcStep(d) {
+  mvcN = Math.max(0, Math.min(4, mvcN + d));
+  drawMVC(mvcN);
+  const s = mvcData[mvcN];
+  document.getElementById('mvc-label').textContent = 'Step ' + (mvcN + 1) + ' of 5';
+  document.getElementById('mvc-title').textContent = s.title;
+  document.getElementById('mvc-desc').textContent = s.desc;
+  document.getElementById('mvc-notes').innerHTML = s.notes.map(n =>
+    `<div class="ann-item"><div class="ann-dot" style="background:${n[0]};"></div><div class="ann-text">${n[1]}</div></div>`).join('');
+  document.getElementById('mvc-prev').disabled = mvcN === 0;
+  document.getElementById('mvc-next').disabled = mvcN === 4;
+}
+
+// ── CLEAVAGE ANIMATION ─────────────────────────────────────────────────────
+let clN = 0;
+const clData = [
+  { title:'1 — Polycrystalline Structure Under Tensile Load',
+    desc:'A polycrystalline BCC steel under tensile loading. Each grain has a distinct crystallographic orientation. The {001} cleavage plane is oriented differently in each grain. Fracture initiates where the resolved tensile stress normal to {001} is highest — often at a stress concentration or grain boundary triple point.',
+    notes:[['#7dd3fc','Grains with differing crystallographic orientations (colour-coded)'],['#ef4444','Dashed ticks inside each grain = local {001} cleavage plane orientation'],['#fbbf24','Arrows: applied tensile stress direction (vertical)']] },
+  { title:'2 — Crack Initiation at Stress Concentration',
+    desc:'Brittle fracture initiates at a pre-existing defect — a notch, an inclusion-cracked particle, a grain boundary triple point, or a surface scratch. The local stress at the defect tip exceeds the cohesive strength of the {001} cleavage plane in the most favourably oriented grain. No plastic blunting occurs.',
+    notes:[['#ef4444','Crack initiation site at defect or boundary — marked in red'],['#f97316','Most favourably oriented grain (cleavage plane ⊥ stress) initiates first'],['#fca5a5','No plastic zone forms — no crack tip blunting; linear elastic fracture']] },
+  { title:'3 — Cleavage Crack Propagates Through Grains',
+    desc:'The crack runs along {001} at near-sonic speed. At each grain boundary, the crack must switch to the {001} orientation of the adjacent grain. This orientation mismatch creates steps on the fracture surface — the origin of river marks and cleavage tongues.',
+    notes:[['#ef4444','Crack on {001} plane — atomically flat within each grain'],['#fca5a5','At grain boundary: plane steps to match adjacent grain orientation'],['#f97316','Each step between cleavage planes → one river mark on fracture surface']] },
+  { title:'4 — Cleavage Facets and River Marks',
+    desc:'The final surface shows: (1) Cleavage facets — flat, bright patches each representing one grain; (2) River marks — fine parallel lines on each facet, each a step between sub-parallel cleavage planes within the grain; (3) River marks converge upstream toward the crack origin.',
+    notes:[['#ef4444','Cleavage facets: flat, bright; boundary = prior grain boundary'],['#fca5a5','River marks: step terraces between parallel {001} planes within a grain'],['#fbbf24','River marks converge toward the crack origin — use to locate initiation']] },
+];
+
+function drawCleavage(step) {
+  const cv = document.getElementById('cv-cleavage');
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#0f2040'; ctx.fillRect(0, 0, W, 22);
+  ctx.fillStyle = '#ef4444'; ctx.font = 'bold 10px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText('Cleavage Fracture Mechanism — Step ' + (step + 1), 6, 15);
+
+  const grains = [
+    {cx:78,cy:88,r:50,col:'#1a2d44',ang:0.2},{cx:170,cy:72,r:53,col:'#182a3a',ang:1.1},
+    {cx:268,cy:82,r:50,col:'#1c2e42',ang:0.6},{cx:335,cy:108,r:44,col:'#16243a',ang:1.8},
+    {cx:68,cy:172,r:52,col:'#182a3c',ang:2.2},{cx:162,cy:182,r:50,col:'#1b2c40',ang:0.9},
+    {cx:255,cy:188,r:52,col:'#192a3c',ang:1.4},{cx:340,cy:192,r:44,col:'#16243a',ang:0.4},
+  ];
+
+  grains.forEach((g) => {
+    ctx.beginPath(); ctx.arc(g.cx, g.cy, g.r, 0, Math.PI * 2);
+    ctx.fillStyle = g.col; ctx.fill();
+    ctx.strokeStyle = '#2d4a6a'; ctx.lineWidth = 1.5; ctx.stroke();
+    if (step < 3) {
+      ctx.save(); ctx.translate(g.cx, g.cy); ctx.rotate(g.ang);
+      ctx.beginPath(); ctx.moveTo(-18, 0); ctx.lineTo(18, 0);
+      ctx.strokeStyle = 'rgba(239,68,68,0.45)'; ctx.lineWidth = 1.4;
+      ctx.setLineDash([3, 2]); ctx.stroke(); ctx.setLineDash([]);
+      ctx.restore();
+    }
+  });
+
+  if (step >= 1) {
+    ctx.beginPath(); ctx.arc(128, 128, 5, 0, Math.PI * 2);
+    ctx.fillStyle = '#ef4444'; ctx.fill();
+    ctx.font = 'bold 9px Segoe UI,Arial'; ctx.textAlign = 'left';
+    ctx.fillStyle = '#ef4444'; ctx.fillText('Initiation', 138, 132);
+  }
+
+  if (step >= 2) {
+    ctx.beginPath(); ctx.moveTo(128, 128);
+    [[168,113],[208,116],[248,108],[286,106],[326,114]].forEach(([sx, sy]) => ctx.lineTo(sx, sy));
+    ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2.5; ctx.stroke();
+    [[168,113],[248,108],[286,106]].forEach(([bx, by]) => {
+      ctx.beginPath(); ctx.arc(bx, by, 4, 0, Math.PI * 2); ctx.fillStyle = '#fca5a5'; ctx.fill();
+      ctx.font = '8px Segoe UI,Arial'; ctx.textAlign = 'center';
+      ctx.fillStyle = '#fca5a5'; ctx.fillText('step', bx, by - 8);
+    });
+  }
+
+  if (step >= 3) {
+    const SX = 8, SY = H - 92, SW = W - 16, SH = 84;
+    ctx.fillStyle = '#060e1c'; ctx.fillRect(SX, SY, SW, SH);
+    ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 1; ctx.strokeRect(SX, SY, SW, SH);
+    ctx.fillStyle = '#ef4444'; ctx.font = 'bold 9px Segoe UI,Arial'; ctx.textAlign = 'left';
+    ctx.fillText('Cleavage surface: facets + river marks', SX + 4, SY + 13);
+    const rngR = seeded(999);
+    [[SX+10,SY+18,82,58],[SX+108,SY+18,82,58],[SX+206,SY+18,82,58]].forEach(([fx,fy,fw,fh], fi) => {
+      const br = 0.08 + fi * 0.07; const l = Math.floor(br * 255);
+      ctx.fillStyle = `rgb(${l+22},${l+32},${l+52})`; ctx.fillRect(fx, fy, fw, fh);
+      ctx.strokeStyle = 'rgba(148,163,184,0.25)'; ctx.lineWidth = 0.8; ctx.strokeRect(fx, fy, fw, fh);
+      for (let r2 = 0; r2 < 10; r2++) {
+        const ry = fy + 8 + r2 * (fh - 12) / 10;
+        ctx.beginPath(); ctx.moveTo(fx + rngR() * 12, ry);
+        ctx.lineTo(fx + fw - rngR() * 10, ry + (rngR() - 0.5) * 3);
+        ctx.strokeStyle = `rgba(248,113,113,${0.25 + rngR() * 0.38})`; ctx.lineWidth = 0.55; ctx.stroke();
+      }
+      ctx.font = '8px Segoe UI,Arial'; ctx.textAlign = 'center'; ctx.fillStyle = '#64748b';
+      ctx.fillText(['Grain 1', 'Grain 2', 'Grain 3'][fi], fx + fw / 2, fy + fh - 3);
+    });
+  }
+
+  if (step < 3) {
+    ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'center'; ctx.font = 'bold 12px Segoe UI,Arial';
+    ctx.fillText('▲ σ applied', W / 2, H - 8);
+    ctx.fillText('▼ σ applied', W / 2, 36);
+  }
+}
+
+function clStep(d) {
+  clN = Math.max(0, Math.min(3, clN + d));
+  drawCleavage(clN);
+  const s = clData[clN];
+  document.getElementById('cl-label').textContent = 'Step ' + (clN + 1) + ' of 4';
+  document.getElementById('cl-title').textContent = s.title;
+  document.getElementById('cl-desc').textContent = s.desc;
+  document.getElementById('cl-notes').innerHTML = s.notes.map(n =>
+    `<div class="ann-item"><div class="ann-dot" style="background:${n[0]};"></div><div class="ann-text">${n[1]}</div></div>`).join('');
+  document.getElementById('cl-prev').disabled = clN === 0;
+  document.getElementById('cl-next').disabled = clN === 3;
+}
+
+// ── FATIGUE ATLAS ──────────────────────────────────────────────────────────
+let atlasZ = 0;
+const atlasInfo = [
+  { title:'Macro View — Complete Fracture Face (1×)',
+    desc:'The complete fracture face of a rotating-bending fatigue specimen. The initiation site is at the surface (lower-left), where a stress concentration started the crack. Beach marks radiate outward as concentric arcs, recording load changes or corrosive interruptions during service. The final fracture zone (upper-right) is rough — remaining cross-section failed by overload.',
+    notes:[['#38bdf8','Initiation site — at surface; often at a stress concentration'],['#f59e0b','Beach marks — concentric arcs recording crack front position'],['#fcd34d','Ratchet marks — steps between adjacent initiation sites'],['#ef4444','Final fracture zone — rough overload; ductile dimples or cleavage']],
+    src:'Source: ASM Handbook Vol. 12; Forsyth Fatigue Fractography Atlas' },
+  { title:'Low Magnification (20×) — Beach Mark Spacing',
+    desc:'At 20× magnification, individual beach marks are clearly resolved. Spacing between beach marks records crack advance during each load block or service interval. Wide spacing = fast crack growth (high load); narrow spacing = slow growth (low load or corrosive crack arrest). The beach mark surface is smooth, polished by fretting between opposing fracture faces during each cycle.',
+    notes:[['#f59e0b','Beach mark spacing = crack advance per load block or service interval'],['#fbbf24','Smooth texture between marks — fretting contact on each cycle'],['#38bdf8','Narrow-to-wide transition = load increase event during service'],['#ef4444','Arrow shows crack growth direction (inward from initiation surface)']],
+    src:'Source: ASM Handbook Vol. 12 — Fatigue Fractography section' },
+  { title:'Medium Magnification (200×) — Striations Becoming Visible',
+    desc:'At 200× SEM, individual fatigue striations become just resolvable — fine parallel ridges perpendicular to local crack growth direction. Secondary cracks (small branches from the main crack front) are also visible. Striation spacing of 1–5 μm at this scale allows direct measurement of da/dN.',
+    notes:[['#fbbf24','Striations: fine parallel lines perpendicular to crack growth direction'],['#f97316','Secondary cracks: small branches from main crack front — indicate high ΔK'],['#38bdf8','Striation spacing = da/dN (crack growth per cycle)'],['#fcd34d','At Stage II (Paris regime): spacing ∝ ΔK² / (2σy·E)']],
+    src:'Source: ASM Vol. 12; Forsyth (1963) fatigue striation model' },
+  { title:'High Magnification SEM (2000×) — Individual Striations',
+    desc:'At 2000× SEM, each striation corresponds to exactly one load cycle (Forsyth-Laird model). The striation forms by crack-tip blunting on the tensile half-cycle (crack advances) and resharpening on the compressive half-cycle. Striation spacing here enables direct calculation of local da/dN and reconstruction of loading history.',
+    notes:[['#fbbf24','Each striation = 1 load cycle (Forsyth 1963; Laird 1967)'],['#f97316','Blunting: crack tip opens and advances on tensile half-cycle'],['#38bdf8','Resharpening: crack tip closes and sharpens on compressive half'],['#ef4444','Striation spacing 0.1–5 μm; measurable by SEM image analysis']],
+    src:'Source: Forsyth & Ryder (1960); Laird (1967); ASM Vol. 12 p.108' },
+];
+
+function drawAtlas(zoom) {
+  const cv = document.getElementById('cv-atlas');
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#0f2040'; ctx.fillRect(0, 0, W, 26);
+  ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 10px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText('Fatigue Atlas — ' + ['1×','20×','200×','2000×'][zoom], 6, 17);
+
+  if (zoom === 0) {
+    // Macro: full circular face
+    const CX = W / 2, CY = H / 2 + 14, R = Math.min(W, H) / 2 - 32;
+    const iX = CX - R * 0.72, iY = CY + R * 0.48;
+    ctx.save(); ctx.beginPath(); ctx.arc(CX, CY, R, 0, Math.PI * 2); ctx.clip();
+    ctx.fillStyle = '#0d1928'; ctx.fillRect(0, 0, W, H);
+    for (let i = 1; i <= 11; i++) {
+      const bR = i * R / 12;
+      const ang = Math.atan2(CY - iY, CX - iX);
+      const span = Math.PI * (0.5 + i * 0.028);
+      ctx.beginPath(); ctx.arc(iX, iY, bR, ang - span, ang + span);
+      ctx.strokeStyle = `rgba(${92+i*10},${122+i*8},${155+i*4},${0.36+i*0.028})`;
+      ctx.lineWidth = 0.8 + i * 0.1; ctx.stroke();
+    }
+    const rngFF = seeded(88);
+    const ffX = CX + R * 0.18, ffY = CY - R * 0.32;
+    for (let i = 0; i < 38; i++) {
+      const fx = ffX + (rngFF() - 0.5) * R * 0.65, fy = ffY + (rngFF() - 0.5) * R * 0.55;
+      if ((fx - CX) ** 2 + (fy - CY) ** 2 > R * R * 0.92) continue;
+      const fr = 3 + rngFF() * 8;
+      const g = ctx.createRadialGradient(fx, fy, 0, fx, fy, fr);
+      g.addColorStop(0, '#4b5563'); g.addColorStop(1, '#1e293b');
+      ctx.beginPath(); ctx.arc(fx, fy, fr, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill();
+    }
+    for (let i = 0; i < 4; i++) {
+      const ang = Math.PI * 0.46 + i * 0.14;
+      ctx.beginPath();
+      ctx.moveTo(CX + R * 0.83 * Math.cos(ang), CY + R * 0.83 * Math.sin(ang));
+      ctx.lineTo(CX + R * 0.97 * Math.cos(ang), CY + R * 0.97 * Math.sin(ang));
+      ctx.strokeStyle = '#fcd34d'; ctx.lineWidth = 2; ctx.stroke();
+    }
+    ctx.restore();
+    ctx.beginPath(); ctx.arc(CX, CY, R, 0, Math.PI * 2);
+    ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.beginPath(); ctx.arc(iX, iY, 6, 0, Math.PI * 2); ctx.fillStyle = '#38bdf8'; ctx.fill();
+    ctx.font = 'bold 9px Segoe UI,Arial';
+    ctx.fillStyle = 'rgba(10,22,40,0.88)'; ctx.fillRect(iX + 10, iY - 8, 56, 14);
+    ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left'; ctx.fillText('Initiation', iX + 12, iY + 3);
+    ctx.fillStyle = 'rgba(10,22,40,0.88)'; ctx.fillRect(CX - 38, CY - R * 0.15 - 8, 76, 14);
+    ctx.fillStyle = '#f59e0b'; ctx.textAlign = 'center'; ctx.fillText('Beach Marks', CX, CY - R * 0.15 + 3);
+    ctx.fillStyle = 'rgba(10,22,40,0.88)'; ctx.fillRect(ffX - 36, ffY - 8, 72, 14);
+    ctx.fillStyle = '#ef4444'; ctx.textAlign = 'center'; ctx.fillText('Final Fracture', ffX, ffY + 3);
+
+  } else if (zoom === 1) {
+    // Low mag: beach mark spacing with labels
+    ctx.fillStyle = '#0c1928'; ctx.fillRect(20, 36, W - 40, H - 46);
+    const rngB = seeded(222);
+    for (let i = 0; i < 9; i++) {
+      const y = 46 + i * (H - 56) / 9;
+      ctx.beginPath(); ctx.moveTo(20, y);
+      for (let x = 20; x < W - 20; x += 4) ctx.lineTo(x, y + (rngB() - 0.5) * 2.8);
+      ctx.strokeStyle = `rgba(${88+i*12},${125+i*9},${158+i*4},${0.42+i*0.035})`;
+      ctx.lineWidth = 0.8 + i * 0.1; ctx.stroke();
+    }
+    // Spacing indicator
+    const y1 = 46 + 2 * (H - 56) / 9, y2 = 46 + 3 * (H - 56) / 9;
+    const y3 = 46 + 6 * (H - 56) / 9, y4 = 46 + 7 * (H - 56) / 9;
+    ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(16, y1); ctx.lineTo(16, y2); ctx.stroke();
+    ctx.fillStyle = '#38bdf8'; ctx.font = '8px Segoe UI,Arial'; ctx.textAlign = 'right';
+    ctx.fillText('narrow', 15, (y1 + y2) / 2 + 3);
+    ctx.strokeStyle = '#ef4444';
+    ctx.beginPath(); ctx.moveTo(16, y3); ctx.lineTo(16, y4); ctx.stroke();
+    ctx.fillStyle = '#ef4444'; ctx.fillText('wide', 15, (y3 + y4) / 2 + 3);
+    ctx.fillStyle = '#f59e0b'; ctx.textAlign = 'center'; ctx.font = '9px Segoe UI,Arial';
+    ctx.fillText('← Crack growth direction (toward centre)', W / 2, H - 8);
+
+  } else if (zoom === 2) {
+    // Med mag: striations becoming visible
+    ctx.fillStyle = '#080f1e'; ctx.fillRect(20, 36, W - 40, H - 46);
+    const rngM = seeded(333);
+    const n = 48;
+    for (let i = 0; i < n; i++) {
+      const y = 42 + i * (H - 52) / n;
+      ctx.beginPath(); ctx.moveTo(20, y);
+      for (let x = 20; x < W - 20; x += 3) ctx.lineTo(x, y + (rngM() - 0.5) * 1.8);
+      ctx.strokeStyle = `rgba(251,191,36,${0.12 + i * (0.48 / n)})`; ctx.lineWidth = 0.5 + i * (0.7 / n); ctx.stroke();
+    }
+    const rngSC = seeded(444);
+    for (let i = 0; i < 5; i++) {
+      const sx = 60 + rngSC() * (W - 120), sy = 50 + rngSC() * (H - 80);
+      const sl = 12 + rngSC() * 28;
+      ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(sx + sl * (rngSC() - 0.3), sy + sl * 0.28);
+      ctx.strokeStyle = 'rgba(248,113,113,0.55)'; ctx.lineWidth = 0.8; ctx.stroke();
+    }
+    ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'center'; ctx.font = '9px Segoe UI,Arial';
+    ctx.fillText('← Striations (each = 1 cycle)', W / 2, H - 8);
+
+  } else {
+    // High mag: clear striations
+    ctx.fillStyle = '#060c18'; ctx.fillRect(20, 36, W - 40, H - 46);
+    const rngH = seeded(555);
+    const n2 = 62;
+    for (let i = 0; i < n2; i++) {
+      const y = 42 + i * (H - 52) / n2;
+      ctx.beginPath(); ctx.moveTo(20, y);
+      for (let x = 20; x < W - 20; x += 2) ctx.lineTo(x, y + (rngH() - 0.5) * 1.1);
+      ctx.strokeStyle = `rgba(251,191,36,${0.12 + i * (0.56 / n2)})`; ctx.lineWidth = 0.55 + i * (0.75 / n2); ctx.stroke();
+    }
+    // Measurement bracket for 1 striation
+    const s1y = 42 + 22 * (H - 52) / n2, s2y = 42 + 23 * (H - 52) / n2;
+    ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(W - 28, s1y); ctx.lineTo(W - 28, s2y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(W - 32, s1y); ctx.lineTo(W - 24, s1y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(W - 32, s2y); ctx.lineTo(W - 24, s2y); ctx.stroke();
+    ctx.fillStyle = '#38bdf8'; ctx.font = '8px Segoe UI,Arial'; ctx.textAlign = 'right';
+    ctx.fillText('1 cycle', W - 30, (s1y + s2y) / 2 + 3);
+    ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'center'; ctx.font = '9px Segoe UI,Arial';
+    ctx.fillText('da/dN = striation spacing', W / 2, H - 8);
+  }
+}
+
+function setZoom(z, btn) {
+  atlasZ = z;
+  document.querySelectorAll('.zoom-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  drawAtlas(z);
+  const d = atlasInfo[z];
+  document.getElementById('atlas-title').textContent = d.title;
+  document.getElementById('atlas-desc').textContent = d.desc;
+  document.getElementById('atlas-notes').innerHTML = d.notes.map(n =>
+    `<div class="ann-item"><div class="ann-dot" style="background:${n[0]};"></div><div class="ann-text">${n[1]}</div></div>`).join('');
+  document.getElementById('atlas-src').textContent = d.src;
+}
+
+// ── NIST CASE A ────────────────────────────────────────────────────────────
+function drawNistA() {
+  const cv = document.getElementById('cv-nist-a');
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#0f2040'; ctx.fillRect(0, 0, W, 22);
+  ctx.fillStyle = '#38bdf8'; ctx.font = 'bold 10px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText('Case A — High-Cycle Fatigue (Shaft at Keyway)', 6, 15);
+
+  const CX = W / 2, CY = H / 2 + 8, R = Math.min(W, H) / 2 - 28;
+  const kwW = 24, kwH = 20;
+  const iX = CX - kwW / 2, iY = CY - R + kwH;
+
+  ctx.save(); ctx.beginPath(); ctx.arc(CX, CY, R, 0, Math.PI * 2); ctx.clip();
+  ctx.fillStyle = '#0d1928'; ctx.fillRect(0, 0, W, H);
+  // Keyway cutout
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(CX - kwW / 2, CY - R, kwW, kwH);
+
+  // Beach marks (fine, high-cycle)
+  for (let i = 1; i <= 13; i++) {
+    const bR = i * R * 0.8 / 13;
+    const ang = Math.atan2(CY - iY, CX - iX);
+    const span = Math.PI * (0.58 + i * 0.022);
+    ctx.beginPath(); ctx.arc(iX, iY, bR, ang - span, ang + span);
+    ctx.strokeStyle = `rgba(${78+i*9},${112+i*7},${150+i*4},${0.38+i*0.022})`;
+    ctx.lineWidth = 0.5 + i * 0.05; ctx.stroke();
+  }
+
+  // Small final fracture zone
+  const rngFF = seeded(702);
+  const ffX = CX + R * 0.3, ffY = CY + R * 0.22;
+  for (let i = 0; i < 18; i++) {
+    const fx = ffX + (rngFF() - 0.5) * R * 0.38, fy = ffY + (rngFF() - 0.5) * R * 0.38;
+    if ((fx - CX) ** 2 + (fy - CY) ** 2 > R * R * 0.92) continue;
+    const fr = 2 + rngFF() * 6;
+    const g = ctx.createRadialGradient(fx, fy, 0, fx, fy, fr);
+    g.addColorStop(0, '#4b5563'); g.addColorStop(1, '#1e293b');
+    ctx.beginPath(); ctx.arc(fx, fy, fr, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill();
+  }
+  ctx.restore();
+
+  ctx.beginPath(); ctx.arc(CX, CY, R, 0, Math.PI * 2);
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1;
+  ctx.strokeRect(CX - kwW / 2, CY - R, kwW, kwH);
+
+  ctx.beginPath(); ctx.arc(iX, iY, 5, 0, Math.PI * 2); ctx.fillStyle = '#38bdf8'; ctx.fill();
+  ctx.font = 'bold 9px Segoe UI,Arial';
+  ctx.fillStyle = 'rgba(10,22,40,0.88)'; ctx.fillRect(iX + 8, iY - 8, 96, 14);
+  ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left'; ctx.fillText('Keyway corner initiation', iX + 10, iY + 3);
+  ctx.fillStyle = 'rgba(10,22,40,0.88)'; ctx.fillRect(CX - 38, CY - R * 0.08 - 8, 76, 14);
+  ctx.fillStyle = '#f59e0b'; ctx.textAlign = 'center'; ctx.fillText('Beach marks', CX, CY - R * 0.08 + 3);
+  ctx.fillStyle = 'rgba(10,22,40,0.88)'; ctx.fillRect(ffX - 35, ffY - 8, 70, 14);
+  ctx.fillStyle = '#ef4444'; ctx.textAlign = 'center'; ctx.fillText('Final (small)', ffX, ffY + 3);
+  ctx.fillStyle = '#64748b'; ctx.font = '8px Segoe UI,Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Keyway', CX, CY - R + kwH - 5);
+}
+
+// ── NIST CASE B ────────────────────────────────────────────────────────────
+function drawNistB() {
+  const cv = document.getElementById('cv-nist-b');
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  const rng = seeded(801);
+  ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#0f2040'; ctx.fillRect(0, 0, W, 22);
+  ctx.fillStyle = '#ef4444'; ctx.font = 'bold 10px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillText('Case B — Brittle Fracture (Pressure Vessel, −15°C)', 6, 15);
+
+  const FX = 12, FY = 28, FW = W - 24, FH = 160;
+  const bgG = ctx.createLinearGradient(FX, FY, FX + FW, FY + FH);
+  bgG.addColorStop(0, '#192535'); bgG.addColorStop(1, '#0f1d2a');
+  ctx.fillStyle = bgG; ctx.fillRect(FX, FY, FW, FH);
+
+  // Cleavage facets
+  const rngC = seeded(811);
+  for (let i = 0; i < 28; i++) {
+    const fx = FX + 6 + rngC() * (FW - 12), fy = FY + 6 + rngC() * (FH - 12);
+    const fs = 8 + rngC() * 16;
+    const br = 0.07 + rngC() * 0.2; const l = Math.floor(br * 255);
+    ctx.beginPath();
+    const nv = 4 + Math.floor(rngC() * 3);
+    for (let j = 0; j < nv; j++) {
+      const ang = (j / nv) * Math.PI * 2 + rngC() * 0.5;
+      const r2 = fs * (0.5 + rngC() * 0.58);
+      if (j === 0) ctx.moveTo(fx + r2 * Math.cos(ang), fy + r2 * Math.sin(ang));
+      else ctx.lineTo(fx + r2 * Math.cos(ang), fy + r2 * Math.sin(ang));
+    }
+    ctx.closePath(); ctx.fillStyle = `rgb(${l+24},${l+34},${l+54})`; ctx.fill();
+    ctx.strokeStyle = 'rgba(148,163,184,0.14)'; ctx.lineWidth = 0.5; ctx.stroke();
+  }
+
+  const oX = FX + 22, oY = FY + FH * 0.52;
+  // Chevron lines
+  for (let i = 0; i < 5; i++) {
+    const armY = FY + FH * (0.32 + i * 0.07);
+    ctx.beginPath(); ctx.moveTo(oX + 5, oY); ctx.lineTo(oX + FW * 0.52, armY);
+    ctx.strokeStyle = 'rgba(252,165,165,0.32)'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(oX + 5, oY); ctx.lineTo(oX + FW * 0.52, FY * 2 + FH - armY);
+    ctx.stroke();
+  }
+
+  // River marks
+  const rngR = seeded(822);
+  for (let i = 0; i < 20; i++) {
+    const rx1 = oX + rngR() * 22, ry1 = oY + (rngR() - 0.5) * 28;
+    const rx2 = FX + FW * 0.38 + rngR() * FW * 0.57, ry2 = FY + 8 + rngR() * (FH - 16);
+    ctx.beginPath(); ctx.moveTo(rx1, ry1);
+    ctx.quadraticCurveTo((rx1 + rx2) * 0.5 + (rngR() - 0.5) * 28, (ry1 + ry2) * 0.5 + (rngR() - 0.5) * 24, rx2, ry2);
+    ctx.strokeStyle = `rgba(248,113,113,${0.2 + rngR() * 0.32})`; ctx.lineWidth = 0.65; ctx.stroke();
+  }
+
+  ctx.beginPath(); ctx.arc(oX, oY, 6, 0, Math.PI * 2); ctx.fillStyle = '#ef4444'; ctx.fill();
+  ctx.font = 'bold 9px Segoe UI,Arial'; ctx.textAlign = 'left';
+  ctx.fillStyle = 'rgba(10,22,40,0.88)'; ctx.fillRect(oX + 10, oY - 8, 118, 14);
+  ctx.fillStyle = '#ef4444'; ctx.fillText('Origin: weld toe HAZ (HIC crack)', oX + 12, oY + 3);
+  ctx.fillStyle = 'rgba(10,22,40,0.88)'; ctx.fillRect(FX + FW - 118, FY + 5, 114, 14);
+  ctx.fillStyle = '#fca5a5'; ctx.fillText('Cleavage facets (bright)', FX + FW - 116, FY + 16);
+  ctx.fillStyle = 'rgba(10,22,40,0.88)'; ctx.fillRect(FX + FW - 118, FY + 23, 114, 14);
+  ctx.fillStyle = '#f87171'; ctx.fillText('River marks → origin', FX + FW - 116, FY + 34);
+
+  ctx.fillStyle = '#64748b'; ctx.font = '8px Segoe UI,Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Flat fracture — no shear lip (fully brittle at −15°C)', W / 2, FY + FH + 14);
+  ctx.fillStyle = '#475569'; ctx.fillText('Chevron pattern converges toward origin (left)', W / 2, FY + FH + 26);
+  ctx.fillStyle = '#475569'; ctx.textAlign = 'right';
+  ctx.fillText('Source: NIST Failure Analysis Case Studies', W - 14, H - 4);
+}
+
+// ── INIT ────────────────────────────────────────────────────────────────────
+window.addEventListener('load', function() {
+  drawDuctile(); drawBrittle(); drawFatigue();
+  drawMVC(0); drawCleavage(0);
+  setZoom(0, document.querySelector('.zoom-btn'));
+  drawNistA(); drawNistB();
+});
+</script>
+</body>
+</html>
