@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PREN – Stainless Steel Pitting Resistance</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f8fafc;color:#1e293b;line-height:1.6;}
+h1{font-size:1.35rem;font-weight:700;padding:1.4rem 1.5rem 0.3rem;color:#0f172a;}
+.subtitle{font-size:0.82rem;color:#64748b;padding:0 1.5rem 0.9rem;}
+.tab-bar{display:flex;background:#fff;border-bottom:2px solid #e2e8f0;position:sticky;top:0;z-index:10;}
+.tab-btn{padding:0.65rem 1.1rem;background:none;border:none;border-bottom:3px solid transparent;font-size:0.78rem;color:#64748b;cursor:pointer;white-space:nowrap;transition:all 0.2s;}
+.tab-btn:hover{color:#0f172a;background:#f1f5f9;}
+.tab-btn.active{color:#0369a1;border-bottom-color:#0369a1;font-weight:700;background:#fff;}
+.tab-panel{display:none;padding:1.4rem 1.5rem;}
+.tab-panel.active{display:block;}
+.source-tag{display:inline-block;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 8px;font-size:0.71rem;color:#64748b;margin-bottom:0.7rem;}
+.section-title{font-size:1rem;font-weight:700;color:#0f172a;margin:1.2rem 0 0.4rem;}
+.section-title:first-child{margin-top:0;}
+p{font-size:0.82rem;color:#334155;margin-bottom:0.7rem;line-height:1.6;}
+.formula-box{background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:8px;padding:1rem 1.2rem;margin:0.8rem 0;font-family:'Courier New',monospace;}
+.formula-main{font-size:1.1rem;font-weight:700;color:#0369a1;margin-bottom:0.4rem;}
+.formula-alt{font-size:0.9rem;color:#0284c7;margin-bottom:0.25rem;}
+.formula-note{font-size:0.75rem;color:#64748b;margin-top:0.5rem;font-family:'Segoe UI',Arial,sans-serif;}
+table{width:100%;border-collapse:collapse;font-size:0.78rem;margin:0.7rem 0;}
+th{background:#0369a1;color:#fff;padding:0.5rem 0.65rem;text-align:left;font-weight:600;}
+td{padding:0.45rem 0.65rem;border-bottom:1px solid #e2e8f0;vertical-align:top;}
+tr:nth-child(even)td{background:#f8fafc;}
+tr:hover td{background:#f0f9ff;}
+.pren-bar-cell{min-width:120px;}
+.pren-bar{height:12px;border-radius:3px;display:inline-block;vertical-align:middle;margin-right:6px;}
+.badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:0.68rem;font-weight:600;white-space:nowrap;}
+.badge-low{background:#fef2f2;color:#dc2626;border:1px solid #fca5a5;}
+.badge-med{background:#fefce8;color:#ca8a04;border:1px solid #fde68a;}
+.badge-good{background:#f0fdf4;color:#16a34a;border:1px solid #86efac;}
+.badge-high{background:#eff6ff;color:#2563eb;border:1px solid #93c5fd;}
+.badge-vhigh{background:#faf5ff;color:#7c3aed;border:1px solid #c4b5fd;}
+.threshold-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.75rem;margin:0.8rem 0;}
+.thresh-card{border-radius:7px;padding:0.75rem 0.9rem;border:1.5px solid;}
+.thresh-card h4{font-size:0.8rem;font-weight:700;margin-bottom:0.3rem;}
+.thresh-card p{font-size:0.74rem;margin:0;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.info-box{background:#fff;border:1px solid #e2e8f0;border-radius:7px;padding:0.85rem 1rem;margin:0.6rem 0;}
+.info-box h4{font-size:0.82rem;font-weight:700;color:#0f172a;margin-bottom:0.3rem;}
+.info-box p{font-size:0.75rem;color:#475569;margin:0;}
+.note-box{background:#fffbeb;border:1.5px solid #fde68a;border-radius:6px;padding:0.7rem 0.9rem;margin:0.8rem 0;font-size:0.78rem;color:#78350f;}
+.grade-highlight{font-weight:700;color:#0369a1;}
+@media(max-width:640px){.two-col{grid-template-columns:1fr;}.threshold-grid{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+
+<h1>Stainless Steel PREN – Pitting Resistance Equivalent Number</h1>
+<p class="subtitle">NACE International &nbsp;·&nbsp; ASTM A276 / A240 &nbsp;·&nbsp; ISO 15156 &nbsp;·&nbsp; Outokumpu Corrosion Handbook</p>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('formula',this)">Formula &amp; Definition</button>
+  <button class="tab-btn" onclick="showTab('grades',this)">Grade Comparison</button>
+  <button class="tab-btn" onclick="showTab('service',this)">Service Environment Guide</button>
+</div>
+
+<!-- TAB 1: Formula -->
+<div class="tab-panel active" id="tab-formula">
+  <div class="source-tag">NACE International · Outokumpu Corrosion Handbook · ISO 15156-3</div>
+
+  <p class="section-title">What Is PREN?</p>
+  <p>The Pitting Resistance Equivalent Number (PREN) is an empirically derived index that ranks stainless steels and nickel alloys by their resistance to pitting and crevice corrosion in chloride-containing environments. It is calculated from the mass percentages of the three elements that most strongly influence passive-film stability: chromium (Cr), molybdenum (Mo), and nitrogen (N).</p>
+  <p>PREN is not an absolute guarantee of performance — it must always be considered alongside temperature, chloride concentration, pH, and surface finish. However it is the industry-standard first-pass screening tool for alloy selection.</p>
+
+  <p class="section-title">Standard Formulas</p>
+  <div class="formula-box">
+    <div class="formula-main">PREN = %Cr + 3.3 × %Mo + 16 × %N</div>
+    <div class="formula-alt">PREN<sub>W</sub> = %Cr + 3.3 × (%Mo + 0.5 × %W) + 16 × %N &nbsp;&nbsp;(tungsten-bearing grades)</div>
+    <div class="formula-alt">PREN<sub>N</sub> = %Cr + 3.3 × %Mo + 30 × %N &nbsp;&nbsp;(high-nitrogen grades, some sources)</div>
+    <div class="formula-note">Coefficients: Cr = 1.0 (base former); Mo = 3.3 (strongly stabilises passive film, promotes repassivation); N = 16 or 30 (retards pit initiation, enriches at pit surface). All values are nominal wt% from the alloy specification midpoint.</div>
+  </div>
+
+  <div class="note-box">
+    <strong>Important:</strong> PREN is calculated from <em>nominal</em> composition midpoints. Heat-to-heat variation, surface condition (mill finish vs. pickled vs. electropolished), and heat-treatment history all shift actual pitting resistance significantly. Always use PREN as a comparative ranking tool, not an absolute threshold.
+  </div>
+
+  <p class="section-title">Role of Each Element</p>
+  <div class="two-col">
+    <div>
+      <div class="info-box">
+        <h4>Chromium (Cr) — coefficient 1.0</h4>
+        <p>Forms the primary Cr₂O₃ passive film. Minimum ~10.5 wt% required to be classified as stainless steel. Higher Cr widens the passive range and lowers the critical pitting temperature (CPT). Coefficient of 1.0 reflects its baseline contribution.</p>
+      </div>
+      <div class="info-box">
+        <h4>Molybdenum (Mo) — coefficient 3.3</h4>
+        <p>Most potent per-weight alloying element for pitting resistance. Enriches at the pit/crevice boundary as MoO₄²⁻, inhibiting pit propagation and promoting repassivation. Coefficient 3.3 reflects ~3× the effect of Cr per wt%. Above ~7 wt%, Mo destabilises the austenite matrix (sigma-phase risk).</p>
+      </div>
+    </div>
+    <div>
+      <div class="info-box">
+        <h4>Nitrogen (N) — coefficient 16</h4>
+        <p>Strongly stabilises austenite (allows Ni reduction in lean duplex), slows pit initiation by adsorbing at the passive film surface, and locally raises pH at pit fronts via NH₄⁺ formation. Coefficient 16–30 varies by source; 16 is standard for most duplex and austenitic grades.</p>
+      </div>
+      <div class="info-box">
+        <h4>Tungsten (W) — coefficient 1.65 (via Mo equivalency)</h4>
+        <p>Present in some super-duplex grades (e.g. Zeron 100, SAF 2507W). Similar mechanism to Mo but roughly half the effectiveness per wt%. Accounted for as 0.5 × %W added to %Mo in the PREN<sub>W</sub> formula. Coefficient reflects 3.3 × 0.5 = 1.65.</p>
+      </div>
+    </div>
+  </div>
+
+  <p class="section-title">PREN Threshold Bands</p>
+  <div class="threshold-grid">
+    <div class="thresh-card" style="border-color:#fca5a5;background:#fef2f2;">
+      <h4 style="color:#dc2626;">PREN &lt; 18</h4>
+      <p style="color:#7f1d1d;">Low resistance. Not suitable for chloride service. Risk of pitting even in potable water at elevated temperature.</p>
+    </div>
+    <div class="thresh-card" style="border-color:#fde68a;background:#fefce8;">
+      <h4 style="color:#ca8a04;">PREN 18–25</h4>
+      <p style="color:#713f12;">Moderate. Suitable for fresh water, mild industrial, food processing. Not recommended above ~50 °C in chloride.</p>
+    </div>
+    <div class="thresh-card" style="border-color:#86efac;background:#f0fdf4;">
+      <h4 style="color:#16a34a;">PREN 25–35</h4>
+      <p style="color:#14532d;">Good. Handles moderate chloride (brackish water, marine atmosphere, dilute process streams). 316L comfortable here.</p>
+    </div>
+    <div class="thresh-card" style="border-color:#93c5fd;background:#eff6ff;">
+      <h4 style="color:#2563eb;">PREN 35–40</h4>
+      <p style="color:#1e3a8a;">High. Suitable for seawater at moderate temperature (&lt;40 °C), aggressive chemical processing. 2205 and 904L range.</p>
+    </div>
+    <div class="thresh-card" style="border-color:#c4b5fd;background:#faf5ff;">
+      <h4 style="color:#7c3aed;">PREN &gt; 40</h4>
+      <p style="color:#4c1d95;">Very high. Full seawater service, offshore, desalination, hot chloride acids. Super duplex and 6Mo austenitic range.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: Grade Comparison -->
+<div class="tab-panel" id="tab-grades">
+  <div class="source-tag">ASTM A240 / A276 · EN 10088 · Outokumpu Corrosion Handbook · NACE MR0175 / ISO 15156</div>
+
+  <p>Nominal compositions are specification midpoints; actual PREN varies with heat chemistry. Values calculated using PREN = %Cr + 3.3×%Mo + 16×%N.</p>
+
+  <p class="section-title">Austenitic Grades</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Grade (UNS)</th>
+        <th>EN / W.Nr.</th>
+        <th>%Cr</th>
+        <th>%Mo</th>
+        <th>%N</th>
+        <th>PREN</th>
+        <th>Rating</th>
+        <th>Typical Service Environments</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="grade-highlight">304 (S30400)</td>
+        <td>1.4301</td>
+        <td>18.2</td>
+        <td>—</td>
+        <td>0.05</td>
+        <td><strong>19.0</strong>
+          <div class="pren-bar-cell"><div class="pren-bar" style="width:38px;background:#dc2626;"></div></div>
+        </td>
+        <td><span class="badge badge-low">18–25</span></td>
+        <td>Food &amp; beverage, architecture, mild chemicals, potable water (below 50 °C, low Cl⁻)</td>
+      </tr>
+      <tr>
+        <td>304L (S30403)</td>
+        <td>1.4307</td>
+        <td>18.2</td>
+        <td>—</td>
+        <td>0.04</td>
+        <td><strong>18.8</strong>
+          <div class="pren-bar-cell"><div class="pren-bar" style="width:37px;background:#dc2626;"></div></div>
+        </td>
+        <td><span class="badge badge-low">18–25</span></td>
+        <td>Same as 304; preferred for welded fabrication (lower C reduces sensitisation risk)</td>
+      </tr>
+      <tr>
+        <td>321 (S32100)</td>
+        <td>1.4541</td>
+        <td>17.5</td>
+        <td>—</td>
+        <td>0.05</td>
+        <td><strong>18.3</strong>
+          <div class="pren-bar-cell"><div class="pren-bar" style="width:36px;background:#dc2626;"></div></div>
+        </td>
+        <td><span class="badge badge-low">18–25</span></td>
+        <td>High-temperature service with Ti stabilisation; similar pitting resistance to 304</td>
+      </tr>
+      <tr>
+        <td class="grade-highlight">316 (S31600)</td>
+        <td>1.4401</td>
+        <td>17.2</td>
+        <td>2.1</td>
+        <td>0.05</td>
+        <td><strong>25.1</strong>
+          <div class="pren-bar-cell"><div class="pren-bar" style="width:50px;background:#ca8a04;"></div></div>
+        </td>
+        <td><span class="badge badge-med">25–35</span></td>
+        <td>Marine atmosphere, coastal construction, pharmaceutical, dilute acids, moderate Cl⁻ process</td>
+      </tr>
+      <tr>
+        <td class="grade-highlight">316L (S31603)</td>
+        <td>1.4404</td>
+        <td>17.2</td>
+        <td>2.1</td>
+        <td>0.05</td>
+        <td><strong>25.1</strong>
+          <div class="pren-bar-cell"><div class="pren-bar" style="width:50px;background:#ca8a04;"></div></div>
+        </td>
+        <td><span class="badge badge-med">25–35</span></td>
+        <td>Welded construction in marine/chemical service; preferred over 316 for most weldments</td>
+      </tr>
+      <tr>
+        <td>317L (S31703)</td>
+        <td>1.4438</td>
+        <td>18.5</td>
+        <td>3.1</td>
+        <td>0.05</td>
+        <td><strong>29.7</strong>
+          <div class="pren-bar-cell"><div class="pren-bar" style="width:59px;background:#16a34a;"></div></div>
+        </td>
+        <td><span class="badge badge-good">25–35</span></td>
+        <td>Pulp &amp; paper, sulphite processes, more aggressive acids than 316L</td>
+      </tr>
+      <tr>
+        <td>904L (N08904)</td>
+        <td>1.4539</td>
+        <td>20.0</td>
+        <td>4.5</td>
+        <td>0.06</td>
+        <td><strong>35.8</strong>
+          <div class="pren-bar-cell"><div class="pren-bar" style="width:72px;background:#2563eb;"></div></div>
+        </td>
+        <td><span class="badge badge-high">35–40</span></td>
+        <td>Sulphuric acid, phosphoric acid, seawater heat exchangers (borderline), wet chloride gas</td>
+      </tr>
+      <tr>
+        <td>254 SMO (S31254)</td>
+        <td>1.4547</td>
+        <td>20.0</td>
+        <td>6.1</td>
+        <td>0.20</td>
+        <td><strong>43.4</strong>
+          <div class="pren-bar-cell"><div class="pren-bar" style="width:87px;background:#7c3aed;"></div></div>
+        </td>
+        <td><span class="badge badge-vhigh">&gt; 40</span></td>
+        <td>Seawater systems, desalination, bleach plants, offshore, FGD scrubbers</td>
+      </tr>
+      <tr>
+        <td>AL-6XN (N08367)</td>
+        <td>—</td>
+        <td>21.0</td>
+        <td>6.5</td>
+        <td>0.22</td>
+        <td><strong>47.0</strong>
+          <div class="pren-bar-cell"><div class="pren-bar" style="width:94px;background:#7c3aed;"></div></div>
+        </td>
+        <td><span class="badge badge-vhigh">&gt; 40</span></td>
+        <td>Marine, offshore, chemical processing, naval applications, seawater piping</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="section-title">Ferritic &amp; Duplex Grades</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Grade (UNS)</th>
+        <th>EN / W.Nr.</th>
+        <th>%Cr</th>
+        <th>%Mo</th>
+        <th>%N</th>
+        <th>PREN</th>
+        <th>Rating</th>
+        <th>Typical Service Environments</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>430 (S43000)</td>
+        <td>1.4016</td>
+        <td>16.5</td>
+        <td>—</td>
+        <td>0.03</td>
+        <td><strong>17.0</strong>
+          <div class="pren-bar-cell"><div class="pren-bar" style="width:34px;background:#dc2626;"></div></div>
+        </td>
+        <td><span class="badge badge-low">&lt; 18</span></td>
+        <td>Indoor architectural, appliances, mild atmospheric; avoid chloride service</td>
+      </tr>
+      <tr>
+        <td>2101 Lean Duplex (S32101)</td>
+        <td>1.4162</td>
+        <td>21.5</td>
+        <td>0.3</td>
+        <td>0.22</td>
+        <td><strong>25.5</strong>
+          <div class="pren-bar-cell"><div class="pren-bar" style="width:51px;background:#ca8a04;"></div></div>
+        </td>
+        <td><span class="badge badge-med">25–35</span></td>
+        <td>Structural, storage tanks, bridges, mild chemical service; good SCC resistance</td>
+      </tr>
+      <tr>
+        <td class="grade-highlight">2205 Duplex (S32205)</td>
+        <td>1.4462</td>
+        <td>22.0</td>
+        <td>3.1</td>
+        <td>0.17</td>
+        <td><strong>35.6</strong>
+          <div class="pren-bar-cell"><div class="pren-bar" style="width:71px;background:#2563eb;"></div></div>
+        </td>
+        <td><span class="badge badge-high">35–40</span></td>
+        <td>Oil &amp; gas pipelines, offshore topsides, pulp &amp; paper, chemical tankers, marine hardware</td>
+      </tr>
+      <tr>
+        <td class="grade-highlight">2507 Super Duplex (S32750)</td>
+        <td>1.4410</td>
+        <td>25.0</td>
+        <td>4.0</td>
+        <td>0.27</td>
+        <td><strong>43.5</strong>
+          <div class="pren-bar-cell"><div class="pren-bar" style="width:87px;background:#7c3aed;"></div></div>
+        </td>
+        <td><span class="badge badge-vhigh">&gt; 40</span></td>
+        <td>Subsea umbilicals, seawater injection, FGD, desalination, offshore risers</td>
+      </tr>
+      <tr>
+        <td>Zeron 100 (S32760)</td>
+        <td>1.4501</td>
+        <td>25.0</td>
+        <td>3.7</td>
+        <td>0.25</td>
+        <td><strong>42.2</strong>
+          <div class="pren-bar-cell"><div class="pren-bar" style="width:84px;background:#7c3aed;"></div></div>
+        </td>
+        <td><span class="badge badge-vhigh">&gt; 40</span></td>
+        <td>Similar to 2507; includes W (PREN<sub>W</sub> ≈ 45); pumps, valves, subsea hardware</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note-box">
+    <strong>Key Takeaway — 304 vs. 316 vs. 2205:</strong> The Mo addition in 316/316L raises PREN from ~19 to ~25 — enough to handle marine atmosphere and mild process chloride. Moving to 2205 duplex (PREN ~36) adds both Mo and N, roughly doubling chloride resistance over 316L while also doubling yield strength. 2507 super duplex at PREN ~44 is the threshold for reliable seawater immersion service.
+  </div>
+</div>
+
+<!-- TAB 3: Service Environment Guide -->
+<div class="tab-panel" id="tab-service">
+  <div class="source-tag">NACE International · Outokumpu Stainless Steel Selection Guide · ISO 15156 / NACE MR0175</div>
+
+  <p>This guide maps PREN ranges to service environments. Critical pitting temperature (CPT) and critical crevice temperature (CCT) data from ASTM G48 (6% FeCl₃ test) provide additional discrimination within PREN bands.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>PREN Range</th>
+        <th>Representative Grades</th>
+        <th>CPT (ASTM G48B, °C)</th>
+        <th>Suitable Environments</th>
+        <th>Avoid</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-low">&lt; 18</span></td>
+        <td>430, 409, 410</td>
+        <td>&lt; 0</td>
+        <td>Indoor architecture, dry atmospheric, mild rural atmosphere, appliances</td>
+        <td>Any chloride-containing water, coastal/marine, chemical process</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-low">18–22</span></td>
+        <td>304, 304L, 321</td>
+        <td>0–15</td>
+        <td>Potable water (&lt; 200 ppm Cl⁻, &lt; 50 °C), food processing, mild chemicals, indoor marine atmosphere</td>
+        <td>Direct seawater immersion, heated brine, coastal splash zones</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-med">22–28</span></td>
+        <td>316, 316L, 316Ti</td>
+        <td>15–25</td>
+        <td>Marine atmosphere (not splash), coastal construction, pharmaceuticals, dilute HCl and H₂SO₄, process water up to 1000 ppm Cl⁻</td>
+        <td>Seawater immersion, hot concentrated chloride, crevices in seawater</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-med">28–35</span></td>
+        <td>317L, 316LN, 2101 Lean Duplex</td>
+        <td>25–35</td>
+        <td>Pulp &amp; paper liquors, aggressive industrial atmospheres, brackish water, chemical tanker cargo holds</td>
+        <td>Hot seawater, strong reducing acids without inhibitor, crevice contact in seawater</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-high">35–40</span></td>
+        <td>904L, 2205 Duplex</td>
+        <td>35–50</td>
+        <td>Seawater at ambient temperature (&lt; 35 °C), offshore topsides, desalination pre-treatment, FGD wet scrubbers, oil &amp; gas production (sour service with NACE MR0175 compliance)</td>
+        <td>Hot seawater (&gt; 40 °C) in stagnant/crevice conditions, very high Cl⁻ brines</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-vhigh">40–45</span></td>
+        <td>2507 Super Duplex, Zeron 100, 254 SMO</td>
+        <td>50–70</td>
+        <td>Seawater injection and cooling (&lt; 50 °C), subsea umbilicals, offshore risers, desalination evaporators, bleach production, hot HCl/H₂SO₄</td>
+        <td>Hot seawater above 60 °C in stagnant crevices; highly reducing hot acids</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-vhigh">&gt; 45</span></td>
+        <td>AL-6XN, 654 SMO, Ni-alloys (C-276)</td>
+        <td>&gt; 70</td>
+        <td>Hot seawater systems, subsea wellheads, concentrated HCl, wet chlorine/chlorine dioxide, aggressive sour gas service</td>
+        <td>Very few inorganic media problematic; cost limits scope of application</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="section-title">Chloride Concentration vs. Temperature Risk Map</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Cl⁻ Concentration</th>
+        <th>&lt; 30 °C</th>
+        <th>30–60 °C</th>
+        <th>60–100 °C</th>
+        <th>&gt; 100 °C</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>&lt; 200 ppm</strong> (potable water)</td>
+        <td>304 adequate</td>
+        <td>316L preferred</td>
+        <td>316L or 2205</td>
+        <td>2205 minimum</td>
+      </tr>
+      <tr>
+        <td><strong>200–1000 ppm</strong></td>
+        <td>316L adequate</td>
+        <td>316L / 2205</td>
+        <td>2205 minimum</td>
+        <td>2507 / 6Mo</td>
+      </tr>
+      <tr>
+        <td><strong>1000–5000 ppm</strong></td>
+        <td>316L / 2205</td>
+        <td>2205 minimum</td>
+        <td>2507 / 6Mo</td>
+        <td>Ni-alloy (C-276)</td>
+      </tr>
+      <tr>
+        <td><strong>Seawater (~19,000 ppm)</strong></td>
+        <td>2205 minimum</td>
+        <td>2507 / 6Mo</td>
+        <td>Ni-alloy or Ti</td>
+        <td>Ti / C-276</td>
+      </tr>
+      <tr>
+        <td><strong>Brine (&gt; 50,000 ppm)</strong></td>
+        <td>2507 / 6Mo</td>
+        <td>Ni-alloy or Ti</td>
+        <td>Ti / C-276</td>
+        <td>Ti or C-22</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="section-title">Additional Selection Considerations</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Factor</th>
+        <th>Effect on PREN Requirement</th>
+        <th>Guidance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Crevice geometry present</td>
+        <td>Raises required PREN by ~5–8 units (CCT &lt; CPT by ~15–20 °C)</td>
+        <td>Specify CCT rather than CPT; design to eliminate crevices where possible</td>
+      </tr>
+      <tr>
+        <td>Weld heat-affected zone</td>
+        <td>Local Cr depletion in austenitic grades can reduce effective PREN by ~2–3 units</td>
+        <td>Use L-grade or stabilised grade; post-weld anneal or pickle/passivate</td>
+      </tr>
+      <tr>
+        <td>Surface finish</td>
+        <td>Ra 0.5 µm (electropolished) vs. Ra 3.2 µm (mill finish) can shift CPT by ~10 °C</td>
+        <td>Specify surface finish in addition to PREN for critical applications</td>
+      </tr>
+      <tr>
+        <td>pH &lt; 5</td>
+        <td>Passive film destabilised; effective PREN reduced; need higher-Mo grade</td>
+        <td>Consult corrosion engineer; consider Ni-alloys or Ti if pH &lt; 3 with chloride</td>
+      </tr>
+      <tr>
+        <td>SCC risk (austenitic SS)</td>
+        <td>PREN does not address SCC; duplex grades inherently more resistant</td>
+        <td>Use duplex (2205, 2507) in hot chloride + tensile stress environments regardless of PREN</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+function showTab(name,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

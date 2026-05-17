@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corrosion – Galvanic Series, Types &amp; Electrochemical Cell</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh;}
+h1{text-align:center;padding:1.4rem 1rem 0.3rem;font-size:1.35rem;color:#f1f5f9;}
+.subtitle{text-align:center;color:#94a3b8;font-size:0.82rem;margin-bottom:0.8rem;}
+.tab-bar{display:flex;background:#1e293b;border-bottom:2px solid #334155;position:sticky;top:0;z-index:10;}
+.tab-btn{flex:1;padding:0.65rem 0.4rem;background:none;border:none;color:#94a3b8;font-size:0.77rem;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;text-align:center;}
+.tab-btn:hover{color:#e2e8f0;background:#253047;}
+.tab-btn.active{color:#38bdf8;border-bottom-color:#38bdf8;background:#1e293b;font-weight:700;}
+.tab-panel{display:none;padding:1.2rem 1.4rem;}
+.tab-panel.active{display:block;}
+.source-tag{display:inline-block;background:#1e293b;border:1px solid #334155;border-radius:4px;padding:2px 8px;font-size:0.71rem;color:#64748b;margin-bottom:0.6rem;}
+.section-sub{font-size:0.79rem;color:#94a3b8;margin-bottom:1rem;line-height:1.5;}
+.source-note{font-size:0.74rem;color:#64748b;margin-top:0.8rem;line-height:1.5;}
+canvas{display:block;border-radius:6px;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.card{background:#1e293b;border:1px solid #334155;border-radius:8px;padding:0.9rem;}
+.card h3{font-size:0.83rem;color:#f1f5f9;margin-bottom:0.45rem;}
+.card p{font-size:0.74rem;color:#94a3b8;line-height:1.55;}
+.corr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1rem;}
+.corr-card{background:#1e293b;border:1px solid #334155;border-radius:8px;overflow:hidden;}
+.corr-card-hdr{padding:0.55rem 0.85rem;font-size:0.83rem;font-weight:700;}
+.corr-card-body{padding:0 0.85rem 0.85rem;}
+.corr-row{display:flex;gap:0.45rem;margin-top:0.45rem;}
+.corr-lbl{font-size:0.69rem;color:#64748b;font-weight:700;min-width:88px;padding-top:2px;flex-shrink:0;}
+.corr-val{font-size:0.71rem;color:#cbd5e1;line-height:1.45;}
+.ctrl-row{display:flex;gap:0.5rem;margin-bottom:0.75rem;flex-wrap:wrap;align-items:center;}
+.ctrl-btn{padding:0.28rem 0.7rem;background:#1e293b;border:1px solid #334155;border-radius:4px;color:#94a3b8;font-size:0.74rem;cursor:pointer;transition:all 0.15s;}
+.ctrl-btn:hover{border-color:#38bdf8;color:#38bdf8;}
+.ctrl-btn.active{background:#0c4a6e;border-color:#38bdf8;color:#38bdf8;font-weight:700;}
+@media(max-width:650px){.two-col{grid-template-columns:1fr;}.corr-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<h1>Corrosion – Galvanic Series, Types &amp; Electrochemical Cell</h1>
+<p class="subtitle">ASM International &nbsp;·&nbsp; NACE International &nbsp;·&nbsp; Fontana Corrosion Engineering</p>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('galvanic',this)">Galvanic Series</button>
+  <button class="tab-btn" onclick="showTab('types',this)">Corrosion Types</button>
+  <button class="tab-btn" onclick="showTab('cell',this)">Electrochemical Cell</button>
+</div>
+
+<!-- TAB 1 -->
+<div class="tab-panel active" id="tab-galvanic">
+  <div class="source-tag">ASM International · NACE SP0176 · Fontana &amp; Greene — Seawater, 25 °C, SCE reference</div>
+  <p class="section-sub">Metals listed from most active (anodic, negative potential) to most noble (cathodic, positive potential). When two metals are coupled in seawater, the more active one corrodes preferentially.</p>
+  <canvas id="cvGalvanic" width="820" height="620" style="width:100%;"></canvas>
+  <p class="source-note">Half-cell potentials are approximate vs. saturated calomel electrode (SCE) in flowing seawater. Dashed outlines indicate passive range. Larger potential difference between coupled metals = greater galvanic driving force.</p>
+</div>
+
+<!-- TAB 2 -->
+<div class="tab-panel" id="tab-types">
+  <div class="source-tag">ASM International Vol. 13A · NACE International · TWI Corrosion Library</div>
+  <p class="section-sub">Seven major corrosion morphologies. Canvas simulations show characteristic cross-section or surface view; key appearance, location, and distinguishing visual cues listed below each image.</p>
+  <div class="corr-grid" id="corrGrid"></div>
+  <p class="source-note">All images are procedurally generated canvas simulations — visual features exaggerated for clarity. No copyrighted micrographs are embedded.</p>
+</div>
+
+<!-- TAB 3 -->
+<div class="tab-panel" id="tab-cell">
+  <div class="source-tag">Fontana Corrosion Engineering · ASM International · NACE</div>
+  <p class="section-sub">Daniell cell (Zn | ZnSO₄ ‖ CuSO₄ | Cu) illustrating the fundamental electrochemical principles underlying galvanic corrosion. Animate to show electron and ion migration.</p>
+  <div class="ctrl-row">
+    <button class="ctrl-btn" id="btnAnim" onclick="toggleAnim()">▶ Animate</button>
+    <button class="ctrl-btn" onclick="resetCell()">↺ Reset</button>
+  </div>
+  <canvas id="cvCell" width="720" height="415" style="width:100%;"></canvas>
+  <div class="two-col" style="margin-top:1rem;">
+    <div class="card">
+      <h3>Anode (−) — Oxidation — Zinc</h3>
+      <p>Zn → Zn²⁺ + 2e⁻ &nbsp;|&nbsp; E° = −0.76 V (SHE)<br>Metal dissolves; electrons flow through external circuit toward cathode. Active (more negative) electrode always acts as anode in galvanic pair.</p>
+    </div>
+    <div class="card">
+      <h3>Cathode (+) — Reduction — Copper</h3>
+      <p>Cu²⁺ + 2e⁻ → Cu &nbsp;|&nbsp; E° = +0.34 V (SHE)<br>Metal deposits from solution. In open-circuit corrosion, O₂ or H⁺ is reduced instead. Cell EMF = E_cathode − E_anode = 1.10 V.</p>
+    </div>
+  </div>
+  <p class="source-note">In real corrosion the anode and cathode are on the same metal surface in one electrolyte; separate half-cells shown here for instructional clarity. Cations migrate toward cathode; anions migrate toward anode through solution.</p>
+</div>
+
+<p style="text-align:center;padding:1.2rem 0 0.2rem;"><a href="index.html" style="color:#38bdf8;font-size:0.82rem;">← Back to Visualizations</a></p>
+
+<script>
+// ── helpers ──────────────────────────────────────────────────────────────────
+function mkRng(seed){
+  let s=seed>>>0;
+  return ()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296;};
+}
+function getCtx(id){
+  const cv=document.getElementById(id);
+  if(!cv)return null;
+  const dpr=window.devicePixelRatio||1;
+  if(!cv.dataset.lw){cv.dataset.lw=cv.width||820;cv.dataset.lh=cv.height||400;}
+  const W=+cv.dataset.lw,H=+cv.dataset.lh;
+  cv.style.width=W+'px';cv.style.height=H+'px';
+  cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
+  const ctx=cv.getContext('2d');
+  ctx.scale(dpr,dpr);
+  return{cv,ctx,W,H};
+}
+function showTab(name,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+  if(name==='galvanic')drawGalvanic();
+  if(name==='types')buildCorrGrid();
+  if(name==='cell')drawCell();
+}
+
+// ── TAB 1: Galvanic Series ───────────────────────────────────────────────────
+const GAL=[
+  ['Magnesium',           -1.73,-1.60,false,'#a78bfa'],
+  ['Zinc',                -1.05,-0.98,false,'#818cf8'],
+  ['Galvanized Steel',    -1.00,-0.90,false,'#93c5fd'],
+  ['Aluminum Alloys',     -0.90,-0.68,false,'#38bdf8'],
+  ['Cadmium',             -0.52,-0.45,false,'#34d399'],
+  ['Mild Steel / Iron',   -0.72,-0.58,false,'#4ade80'],
+  ['Cast Iron',           -0.70,-0.60,false,'#86efac'],
+  ['Lead–Tin Solder',     -0.45,-0.38,false,'#fde68a'],
+  ['Tin',                 -0.31,-0.25,false,'#fcd34d'],
+  ['Copper',              -0.36,-0.26,false,'#fb923c'],
+  ['Bronze (Cu–Sn)',      -0.32,-0.24,false,'#f97316'],
+  ['Brass (Cu–Zn)',       -0.30,-0.22,false,'#ea580c'],
+  ['Nickel–Copper (Monel)',-0.19,-0.12,false,'#e879f9'],
+  ['Nickel (active)',     -0.14,-0.07,false,'#d946ef'],
+  ['316 SS (active)',     -0.46,-0.35,false,'#64748b'],
+  ['Titanium',            -0.06, 0.06, true,'#22d3ee'],
+  ['316 SS (passive)',    -0.17, 0.10, true,'#0ea5e9'],
+  ['Nickel (passive)',    -0.12, 0.18, true,'#8b5cf6'],
+  ['Silver',               0.22, 0.30,false,'#d1d5db'],
+  ['Platinum',             0.36, 0.44,false,'#fbbf24'],
+  ['Gold',                 0.38, 0.46,false,'#f59e0b'],
+];
+
+function drawGalvanic(){
+  const cv=document.getElementById('cvGalvanic');
+  const cw=(cv.parentElement&&cv.parentElement.clientWidth)||820;
+  const ch=Math.max(580,GAL.length*25+90);
+  cv.dataset.lw=cw; cv.dataset.lh=ch;
+  const{ctx,W,H}=getCtx('cvGalvanic');
+
+  ctx.fillStyle='#0a1628';ctx.fillRect(0,0,W,H);
+
+  const ml=172,mr=110,mt=52,mb=38;
+  const vMin=-1.90,vMax=0.62,vRange=vMax-vMin;
+  const aw=W-ml-mr,ah=H-mt-mb;
+  const xV=v=>ml+(v-vMin)/vRange*aw;
+
+  // title
+  ctx.fillStyle='#f1f5f9';ctx.font='bold 13px Segoe UI,Arial';ctx.textAlign='center';
+  ctx.fillText('Galvanic Series in Seawater — Approximate Half-Cell Potentials vs. SCE',W/2,22);
+
+  // active / noble axis labels
+  ctx.fillStyle='#dc2626';ctx.font='bold 11px Segoe UI,Arial';ctx.textAlign='center';
+  ctx.fillText('◄ ACTIVE  (ANODIC)',ml+aw*0.18,40);
+  ctx.fillStyle='#16a34a';
+  ctx.fillText('NOBLE  (CATHODIC) ►',ml+aw*0.78,40);
+
+  // gradient bg
+  const grad=ctx.createLinearGradient(ml,0,ml+aw,0);
+  grad.addColorStop(0,'rgba(220,38,38,0.07)');
+  grad.addColorStop(0.5,'rgba(100,116,139,0.03)');
+  grad.addColorStop(1,'rgba(22,163,74,0.07)');
+  ctx.fillStyle=grad;ctx.fillRect(ml,mt,aw,ah);
+
+  // tick grid
+  for(let v=-1.8;v<=0.62;v+=0.2){
+    const x=xV(v);
+    ctx.strokeStyle='#1e293b';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(x,mt);ctx.lineTo(x,mt+ah);ctx.stroke();
+    ctx.fillStyle='#64748b';ctx.font='9px Segoe UI,Arial';ctx.textAlign='center';
+    ctx.fillText(v.toFixed(1)+'V',x,mt+ah+13);
+  }
+  // zero line
+  const x0=xV(0);
+  ctx.strokeStyle='#475569';ctx.lineWidth=1.5;ctx.setLineDash([5,4]);
+  ctx.beginPath();ctx.moveTo(x0,mt);ctx.lineTo(x0,mt+ah);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#94a3b8';ctx.font='bold 9px Segoe UI,Arial';ctx.textAlign='center';
+  ctx.fillText('0 V',x0,mt-6);
+
+  // rows
+  const rh=ah/GAL.length;
+  GAL.forEach(([name,v1,v2,passive,color],i)=>{
+    const y=mt+i*rh+rh*0.14;
+    const bh=rh*0.72;
+    const bx=xV(v1),bw=Math.max(xV(v2)-xV(v1),5);
+
+    ctx.fillStyle=passive?color+'44':color+'99';
+    ctx.fillRect(bx,y,bw,bh);
+    ctx.strokeStyle=color;ctx.lineWidth=passive?1.5:1;
+    ctx.setLineDash(passive?[3,2]:[]);
+    ctx.strokeRect(bx,y,bw,bh);ctx.setLineDash([]);
+
+    // name
+    ctx.fillStyle='#cbd5e1';ctx.font='10px Segoe UI,Arial';ctx.textAlign='right';
+    ctx.fillText(name+(passive?' (passive)':''),ml-6,y+bh/2+4);
+
+    // potential range right of bar
+    const vLabel=v1.toFixed(2)+' to '+v2.toFixed(2)+' V';
+    const tx=xV(v2)+4;
+    ctx.font='bold 8px Segoe UI,Arial';ctx.textAlign='left';
+    const tw=ctx.measureText(vLabel).width;
+    ctx.fillStyle='rgba(10,22,40,0.78)';ctx.fillRect(tx-1,y+1,tw+4,bh-2);
+    ctx.fillStyle=color;ctx.fillText(vLabel,tx+1,y+bh/2+3);
+  });
+
+  // legend box
+  const lx=W-105,ly=mt+6;
+  ctx.fillStyle='rgba(15,23,42,0.92)';ctx.fillRect(lx-4,ly-4,102,56);
+  ctx.strokeStyle='#334155';ctx.lineWidth=1;ctx.strokeRect(lx-4,ly-4,102,56);
+  ctx.fillStyle='#94a3b8';ctx.font='bold 9px Segoe UI,Arial';ctx.textAlign='left';
+  ctx.fillText('Legend',lx,ly+9);
+  ctx.fillStyle='#38bdf899';ctx.fillRect(lx,ly+16,28,10);
+  ctx.strokeStyle='#38bdf8';ctx.lineWidth=1;ctx.strokeRect(lx,ly+16,28,10);
+  ctx.fillStyle='#94a3b8';ctx.font='9px Segoe UI,Arial';ctx.fillText('Active range',lx+32,ly+25);
+  ctx.fillStyle='#38bdf844';ctx.fillRect(lx,ly+32,28,10);
+  ctx.setLineDash([3,2]);ctx.strokeStyle='#38bdf8';ctx.strokeRect(lx,ly+32,28,10);ctx.setLineDash([]);
+  ctx.fillStyle='#94a3b8';ctx.fillText('Passive range',lx+32,ly+41);
+}
+
+// ── TAB 2: Corrosion Types ───────────────────────────────────────────────────
+const CORR_TYPES=[
+  {name:'Uniform Corrosion',     color:'#f97316', draw:drawUniform,
+   app:'General thinning over entire exposed surface; rough pitted texture; uniform oxide/rust layer',
+   loc:'Entire exposed surface in contact with electrolyte',
+   cues:'Even material loss; predictable rate (mm/yr); no preferential sites; rust uniformly distributed'},
+  {name:'Galvanic Corrosion',    color:'#a78bfa', draw:drawGalvanicC,
+   app:'Accelerated attack concentrated at or near dissimilar metal junction; corroded rim around anode metal',
+   loc:'Interface of two metals with different electrode potentials in a common electrolyte',
+   cues:'Attack within ~10–20 mm of joint; noble metal unaffected; active metal sacrificed; increases with potential difference'},
+  {name:'Pitting Corrosion',     color:'#f43f5e', draw:drawPitting,
+   app:'Discrete deep hemispherical or cylindrical cavities, often with corrosion-product lid; small mouth relative to depth',
+   loc:'Passive alloys (304/316 SS, aluminium, titanium) in Cl⁻-containing environments',
+   cues:'Aspect ratio depth/width > 1; autocatalytic; hard to detect; Cl⁻ concentration inside pit > bulk; low pH inside'},
+  {name:'Crevice Corrosion',     color:'#f59e0b', draw:drawCrevice,
+   app:'Localised attack inside tight gaps; outer surface intact; brown/orange deposit at crevice mouth',
+   loc:'Under gaskets, washers, flanges, lap joints, O-rings, bolt heads',
+   cues:'Requires gap ≤ 0.1 mm; pH drop and Cl⁻ concentration inside gap; outside surface acts as cathode'},
+  {name:'Stress Corrosion Cracking', color:'#ef4444', draw:drawSCC,
+   app:'Fine branching cracks (transgranular or intergranular); little macroscopic plastic deformation; minimal bulk metal loss',
+   loc:'High-stress or residual-stress zones; weld HAZ; cold-worked areas',
+   cues:'Requires susceptible alloy + tensile stress + specific environment simultaneously; often catastrophic and sudden'},
+  {name:'Intergranular Corrosion',color:'#22d3ee', draw:drawIntergranular,
+   app:'Preferential attack along grain boundaries; grains loosen and fall out; grainy or granular surface texture',
+   loc:'Sensitised stainless steel (450–850 °C range); Al–Cu alloys at grain boundaries',
+   cues:'Chromium carbide precipitation depletes Cr at grain boundaries ("weld decay"); mechanical strength drops sharply'},
+  {name:'Erosion-Corrosion',     color:'#4ade80', draw:drawErosionC,
+   app:'Directional grooves, horseshoe-shaped pits, smooth upstream face, rough downstream; thinning follows flow pattern',
+   loc:'Pipe bends, elbows, pump impellers, heat-exchanger inlets, valve seats, turbine blades',
+   cues:'Flow direction visible in damage pattern; protective film mechanically removed; rate increases with velocity and turbulence'},
+];
+
+function buildCorrGrid(){
+  const grid=document.getElementById('corrGrid');
+  if(grid.dataset.built)return;
+  grid.dataset.built='1';
+  grid.innerHTML='';
+  CORR_TYPES.forEach((ct,i)=>{
+    const div=document.createElement('div');
+    div.className='corr-card';
+    div.innerHTML=`<div class="corr-card-hdr" style="background:${ct.color}1a;color:${ct.color};">${ct.name}</div>
+      <canvas id="cvC${i}" width="280" height="145" style="width:100%;display:block;"></canvas>
+      <div class="corr-card-body">
+        <div class="corr-row"><span class="corr-lbl">Appearance</span><span class="corr-val">${ct.app}</span></div>
+        <div class="corr-row"><span class="corr-lbl">Location</span><span class="corr-val">${ct.loc}</span></div>
+        <div class="corr-row"><span class="corr-lbl">Visual Cues</span><span class="corr-val">${ct.cues}</span></div>
+      </div>`;
+    grid.appendChild(div);
+    setTimeout(()=>ct.draw(i),20);
+  });
+}
+
+function cCtx(i){
+  const cv=document.getElementById('cvC'+i);
+  if(!cv)return null;
+  cv.dataset.lw=280;cv.dataset.lh=145;
+  return getCtx('cvC'+i);
+}
+
+function drawUniform(i){
+  const r=cCtx(i);if(!r)return;
+  const{ctx,W,H}=r;
+  ctx.fillStyle='#0a1628';ctx.fillRect(0,0,W,H);
+  const rng=mkRng(1);
+  const origY=30,thinY=44,metalH=72;
+
+  // original surface dashed
+  ctx.strokeStyle='#475569';ctx.lineWidth=1;ctx.setLineDash([5,4]);
+  ctx.beginPath();ctx.moveTo(8,origY);ctx.lineTo(W-8,origY);ctx.stroke();ctx.setLineDash([]);
+
+  // metal body
+  ctx.fillStyle='#374151';ctx.fillRect(8,thinY,W-16,metalH);
+  ctx.strokeStyle='#4b5563';ctx.lineWidth=1;ctx.strokeRect(8,thinY,W-16,metalH);
+
+  // wavy corroded surface
+  ctx.beginPath();ctx.moveTo(8,thinY);
+  for(let x=8;x<=W-8;x+=3)ctx.lineTo(x,thinY+Math.sin(x*0.35)*3+Math.sin(x*0.8)*1.5+rng()*0.8);
+  ctx.lineTo(W-8,origY);ctx.lineTo(8,origY);ctx.closePath();
+  ctx.fillStyle='rgba(234,88,12,0.55)';ctx.fill();
+  ctx.strokeStyle='#92400e';ctx.lineWidth=1.2;ctx.stroke();
+
+  // labels drawn after header region
+  ctx.fillStyle='rgba(8,13,26,0.88)';ctx.fillRect(0,0,W,20);
+  ctx.fillStyle='#f97316';ctx.font='bold 9px Segoe UI,Arial';ctx.textAlign='left';
+  ctx.fillText('Cross-Section — Uniform Thinning',5,14);
+
+  ctx.fillStyle='#f97316';ctx.font='8px Segoe UI,Arial';ctx.textAlign='center';
+  ctx.fillText('Oxide / Rust',W/2,origY+10);
+  ctx.fillStyle='#94a3b8';ctx.fillText('Metal (uniformly thinned)',W/2,thinY+metalH/2+5);
+
+  ctx.strokeStyle='#64748b';ctx.lineWidth=0.8;
+  ctx.beginPath();ctx.moveTo(6,origY);ctx.lineTo(6,thinY);ctx.stroke();
+  ctx.fillStyle='#64748b';ctx.font='7px Segoe UI,Arial';ctx.textAlign='left';
+  ctx.fillText('Δt',8,origY+9);
+
+  ctx.fillStyle='#475569';ctx.font='7px Segoe UI,Arial';ctx.textAlign='right';
+  ctx.fillText('Original surface',W-10,origY-2);
+}
+
+function drawGalvanicC(i){
+  const r=cCtx(i);if(!r)return;
+  const{ctx,W,H}=r;
+  ctx.fillStyle='#0a1628';ctx.fillRect(0,0,W,H);
+  const mx=W/2,y=28,mh=72;
+
+  // noble right
+  ctx.fillStyle='#78350f';ctx.fillRect(mx+2,y,W/2-12,mh);
+  ctx.strokeStyle='#b45309';ctx.lineWidth=1.5;ctx.strokeRect(mx+2,y,W/2-12,mh);
+
+  // active left with corrosion at interface
+  ctx.fillStyle='#374151';ctx.fillRect(10,y,mx-12,mh);
+  const cg=ctx.createLinearGradient(mx-45,0,mx,0);
+  cg.addColorStop(0,'rgba(120,53,15,0)');cg.addColorStop(1,'rgba(120,53,15,0.65)');
+  ctx.fillStyle=cg;ctx.fillRect(mx-45,y,45,mh);
+  ctx.strokeStyle='#4b5563';ctx.lineWidth=1.5;ctx.strokeRect(10,y,mx-12,mh);
+
+  // interface dashed line
+  ctx.strokeStyle='#a78bfa';ctx.lineWidth=1;ctx.setLineDash([3,2]);
+  ctx.beginPath();ctx.moveTo(mx,y-5);ctx.lineTo(mx,y+mh+3);ctx.stroke();ctx.setLineDash([]);
+
+  // attack arrows
+  ctx.strokeStyle='#a78bfa';ctx.lineWidth=1.5;
+  for(let yy=y+8;yy<y+mh-6;yy+=16){
+    ctx.beginPath();ctx.moveTo(mx-22,yy);ctx.lineTo(mx-4,yy);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(mx-8,yy-4);ctx.lineTo(mx-4,yy);ctx.lineTo(mx-8,yy+4);ctx.fill();
+  }
+
+  // electrolyte
+  ctx.fillStyle='rgba(56,189,248,0.1)';ctx.fillRect(10,y+mh,W-22,18);
+  ctx.strokeStyle='#38bdf8';ctx.lineWidth=1;ctx.setLineDash([2,3]);
+  ctx.strokeRect(10,y+mh,W-22,18);ctx.setLineDash([]);
+
+  ctx.fillStyle='rgba(8,13,26,0.88)';ctx.fillRect(0,0,W,20);
+  ctx.fillStyle='#a78bfa';ctx.font='bold 9px Segoe UI,Arial';ctx.textAlign='left';
+  ctx.fillText('Cross-Section — Galvanic Attack at Metal Junction',5,14);
+
+  ctx.fillStyle='#94a3b8';ctx.font='bold 9px Segoe UI,Arial';ctx.textAlign='center';
+  ctx.fillText('Zn (active)',mx/2+5,y+mh/2+5);
+  ctx.fillStyle='#fbbf24';ctx.fillText('Cu (noble)',mx+(W/2-12)/2+2,y+mh/2+5);
+  ctx.fillStyle='#38bdf8';ctx.font='8px Segoe UI,Arial';
+  ctx.fillText('Electrolyte',W/2-5,y+mh+13);
+  ctx.fillStyle='#a78bfa';ctx.font='7px Segoe UI,Arial';
+  ctx.fillText('Interface',mx,y-7);
+}
+
+function drawPitting(i){
+  const r=cCtx(i);if(!r)return;
+  const{ctx,W,H}=r;
+  ctx.fillStyle='#0a1628';ctx.fillRect(0,0,W,H);
+  const rng=mkRng(7);
+  const my=32,mh=88;
+
+  ctx.fillStyle='#374151';ctx.fillRect(8,my,W-16,mh);
+  ctx.strokeStyle='#4b5563';ctx.lineWidth=1;ctx.strokeRect(8,my,W-16,mh);
+  // passive film thin line
+  ctx.fillStyle='rgba(34,211,238,0.5)';ctx.fillRect(8,my,W-16,3);
+
+  const pits=[{x:55,d:22,w:13},{x:115,d:30,w:11},{x:175,d:25,w:14},{x:230,d:18,w:10}];
+  pits.forEach(p=>{
+    ctx.beginPath();
+    ctx.moveTo(p.x-p.w/2,my+2);
+    ctx.quadraticCurveTo(p.x-p.w/3,my+p.d*0.65,p.x,my+p.d);
+    ctx.quadraticCurveTo(p.x+p.w/3,my+p.d*0.65,p.x+p.w/2,my+2);
+    ctx.fillStyle='#0a1628';ctx.fill();
+    ctx.strokeStyle='#f43f5e';ctx.lineWidth=1.2;ctx.stroke();
+    // lid
+    ctx.beginPath();ctx.ellipse(p.x,my+2,p.w/2+3,4,0,0,Math.PI*2);
+    ctx.fillStyle='rgba(234,88,12,0.55)';ctx.fill();
+    // depth tick
+    ctx.strokeStyle='#64748b';ctx.lineWidth=0.8;
+    ctx.beginPath();ctx.moveTo(p.x+p.w/2+4,my);ctx.lineTo(p.x+p.w/2+4,my+p.d);ctx.stroke();
+  });
+
+  // Cl- arrows
+  [55,175].forEach(x=>{
+    ctx.strokeStyle='#f43f5e';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(x,my-14);ctx.lineTo(x,my+1);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x-3,my-3);ctx.lineTo(x,my+1);ctx.lineTo(x+3,my-3);ctx.fill();
+    ctx.fillStyle='#f43f5e';ctx.font='bold 7px Segoe UI,Arial';ctx.textAlign='center';
+    ctx.fillText('Cl⁻',x,my-16);
+  });
+
+  ctx.fillStyle='rgba(8,13,26,0.88)';ctx.fillRect(0,0,W,20);
+  ctx.fillStyle='#f43f5e';ctx.font='bold 9px Segoe UI,Arial';ctx.textAlign='left';
+  ctx.fillText('Cross-Section — Pitting (deep hemispherical pits)',5,14);
+  ctx.fillStyle='#22d3ee';ctx.font='8px Segoe UI,Arial';ctx.textAlign='right';
+  ctx.fillText('Passive film (broken at mouth)',W-10,my-3);
+}
+
+function drawCrevice(i){
+  const r=cCtx(i);if(!r)return;
+  const{ctx,W,H}=r;
+  ctx.fillStyle='#0a1628';ctx.fillRect(0,0,W,H);
+
+  // base metal
+  ctx.fillStyle='#374151';ctx.fillRect(8,80,W-16,50);
+  ctx.strokeStyle='#4b5563';ctx.lineWidth=1;ctx.strokeRect(8,80,W-16,50);
+
+  // overlapping plate
+  ctx.fillStyle='#4b5563';ctx.fillRect(68,48,144,34);
+  ctx.strokeStyle='#6b7280';ctx.lineWidth=1;ctx.strokeRect(68,48,144,34);
+
+  // crevice gap
+  ctx.fillStyle='#0a1628';ctx.fillRect(68,80,144,3);
+  ctx.strokeStyle='#f59e0b';ctx.lineWidth=0.8;
+  ctx.beginPath();ctx.moveTo(68,81);ctx.lineTo(212,81);ctx.stroke();
+
+  // corrosion inside gap
+  const cg=ctx.createLinearGradient(68,0,212,0);
+  cg.addColorStop(0,'rgba(234,88,12,0)');cg.addColorStop(0.3,'rgba(234,88,12,0.65)');
+  cg.addColorStop(0.7,'rgba(234,88,12,0.65)');cg.addColorStop(1,'rgba(234,88,12,0)');
+  ctx.fillStyle=cg;ctx.fillRect(68,80,144,14);
+
+  // cathodic O2 reduction outside
+  ctx.strokeStyle='#22d3ee';ctx.lineWidth=1;
+  [28,48,228,248].forEach(x=>{
+    ctx.beginPath();ctx.moveTo(x,58);ctx.lineTo(x,82);ctx.stroke();
+  });
+
+  ctx.fillStyle='rgba(8,13,26,0.88)';ctx.fillRect(0,0,W,20);
+  ctx.fillStyle='#f59e0b';ctx.font='bold 9px Segoe UI,Arial';ctx.textAlign='left';
+  ctx.fillText('Cross-Section — Crevice under Plate / Gasket',5,14);
+
+  ctx.fillStyle='#94a3b8';ctx.font='8px Segoe UI,Arial';ctx.textAlign='center';
+  ctx.fillText('Plate / Gasket',140,67);
+  ctx.fillStyle='#f59e0b';ctx.font='bold 8px Segoe UI,Arial';
+  ctx.fillText('↑ Cl⁻  ↓ pH  ↑ [M²⁺]  (inside crevice)',140,97);
+  ctx.fillStyle='#22d3ee';ctx.font='7px Segoe UI,Arial';ctx.textAlign='center';
+  ctx.fillText('O₂ reduction',30,52);ctx.fillText('O₂ reduction',242,52);
+}
+
+function drawSCC(i){
+  const r=cCtx(i);if(!r)return;
+  const{ctx,W,H}=r;
+  ctx.fillStyle='#0a1628';ctx.fillRect(0,0,W,H);
+  const rng=mkRng(42);
+
+  ctx.fillStyle='#1e3a5f';ctx.fillRect(8,24,W-16,105);
+  ctx.strokeStyle='#2d5a8e';ctx.lineWidth=1;ctx.strokeRect(8,24,W-16,105);
+
+  // tensile stress arrows
+  ctx.strokeStyle='#ef4444';ctx.lineWidth=1.8;
+  [35,90,145,200,245].forEach(x=>{
+    ctx.beginPath();ctx.moveTo(x,24);ctx.lineTo(x,9);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x-3,13);ctx.lineTo(x,8);ctx.lineTo(x+3,13);ctx.fill();
+    ctx.beginPath();ctx.moveTo(x,129);ctx.lineTo(x,144);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x-3,140);ctx.lineTo(x,145);ctx.lineTo(x+3,140);ctx.fill();
+  });
+
+  // branching cracks from top surface
+  function crack(x0,y0,ang,depth){
+    if(depth<=0)return;
+    const len=8+rng()*7;
+    const x1=x0+Math.cos(ang)*len,y1=y0+Math.sin(ang)*len;
+    ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);
+    ctx.strokeStyle='#ef4444';ctx.lineWidth=Math.max(0.5,depth/7);ctx.stroke();
+    if(depth>2&&rng()>0.45){
+      crack(x1,y1,ang-(0.25+rng()*0.2),depth-1);
+      crack(x1,y1,ang+(0.25+rng()*0.2),depth-1);
+    }else{
+      crack(x1,y1,ang+(rng()-0.5)*0.3,depth-1);
+    }
+  }
+  crack(75,24,Math.PI*0.58,7);
+  crack(140,24,Math.PI*0.52,9);
+  crack(200,24,Math.PI*0.62,6);
+
+  // environment
+  ctx.fillStyle='rgba(56,189,248,0.09)';ctx.fillRect(8,105,W-16,24);
+  ctx.fillStyle='#38bdf8';ctx.font='8px Segoe UI,Arial';ctx.textAlign='center';
+  ctx.fillText('Corrosive environment (H₂S, NaCl, NaOH, etc.)',W/2,120);
+
+  ctx.fillStyle='rgba(8,13,26,0.88)';ctx.fillRect(0,0,W,20);
+  ctx.fillStyle='#ef4444';ctx.font='bold 9px Segoe UI,Arial';ctx.textAlign='left';
+  ctx.fillText('Cross-Section — SCC: Branching cracks under σ_tensile',5,14);
+  ctx.fillStyle='#ef4444';ctx.font='bold 8px Segoe UI,Arial';ctx.textAlign='center';
+  ctx.fillText('σ (tensile)',W/2,7);
+}
+
+function drawIntergranular(i){
+  const r=cCtx(i);if(!r)return;
+  const{ctx,W,H}=r;
+  ctx.fillStyle='#0a1628';ctx.fillRect(0,0,W,H);
+
+  const grains=[
+    {cx:55,cy:65,rx:36,ry:27,rot:-0.3},
+    {cx:130,cy:58,rx:38,ry:29,rot:0.2},
+    {cx:210,cy:62,rx:31,ry:26,rot:-0.15},
+    {cx:55,cy:108,rx:30,ry:24,rot:0.3},
+    {cx:135,cy:112,rx:36,ry:26,rot:-0.2},
+    {cx:215,cy:110,rx:28,ry:23,rot:0.1},
+  ];
+
+  grains.forEach(g=>{
+    ctx.save();ctx.translate(g.cx,g.cy);ctx.rotate(g.rot);
+    ctx.beginPath();ctx.ellipse(0,0,g.rx,g.ry,0,0,Math.PI*2);
+    ctx.fillStyle='#1e3a5f';ctx.fill();
+    ctx.restore();
+  });
+  // corroded boundaries
+  grains.forEach(g=>{
+    ctx.save();ctx.translate(g.cx,g.cy);ctx.rotate(g.rot);
+    ctx.beginPath();ctx.ellipse(0,0,g.rx,g.ry,0,0,Math.PI*2);
+    ctx.strokeStyle='#22d3ee';ctx.lineWidth=2.5;ctx.stroke();
+    ctx.restore();
+  });
+
+  ctx.fillStyle='rgba(8,13,26,0.88)';ctx.fillRect(0,0,W,20);
+  ctx.fillStyle='#22d3ee';ctx.font='bold 9px Segoe UI,Arial';ctx.textAlign='left';
+  ctx.fillText('Surface View — Intergranular Attack (Sensitised SS)',5,14);
+  ctx.fillStyle='#22d3ee';ctx.font='8px Segoe UI,Arial';ctx.textAlign='center';
+  ctx.fillText('Cr-depleted grain boundaries (corroded)',W/2,135);
+  ctx.fillStyle='#94a3b8';ctx.fillText('Grain interior intact',130,72);
+}
+
+function drawErosionC(i){
+  const r=cCtx(i);if(!r)return;
+  const{ctx,W,H}=r;
+  ctx.fillStyle='#0a1628';ctx.fillRect(0,0,W,H);
+
+  // outer pipe arc
+  ctx.strokeStyle='#4b5563';ctx.lineWidth=3;
+  ctx.beginPath();ctx.arc(210,72,62,Math.PI*0.45,Math.PI*1.55,false);ctx.stroke();
+  ctx.beginPath();ctx.arc(210,72,45,Math.PI*0.45,Math.PI*1.55,false);ctx.stroke();
+
+  // straight sections
+  ctx.strokeStyle='#4b5563';ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(148,30);ctx.lineTo(28,30);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(148,114);ctx.lineTo(28,114);ctx.stroke();
+
+  // flow arrows
+  ctx.strokeStyle='#38bdf8';ctx.lineWidth=1.5;
+  [40,55,72,88,103].forEach(y=>{
+    ctx.beginPath();ctx.moveTo(8,y);ctx.lineTo(60,y);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(55,y-3);ctx.lineTo(62,y);ctx.lineTo(55,y+3);ctx.fill();
+  });
+
+  // worn zone at bend inner radius
+  const wg=ctx.createRadialGradient(210,72,43,210,72,63);
+  wg.addColorStop(0,'rgba(74,222,128,0)');
+  wg.addColorStop(0.6,'rgba(74,222,128,0.3)');
+  wg.addColorStop(1,'rgba(74,222,128,0)');
+  ctx.fillStyle=wg;
+  ctx.beginPath();ctx.arc(210,72,63,Math.PI*0.45,Math.PI*1.55);
+  ctx.arc(210,72,43,Math.PI*1.55,Math.PI*0.45,true);
+  ctx.closePath();ctx.fill();
+
+  // horseshoe pits on outer bend face
+  const rng=mkRng(5);
+  [[148,36],[147,52],[148,71],[148,90],[147,108]].forEach(([x,y])=>{
+    ctx.beginPath();ctx.ellipse(x,y,6,4,0,0,Math.PI*2);
+    ctx.fillStyle='#0a1628';ctx.fill();
+    ctx.strokeStyle='#4ade80';ctx.lineWidth=0.9;ctx.stroke();
+  });
+
+  ctx.fillStyle='rgba(8,13,26,0.88)';ctx.fillRect(0,0,W,20);
+  ctx.fillStyle='#4ade80';ctx.font='bold 9px Segoe UI,Arial';ctx.textAlign='left';
+  ctx.fillText('Pipe Bend — Erosion-Corrosion at Flow Impact Zone',5,14);
+  ctx.fillStyle='#38bdf8';ctx.font='bold 8px Segoe UI,Arial';ctx.textAlign='left';
+  ctx.fillText('Flow →',12,22);
+  ctx.fillStyle='#4ade80';ctx.font='8px Segoe UI,Arial';ctx.textAlign='center';
+  ctx.fillText('Thinning & pits at outer bend',W/2+20,133);
+}
+
+// ── TAB 3: Electrochemical Cell ──────────────────────────────────────────────
+let animOn=false,animId=null,electrons=[],ions=[];
+// shared layout so animStep can wrap ions correctly
+let CL={aX:0,caX:0,abX:0,cbX:0,bW:0,bY:0,bH:0,wY:0,eY:0,eH:0};
+
+function initParticles(){
+  const{abX,cbX,bW,bY,bH}=CL;
+  electrons=[];
+  for(let i=0;i<9;i++)electrons.push({t:i/9,speed:0.005+Math.random()*0.002});
+  ions=[];
+  for(let i=0;i<5;i++)ions.push({
+    x:abX+12+Math.random()*(bW-24), y:bY+25+Math.random()*(bH-50),
+    vx:0.45+Math.random()*0.3, type:'Zn'});
+  for(let i=0;i<5;i++)ions.push({
+    x:cbX+12+Math.random()*(bW-24), y:bY+25+Math.random()*(bH-50),
+    vx:-(0.4+Math.random()*0.3), type:'Cu'});
+  for(let i=0;i<4;i++)ions.push({
+    x:abX+12+Math.random()*(bW-24), y:bY+40+Math.random()*(bH-60),
+    vx:(Math.random()-0.5)*0.5, type:'SO4'});
+}
+
+function drawCell(t){
+  const cv=document.getElementById('cvCell');
+  const cw=(cv.parentElement&&cv.parentElement.clientWidth)||720;
+  cv.dataset.lw=Math.min(cw,720); cv.dataset.lh=415;
+  const{ctx,W,H}=getCtx('cvCell');
+  ctx.fillStyle='#0a1628'; ctx.fillRect(0,0,W,H);
+
+  // ── layout ──
+  const aX=W*0.26, caX=W*0.74;
+  const eY=130, eH=148, bY=190, bH=150, bW=W*0.33;
+  const abX=W*0.09, cbX=W*0.58;
+  const wY=eY-42;             // wire y-level  (= 88)
+  const vmX=W/2, vmY=wY-20;  // voltmeter centre (= 68)
+  CL={aX,caX,abX,cbX,bW,bY,bH,wY,eY,eH};
+
+  // ── local label helper — dark backing + coloured text ──
+  function lbl(x,y,text,color,align,size){
+    const f=size||9;
+    ctx.font=`bold ${f}px Segoe UI,Arial`;
+    ctx.textAlign=align||'center';
+    const tw=ctx.measureText(text).width;
+    const ox=align==='center'?-tw/2:align==='right'?-tw:0;
+    ctx.fillStyle='rgba(8,13,26,0.88)';
+    ctx.fillRect(x+ox-3,y-f-1,tw+6,f+4);
+    ctx.fillStyle=color;
+    ctx.fillText(text,x,y);
+  }
+
+  // ── beakers ──
+  ctx.fillStyle='rgba(56,189,248,0.08)'; ctx.fillRect(abX,bY,bW,bH);
+  ctx.strokeStyle='#334155'; ctx.lineWidth=2; ctx.strokeRect(abX,bY,bW,bH);
+  ctx.fillStyle='rgba(96,165,250,0.13)'; ctx.fillRect(cbX,bY,bW,bH);
+  ctx.strokeStyle='#334155'; ctx.lineWidth=2; ctx.strokeRect(cbX,bY,bW,bH);
+
+  // ── salt bridge ──
+  const sb1=abX+bW, sb2=cbX, sbMid=(sb1+sb2)/2, sbY=bY+28;
+  ctx.fillStyle='#1e293b'; ctx.fillRect(sb1,sbY,sb2-sb1,20);
+  ctx.strokeStyle='#475569'; ctx.lineWidth=1.5; ctx.strokeRect(sb1,sbY,sb2-sb1,20);
+  lbl(sbMid,sbY+14,'Salt Bridge','#94a3b8','center',9);
+
+  // ── electrodes ──
+  ctx.fillStyle='#9ca3af'; ctx.fillRect(aX-10,eY,20,eH);
+  ctx.strokeStyle='#6b7280'; ctx.lineWidth=2; ctx.strokeRect(aX-10,eY,20,eH);
+  const rng=mkRng(3);
+  for(let y=eY+4;y<eY+eH-4;y+=6){
+    ctx.fillStyle='rgba(120,53,15,0.55)';
+    ctx.fillRect(aX-13,y,2+rng()*2,4);
+  }
+  lbl(aX,eY+eH/2+5,'Zn','#f1f5f9','center',12);
+
+  ctx.fillStyle='#b45309'; ctx.fillRect(caX-10,eY,20,eH);
+  ctx.strokeStyle='#92400e'; ctx.lineWidth=2; ctx.strokeRect(caX-10,eY,20,eH);
+  lbl(caX,eY+eH/2+5,'Cu','#f1f5f9','center',12);
+
+  // ── wire ──
+  ctx.strokeStyle='#94a3b8'; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.moveTo(aX,eY); ctx.lineTo(aX,wY);
+  ctx.lineTo(caX,wY); ctx.lineTo(caX,eY); ctx.stroke();
+
+  // ── voltmeter ──
+  ctx.fillStyle='#1e293b';
+  ctx.beginPath(); ctx.arc(vmX,vmY,18,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#475569'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.arc(vmX,vmY,18,0,Math.PI*2); ctx.stroke();
+  ctx.fillStyle='#fbbf24'; ctx.font='bold 11px Segoe UI,Arial';
+  ctx.textAlign='center'; ctx.fillText('V',vmX,vmY+4);
+  ctx.strokeStyle='#94a3b8'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(aX,wY); ctx.lineTo(vmX-18,vmY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(vmX+18,vmY); ctx.lineTo(caX,wY); ctx.stroke();
+
+  // ── animated or static content ──
+  if(animOn&&t!==undefined){
+    // electron dots along wire path
+    electrons.forEach(p=>{
+      const seg1=eY-wY, seg2=seg1+(caX-aX), total=seg1+seg2+(eY-wY);
+      const pos=p.t*total;
+      let ex,ey;
+      if(pos<seg1){ex=aX; ey=eY-pos;}
+      else if(pos<seg2){ex=aX+(pos-seg1); ey=wY;}
+      else{ex=caX; ey=wY+(pos-seg2);}
+      ctx.beginPath(); ctx.arc(ex,ey,4,0,Math.PI*2);
+      ctx.fillStyle='#fbbf24'; ctx.fill();
+      ctx.strokeStyle='rgba(0,0,0,0.4)'; ctx.lineWidth=0.5; ctx.stroke();
+    });
+    // ion dots + backed labels
+    ions.forEach(ion=>{
+      const col=ion.type==='Zn'?'#a78bfa':ion.type==='Cu'?'#f97316':'#94a3b8';
+      const label=ion.type==='Zn'?'Zn²⁺':ion.type==='Cu'?'Cu²⁺':'SO₄²⁻';
+      ctx.beginPath(); ctx.arc(ion.x,ion.y,5,0,Math.PI*2);
+      ctx.fillStyle=col; ctx.fill();
+      lbl(ion.x,ion.y+16,label,col,'center',8);
+    });
+  }else{
+    // static e⁻ flow arrow
+    ctx.strokeStyle='#fbbf24'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
+    ctx.beginPath(); ctx.moveTo(aX+10,wY); ctx.lineTo(vmX-22,wY); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#fbbf24';
+    ctx.beginPath(); ctx.moveTo(vmX-22,wY-5); ctx.lineTo(vmX-10,wY); ctx.lineTo(vmX-22,wY+5); ctx.fill();
+    lbl(vmX-38,wY-10,'e⁻  flow','#fbbf24','center',9);
+    // static ion migration labels
+    lbl(abX+bW/2,bY+70,'Zn²⁺  →','#a78bfa','center',9);
+    lbl(abX+bW/2,bY+88,'←  SO₄²⁻','#94a3b8','center',9);
+    lbl(cbX+bW/2,bY+70,'←  Cu²⁺','#f97316','center',9);
+    lbl(cbX+bW/2,bY+88,'SO₄²⁻  →','#94a3b8','center',9);
+  }
+
+  // ── ANODE / CATHODE — top strip, drawn last so always on top ──
+  lbl(aX,15,'ANODE (−)','#ef4444','center',13);
+  lbl(caX,15,'CATHODE (+)','#22c55e','center',13);
+  // Oxidation / Reduction — between wire and electrode top
+  lbl(aX,wY+18,'Oxidation','#ef4444','center',9);
+  lbl(caX,wY+18,'Reduction','#22c55e','center',9);
+
+  // ── E_cell near voltmeter ──
+  lbl(W/2,vmY+38,'E_cell = 1.10 V','#fbbf24','center',11);
+
+  // ── half-reactions — below beakers ──
+  const hrY=bY+bH+18;
+  lbl(aX,hrY,'Zn → Zn²⁺ + 2e⁻','#ef4444','center',10);
+  lbl(aX,hrY+16,'E° = −0.76 V (SHE)','#64748b','center',9);
+  lbl(caX,hrY,'Cu²⁺ + 2e⁻ → Cu','#22c55e','center',10);
+  lbl(caX,hrY+16,'E° = +0.34 V (SHE)','#64748b','center',9);
+
+  // ── solution labels ──
+  ctx.font='italic 10px Segoe UI,Arial'; ctx.textAlign='center';
+  lbl(abX+bW/2,bY+bH-12,'ZnSO₄ (aq)','#7dd3fc','center',10);
+  lbl(cbX+bW/2,bY+bH-12,'CuSO₄ (aq)','#93c5fd','center',10);
+  lbl(W/2,bY+14,'ELECTROLYTE','#38bdf8','center',9);
+}
+
+function animStep(){
+  if(!animOn)return;
+  electrons.forEach(p=>{p.t+=p.speed; if(p.t>=1)p.t-=1;});
+  const{abX,cbX,bW,bY,bH}=CL;
+  ions.forEach(ion=>{
+    ion.x+=ion.vx;
+    // wrap each ion within its own beaker
+    if(ion.type==='Zn'||ion.type==='SO4'){
+      if(ion.x<abX+5)ion.x=abX+bW-8;
+      if(ion.x>abX+bW-5)ion.x=abX+8;
+    }else{
+      if(ion.x<cbX+5)ion.x=cbX+bW-8;
+      if(ion.x>cbX+bW-5)ion.x=cbX+8;
+    }
+    if(ion.y<bY+8)ion.y=bY+bH-20;
+    if(ion.y>bY+bH-8)ion.y=bY+12;
+  });
+  drawCell(1);
+  animId=requestAnimationFrame(animStep);
+}
+function toggleAnim(){
+  animOn=!animOn;
+  const btn=document.getElementById('btnAnim');
+  if(animOn){
+    btn.textContent='⏸ Pause'; btn.classList.add('active');
+    if(!electrons.length)initParticles();
+    animStep();
+  }else{
+    btn.textContent='▶ Animate'; btn.classList.remove('active');
+    cancelAnimationFrame(animId); drawCell();
+  }
+}
+function resetCell(){
+  animOn=false; cancelAnimationFrame(animId);
+  document.getElementById('btnAnim').textContent='▶ Animate';
+  document.getElementById('btnAnim').classList.remove('active');
+  electrons=[]; ions=[]; drawCell();
+}
+
+// ── init ─────────────────────────────────────────────────────────────────────
+window.addEventListener('load',()=>{drawGalvanic();});
+window.addEventListener('resize',()=>{
+  if(document.getElementById('tab-galvanic').classList.contains('active'))drawGalvanic();
+  if(document.getElementById('tab-cell').classList.contains('active'))drawCell();
+});
+</script>
+</body>
+</html>

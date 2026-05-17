@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corrosion Protection Selection Guide</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f8fafc;color:#1e293b;line-height:1.6;}
+h1{font-size:1.35rem;font-weight:700;padding:1.4rem 1.5rem 0.3rem;color:#0f172a;}
+.subtitle{font-size:0.82rem;color:#64748b;padding:0 1.5rem 0.9rem;}
+.tab-bar{display:flex;background:#fff;border-bottom:2px solid #e2e8f0;position:sticky;top:0;z-index:10;flex-wrap:wrap;}
+.tab-btn{padding:0.65rem 1rem;background:none;border:none;border-bottom:3px solid transparent;font-size:0.77rem;color:#64748b;cursor:pointer;white-space:nowrap;transition:all 0.2s;}
+.tab-btn:hover{color:#0f172a;background:#f1f5f9;}
+.tab-btn.active{color:#0369a1;border-bottom-color:#0369a1;font-weight:700;background:#fff;}
+.tab-panel{display:none;padding:1.4rem 1.5rem;}
+.tab-panel.active{display:block;}
+.source-tag{display:inline-block;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 8px;font-size:0.71rem;color:#64748b;margin-bottom:0.7rem;}
+.section-title{font-size:1rem;font-weight:700;color:#0f172a;margin:1.2rem 0 0.4rem;}
+.section-title:first-child{margin-top:0;}
+p{font-size:0.82rem;color:#334155;margin-bottom:0.7rem;line-height:1.6;}
+table{width:100%;border-collapse:collapse;font-size:0.77rem;margin:0.7rem 0;}
+th{background:#0369a1;color:#fff;padding:0.5rem 0.65rem;text-align:left;font-weight:600;vertical-align:top;}
+td{padding:0.45rem 0.65rem;border-bottom:1px solid #e2e8f0;vertical-align:top;}
+tr:nth-child(even)td{background:#f8fafc;}
+tr:hover td{background:#f0f9ff;}
+.badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:0.67rem;font-weight:600;white-space:nowrap;margin:1px 1px;}
+/* Effectiveness badges */
+.eff-primary{background:#dcfce7;color:#15803d;border:1px solid #86efac;}
+.eff-secondary{background:#fef9c3;color:#a16207;border:1px solid #fde047;}
+.eff-limited{background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;}
+.eff-na{background:#f1f5f9;color:#94a3b8;border:1px solid #e2e8f0;}
+/* Method header colors */
+.mth-coat{background:#7c3aed;color:#fff;}
+.mth-cp{background:#0369a1;color:#fff;}
+.mth-mat{background:#166534;color:#fff;}
+.mth-inh{background:#92400e;color:#fff;}
+.mth-des{background:#1e3a8a;color:#fff;}
+/* Corrosion type row headers */
+.ct-row td:first-child{font-weight:700;color:#0f172a;background:#f1f5f9;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;}
+.method-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:8px;overflow:hidden;margin-bottom:0.8rem;}
+.method-card-hdr{padding:0.6rem 0.9rem;font-size:0.85rem;font-weight:700;}
+.method-card-body{padding:0.7rem 0.9rem;}
+.method-card-body p{font-size:0.76rem;margin-bottom:0.45rem;}
+.method-card-body ul{margin:0.3rem 0 0 1.1rem;font-size:0.75rem;color:#475569;}
+.method-card-body li{margin-bottom:0.2rem;}
+.info-box{background:#fff;border:1px solid #e2e8f0;border-radius:7px;padding:0.8rem 1rem;margin:0.5rem 0;}
+.info-box h4{font-size:0.82rem;font-weight:700;color:#0f172a;margin-bottom:0.3rem;}
+.info-box p{font-size:0.75rem;color:#475569;margin:0;}
+.note-box{background:#fffbeb;border:1.5px solid #fde68a;border-radius:6px;padding:0.7rem 0.9rem;margin:0.8rem 0;font-size:0.78rem;color:#78350f;}
+.legend-row{display:flex;gap:0.6rem;flex-wrap:wrap;margin:0.6rem 0 1rem;}
+.decision-table td{font-size:0.76rem;}
+.decision-table .q{font-style:italic;color:#0369a1;font-weight:600;}
+@media(max-width:650px){.two-col,.three-col{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<h1>Corrosion Protection Selection Guide</h1>
+<p class="subtitle">NACE International &nbsp;·&nbsp; ASM International Vol. 13 &nbsp;·&nbsp; ISO 12944 (Coatings) &nbsp;·&nbsp; NACE SP0169 / SP0572 (Cathodic Protection)</p>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('methods',this)">Protection Methods</button>
+  <button class="tab-btn" onclick="showTab('matrix',this)">Selection Matrix</button>
+  <button class="tab-btn" onclick="showTab('decision',this)">Decision Guide</button>
+</div>
+
+<!-- TAB 1: Methods Overview -->
+<div class="tab-panel active" id="tab-methods">
+  <div class="source-tag">NACE International · ISO 12944 · ASM International Vol. 13A · SSPC (Coatings)</div>
+  <p>Five primary categories of corrosion protection. Most real-world systems combine two or more (e.g. coating + cathodic protection for buried pipelines). Understanding the mechanism of each allows effective pairing and failure analysis.</p>
+
+  <!-- Coatings -->
+  <div class="method-card">
+    <div class="method-card-hdr mth-coat">① Protective Coatings</div>
+    <div class="method-card-body">
+      <p><strong>Mechanism:</strong> Physical barrier separating metal from electrolyte; some coating types add electrochemical (sacrificial) or inhibitive chemistry at the interface.</p>
+      <div class="two-col">
+        <div>
+          <p><strong>Organic Coatings (paint systems)</strong></p>
+          <ul>
+            <li><strong>Primers:</strong> zinc-rich epoxy (sacrificial), wash primer (adhesion), inhibitive (chromate-free alternatives)</li>
+            <li><strong>Midcoats:</strong> epoxy, vinyl ester — barrier build</li>
+            <li><strong>Topcoats:</strong> polyurethane (UV, wear), silicone-acrylate (high-temp)</li>
+            <li>ISO 12944 classifies exposure: C1 (very low) to CX (extreme marine/offshore)</li>
+          </ul>
+        </div>
+        <div>
+          <p><strong>Metallic &amp; Inorganic Coatings</strong></p>
+          <ul>
+            <li><strong>Hot-dip galvanizing</strong> — Zn sacrificial, 50–150 µm, structural steel</li>
+            <li><strong>Thermal spray</strong> — Zn, Al, ZnAl (metallizing), offshore, bridges</li>
+            <li><strong>Anodizing</strong> — Al₂O₃ on aluminium, 5–25 µm; no galvanic benefit</li>
+            <li><strong>Electroplating</strong> — Cr, Ni, Cd, Zn; decorative and functional</li>
+            <li><strong>Conversion coatings</strong> — phosphate, chromate (restricted), zirconate; primer adhesion base</li>
+          </ul>
+        </div>
+      </div>
+      <p><strong>Best for:</strong> Uniform corrosion, atmospheric corrosion, general structural steel. Requires surface preparation (SSPC/NACE SP-6 to SP-5) — coating adhesion is the limiting factor.</p>
+      <p><strong>Limitations:</strong> Holidays, mechanical damage, and disbondment remove protection. Cannot alone address crevice or pitting in immersion without CP backup. Temperature limits (epoxy ~120 °C, thermoplastic linings up to 200 °C).</p>
+    </div>
+  </div>
+
+  <!-- Cathodic Protection -->
+  <div class="method-card">
+    <div class="method-card-hdr mth-cp">② Cathodic Protection (CP)</div>
+    <div class="method-card-body">
+      <p><strong>Mechanism:</strong> Shifts the metal potential below its corrosion potential (E_corr) into the immune or passive range on the Pourbaix diagram. Corrosion requires anodic current; CP supplies cathodic current so the metal becomes the cathode and oxidation is suppressed.</p>
+      <div class="two-col">
+        <div>
+          <p><strong>Sacrificial Anode CP (SACP / Galvanic)</strong></p>
+          <ul>
+            <li>More active metal (Zn, Al, Mg alloy) attached to structure</li>
+            <li>Anode corrodes preferentially; electrons flow to protected structure</li>
+            <li>No external power; self-regulating; limited driving voltage (Zn: ~0.25 V in seawater)</li>
+            <li>Applications: ship hulls, offshore jacket legs, buried tank bottoms, jetties, heat exchangers</li>
+            <li>Anode materials: Zn alloy (NACE TM0190), Al alloy (offshore, seawater), Mg alloy (fresh water, soil)</li>
+          </ul>
+        </div>
+        <div>
+          <p><strong>Impressed Current CP (ICCP)</strong></p>
+          <ul>
+            <li>External DC power supply drives current from inert anode (MMO/Ti, graphite, high-Si cast iron) to structure</li>
+            <li>Higher driving voltage; adjustable output; covers large structures</li>
+            <li>Applications: buried pipelines, storage tank floors, offshore platforms, reinforced concrete (rebar CP)</li>
+            <li>Criterion: steel in soil/seawater protected at −850 mV vs. CSE (NACE SP0169); −800 mV vs. Ag/AgCl/seawater (offshore)</li>
+            <li>Risk: hydrogen embrittlement on high-strength steel if over-protected (&lt;−1100 mV CSE)</li>
+          </ul>
+        </div>
+      </div>
+      <p><strong>Best for:</strong> Buried and submerged structures (pipelines, tank bottoms, ship hulls, offshore). Most effective combined with high-quality coating (coating reduces current demand; CP protects holidays).</p>
+    </div>
+  </div>
+
+  <!-- Material Selection -->
+  <div class="method-card">
+    <div class="method-card-hdr mth-mat">③ Material Selection &amp; Upgrading</div>
+    <div class="method-card-body">
+      <p><strong>Mechanism:</strong> Inherently resistant material eliminates the thermodynamic or kinetic driving force for corrosion. No maintenance of a protection system required.</p>
+      <div class="three-col">
+        <div>
+          <p><strong>Alloy Upgrading</strong></p>
+          <ul>
+            <li>304 → 316L → 2205 → 2507 (increasing PREN and SCC resistance)</li>
+            <li>Carbon steel → Cor-Ten weathering steel (atmospheric)</li>
+            <li>Low-alloy steel → 9Cr-1Mo or 316L (H₂S sour service)</li>
+            <li>NACE MR0175 / ISO 15156 defines H₂S-resistant alloys by hardness and heat treatment</li>
+          </ul>
+        </div>
+        <div>
+          <p><strong>Non-Metallic Materials</strong></p>
+          <ul>
+            <li>HDPE, CPVC, GRP/FRP, PTFE for piping</li>
+            <li>Rubber lining, thermoplastic lining for tanks</li>
+            <li>Ceramic tiles for abrasion-corrosion</li>
+            <li>Carbon-fibre composites for lightweight structural</li>
+          </ul>
+        </div>
+        <div>
+          <p><strong>Clad &amp; Weld Overlay</strong></p>
+          <ul>
+            <li>Carbon steel base + 316L / Alloy 625 / titanium cladding</li>
+            <li>Weld overlay (buttering) on nozzles and flanges</li>
+            <li>Explosive bonding for large flat sheets</li>
+            <li>Economical for large vessels where solid alloy is cost-prohibitive</li>
+          </ul>
+        </div>
+      </div>
+      <p><strong>Best for:</strong> Pitting, crevice, SCC, intergranular — where coatings are impractical (internal surfaces, high-temperature, abrasive flow). First choice when operating life &gt; 20 years or maintenance access is limited.</p>
+    </div>
+  </div>
+
+  <!-- Inhibitors -->
+  <div class="method-card">
+    <div class="method-card-hdr mth-inh">④ Corrosion Inhibitors</div>
+    <div class="method-card-body">
+      <p><strong>Mechanism:</strong> Chemicals added to the environment at low concentration (ppm level) that adsorb on the metal surface or react with the electrolyte to slow anodic oxidation, cathodic reduction, or both.</p>
+      <div class="three-col">
+        <div>
+          <p><strong>Anodic Inhibitors</strong></p>
+          <ul>
+            <li>Chromates, molybdates, orthophosphates, silicates, nitrites</li>
+            <li>Stabilise passive film; reduce anodic dissolution rate</li>
+            <li>Risk: if under-dosed, accelerate pitting (dangerous if concentration falls)</li>
+            <li>Applications: cooling water, recirculating systems</li>
+          </ul>
+        </div>
+        <div>
+          <p><strong>Cathodic Inhibitors</strong></p>
+          <ul>
+            <li>Zinc salts, polyphosphates, arsenates (restricted), Ca/Mg compounds</li>
+            <li>Form insoluble deposits at cathodic sites; impede O₂/H⁺ reduction</li>
+            <li>Safer than anodic (under-dosing not catastrophic)</li>
+            <li>Applications: water treatment, closed cooling loops</li>
+          </ul>
+        </div>
+        <div>
+          <p><strong>Mixed / Film-Forming</strong></p>
+          <ul>
+            <li>Amines, imidazolines, thiourea derivatives, quaternary ammonium compounds</li>
+            <li>Adsorb on metal surface (organic film), block both reactions</li>
+            <li>Oil &amp; gas pipelines, oil-well acidising (HCl), downhole injection</li>
+            <li>Volatile corrosion inhibitors (VCI) — amines in packaging, enclosed spaces</li>
+          </ul>
+        </div>
+      </div>
+      <p><strong>Best for:</strong> Closed systems, process streams, cooling water, oil &amp; gas production where continuous dosing is practical. Not suitable for open systems or potable water (toxicity).</p>
+      <p><strong>Limitations:</strong> Require continuous monitoring and dosing; effectiveness degrades with flow velocity (erosion removes film); regulatory limits on certain compounds (chromates, arsenates).</p>
+    </div>
+  </div>
+
+  <!-- Design Changes -->
+  <div class="method-card">
+    <div class="method-card-hdr mth-des">⑤ Design Changes</div>
+    <div class="method-card-body">
+      <p><strong>Mechanism:</strong> Eliminate or mitigate the geometric and environmental conditions that enable specific corrosion forms — particularly crevice, galvanic, erosion-corrosion, and SCC — without modifying the material or adding chemicals.</p>
+      <div class="two-col">
+        <div>
+          <ul>
+            <li><strong>Eliminate crevices:</strong> continuous welds instead of lap joints; seal gaps; use gaskets with minimum contact area; butt weld instead of socket weld</li>
+            <li><strong>Prevent galvanic coupling:</strong> insulate dissimilar metals (dielectric flanges, sleeves, washers); keep area ratio favourable (large anode, small cathode); break electrical continuity</li>
+            <li><strong>Reduce stress:</strong> post-weld heat treatment (PWHT) to reduce residual stress and lower SCC susceptibility; avoid stress concentrations (notches, sharp transitions)</li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li><strong>Improve drainage:</strong> slope surfaces to prevent ponding; drain dead-legs; avoid horizontal pipe sections where solids settle</li>
+            <li><strong>Control flow velocity:</strong> keep velocity above silt deposition (to prevent underdeposit corrosion) but below erosion threshold; avoid sudden geometry changes that cause turbulence</li>
+            <li><strong>Access for maintenance:</strong> design for inspection, cleaning, and recoating; include CP test points; install corrosion monitoring coupons</li>
+          </ul>
+        </div>
+      </div>
+      <p><strong>Best for:</strong> Crevice, galvanic, erosion-corrosion, SCC prevention at the design stage. Most cost-effective intervention — design changes at concept cost pennies per kg of structure; retrofitting costs orders of magnitude more.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: Selection Matrix -->
+<div class="tab-panel" id="tab-matrix">
+  <div class="source-tag">NACE International · ASM International Vol. 13A · TWI Corrosion Library · ISO 12944</div>
+  <p>Effectiveness of each protection strategy against each corrosion type. Combine strategies for highest reliability.</p>
+
+  <div class="legend-row">
+    <span class="badge eff-primary">● Primary — highly effective</span>
+    <span class="badge eff-secondary">◑ Secondary — effective when combined</span>
+    <span class="badge eff-limited">○ Limited — minor benefit only</span>
+    <span class="badge eff-na">— Not applicable</span>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="min-width:140px;">Corrosion Type</th>
+        <th class="mth-coat" style="min-width:110px;">Coatings<br><span style="font-weight:400;font-size:0.7rem;">(organic, metallic, inorganic)</span></th>
+        <th class="mth-cp" style="min-width:110px;">Cathodic Protection<br><span style="font-weight:400;font-size:0.7rem;">(SACP / ICCP)</span></th>
+        <th class="mth-mat" style="min-width:120px;">Material Selection<br><span style="font-weight:400;font-size:0.7rem;">(alloy upgrade, non-metallic)</span></th>
+        <th class="mth-inh" style="min-width:110px;">Inhibitors<br><span style="font-weight:400;font-size:0.7rem;">(anodic, cathodic, film-forming)</span></th>
+        <th class="mth-des" style="min-width:120px;">Design Changes<br><span style="font-weight:400;font-size:0.7rem;">(geometry, stress, drainage)</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="ct-row">
+        <td>Uniform / General Corrosion<br><span style="font-size:0.68rem;font-weight:400;color:#64748b;">General thinning; predictable rate</span></td>
+        <td><span class="badge eff-primary">● Primary</span><br>Barrier paint systems, hot-dip Zn, thermal spray Zn/Al eliminate contact with electrolyte</td>
+        <td><span class="badge eff-primary">● Primary</span><br>Highly effective on buried/immersed structures; cathodic suppression of anodic dissolution</td>
+        <td><span class="badge eff-primary">● Primary</span><br>Stainless/Ni-alloy passive film; weathering steel (Cor-Ten); non-metallic materials</td>
+        <td><span class="badge eff-primary">● Primary</span><br>Anodic inhibitors (phosphate, molybdate) directly reduce dissolution; very effective in closed loops</td>
+        <td><span class="badge eff-secondary">◑ Secondary</span><br>Reduce wetted surface area; improve drainage; reduce turbulence</td>
+      </tr>
+      <tr class="ct-row">
+        <td>Galvanic Corrosion<br><span style="font-size:0.68rem;font-weight:400;color:#64748b;">Dissimilar metal couple in electrolyte</span></td>
+        <td><span class="badge eff-secondary">◑ Secondary</span><br>Coating the more noble metal is effective (reduces cathode area); coating both is best barrier</td>
+        <td><span class="badge eff-secondary">◑ Secondary</span><br>CP can protect the active metal but does not address root cause; used on corroding component only</td>
+        <td><span class="badge eff-primary">● Primary</span><br>Select compatible metals (close on galvanic series); avoid large noble/small active area ratios</td>
+        <td><span class="badge eff-limited">○ Limited</span><br>Inhibitors may slow but not stop galvanic current; not a primary strategy</td>
+        <td><span class="badge eff-primary">● Primary</span><br>Electrical insulation (dielectric flanges, sleeves, coated fasteners); break conductive path</td>
+      </tr>
+      <tr class="ct-row">
+        <td>Pitting Corrosion<br><span style="font-size:0.68rem;font-weight:400;color:#64748b;">Localised deep holes; Cl⁻ driven; passive alloys</span></td>
+        <td><span class="badge eff-secondary">◑ Secondary</span><br>Barrier coatings delay pit initiation; organic coatings alone insufficient for immersed stainless in seawater</td>
+        <td><span class="badge eff-primary">● Primary</span><br>Shifts potential below pitting potential (E_pit); effective for carbon and low-alloy steel; combined with coating for stainless</td>
+        <td><span class="badge eff-primary">● Primary</span><br>Increase PREN (higher Cr, Mo, N); specify grade with CPT above service temperature; most reliable long-term solution</td>
+        <td><span class="badge eff-secondary">◑ Secondary</span><br>Molybdate and nitrite inhibitors raise pitting potential; effective in closed systems; must maintain concentration</td>
+        <td><span class="badge eff-limited">○ Limited</span><br>Reduce surface roughness (lower pit initiation sites); ensure even flow; limited effect on susceptible alloys</td>
+      </tr>
+      <tr class="ct-row">
+        <td>Crevice Corrosion<br><span style="font-size:0.68rem;font-weight:400;color:#64748b;">Attack inside tight gaps; pH/Cl⁻ shift</span></td>
+        <td><span class="badge eff-limited">○ Limited</span><br>Sealing the crevice with sealant or continuous weld can help; conventional coatings cannot penetrate tight gaps</td>
+        <td><span class="badge eff-secondary">◑ Secondary</span><br>Protects accessible surfaces; current distribution limited in tight crevice (&lt;0.1 mm); not a primary strategy for crevice</td>
+        <td><span class="badge eff-primary">● Primary</span><br>Specify CCT ≥ service temp (CCT 15–20 °C below CPT); upgrade to super duplex or Ni-alloy for seawater crevices</td>
+        <td><span class="badge eff-limited">○ Limited</span><br>Inhibitors cannot reliably diffuse into tight crevices; stagnant chemistry inside gap prevents effective dosing</td>
+        <td><span class="badge eff-primary">● Primary</span><br>Eliminate crevices at design stage: butt weld, seal gaps, use non-absorbent gaskets (PTFE), drain all dead-legs</td>
+      </tr>
+      <tr class="ct-row">
+        <td>Stress Corrosion Cracking (SCC)<br><span style="font-size:0.68rem;font-weight:400;color:#64748b;">Branching cracks; tensile stress + corrosive env.</span></td>
+        <td><span class="badge eff-secondary">◑ Secondary</span><br>Barrier coatings prevent contact with SCC environment; very effective if holiday-free; must remain intact at all stress concentrations</td>
+        <td><span class="badge eff-secondary">◑ Secondary</span><br>CP below −850 mV (CSE) can suppress SCC of austenitic SS; risk of H₂ embrittlement at &lt;−1100 mV; not used for duplex</td>
+        <td><span class="badge eff-primary">● Primary</span><br>Duplex stainless (inherently SCC resistant); Ni-alloys; Ti alloys; low-alloy ferritic SS; avoid austenitic SS in hot Cl⁻ + stress</td>
+        <td><span class="badge eff-limited">○ Limited</span><br>Amines and thiourea derivatives can inhibit SCC in specific systems (e.g. amine cracking); not a general solution</td>
+        <td><span class="badge eff-primary">● Primary</span><br>PWHT to relieve residual stress; shot peening (compressive surface stress); eliminate stress concentrations; remove tensile loading</td>
+      </tr>
+      <tr class="ct-row">
+        <td>Intergranular Corrosion<br><span style="font-size:0.68rem;font-weight:400;color:#64748b;">Grain boundary attack; sensitised SS</span></td>
+        <td><span class="badge eff-limited">○ Limited</span><br>Barrier coatings prevent electrolyte access; do not address the metallurgical root cause (Cr depletion)</td>
+        <td><span class="badge eff-limited">○ Limited</span><br>CP can slow dissolution but cannot reverse sensitisation; not a primary control for intergranular attack</td>
+        <td><span class="badge eff-primary">● Primary</span><br>Use L-grade (304L, 316L, max 0.03% C) or stabilised grade (321 with Ti, 347 with Nb); solution anneal after welding</td>
+        <td><span class="badge eff-secondary">◑ Secondary</span><br>In some process streams, raising pH or adding molybdate inhibitor slows boundary dissolution; not a substitute for alloy selection</td>
+        <td><span class="badge eff-secondary">◑ Secondary</span><br>Control heat input; avoid slow cooling through sensitisation range; post-weld anneal (1050–1080 °C) and quench</td>
+      </tr>
+      <tr class="ct-row">
+        <td>Erosion-Corrosion<br><span style="font-size:0.68rem;font-weight:400;color:#64748b;">Flow-assisted attack; protective film removed</span></td>
+        <td><span class="badge eff-secondary">◑ Secondary</span><br>Hard coatings (WC thermal spray, ceramic tile, rubber lining) resist mechanical removal; organic paints quickly abraded</td>
+        <td><span class="badge eff-limited">○ Limited</span><br>CP can protect underlying metal at holiday sites; does not prevent mechanical film removal; limited effectiveness at high velocity</td>
+        <td><span class="badge eff-primary">● Primary</span><br>Hard alloys (duplex SS, Alloy 625 overlay, white iron, ceramics); hardness and passive film stability both important</td>
+        <td><span class="badge eff-secondary">◑ Secondary</span><br>Film-forming inhibitors can provide some protection at moderate velocities; removed at high flow velocity or turbulence</td>
+        <td><span class="badge eff-primary">● Primary</span><br>Reduce velocity; smooth pipe bends (long-radius elbows); avoid sudden diameter changes; use wear-resistant inserts at bends</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note-box">
+    <strong>Combined protection principle:</strong> Defence-in-depth stacking is always more reliable than a single method. The industry standard for buried pipelines — high-build coating + ICCP — demonstrates this: the coating reduces current demand by 98 %, and the CP protects coating holidays that would otherwise become corrosion sites. Neither alone is adequate for a 50-year design life.
+  </div>
+</div>
+
+<!-- TAB 3: Decision Guide -->
+<div class="tab-panel" id="tab-decision">
+  <div class="source-tag">NACE International · ISO 21457 (Oil &amp; Gas Material Selection) · ASTM G31 / G46 / G48 / G78</div>
+
+  <p class="section-title">Step-by-Step Protection Selection Protocol</p>
+  <table class="decision-table">
+    <thead>
+      <tr>
+        <th style="width:5%;">Step</th>
+        <th>Question / Action</th>
+        <th>Key Factors to Evaluate</th>
+        <th>Outcome / Next Step</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="text-align:center;font-weight:700;">1</td>
+        <td class="q">Identify corrosion type(s) present or anticipated</td>
+        <td>Visual inspection, failure analysis (ASM Vol. 11), service history, environment chemistry (Cl⁻, pH, O₂, temperature, H₂S/CO₂)</td>
+        <td>Determine primary corrosion form (uniform, pitting, galvanic, crevice, SCC, intergranular, erosion-corrosion). More than one may be present.</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;font-weight:700;">2</td>
+        <td class="q">Is the corrosion type addressable by design changes?</td>
+        <td>Check for crevice geometry (flanges, gaskets, lap welds), dissimilar metal contact, flow-induced erosion zones, residual stress concentrations</td>
+        <td><strong>If yes:</strong> implement design fix first (lowest lifecycle cost). Redesign eliminates the root cause; other methods only manage it.</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;font-weight:700;">3</td>
+        <td class="q">Is material upgrade technically feasible and cost-effective?</td>
+        <td>PREN requirement (use Cl⁻ vs. temperature map), SCC susceptibility, H₂S sour service (NACE MR0175), wall thickness budget, lead time</td>
+        <td><strong>If yes:</strong> upgrade alloy or switch to non-metallic. Material selection is the most durable long-term solution for pitting, crevice, SCC, and intergranular.</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;font-weight:700;">4</td>
+        <td class="q">Is the surface accessible for coating application and maintenance?</td>
+        <td>Internal vs. external, access frequency, operating temperature range, mechanical wear, surface prep feasibility (blast cleaning standard)</td>
+        <td><strong>If accessible:</strong> specify coating system (ISO 12944 category C3–CX); select primer/topcoat based on environment; establish recoat interval.</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;font-weight:700;">5</td>
+        <td class="q">Is the structure buried, immersed, or in splash zone?</td>
+        <td>Soil resistivity (Ω·cm), seawater depth, current distribution feasibility, presence of AC/stray current, access for anode inspection</td>
+        <td><strong>If buried/immersed:</strong> add CP (SACP or ICCP) to complement coating. Calculate current demand (NACE SP0169 / SP0572). Design for −850 mV CSE criterion (steel).</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;font-weight:700;">6</td>
+        <td class="q">Is the system closed and can chemical dosing be controlled?</td>
+        <td>Flow rate, retention time, water chemistry, regulatory constraints (potable water, discharge limits), monitoring capability</td>
+        <td><strong>If closed/controlled:</strong> inhibitor program (cooling water treatment, pipeline injection). Establish dosing rate, monitoring frequency (coupon, LPR, ER probe).</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;font-weight:700;">7</td>
+        <td class="q">Combine methods for defence-in-depth</td>
+        <td>Identify residual risk from each single method; pair complementary strategies (coating + CP, material upgrade + design change, inhibitor + coating)</td>
+        <td>Document protection system in corrosion management plan; set inspection intervals; specify corrosion allowance if residual uniform corrosion is accepted.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="section-title">Quick-Reference: Corrosion Type → Recommended Primary Strategy</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Corrosion Type</th>
+        <th>First Choice</th>
+        <th>Second Choice</th>
+        <th>Typical Specification</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Uniform — atmospheric</strong></td>
+        <td>Organic coating system</td>
+        <td>Hot-dip galvanizing or thermal spray Zn/Al</td>
+        <td>ISO 12944 C3–C5 system; SSPC SP-6 min surface prep; 250–500 µm DFT</td>
+      </tr>
+      <tr>
+        <td><strong>Uniform — buried/immersed</strong></td>
+        <td>Coating + ICCP or SACP</td>
+        <td>High-build FBE / 3LPE pipeline coating + CP</td>
+        <td>NACE SP0169; −850 mV CSE criterion; inspect anodes per NACE SP0176</td>
+      </tr>
+      <tr>
+        <td><strong>Galvanic</strong></td>
+        <td>Electrical isolation (design)</td>
+        <td>Compatible material selection</td>
+        <td>Dielectric flanges per ASME B16.5; insulating kits with PTFE sleeves; coat noble metal</td>
+      </tr>
+      <tr>
+        <td><strong>Pitting — mild Cl⁻</strong></td>
+        <td>Material upgrade (316L, PREN ≥ 25)</td>
+        <td>Inhibitor (cooling water) or CP</td>
+        <td>ASTM A240 316L; PREN &gt; service CPT; passivate after fabrication (ASTM A967)</td>
+      </tr>
+      <tr>
+        <td><strong>Pitting — seawater</strong></td>
+        <td>Material upgrade (PREN ≥ 40)</td>
+        <td>CP for carbon steel; coating for splash zone</td>
+        <td>UNS S32750 / S31254; PREN &gt; 40; ASTM G48B CPT test ≥ service temp + 10 °C</td>
+      </tr>
+      <tr>
+        <td><strong>Crevice</strong></td>
+        <td>Design elimination of crevice</td>
+        <td>Material upgrade (CCT ≥ service temp)</td>
+        <td>Butt weld; non-absorbent gaskets (PTFE); specify CCT from ASTM G78; upgrade PREN by ~5–8 vs. pitting requirement</td>
+      </tr>
+      <tr>
+        <td><strong>SCC — austenitic SS</strong></td>
+        <td>Switch to duplex SS or Ni-alloy</td>
+        <td>PWHT to reduce residual stress + coating</td>
+        <td>UNS S32205 or S32750 duplex; or ASTM A967 passivation + stress relief &lt; 450 °C for 304/316</td>
+      </tr>
+      <tr>
+        <td><strong>Intergranular</strong></td>
+        <td>Use L-grade or stabilised SS</td>
+        <td>Solution anneal + quench after welding</td>
+        <td>ASTM A240 316L (C ≤ 0.03%); or 321/347; post-weld anneal at 1050–1080 °C + water quench</td>
+      </tr>
+      <tr>
+        <td><strong>Erosion-Corrosion</strong></td>
+        <td>Design (velocity control, long-radius bends)</td>
+        <td>Hard alloy or ceramic lining</td>
+        <td>Limit velocity per API 14E; long-radius elbows (≥ 1.5D); Alloy 625 weld overlay at bends; WC thermal spray</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="section-title">Monitoring &amp; Verification Standards</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Monitoring Method</th>
+        <th>Corrosion Types Detected</th>
+        <th>Standard / Reference</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Weight-loss coupons</td>
+        <td>Uniform, erosion-corrosion (mass loss rate)</td>
+        <td>ASTM G1, NACE RP0775; coupon exposure minimum 90 days</td>
+      </tr>
+      <tr>
+        <td>Electrical resistance (ER) probe</td>
+        <td>Uniform, erosion-corrosion (real-time wall loss)</td>
+        <td>ASTM G96; continuous data logging; insensitive to localised attack</td>
+      </tr>
+      <tr>
+        <td>Linear polarisation resistance (LPR)</td>
+        <td>Uniform corrosion rate (instantaneous)</td>
+        <td>ASTM G59; requires conductive electrolyte; does not detect pitting directly</td>
+      </tr>
+      <tr>
+        <td>Electrochemical noise (ECN)</td>
+        <td>Pitting initiation, SCC propagation</td>
+        <td>ASTM G199; detects localised events via current transients; advanced technique</td>
+      </tr>
+      <tr>
+        <td>Ultrasonic testing (UT) wall thickness</td>
+        <td>Uniform thinning, pitting (if deep enough), erosion</td>
+        <td>ASME PCC-2; scan grid pitch ≤ 25 mm for localised attack; TOFD for pitting</td>
+      </tr>
+      <tr>
+        <td>CP potential monitoring</td>
+        <td>Verifies cathodic protection criterion met; detects CP system failure</td>
+        <td>NACE SP0169 / SP0572; test at remote/close/instant-off; semi-annual minimum</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+function showTab(name,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
