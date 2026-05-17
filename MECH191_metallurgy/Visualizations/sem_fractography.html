@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEM Fractography — Thermo Fisher &amp; Zeiss</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:#0a1628; color:#e2e8f0; }
+
+header { background:linear-gradient(135deg,#0f2040,#1e3a5f); padding:28px 24px 22px; text-align:center; border-bottom:1px solid #1e3a5f; }
+header h1 { font-size:1.75rem; font-weight:700; color:#f1f5f9; }
+header .subtitle { color:#38bdf8; margin-top:6px; font-size:0.88rem; }
+
+.tab-bar { display:flex; flex-wrap:wrap; background:#0f2040; border-bottom:2px solid #1e3a5f; padding:0 20px; position:sticky; top:0; z-index:10; }
+.tab-btn { padding:11px 18px; font-size:0.84rem; font-weight:600; border:none; background:none; cursor:pointer; color:#64748b; border-bottom:3px solid transparent; margin-bottom:-2px; transition:all 0.15s; white-space:nowrap; }
+.tab-btn:hover { color:#38bdf8; }
+.tab-btn.active { color:#38bdf8; border-bottom-color:#38bdf8; }
+
+.panel { display:none; max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
+.panel.active { display:block; }
+
+.card { background:#0f2040; border:1px solid #1e3a5f; border-radius:12px; padding:20px 22px; margin-bottom:22px; }
+.card h2 { font-size:1.1rem; color:#38bdf8; margin-bottom:10px; }
+.card h3 { font-size:0.94rem; color:#7dd3fc; font-weight:700; margin:14px 0 7px; }
+.card p  { font-size:0.86rem; color:#94a3b8; line-height:1.65; margin-bottom:8px; }
+.card ul { font-size:0.86rem; color:#94a3b8; line-height:1.65; margin:6px 0 8px 18px; }
+.card li { margin-bottom:4px; }
+
+canvas { display:block; border-radius:8px; }
+
+.three-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+@media (max-width:820px) { .three-grid { grid-template-columns:1fr; } }
+.two-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media (max-width:660px) { .two-grid { grid-template-columns:1fr; } }
+
+.canvas-label { font-size:0.8rem; font-weight:700; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.05em; }
+
+.ctrl-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:12px 0; }
+.ctrl-btn { padding:7px 16px; background:#1e3a5f; border:1px solid #38bdf8; border-radius:7px; color:#38bdf8; font-size:0.82rem; font-weight:600; cursor:pointer; transition:all 0.15s; }
+.ctrl-btn:hover { background:#38bdf8; color:#0a1628; }
+.ctrl-btn:disabled { opacity:0.35; cursor:default; background:#1e3a5f; color:#38bdf8; }
+.step-label { font-size:0.82rem; color:#7dd3fc; }
+
+.ref-table { width:100%; border-collapse:collapse; font-size:0.81rem; margin:10px 0; }
+.ref-table th { background:#1e3a5f; color:#7dd3fc; padding:8px 10px; text-align:left; font-weight:600; }
+.ref-table td { padding:7px 10px; border-bottom:1px solid #1e3a5f; color:#94a3b8; vertical-align:top; }
+.ref-table tr:hover td { background:#0a1628; }
+
+.ann-list .ann-item { display:flex; gap:10px; align-items:flex-start; margin-bottom:7px; }
+.ann-list .ann-dot { width:11px; height:11px; border-radius:50%; flex-shrink:0; margin-top:3px; }
+.ann-list .ann-text { font-size:0.83rem; color:#94a3b8; line-height:1.55; }
+
+.source-tag { display:inline-block; padding:3px 10px; background:#1e3a5f; color:#93c5fd; border-radius:6px; font-size:0.75rem; font-weight:600; margin-bottom:12px; }
+
+.zoom-row { display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 14px; }
+.zoom-btn { padding:6px 14px; background:#0f2040; border:1px solid #334155; border-radius:6px; color:#64748b; font-size:0.8rem; font-weight:600; cursor:pointer; transition:all 0.15s; }
+.zoom-btn.active { border-color:#38bdf8; color:#38bdf8; }
+
+.back { text-align:center; padding:24px; font-size:0.9rem; }
+.back a { color:#38bdf8; text-decoration:none; }
+.back a:hover { text-decoration:underline; }
+
+.badge { display:inline-block; padding:2px 8px; border-radius:4px; font-size:0.72rem; font-weight:700; margin-left:6px; vertical-align:middle; }
+.badge-tf  { background:#1e3a5f; color:#38bdf8; }
+.badge-z   { background:#1e293b; color:#a78bfa; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>SEM Fractography</h1>
+  <div class="subtitle">Thermo Fisher Scientific — Dimple Morphology · Cleavage · Fatigue Striations &nbsp;|&nbsp; Zeiss — Annotated Fracture Mode Atlas</div>
+</header>
+
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('dimple',this)">TFS — Dimple Morphology</button>
+  <button class="tab-btn" onclick="showTab('cleavage',this)">TFS — Cleavage Patterns</button>
+  <button class="tab-btn" onclick="showTab('striation',this)">TFS — Fatigue Striations</button>
+  <button class="tab-btn" onclick="showTab('zeiss',this)">Zeiss — Fracture Mode Atlas</button>
+</nav>
+
+<!-- ═══════════════ TAB 1: DIMPLE MORPHOLOGY ═══════════════ -->
+<div id="panel-dimple" class="panel active">
+
+  <div class="card">
+    <div class="source-tag">Thermo Fisher Scientific — Helios &amp; Apreo SEM/FIB Application Notes</div>
+    <h2>Dimple Morphology — Microvoid Coalescence (MVC) in SEM</h2>
+    <p>Dimples are the SEM signature of ductile fracture via microvoid coalescence. Dimple geometry encodes the local stress state: <strong style="color:#22c55e;">equiaxed</strong> dimples indicate pure Mode I (tensile opening); <strong style="color:#f59e0b;">elongated/parabolic</strong> dimples indicate shear or mixed-mode loading. Thermo Fisher Apreo SEM operates at 0.8–30 kV with SE and BSE detectors to resolve individual dimple walls and inclusions at centres.</p>
+
+    <div class="zoom-row" id="dimple-zoom-row">
+      <button class="zoom-btn active" onclick="setDimpleZoom(0,this)">500× — Low Mag</button>
+      <button class="zoom-btn" onclick="setDimpleZoom(1,this)">2,000× — Mid Mag</button>
+      <button class="zoom-btn" onclick="setDimpleZoom(2,this)">10,000× — High Mag</button>
+      <button class="zoom-btn" onclick="setDimpleZoom(3,this)">50,000× — Ultra High</button>
+    </div>
+
+    <div class="three-grid">
+      <div>
+        <div class="canvas-label" style="color:#22c55e;">Mode I — Equiaxed Dimples</div>
+        <canvas id="cv-eq" width="300" height="260"></canvas>
+        <div class="ann-list" style="margin-top:10px;">
+          <div class="ann-item"><div class="ann-dot" style="background:#22c55e;"></div><div class="ann-text"><strong style="color:#22c55e;">Round, symmetric</strong> — equal diameter in all directions; formed under pure tensile opening stress</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#86efac;"></div><div class="ann-text"><strong style="color:#86efac;">Inclusion/particle</strong> at dimple base — MnS, oxide, or carbide nucleation site</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#4ade80;"></div><div class="ann-text"><strong style="color:#4ade80;">Wall ridges</strong> — shared walls between adjacent coalesced voids; height ∝ void growth ratio</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="canvas-label" style="color:#f59e0b;">Mode III — Elongated/Parabolic Dimples</div>
+        <canvas id="cv-elong" width="300" height="260"></canvas>
+        <div class="ann-list" style="margin-top:10px;">
+          <div class="ann-item"><div class="ann-dot" style="background:#f59e0b;"></div><div class="ann-text"><strong style="color:#f59e0b;">Parabolic profile</strong> — elongated along shear direction; open end points toward crack propagation</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#fcd34d;"></div><div class="ann-text"><strong style="color:#fcd34d;">Matched pair rule</strong> — opposing fracture surfaces show dimples pointing in opposite directions</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#fbbf24;"></div><div class="ann-text"><strong style="color:#fbbf24;">Aspect ratio</strong> (L/W &gt; 2) — higher ratio indicates larger shear component</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="canvas-label" style="color:#a78bfa;">Mixed Mode — Tear Dimples</div>
+        <canvas id="cv-tear" width="300" height="260"></canvas>
+        <div class="ann-list" style="margin-top:10px;">
+          <div class="ann-item"><div class="ann-dot" style="background:#a78bfa;"></div><div class="ann-text"><strong style="color:#a78bfa;">Irregular, flattened</strong> — combination of I + III; seen at shear lips and Mode II crack fronts</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#c4b5fd;"></div><div class="ann-text"><strong style="color:#c4b5fd;">Depth gradient</strong> — shallow near shear lip transition; deeper in plane-strain core</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#ddd6fe;"></div><div class="ann-text"><strong style="color:#ddd6fe;">Roughness parameter</strong> Ra (SEM stereo) — higher for equiaxed, lower for shallow tear dimples</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Dimple Size, Depth &amp; Material Correlations</h2>
+    <p>Dimple diameter and depth reflect void growth ratio (VGR = R<sub>f</sub>/R₀) and are quantifiable with Thermo Fisher Avizo 3D reconstruction from stereo-SEM pairs. Cleaner steels (lower inclusion content) produce fewer, larger dimples; dirty steels produce dense fine dimples.</p>
+    <div style="overflow-x:auto;">
+    <table class="ref-table" style="min-width:600px;">
+      <thead><tr><th>Parameter</th><th>Equiaxed (Tensile)</th><th>Elongated (Shear)</th><th>Tear (Mixed)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Geometry</strong></td><td>Circular, L/W ≈ 1</td><td>Parabolic, L/W = 2–8</td><td>Irregular, shallow</td></tr>
+        <tr><td><strong>Stress state</strong></td><td>Mode I (KI dominant)</td><td>Mode II/III (shear)</td><td>Mixed I+III; shear lip</td></tr>
+        <tr><td><strong>Typical diameter</strong></td><td>1–20 μm (steel); 5–50 μm (Al)</td><td>2–40 μm elongated axis</td><td>0.5–10 μm</td></tr>
+        <tr><td><strong>Nucleation site</strong></td><td>Inclusions, carbides, grain boundaries</td><td>Inclusions; second-phase particles</td><td>Surface/subsurface inclusions</td></tr>
+        <tr><td><strong>TFS SEM setting</strong></td><td>5–10 kV SE; 45° tilt for depth</td><td>2–5 kV SE; in-lens detector</td><td>5 kV, low kV for surface detail</td></tr>
+        <tr><td><strong>Material examples</strong></td><td>Low-alloy steel, Ti-6Al-4V, Cu alloys</td><td>Al 7075-T6, stainless at shear lip</td><td>Transition zone; 45° shear lip</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>EDS / EBSD Integration — Identifying Nucleation Sites</h2>
+    <p>Thermo Fisher Apreo combines SE/BSE imaging with Oxford Instruments EDS and EBSD for correlative fractography. EDS identifies inclusion chemistry (MnS, Al₂O₃, TiN) at dimple bases; EBSD maps crystallographic misorientation at dimple walls revealing local plastic deformation.</p>
+    <div class="two-grid">
+      <div>
+        <canvas id="cv-eds" width="390" height="220"></canvas>
+      </div>
+      <div>
+        <h3>EDS Map — Inclusion at Dimple Base</h3>
+        <div class="ann-list" style="margin-top:8px;">
+          <div class="ann-item"><div class="ann-dot" style="background:#fbbf24;"></div><div class="ann-text"><strong style="color:#fbbf24;">S Kα (yellow)</strong> — MnS inclusion at dimple centre; elongated stringer morphology common in wrought steels</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#ef4444;"></div><div class="ann-text"><strong style="color:#ef4444;">Al Kα (red)</strong> — Al₂O₃ oxide inclusion; harder, rounder than MnS; nucleates voids at lower strains</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#22c55e;"></div><div class="ann-text"><strong style="color:#22c55e;">Fe Kα (green)</strong> — matrix signal; lower intensity at voids confirming void geometry</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#94a3b8;"></div><div class="ann-text">Apreo FEG-SEM at 15 kV; Oxford Ultim Max 100 EDS; spatial resolution ~0.5 μm at inclusion scale</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ TAB 2: CLEAVAGE PATTERNS ═══════════════ -->
+<div id="panel-cleavage" class="panel">
+
+  <div class="card">
+    <div class="source-tag">Thermo Fisher Scientific — Phenom &amp; Apreo SEM; ASM Vol. 12 Cleavage Atlas</div>
+    <h2>Cleavage Fracture — SEM Features &amp; Identification</h2>
+    <p>Cleavage fracture produces flat, crystallographically-controlled surfaces on specific low-index planes ({001} BCC, {0001} HCP). The key SEM features — river marks, feather markings, tongue marks, and cleavage steps — allow origin identification and stress-state reconstruction. Thermo Fisher Phenom XL desktop SEM resolves cleavage facets at 15–30× to 50,000×.</p>
+
+    <div class="ctrl-row">
+      <button class="ctrl-btn" id="cl-prev" onclick="cleavageStep(-1)" disabled>◀ Prev</button>
+      <span class="step-label" id="cl-step-label">Feature 1 of 5</span>
+      <button class="ctrl-btn" id="cl-next" onclick="cleavageStep(1)">Next ▶</button>
+    </div>
+
+    <div class="two-grid">
+      <div>
+        <canvas id="cv-clv-main" width="420" height="340"></canvas>
+      </div>
+      <div>
+        <h3 id="clv-title">River Marks</h3>
+        <p id="clv-desc">River marks are fine parallel lines on a cleavage facet that converge in the direction opposite to crack propagation — following river marks "downstream" leads to the origin grain. They form when the crack front crosses a low-angle twist boundary between adjacent parallel cleavage planes, creating a step that appears as a line in SEM. Step height = offset between cleavage planes ≈ 1–100 nm.</p>
+        <div class="ann-list" id="clv-notes">
+          <div class="ann-item"><div class="ann-dot" style="background:#38bdf8;"></div><div class="ann-text"><strong style="color:#38bdf8;">Convergence direction</strong> — rivers flow toward origin; diverge away</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#7dd3fc;"></div><div class="ann-text"><strong style="color:#7dd3fc;">Step height</strong> — 1–100 nm; visible in BSE at &gt;5,000×</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#93c5fd;"></div><div class="ann-text"><strong style="color:#93c5fd;">TFS tip:</strong> Tilt specimen 45° for best river mark contrast; use 5–10 kV</div></div>
+        </div>
+        <p id="clv-src" style="font-size:0.78rem;color:#475569;margin-top:12px;">Thermo Fisher Apreo S LoVac; 5 kV SE2; BCC ferritic steel</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Cleavage Feature Gallery — All Five Key Signatures</h2>
+    <div class="two-grid" style="margin-top:12px;">
+      <div>
+        <canvas id="cv-clv-grid1" width="390" height="220"></canvas>
+        <div class="ann-list" style="margin-top:8px;">
+          <div class="ann-item"><div class="ann-dot" style="background:#ef4444;"></div><div class="ann-text"><strong style="color:#ef4444;">Feather markings</strong> — fine herringbone pattern branching from central spine; propagation → spine tip; common in low-carbon steel at low T</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#fca5a5;"></div><div class="ann-text"><strong style="color:#fca5a5;">Chevron pattern</strong> — macroscale herringbone; apex points to origin; entire grain may show single chevron</div></div>
+        </div>
+      </div>
+      <div>
+        <canvas id="cv-clv-grid2" width="390" height="220"></canvas>
+        <div class="ann-list" style="margin-top:8px;">
+          <div class="ann-item"><div class="ann-dot" style="background:#a78bfa;"></div><div class="ann-text"><strong style="color:#a78bfa;">Tongue marks</strong> — tongue-shaped depressions formed when crack front intersects a mechanical twin; seen in high-rate impact fractures and HCP metals</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#c4b5fd;"></div><div class="ann-text"><strong style="color:#c4b5fd;">Grain boundary step</strong> — cleavage plane misorientation across grain boundary produces a step; river marks form to accommodate misfit</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Cleavage vs. Intergranular Fracture — SEM Discrimination</h2>
+    <p>Both cleavage and intergranular fracture produce bright, flat surfaces at low magnification — SEM is required to discriminate. Cleavage shows river marks within a grain facet; intergranular fracture follows grain boundaries producing a "rock candy" faceted topology without intra-facet river marks.</p>
+    <div style="overflow-x:auto;">
+    <table class="ref-table" style="min-width:560px;">
+      <thead><tr><th>Feature</th><th style="color:#38bdf8;">Transgranular Cleavage</th><th style="color:#a78bfa;">Intergranular Fracture</th></tr></thead>
+      <tbody>
+        <tr><td><strong>SEM appearance</strong></td><td>Flat facets WITH river marks, feather markings</td><td>Flat facets — smooth or decorated, NO river marks</td></tr>
+        <tr><td><strong>Facet shape</strong></td><td>Determined by grain shape but limited to cleavage plane</td><td>"Rock candy" — follows grain boundary; polyhedral</td></tr>
+        <tr><td><strong>Surface decorations</strong></td><td>River marks, tongues, steps</td><td>Grain boundary precipitates, corrosion product, segregant</td></tr>
+        <tr><td><strong>Typical causes</strong></td><td>Low T, high strain rate, BCC/HCP metals, hydrogen</td><td>Temper embrittlement, SCC, hydrogen, liquid metal embrittlement, creep</td></tr>
+        <tr><td><strong>Discrimination test</strong></td><td>EDS — clean facet; EBSD — all one grain orientation</td><td>EDS — segregants (P, S, Sb) on surface; EBSD — each facet = one grain</td></tr>
+        <tr><td><strong>TFS instrument</strong></td><td>Apreo S; 5–10 kV; SE2 + BSE combo</td><td>Apreo + EDS Oxford; check grain boundary chemistry</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ TAB 3: FATIGUE STRIATIONS ═══════════════ -->
+<div id="panel-striation" class="panel">
+
+  <div class="card">
+    <div class="source-tag">Thermo Fisher Scientific — Apreo SEM; Forsyth–Laird Striation Model</div>
+    <h2>Fatigue Striations — SEM Identification &amp; Crack Growth Rate</h2>
+    <p>Fatigue striations are the highest-resolution fracture evidence available without TEM. In the Forsyth–Laird model, each striation corresponds to one load cycle: the crack tip blunts on loading and re-sharpens on unloading, advancing by one striation spacing per cycle. Striation spacing = <em>da/dN</em> and varies from ~10 nm (near threshold) to ~10 μm (high ΔK). Thermo Fisher Apreo FEG-SEM at 50,000–100,000× resolves near-threshold striations in steel and aluminum.</p>
+
+    <div class="zoom-row" id="stri-zoom-row">
+      <button class="zoom-btn active" onclick="setStriZoom(0,this)">Near Threshold (ΔK ≈ 5 MPa√m)</button>
+      <button class="zoom-btn" onclick="setStriZoom(1,this)">Paris Regime (ΔK ≈ 15 MPa√m)</button>
+      <button class="zoom-btn" onclick="setStriZoom(2,this)">High ΔK (ΔK ≈ 35 MPa√m)</button>
+    </div>
+
+    <div class="two-grid">
+      <div>
+        <canvas id="cv-stri-main" width="420" height="340"></canvas>
+      </div>
+      <div>
+        <h3 id="stri-title">Near-Threshold Striations — Fine Spacing (ΔK ≈ 5 MPa√m)</h3>
+        <p id="stri-desc">Near the fatigue threshold ΔK<sub>th</sub>, striation spacing is 10–100 nm — at or near the TEM resolution limit for SEM. Thermo Fisher Apreo at 100 kV FEG with immersion lens mode achieves 1–2 nm resolution, resolving individual striations. The fracture surface appears nearly flat with very fine, closely-spaced parallel ridges perpendicular to the local crack propagation direction. Secondary cracks are absent.</p>
+        <div class="ann-list" id="stri-notes">
+          <div class="ann-item"><div class="ann-dot" style="background:#38bdf8;"></div><div class="ann-text"><strong style="color:#38bdf8;">Striation spacing</strong> ≈ 10–100 nm; measure ≥20 striations and average for da/dN</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#7dd3fc;"></div><div class="ann-text"><strong style="color:#7dd3fc;">Crack direction</strong> — perpendicular to striations; striations are parallel ridges</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#93c5fd;"></div><div class="ann-text"><strong style="color:#93c5fd;">No secondary cracks</strong> — low ΔK; Stage II planar propagation</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#bfdbfe;"></div><div class="ann-text">TFS setting: 5 kV SE; immersion mode; beam deceleration for surface contrast</div></div>
+        </div>
+        <p id="stri-src" style="font-size:0.78rem;color:#475569;margin-top:12px;">Source: Forsyth–Laird model; TFS Apreo SEM application note AN0052</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Striation Counting Protocol — da/dN from Fracture Surface</h2>
+    <p>Striation counting is an ASTM E1823-defined measurement technique. The procedure requires calibrated SEM magnification (NIST traceable), a minimum of 20 striation measurements per location, and multiple locations per crack growth increment. Results are compared to Paris-law data (da/dN vs. ΔK) to validate or reconstruct loading history.</p>
+    <div class="two-grid">
+      <div>
+        <canvas id="cv-stri-count" width="390" height="260"></canvas>
+      </div>
+      <div>
+        <h3>Step-by-Step Counting Procedure</h3>
+        <div class="ann-list" style="margin-top:6px;">
+          <div class="ann-item"><div class="ann-dot" style="background:#22c55e;"></div><div class="ann-text"><strong style="color:#22c55e;">1. Locate region</strong> — known distance from initiation site; measure with vernier stage encoder</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#38bdf8;"></div><div class="ann-text"><strong style="color:#38bdf8;">2. Identify striations</strong> — parallel ridges ⊥ to crack growth; must be distinguishable from machining marks or surface steps</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#f59e0b;"></div><div class="ann-text"><strong style="color:#f59e0b;">3. Draw intercept line</strong> — draw a line ∥ to crack growth direction; count intersections with striations over known length L</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#a78bfa;"></div><div class="ann-text"><strong style="color:#a78bfa;">4. Calculate spacing</strong> — s = L / N; repeat at 3+ orientations; report mean ± 1σ</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#ef4444;"></div><div class="ann-text"><strong style="color:#ef4444;">5. Paris law check</strong> — compare s to da/dN = C(ΔK)^m; estimate ΔK at that crack length</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Fatigue Striation vs. Machining Mark — Discrimination</h2>
+    <div style="overflow-x:auto;">
+    <table class="ref-table" style="min-width:560px;">
+      <thead><tr><th>Property</th><th style="color:#38bdf8;">Fatigue Striations</th><th style="color:#ef4444;">Machining Marks / Artefacts</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Orientation</strong></td><td>Always ⊥ to local crack propagation direction; changes with crack path curvature</td><td>Parallel to cutting direction; does not follow crack path</td></tr>
+        <tr><td><strong>Spacing</strong></td><td>Varies with crack length (increases away from origin)</td><td>Uniform — set by feed rate / tool geometry</td></tr>
+        <tr><td><strong>Correlation test</strong></td><td>Spacing increases with distance from initiation site</td><td>Spacing constant over entire surface</td></tr>
+        <tr><td><strong>Shape</strong></td><td>Slightly curved, following crack front radius of curvature</td><td>Straight lines across entire specimen</td></tr>
+        <tr><td><strong>Other features</strong></td><td>Associated with secondary cracks, beach marks at macro scale</td><td>No associated beach marks; persist on non-fracture surfaces</td></tr>
+        <tr><td><strong>TFS verification</strong></td><td>Stereo-SEM height profile confirms crack plane orientation</td><td>EDS confirms machining residue (lubricant, oxide)</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ TAB 4: ZEISS ATLAS ═══════════════ -->
+<div id="panel-zeiss" class="panel">
+
+  <div class="card">
+    <div class="source-tag">Carl Zeiss AG — Sigma &amp; GeminiSEM Fractography Atlas; ASM Vol. 12</div>
+    <h2>Zeiss Annotated Fracture Mode Atlas — Organized by Fracture Type</h2>
+    <p>The Zeiss GeminiSEM column with in-lens SE detector provides high-contrast surface topography at 0.4 nm resolution, enabling annotation-quality fractographs for all principal fracture modes. Images below simulate annotated SEM fractographs as produced by the Zeiss SmartSEM annotation overlay tool.</p>
+
+    <div class="zoom-row" id="zeiss-type-row">
+      <button class="zoom-btn active" onclick="setZeissType(0,this)">Ductile Overload</button>
+      <button class="zoom-btn" onclick="setZeissType(1,this)">Transgranular Cleavage</button>
+      <button class="zoom-btn" onclick="setZeissType(2,this)">Intergranular</button>
+      <button class="zoom-btn" onclick="setZeissType(3,this)">Fatigue</button>
+    </div>
+
+    <div class="two-grid">
+      <div>
+        <canvas id="cv-zeiss-main" width="440" height="360"></canvas>
+      </div>
+      <div>
+        <h3 id="zeiss-title">Ductile Overload — Annotated SEM Fractograph</h3>
+        <p id="zeiss-desc">Ductile overload fracture in low-alloy steel (AISI 4340, Rc 36). Zeiss Sigma 300 VP-FE SEM; 5 kV; in-lens SE detector; 45° stage tilt for depth relief. The central fibrous zone shows equiaxed dimples (Mode I MVC); the perimeter shear lip shows elongated tear dimples. Annotations applied with Zeiss SmartSEM v6.01 overlay.</p>
+        <div class="ann-list" id="zeiss-notes">
+          <div class="ann-item"><div class="ann-dot" style="background:#22c55e;"></div><div class="ann-text"><strong style="color:#22c55e;">Equiaxed dimples</strong> — central zone; 3–8 μm dia; MnS inclusions at base (confirmed EDS)</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#86efac;"></div><div class="ann-text"><strong style="color:#86efac;">Shear lip</strong> — peripheral tear dimples; elongated ∥ to shear direction; aspect ratio 2–4×</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#fbbf24;"></div><div class="ann-text"><strong style="color:#fbbf24;">Inclusion cluster</strong> — enlarged void at stringer; local fracture toughness reduced</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#38bdf8;"></div><div class="ann-text"><strong style="color:#38bdf8;">Wall ridge network</strong> — interconnected void walls; fractal dimension D ≈ 1.3–1.6 (Zeiss Atlas 5 quantification)</div></div>
+        </div>
+        <p id="zeiss-src" style="font-size:0.78rem;color:#475569;margin-top:12px;">Zeiss Sigma 300 VP-FE; 5 kV; in-lens SE; Zeiss SmartSEM annotations</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Zeiss Multi-Mode Comparison — All Four Fracture Types</h2>
+    <p>The Zeiss Atlas 5 correlative platform enables batch acquisition and automatic annotation across multiple fracture modes in a single session. Below: simulated annotated canvases for all four principal modes at matching magnification (2,000×).</p>
+    <div class="three-grid" style="margin-top:14px;">
+      <div>
+        <div class="canvas-label" style="color:#22c55e;">Ductile</div>
+        <canvas id="cv-z-ductile" width="300" height="240"></canvas>
+      </div>
+      <div>
+        <div class="canvas-label" style="color:#ef4444;">Brittle — Cleavage</div>
+        <canvas id="cv-z-brittle" width="300" height="240"></canvas>
+      </div>
+      <div>
+        <div class="canvas-label" style="color:#f59e0b;">Fatigue</div>
+        <canvas id="cv-z-fatigue" width="300" height="240"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Zeiss GeminiSEM — Fractography Operating Parameters by Mode</h2>
+    <div style="overflow-x:auto;">
+    <table class="ref-table" style="min-width:600px;">
+      <thead><tr><th>Fracture Mode</th><th>Accelerating Voltage</th><th>Detector</th><th>Stage Tilt</th><th>Key Feature Resolved</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Ductile overload</strong></td><td>5–10 kV</td><td>In-lens SE (SE1)</td><td>30–45°</td><td>Dimple depth, wall ridges, inclusion at base</td></tr>
+        <tr><td><strong>Transgranular cleavage</strong></td><td>5–10 kV</td><td>SE2 + BSE combo</td><td>0–15° (flat for river marks)</td><td>River marks, feather markings, cleavage steps</td></tr>
+        <tr><td><strong>Intergranular</strong></td><td>10–15 kV</td><td>BSE + EDS</td><td>0°</td><td>Grain boundary precipitates, segregants (EDS)</td></tr>
+        <tr><td><strong>Fatigue striations</strong></td><td>2–5 kV</td><td>In-lens SE; beam decel</td><td>0–10°</td><td>Sub-100 nm striations; secondary cracks</td></tr>
+        <tr><td><strong>Creep fracture</strong></td><td>10–15 kV</td><td>BSE + EDS</td><td>30°</td><td>Grain boundary cavities, oxidised facets</td></tr>
+        <tr><td><strong>Stress corrosion</strong></td><td>5 kV</td><td>SE2 + EDS</td><td>0–20°</td><td>Corrosion product in crack; branching secondary cracks</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Creep &amp; Stress Corrosion Cracking — Extended Zeiss Modes</h2>
+    <div class="two-grid" style="margin-top:12px;">
+      <div>
+        <canvas id="cv-z-creep" width="390" height="260"></canvas>
+        <div class="ann-list" style="margin-top:8px;">
+          <div class="ann-item"><div class="ann-dot" style="background:#fb923c;"></div><div class="ann-text"><strong style="color:#fb923c;">Grain boundary cavities</strong> — round, isolated voids on grain facets; nucleate at triple points and precipitate interfaces</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#fdba74;"></div><div class="ann-text"><strong style="color:#fdba74;">Oxidised facets</strong> — high-temperature exposure; Zeiss EDS confirms O, Cr enrichment on boundary</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#fcd34d;"></div><div class="ann-text"><strong style="color:#fcd34d;">Wedge cracks</strong> — grain boundary triple-point cracking at high stress; precursor to intergranular creep failure</div></div>
+        </div>
+      </div>
+      <div>
+        <canvas id="cv-z-scc" width="390" height="260"></canvas>
+        <div class="ann-list" style="margin-top:8px;">
+          <div class="ann-item"><div class="ann-dot" style="background:#34d399;"></div><div class="ann-text"><strong style="color:#34d399;">Main crack</strong> — intergranular path (austenitic SS) or transgranular (Al alloys); wide, corroded interior</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#6ee7b7;"></div><div class="ann-text"><strong style="color:#6ee7b7;">Secondary branching</strong> — hallmark of SCC; multiple crack branches perpendicular to main; absent in fatigue</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#a7f3d0;"></div><div class="ann-text"><strong style="color:#a7f3d0;">Corrosion product</strong> — Zeiss EDS: Cl (chloride SCC), S (polythionic), or O (oxidation); identifies environment</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="back"><a href="index.html">← Back to MECH191 Visualizations</a></div>
+
+<script>
+// ── Utilities ──────────────────────────────────────────────────────────────
+function showTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+  redrawAll(id);
+}
+
+function seeded(seed) {
+  let s = Math.abs(Math.round(seed)) || 1;
+  return function() { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
+}
+
+// HiDPI-aware canvas setup — returns logical {ctx, W, H}; scales buffer for devicePixelRatio.
+function getCtx(id) {
+  const cv = document.getElementById(id);
+  if (!cv) return null;
+  const dpr = window.devicePixelRatio || 1;
+  if (!cv.dataset.lw) { cv.dataset.lw = cv.width; cv.dataset.lh = cv.height; }
+  const W = +cv.dataset.lw, H = +cv.dataset.lh;
+  cv.style.width  = W + 'px';
+  cv.style.height = H + 'px';
+  cv.width  = Math.round(W * dpr);
+  cv.height = Math.round(H * dpr);
+  const ctx = cv.getContext('2d');
+  ctx.scale(dpr, dpr);
+  return { cv, ctx, W, H };
+}
+
+function semBg(ctx, W, H, grain, rng) {
+  ctx.fillStyle = '#080d1a'; ctx.fillRect(0, 0, W, H);
+  for (let i = 0; i < grain; i++) {
+    const x = rng() * W, y = rng() * H;
+    const v = Math.floor(rng() * 30 + 8);
+    ctx.fillStyle = `rgb(${v},${v},${v+4})`;
+    ctx.fillRect(x, y, 1, 1);
+  }
+}
+
+// Scale bar with a dark backing behind the label so it's legible over noise.
+function semScaleBar(ctx, W, H, label) {
+  const bx = W - 90, by = H - 22, bw = 60, bh = 4;
+  ctx.font = 'bold 10px Segoe UI,Arial'; ctx.textAlign = 'center';
+  const tw = ctx.measureText(label).width;
+  ctx.fillStyle = 'rgba(8,13,26,0.82)';
+  ctx.fillRect(bx + bw/2 - tw/2 - 3, by - 13, tw + 6, 13);
+  ctx.fillStyle = '#fff';
+  ctx.fillText(label, bx + bw / 2, by - 2);
+  ctx.fillRect(bx, by, bw, bh);
+  ctx.fillRect(bx, by - 3, 2, 10); ctx.fillRect(bx + bw - 2, by - 3, 2, 10);
+}
+
+// Header bar drawn first so subsequent text (instrument badge etc.) can overlay it.
+function semHeader(ctx, W, text, color) {
+  ctx.fillStyle = 'rgba(8,13,26,0.88)'; ctx.fillRect(0, 0, W, 22);
+  ctx.save(); ctx.rect(0, 0, W, 22); ctx.clip();
+  ctx.fillStyle = color; ctx.font = 'bold 10px Segoe UI,Arial';
+  ctx.textAlign = 'left'; ctx.fillText(text, 6, 15);
+  ctx.restore();
+}
+
+// Instrument badge drawn in upper-right corner — must be called AFTER semHeader.
+function semBadge(ctx, W, text) {
+  ctx.font = 'bold 9px Segoe UI,Arial'; ctx.textAlign = 'right';
+  const tw = ctx.measureText(text).width;
+  ctx.fillStyle = 'rgba(8,13,26,0.82)'; ctx.fillRect(W - tw - 10, 4, tw + 8, 14);
+  ctx.fillStyle = '#a78bfa'; ctx.fillText(text, W - 4, 15);
+}
+
+// Annotation dot+leader+label — label has dark backing so it reads over any background.
+function annDot(ctx, x, y, r, color, label) {
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.strokeStyle = color; ctx.setLineDash([3, 3]); ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(x + r, y); ctx.lineTo(x + r + 16, y); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.font = 'bold 9px Segoe UI,Arial'; ctx.textAlign = 'left';
+  const tx = x + r + 18, ty = y + 4;
+  const tw = ctx.measureText(label).width;
+  ctx.fillStyle = 'rgba(8,13,26,0.82)'; ctx.fillRect(tx - 2, ty - 10, tw + 5, 13);
+  ctx.fillStyle = color; ctx.fillText(label, tx, ty);
+}
+
+// Small text label with dark backing — use wherever inline text sits on noisy canvas.
+function canvasLabel(ctx, x, y, text, color, align) {
+  ctx.font = 'bold 9px Segoe UI,Arial'; ctx.textAlign = align || 'left';
+  const tw = ctx.measureText(text).width;
+  const ox = align === 'center' ? -tw/2 : align === 'right' ? -tw : 0;
+  ctx.fillStyle = 'rgba(8,13,26,0.82)'; ctx.fillRect(x + ox - 3, y - 11, tw + 6, 13);
+  ctx.fillStyle = color; ctx.fillText(text, x, y);
+}
+
+// ── TAB 1: DIMPLE MORPHOLOGY ───────────────────────────────────────────────
+let dimpleZoom = 0;
+function setDimpleZoom(z, btn) {
+  dimpleZoom = z;
+  document.querySelectorAll('#dimple-zoom-row .zoom-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  drawEquiaxed(); drawElongated(); drawTear(); drawEDS();
+}
+
+function drawEquiaxed() {
+  const _r = getCtx('cv-eq'); if (!_r) return;
+  const { ctx, W, H } = _r;
+  const rng = seeded(101 + dimpleZoom * 7);
+  semBg(ctx, W, H, 800, seeded(55));
+
+  const scales = [[16, 12], [10, 8], [6, 5], [3, 2.5]];
+  const [R, r] = scales[dimpleZoom];
+  const cols = Math.floor(W / (R * 2.4));
+  const rows = Math.floor((H - 28) / (R * 2.4));
+
+  for (let iy = 0; iy < rows; iy++) {
+    for (let ix = 0; ix < cols; ix++) {
+      const cx = 16 + ix * R * 2.4 + (iy % 2) * R * 1.2 + rng() * R * 0.6;
+      const cy = 28 + iy * R * 2.4 + rng() * R * 0.5;
+      const dr = R * (0.7 + rng() * 0.5);
+      const g = ctx.createRadialGradient(cx - dr*0.25, cy - dr*0.2, 0, cx, cy, dr);
+      g.addColorStop(0, `rgba(30,50,80,0.95)`);
+      g.addColorStop(0.6, `rgba(15,30,55,0.9)`);
+      g.addColorStop(1, `rgba(80,120,180,0.4)`);
+      ctx.beginPath(); ctx.arc(cx, cy, dr, 0, Math.PI * 2);
+      ctx.fillStyle = g; ctx.fill();
+      ctx.strokeStyle = `rgba(100,160,220,${0.35 + rng()*0.3})`; ctx.lineWidth = 0.8; ctx.stroke();
+      // inclusion dot
+      if (rng() > 0.5) {
+        const ix2 = cx + (rng()-0.5)*dr*0.6, iy2 = cy + (rng()-0.5)*dr*0.6;
+        ctx.beginPath(); ctx.arc(ix2, iy2, r*0.35, 0, Math.PI*2);
+        ctx.fillStyle = rng()>0.5 ? '#fbbf24' : '#94a3b8'; ctx.fill();
+      }
+    }
+  }
+  const mags = ['500×', '2,000×', '10,000×', '50,000×'];
+  const bars = ['20 μm', '5 μm', '1 μm', '200 nm'];
+  semHeader(ctx, W, 'Mode I Equiaxed Dimples — ' + mags[dimpleZoom], '#22c55e');
+  semScaleBar(ctx, W, H, bars[dimpleZoom]);
+}
+
+function drawElongated() {
+  const _r = getCtx('cv-elong'); if (!_r) return;
+  const { ctx, W, H } = _r;
+  const rng = seeded(202 + dimpleZoom * 5);
+  semBg(ctx, W, H, 800, seeded(66));
+
+  const scales = [[18, 6], [12, 4], [7, 2.5], [4, 1.4]];
+  const [Rx, Ry] = scales[dimpleZoom];
+  const cols = Math.floor(W / (Rx * 2.2));
+  const rows = Math.floor((H - 28) / (Ry * 5));
+
+  for (let iy = 0; iy < rows + 1; iy++) {
+    for (let ix = 0; ix < cols + 1; ix++) {
+      const cx = 14 + ix * Rx * 2.2 + rng() * Rx * 0.5;
+      const cy = 30 + iy * Ry * 5 + rng() * Ry * 0.8;
+      const drx = Rx * (0.75 + rng() * 0.4);
+      const dry = Ry * (0.6 + rng() * 0.4);
+      ctx.save(); ctx.translate(cx, cy); ctx.rotate((rng()-0.5)*0.3);
+      const g = ctx.createRadialGradient(-drx*0.2, -dry*0.2, 0, 0, 0, Math.max(drx, dry));
+      g.addColorStop(0, 'rgba(25,45,75,0.95)');
+      g.addColorStop(0.7, 'rgba(12,25,50,0.9)');
+      g.addColorStop(1, 'rgba(80,120,180,0.35)');
+      ctx.beginPath(); ctx.ellipse(0, 0, drx, dry, 0, 0, Math.PI * 2);
+      ctx.fillStyle = g; ctx.fill();
+      ctx.strokeStyle = `rgba(250,191,36,${0.3+rng()*0.3})`; ctx.lineWidth = 0.8; ctx.stroke();
+      ctx.restore();
+    }
+  }
+  // draw arrow showing shear direction
+  ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.moveTo(18, H - 30); ctx.lineTo(W - 18, H - 30); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(W - 18, H - 30); ctx.lineTo(W - 26, H - 35); ctx.lineTo(W - 26, H - 25); ctx.closePath();
+  ctx.fillStyle = '#f59e0b'; ctx.fill();
+  const mags = ['500×', '2,000×', '10,000×', '50,000×'];
+  const bars = ['20 μm', '5 μm', '1 μm', '200 nm'];
+  semHeader(ctx, W, 'Elongated/Parabolic Dimples (Mode III) — ' + mags[dimpleZoom], '#f59e0b');
+  semScaleBar(ctx, W, H, bars[dimpleZoom]);
+  canvasLabel(ctx, 22, H - 32, 'shear →', '#f59e0b', 'left');
+}
+
+function drawTear() {
+  const _r = getCtx('cv-tear'); if (!_r) return;
+  const { ctx, W, H } = _r;
+  const rng = seeded(303 + dimpleZoom * 3);
+  semBg(ctx, W, H, 800, seeded(77));
+
+  // Mixed dimples — irregular shapes
+  for (let i = 0; i < 40; i++) {
+    const cx = 10 + rng() * (W - 20), cy = 28 + rng() * (H - 36);
+    const rx = 4 + rng() * 14, ry = 3 + rng() * 8;
+    const ang = rng() * Math.PI;
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(ang);
+    const g = ctx.createRadialGradient(0, 0, 0, 0, 0, Math.max(rx, ry));
+    g.addColorStop(0, 'rgba(20,40,70,0.9)');
+    g.addColorStop(1, 'rgba(70,100,160,0.35)');
+    ctx.beginPath(); ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+    ctx.fillStyle = g; ctx.fill();
+    ctx.strokeStyle = `rgba(167,139,250,${0.3+rng()*0.35})`; ctx.lineWidth = 0.8; ctx.stroke();
+    ctx.restore();
+  }
+  // Some shallow flat areas
+  for (let i = 0; i < 12; i++) {
+    const cx = 10 + rng() * (W - 20), cy = 28 + rng() * (H - 36);
+    ctx.beginPath(); ctx.arc(cx, cy, 3 + rng() * 6, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(30,50,90,${0.4+rng()*0.3})`; ctx.fill();
+  }
+
+  const mags = ['500×', '2,000×', '10,000×', '50,000×'];
+  const bars = ['20 μm', '5 μm', '1 μm', '200 nm'];
+  semHeader(ctx, W, 'Mixed-Mode Tear Dimples — ' + mags[dimpleZoom], '#a78bfa');
+  semScaleBar(ctx, W, H, bars[dimpleZoom]);
+}
+
+function drawEDS() {
+  const _r = getCtx('cv-eds'); if (!_r) return;
+  const { ctx, W, H } = _r;
+  const rng = seeded(404);
+  semBg(ctx, W, H, 600, seeded(88));
+
+  const mid = W / 2 - 5;
+
+  // Left: SE dimple image
+  for (let i = 0; i < 8; i++) {
+    const cx = 10 + rng() * (mid - 20), cy = 26 + rng() * (H - 34);
+    const dr = 12 + rng() * 18;
+    const g = ctx.createRadialGradient(cx-dr*0.2, cy-dr*0.15, 0, cx, cy, dr);
+    g.addColorStop(0, 'rgba(25,45,80,0.95)'); g.addColorStop(1, 'rgba(70,110,170,0.3)');
+    ctx.beginPath(); ctx.arc(cx, cy, dr, 0, Math.PI*2);
+    ctx.fillStyle = g; ctx.fill();
+    ctx.strokeStyle = 'rgba(100,150,220,0.4)'; ctx.lineWidth = 0.8; ctx.stroke();
+  }
+  // SE divider
+  ctx.strokeStyle = '#334155'; ctx.lineWidth = 1.5; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(mid, 0); ctx.lineTo(mid, H); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Right: EDS coloured spots
+  const ex = mid + 5;
+  for (let i = 0; i < 120; i++) {
+    const x = ex + rng()*(W-ex-5), y = 26 + rng()*(H-30);
+    ctx.fillStyle = `rgba(34,197,94,${0.15+rng()*0.25})`; ctx.fillRect(x, y, 2, 2);
+  }
+  const sx = ex + 60, sy = H/2 - 10;
+  for (let i = 0; i < 35; i++) {
+    const x = sx + (rng()-0.5)*22, y = sy + (rng()-0.5)*10;
+    ctx.fillStyle = `rgba(251,191,36,${0.6+rng()*0.3})`; ctx.fillRect(x, y, 2, 2);
+  }
+  const ax = ex + 110, ay = H/2 + 30;
+  for (let i = 0; i < 20; i++) {
+    const x = ax + (rng()-0.5)*12, y = ay + (rng()-0.5)*12;
+    ctx.fillStyle = `rgba(239,68,68,${0.6+rng()*0.3})`; ctx.fillRect(x, y, 2, 2);
+  }
+
+  // Draw header FIRST, then column labels and EDS labels on top.
+  semHeader(ctx, W, 'Apreo SEM + EDS: Inclusion at Dimple Base', '#38bdf8');
+  // Column labels drawn after header so they sit on top of it.
+  canvasLabel(ctx, mid/2, 16, 'SE Image', '#64748b', 'center');
+  canvasLabel(ctx, mid + (W-mid)/2, 16, 'EDS Map', '#64748b', 'center');
+  // EDS inclusion labels with backing.
+  canvasLabel(ctx, sx + 15, sy + 4, 'MnS', '#fbbf24', 'left');
+  canvasLabel(ctx, ax + 10, ay + 4, 'Al₂O₃', '#ef4444', 'left');
+  canvasLabel(ctx, ex + 4, H - 10, 'Fe matrix', '#22c55e', 'left');
+}
+
+// ── TAB 2: CLEAVAGE ────────────────────────────────────────────────────────
+let clvN = 0;
+const clvData = [
+  {
+    title: 'River Marks',
+    desc: 'River marks are fine parallel lines on a cleavage facet that converge in the direction opposite to crack propagation — following river marks "downstream" leads to the origin grain. They form when the crack front crosses a low-angle twist boundary between adjacent parallel cleavage planes, creating a step that appears as a line in SEM. Step height = offset between cleavage planes ≈ 1–100 nm.',
+    src: 'Thermo Fisher Apreo S LoVac; 5 kV SE2; BCC ferritic steel',
+    draw: drawRiverMarks
+  },
+  {
+    title: 'Feather Markings',
+    desc: 'Feather markings are a herringbone pattern branching from a central spine on a cleavage facet. Each "barb" propagates at a slight angle to the main direction. The spine points to the crack origin. Feather marks are prominent in low-carbon BCC steel fractured at low temperatures or high strain rates and are resolvable at 200–2,000× SEM.',
+    src: 'TFS Phenom XL; 10 kV; BSE; ferritic low-carbon steel, −60°C',
+    draw: drawFeatherMarks
+  },
+  {
+    title: 'Cleavage Facets — Grain Scale',
+    desc: 'At low magnification (50–200×) a brittle cleavage fracture appears as a mosaic of flat, bright facets — one facet per grain. Each facet is oriented on the {001} cleavage plane of that grain. The mismatch in orientation between adjacent grains produces steps at grain boundaries which appear as bright lines in SE imaging. Facet size = average grain size.',
+    src: 'TFS Apreo S; 10 kV; SE2; medium-carbon steel heat treated below NDT',
+    draw: drawCleavageFacets
+  },
+  {
+    title: 'Tongue Marks',
+    desc: 'Tongue marks are blunt, tongue-shaped depressions formed when the propagating cleavage crack encounters a mechanical twin in a neighbouring grain and propagates a short distance along the twin–matrix interface before reverting to the cleavage plane. Common in high strain-rate impact fractures and in HCP metals (Zr, Ti). Tongue direction indicates crack propagation direction.',
+    src: 'TFS Apreo; BSE detector; 15 kV; α-Fe Charpy specimen',
+    draw: drawTongueMarks
+  },
+  {
+    title: 'Grain Boundary Steps',
+    desc: 'When a cleavage crack crosses a grain boundary, the {001} plane orientation changes. The crack front twists to the new cleavage plane orientation, creating a step. Multiple river marks then form from this step, fanning out into the new grain. Grain boundary steps are the source of river marks and allow reconstruction of grain-by-grain crack path.',
+    src: 'TFS Apreo + EBSD (Oxford NordlysMax); grain orientation mapping confirms step geometry',
+    draw: drawGBSteps
+  }
+];
+
+function cleavageStep(dir) {
+  clvN = Math.max(0, Math.min(clvData.length - 1, clvN + dir));
+  document.getElementById('cl-step-label').textContent = `Feature ${clvN+1} of ${clvData.length}`;
+  document.getElementById('cl-prev').disabled = clvN === 0;
+  document.getElementById('cl-next').disabled = clvN === clvData.length - 1;
+  document.getElementById('clv-title').textContent = clvData[clvN].title;
+  document.getElementById('clv-desc').textContent = clvData[clvN].desc;
+  document.getElementById('clv-src').textContent = clvData[clvN].src;
+  clvData[clvN].draw();
+}
+
+function drawRiverMarks() {
+  const _r = getCtx('cv-clv-main'); if (!_r) return;
+  const { ctx, W, H } = _r;
+  const rng = seeded(501);
+  semBg(ctx, W, H, 1200, seeded(11));
+  // Flat cleavage facet base
+  ctx.fillStyle = 'rgba(20,30,55,0.6)'; ctx.fillRect(0, 20, W, H - 20);
+  // River marks converging to lower-left
+  const ox = 60, oy = H - 40;
+  for (let i = 0; i < 28; i++) {
+    const ang = -0.35 + (i / 27) * 0.7;
+    const len = 80 + rng() * 140;
+    const x1 = ox + Math.cos(ang) * 10, y1 = oy + Math.sin(ang) * 10;
+    const x2 = ox + Math.cos(ang) * len + rng() * 12, y2 = oy + Math.sin(ang) * len + rng() * 8;
+    const brightness = 0.25 + rng() * 0.35;
+    ctx.strokeStyle = `rgba(150,190,240,${brightness})`; ctx.lineWidth = 0.6 + rng() * 0.8;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  }
+  // Convergence annotation
+  ctx.beginPath(); ctx.arc(ox, oy, 8, 0, Math.PI * 2);
+  ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5; ctx.stroke();
+  semHeader(ctx, W, 'Cleavage River Marks — BCC Steel — 5 kV SE2', '#38bdf8');
+  semScaleBar(ctx, W, H, '10 μm');
+  canvasLabel(ctx, ox + 12, oy + 4, 'origin', '#38bdf8', 'left');
+  canvasLabel(ctx, W - 10, 36, '↑ rivers diverge away', '#7dd3fc', 'right');
+}
+
+function drawFeatherMarks() {
+  const _r = getCtx('cv-clv-main'); if (!_r) return;
+  const { ctx, W, H } = _r;
+  const rng = seeded(502);
+  semBg(ctx, W, H, 1200, seeded(22));
+  ctx.fillStyle = 'rgba(18,28,52,0.55)'; ctx.fillRect(0, 20, W, H - 20);
+  // Central spine
+  const spX1 = 50, spY = H / 2 + 20;
+  const spX2 = W - 30;
+  ctx.strokeStyle = 'rgba(248,200,90,0.9)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(spX1, spY); ctx.lineTo(spX2, spY); ctx.stroke();
+  // Feather barbs
+  for (let ix = spX1 + 8; ix < spX2 - 10; ix += 6 + rng() * 4) {
+    const barb = 14 + rng() * 18;
+    for (const side of [-1, 1]) {
+      const x2 = ix - barb * 0.6 + rng() * 4, y2 = spY + side * barb + rng() * 4;
+      ctx.strokeStyle = `rgba(248,200,90,${0.3+rng()*0.4})`; ctx.lineWidth = 0.6;
+      ctx.beginPath(); ctx.moveTo(ix, spY); ctx.lineTo(x2, y2); ctx.stroke();
+    }
+  }
+  semHeader(ctx, W, 'Feather Markings — Low-Carbon Steel, −60°C — 10 kV BSE', '#ef4444');
+  semScaleBar(ctx, W, H, '50 μm');
+  canvasLabel(ctx, spX1 - 8, spY - 10, '◀ origin', '#ef4444', 'left');
+  canvasLabel(ctx, spX2 - 35, spY - 8, 'spine', '#fcd34d', 'left');
+}
+
+function drawCleavageFacets() {
+  const _r = getCtx('cv-clv-main'); if (!_r) return;
+  const { ctx, W, H } = _r;
+  const rng = seeded(503);
+  semBg(ctx, W, H, 800, seeded(33));
+  // Voronoi-like grain facets
+  const pts = [];
+  for (let i = 0; i < 22; i++) pts.push([20 + rng()*(W-40), 25 + rng()*(H-35)]);
+  const colors = ['rgba(60,90,140', 'rgba(40,70,120', 'rgba(70,100,155', 'rgba(50,80,130', 'rgba(55,85,145'];
+  pts.forEach((p, i) => {
+    ctx.beginPath(); ctx.moveTo(p[0], p[1]);
+    const nb = pts.filter((q,j)=>j!==i).sort((a,b)=>dist(p,a)-dist(p,b)).slice(0,5);
+    ctx.arc(p[0], p[1], dist(p, nb[0])*0.48, 0, Math.PI*2);
+    ctx.fillStyle = colors[i%colors.length] + `,${0.5+rng()*0.35})`; ctx.fill();
+    ctx.strokeStyle = 'rgba(180,210,255,0.5)'; ctx.lineWidth = 0.8; ctx.stroke();
+    // River marks inside grain
+    const ang = rng() * Math.PI;
+    for (let r2 = 0; r2 < 5; r2++) {
+      const da = ang + (r2-2)*0.12, rl = 8 + rng()*12;
+      ctx.strokeStyle = `rgba(160,200,240,${0.2+rng()*0.25})`; ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      ctx.moveTo(p[0] + Math.cos(da)*2, p[1] + Math.sin(da)*2);
+      ctx.lineTo(p[0] + Math.cos(da)*rl, p[1] + Math.sin(da)*rl);
+      ctx.stroke();
+    }
+  });
+  semHeader(ctx, W, 'Cleavage Facets — Medium-Carbon Steel — 10 kV SE2', '#fca5a5');
+  semScaleBar(ctx, W, H, '200 μm');
+}
+
+function dist(a,b){return Math.sqrt((a[0]-b[0])**2+(a[1]-b[1])**2);}
+
+function drawTongueMarks() {
+  const _r = getCtx('cv-clv-main'); if (!_r) return;
+  const { ctx, W, H } = _r;
+  const rng = seeded(504);
+  semBg(ctx, W, H, 1000, seeded(44));
+  ctx.fillStyle = 'rgba(18,28,52,0.55)'; ctx.fillRect(0, 20, W, H - 20);
+  // Cleavage facet base with faint river marks
+  for (let i = 0; i < 18; i++) {
+    ctx.strokeStyle = `rgba(100,140,200,${0.1+rng()*0.15})`; ctx.lineWidth = 0.5;
+    ctx.beginPath(); ctx.moveTo(0, 28 + rng()*(H-30)); ctx.lineTo(W, 28 + rng()*(H-30)); ctx.stroke();
+  }
+  // Tongue marks
+  for (let i = 0; i < 8; i++) {
+    const tx = 40 + rng()*(W-80), ty = 40 + rng()*(H-60), tw = 18+rng()*22, tl = 12+rng()*16;
+    ctx.save(); ctx.translate(tx, ty); ctx.rotate((rng()-0.5)*0.4);
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(tw*0.5, -tl*0.4, tw, 0);
+    ctx.quadraticCurveTo(tw*0.5, tl*0.7, 0, 0); ctx.closePath();
+    ctx.fillStyle = `rgba(167,139,250,${0.35+rng()*0.3})`; ctx.fill();
+    ctx.strokeStyle = `rgba(196,181,253,0.7)`; ctx.lineWidth = 0.8; ctx.stroke();
+    ctx.restore();
+  }
+  semHeader(ctx, W, 'Tongue Marks — α-Fe Charpy Specimen — 15 kV BSE', '#a78bfa');
+  semScaleBar(ctx, W, H, '20 μm');
+  canvasLabel(ctx, W/2, H - 30, 'tongue marks', '#a78bfa', 'center');
+}
+
+function drawGBSteps() {
+  const _r = getCtx('cv-clv-main'); if (!_r) return;
+  const { ctx, W, H } = _r;
+  const rng = seeded(505);
+  semBg(ctx, W, H, 900, seeded(55));
+  // Two grains separated by boundary
+  const bx = W / 2 + (rng()-0.5)*30;
+  ctx.fillStyle = 'rgba(18,32,60,0.7)'; ctx.fillRect(0, 20, bx, H-20);
+  ctx.fillStyle = 'rgba(28,45,80,0.7)'; ctx.fillRect(bx, 20, W-bx, H-20);
+  // River marks in left grain
+  for (let i = 0; i < 14; i++) {
+    const y = 32 + i * (H-36)/14 + rng()*8;
+    ctx.strokeStyle = `rgba(130,180,240,${0.25+rng()*0.3})`; ctx.lineWidth = 0.7;
+    ctx.beginPath(); ctx.moveTo(10 + rng()*20, y); ctx.lineTo(bx - 5, y + rng()*6); ctx.stroke();
+  }
+  // River marks in right grain — different angle after step
+  for (let i = 0; i < 12; i++) {
+    const y = 32 + i*(H-36)/12 + rng()*8;
+    const y2 = y + 15 + rng()*10;
+    ctx.strokeStyle = `rgba(130,180,240,${0.2+rng()*0.25})`; ctx.lineWidth = 0.7;
+    ctx.beginPath(); ctx.moveTo(bx + 5, y); ctx.lineTo(W - 10, y2 + rng()*8); ctx.stroke();
+  }
+  // Grain boundary line
+  ctx.strokeStyle = 'rgba(200,220,255,0.7)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(bx, 20); ctx.lineTo(bx + (rng()-0.5)*8, H); ctx.stroke();
+  // Step annotation
+  ctx.beginPath(); ctx.arc(bx, H/2, 7, 0, Math.PI*2);
+  ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1.5; ctx.stroke();
+  semHeader(ctx, W, 'Grain Boundary Step + River Marks — EBSD Correlated', '#38bdf8');
+  semScaleBar(ctx, W, H, '30 μm');
+  canvasLabel(ctx, bx + 10, H/2 + 4, 'GB step', '#f59e0b', 'left');
+  canvasLabel(ctx, 12, 36, 'Grain A', '#7dd3fc', 'left');
+  canvasLabel(ctx, bx + 8, 36, 'Grain B', '#7dd3fc', 'left');
+}
+
+function drawClvGallery() {
+  drawClvGrid1();
+  drawClvGrid2();
+}
+
+function drawClvGrid1() {
+  const _r = getCtx('cv-clv-grid1'); if (!_r) return;
+  const { ctx, W, H } = _r;
+  const rng = seeded(601);
+  semBg(ctx, W, H, 800, seeded(99));
+  ctx.fillStyle = 'rgba(18,28,52,0.5)'; ctx.fillRect(0, 20, W, H-20);
+  // Feather marks (left half)
+  const spY = H*0.55;
+  ctx.strokeStyle = 'rgba(240,180,50,0.8)'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(15, spY); ctx.lineTo(W/2-10, spY); ctx.stroke();
+  for (let ix = 22; ix < W/2-10; ix += 5 + rng()*3) {
+    const barb = 10 + rng()*12;
+    for (const side of [-1,1]) {
+      ctx.strokeStyle = `rgba(240,180,50,${0.25+rng()*0.35})`; ctx.lineWidth = 0.5;
+      ctx.beginPath(); ctx.moveTo(ix, spY); ctx.lineTo(ix - barb*0.55 + rng()*3, spY + side*barb + rng()*3); ctx.stroke();
+    }
+  }
+  // Chevron (right half)
+  const cx = W*0.75, cy = H*0.5;
+  for (let r2 = 1; r2 <= 5; r2++) {
+    ctx.strokeStyle = `rgba(248,113,113,${0.4+r2*0.07})`; ctx.lineWidth = 0.7;
+    ctx.beginPath(); ctx.moveTo(cx-r2*18, cy-r2*14); ctx.lineTo(cx, cy); ctx.lineTo(cx+r2*18, cy-r2*14); ctx.stroke();
+  }
+  semScaleBar(ctx, W, H, '100 μm');
+  canvasLabel(ctx, 6, 16, 'Feather marks', '#ef4444', 'left');
+  canvasLabel(ctx, W*0.75, H-30, 'Chevron', '#fca5a5', 'center');
+}
+
+function drawClvGrid2() {
+  const _r = getCtx('cv-clv-grid2'); if (!_r) return;
+  const { ctx, W, H } = _r;
+  const rng = seeded(602);
+  semBg(ctx, W, H, 800, seeded(110));
+  ctx.fillStyle = 'rgba(18,28,52,0.5)'; ctx.fillRect(0, 20, W, H-20);
+  // Tongue marks (left half)
+  for (let i = 0; i < 5; i++) {
+    const tx = 20 + rng()*(W/2-30), ty = 35 + rng()*(H-55), tw = 16+rng()*18, tl = 10+rng()*14;
+    ctx.save(); ctx.translate(tx, ty); ctx.rotate((rng()-0.5)*0.5);
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.quadraticCurveTo(tw*0.5,-tl*0.35,tw,0); ctx.quadraticCurveTo(tw*0.5,tl*0.65,0,0); ctx.closePath();
+    ctx.fillStyle = `rgba(167,139,250,${0.35+rng()*0.3})`; ctx.fill();
+    ctx.strokeStyle = 'rgba(196,181,253,0.65)'; ctx.lineWidth = 0.7; ctx.stroke();
+    ctx.restore();
+  }
+  // Grain boundary step (right half)
+  const bx = W*0.65;
+  ctx.fillStyle = 'rgba(10,20,40,0.5)'; ctx.fillRect(bx, 20, W-bx, H-20);
+  ctx.strokeStyle = 'rgba(200,220,255,0.7)'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(bx, 20); ctx.lineTo(bx, H); ctx.stroke();
+  for (let i = 0; i < 8; i++) {
+    const y = 28 + i*(H-32)/8;
+    ctx.strokeStyle = `rgba(120,170,230,${0.2+rng()*0.2})`; ctx.lineWidth = 0.5;
+    ctx.beginPath(); ctx.moveTo(bx+5, y); ctx.lineTo(W-5, y+8+rng()*12); ctx.stroke();
+  }
+  ctx.beginPath(); ctx.arc(bx, H/2, 6, 0, Math.PI*2);
+  ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 1.2; ctx.stroke();
+  semScaleBar(ctx, W, H, '50 μm');
+  canvasLabel(ctx, 4, 16, 'Tongue marks', '#a78bfa', 'left');
+  canvasLabel(ctx, W*0.82, H-30, 'GB Step', '#c4b5fd', 'center');
+}
+
+// ── TAB 3: FATIGUE STRIATIONS ─────────────────────────────────────────────
+let striZoom = 0;
+function setStriZoom(z, btn) {
+  striZoom = z;
+  document.querySelectorAll('#stri-zoom-row .zoom-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const titles = [
+    'Near-Threshold Striations — Fine Spacing (ΔK ≈ 5 MPa√m)',
+    'Paris Regime Striations — Medium Spacing (ΔK ≈ 15 MPa√m)',
+    'High ΔK Striations — Wide Spacing + Secondary Cracks (ΔK ≈ 35 MPa√m)'
+  ];
+  const descs = [
+    'Near the fatigue threshold ΔKth, striation spacing is 10–100 nm — at or near the TEM resolution limit for SEM. Thermo Fisher Apreo at 100 kV FEG with immersion lens mode achieves 1–2 nm resolution, resolving individual striations. The fracture surface appears nearly flat with very fine, closely-spaced parallel ridges perpendicular to the local crack propagation direction. Secondary cracks are absent.',
+    'In the Paris power-law regime (da/dN = C·ΔKⁿ), striation spacing is 0.1–5 μm — readily resolved at 2,000–20,000× SEM. Striations are uniformly spaced and clearly parallel. Spacing can be measured directly to give da/dN. Secondary cracks begin to appear at grain boundaries and inclusions at higher magnifications. Beach marks at lower magnification record load excursions.',
+    'At high ΔK approaching KIc, striation spacing is 2–15 μm, static fracture mechanisms (dimples, cleavage) begin to appear between striations, and secondary cracks are prominent and branching. The fracture surface is rougher — the crack follows grain boundaries and inclusions more than at lower ΔK. Striation measurement becomes less reliable as mixed-mode fracture appears.'
+  ];
+  const srcs = [
+    'Source: Forsyth–Laird model; TFS Apreo SEM application note AN0052',
+    'Source: Paris–Erdogan law; ASTM E1820; TFS Apreo 20,000×',
+    'Source: ASM Vol. 12 pp. 112–120; TFS Apreo high-ΔK regime atlas'
+  ];
+  document.getElementById('stri-title').textContent = titles[z];
+  document.getElementById('stri-desc').textContent = descs[z];
+  document.getElementById('stri-src').textContent = srcs[z];
+  drawStriMain();
+}
+
+function drawStriMain() {
+  const _r = getCtx('cv-stri-main'); if (!_r) return;
+  const { ctx, W, H } = _r;
+  const rng = seeded(700 + striZoom * 11);
+  semBg(ctx, W, H, 1200, seeded(striZoom + 13));
+
+  const spacings = [3, 8, 18];
+  const sp = spacings[striZoom];
+  const wavy = [0.5, 1.5, 3][striZoom];
+  const bright = [0.22, 0.32, 0.45][striZoom];
+  const lbls = ['Near-threshold: spacing ~50 nm', 'Paris regime: spacing ~1 μm', 'High ΔK: spacing ~5 μm'];
+  const bars2 = ['100 nm', '2 μm', '10 μm'];
+
+  // Draw striations
+  let y = 24;
+  while (y < H - 10) {
+    const xoffset = rng() * wavy * 4;
+    ctx.strokeStyle = `rgba(150,190,240,${bright + rng()*0.12})`; ctx.lineWidth = 0.5 + rng()*0.5;
+    ctx.beginPath();
+    ctx.moveTo(0, y + xoffset);
+    for (let x2 = 0; x2 < W; x2 += 8) {
+      ctx.lineTo(x2, y + Math.sin(x2 * 0.04) * wavy + rng() * wavy * 0.5);
+    }
+    ctx.stroke();
+    y += sp + rng() * sp * 0.3;
+  }
+
+  // Measurement bracket — positioned well above the bottom status row.
+  const my = H - 65, x1m = 30, x2m = x1m + sp * 4;
+  ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(x1m, my); ctx.lineTo(x2m, my); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x1m, my - 4); ctx.lineTo(x1m, my + 4); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x2m, my - 4); ctx.lineTo(x2m, my + 4); ctx.stroke();
+
+  const headers = ['Near-Threshold Striations — 100,000× — TFS Apreo FEG', 'Paris Regime Striations — 10,000× — TFS Apreo', 'High ΔK Striations + 2° Cracks — 2,000× — TFS Apreo'];
+  semHeader(ctx, W, headers[striZoom], '#38bdf8');
+  semScaleBar(ctx, W, H, bars2[striZoom]);
+
+  // Secondary cracks at high ΔK.
+  if (striZoom === 2) {
+    for (let i = 0; i < 5; i++) {
+      const scx = 30 + rng()*(W-60), scy = 30 + rng()*(H-80);
+      ctx.strokeStyle = `rgba(239,68,68,0.7)`; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(scx, scy);
+      ctx.lineTo(scx + (rng()-0.5)*30, scy + rng()*20); ctx.stroke();
+      if (i === 0) canvasLabel(ctx, scx + 4, scy - 3, '2° crack', '#ef4444', 'left');
+    }
+  }
+  // Status label first, then green bracket label on top — no backing-rect overlap.
+  canvasLabel(ctx, 6, H - 28, lbls[striZoom], '#64748b', 'left');
+  canvasLabel(ctx, x2m + 5, my + 4, 'da/dN →', '#22c55e', 'left');
+}
+
+function drawStriCount() {
+  const _r = getCtx('cv-stri-count'); if (!_r) return;
+  const { ctx, W, H } = _r;
+  const rng = seeded(750);
+  semBg(ctx, W, H, 1000, seeded(14));
+  const sp = 12;
+  let y = 24;
+  while (y < H) {
+    ctx.strokeStyle = `rgba(150,190,240,${0.28 + rng()*0.1})`; ctx.lineWidth = 0.6 + rng()*0.4;
+    ctx.beginPath(); ctx.moveTo(0, y);
+    for (let x2 = 0; x2 < W; x2 += 8)
+      ctx.lineTo(x2, y + Math.sin(x2*0.05)*1.5 + rng()*1.5);
+    ctx.stroke();
+    y += sp + rng()*3;
+  }
+  // Intercept line
+  const lx1 = 30, lx2 = W - 30, ly = H/2 + 20;
+  ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1.5; ctx.setLineDash([5,3]);
+  ctx.beginPath(); ctx.moveTo(lx1, ly); ctx.lineTo(lx2, ly); ctx.stroke(); ctx.setLineDash([]);
+  // Intersection marks
+  let count = 0;
+  let lc = lx1 + 5;
+  while (lc < lx2) {
+    ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(lc, ly-5); ctx.lineTo(lc, ly+5); ctx.stroke();
+    lc += sp + rng() * 3; count++;
+  }
+  semHeader(ctx, W, 'Striation Count — Intercept Method (ASTM E1823)', '#22c55e');
+  semScaleBar(ctx, W, H, '5 μm');
+  // Count numbers and formula drawn last with backings.
+  lc = lx1 + 5; let ci = 0;
+  const rng2 = seeded(750);
+  while (lc < lx2) { lc += sp + rng2() * 3; ci++; }
+  lc = lx1 + 5; const rng3 = seeded(750); ci = 0;
+  while (lc < lx2) {
+    canvasLabel(ctx, lc, ly + 14, String(++ci), '#fbbf24', 'center');
+    lc += sp + rng3() * 3;
+  }
+  canvasLabel(ctx, W/2, H - 30, `N = ${count} striations over ${Math.round(lx2-lx1)} px → s = L/N`, '#f59e0b', 'center');
+}
+
+// ── TAB 4: ZEISS ATLAS ────────────────────────────────────────────────────
+let zeissType = 0;
+function setZeissType(z, btn) {
+  zeissType = z;
+  document.querySelectorAll('#zeiss-type-row .zoom-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const titles = ['Ductile Overload — Annotated SEM Fractograph', 'Transgranular Cleavage — Annotated Fractograph', 'Intergranular Fracture — Annotated Fractograph', 'High-Cycle Fatigue — Annotated Fractograph'];
+  const descs = [
+    'Ductile overload fracture in low-alloy steel (AISI 4340, Rc 36). Zeiss Sigma 300 VP-FE SEM; 5 kV; in-lens SE detector; 45° stage tilt for depth relief. The central fibrous zone shows equiaxed dimples (Mode I MVC); the perimeter shear lip shows elongated tear dimples. Annotations applied with Zeiss SmartSEM v6.01 overlay.',
+    'Transgranular cleavage fracture in medium-carbon steel, −78°C Charpy impact. Zeiss Gemini SEM 300; 10 kV; SE2; flat stage. Bright flat cleavage facets dominate; river marks visible within each facet; grain boundary steps produce bright lines. Zeiss SmartSEM auto-annotation identifies facets by grayscale threshold.',
+    'Intergranular fracture in 4340 steel, temper embrittlement (350°C). Zeiss GeminiSEM 450; 15 kV; BSE + EDS overlay. Grain boundary facets show "rock candy" morphology. EDS confirms P and Sb segregation on boundary — classic temper embrittlement signature. No river marks on facets distinguishes IG from cleavage.',
+    'High-cycle fatigue (σ_a = 0.45 Sy, 2.1×10⁷ cycles) in Al 7075-T6. Zeiss Crossbeam FIB-SEM; 5 kV; in-lens SE. Fatigue striations at 15,000× spacing ≈ 0.4 μm (Paris regime). Secondary cracks at grain boundaries. Multiple initiation sites visible at machined surface; ratchet marks between sites. Overload zone (upper right) shows dimples.'
+  ];
+  const srcs = [
+    'Zeiss Sigma 300 VP-FE; 5 kV; in-lens SE; Zeiss SmartSEM annotations',
+    'Zeiss Gemini SEM 300; 10 kV; SE2; Zeiss SmartSEM v6.01',
+    'Zeiss GeminiSEM 450 + Oxford EDS; 15 kV BSE; SmartSEM annotations',
+    'Zeiss Crossbeam 550 FIB-SEM; 5 kV; in-lens SE; 15,000×'
+  ];
+  const noteData = [
+    [['#22c55e','Equiaxed dimples','central zone; 3–8 μm dia; MnS inclusions at base (confirmed EDS)'],['#86efac','Shear lip','peripheral tear dimples; elongated ∥ to shear direction; aspect ratio 2–4×'],['#fbbf24','Inclusion cluster','enlarged void at stringer; local fracture toughness reduced'],['#38bdf8','Wall ridge network','interconnected void walls; fractal dimension D ≈ 1.3–1.6 (Zeiss Atlas 5 quantification)']],
+    [['#ef4444','Cleavage facets','one per grain; bright, flat; size = grain diameter'],['#fca5a5','River marks','fine lines on each facet; converge toward origin grain'],['#38bdf8','Grain boundary steps','bright lines; source of river marks in adjacent grains'],['#fbbf24','Chevron (macro)','herringbone at sample scale; apex → origin']],
+    [['#a78bfa','Rock candy facets','smooth IG facets; no river marks; each facet = one grain boundary'],['#fbbf24','P/Sb segregation','EDS overlay (yellow); enriched on grain boundary surface'],['#ef4444','Grain boundary triple points','stress concentration sites; cracking initiates here'],['#94a3b8','No dimples','fully brittle IG separation; confirms embrittlement not overload']],
+    [['#38bdf8','Fatigue striations','spacing 0.4 μm; perpendicular to crack growth direction'],['#fbbf24','Ratchet marks','steps between initiation sites; surface defect origin'],['#ef4444','Final fracture zone','ductile dimples; small overload area → high-cycle low-stress regime'],['#22c55e','Secondary cracks','at grain boundaries; indicate Stage II propagation']]
+  ];
+  document.getElementById('zeiss-title').textContent = titles[z];
+  document.getElementById('zeiss-desc').textContent = descs[z];
+  document.getElementById('zeiss-src').textContent = srcs[z];
+  const nl = document.getElementById('zeiss-notes');
+  nl.innerHTML = noteData[z].map(([c,b,t])=>
+    `<div class="ann-item"><div class="ann-dot" style="background:${c};"></div><div class="ann-text"><strong style="color:${c};">${b}</strong> — ${t}</div></div>`
+  ).join('');
+  drawZeissMain();
+}
+
+function drawZeissMain() {
+  const _r = getCtx('cv-zeiss-main'); if (!_r) return;
+  const { ctx, W, H } = _r;
+  if (zeissType === 0) drawZDuctile(ctx, W, H, true);
+  else if (zeissType === 1) drawZCleavage(ctx, W, H, true);
+  else if (zeissType === 2) drawZIntergranular(ctx, W, H, true);
+  else drawZFatigue(ctx, W, H, true);
+}
+
+function drawZDuctile(ctx, W, H, annotate) {
+  const rng = seeded(800);
+  semBg(ctx, W, H, 1200, seeded(21));
+  // Dimples
+  for (let i = 0; i < 55; i++) {
+    const cx = 10 + rng()*(W-20), cy = 24 + rng()*(H-30);
+    const dr = 5 + rng()*16;
+    const g = ctx.createRadialGradient(cx-dr*0.2,cy-dr*0.15,0,cx,cy,dr);
+    g.addColorStop(0,'rgba(25,45,80,0.95)'); g.addColorStop(1,'rgba(70,110,170,0.35)');
+    ctx.beginPath(); ctx.arc(cx,cy,dr,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
+    ctx.strokeStyle=`rgba(100,150,220,${0.3+rng()*0.25})`; ctx.lineWidth=0.7; ctx.stroke();
+    if (rng()>0.65) {
+      ctx.beginPath(); ctx.arc(cx+(rng()-0.5)*dr*0.5,cy+(rng()-0.5)*dr*0.5,dr*0.18,0,Math.PI*2);
+      ctx.fillStyle=rng()>0.5?'#fbbf24':'#94a3b8'; ctx.fill();
+    }
+  }
+  semHeader(ctx, W, 'Ductile Overload — AISI 4340 — 5 kV In-Lens SE', '#22c55e');
+  if (annotate) {
+    annDot(ctx, 90, 80, 12, '#22c55e', 'Equiaxed dimples');
+    annDot(ctx, 200, 200, 8, '#fbbf24', 'MnS inclusion');
+    annDot(ctx, 310, 140, 15, '#86efac', 'Wall ridge');
+    semScaleBar(ctx, W, H, '5 μm');
+    semBadge(ctx, W, 'Zeiss Sigma 300 VP-FE');
+  }
+}
+
+function drawZCleavage(ctx, W, H, annotate) {
+  const rng = seeded(810);
+  semBg(ctx, W, H, 900, seeded(22));
+  // Facets
+  for (let i = 0; i < 16; i++) {
+    const cx = 20+rng()*(W-40), cy = 24+rng()*(H-32);
+    const fr = 16+rng()*30;
+    ctx.beginPath(); ctx.arc(cx,cy,fr,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${30+rng()*20},${50+rng()*25},${85+rng()*25},0.75)`; ctx.fill();
+    ctx.strokeStyle='rgba(200,220,255,0.5)'; ctx.lineWidth=0.8; ctx.stroke();
+    const ang = rng()*Math.PI;
+    for (let r2=0;r2<7;r2++){
+      const da=ang+(r2-3)*0.11, rl=6+rng()*fr*0.7;
+      ctx.strokeStyle=`rgba(160,200,240,${0.2+rng()*0.22})`; ctx.lineWidth=0.5;
+      ctx.beginPath(); ctx.moveTo(cx+Math.cos(da)*2,cy+Math.sin(da)*2); ctx.lineTo(cx+Math.cos(da)*rl,cy+Math.sin(da)*rl); ctx.stroke();
+    }
+  }
+  semHeader(ctx, W, 'Transgranular Cleavage — Med-C Steel, −78°C — 10 kV SE2', '#ef4444');
+  if (annotate) {
+    annDot(ctx, 80, 100, 14, '#ef4444', 'Cleavage facet');
+    annDot(ctx, 220, 180, 10, '#38bdf8', 'River marks');
+    annDot(ctx, 330, 100, 8, '#fbbf24', 'GB step');
+    semScaleBar(ctx, W, H, '100 μm');
+    semBadge(ctx, W, 'Zeiss Gemini SEM 300');
+  }
+}
+
+function drawZIntergranular(ctx, W, H, annotate) {
+  const rng = seeded(820);
+  semBg(ctx, W, H, 700, seeded(23));
+  // Rock candy facets
+  const pts = [];
+  for (let i=0;i<20;i++) pts.push([15+rng()*(W-30),25+rng()*(H-35)]);
+  pts.forEach((p,i)=>{
+    const nb = pts.filter((_,j)=>j!==i).sort((a,b)=>dist(p,a)-dist(p,b)).slice(0,5);
+    const r = dist(p,nb[0])*0.46;
+    ctx.beginPath(); ctx.arc(p[0],p[1],r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${40+rng()*15},${60+rng()*20},${100+rng()*25},0.7)`; ctx.fill();
+    ctx.strokeStyle='rgba(200,220,255,0.55)'; ctx.lineWidth=1; ctx.stroke();
+    // P/Sb grain boundary yellow dots
+    if (rng()>0.4) {
+      for (let k=0;k<5;k++){
+        const bx=p[0]+(rng()-0.5)*r*1.6, by=p[1]+(rng()-0.5)*r*1.6;
+        const bd=dist([bx,by],p);
+        if (Math.abs(bd-r)<4) { ctx.beginPath(); ctx.arc(bx,by,1.5,0,Math.PI*2); ctx.fillStyle=`rgba(251,191,36,${0.5+rng()*0.4})`; ctx.fill(); }
+      }
+    }
+  });
+  semHeader(ctx, W, 'Intergranular — 4340 Temper Embrittlement — 15 kV BSE', '#a78bfa');
+  if (annotate) {
+    annDot(ctx, 100, 110, 16, '#a78bfa', 'IG facet (rock candy)');
+    annDot(ctx, 220, 190, 6, '#fbbf24', 'P/Sb segregation (EDS)');
+    annDot(ctx, 310, 90, 7, '#ef4444', 'Triple point crack');
+    semScaleBar(ctx, W, H, '20 μm');
+    semBadge(ctx, W, 'Zeiss GeminiSEM 450');
+  }
+}
+
+function drawZFatigue(ctx, W, H, annotate) {
+  const rng = seeded(830);
+  semBg(ctx, W, H, 1100, seeded(24));
+  // Striations
+  const sp = 9;
+  let y = 24;
+  while (y < H*0.75) {
+    ctx.strokeStyle=`rgba(140,185,235,${0.28+rng()*0.12})`; ctx.lineWidth=0.5+rng()*0.4;
+    ctx.beginPath(); ctx.moveTo(0,y);
+    for (let x2=0;x2<W;x2+=8) ctx.lineTo(x2,y+Math.sin(x2*0.04)*1.5+rng()*1.5);
+    ctx.stroke(); y+=sp+rng()*2;
+  }
+  // Overload zone (upper-right quarter) — dimples
+  const ox = W*0.6, oy2 = 24, odw = W - ox, odh = H*0.4;
+  ctx.fillStyle='rgba(8,13,26,0.65)'; ctx.fillRect(ox,oy2,odw,odh);
+  ctx.strokeStyle='rgba(239,68,68,0.5)'; ctx.lineWidth=1; ctx.strokeRect(ox,oy2,odw,odh);
+  for (let i=0;i<20;i++){
+    const cx=ox+5+rng()*(odw-10),cy=oy2+5+rng()*(odh-10),dr=3+rng()*8;
+    const g=ctx.createRadialGradient(cx,cy,0,cx,cy,dr);
+    g.addColorStop(0,'rgba(25,45,80,0.95)'); g.addColorStop(1,'rgba(70,110,170,0.35)');
+    ctx.beginPath(); ctx.arc(cx,cy,dr,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
+  }
+  // Secondary crack
+  ctx.strokeStyle='rgba(239,68,68,0.65)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(120,150); ctx.lineTo(140,170); ctx.lineTo(135,195); ctx.stroke();
+  semHeader(ctx, W, 'Fatigue — Al 7075-T6, HCF — 5 kV In-Lens SE', '#f59e0b');
+  if (annotate) {
+    annDot(ctx, 60, 100, 10, '#38bdf8', 'Striations (0.4 μm)');
+    annDot(ctx, 120, 155, 8, '#22c55e', 'Secondary crack');
+    annDot(ctx, W*0.75, oy2+odh*0.5, 14, '#ef4444', 'Overload zone');
+    semScaleBar(ctx, W, H, '2 μm');
+    semBadge(ctx, W, 'Zeiss Crossbeam 550');
+  }
+}
+
+function drawZDuctileSmall(canvasId) {
+  const _r = getCtx(canvasId); if (!_r) return;
+  const { ctx, W, H } = _r;
+  drawZDuctile(ctx, W, H, false);
+  semScaleBar(ctx, W, H, '5 μm');
+}
+function drawZBrittleSmall(canvasId) {
+  const _r = getCtx(canvasId); if (!_r) return;
+  const { ctx, W, H } = _r;
+  drawZCleavage(ctx, W, H, false);
+  semScaleBar(ctx, W, H, '100 μm');
+}
+function drawZFatigueSmall(canvasId) {
+  const _r = getCtx(canvasId); if (!_r) return;
+  const { ctx, W, H } = _r;
+  drawZFatigue(ctx, W, H, false);
+  semScaleBar(ctx, W, H, '2 μm');
+}
+
+function drawCreep() {
+  const _r = getCtx('cv-z-creep'); if (!_r) return;
+  const { ctx, W, H } = _r;
+  const rng=seeded(900);
+  semBg(ctx,W,H,800,seeded(31));
+  // Grain facets
+  const pts=[];
+  for (let i=0;i<18;i++) pts.push([15+rng()*(W-30),20+rng()*(H-30)]);
+  pts.forEach(p=>{
+    const nb=pts.filter(q=>q!==p).sort((a,b)=>dist(p,a)-dist(p,b)).slice(0,5);
+    ctx.beginPath(); ctx.arc(p[0],p[1],dist(p,nb[0])*0.44,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${40+rng()*12},${58+rng()*18},${95+rng()*20},0.65)`; ctx.fill();
+    ctx.strokeStyle='rgba(200,220,255,0.5)'; ctx.lineWidth=0.8; ctx.stroke();
+    // Grain boundary cavities
+    for (let k=0;k<3;k++){
+      const ang=rng()*Math.PI*2, r2=dist(p,nb[0])*0.42;
+      const bx=p[0]+Math.cos(ang)*r2*0.8, by=p[1]+Math.sin(ang)*r2*0.8;
+      if (bx>0&&bx<W&&by>0&&by<H){
+        ctx.beginPath(); ctx.arc(bx,by,1.5+rng()*3,0,Math.PI*2);
+        ctx.fillStyle=`rgba(251,146,60,${0.5+rng()*0.4})`; ctx.fill();
+      }
+    }
+  });
+  // Wedge crack at triple point
+  const tx=W*0.55,ty=H*0.45;
+  ctx.strokeStyle='rgba(253,186,116,0.8)'; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(tx+20,ty-15); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(tx+22,ty+12); ctx.stroke();
+  semHeader(ctx,W,'Creep Fracture — IN718, 650°C — 15 kV BSE','#fb923c');
+  semScaleBar(ctx,W,H,'20 μm');
+}
+
+function drawSCC() {
+  const _r = getCtx('cv-z-scc'); if (!_r) return;
+  const { ctx, W, H } = _r;
+  const rng=seeded(950);
+  semBg(ctx,W,H,900,seeded(32));
+  ctx.fillStyle='rgba(18,28,52,0.5)'; ctx.fillRect(0,20,W,H-20);
+  // Main crack (wide, corroded)
+  const cx2=W*0.4;
+  ctx.strokeStyle='rgba(52,211,153,0.6)'; ctx.lineWidth=4;
+  ctx.beginPath(); ctx.moveTo(cx2,24);
+  let yc=24;
+  while(yc<H-15){
+    ctx.lineTo(cx2+(rng()-0.5)*8, yc+=8+rng()*4);
+  }
+  ctx.stroke();
+  // Corrosion product fill
+  ctx.strokeStyle='rgba(110,231,183,0.3)'; ctx.lineWidth=8;
+  ctx.beginPath(); ctx.moveTo(cx2,24);
+  yc=24;
+  while(yc<H-15) ctx.lineTo(cx2+(rng()-0.5)*6, yc+=8+rng()*4);
+  ctx.stroke();
+  // Secondary branches
+  for (let i=0;i<7;i++){
+    const sy=35+rng()*(H-50), sx=cx2+(rng()-0.5)*6;
+    const blen=20+rng()*35, bang=(rng()-0.5)*1.4;
+    ctx.strokeStyle=`rgba(110,231,183,${0.4+rng()*0.3})`; ctx.lineWidth=0.8;
+    ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(sx+Math.sin(bang)*blen, sy+Math.cos(bang)*blen); ctx.stroke();
+  }
+  semHeader(ctx,W,'Stress Corrosion Cracking — 316SS / Cl⁻ — 5 kV SE2','#34d399');
+  semScaleBar(ctx,W,H,'50 μm');
+}
+
+// ── Master redraw ──────────────────────────────────────────────────────────
+function redrawAll(tab) {
+  if (tab === 'dimple') { drawEquiaxed(); drawElongated(); drawTear(); drawEDS(); }
+  if (tab === 'cleavage') { clvData[clvN].draw(); drawClvGallery(); }
+  if (tab === 'striation') { drawStriMain(); drawStriCount(); }
+  if (tab === 'zeiss') { drawZeissMain(); drawZDuctileSmall('cv-z-ductile'); drawZBrittleSmall('cv-z-brittle'); drawZFatigueSmall('cv-z-fatigue'); drawCreep(); drawSCC(); }
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+(function init() {
+  drawEquiaxed(); drawElongated(); drawTear(); drawEDS();
+})();
+</script>
+</body>
+</html>
