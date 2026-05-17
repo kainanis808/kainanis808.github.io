@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welding Metallurgy — ESAB Handbook</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fff; color: #1a1a1a; }
+
+header { background: #1e3a5f; color: #fff; padding: 28px 24px 22px; text-align: center; }
+header h1 { font-size: 1.85rem; font-weight: 700; }
+header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
+
+.source-note {
+  background: #eff6ff; border-left: 4px solid #1e3a5f;
+  padding: 10px 18px; font-size: 0.82rem; color: #1e40af; line-height: 1.55;
+}
+
+.tab-bar {
+  display: flex; flex-wrap: wrap; gap: 0;
+  background: #f1f5f9; border-bottom: 2px solid #e2e8f0;
+  padding: 0 20px; position: sticky; top: 0; z-index: 10;
+}
+.tab-btn {
+  padding: 10px 18px; font-size: 0.84rem; font-weight: 600;
+  border: none; background: none; cursor: pointer; color: #64748b;
+  border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.15s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: #1e3a5f; }
+.tab-btn.active { color: #1e3a5f; border-bottom-color: #1e3a5f; }
+
+.panel { display: none; max-width: 1100px; margin: 0 auto; padding: 28px 20px 60px; }
+.panel.active { display: block; }
+
+.section {
+  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
+  padding: 22px 24px; margin-bottom: 26px;
+}
+.section h2 { font-size: 1.2rem; color: #1e3a5f; margin-bottom: 10px; }
+.section h3 { font-size: 0.97rem; color: #334155; font-weight: 700; margin: 16px 0 8px; }
+.section p  { font-size: 0.88rem; color: #4b5563; line-height: 1.65; margin-bottom: 8px; }
+.section ul { font-size: 0.88rem; color: #4b5563; line-height: 1.65; margin: 6px 0 8px 20px; }
+.section li { margin-bottom: 4px; }
+
+.ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin: 10px 0; }
+.ref-table th { background: #1e3a5f; color: #fff; padding: 8px 10px; text-align: left; font-weight: 600; }
+.ref-table td { padding: 7px 10px; border-bottom: 1px solid #e2e8f0; color: #374151; vertical-align: top; }
+.ref-table tr:nth-child(even) td { background: #f8fafc; }
+.ref-table tr:hover td { background: #eff6ff; }
+
+.note-box {
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px;
+  padding: 12px 16px; font-size: 0.83rem; color: #78350f; margin: 12px 0; line-height: 1.6;
+}
+.info-box {
+  background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;
+  padding: 12px 16px; font-size: 0.83rem; color: #1e40af; margin: 12px 0; line-height: 1.6;
+}
+.warn-box {
+  background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px;
+  padding: 12px 16px; font-size: 0.83rem; color: #991b1b; margin: 12px 0; line-height: 1.6;
+}
+.green-box {
+  background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;
+  padding: 12px 16px; font-size: 0.83rem; color: #14532d; margin: 12px 0; line-height: 1.6;
+}
+
+.formula-box {
+  background: #1e3a5f; color: #e2e8f0; border-radius: 8px;
+  padding: 14px 20px; font-family: 'Courier New', monospace; font-size: 0.9rem; margin: 10px 0;
+}
+.formula-box .fn { font-family: 'Segoe UI', sans-serif; font-size: 0.78rem; color: #93c5fd; margin-top: 6px; display: block; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 680px) { .two-col { grid-template-columns: 1fr; } }
+
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+@media (max-width: 760px) { .three-col { grid-template-columns: 1fr; } }
+
+.four-col { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14px; }
+@media (max-width: 820px) { .four-col { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .four-col { grid-template-columns: 1fr; } }
+
+.zone-card { border-radius: 10px; padding: 16px 18px; }
+.zone-card .zt { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; }
+.zone-card .zb { font-size: 0.8rem; line-height: 1.62; }
+
+.elem-card { border-radius: 10px; padding: 14px 16px; }
+.elem-card .el-sym { font-size: 1.4rem; font-weight: 800; }
+.elem-card .el-name { font-size: 0.72rem; color: #64748b; margin-bottom: 6px; }
+.elem-card .el-body { font-size: 0.78rem; line-height: 1.6; }
+
+.crack-card { background: #fef2f2; border: 2px solid #fca5a5; border-radius: 10px; padding: 18px; }
+.crack-card .ct { font-size: 0.97rem; font-weight: 700; color: #991b1b; margin-bottom: 8px; }
+.crack-card .cb { font-size: 0.82rem; color: #374151; line-height: 1.65; }
+.crack-card .cb strong { color: #7f1d1d; }
+
+.step-list { counter-reset: step-ctr; }
+.step-list li { counter-increment: step-ctr; list-style: none; padding-left: 2em; position: relative; margin-bottom: 6px; font-size: 0.88rem; color: #4b5563; line-height: 1.65; }
+.step-list li::before { content: counter(step-ctr); position: absolute; left: 0; background: #1e3a5f; color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 0.72rem; font-weight: 700; display: flex; align-items: center; justify-content: center; top: 2px; }
+
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 700; margin: 2px; }
+.tag-red    { background: #fee2e2; color: #991b1b; }
+.tag-orange { background: #fff7ed; color: #c2410c; }
+.tag-green  { background: #dcfce7; color: #14532d; }
+.tag-blue   { background: #dbeafe; color: #1d4ed8; }
+.tag-purple { background: #f3e8ff; color: #6b21a8; }
+.tag-gray   { background: #f1f5f9; color: #475569; }
+
+.back { text-align: center; padding: 24px; }
+.back a { color: #1e3a5f; font-size: 0.9rem; text-decoration: none; }
+.back a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Welding Metallurgy</h1>
+  <div class="subtitle">ESAB Welding Metallurgy Handbook — Weld Metals · HAZ Microstructure · Cracking Mechanisms · Alloying Elements &amp; Weldability</div>
+</header>
+
+<div class="source-note">
+  <strong>Source:</strong> ESAB <em>Welding Metallurgy</em> (Sindo Kou, ESAB Knowledge Centre); supplemented by AWS Welding Handbook Vol. 1 &amp; ASM Handbook Vol. 6 where noted. All data are reference values — verify against applicable code and base-metal specification before use.
+</div>
+
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('weld',this)">Weld Metals</button>
+  <button class="tab-btn" onclick="showTab('haz',this)">HAZ Microstructure</button>
+  <button class="tab-btn" onclick="showTab('crack',this)">Cracking Mechanisms</button>
+  <button class="tab-btn" onclick="showTab('alloy',this)">Alloying Elements &amp; Weldability</button>
+</nav>
+
+<!-- ═══════════════════════ TAB 1 — WELD METALS ═══════════════════════════ -->
+<div id="panel-weld" class="panel active">
+
+  <div class="section">
+    <h2>Weld Metal Solidification — Fundamentals</h2>
+    <p>Weld metal solidification begins epitaxially at the fusion boundary: solid grains from the base metal act as nucleation sites and grow into the liquid pool. Growth is competitive — grains whose easy-growth direction (⟨100⟩ in cubic metals) is most closely aligned with the steepest temperature gradient survive at the expense of misaligned neighbours. The result is a columnar, dendritic structure with grain boundaries roughly parallel to the heat-flow direction.</p>
+
+    <div class="two-col" style="margin-top:14px;">
+      <div>
+        <h3>Solidification Parameters</h3>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Parameter</th><th>Symbol</th><th>Effect on Microstructure</th></tr></thead>
+          <tbody>
+            <tr><td>Temperature gradient</td><td><em>G</em></td><td>High G → planar/cellular; Low G → dendritic/equiaxed</td></tr>
+            <tr><td>Solidification rate</td><td><em>R</em></td><td>High R → fine dendrites; Low R → coarse</td></tr>
+            <tr><td><em>G/R</em> ratio</td><td>—</td><td>Determines solidification mode (planar → cellular → dendritic → equiaxed)</td></tr>
+            <tr><td><em>G × R</em> product</td><td>—</td><td>Cooling rate; controls dendrite arm spacing (DAS)</td></tr>
+            <tr><td>Solidification range</td><td>ΔT<sub>L–S</sub></td><td>Wide range → greater segregation &amp; hot-crack susceptibility</td></tr>
+            <tr><td>Partition coefficient</td><td><em>k</em></td><td>k &lt; 1 → solute rejected to liquid → microsegregation; k &gt; 1 → partitions to solid</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+      <div>
+        <h3>Solidification Modes (Stainless Steels)</h3>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Mode</th><th>Primary Phase</th><th>Cr<sub>eq</sub>/Ni<sub>eq</sub></th><th>Hot-Crack Risk</th></tr></thead>
+          <tbody>
+            <tr><td><strong>A</strong> — Fully austenitic</td><td>γ</td><td>&lt; 1.25</td><td>High</td></tr>
+            <tr><td><strong>AF</strong> — Austenite + some δ</td><td>γ</td><td>1.25–1.48</td><td>Moderate</td></tr>
+            <tr><td><strong>FA</strong> — Ferrite primary</td><td>δ</td><td>1.48–1.95</td><td>Low</td></tr>
+            <tr><td><strong>F</strong> — Fully ferritic</td><td>δ</td><td>&gt; 1.95</td><td>Very Low</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="note-box" style="margin-top:10px;"><strong>ESAB Note:</strong> A minimum of 4–8% δ-ferrite in austenitic SS weld metal (FA or F mode) dramatically reduces solidification cracking. Ferrite provides a sink for P and S at grain boundaries.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Weld Metal Microstructure — Carbon &amp; Low-Alloy Steel</h2>
+    <p>On cooling from the austenite range, weld metal in carbon and low-alloy steels transforms to a complex mixture of ferritic constituents. ESAB classifies these as follows (IIW nomenclature):</p>
+
+    <div class="four-col" style="margin-top:12px;">
+      <div class="zone-card" style="background:#f0fdf4;border:1px solid #86efac;">
+        <div class="zt" style="color:#15803d;">Grain Boundary Ferrite (GBF)</div>
+        <div class="zb">Allotriomorphic ferrite forming at prior austenite grain boundaries (PAGB). First to nucleate on cooling. Proportional to prior austenite grain size. Reduces toughness at high fractions.</div>
+      </div>
+      <div class="zone-card" style="background:#eff6ff;border:1px solid #93c5fd;">
+        <div class="zt" style="color:#1d4ed8;">Widmanstätten Ferrite (WF)</div>
+        <div class="zb">Side-plate or intragranular plates growing from GBF or PAGBs. Characteristic parallel lath morphology. Present in medium-carbon, coarse-grained weld metals. Degrades toughness.</div>
+      </div>
+      <div class="zone-card" style="background:#faf5ff;border:1px solid #c4b5fd;">
+        <div class="zt" style="color:#6d28d9;">Acicular Ferrite (AF)</div>
+        <div class="zb">Intragranularly nucleated, randomly oriented fine laths (0.5–3 µm). Nucleates on non-metallic inclusions (TiO, MnO, Al₂O₃). Provides the best combination of strength and CVN impact toughness. <strong>Target microstructure for ESAB low-alloy wires.</strong></div>
+      </div>
+      <div class="zone-card" style="background:#fff7ed;border:1px solid #fdba74;">
+        <div class="zt" style="color:#c2410c;">Bainite &amp; Martensite</div>
+        <div class="zb">Form at higher hardenability or faster cooling. Upper bainite (lath packets) acceptable; lower bainite and martensite raise hardness and HIC risk. Martensite HV typically &gt;350 in low-alloy steel HAZ.</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:18px;">Mechanical Properties vs. Microstructure — ESAB Reference Data</h3>
+    <div style="overflow-x:auto;">
+    <table class="ref-table">
+      <thead><tr><th>Constituent</th><th>Tensile (MPa)</th><th>Yield (MPa)</th><th>CVN −20°C (J)</th><th>Toughness Ranking</th></tr></thead>
+      <tbody>
+        <tr><td>Acicular ferrite (AF)</td><td>530–650</td><td>430–540</td><td>100–200+</td><td>✦✦✦✦✦ Best</td></tr>
+        <tr><td>Polygonal ferrite + pearlite</td><td>420–520</td><td>280–380</td><td>40–90</td><td>✦✦✦ Moderate</td></tr>
+        <tr><td>Grain boundary ferrite (GBF)</td><td>—</td><td>—</td><td>—</td><td>✦✦ Lower (boundary crack path)</td></tr>
+        <tr><td>Upper bainite</td><td>700–900</td><td>550–700</td><td>30–80</td><td>✦✦ Moderate–Low</td></tr>
+        <tr><td>Lower bainite</td><td>900–1100</td><td>750–900</td><td>60–120</td><td>✦✦✦ Moderate</td></tr>
+        <tr><td>Lath martensite (as-weld)</td><td>1100–1600</td><td>900–1400</td><td>&lt;30 typically</td><td>✦ Poor (hydrogen risk)</td></tr>
+        <tr><td>δ-ferrite in SS weld metal</td><td>—</td><td>—</td><td>—</td><td>Reduces hot-crack susceptibility</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Weld Metal Inclusions &amp; Acicular Ferrite Nucleation</h2>
+    <p>The density of non-metallic inclusions (NMIs) in the weld pool controls acicular ferrite volume fraction. ESAB research (Thewlis et al.) established that inclusions 0.2–2.0 µm diameter are the most effective AF nucleants. Inclusions are formed by deoxidation reactions during solidification.</p>
+    <div class="two-col">
+      <div>
+        <h3>Key Inclusion Types &amp; Their Roles</h3>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Inclusion Phase</th><th>Nucleation Effectiveness</th><th>Source</th></tr></thead>
+          <tbody>
+            <tr><td>TiO / Ti₂O₃</td><td>✦✦✦✦✦ Very high</td><td>Ti additions to wire; low O₂ affinity</td></tr>
+            <tr><td>MnO–Al₂O₃ spinel</td><td>✦✦✦✦ High</td><td>Mn + Al deoxidation; most common</td></tr>
+            <tr><td>Pure Al₂O₃</td><td>✦✦ Low (too large)</td><td>High Al wire without Ti</td></tr>
+            <tr><td>SiO₂</td><td>✦✦ Low (slag)</td><td>Si deoxidation without Mn balance</td></tr>
+            <tr><td>MnS</td><td>✦ Poor nucleant</td><td>High S base metal; impairs ductility</td></tr>
+            <tr><td>CaO, BaO</td><td>✦ Low (too few)</td><td>Flux fluxing agents</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+      <div>
+        <h3>Optimising for Acicular Ferrite</h3>
+        <ul>
+          <li>Maintain weld metal O content 200–400 ppm (enough NMIs; excess O degrades toughness)</li>
+          <li>Add Ti (0.01–0.05 wt%) to form TiO nucleants; balance with B (3–15 ppm) to suppress GBF</li>
+          <li>Control Mn/Si ratio: Mn 1.2–1.8%, Si 0.2–0.5% for spinel inclusion chemistry</li>
+          <li>Avoid very high heat input: coarse prior-austenite grains suppress intragranular nucleation</li>
+          <li>Multi-pass welding reheats prior beads, refining grain size and increasing AF%</li>
+        </ul>
+        <div class="info-box"><strong>ESAB Wire Design:</strong> ESAB Dual Shield and OK AristoRod series are formulated with Ti–B additions specifically to maximise acicular ferrite at heat inputs of 1–3 kJ/mm.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Weld Metal Classification — AWS Filler Metal Systems</h2>
+    <div class="two-col">
+      <div>
+        <h3>SMAW Electrode Classification (AWS A5.1 / A5.5)</h3>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Designation</th><th>Tensile (psi)</th><th>Position</th><th>Current / Flux Type</th></tr></thead>
+          <tbody>
+            <tr><td><strong>E60XX</strong></td><td>62,000 min</td><td>—</td><td>Per suffix</td></tr>
+            <tr><td><strong>E7016</strong></td><td>70,000 min</td><td>All pos.</td><td>AC or DCEP; low-H</td></tr>
+            <tr><td><strong>E7018</strong></td><td>70,000 min</td><td>All pos.</td><td>AC or DCEP; low-H (H4/H8)</td></tr>
+            <tr><td><strong>E7018-1</strong></td><td>70,000 min</td><td>All pos.</td><td>DCEP; −50°F CVN ≥ 27 J</td></tr>
+            <tr><td><strong>E11018-M</strong></td><td>110,000 min</td><td>All pos.</td><td>DCEP; low-H, mil-spec</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="font-size:0.79rem;color:#6b7280;margin-top:6px;">Suffix digits: XX1X = cellulosic; XX1<u>6</u>/<u>8</u> = low-hydrogen; -H4/H8/H16 = diffusible H limit (mL/100g deposited).</p>
+      </div>
+      <div>
+        <h3>GMAW Wire (AWS A5.18 / A5.28) &amp; FCAW (A5.20)</h3>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Class</th><th>Process</th><th>Shielding</th><th>Application</th></tr></thead>
+          <tbody>
+            <tr><td>ER70S-3</td><td>GMAW</td><td>CO₂ / Ar-mix</td><td>Clean mill-scale free plate</td></tr>
+            <tr><td>ER70S-6</td><td>GMAW</td><td>CO₂ / Ar-mix</td><td>Rusty/oily/mill-scale plate (higher Mn, Si)</td></tr>
+            <tr><td>ER80S-D2</td><td>GMAW</td><td>Ar-mix</td><td>High-strength low-alloy (Mo)</td></tr>
+            <tr><td>E70T-1C</td><td>FCAW-G</td><td>CO₂</td><td>General structural; low-H optional</td></tr>
+            <tr><td>E71T-8</td><td>FCAW-S</td><td>None</td><td>Self-shielded; field erection</td></tr>
+            <tr><td>E309LT1-1</td><td>FCAW-G</td><td>Ar+CO₂</td><td>309 SS dissimilar weld buffer</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ TAB 2 — HAZ MICROSTRUCTURE ══════════════════ -->
+<div id="panel-haz" class="panel">
+
+  <div class="section">
+    <h2>HAZ Sub-Zone Definitions — ESAB / IIW Classification</h2>
+    <p>The heat-affected zone (HAZ) is the region of base metal whose microstructure and properties are altered by welding heat without melting. ESAB defines four sub-zones based on peak temperature experienced during the weld thermal cycle.</p>
+
+    <div style="overflow-x:auto;margin-top:14px;">
+    <table class="ref-table">
+      <thead>
+        <tr>
+          <th>Sub-Zone</th><th>Peak Temp (°C)</th><th>Microstructure</th><th>Key Concern</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Coarse-Grain HAZ (CGHAZ)</strong></td>
+          <td>1100 – T<sub>solidus</sub></td>
+          <td>Austenite grain coarsening; on cooling: coarse GBF, Widmanstätten, bainite, or martensite depending on CE</td>
+          <td>Lowest toughness; highest HIC risk; largest martensite laths</td>
+        </tr>
+        <tr>
+          <td><strong>Fine-Grain HAZ (FGHAZ)</strong></td>
+          <td>950 – 1100°C</td>
+          <td>Complete austenitisation with controlled grain growth; refined ferrite + pearlite on cooling</td>
+          <td>Best toughness of all HAZ zones; similar to normalised BM</td>
+        </tr>
+        <tr>
+          <td><strong>Intercritical HAZ (ICHAZ)</strong></td>
+          <td>Ac<sub>1</sub> – Ac<sub>3</sub> (710–895°C)</td>
+          <td>Partial austenitisation; mixed ferrite + austenite on heating → retained ferrite + martensite-austenite (M-A) islands on cooling</td>
+          <td>M-A constituent reduces toughness; relevant to CTOD &amp; low-T testing</td>
+        </tr>
+        <tr>
+          <td><strong>Subcritical HAZ (SCHAZ)</strong></td>
+          <td>200 – Ac<sub>1</sub></td>
+          <td>No phase transformation; tempers existing martensite/bainite; carbide spheroidisation at high end</td>
+          <td>Softening in Q&amp;T steels; stress relief zone</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="note-box" style="margin-top:14px;"><strong>Multi-Pass Welding HAZ Complexity:</strong> Each subsequent pass reheats the CGHAZ of the previous pass. Reheated CGHAZ (RCHAZ) peaks at Ac<sub>1</sub>–Ac<sub>3</sub> → produces intercritical reheated CGHAZ (ICCGHAZ) with concentrated M-A at prior austenite grain boundaries. This is the lowest-toughness region in multi-pass welds.</div>
+  </div>
+
+  <div class="section">
+    <h2>Austenite Grain Growth in the CGHAZ</h2>
+    <div class="two-col">
+      <div>
+        <p>Above ~1000–1100°C, grain-boundary pinning particles (carbides, nitrides) dissolve and austenite grains grow rapidly. ESAB data shows grain growth follows an Arrhenius relationship:</p>
+        <div class="formula-box">
+          d² − d₀² = A · t · exp(−Q / RT)
+          <span class="fn">d = grain diameter (µm); A = material constant; Q = activation energy; R = 8.314 J/(mol·K); T = absolute temperature (K)</span>
+        </div>
+        <p>For C–Mn steels without microalloy pinning, rapid coarsening occurs above 1100°C. A CGHAZ grain size of 150–400 µm is typical at 1.5–3.0 kJ/mm heat input.</p>
+        <h3>Grain Coarsening — Effect of Heat Input</h3>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Heat Input (kJ/mm)</th><th>Approx. CGHAZ Grain Size (µm)</th><th>Approx. t<sub>8/5</sub> (s) — 25mm plate</th></tr></thead>
+          <tbody>
+            <tr><td>&lt; 1.0</td><td>80–150</td><td>&lt;5</td></tr>
+            <tr><td>1.0–2.0</td><td>150–250</td><td>5–15</td></tr>
+            <tr><td>2.0–4.0</td><td>250–400</td><td>15–40</td></tr>
+            <tr><td>4.0–6.0</td><td>400–600</td><td>40–80</td></tr>
+            <tr><td>&gt; 6.0</td><td>&gt; 600</td><td>&gt; 80</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+      <div>
+        <h3>Microalloying Grain Refinement Pinning Temperatures</h3>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Precipitate</th><th>Dissolution Temp (°C)</th><th>Pinning Effectiveness</th></tr></thead>
+          <tbody>
+            <tr><td>AlN</td><td>~1100</td><td>Moderate; dissolves at high T</td></tr>
+            <tr><td>NbC / NbN</td><td>~1200–1250</td><td>Good up to 1200°C; widely used</td></tr>
+            <tr><td>TiN</td><td>~1400–1450</td><td>Excellent; stable to near solidus</td></tr>
+            <tr><td>TiC</td><td>~1000</td><td>Low; dissolves in CGHAZ</td></tr>
+            <tr><td>VN</td><td>~900–1000</td><td>Mainly FGHAZ / ICHAZ region</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="info-box" style="margin-top:10px;"><strong>ESAB Recommendation:</strong> Ti/N ratio ≈ 3.4 (stoichiometric TiN) maximises TiN particle density for CGHAZ pinning. Excess Ti forms TiC which dissolves at lower temperature and loses its pinning effect.</div>
+        <h3>t<sub>8/5</sub> Cooling Time — Key Control Parameter</h3>
+        <p>t<sub>8/5</sub> = time to cool from 800°C to 500°C; determines transformation products in the CGHAZ via the CCT diagram. ESAB tabulates critical t<sub>8/5</sub> values per steel grade for CCT-diagram entry.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>CCT Diagrams &amp; HAZ Transformation Products</h2>
+    <p>Continuous Cooling Transformation (CCT) diagrams for the CGHAZ differ fundamentally from bulk steel CCT curves because the austenite grain size is much larger (150–400 µm). Coarser austenite shifts ferrite/bainite start lines to longer times, increasing the tendency for bainite and martensite formation.</p>
+
+    <div class="two-col">
+      <div>
+        <h3>Reading a CGHAZ CCT Diagram</h3>
+        <ol class="step-list">
+          <li>Identify the steel CE (IIW or Pcm) to select the correct diagram.</li>
+          <li>Calculate or measure t<sub>8/5</sub> from welding parameters (heat input, preheat, plate geometry).</li>
+          <li>Draw a cooling curve from 800°C to 500°C across the t<sub>8/5</sub> interval.</li>
+          <li>Read intersection phases: ferrite start, bainite start, martensite start (Ms) temperatures.</li>
+          <li>Estimate hardness and toughness from the phase fractions reached.</li>
+        </ol>
+        <div class="warn-box" style="margin-top:10px;"><strong>Critical hardness limit:</strong> CGHAZ hardness &gt; 350 HV10 indicates significant martensite and elevates HIC risk. AWS D1.1 and EN 1011-2 both target ≤ 350 HV10 in the HAZ for non-preheat-exempt joints.</div>
+      </div>
+      <div>
+        <h3>Transformation Products vs. t<sub>8/5</sub> — C–Mn Steel (CE ≈ 0.40)</h3>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>t<sub>8/5</sub> (s)</th><th>Dominant HAZ Phase</th><th>HV10 (approx.)</th><th>CVN at −20°C</th></tr></thead>
+          <tbody>
+            <tr><td>&lt; 5</td><td>Martensite ± bainite</td><td>380–450</td><td>&lt; 30 J (brittle)</td></tr>
+            <tr><td>5–15</td><td>Upper bainite + some martensite</td><td>280–380</td><td>40–80 J</td></tr>
+            <tr><td>15–40</td><td>Upper bainite + GBF</td><td>220–280</td><td>70–120 J</td></tr>
+            <tr><td>40–80</td><td>GBF + Widmanstätten + pearlite</td><td>180–220</td><td>80–150 J</td></tr>
+            <tr><td>&gt; 80</td><td>Coarse ferrite + pearlite</td><td>150–185</td><td>&gt; 100 J but soft</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="note-box" style="margin-top:8px;">Optimal t<sub>8/5</sub> for toughness in this steel: 15–50 s. Achieved by preheat + controlled heat input per ESAB guidelines.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Martensite-Austenite (M-A) Constituent</h2>
+    <p>M-A is a high-carbon phase formed when carbon-enriched austenite in the ICHAZ or ICCGHAZ partially transforms to martensite on cooling, with the remainder retained as austenite. ESAB identifies M-A as the primary toughness-limiting phase in modern HSLA and X-grade pipeline steels.</p>
+    <div class="two-col">
+      <div>
+        <ul>
+          <li>M-A islands: hard (HV 600–900), brittle micro-regions in a softer ferritic matrix</li>
+          <li>Preferred locations: prior austenite grain boundaries and lath packet boundaries in CGHAZ; pearlite colony boundaries in ICHAZ</li>
+          <li>Carbon enrichment: solute redistribution during incomplete austenitisation raises C in untransformed austenite from 0.07% to &gt;0.5%</li>
+          <li>M-A fraction increases with: higher carbon, faster cooling, coarser prior austenite grain size</li>
+          <li>Detection: LePera etch (M-A appears white/tan); EBSD; nanoindentation</li>
+        </ul>
+      </div>
+      <div>
+        <h3>M-A Reduction Strategies (ESAB)</h3>
+        <ul>
+          <li>Reduce base metal carbon to &lt; 0.07% (X70/X80 pipeline spec)</li>
+          <li>Use low heat input multi-pass procedures to reheat and temper CGHAZ</li>
+          <li>Post-weld heat treatment (PWHT) at 600–650°C decomposes M-A → tempered martensite + carbides</li>
+          <li>Add Ti (TiN pinning) to limit CGHAZ grain growth → less M-A formation surface area</li>
+          <li>Avoid ICCGHAZ by designing pass sequence so reheating peak T &lt; Ac<sub>1</sub> or &gt; Ac<sub>3</sub> (not intercritical)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ TAB 3 — CRACKING MECHANISMS ══════════════════ -->
+<div id="panel-crack" class="panel">
+
+  <div class="section">
+    <h2>Overview of Weld Cracking Types</h2>
+    <p>ESAB classifies weld cracking into three temperature regimes. Understanding the regime is the first step in prevention because root causes and remedies differ fundamentally between them.</p>
+
+    <div class="three-col" style="margin-top:14px;">
+      <div class="crack-card" style="background:#fff7ed;border-color:#fdba74;">
+        <div class="ct" style="color:#c2410c;">Hot Cracking (High Temperature)</div>
+        <div class="cb">Occurs during or just after solidification (solidification cracking) or in the partially melted zone (liquation cracking). Temperature range: from liquidus to ~1000°C. <strong>Driving force:</strong> tensile strain on a thin liquid film at grain boundaries. <strong>Prevention:</strong> control composition (low S, P, C) and reduce welding stresses.</div>
+      </div>
+      <div class="crack-card" style="background:#fef2f2;border-color:#fca5a5;">
+        <div class="ct" style="color:#991b1b;">Cold Cracking / HIC (Low Temperature)</div>
+        <div class="cb">Occurs at or below 200°C, often hours to days after welding. Requires all three: susceptible microstructure (martensite), hydrogen, and tensile stress. <strong>Prevention:</strong> preheat, PWHT, low-hydrogen practice, reduce restraint. Also called <em>hydrogen-induced cracking (HIC)</em>, <em>underbead cracking</em>, <em>delayed cracking</em>.</div>
+      </div>
+      <div class="crack-card" style="background:#faf5ff;border-color:#c4b5fd;">
+        <div class="ct" style="color:#6d28d9;">Reheat / Stress-Relief Cracking</div>
+        <div class="cb">Occurs during PWHT or elevated-temperature service in alloy steels containing Cr, Mo, V, Nb. Carbide precipitation strengthens grain interiors while grain boundaries remain weak → intergranular creep fracture during stress relaxation. <strong>Prevention:</strong> slow heat up, controlled PWHT temp, restrict Cr+Mo+V+Nb sum.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Solidification Cracking (Hot Cracking in Weld Metal)</h2>
+    <div class="two-col">
+      <div>
+        <h3>Mechanism</h3>
+        <p>As the weld pool solidifies, a brittle temperature range (BTR) exists between the coherence temperature (where dendrites interlock) and the solidus. Within the BTR, liquid films exist between dendrite arms/grain boundaries. If welding-induced tensile strain across these films exceeds the ductility of the semi-solid, cracking initiates. ESAB notes that cracks appear at the weld centreline (centreline cracking) or at crater cracks (last point to solidify).</p>
+        <h3>Susceptible Compositions</h3>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>Element</th><th>Role in Hot Cracking</th><th>Critical Level</th></tr></thead>
+          <tbody>
+            <tr><td>Sulfur (S)</td><td>Forms low-melting FeS eutectic (988°C) at grain boundaries</td><td>&gt; 0.025% greatly increases risk</td></tr>
+            <tr><td>Phosphorus (P)</td><td>Forms Fe₃P eutectic (1049°C); also segregates to boundaries</td><td>&gt; 0.020% risk increases</td></tr>
+            <tr><td>Carbon (C)</td><td>Widens solidification range (liquidus–solidus gap)</td><td>High C in austenitic SS increases risk</td></tr>
+            <tr><td>Silicon (Si)</td><td>In SS: wide two-phase region; in C-Mn: moderate effect</td><td>Si &gt; 0.6% in SS weld metal</td></tr>
+            <tr><td>Mn/S ratio</td><td>Mn scavenges S as MnS (higher melting, less harmful)</td><td>Mn/S &gt; 25 required</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+      <div>
+        <h3>Susceptibility Indices (Empirical)</h3>
+        <div class="formula-box">
+          UCS = 230C + 190S + 75P + 45Nb − 12.3Si − 5.4Mn − 1
+          <span class="fn">Units Cracking Susceptibility (UCS). UCS &lt; 10: low risk; 10–30: moderate; &gt; 30: high. (Lancaster, Metallurgy of Welding)</span>
+        </div>
+        <div class="formula-box" style="margin-top:10px;">
+          HCS = (1000S + P) / (25Mn + Cr + Ni + 0.5Mo) · (C/100)
+          <span class="fn">Hebble-Christensen Hot Cracking Susceptibility Index (Austenitic SS). HCS &lt; 4: safe; &gt; 4: hot-crack prone.</span>
+        </div>
+        <h3>Prevention</h3>
+        <ul style="margin-top:8px;">
+          <li>Limit S + P in base and filler metal</li>
+          <li>Maintain Mn/S &gt; 25 in C-Mn weld metal</li>
+          <li>In SS: target 4–8% δ-ferrite (FA or F solidification mode)</li>
+          <li>Use convex weld bead profile (avoid deep concave craters)</li>
+          <li>Fill craters before arc extinction</li>
+          <li>Reduce welding speed (allows liquid feeding of cracks)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>HAZ Liquation Cracking</h2>
+    <p>Liquation cracking occurs in the partially melted zone (PMZ) — base metal grains immediately adjacent to the fusion boundary that experience peak temperatures above the local solidus (due to constitutional liquation or low-melting phases at grain boundaries). ESAB identifies this as a distinct mechanism from solidification cracking.</p>
+    <div class="two-col">
+      <div>
+        <h3>Constitutional Liquation Mechanism</h3>
+        <ol class="step-list">
+          <li>Carbides, sulfides, or other second-phase particles (e.g. NbC, TiC, MnS) dissolve rapidly as temperature rises toward the solidus.</li>
+          <li>Local carbon/solute enrichment depresses the local melting point of the surrounding matrix (constitutional liquation).</li>
+          <li>A thin liquid film forms around the particle and spreads along the grain boundary.</li>
+          <li>Tensile strain from welding shrinkage opens the film → intergranular crack in the HAZ.</li>
+        </ol>
+      </div>
+      <div>
+        <h3>Most Susceptible Materials</h3>
+        <ul>
+          <li>Nickel-base superalloys (Inconel 718, Waspaloy): NbC, Ni₃Nb (δ-phase) liquation</li>
+          <li>Austenitic stainless steels: NbC liquation at high Nb</li>
+          <li>High-carbon steel HAZ: cementite liquation at grain boundaries</li>
+          <li>Aluminium alloys: low-melting Mg₂Si, CuAl₂ eutectic phases</li>
+        </ul>
+        <h3>Prevention</h3>
+        <ul>
+          <li>Reduce heat input → narrow PMZ width → less liquid film area</li>
+          <li>Use filler metal that produces compressive shrinkage stresses in HAZ</li>
+          <li>Homogenisation anneal before welding (dissolves precipitates more uniformly)</li>
+          <li>For Ni alloys: solution annealing + quench to eliminate NbC pre-weld</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Hydrogen-Induced Cracking (HIC) — Cold Cracking</h2>
+    <p>ESAB describes HIC as requiring the simultaneous presence of all three conditions (the "three-factor triangle"). Remove any one factor and cracking cannot occur.</p>
+    <div class="three-col" style="margin-top:12px;">
+      <div style="background:#fff7ed;border:2px solid #fb923c;border-radius:10px;padding:16px;">
+        <div style="font-size:0.97rem;font-weight:700;color:#c2410c;margin-bottom:8px;">① Susceptible Microstructure</div>
+        <div style="font-size:0.82rem;color:#374151;line-height:1.65;">Untempered martensite is most susceptible. Hardness &gt; 350 HV10 in the CGHAZ is a common threshold. Coarse lath martensite &gt; fine martensite. Bainite has intermediate susceptibility. Ferrite + pearlite is immune.</div>
+      </div>
+      <div style="background:#eff6ff;border:2px solid #60a5fa;border-radius:10px;padding:16px;">
+        <div style="font-size:0.97rem;font-weight:700;color:#1d4ed8;margin-bottom:8px;">② Hydrogen</div>
+        <div style="font-size:0.82rem;color:#374151;line-height:1.65;">Atomic hydrogen absorbed from the arc atmosphere (moisture, hydrocarbons, rust) diffuses into the weld and HAZ. Diffusible H threshold for cracking in CGHAZ: typically 5–10 mL/100g. Hydrogen is mobile at RT, accumulates at stress concentrators.</div>
+      </div>
+      <div style="background:#faf5ff;border:2px solid #a78bfa;border-radius:10px;padding:16px;">
+        <div style="font-size:0.97rem;font-weight:700;color:#6d28d9;margin-bottom:8px;">③ Tensile Stress</div>
+        <div style="font-size:0.82rem;color:#374151;line-height:1.65;">Residual welding stresses, restraint from fixture or geometry, or applied service loads. Triaxial stress states at root or toe stress concentrations are most damaging. Stress drives hydrogen to regions of dilatation (crack tips, grain boundaries).</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:18px;">HIC Morphologies</h3>
+    <div style="overflow-x:auto;">
+    <table class="ref-table">
+      <thead><tr><th>Crack Type</th><th>Location</th><th>Orientation</th><th>Detection</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Underbead crack</strong></td><td>CGHAZ, beneath the weld bead</td><td>Parallel to fusion boundary</td><td>UT, phased-array; sectioning</td></tr>
+        <tr><td><strong>Toe crack</strong></td><td>At weld toe stress concentration</td><td>Transverse or longitudinal</td><td>MT, PT, UT from surface</td></tr>
+        <tr><td><strong>Root crack</strong></td><td>Root of single-sided weld or partial pen.</td><td>Parallel to weld axis</td><td>UT, RT</td></tr>
+        <tr><td><strong>Transverse crack</strong></td><td>Weld metal or HAZ, across weld axis</td><td>Perpendicular to weld axis</td><td>MT (surface), UT</td></tr>
+        <tr><td><strong>Lamellar tearing</strong></td><td>HAZ or base metal, Z-direction</td><td>Stepped intergranular/MnS</td><td>UT (laminar reflectors), sectioning</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 style="margin-top:16px;">Prevention Protocol (ESAB)</h3>
+    <ol class="step-list" style="margin-top:8px;">
+      <li><strong>Reduce hardenability:</strong> select base metal with CE ≤ 0.40 (IIW) where possible; use Q&amp;T steel with controlled CE.</li>
+      <li><strong>Reduce hydrogen:</strong> use low-H electrodes (E7018-H4); dry, rebake electrodes per AWS D1.1 Table 4.2; clean joint faces (no rust, moisture, grease).</li>
+      <li><strong>Preheat:</strong> per Lincoln Electric / AWS D1.1 preheat table or carbon equivalent formula. Minimum preheat slows cooling, allows H diffusion out, reduces martensite fraction.</li>
+      <li><strong>Interpass temperature:</strong> maintain minimum (≥ preheat); limit maximum to avoid grain growth (typically ≤ 250°C for C-Mn steels).</li>
+      <li><strong>Post-weld hydrogen release bake:</strong> 200–250°C for 1–4 h immediately after welding (before cooling to room temp) drives residual H out.</li>
+      <li><strong>PWHT:</strong> 600–650°C stress-relief tempers martensite, removes residual stress, and reduces H trapping sites.</li>
+    </ol>
+  </div>
+
+  <div class="section">
+    <h2>Reheat Cracking &amp; Lamellar Tearing</h2>
+    <div class="two-col">
+      <div>
+        <h3>Reheat Cracking (Stress-Relief Cracking)</h3>
+        <p>Most common in Cr-Mo-V steels (P91, P22, 2.25Cr-1Mo) and some austenitic SS during PWHT. Carbide precipitation in grain interiors (M₂₃C₆, VC, MoC) pins dislocations, preventing relaxation by creep inside grains. Stress relaxation is forced to the weaker grain boundaries → intergranular fracture during heat treatment.</p>
+        <div class="formula-box" style="margin-top:10px;">
+          ΔG = Cr + Cu + Mo + V + Nb + Ti − 2
+          <span class="fn">Graville susceptibility index. ΔG &gt; 0 → susceptible to reheat cracking. (TWI / ESAB)</span>
+        </div>
+        <ul style="margin-top:10px;">
+          <li>Prevention: slow heat-up rate (&lt; 80°C/h) through 300–600°C range</li>
+          <li>PWHT temperature selection: above or below peak carbide precipitation range</li>
+          <li>Avoid notches at weld toes; TIG-dress or grind toes in susceptible materials</li>
+          <li>Post-weld NDT after PWHT by MT/PT (surface intergranular cracks)</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Lamellar Tearing</h3>
+        <p>Occurs in the base metal (HAZ or beyond) when through-thickness (Z-direction) stresses act on MnS inclusion stringers elongated by rolling. The crack follows a stepped path along inclusion planes.</p>
+        <ul>
+          <li>Primarily affects heavy structural plates (&gt; 25 mm) with high Sulphur (S &gt; 0.015%)</li>
+          <li>T-joints, corner joints, and cruciform joints with large weld cross-sections are highest risk</li>
+          <li>Z-direction reduction in area (ZRA) &lt; 15% indicates susceptibility</li>
+          <li>ESAB prevention strategies:</li>
+        </ul>
+        <div style="overflow-x:auto;margin-top:8px;">
+        <table class="ref-table">
+          <thead><tr><th>Method</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>Low-S steel</td><td>Specify Z-grade plate: S ≤ 0.010%, ZRA ≥ 35% (EN 10164: Z35)</td></tr>
+            <tr><td>Ca-treated steel</td><td>Ca converts MnS to spherical CaS → reduces anisotropy</td></tr>
+            <tr><td>Butter layer</td><td>Deposit ductile weld metal butter layer on Z-direction surface before welding</td></tr>
+            <tr><td>Joint redesign</td><td>Shift weld fusion boundary away from Z-direction stress plane</td></tr>
+            <tr><td>Preheat &amp; reduce restraint</td><td>Lower residual stress magnitude</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ TAB 4 — ALLOYING ELEMENTS ═══════════════════ -->
+<div id="panel-alloy" class="panel">
+
+  <div class="section">
+    <h2>Carbon Equivalent — Weldability Indices</h2>
+    <p>Carbon equivalent (CE) is a single-number index that combines the hardenability contributions of all alloying elements relative to carbon. ESAB and AWS both use CE as the primary tool for preheat selection and weldability assessment.</p>
+
+    <div class="two-col">
+      <div>
+        <div class="formula-box">
+          CE<sub>IIW</sub> = C + Mn/6 + (Cr+Mo+V)/5 + (Ni+Cu)/15
+          <span class="fn">IIW formula (AWS D1.1, EN 1011-2). Best for C-Mn and microalloyed steels with C &gt; 0.18%. All elements in wt%.</span>
+        </div>
+        <div class="formula-box" style="margin-top:10px;">
+          Pcm = C + Si/30 + (Mn+Cu+Cr)/20 + Ni/60 + Mo/15 + V/10 + 5B
+          <span class="fn">Ito-Bessyo (Pcm). Best for low-carbon steels (C &lt; 0.18%), HSLA, pipeline steels. More sensitive to B and V. Used in Japanese JIS standards and ESAB pipeline guides.</span>
+        </div>
+        <h3 style="margin-top:14px;">Preheat Guidance by CE (IIW) — ESAB Table</h3>
+        <div style="overflow-x:auto;">
+        <table class="ref-table">
+          <thead><tr><th>CE<sub>IIW</sub></th><th>Preheat (°C) — 25mm plate, H ≤ 5 mL/100g</th><th>Risk Category</th></tr></thead>
+          <tbody>
+            <tr><td>&lt; 0.35</td><td>None required (clean joints)</td><td>Low</td></tr>
+            <tr><td>0.35–0.40</td><td>None to 75°C</td><td>Low–Moderate</td></tr>
+            <tr><td>0.40–0.45</td><td>75–100°C</td><td>Moderate</td></tr>
+            <tr><td>0.45–0.50</td><td>100–150°C</td><td>Moderate–High</td></tr>
+            <tr><td>0.50–0.60</td><td>150–200°C</td><td>High</td></tr>
+            <tr><td>&gt; 0.60</td><td>200–300°C (consider PWHT)</td><td>Very High</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+      <div>
+        <h3>Cr<sub>eq</sub> and Ni<sub>eq</sub> — Stainless Steel Weld Metal</h3>
+        <div class="formula-box">
+          Cr<sub>eq</sub> = Cr + Mo + 1.5Si + 0.5Nb
+          <span class="fn">Ferrite-forming elements equivalent (Schaeffler diagram)</span>
+        </div>
+        <div class="formula-box" style="margin-top:8px;">
+          Ni<sub>eq</sub> = Ni + 30C + 0.5Mn
+          <span class="fn">Austenite-forming elements equivalent (Schaeffler diagram)</span>
+        </div>
+        <div class="formula-box" style="margin-top:8px;">
+          Cr<sub>eq</sub>(WRC-1992) = Cr + Mo + 0.7Nb
+          Ni<sub>eq</sub>(WRC-1992) = Ni + 35C + 20N + 0.25Cu
+          <span class="fn">WRC-1992 diagram (more accurate for duplex and modern SS). Predicts FN (Ferrite Number) in weld metal.</span>
+        </div>
+        <div class="note-box" style="margin-top:10px;"><strong>Target FN:</strong> 4–8 FN in austenitic SS weld metal for hot-crack resistance without embrittlement. &gt; 15 FN risks σ-phase embrittlement above 475°C.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Effect of Alloying Elements on Weldability — ESAB Reference</h2>
+
+    <div class="four-col" style="margin-top:14px;">
+
+      <div class="elem-card" style="background:#fff7ed;border:1px solid #fdba74;">
+        <div class="el-sym" style="color:#c2410c;">C</div>
+        <div class="el-name">Carbon</div>
+        <span class="tag tag-red">↑ hardenability</span>
+        <span class="tag tag-red">↑ hot-crack</span>
+        <span class="tag tag-green">↑ strength</span>
+        <div class="el-body" style="margin-top:6px;">Most potent hardenability element. Raises Ms temperature, promotes martensite. Widens solidification range → hot-crack risk. Limit &lt; 0.12% for good weldability. Each 0.01% increase in C ≈ 0.01 CE (IIW).</div>
+      </div>
+
+      <div class="elem-card" style="background:#fff7ed;border:1px solid #fdba74;">
+        <div class="el-sym" style="color:#c2410c;">Mn</div>
+        <div class="el-name">Manganese</div>
+        <span class="tag tag-orange">↑ hardenability (mild)</span>
+        <span class="tag tag-green">↑ strength</span>
+        <span class="tag tag-green">↑ toughness</span>
+        <div class="el-body" style="margin-top:6px;">Scavenges S as MnS, raising Mn/S ratio and reducing hot-crack risk. Promotes acicular ferrite nucleation. Excess Mn (&gt;2%) can cause solidification cracking. ESAB typical weld metal: 1.0–1.8% Mn.</div>
+      </div>
+
+      <div class="elem-card" style="background:#f0f9ff;border:1px solid #7dd3fc;">
+        <div class="el-sym" style="color:#0369a1;">Si</div>
+        <div class="el-name">Silicon</div>
+        <span class="tag tag-orange">↑ hardenability (weak)</span>
+        <span class="tag tag-orange">↑ hot-crack (SS)</span>
+        <span class="tag tag-green">deoxidiser</span>
+        <div class="el-body" style="margin-top:6px;">Primary deoxidiser in GMAW wires. Reduces porosity. Increases fluidity. In austenitic SS &gt; 0.6%: widens two-phase region → hot-crack risk. Weld metal: 0.2–0.6% Si optimal for C-Mn steels.</div>
+      </div>
+
+      <div class="elem-card" style="background:#faf5ff;border:1px solid #c4b5fd;">
+        <div class="el-sym" style="color:#7e22ce;">Cr</div>
+        <div class="el-name">Chromium</div>
+        <span class="tag tag-red">↑ hardenability</span>
+        <span class="tag tag-purple">↑ corrosion resist.</span>
+        <span class="tag tag-orange">reheat crack risk</span>
+        <div class="el-body" style="margin-top:6px;">Strong carbide former (Cr₂₃C₆, Cr₇C₃). Raises CE significantly. &gt;12% gives stainless properties. In CGHAZ of Cr-Mo steels: M₂₃C₆ precipitation → reheat cracking. Minimum 10.5% Cr needed for passive film.</div>
+      </div>
+
+      <div class="elem-card" style="background:#f0fdf4;border:1px solid #86efac;">
+        <div class="el-sym" style="color:#15803d;">Ni</div>
+        <div class="el-name">Nickel</div>
+        <span class="tag tag-green">↑ toughness</span>
+        <span class="tag tag-blue">austenite former</span>
+        <span class="tag tag-gray">↓ Ms temp</span>
+        <div class="el-body" style="margin-top:6px;">Improves low-temperature CVN without significantly increasing hardenability. Does not form carbides. Counters Cr in Schaeffler diagram (austenite former). Added to consumables for −50°C to −80°C service. 3.5% Ni in weld metal targets −60°C CVN ≥ 47 J.</div>
+      </div>
+
+      <div class="elem-card" style="background:#fff7ed;border:1px solid #fdba74;">
+        <div class="el-sym" style="color:#c2410c;">Mo</div>
+        <div class="el-name">Molybdenum</div>
+        <span class="tag tag-red">↑ hardenability</span>
+        <span class="tag tag-green">↑ creep strength</span>
+        <span class="tag tag-orange">reheat crack risk</span>
+        <div class="el-body" style="margin-top:6px;">Strong hardenability effect per unit weight. Promotes bainite, reduces pearlite. Essential for creep-resistant steels (P91, P22). Mo carbides (Mo₂C) precipitate during PWHT → potential reheat cracking contributor. 0.5–1.0% Mo in HSLA weld metal improves strength without high hardenability.</div>
+      </div>
+
+      <div class="elem-card" style="background:#faf5ff;border:1px solid #c4b5fd;">
+        <div class="el-sym" style="color:#7e22ce;">V</div>
+        <div class="el-name">Vanadium</div>
+        <span class="tag tag-orange">↑ hardenability (moderate)</span>
+        <span class="tag tag-green">grain refiner</span>
+        <span class="tag tag-orange">reheat crack risk</span>
+        <div class="el-body" style="margin-top:6px;">Strong precipitation hardener (VC, VN). Dissolves in CGHAZ but re-precipitates during PWHT → reheat cracking sensitisation. ESAB limits V to &lt;0.08% in weld metal for lower-temperature service. VN dissolves at ~900°C, so FGHAZ retains grain refining benefit.</div>
+      </div>
+
+      <div class="elem-card" style="background:#f0f9ff;border:1px solid #7dd3fc;">
+        <div class="el-sym" style="color:#0369a1;">Ti</div>
+        <div class="el-name">Titanium</div>
+        <span class="tag tag-green">TiN grain pin</span>
+        <span class="tag tag-green">AF nucleant</span>
+        <span class="tag tag-blue">strong deoxidiser</span>
+        <div class="el-body" style="margin-top:6px;">TiN particles pin CGHAZ grain boundaries up to ~1400°C. TiO/Ti₂O₃ inclusions nucleate acicular ferrite. ESAB target: 0.01–0.05% Ti in weld wire. Ti/N ≈ 3.4 for stoichiometric TiN. Excess Ti forms TiC (dissolves at 1000°C) or large TiN clusters (non-pinning).</div>
+      </div>
+
+      <div class="elem-card" style="background:#f0fdf4;border:1px solid #86efac;">
+        <div class="el-sym" style="color:#15803d;">Nb</div>
+        <div class="el-name">Niobium</div>
+        <span class="tag tag-green">grain refiner</span>
+        <span class="tag tag-green">precipitation hardener</span>
+        <span class="tag tag-orange">liquation crack risk</span>
+        <div class="el-body" style="margin-top:6px;">NbC/NbN dissolve at 1200–1250°C → effective CGHAZ grain-boundary pinning below that temperature. In Ni superalloys: NbC undergoes constitutional liquation → HAZ liquation cracking. ESAB limits Nb &lt;0.05% in weld consumables to avoid liquation risk.</div>
+      </div>
+
+      <div class="elem-card" style="background:#f0fdf4;border:1px solid #86efac;">
+        <div class="el-sym" style="color:#15803d;">B</div>
+        <div class="el-name">Boron</div>
+        <span class="tag tag-red">↑ hardenability (potent)</span>
+        <span class="tag tag-green">↑ AF formation</span>
+        <span class="tag tag-gray">very small amounts</span>
+        <div class="el-body" style="margin-top:6px;">3–30 ppm B dramatically increases hardenability by suppressing grain-boundary ferrite nucleation. Works synergistically with Ti (Ti fixes N so B remains in solution). ESAB uses 5–15 ppm B in pipeline and structural wires to maximise acicular ferrite and strength at low carbon.</div>
+      </div>
+
+      <div class="elem-card" style="background:#fef2f2;border:1px solid #fca5a5;">
+        <div class="el-sym" style="color:#991b1b;">S</div>
+        <div class="el-name">Sulphur</div>
+        <span class="tag tag-red">hot-crack risk</span>
+        <span class="tag tag-red">lamellar tearing</span>
+        <span class="tag tag-red">ductility loss</span>
+        <div class="el-body" style="margin-top:6px;">Most damaging tramp element. FeS eutectic at 988°C causes solidification cracking. MnS stringers cause lamellar tearing in rolling direction. ESAB &amp; AWS limit: S ≤ 0.025% in weld wire (A5.18); base metal for critical welds: S ≤ 0.010% (Z-grade).</div>
+      </div>
+
+      <div class="elem-card" style="background:#fef2f2;border:1px solid #fca5a5;">
+        <div class="el-sym" style="color:#991b1b;">P</div>
+        <div class="el-name">Phosphorus</div>
+        <span class="tag tag-red">hot-crack risk</span>
+        <span class="tag tag-red">temper embrittlement</span>
+        <span class="tag tag-red">IG fracture</span>
+        <div class="el-body" style="margin-top:6px;">Fe₃P eutectic (1049°C) at grain boundaries → solidification cracking. Segregates to PAGBs at 350–600°C → temper embrittlement in Cr-Mo and Ni-Cr-Mo steels (raises DBTT). ESAB limits P ≤ 0.025% in consumables; &lt;0.010% for critical service.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Element Effect Summary Table — Weldability Quick Reference</h2>
+    <div style="overflow-x:auto;">
+    <table class="ref-table">
+      <thead>
+        <tr>
+          <th>Element</th>
+          <th>Hardenability</th>
+          <th>Hot-Crack Risk</th>
+          <th>Cold-Crack (HIC)</th>
+          <th>Toughness</th>
+          <th>Creep / High-T Strength</th>
+          <th>Remarks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>C</strong></td><td>↑↑↑ (largest effect)</td><td>↑↑ (wide ΔT)</td><td>↑↑↑</td><td>↓ as martensite ↑</td><td>↑ carbides</td><td>Limit &lt;0.12% for weldability</td></tr>
+        <tr><td><strong>Mn</strong></td><td>↑ moderate</td><td>↓ (scavenges S)</td><td>↑ mild</td><td>↑ (AF promotion)</td><td>—</td><td>Mn/S &gt; 25 needed</td></tr>
+        <tr><td><strong>Si</strong></td><td>↑ mild</td><td>↑ in SS</td><td>—</td><td>— to ↓ at high %</td><td>—</td><td>Deoxidiser; 0.2–0.6% optimal</td></tr>
+        <tr><td><strong>Cr</strong></td><td>↑↑</td><td>—</td><td>↑↑</td><td>↓ if martensite</td><td>↑↑ carbides</td><td>Reheat cracking &gt;1%Cr + Mo</td></tr>
+        <tr><td><strong>Ni</strong></td><td>↑ mild</td><td>—</td><td>—</td><td>↑↑ low-T CVN</td><td>—</td><td>Best low-T toughness improver</td></tr>
+        <tr><td><strong>Mo</strong></td><td>↑↑</td><td>—</td><td>↑↑</td><td>— to ↑ (fine bainite)</td><td>↑↑↑</td><td>Mo₂C → reheat cracking</td></tr>
+        <tr><td><strong>V</strong></td><td>↑</td><td>—</td><td>↑</td><td>↑ if grain-refined</td><td>↑ precipitation</td><td>VC → reheat cracking risk</td></tr>
+        <tr><td><strong>Ti</strong></td><td>— (low)</td><td>—</td><td>—</td><td>↑ (grain pin + AF)</td><td>—</td><td>TiN stable to ~1450°C; key microalloy</td></tr>
+        <tr><td><strong>Nb</strong></td><td>↑ mild</td><td>—</td><td>—</td><td>↑ (grain refine)</td><td>↑</td><td>Liquation cracking in Ni alloys</td></tr>
+        <tr><td><strong>B</strong></td><td>↑↑ (trace amounts)</td><td>—</td><td>↑ if excess</td><td>↑ AF (Ti+B)</td><td>—</td><td>5–15 ppm; Ti must be present</td></tr>
+        <tr><td><strong>S</strong></td><td>—</td><td>↑↑↑</td><td>—</td><td>↓↓ (MnS)</td><td>—</td><td>Most damaging impurity; limit &lt;0.025%</td></tr>
+        <tr><td><strong>P</strong></td><td>—</td><td>↑↑</td><td>—</td><td>↓↓ (temper embr.)</td><td>—</td><td>Segregates to PAGB; limit &lt;0.025%</td></tr>
+        <tr><td><strong>Cu</strong></td><td>↑ mild</td><td>—</td><td>—</td><td>—</td><td>—</td><td>Precipitation hardening at &gt;0.4%</td></tr>
+        <tr><td><strong>N</strong></td><td>—</td><td>↑ (porosity)</td><td>—</td><td>— to ↓ (strain aging)</td><td>↑ nitrides</td><td>Strain aging in C-Mn; fix with Al, Ti</td></tr>
+        <tr><td><strong>H</strong></td><td>—</td><td>—</td><td>↑↑↑</td><td>↓↓ (HIC)</td><td>—</td><td>Must limit diffusible H; use low-H electrodes</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Schaeffler &amp; WRC-1992 Diagrams — Stainless Steel Weld Metal Prediction</h2>
+    <div class="two-col">
+      <div>
+        <h3>Schaeffler Diagram (1949) — Composition-Phase Map</h3>
+        <p>Maps Cr<sub>eq</sub> vs. Ni<sub>eq</sub> to predict weld metal phase constitution. Originally calibrated for dilution welding of dissimilar stainless steels. Regions: fully austenitic (A), austenitic + martensite (A+M), austenitic + ferrite (A+F), fully ferritic (F), martensite (M).</p>
+        <div style="overflow-x:auto;">
+        <table class="ref-table" style="margin-top:8px;">
+          <thead><tr><th>Region (Schaeffler)</th><th>Cr<sub>eq</sub> (approx.)</th><th>Ni<sub>eq</sub> (approx.)</th><th>Risk</th></tr></thead>
+          <tbody>
+            <tr><td>Fully austenitic (A)</td><td>&lt;18</td><td>&gt;15</td><td>High hot-crack risk</td></tr>
+            <tr><td>A + 4–8% F</td><td>19–22</td><td>11–14</td><td>Optimal for 304L/316L welds</td></tr>
+            <tr><td>A + &gt;20% F</td><td>&gt;22</td><td>&lt;10</td><td>σ-phase risk at 475–950°C</td></tr>
+            <tr><td>Martensite zone</td><td>14–18</td><td>&lt;8</td><td>High HIC risk; avoid in SS welding</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+      <div>
+        <h3>DeLong Diagram (1956) &amp; WRC-1992</h3>
+        <p>DeLong added nitrogen to the Ni<sub>eq</sub> formula (30N) and added Ferrite Number (FN) contours — more accurate than Schaeffler. WRC-1992 further refined for duplex SS and modern austenitic grades; separates the martensite region and uses Ferrite Number up to 100 FN.</p>
+        <div class="info-box" style="margin-top:10px;">
+          <strong>Practical use (ESAB):</strong>
+          <ul style="margin-top:6px;">
+            <li>Calculate Cr<sub>eq</sub> and Ni<sub>eq</sub> for the <em>diluted weld metal</em> (accounting for base metal dilution %)</li>
+            <li>Plot on WRC-1992 diagram to read predicted FN</li>
+            <li>Target FN 4–8 for standard austenitic SS</li>
+            <li>For duplex: target FN 40–60 (≈ 40–60% ferrite)</li>
+            <li>Verify with magnetic ferrite tester (Magne-Gage / Fischer FERITSCOPE) after welding</li>
+          </ul>
+        </div>
+        <div class="note-box"><strong>FN vs. ferrite %:</strong> At low ferrite contents (&lt;10 FN), FN ≈ ferrite %. Above 10 FN the relationship diverges. Use WRC-1992 FN contours directly rather than converting to %.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="back">
+  <a href="index.html">← Back to MECH191 Reference Tables &amp; Diagrams</a>
+</div>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
