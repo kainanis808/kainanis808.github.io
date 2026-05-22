@@ -29,23 +29,40 @@
             line-height: 1.6;
         }
         main { max-width: 900px; margin: 0 auto; padding: 36px 20px; }
-        h2 {
-            font-size: 1.2rem;
+
+        .unit-block { margin-bottom: 36px; }
+        .unit-heading {
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #38bdf8;
+            margin-bottom: 6px;
+        }
+        .unit-title {
+            font-size: 1.15rem;
             color: #7dd3fc;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             padding-bottom: 8px;
             border-bottom: 1px solid #334155;
         }
-        ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .week-label {
+            font-size: 0.78rem;
+            color: #64748b;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
         li a {
             display: block;
             background: #1e293b;
             border: 1px solid #334155;
             border-radius: 8px;
-            padding: 14px 18px;
+            padding: 12px 16px;
             color: #7dd3fc;
             text-decoration: none;
-            font-size: 0.92rem;
+            font-size: 0.9rem;
             line-height: 1.5;
             transition: background 0.2s, border-color 0.2s;
         }
@@ -69,43 +86,89 @@
 
 <header>
     <h1>MECH191 Visualizations</h1>
-    <p class="subtitle">Interactive visualizations covering crystal structures, phase diagrams, mechanical properties, manufacturing processes, welding, and failure analysis for MECH191: Metallurgy.</p>
+    <p class="subtitle">Interactive visualizations for MECH191: Metallurgy — organized by course unit.</p>
 </header>
 
 <main>
-    <h2>Available Visualizations</h2>
-    <ul>
-        <li><a href="crystal_structures.html">Crystal Structures Visualization</a></li>
-        <li><a href="periodic_table_interact.html">Periodic Table of Elements</a></li>
-        <li><a href="grain_boundaries.html">Grain Boundaries and Types</a></li>
-        <li><a href="iron_carbon_phase_diagram.html">Iron-Carbon Phase Diagram (Interactive)</a></li>
-        <li><a href="stress_strain_curve.html">Stress-Strain Curve (Interactive)</a></li>
-        <li><a href="solidification.html">Solidification &amp; Dendrite Growth (Interactive)</a></li>
-        <li><a href="sand_casting.html">Sand Casting – Process, Design &amp; Defects (Interactive)</a></li>
-        <li><a href="die_casting.html">Die Casting – NADCA Process, Design &amp; Animation (Interactive)</a></li>
-        <li><a href="investment_casting.html">Investment Casting – ICI Process, Design &amp; Animation (Interactive)</a></li>
-        <li><a href="hot_cold_working.html">Hot vs Cold Working &amp; Work Hardening – ASM Recrystallization Diagrams (Interactive)</a></li>
-        <li><a href="forging.html">Forging – FIA Design Guidelines, Grain Flow &amp; Process Comparison (Interactive)</a></li>
-        <li><a href="extrusion.html">Extrusion – AEC Design Guidelines, Process Animation &amp; Die Design (Interactive)</a></li>
-        <li><a href="tube_drawing.html">Tube &amp; Pipe Drawing – TPA Manufacturing Processes, Drawing Methods, Tolerances &amp; Inspection (Interactive)</a></li>
-        <li><a href="forming_limit_diagrams.html">Forming Limit Diagrams – FLDs for Common Sheet Alloys, Strain Paths &amp; Material Data (Interactive)</a></li>
-        <li><a href="forming_defects.html">Forming Defects &amp; Process Comparison – TWI Defect Reference, NDT Detection &amp; CustomPartNet Capability Data (Interactive)</a></li>
-        <li><a href="cutting_chip_formation.html">Cutting &amp; Chip Formation – DoITPoMS Deformation Zones, Tool Wear &amp; Sandvik Coromant Parameters, Geometry &amp; Material Guide (Interactive)</a></li>
-        <li><a href="turning_milling.html">Turning &amp; Milling – Sandvik Coromant Calculators, Haas Automation Operation Guides &amp; Harvey Tool / Helical Solutions Difficult-Material Strategies (Interactive)</a></li>
-        <li><a href="powder_metallurgy.html">Powder Metallurgy – MPIF Process Overview, Design Guidelines, Material Data, DoITPoMS Sintering Fundamentals &amp; PM Review Case Studies (Interactive)</a></li>
-        <li><a href="sintering.html">Sintering – Neck Formation, Atomic Diffusion Mechanisms, Pore Closure &amp; Densification Curve (Animated &amp; Interactive)</a></li>
-        <li><a href="atomization.html">Atomization &amp; Powder Production – Höganäs Water &amp; Gas Atomization, SEM Particle Morphology, Powder Characterization &amp; Design Guidelines (Interactive)</a></li>
-        <li><a href="process_selection.html">Manufacturing Process Selection – CustomPartNet Selector, eFunda Capability Data, Kalpakjian Tolerance vs. Surface Finish Chart (Interactive)</a></li>
-        <li><a href="smaw.html">SMAW – Arc Establishment, Electrode Angles &amp; Travel Speed; E-Number Classification &amp; Selection Guide (AWS A5.1/A5.5); Low Hydrogen Storage, Exposure Limits &amp; Reconditioning (Interactive)</a></li>
-        <li><a href="gmaw.html">GMAW – Short-Circuit, Spray &amp; Pulsed Transfer Mode Comparison, Arc-Level Droplet Mechanics, Force Balance, SC Cycle Waveform, Shielding Gas Selection &amp; ER-Wire Classification (Interactive)</a></li>
-        <li><a href="fcaw.html">FCAW – Self-Shielded vs Gas-Shielded Process, Wire Selection &amp; Classification (AWS A5.20/A5.36), Parameter Setting, Slag Removal &amp; FCAW-S vs FCAW-G Comparison (Interactive)</a></li>
-        <li><a href="gtaw.html">GTAW (TIG) – Tungsten Electrode Selection, AC vs DCEN Polarity, Cathodic Cleaning Mechanism, Shielding Gas Selection, Filler Rod Technique; TIG Root Pass Pipe Welding; AWS ER Filler Classification (Interactive)</a></li>
-        <li><a href="weld_microstructure_haz.html">Weld Microstructure &amp; HAZ – HAZ Sub-Zones, Grain Growth &amp; Heat Input Effect; Weld Metal Solidification Stages, Carbon Equivalent &amp; HAZ Hardness Calculator; HAZ Thermal Cycle &amp; CCT Diagrams (Interactive)</a></li>
-        <li><a href="fracture_surface_reading.html">Fracture Types &amp; Fracture Surface Reading – Ductile, Brittle &amp; Fatigue Fracture Morphology; Microvoid Coalescence &amp; Cleavage Mechanism Animations; Multi-Scale Fatigue Atlas; Failure Analysis Case Studies (Interactive)</a></li>
-        <li><a href="weld_cracking_types.html">Weld Cracking Types – Hot Cracking, Cold Cracking / Hydrogen-Induced Cracking, Lamellar Tearing; Crack Morphology Visual Comparison; Lamellar Tearing Mechanism &amp; Prevention (Interactive)</a></li>
-        <li><a href="sem_fractography.html">SEM Fractography – Dimple Morphology, EDS Inclusion Mapping; Cleavage Patterns; Fatigue Striation Counting &amp; da/dN Measurement; Zeiss Annotated Fracture Mode Atlas (Interactive)</a></li>
-        <li><a href="corrosion.html">Corrosion – Galvanic Series in Seawater; Corrosion Types Recognition; Electrochemical Cell Diagram: Anode/Cathode, Electrolyte, Half-Reactions &amp; Animation (Interactive)</a></li>
-    </ul>
+
+    <!-- UNIT 1 -->
+    <div class="unit-block">
+        <p class="unit-heading">Unit 1 &mdash; Weeks 1–2</p>
+        <h2 class="unit-title">Foundations: What Metals Are and How They're Built</h2>
+        <ul>
+            <li><a href="crystal_structures.html">Crystal Structures Visualization</a></li>
+            <li><a href="periodic_table_interact.html">Periodic Table of Elements</a></li>
+            <li><a href="grain_boundaries.html">Grain Boundaries and Types</a></li>
+            <li><a href="stress_strain_curve.html">Stress-Strain Curve (Interactive)</a></li>
+            <li><a href="hot_cold_working.html">Hot vs Cold Working &amp; Work Hardening – ASM Recrystallization Diagrams (Interactive)</a></li>
+        </ul>
+    </div>
+
+    <!-- UNIT 2 -->
+    <div class="unit-block">
+        <p class="unit-heading">Unit 2 &mdash; Weeks 4–6</p>
+        <h2 class="unit-title">Metal Families: Knowing What You're Working With</h2>
+        <ul>
+            <li><a href="iron_carbon_phase_diagram.html">Iron-Carbon Phase Diagram (Interactive)</a></li>
+            <li><a href="solidification.html">Solidification &amp; Dendrite Growth (Interactive)</a></li>
+        </ul>
+    </div>
+
+    <!-- UNIT 4 -->
+    <div class="unit-block">
+        <p class="unit-heading">Unit 4 &mdash; Weeks 10–13</p>
+        <h2 class="unit-title">Manufacturing Processes: How Parts Are Made and What to Check</h2>
+        <p class="week-label">Weeks 10 — Casting</p>
+        <ul>
+            <li><a href="sand_casting.html">Sand Casting – Process, Design &amp; Defects (Interactive)</a></li>
+            <li><a href="die_casting.html">Die Casting – NADCA Process, Design &amp; Animation (Interactive)</a></li>
+            <li><a href="investment_casting.html">Investment Casting – ICI Process, Design &amp; Animation (Interactive)</a></li>
+        </ul>
+        <p class="week-label" style="margin-top:14px;">Week 11 — Forming</p>
+        <ul>
+            <li><a href="forging.html">Forging – FIA Design Guidelines, Grain Flow &amp; Process Comparison (Interactive)</a></li>
+            <li><a href="extrusion.html">Extrusion – AEC Design Guidelines, Process Animation &amp; Die Design (Interactive)</a></li>
+            <li><a href="tube_drawing.html">Tube &amp; Pipe Drawing – TPA Manufacturing Processes, Drawing Methods, Tolerances &amp; Inspection (Interactive)</a></li>
+            <li><a href="forming_limit_diagrams.html">Forming Limit Diagrams – FLDs for Common Sheet Alloys, Strain Paths &amp; Material Data (Interactive)</a></li>
+            <li><a href="forming_defects.html">Forming Defects &amp; Process Comparison – TWI Defect Reference, NDT Detection &amp; CustomPartNet Capability Data (Interactive)</a></li>
+        </ul>
+        <p class="week-label" style="margin-top:14px;">Week 12 — Machining</p>
+        <ul>
+            <li><a href="cutting_chip_formation.html">Cutting &amp; Chip Formation – DoITPoMS Deformation Zones, Tool Wear &amp; Sandvik Coromant Parameters, Geometry &amp; Material Guide (Interactive)</a></li>
+            <li><a href="turning_milling.html">Turning &amp; Milling – Sandvik Coromant Calculators, Haas Automation Operation Guides &amp; Harvey Tool / Helical Solutions Difficult-Material Strategies (Interactive)</a></li>
+        </ul>
+        <p class="week-label" style="margin-top:14px;">Week 13 — Powder Metallurgy &amp; Process Selection</p>
+        <ul>
+            <li><a href="powder_metallurgy.html">Powder Metallurgy – MPIF Process Overview, Design Guidelines, Material Data, DoITPoMS Sintering Fundamentals &amp; PM Review Case Studies (Interactive)</a></li>
+            <li><a href="sintering.html">Sintering – Neck Formation, Atomic Diffusion Mechanisms, Pore Closure &amp; Densification Curve (Animated &amp; Interactive)</a></li>
+            <li><a href="atomization.html">Atomization &amp; Powder Production – Höganäs Water &amp; Gas Atomization, SEM Particle Morphology, Powder Characterization &amp; Design Guidelines (Interactive)</a></li>
+            <li><a href="process_selection.html">Manufacturing Process Selection – CustomPartNet Selector, eFunda Capability Data, Kalpakjian Tolerance vs. Surface Finish Chart (Interactive)</a></li>
+        </ul>
+    </div>
+
+    <!-- UNIT 5 -->
+    <div class="unit-block">
+        <p class="unit-heading">Unit 5 &mdash; Weeks 14–16</p>
+        <h2 class="unit-title">Keeping Metal in Service: Welding, Failure, Corrosion, and Modern Tech</h2>
+        <p class="week-label">Week 14 — Welding Processes</p>
+        <ul>
+            <li><a href="smaw.html">SMAW – Arc Establishment, Electrode Angles &amp; Travel Speed; E-Number Classification &amp; Selection Guide (AWS A5.1/A5.5); Low Hydrogen Storage, Exposure Limits &amp; Reconditioning (Interactive)</a></li>
+            <li><a href="gmaw.html">GMAW – Short-Circuit, Spray &amp; Pulsed Transfer Mode Comparison, Arc-Level Droplet Mechanics, Force Balance, SC Cycle Waveform, Shielding Gas Selection &amp; ER-Wire Classification (Interactive)</a></li>
+            <li><a href="fcaw.html">FCAW – Self-Shielded vs Gas-Shielded Process, Wire Selection &amp; Classification (AWS A5.20/A5.36), Parameter Setting, Slag Removal &amp; FCAW-S vs FCAW-G Comparison (Interactive)</a></li>
+            <li><a href="gtaw.html">GTAW (TIG) – Tungsten Electrode Selection, AC vs DCEN Polarity, Cathodic Cleaning Mechanism, Shielding Gas Selection, Filler Rod Technique; TIG Root Pass Pipe Welding; AWS ER Filler Classification (Interactive)</a></li>
+        </ul>
+        <p class="week-label" style="margin-top:14px;">Week 15 — Welding Metallurgy &amp; Failure Analysis</p>
+        <ul>
+            <li><a href="weld_microstructure_haz.html">Weld Microstructure &amp; HAZ – HAZ Sub-Zones, Grain Growth &amp; Heat Input Effect; Weld Metal Solidification Stages, Carbon Equivalent &amp; HAZ Hardness Calculator; HAZ Thermal Cycle &amp; CCT Diagrams (Interactive)</a></li>
+            <li><a href="fracture_surface_reading.html">Fracture Types &amp; Fracture Surface Reading – Ductile, Brittle &amp; Fatigue Fracture Morphology; Microvoid Coalescence &amp; Cleavage Mechanism Animations; Multi-Scale Fatigue Atlas; Failure Analysis Case Studies (Interactive)</a></li>
+            <li><a href="weld_cracking_types.html">Weld Cracking Types – Hot Cracking, Cold Cracking / Hydrogen-Induced Cracking, Lamellar Tearing; Crack Morphology Visual Comparison; Lamellar Tearing Mechanism &amp; Prevention (Interactive)</a></li>
+            <li><a href="sem_fractography.html">SEM Fractography – Dimple Morphology, EDS Inclusion Mapping; Cleavage Patterns; Fatigue Striation Counting &amp; da/dN Measurement; Zeiss Annotated Fracture Mode Atlas (Interactive)</a></li>
+        </ul>
+        <p class="week-label" style="margin-top:14px;">Week 16 — Corrosion</p>
+        <ul>
+            <li><a href="corrosion.html">Corrosion – Galvanic Series in Seawater; Corrosion Types Recognition; Electrochemical Cell Diagram: Anode/Cathode, Electrolyte, Half-Reactions &amp; Animation (Interactive)</a></li>
+        </ul>
+    </div>
 
     <a class="back-link" href="../index.html">← Back to Main Course Page</a>
 </main>

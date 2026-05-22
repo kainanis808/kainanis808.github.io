@@ -29,23 +29,40 @@
             line-height: 1.6;
         }
         main { max-width: 900px; margin: 0 auto; padding: 36px 20px; }
-        h2 {
-            font-size: 1.2rem;
+
+        .unit-block { margin-bottom: 36px; }
+        .unit-heading {
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #3b82f6;
+            margin-bottom: 6px;
+        }
+        .unit-title {
+            font-size: 1.15rem;
             color: #1e3a5f;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             padding-bottom: 8px;
             border-bottom: 1px solid #e2e8f0;
         }
-        ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .week-label {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
         li a {
             display: block;
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
-            padding: 14px 18px;
+            padding: 12px 16px;
             color: #1e3a5f;
             text-decoration: none;
-            font-size: 0.92rem;
+            font-size: 0.9rem;
             line-height: 1.5;
             transition: background 0.2s, border-color 0.2s;
         }
@@ -69,36 +86,83 @@
 
 <header>
     <h1>MECH191 Reference Tables &amp; Diagrams</h1>
-    <p class="subtitle">Quick-access reference tables, diagrams, and data sheets covering material properties, standards, welding, powder metallurgy, and failure analysis for MECH191: Metallurgy.</p>
+    <p class="subtitle">Quick-access reference tables, diagrams, and data sheets for MECH191: Metallurgy — organized by course unit.</p>
 </header>
 
 <main>
-    <h2>Available References</h2>
-    <ul>
-        <li><a href="aisi_sae_codes.html">AISI/SAE Steel Designation Codes</a></li>
-        <li><a href="hardness_scales.html">Hardness Testing Scales</a></li>
-        <li><a href="impact_fatigue_testing.html">Impact &amp; Fatigue Testing</a></li>
-        <li><a href="quality_standards.html">Quality Standards &amp; Codes</a></li>
-        <li><a href="inspection_documentation.html">Reading Inspection Documentation</a></li>
-        <li><a href="defect_recognition.html">Defect Recognition</a></li>
-        <li><a href="ndt_methods.html">NDT Methods &mdash; Physics, Techniques &amp; Limitations</a></li>
-        <li><a href="casting_defects.html">Casting Defects &mdash; TWI Defect Library</a></li>
-        <li><a href="sintering.html">Sintering &mdash; Time-Temperature Profiles, Atmospheres &amp; Microstructure</a></li>
-        <li><a href="mim_hip.html">Metal Injection Moulding &amp; HIP &mdash; Bodycote Process Overview, Density Data &amp; Case Studies</a></li>
-        <li><a href="pm_defects.html">Powder Metallurgy Defects &mdash; MPIF Standard Test Methods &amp; TWI PM Defect Library</a></li>
-        <li><a href="am_additive.html">Additive Manufacturing &mdash; America Makes (LPBF, EBM, DED, Binder Jetting) &amp; GE Additive Case Studies</a></li>
-        <li><a href="welding_fundamentals.html">Welding Fundamentals &amp; Joint Design &mdash; Lincoln Electric, AWS Welding Handbook, Miller Electric</a></li>
-        <li><a href="gmaw_mig_guide.html">GMAW / MIG Welding In-Depth &mdash; Miller Electric (Transfer Modes, Wire Selection, Parameter Setting) &amp; Airgas/Linde Shielding Gas Guide</a></li>
-        <li><a href="d1_1_filler_metals.html">AWS D1.1 Pre-Qualified Filler Metals &mdash; SMAW, GMAW, FCAW, SAW; Preheat &amp; Interpass Requirements; Diffusible Hydrogen Designators</a></li>
-        <li><a href="preheat_interpass.html">Preheat &amp; Interpass Temperature &mdash; Lincoln Electric Preheat Calculator, Carbon Equivalent (IIW &amp; Pcm), AWS D1.1 Table 4.4</a></li>
-        <li><a href="weld_symbols.html">Weld Symbols &mdash; AWS A2.4 Quick Reference, Interactive Symbol Trainer, Callout Anatomy &amp; GD&amp;T Integration</a></li>
-        <li><a href="welding_twi_esab.html">Welding Process Guide &mdash; TWI Process Descriptions &amp; ESAB Electrode/Wire Selection Chart (SMAW, GMAW, GTAW, FCAW)</a></li>
-        <li><a href="failure_analysis.html">Failure Analysis Methodology &mdash; ASM International Vol. 11, NTSB &amp; AAIB Investigation Reports, TWI Step-by-Step Protocol</a></li>
-        <li><a href="hic_hydrogen_cracking.html">Hydrogen-Induced Cracking (HIC) &amp; Cold Cracking Prevention &mdash; TWI, Lincoln Electric, IIW International Standards Comparison</a></li>
-        <li><a href="esab_welding_metallurgy.html">Welding Metallurgy &mdash; ESAB Handbook (Solidification Modes, HAZ Microstructure, Cracking Mechanisms, Schaeffler/WRC-1992 Diagrams)</a></li>
-        <li><a href="pren_stainless_steel.html">Stainless Steel PREN (Pitting Resistance Equivalent Number) &mdash; Formula, Grade Comparison Table &amp; Service Environment Guide</a></li>
-        <li><a href="corrosion_protection_guide.html">Corrosion Protection Selection Guide &mdash; Five Protection Methods, Effectiveness Matrix &amp; Selection Protocol (NACE / ISO 12944 / ASM Vol. 13A)</a></li>
-    </ul>
+
+    <!-- UNIT 2 -->
+    <div class="unit-block">
+        <p class="unit-heading">Unit 2 &mdash; Weeks 4–5</p>
+        <h2 class="unit-title">Metal Families: Knowing What You're Working With</h2>
+        <ul>
+            <li><a href="aisi_sae_codes.html">AISI/SAE Steel Designation Codes</a></li>
+        </ul>
+    </div>
+
+    <!-- UNIT 3 -->
+    <div class="unit-block">
+        <p class="unit-heading">Unit 3 &mdash; Weeks 7–9</p>
+        <h2 class="unit-title">Testing, Inspection, and Quality: The Technician's Core Skills</h2>
+        <p class="week-label">Week 7 — Mechanical Testing</p>
+        <ul>
+            <li><a href="hardness_scales.html">Hardness Testing Scales</a></li>
+            <li><a href="impact_fatigue_testing.html">Impact &amp; Fatigue Testing</a></li>
+        </ul>
+        <p class="week-label" style="margin-top:14px;">Week 8 — Non-Destructive Testing (NDT)</p>
+        <ul>
+            <li><a href="ndt_methods.html">NDT Methods &mdash; Physics, Techniques &amp; Limitations</a></li>
+            <li><a href="defect_recognition.html">Defect Recognition</a></li>
+        </ul>
+        <p class="week-label" style="margin-top:14px;">Week 9 — Quality Standards &amp; Documentation</p>
+        <ul>
+            <li><a href="quality_standards.html">Quality Standards &amp; Codes</a></li>
+            <li><a href="inspection_documentation.html">Reading Inspection Documentation</a></li>
+        </ul>
+    </div>
+
+    <!-- UNIT 4 -->
+    <div class="unit-block">
+        <p class="unit-heading">Unit 4 &mdash; Weeks 10–13</p>
+        <h2 class="unit-title">Manufacturing Processes: How Parts Are Made and What to Check</h2>
+        <p class="week-label">Week 10 — Casting</p>
+        <ul>
+            <li><a href="casting_defects.html">Casting Defects &mdash; TWI Defect Library</a></li>
+        </ul>
+        <p class="week-label" style="margin-top:14px;">Week 13 — Powder Metallurgy &amp; Additive Manufacturing</p>
+        <ul>
+            <li><a href="sintering.html">Sintering &mdash; Time-Temperature Profiles, Atmospheres &amp; Microstructure</a></li>
+            <li><a href="mim_hip.html">Metal Injection Moulding &amp; HIP &mdash; Bodycote Process Overview, Density Data &amp; Case Studies</a></li>
+            <li><a href="pm_defects.html">Powder Metallurgy Defects &mdash; MPIF Standard Test Methods &amp; TWI PM Defect Library</a></li>
+            <li><a href="am_additive.html">Additive Manufacturing &mdash; America Makes (LPBF, EBM, DED, Binder Jetting) &amp; GE Additive Case Studies</a></li>
+        </ul>
+    </div>
+
+    <!-- UNIT 5 -->
+    <div class="unit-block">
+        <p class="unit-heading">Unit 5 &mdash; Weeks 14–16</p>
+        <h2 class="unit-title">Keeping Metal in Service: Welding, Failure, Corrosion, and Modern Tech</h2>
+        <p class="week-label">Week 14 — Welding Processes</p>
+        <ul>
+            <li><a href="welding_fundamentals.html">Welding Fundamentals &amp; Joint Design &mdash; Lincoln Electric, AWS Welding Handbook, Miller Electric</a></li>
+            <li><a href="gmaw_mig_guide.html">GMAW / MIG Welding In-Depth &mdash; Miller Electric (Transfer Modes, Wire Selection, Parameter Setting) &amp; Airgas/Linde Shielding Gas Guide</a></li>
+            <li><a href="d1_1_filler_metals.html">AWS D1.1 Pre-Qualified Filler Metals &mdash; SMAW, GMAW, FCAW, SAW; Preheat &amp; Interpass Requirements; Diffusible Hydrogen Designators</a></li>
+            <li><a href="preheat_interpass.html">Preheat &amp; Interpass Temperature &mdash; Lincoln Electric Preheat Calculator, Carbon Equivalent (IIW &amp; Pcm), AWS D1.1 Table 4.4</a></li>
+            <li><a href="weld_symbols.html">Weld Symbols &mdash; AWS A2.4 Quick Reference, Interactive Symbol Trainer, Callout Anatomy &amp; GD&amp;T Integration</a></li>
+            <li><a href="welding_twi_esab.html">Welding Process Guide &mdash; TWI Process Descriptions &amp; ESAB Electrode/Wire Selection Chart (SMAW, GMAW, GTAW, FCAW)</a></li>
+        </ul>
+        <p class="week-label" style="margin-top:14px;">Week 15 — Welding Metallurgy &amp; Failure Analysis</p>
+        <ul>
+            <li><a href="esab_welding_metallurgy.html">Welding Metallurgy &mdash; ESAB Handbook (Solidification Modes, HAZ Microstructure, Cracking Mechanisms, Schaeffler/WRC-1992 Diagrams)</a></li>
+            <li><a href="failure_analysis.html">Failure Analysis Methodology &mdash; ASM International Vol. 11, NTSB &amp; AAIB Investigation Reports, TWI Step-by-Step Protocol</a></li>
+            <li><a href="hic_hydrogen_cracking.html">Hydrogen-Induced Cracking (HIC) &amp; Cold Cracking Prevention &mdash; TWI, Lincoln Electric, IIW International Standards Comparison</a></li>
+        </ul>
+        <p class="week-label" style="margin-top:14px;">Week 16 — Corrosion</p>
+        <ul>
+            <li><a href="pren_stainless_steel.html">Stainless Steel PREN (Pitting Resistance Equivalent Number) &mdash; Formula, Grade Comparison Table &amp; Service Environment Guide</a></li>
+            <li><a href="corrosion_protection_guide.html">Corrosion Protection Selection Guide &mdash; Five Protection Methods, Effectiveness Matrix &amp; Selection Protocol (NACE / ISO 12944 / ASM Vol. 13A)</a></li>
+        </ul>
+    </div>
 
     <a class="back-link" href="../index.html">← Back to Main Course Page</a>
 </main>
