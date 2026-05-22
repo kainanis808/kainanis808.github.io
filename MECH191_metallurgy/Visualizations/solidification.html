@@ -8,47 +8,47 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #ffffff;
-            color: #1a1a1a;
+            background: #0f172a;
+            color: #e2e8f0;
         }
         header {
             text-align: center;
             padding: 30px 20px;
-            background: #f1f5f9;
-            border-bottom: 1px solid #e2e8f0;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
         }
-        h1 { font-size: 2.2rem; color: #1a1a2e; }
-        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        h1 { font-size: 2.2rem; color: #f1f5f9; }
+        .subtitle { color: #94a3b8; margin-top: 8px; font-size: 1.05rem; }
         main { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
 
         .intro {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
+            background: #1e293b;
+            border: 1px solid #334155;
             border-radius: 12px;
             padding: 24px;
             margin-bottom: 28px;
-            color: #374151;
+            color: #94a3b8;
             line-height: 1.7;
             font-size: 0.97rem;
         }
-        .intro h2 { color: #1e3a5f; margin-bottom: 10px; font-size: 1.2rem; }
+        .intro h2 { color: #7dd3fc; margin-bottom: 10px; font-size: 1.2rem; }
         .intro p { margin-bottom: 10px; }
         .intro p:last-child { margin-bottom: 0; }
 
         .section {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
+            background: #1e293b;
+            border: 1px solid #334155;
             border-radius: 12px;
             padding: 24px;
             margin-bottom: 28px;
         }
         .section h2 {
             font-size: 1.3rem;
-            color: #1e3a5f;
+            color: #7dd3fc;
             margin-bottom: 8px;
         }
         .section > p {
-            color: #4b5563;
+            color: #94a3b8;
             line-height: 1.6;
             margin-bottom: 16px;
             font-size: 0.95rem;
@@ -62,7 +62,7 @@
             flex-wrap: wrap;
         }
         #dendrite-canvas {
-            border: 1px solid #cbd5e1;
+            border: 1px solid #334155;
             border-radius: 8px;
             background: #0a0a1a;
             flex-shrink: 0;
@@ -77,39 +77,41 @@
         .ctrl-group label {
             display: block;
             font-size: 0.88rem;
-            color: #374151;
+            color: #e2e8f0;
             font-weight: 600;
             margin-bottom: 4px;
         }
         .ctrl-group input[type=range] {
             width: 100%;
-            accent-color: #1e3a5f;
+            accent-color: #38bdf8;
         }
         .ctrl-group .val-display {
             font-size: 0.82rem;
-            color: #6b7280;
+            color: #94a3b8;
             margin-top: 2px;
         }
         .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
         button {
             padding: 8px 20px;
-            background: #1e3a5f;
-            color: #fff;
-            border: none;
+            background: #1e293b;
+            color: #38bdf8;
+            border: 1px solid #38bdf8;
             border-radius: 6px;
             cursor: pointer;
             font-size: 0.9rem;
             transition: background 0.2s;
         }
-        button:hover { background: #2d5a8e; }
+        button:hover { background: #1e3a5f; }
         button.secondary {
-            background: #475569;
+            background: #1e293b;
+            color: #94a3b8;
+            border-color: #334155;
         }
-        button.secondary:hover { background: #64748b; }
+        button.secondary:hover { background: #334155; }
         #sim-status {
             font-size: 0.85rem;
-            color: #4b5563;
-            background: #f1f5f9;
+            color: #94a3b8;
+            background: #1e293b;
             border-radius: 6px;
             padding: 8px 12px;
             line-height: 1.5;
@@ -117,7 +119,7 @@
 
         /* ── Cooling Rate Comparison ── */
         #das-section canvas {
-            border: 1px solid #cbd5e1;
+            border: 1px solid #334155;
             border-radius: 8px;
         }
         .das-row {
@@ -134,7 +136,7 @@
         .das-box figcaption {
             margin-top: 6px;
             font-size: 0.82rem;
-            color: #6b7280;
+            color: #64748b;
             font-style: italic;
         }
 
@@ -146,9 +148,9 @@
             flex-wrap: wrap;
         }
         #grain-canvas {
-            border: 1px solid #cbd5e1;
+            border: 1px solid #334155;
             border-radius: 8px;
-            background: #fff;
+            background: #0f172a;
             flex-shrink: 0;
         }
         #grain-controls {
@@ -163,13 +165,13 @@
             align-items: center;
             gap: 8px;
             font-size: 0.85rem;
-            color: #374151;
+            color: #e2e8f0;
         }
         .legend-swatch {
             width: 18px;
             height: 18px;
             border-radius: 3px;
-            border: 1px solid #cbd5e1;
+            border: 1px solid #334155;
             flex-shrink: 0;
         }
 
@@ -180,16 +182,16 @@
             gap: 16px;
         }
         .exp-card {
-            background: #fff;
-            border: 1px solid #e2e8f0;
+            background: #1e293b;
+            border: 1px solid #334155;
             border-radius: 10px;
             padding: 18px;
         }
-        .exp-card h3 { font-size: 1rem; color: #1e3a5f; margin-bottom: 8px; }
-        .exp-card p { font-size: 0.88rem; color: #4b5563; line-height: 1.6; }
+        .exp-card h3 { font-size: 1rem; color: #7dd3fc; margin-bottom: 8px; }
+        .exp-card p { font-size: 0.88rem; color: #94a3b8; line-height: 1.6; }
 
         .formula-box {
-            background: #1e3a5f;
+            background: #0c2044;
             color: #e2e8f0;
             border-radius: 8px;
             padding: 14px 18px;
@@ -203,7 +205,7 @@
             display: block;
             text-align: center;
             margin-top: 30px;
-            color: #0284c7;
+            color: #38bdf8;
             text-decoration: none;
             font-size: 0.95rem;
         }
@@ -660,8 +662,8 @@
         const ctx = canvas.getContext('2d');
         const W = canvas.width, H = canvas.height;
 
-        // background — etched metal look
-        ctx.fillStyle = '#e8e0d0';
+        // background — dark
+        ctx.fillStyle = '#0f172a';
         ctx.fillRect(0, 0, W, H);
 
         // draw several dendrite cross-sections as concentric squares
@@ -682,14 +684,14 @@
                 ctx.fill();
 
                 // boundary lines (interdendritic)
-                ctx.strokeStyle = '#3d2b1f';
+                ctx.strokeStyle = '#334155';
                 ctx.lineWidth = 0.8;
                 ctx.stroke();
             }
         }
 
         // overlay a subtle grid of grain boundaries
-        ctx.strokeStyle = 'rgba(50,30,10,0.25)';
+        ctx.strokeStyle = 'rgba(148,163,184,0.15)';
         ctx.lineWidth = 1;
         for (let x = 0; x <= W; x += spacing) {
             ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
