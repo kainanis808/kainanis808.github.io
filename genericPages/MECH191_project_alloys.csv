@@ -1,14 +1,14 @@
-Sample Type,Family,Alloy,Recommended Form,Why This Alloy,Unit Tie-In
-Core,Carbon Steel,AISI 1045,"3/4"" round bar, 1-1.5"" pucks","Medium carbon - actually responds to quench/temper, unlike 1018",Unit 1 (Heat Treatment)
-Core,Alloy/Tool Steel,AISI 4140,"3/4"" round bar, 1-1.5"" pucks","Standard hardenable alloy steel, contrast to 1045 for hardenability",Unit 1 & 2 (Heat Treatment / Metal Families)
-Core,Stainless Steel (Austenitic),304,"3/4"" round bar, 1-1.5"" pucks","Non-heat-treatable by quench, corrosion-resistance baseline, ties to PREN reference page",Unit 2 & 5 (Metal Families / Corrosion)
-Core,Stainless Steel (Martensitic),410,"3/4"" round bar, 1-1.5"" pucks","Does respond to quench/temper - contrast to 304 within same family",Unit 1 & 2 (Heat Treatment / Metal Families)
-Core,Cast Iron,"Gray Iron, ASTM A48 Class 30","1"" round or cast puck","Unmistakable graphite flake structure under scope, brittle fracture demo",Unit 1 & 5 (Metallography / Fractography)
-Core,Aluminum,6061-T6,"3/4"" round bar, 1-1.5"" pucks","Cheap, weldable, most common structural aluminum baseline",Unit 2 (Metal Families)
-Core (optional 2nd),Aluminum,2024-T3,"3/4"" round bar, 1-1.5"" pucks","Precipitation-hardening contrast to 6061",Unit 2 (Metal Families)
-Core,Copper Alloy,C360 Brass (free-machining),"3/4"" round bar, 1-1.5"" pucks","Cheap, easy to machine into coupons",Unit 2 (Metal Families)
-Core (optional 2nd),Copper Alloy,C932 Bearing Bronze,"3/4"" round bar, 1-1.5"" pucks","Different color/structure than brass, common bearing application",Unit 2 (Metal Families)
-Demo/Shared,Titanium,Ti-6Al-4V,"Small coupons, few pieces only","Aerospace/medical talking point, expensive per pound",Unit 2 (Metal Families)
-Demo/Shared,Nickel/Cobalt,Inconel 625 or Monel 400,"Small coupons, few pieces only","High-temp/high-performance survey sample, expensive per pound",Unit 2 (Metal Families)
-Demo/Shared,Coated Steel,Galvanized (Zinc-coated) 1018,"Sheet or coupon","Coatings/corrosion-prevention discussion",Unit 5 (Corrosion)
-Demo/Shared,Solder,Sn-based lead-free wire,"Wire spool",Soldering/joining discussion - not a structural sample,Unit 5 (Joining)
+Sample Type,Family,Alloy,Recommended Form,Why This Alloy,Unit Tie-In,Qty for 10 Students,
+Core,Carbon Steel,AISI 1045,"3/4"" round bar, 1-1.5"" pucks","Medium carbon - actually responds to quench/temper, unlike 1018",Unit 1 (Heat Treatment),12,
+Core,Alloy/Tool Steel,AISI 4140,"3/4"" round bar, 1-1.5"" pucks","Standard hardenable alloy steel, contrast to 1045 for hardenability",Unit 1 & 2 (Heat Treatment / Metal Families),12,
+Core,Stainless Steel (Austenitic),304,"3/4"" round bar, 1-1.5"" pucks","Non-heat-treatable by quench, corrosion-resistance baseline, ties to PREN reference page",Unit 2 & 5 (Metal Families / Corrosion),12,
+Core,Stainless Steel (Martensitic),410,"3/4"" round bar, 1-1.5"" pucks",Does respond to quench/temper - contrast to 304 within same family,Unit 1 & 2 (Heat Treatment / Metal Families),12,
+Core,Cast Iron,"Gray Iron, ASTM A48 Class 30","1"" round or cast puck","Unmistakable graphite flake structure under scope, brittle fracture demo",Unit 1 & 5 (Metallography / Fractography),12,
+Core,Aluminum,6061-T6,"3/4"" round bar, 1-1.5"" pucks","Cheap, weldable, most common structural aluminum baseline",Unit 2 (Metal Families),12,
+Core,Aluminum,2024-T3,"3/4"" round bar, 1-1.5"" pucks",Precipitation-hardening contrast to 6061,Unit 2 (Metal Families),12,
+Core,Copper Alloy,C360 Brass (free-machining),"3/4"" round bar, 1-1.5"" pucks","Cheap, easy to machine into coupons",Unit 2 (Metal Families),12,
+Core,Copper Alloy,C932 Bearing Bronze,"3/4"" round bar, 1-1.5"" pucks","Different color/structure than brass, common bearing application",Unit 2 (Metal Families),12,
+Demo/Shared,Titanium,Ti-6Al-4V,"Small coupons, few pieces only","Aerospace/medical talking point, expensive per pound",Unit 2 (Metal Families),3 (class-shared, not per student)
+Demo/Shared,Nickel/Cobalt,Inconel 625 or Monel 400,"Small coupons, few pieces only","High-temp/high-performance survey sample, expensive per pound",Unit 2 (Metal Families),3 (class-shared, not per student)
+Demo/Shared,Coated Steel,Galvanized (Zinc-coated) 1018,Sheet or coupon,Coatings/corrosion-prevention discussion,Unit 5 (Corrosion),2 (class-shared, not per student)
+Demo/Shared,Copper Pipe (soldered joint),Type L copper pipe w/ pre-soldered fitting,"Pre-soldered joint, 4-6"" length","Physical soldered-joint visual for joining discussion, doubles as copper-family tie-in",Unit 5 (Joining),2 (class-shared, not per student)
