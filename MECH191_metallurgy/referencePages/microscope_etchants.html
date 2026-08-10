@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ME580 Microscope &amp; Etchant Reference</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.2rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 980px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 30px; font-size: 1rem; }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section h2 {
+            font-size: 1.3rem;
+            color: #1e3a5f;
+            margin-bottom: 10px;
+        }
+        .section p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 14px;
+            font-size: 0.95rem;
+        }
+
+        /* Spec cards */
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+            margin: 16px 0;
+        }
+        .spec-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+        }
+        .spec-card .sc-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-bottom: 6px;
+        }
+        .spec-card .sc-value {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+        .spec-card ul {
+            padding-left: 16px;
+            color: #4b5563;
+            font-size: 0.87rem;
+            line-height: 1.7;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            margin-top: 10px;
+        }
+        thead tr {
+            background: #1e3a5f;
+            color: #fff;
+        }
+        thead th {
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        tbody tr:nth-child(even) { background: #f1f5f9; }
+        tbody tr:hover { background: #e0f2fe; }
+        tbody td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #374151;
+            vertical-align: middle;
+        }
+        .code { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #1e3a5f; }
+        .section-label {
+            font-weight: 700;
+            color: #1e3a5f;
+            font-size: 0.95rem;
+            margin: 18px 0 6px;
+        }
+        .note {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .badge-nital     { background: #dbeafe; color: #1d4ed8; }
+        .badge-marble    { background: #dcfce7; color: #15803d; }
+        .badge-keller    { background: #fce7f3; color: #9d174d; }
+        .badge-ferric    { background: #fef9c3; color: #854d0e; }
+        .badge-none      { background: #e5e7eb; color: #374151; }
+
+        /* Etchant recipe cards */
+        .etch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
+            margin: 16px 0;
+        }
+        .etch-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+        }
+        .etch-card .ec-name {
+            font-weight: 700;
+            color: #1e3a5f;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+        .etch-card .ec-recipe {
+            font-family: 'Courier New', Courier, monospace;
+            background: #1e3a5f;
+            color: #e2e8f0;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        .etch-card .ec-use {
+            color: #4b5563;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .tip-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            margin: 14px 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .tip-box strong { color: #92400e; }
+
+        .danger-box {
+            background: #fef2f2;
+            border-left: 4px solid #dc2626;
+            border-radius: 0 8px 8px 0;
+            padding: 14px 18px;
+            margin: 16px 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .danger-box strong { color: #991b1b; }
+        .danger-box .db-title {
+            font-weight: 800;
+            color: #991b1b;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .steps-list {
+            counter-reset: step;
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+        .steps-list li {
+            counter-increment: step;
+            position: relative;
+            padding: 8px 0 8px 40px;
+            color: #374151;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .steps-list li:last-child { border-bottom: none; }
+        .steps-list li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 26px;
+            height: 26px;
+            background: #1e3a5f;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .group-header td {
+            background: #dbeafe !important;
+            font-weight: 700;
+            color: #1e3a5f;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+        }
+        .noetch-row td { background: #f3f4f6 !important; color: #6b7280 !important; font-style: italic; }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #0284c7;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>ME580 Microscope &amp; Etchant Reference</h1>
+    <p class="subtitle">AmScope ME580T-PZ-2L — magnifications, field widths, and specimen etchants for the Metallography Lab modules</p>
+</header>
+<main>
+    <p class="intro">
+        Every weekly module in the Semester Metallography Portfolio uses the same shared class
+        microscope and a small set of etchants. This page is a single reference for both: what the
+        ME580 can actually do, and what each lettered specimen (A&ndash;O) needs to be etched with
+        before it goes on the stage.
+    </p>
+
+    <!-- MICROSCOPE -->
+    <div class="section">
+        <h2>The Microscope — AmScope ME580T-PZ-2L</h2>
+        <p>
+            A trinocular, dual-illumination, polarized-light metallurgical microscope. The
+            <strong>-2L</strong> designation means it ships with two full objective sets &mdash; one
+            for reflected-light metallurgical work (opaque, polished/etched specimens) and one
+            achromatic set shared with transmitted-light use &mdash; giving five total magnifications
+            with the standard 10&times; eyepiece.
+        </p>
+        <div class="spec-grid">
+            <div class="spec-card">
+                <div class="sc-title">Metallurgical Objectives</div>
+                <div class="sc-value">5&times; / 10&times; / 50&times;</div>
+                <ul>
+                    <li>Long-range plan, reflected light</li>
+                    <li>Correct choice for all opaque, polished/etched specimens (A&ndash;O)</li>
+                </ul>
+            </div>
+            <div class="spec-card">
+                <div class="sc-title">Achromatic Objectives</div>
+                <div class="sc-value">4&times; / 10&times; / 40&times;</div>
+                <ul>
+                    <li>Included on -2L models only</li>
+                    <li>4&times; is the low-NA overview objective used for the 40&times; step</li>
+                </ul>
+            </div>
+            <div class="spec-card">
+                <div class="sc-title">Eyepiece</div>
+                <div class="sc-value">WF10&times; / 18mm</div>
+                <ul>
+                    <li>Standard widefield eyepiece</li>
+                    <li>A bonus WF16&times; ships with -2L models but is not used in the modules</li>
+                </ul>
+            </div>
+        </div>
+
+        <p class="section-label">Native Total Magnifications (with 10&times; eyepiece)</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Total Magnification</th>
+                    <th>Objective Used</th>
+                    <th>Used in the Modules?</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>40&times;</strong></td>
+                    <td>4&times; achromatic</td>
+                    <td><span class="badge badge-nital">Yes — overview scan</span></td>
+                </tr>
+                <tr>
+                    <td>50&times;</td>
+                    <td>5&times; metallurgical</td>
+                    <td><span class="badge badge-none">Not used</span></td>
+                </tr>
+                <tr>
+                    <td><strong>100&times;</strong></td>
+                    <td>10&times; (either set)</td>
+                    <td><span class="badge badge-nital">Yes — primary working magnification</span></td>
+                </tr>
+                <tr>
+                    <td>400&times;</td>
+                    <td>40&times; achromatic</td>
+                    <td><span class="badge badge-none">Not used</span></td>
+                </tr>
+                <tr>
+                    <td><strong>500&times;</strong></td>
+                    <td>50&times; metallurgical</td>
+                    <td><span class="badge badge-nital">Yes — fine detail</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="note">
+            200&times; is not a native setting on this scope with the included eyepiece — there is no
+            objective/eyepiece combination that produces it without an add-on 20&times; eyepiece. The
+            modules use only 40&times;, 100&times;, and 500&times; for this reason.
+        </p>
+
+        <p class="section-label">Field of View by Magnification</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Magnification</th>
+                    <th>Field Width</th>
+                    <th>Ideal For</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>40&times;</strong></td>
+                    <td>&asymp; 8.0 mm</td>
+                    <td>Full cross-section, solidification zones, gross defects</td>
+                </tr>
+                <tr>
+                    <td><strong>100&times;</strong></td>
+                    <td>&asymp; 1.6 mm</td>
+                    <td>Grain counting (ASTM E112), inclusion survey (ASTM E45), indent identification, grain aspect ratio, ferrite/pearlite ratio</td>
+                </tr>
+                <tr>
+                    <td><strong>500&times;</strong></td>
+                    <td>&asymp; 0.32 mm</td>
+                    <td>Precipitates, lamellar pearlite spacing, martensite lath detail, pore morphology, HAZ sub-zones, fracture texture, grain boundary attack</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- HANDLING -->
+    <div class="section">
+        <h2>Specimen &amp; Microscope Handling</h2>
+        <p>The same setup sequence applies to every module:</p>
+        <ol class="steps-list">
+            <li>Clean the specimen surface with a lint-free lens tissue using a single swipe &mdash; never a circular motion.</li>
+            <li>Handle the specimen by its edges only. Fingerprints etch and will obscure the microstructure.</li>
+            <li>Place the specimen face-down on the stage. Start at 40&times; and focus with the coarse knob.</li>
+            <li>Switch objectives without moving the stage. Use fine focus only above 100&times;.</li>
+            <li>Work through magnifications in the order listed for that module, then return the specimen to the labeled tray before leaving class.</li>
+        </ol>
+        <div class="tip-box">
+            <strong>Kit rule:</strong> return all specimens before leaving class, never clean with abrasives, and notify the instructor immediately if a specimen is damaged. Safety glasses and gloves are required during all lab activities.
+        </div>
+    </div>
+
+    <!-- SPECIMEN / ETCHANT TABLE -->
+    <div class="section">
+        <h2>Etchants by Specimen</h2>
+        <p>Fifteen pre-prepared, labeled specimens (A&ndash;O) rotate through the semester. Etch time is only listed where it differs from a standard 5&ndash;10 second swab.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Specimen</th>
+                    <th>Material</th>
+                    <th>Mount</th>
+                    <th>Etchant</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>A</strong></td><td>1018 steel (normalized)</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span></td></tr>
+                <tr><td><strong>B</strong></td><td>1045 steel (normalized)</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span></td></tr>
+                <tr><td><strong>C</strong></td><td>1045 steel — Vickers indent</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span>, 3&ndash;5 sec</td></tr>
+                <tr><td><strong>D</strong></td><td>1095 steel (Q&amp;T martensite)</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span></td></tr>
+                <tr><td><strong>E</strong></td><td>Gray cast iron</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span></td></tr>
+                <tr><td><strong>F</strong></td><td>Ductile cast iron</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span>, 10&ndash;15 sec</td></tr>
+                <tr><td><strong>G</strong></td><td>304 stainless steel</td><td>Hot-compression phenolic</td><td><span class="badge badge-marble">Marble's reagent</span></td></tr>
+                <tr><td><strong>H</strong></td><td>6061-T6 aluminum</td><td>Cold-cure epoxy</td><td><span class="badge badge-keller">Keller's reagent</span></td></tr>
+                <tr><td><strong>I</strong></td><td>70/30 Brass</td><td>Hot-compression phenolic</td><td><span class="badge badge-ferric">Ferric chloride</span></td></tr>
+                <tr><td><strong>J</strong></td><td>GMAW weld cross-section</td><td>Cold-cure epoxy</td><td><span class="badge badge-nital">Nital 2%</span>, 10&ndash;20 sec</td></tr>
+                <tr><td><strong>K</strong></td><td>Sand-cast aluminum</td><td>Cold-cure epoxy</td><td><span class="badge badge-keller">Keller's reagent</span></td></tr>
+                <tr><td><strong>L</strong></td><td>1018 steel, cold-rolled 40%</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span></td></tr>
+                <tr><td><strong>M</strong></td><td>PM sintered iron</td><td>Vacuum-impregnated epoxy</td><td><span class="badge badge-nital">Nital 2%</span>, 5&ndash;10 sec</td></tr>
+                <tr><td><strong>N</strong></td><td>Fracture cross-section</td><td>Cold-cure epoxy</td><td><span class="badge badge-nital">Nital 2%</span></td></tr>
+                <tr class="noetch-row"><td><strong>O</strong></td><td>Corroded carbon steel</td><td>Cold-cure epoxy</td><td><span class="badge badge-none">Do not etch</span></td></tr>
+            </tbody>
+        </table>
+        <p class="note">Specimen O is examined unetched so the corrosion features stay visible as-is. A very light Nital swab is optional only to reveal base-metal grain structure adjacent to the corrosion.</p>
+    </div>
+
+    <!-- ETCHANT RECIPES -->
+    <div class="section">
+        <h2>Etchant Formulas</h2>
+        <div class="etch-grid">
+            <div class="etch-card">
+                <div class="ec-name"><span class="badge badge-nital">Nital 2%</span></div>
+                <div class="ec-recipe">2% HNO&#8323; in ethanol</div>
+                <div class="ec-use">General-purpose steel and cast iron etchant. Used on specimens A&ndash;F, J, L, M, N.</div>
+            </div>
+            <div class="etch-card">
+                <div class="ec-name"><span class="badge badge-marble">Marble's Reagent</span></div>
+                <div class="ec-recipe">10 g CuSO&#8324; + 50 mL HCl + 50 mL H&#8322;O</div>
+                <div class="ec-use">Reveals austenite grain structure and twin bands in 304 stainless steel (Specimen G).</div>
+            </div>
+            <div class="etch-card">
+                <div class="ec-name"><span class="badge badge-keller">Keller's Reagent</span></div>
+                <div class="ec-recipe">2 mL HF + 3 mL HCl + 5 mL HNO&#8323; + 190 mL H&#8322;O</div>
+                <div class="ec-use">Standard aluminum etchant. Used on 6061-T6 (Specimen H) and sand-cast aluminum (Specimen K).</div>
+            </div>
+            <div class="etch-card">
+                <div class="ec-name"><span class="badge badge-ferric">Ferric Chloride</span></div>
+                <div class="ec-recipe">5 g FeCl&#8323; + 50 mL HCl + 100 mL H&#8322;O</div>
+                <div class="ec-use">Standard copper-alloy etchant. Used on 70/30 brass (Specimen I).</div>
+            </div>
+        </div>
+
+        <div class="danger-box">
+            <div class="db-title">Keller's Reagent Contains Hydrofluoric Acid</div>
+            HF is dangerously different from the other acids on this page: it can pass through skin
+            with little or no immediate pain, then damage deep tissue and pull calcium out of the
+            bloodstream &mdash; a large enough skin contact area can be fatal. Nitrile or neoprene
+            gloves only (not latex), full face shield, and mixing/etching only in a fume hood. Keep
+            calcium gluconate gel at the station and know the emergency procedure before this etchant
+            is opened. All four etchants are corrosive acids &mdash; safety glasses, gloves, and
+            adequate ventilation apply across the board, but Keller's reagent specifically needs the
+            HF protocol above.
+        </div>
+
+        <p class="note">Etch by swabbing the polished face with a cotton ball soaked in etchant, or brief immersion, per the times noted in the specimen table above. Rinse immediately with ethanol or water and dry with a single swipe of lens tissue.</p>
+    </div>
+
+    <a class="back-link" href="index.html">← Back to References</a>
+</main>
+</body>
+</html>
