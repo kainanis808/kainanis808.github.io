@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copper, Brass &amp; Bronze Designation System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.2rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 960px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 30px; font-size: 1rem; }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section h2 {
+            font-size: 1.3rem;
+            color: #1e3a5f;
+            margin-bottom: 10px;
+        }
+        .section p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
+
+        /* Range diagram */
+        .range-diagram {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin: 18px 0 8px;
+            flex-wrap: wrap;
+        }
+        .range-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .range-box .d {
+            min-width: 54px;
+            height: 54px;
+            padding: 0 8px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        .range-box .lbl {
+            font-size: 0.72rem;
+            color: #6b7280;
+            text-align: center;
+            max-width: 80px;
+            line-height: 1.3;
+        }
+        .d1 { background: #1e3a5f; }
+        .d2 { background: #2563eb; }
+        .digit-sep { font-size: 1.6rem; color: #9ca3af; align-self: center; padding-bottom: 22px; }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+        thead tr {
+            background: #1e3a5f;
+            color: #fff;
+        }
+        thead th {
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        tbody tr:nth-child(even) { background: #f1f5f9; }
+        tbody tr:hover { background: #e0f2fe; }
+        tbody td {
+            padding: 9px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #374151;
+            vertical-align: top;
+        }
+        .code { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #1e3a5f; white-space: nowrap; }
+        .tag {
+            display: inline-block;
+            padding: 1px 7px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-right: 4px;
+            white-space: nowrap;
+        }
+        .tag-brass   { background: #fef9c3; color: #854d0e; }
+        .tag-bronze  { background: #ffedd5; color: #9a3412; }
+        .tag-copper  { background: #fee2e2; color: #b91c1c; }
+        .tag-cuni    { background: #dbeafe; color: #1d4ed8; }
+        .tag-cast    { background: #dcfce7; color: #15803d; }
+
+        .prefix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .prefix-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+        .prefix-card .pcode {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #1e3a5f;
+        }
+        .prefix-card .pdesc {
+            font-size: 0.85rem;
+            color: #4b5563;
+            margin-top: 3px;
+            line-height: 1.4;
+        }
+
+        .note {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #0284c7;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Copper, Brass &amp; Bronze Designation System</h1>
+    <p class="subtitle">How the UNS/CDA numbering system identifies coppers, brasses, bronzes, and copper-nickels</p>
+</header>
+<main>
+    <p class="intro">
+        Copper and its alloys are identified with the <strong>Unified Numbering System (UNS)</strong>,
+        jointly maintained by the Copper Development Association (CDA) and SAE. Every designation is
+        the letter <strong>C</strong> followed by five digits (Cxxxxx). Unlike steel or aluminum, the
+        digits don't encode a composition percentage — instead, the numbering is organized into
+        <em>blocks</em>, where a five-digit range identifies an entire alloy family (all the brasses,
+        all the phosphor bronzes, and so on). Reading a copper alloy number is a matter of knowing
+        which block a number falls into, not decoding individual digits.
+    </p>
+
+    <!-- HOW TO READ -->
+    <div class="section">
+        <h2>How to Read a UNS Copper Number</h2>
+        <p>
+            The first digit after the C tells you which broad family you're in. Numbers
+            <strong>C10000–C79999</strong> are <strong>wrought</strong> alloys (sheet, bar, tube, wire).
+            Numbers <strong>C80000–C99999</strong> are <strong>cast</strong> alloys — so the same base
+            composition can carry two different numbers depending on whether it was cast or wrought.
+        </p>
+        <div class="range-diagram">
+            <div class="range-box">
+                <div class="d d1">C10000–C79999</div>
+                <div class="lbl">Wrought alloys</div>
+            </div>
+            <div class="digit-sep">vs.</div>
+            <div class="range-box">
+                <div class="d d2">C80000–C99999</div>
+                <div class="lbl">Cast alloys</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WROUGHT FAMILY TABLE -->
+    <div class="section">
+        <h2>Wrought Alloy Family Ranges (C10000–C79999)</h2>
+        <p>Each block of the UNS range corresponds to a distinct alloy family. Memorize the ranges, not individual numbers.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>UNS Range</th>
+                    <th>Family</th>
+                    <th>Composition</th>
+                    <th>Characteristics &amp; Typical Uses</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="code">C10000–C19999</td>
+                    <td><span class="tag tag-copper">Coppers &amp; High-Copper Alloys</span></td>
+                    <td>≥99.3% Cu (coppers); 96–99.3% Cu with small additions (Ag, Te, Be, Cr) for high-copper alloys</td>
+                    <td>Best electrical/thermal conductivity of the group. Electrical wire, bus bar, roofing, high-conductivity springs.</td>
+                </tr>
+                <tr>
+                    <td class="code">C20000–C29999</td>
+                    <td><span class="tag tag-brass">Brasses — Copper-Zinc</span></td>
+                    <td>Cu-Zn ("yellow brasses")</td>
+                    <td>Good formability and moderate strength; color shifts from red toward yellow as Zn content rises. Cartridge cases, plumbing, decorative hardware.</td>
+                </tr>
+                <tr>
+                    <td class="code">C30000–C39999</td>
+                    <td><span class="tag tag-brass">Leaded Brasses</span></td>
+                    <td>Cu-Zn-Pb</td>
+                    <td>Lead added for free-machining chip control. Screw-machine parts, valves, fittings.</td>
+                </tr>
+                <tr>
+                    <td class="code">C40000–C49999</td>
+                    <td><span class="tag tag-brass">Tin Brasses</span></td>
+                    <td>Cu-Zn-Sn</td>
+                    <td>Tin improves corrosion resistance over plain brass. Condenser/heat-exchanger tubing, marine hardware (naval brass, admiralty brass).</td>
+                </tr>
+                <tr>
+                    <td class="code">C50000–C59999</td>
+                    <td><span class="tag tag-bronze">Phosphor Bronzes — Copper-Tin</span></td>
+                    <td>Cu-Sn-P</td>
+                    <td>Phosphorus deoxidizes and adds spring temper. Springs, bellows, diaphragms, wear-resistant bearings.</td>
+                </tr>
+                <tr>
+                    <td class="code">C60600–C64200</td>
+                    <td><span class="tag tag-bronze">Aluminum Bronzes</span></td>
+                    <td>Cu-Al, often + Fe, Ni</td>
+                    <td>High strength, wear and corrosion resistance — no tin at all despite the "bronze" name. Marine hardware, gears, heavy-duty bearings.</td>
+                </tr>
+                <tr>
+                    <td class="code">C64700–C66100</td>
+                    <td><span class="tag tag-bronze">Silicon Bronzes</span></td>
+                    <td>Cu-Si</td>
+                    <td>Good weldability and corrosion resistance, mechanical properties similar to mild steel. Architectural work, marine fasteners, welding filler rod.</td>
+                </tr>
+                <tr>
+                    <td class="code">C66400–C69800</td>
+                    <td><span class="tag tag-brass">Miscellaneous Copper-Zinc Alloys</span></td>
+                    <td>Cu-Zn + Mn, Al, Si, etc.</td>
+                    <td>Alloys that don't fit cleanly elsewhere in the brass ranges, including high-strength "manganese bronze" (which is actually a brass).</td>
+                </tr>
+                <tr>
+                    <td class="code">C70000–C79999</td>
+                    <td><span class="tag tag-cuni">Copper-Nickels &amp; Nickel Silvers</span></td>
+                    <td>Cu-Ni (copper-nickels); Cu-Ni-Zn (nickel silvers)</td>
+                    <td>Outstanding seawater corrosion resistance (copper-nickels); nickel silvers contain no silver at all — the name refers only to their silvery color. Condenser tubing, marine piping, tableware, musical instruments.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="note">Ranges are approximate at the edges — a handful of alloys are grandfathered into a neighboring block for historical reasons. When in doubt, look the specific UNS number up rather than relying on the range alone.</p>
+    </div>
+
+    <!-- CAST ALLOYS -->
+    <div class="section">
+        <h2>Cast Alloy Ranges (C80000–C99999)</h2>
+        <p>Cast copper alloys follow the same family logic as wrought, in a separate number block. A few of the most common ranges a technician will see on castings and valve bodies:</p>
+        <table>
+            <thead>
+                <tr><th>UNS Range</th><th>Family</th><th>Typical Uses</th></tr>
+            </thead>
+            <tbody>
+                <tr><td class="code">C80000–C81200</td><td><span class="tag tag-copper">Cast Coppers</span></td><td>High-conductivity castings</td></tr>
+                <tr><td class="code">C83300–C85800</td><td><span class="tag tag-brass">Cast Brasses (Red &amp; Leaded)</span></td><td>Valve bodies, plumbing fittings — "red brass" / "ounce metal" (e.g. C83600)</td></tr>
+                <tr><td class="code">C90200–C94500</td><td><span class="tag tag-bronze">Cast Tin Bronzes</span></td><td>Bearings, bushings, gears, pump/valve components</td></tr>
+                <tr><td class="code">C95200–C95900</td><td><span class="tag tag-bronze">Cast Aluminum Bronzes</span></td><td>High-strength wear parts, marine propellers</td></tr>
+                <tr><td class="code">C96200–C96900</td><td><span class="tag tag-cuni">Cast Copper-Nickels</span></td><td>Marine valve bodies and pump components</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- BRASS VS BRONZE -->
+    <div class="section">
+        <h2>Brass vs. Bronze: What the Trade Names Actually Mean</h2>
+        <p>
+            The UNS ranges above are the reliable way to identify an alloy; the everyday trade names
+            "brass" and "bronze" are not. Historically, <strong>brass</strong> means copper alloyed with
+            <strong>zinc</strong>, and <strong>bronze</strong> means copper alloyed with <strong>tin</strong>.
+            Modern trade usage has drifted from that: aluminum bronze and silicon bronze contain no tin
+            at all, and "manganese bronze" is actually a high-strength brass (Cu-Zn base). When precision
+            matters — ordering material, reading a spec — go by the UNS number, not the trade name.
+        </p>
+    </div>
+
+    <!-- QUICK ID -->
+    <div class="section">
+        <h2>Common Alloys to Recognize</h2>
+        <p>Frequently encountered UNS numbers and what they're commonly called in the shop.</p>
+        <div class="prefix-grid">
+            <div class="prefix-card">
+                <div class="pcode">C11000</div>
+                <div class="pdesc">ETP Copper — standard electrical-grade copper</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">C26000</div>
+                <div class="pdesc">Cartridge Brass (70/30) — deep-drawing brass</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">C36000</div>
+                <div class="pdesc">Free-Cutting Brass — screw machine stock</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">C46400</div>
+                <div class="pdesc">Naval Brass — marine hardware, propeller shafts</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">C51000</div>
+                <div class="pdesc">Phosphor Bronze (5% Sn) — springs, bearings</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">C63000</div>
+                <div class="pdesc">Aluminum Bronze — high-strength marine/wear parts</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">C65500</div>
+                <div class="pdesc">Silicon Bronze — welding rod, architectural fasteners</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">C70600</div>
+                <div class="pdesc">90-10 Copper-Nickel — seawater piping</div>
+            </div>
+        </div>
+    </div>
+
+    <a class="back-link" href="index.html">← Back to References</a>
+</main>
+</body>
+</html>
