@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etchant Safety Data Sheets (SDS)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.2rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 30px; font-size: 1rem; }
+        .intro a { color: #0284c7; }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section h2 {
+            font-size: 1.3rem;
+            color: #1e3a5f;
+            margin-bottom: 10px;
+        }
+        .section p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 14px;
+            font-size: 0.95rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            margin-top: 10px;
+        }
+        thead tr { background: #1e3a5f; color: #fff; }
+        thead th { padding: 10px 12px; text-align: left; font-weight: 600; }
+        tbody tr:nth-child(even) { background: #f1f5f9; }
+        tbody tr:hover { background: #e0f2fe; }
+        tbody td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #374151;
+            vertical-align: top;
+        }
+        .code { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #1e3a5f; }
+        .note {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        /* Etchant badges (kept consistent with microscope_etchants.html) */
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .badge-nital     { background: #dbeafe; color: #1d4ed8; }
+        .badge-marble    { background: #dcfce7; color: #15803d; }
+        .badge-kalling   { background: #ede9fe; color: #6d28d9; }
+        .badge-keller    { background: #fce7f3; color: #9d174d; }
+        .badge-ferric    { background: #fef9c3; color: #854d0e; }
+        .badge-kroll     { background: #ffe4e6; color: #be123c; }
+
+        /* Hazard tags */
+        .hz {
+            display: inline-block;
+            padding: 1px 7px;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            margin: 1px 3px 1px 0;
+            white-space: nowrap;
+        }
+        .hz-corrosive  { background: #fee2e2; color: #b91c1c; }
+        .hz-flammable  { background: #fef3c7; color: #b45309; }
+        .hz-toxic      { background: #ede9fe; color: #6d28d9; }
+        .hz-aquatic    { background: #cffafe; color: #0e7490; }
+        .hz-organ      { background: #fce7f3; color: #9d174d; }
+        .hz-signal     { background: #7f1d1d; color: #fff; }
+
+        .supplier-box {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px 18px;
+            margin: 14px 0;
+            font-size: 0.9rem;
+            color: #374151;
+            line-height: 1.7;
+        }
+        .supplier-box strong { color: #1e3a5f; }
+
+        .sds-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px 18px;
+            margin-bottom: 14px;
+        }
+        .sds-card .sc-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .sds-card .sc-name { font-size: 1.05rem; font-weight: 700; color: #1e3a5f; }
+        .sds-card .sc-item { font-size: 0.8rem; color: #6b7280; }
+        .sds-card .sc-components {
+            font-size: 0.85rem;
+            color: #4b5563;
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        .link-pill {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 6px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1d4ed8;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .link-pill:hover { background: #dbeafe; }
+
+        .danger-box {
+            background: #fef2f2;
+            border-left: 4px solid #dc2626;
+            border-radius: 0 8px 8px 0;
+            padding: 14px 18px;
+            margin: 16px 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .danger-box strong { color: #991b1b; }
+        .danger-box .db-title {
+            font-weight: 800;
+            color: #991b1b;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #0284c7;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Etchant Safety Data Sheets (SDS)</h1>
+    <p class="subtitle">Manufacturer SDS documents for all six Metallography Lab etchants — ES Laboratory, LLC</p>
+</header>
+<main>
+    <p class="intro">
+        These are the actual product SDS documents from the etchant supplier, ES Laboratory, LLC —
+        not generic chemical sheets, but the exact hazard, composition, and first-aid information for
+        the bottles used in the <a href="microscope_etchants.html">Metallography Lab</a>. All six PDFs
+        are on file in <span class="code">referencePages/sds/</span> and linked below. Reading these
+        turned up one correction worth knowing: Nital's diluent is <strong>methanol</strong>, not the
+        ethanol shown on the etchant recipe page — that page has been updated to match, and the
+        methanol-specific hazard is called out separately below. For what PPE to wear when handling
+        any of these, see the <a href="ppe_guide.html">PPE Reference Guide</a>.
+    </p>
+
+    <!-- SUPPLIER INFO -->
+    <div class="section">
+        <h2>Supplier &amp; Emergency Contact</h2>
+        <p>All six SDS documents share the same supplier and emergency information (SDS Section 1 &amp; Section 1 emergency telephone number).</p>
+        <div class="supplier-box">
+            <strong>Supplier:</strong> ES Laboratory, LLC — 2041 E. Gladstone St. Unit N, Glendora, CA 91740 USA — (626) 208-9011<br>
+            <strong>Emergency (24 hr):</strong> CHEMTREC&reg; 1-800-424-9300 (US &amp; Canada only)<br>
+            <strong>Identified use:</strong> Scientific research and development
+        </div>
+    </div>
+
+    <!-- SDS DIRECTORY -->
+    <div class="section">
+        <h2>SDS Directory</h2>
+        <p>Composition and hazard classification exactly as reported in each product's SDS Section 2 &amp; 3.</p>
+
+        <div class="sds-card">
+            <div class="sc-head">
+                <span class="sc-name"><span class="badge badge-nital">Nital Etch, 2% to 5%</span></span>
+                <span class="sc-item">Item #101–107 · Rev. 6/18/2026</span>
+            </div>
+            <div class="sc-components">
+                <strong>Components:</strong> Methanol (methyl alcohol), CAS <span class="code">67-56-1</span>, 86–91% &nbsp;|&nbsp;
+                Nitric acid, CAS <span class="code">7697-37-2</span>, 2–6%
+            </div>
+            <div>
+                <span class="hz hz-signal">Signal word: Danger</span>
+                <span class="hz hz-flammable">Highly flammable liquid &amp; vapor (H225)</span>
+                <span class="hz hz-corrosive">Severe skin burns/eye damage (H314)</span>
+                <span class="hz hz-toxic">Toxic if swallowed or inhaled (H301+H331)</span>
+                <span class="hz hz-organ">Causes damage to organs (H370)</span>
+            </div>
+            <p style="margin-top:8px;"><a class="link-pill" href="sds/nital-etch-2-sds.pdf" target="_blank" rel="noopener">Open Nital SDS (PDF)</a></p>
+        </div>
+
+        <div class="sds-card">
+            <div class="sc-head">
+                <span class="sc-name"><span class="badge badge-marble">Marble's Reagent</span></span>
+                <span class="sc-item">Item #141–142 · Rev. 6/19/2026</span>
+            </div>
+            <div class="sc-components">
+                <strong>Components:</strong> Cupric sulfate, anhydrous, CAS <span class="code">7758-98-7</span>, 7–10% &nbsp;|&nbsp;
+                Hydrochloric acid, CAS <span class="code">7647-01-0</span>, 15–20%
+            </div>
+            <div>
+                <span class="hz hz-signal">Signal word: Danger</span>
+                <span class="hz hz-corrosive">Severe skin burns/eye damage (H314)</span>
+                <span class="hz hz-toxic">Harmful if swallowed (H302)</span>
+                <span class="hz hz-aquatic">Very toxic to aquatic life, long lasting (H410)</span>
+            </div>
+            <p style="margin-top:8px;"><a class="link-pill" href="sds/marbles-reagent-sds.pdf" target="_blank" rel="noopener">Open Marble's Reagent SDS (PDF)</a></p>
+        </div>
+
+        <div class="sds-card">
+            <div class="sc-head">
+                <span class="sc-name"><span class="badge badge-kalling">Kalling's 2 Reagent</span></span>
+                <span class="sc-item">Item #153–154 · Rev. 6/19/2026</span>
+            </div>
+            <div class="sc-components">
+                <strong>Components:</strong> Ethanol, CAS <span class="code">64-17-5</span>, 35–40% &nbsp;|&nbsp;
+                Cupric chloride, dihydrate, CAS <span class="code">10125-13-0</span>, 2–5% &nbsp;|&nbsp;
+                Hydrochloric acid, CAS <span class="code">7647-01-0</span>, 20–25%
+            </div>
+            <div>
+                <span class="hz hz-signal">Signal word: Danger</span>
+                <span class="hz hz-flammable">Flammable liquid &amp; vapor (H226)</span>
+                <span class="hz hz-corrosive">Severe skin burns/eye damage (H314)</span>
+                <span class="hz hz-toxic">Toxic if inhaled (H331)</span>
+                <span class="hz hz-aquatic">Very toxic to aquatic life (H400/H412)</span>
+            </div>
+            <p style="margin-top:8px;"><a class="link-pill" href="sds/kallings-2-reagent-sds.pdf" target="_blank" rel="noopener">Open Kalling's 2 Reagent SDS (PDF)</a></p>
+        </div>
+
+        <div class="sds-card">
+            <div class="sc-head">
+                <span class="sc-name"><span class="badge badge-keller">Keller's Reagent</span></span>
+                <span class="sc-item">Item #161–162 · Rev. 6/18/2026</span>
+            </div>
+            <div class="sc-components">
+                <strong>Components:</strong> Nitric acid, CAS <span class="code">7697-37-2</span>, 2–3% &nbsp;|&nbsp;
+                Hydrochloric acid, CAS <span class="code">7647-01-0</span>, &asymp;1% &nbsp;|&nbsp;
+                Hydrofluoric acid, CAS <span class="code">7664-39-3</span>, &asymp;1%
+            </div>
+            <div>
+                <span class="hz hz-signal">Signal word: Danger</span>
+                <span class="hz hz-corrosive">Severe skin burns/eye damage (H314)</span>
+                <span class="hz hz-toxic">Contains HF — contact poison</span>
+            </div>
+            <p style="margin-top:8px;"><a class="link-pill" href="sds/kellers-reagent-sds.pdf" target="_blank" rel="noopener">Open Keller's Reagent SDS (PDF)</a></p>
+        </div>
+
+        <div class="sds-card">
+            <div class="sc-head">
+                <span class="sc-name"><span class="badge badge-kroll">Kroll's Reagent</span></span>
+                <span class="sc-item">Item #171–172 · Rev. 6/18/2026</span>
+            </div>
+            <div class="sc-components">
+                <strong>Components:</strong> Nitric acid, CAS <span class="code">7697-37-2</span>, 4–6% &nbsp;|&nbsp;
+                Hydrofluoric acid, CAS <span class="code">7664-39-3</span>, 1–2%
+            </div>
+            <div>
+                <span class="hz hz-signal">Signal word: Danger</span>
+                <span class="hz hz-corrosive">Severe skin burns/eye damage (H314)</span>
+                <span class="hz hz-toxic">Contains HF — contact poison</span>
+            </div>
+            <p style="margin-top:8px;"><a class="link-pill" href="sds/krolls-reagent-sds.pdf" target="_blank" rel="noopener">Open Kroll's Reagent SDS (PDF)</a></p>
+        </div>
+
+        <div class="sds-card">
+            <div class="sc-head">
+                <span class="sc-name"><span class="badge badge-ferric">Acidic Ferric Chloride</span></span>
+                <span class="sc-item">Item #193 · Other name: ASTM 34 · Rev. 6/17/2026</span>
+            </div>
+            <div class="sc-components">
+                <strong>Components:</strong> Hydrochloric acid, CAS <span class="code">7647-01-0</span>, 13–14% &nbsp;|&nbsp;
+                Ferric chloride, anhydrous, CAS <span class="code">7705-08-0</span>, 3–5%
+            </div>
+            <div>
+                <span class="hz hz-signal">Signal word: Danger</span>
+                <span class="hz hz-corrosive">Severe skin burns/eye damage, corrosive to metal (H290/H314)</span>
+                <span class="hz hz-aquatic">Harmful to aquatic life, long lasting (H412)</span>
+            </div>
+            <p style="margin-top:8px;"><a class="link-pill" href="sds/acidic-ferric-chloride-sds.pdf" target="_blank" rel="noopener">Open Ferric Chloride SDS (PDF)</a></p>
+        </div>
+    </div>
+
+    <!-- SPECIAL HAZARDS -->
+    <div class="danger-box">
+        <div class="db-title">Nital Etch Contains Methanol, Not Ethanol</div>
+        The SDS shows Nital's diluent as <strong>methanol</strong> (86–91%), not the ethanol commonly
+        assumed for a "nital" recipe. Methanol is absorbed through skin, is highly flammable
+        (H225), and its SDS carries H370 — causes damage to organs, specifically the optic nerve,
+        with a risk of blindness on significant exposure. Handle it with the same seriousness as the
+        acids on this page: gloves, eye protection, adequate ventilation, and no open flames nearby.
+    </div>
+
+    <div class="danger-box">
+        <div class="db-title">Keller's and Kroll's Reagents Contain Hydrofluoric Acid</div>
+        HF is dangerously different from the other acids on this page: it can pass through skin
+        with little or no immediate pain, then damage deep tissue and pull calcium out of the
+        bloodstream — a large enough skin contact area can be fatal. Both SDS documents specify
+        calcium gluconate gel as the skin first-aid response. Nitrile or neoprene gloves only (not
+        latex), full face shield, and mixing/etching only in a fume hood. Keep calcium gluconate gel
+        at the station and know the emergency procedure before either etchant is opened.
+    </div>
+
+    <p class="note">SDS revision dates above are as printed on each document. If the supplier issues an updated SDS, replace the matching file in <span class="code">referencePages/sds/</span> under the same filename and this page's links will continue to work without further edits.</p>
+
+    <a class="back-link" href="index.html">← Back to References</a>
+</main>
+</body>
+</html>
