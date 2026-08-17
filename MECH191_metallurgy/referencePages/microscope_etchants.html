@@ -123,8 +123,10 @@
         }
         .badge-nital     { background: #dbeafe; color: #1d4ed8; }
         .badge-marble    { background: #dcfce7; color: #15803d; }
+        .badge-kalling   { background: #ede9fe; color: #6d28d9; }
         .badge-keller    { background: #fce7f3; color: #9d174d; }
         .badge-ferric    { background: #fef9c3; color: #854d0e; }
+        .badge-kroll     { background: #ffe4e6; color: #be123c; }
         .badge-none      { background: #e5e7eb; color: #374151; }
 
         /* Etchant recipe cards */
@@ -270,7 +272,7 @@
     <p class="intro">
         Every weekly module in the Semester Metallography Portfolio uses the same shared class
         microscope and a small set of etchants. This page is a single reference for both: what the
-        EXAMET-5-R-600-HD can actually do, and what each lettered specimen (A&ndash;O) needs to be
+        EXAMET-5-R-600-HD can actually do, and what each lettered specimen (A&ndash;P) needs to be
         etched with before it goes on the stage.
     </p>
 
@@ -291,7 +293,7 @@
                 <div class="sc-value">5&times; / 10&times; / 20&times; / 50&times;</div>
                 <ul>
                     <li>Infinity LWD M Plan achromat (5&times;, 10&times;, 20&times;); semi-apo (50&times;)</li>
-                    <li>One set covers all opaque, polished/etched specimens (A&ndash;O)</li>
+                    <li>One set covers all opaque, polished/etched specimens (A&ndash;P)</li>
                 </ul>
             </div>
             <div class="spec-card">
@@ -469,7 +471,7 @@
     <!-- SPECIMEN / ETCHANT TABLE -->
     <div class="section">
         <h2>Etchants by Specimen</h2>
-        <p>Fifteen pre-prepared, labeled specimens (A&ndash;O) rotate through the semester. Etch time is only listed where it differs from a standard 5&ndash;10 second swab.</p>
+        <p>Sixteen pre-prepared, labeled specimens (A&ndash;P) rotate through the semester &mdash; three carbon steels, three stainless grades, four aluminum grades, three brasses, two coppers, and titanium. Mounting is standardized to hot-compression phenolic across the kit.</p>
         <table>
             <thead>
                 <tr>
@@ -480,24 +482,31 @@
                 </tr>
             </thead>
             <tbody>
+                <tr class="group-header"><td colspan="4">Carbon Steel</td></tr>
                 <tr><td><strong>A</strong></td><td>1018 steel (normalized)</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span></td></tr>
                 <tr><td><strong>B</strong></td><td>1045 steel (normalized)</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span></td></tr>
-                <tr><td><strong>C</strong></td><td>1045 steel — Vickers indent</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span>, 3&ndash;5 sec</td></tr>
-                <tr><td><strong>D</strong></td><td>1095 steel (Q&amp;T martensite)</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span></td></tr>
-                <tr><td><strong>E</strong></td><td>Gray cast iron</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span></td></tr>
-                <tr><td><strong>F</strong></td><td>Ductile cast iron</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span>, 10&ndash;15 sec</td></tr>
-                <tr><td><strong>G</strong></td><td>304 stainless steel</td><td>Hot-compression phenolic</td><td><span class="badge badge-marble">Marble's reagent</span></td></tr>
-                <tr><td><strong>H</strong></td><td>6061-T6 aluminum</td><td>Cold-cure epoxy</td><td><span class="badge badge-keller">Keller's reagent</span></td></tr>
-                <tr><td><strong>I</strong></td><td>70/30 Brass</td><td>Hot-compression phenolic</td><td><span class="badge badge-ferric">Ferric chloride</span></td></tr>
-                <tr><td><strong>J</strong></td><td>GMAW weld cross-section</td><td>Cold-cure epoxy</td><td><span class="badge badge-nital">Nital 2%</span>, 10&ndash;20 sec</td></tr>
-                <tr><td><strong>K</strong></td><td>Sand-cast aluminum</td><td>Cold-cure epoxy</td><td><span class="badge badge-keller">Keller's reagent</span></td></tr>
-                <tr><td><strong>L</strong></td><td>1018 steel, cold-rolled 40%</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span></td></tr>
-                <tr><td><strong>M</strong></td><td>PM sintered iron</td><td>Vacuum-impregnated epoxy</td><td><span class="badge badge-nital">Nital 2%</span>, 5&ndash;10 sec</td></tr>
-                <tr><td><strong>N</strong></td><td>Fracture cross-section</td><td>Cold-cure epoxy</td><td><span class="badge badge-nital">Nital 2%</span></td></tr>
-                <tr class="noetch-row"><td><strong>O</strong></td><td>Corroded carbon steel</td><td>Cold-cure epoxy</td><td><span class="badge badge-none">Do not etch</span></td></tr>
+                <tr><td><strong>C</strong></td><td>1075 steel (normalized)</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span></td></tr>
+                <tr class="group-header"><td colspan="4">Stainless Steel</td></tr>
+                <tr><td><strong>D</strong></td><td>304 austenitic stainless steel</td><td>Hot-compression phenolic</td><td><span class="badge badge-marble">Marble's reagent</span></td></tr>
+                <tr><td><strong>E</strong></td><td>316 austenitic stainless steel</td><td>Hot-compression phenolic</td><td><span class="badge badge-marble">Marble's reagent</span></td></tr>
+                <tr><td><strong>F</strong></td><td>17-4PH precipitation-hardening stainless</td><td>Hot-compression phenolic</td><td><span class="badge badge-kalling">Kalling's No. 2</span></td></tr>
+                <tr class="group-header"><td colspan="4">Aluminum</td></tr>
+                <tr><td><strong>G</strong></td><td>6061 aluminum alloy</td><td>Hot-compression phenolic</td><td><span class="badge badge-keller">Keller's reagent</span></td></tr>
+                <tr><td><strong>H</strong></td><td>6063 aluminum alloy</td><td>Hot-compression phenolic</td><td><span class="badge badge-keller">Keller's reagent</span></td></tr>
+                <tr><td><strong>I</strong></td><td>5052 aluminum alloy</td><td>Hot-compression phenolic</td><td><span class="badge badge-keller">Keller's reagent</span></td></tr>
+                <tr><td><strong>J</strong></td><td>2024 aluminum alloy</td><td>Hot-compression phenolic</td><td><span class="badge badge-keller">Keller's reagent</span></td></tr>
+                <tr class="group-header"><td colspan="4">Brass</td></tr>
+                <tr><td><strong>K</strong></td><td>260 brass (cartridge, 70/30)</td><td>Hot-compression phenolic</td><td><span class="badge badge-ferric">Ferric chloride</span></td></tr>
+                <tr><td><strong>L</strong></td><td>360 brass (leaded, free-machining)</td><td>Hot-compression phenolic</td><td><span class="badge badge-ferric">Ferric chloride</span></td></tr>
+                <tr><td><strong>M</strong></td><td>464 brass (naval, duplex alpha-beta)</td><td>Hot-compression phenolic</td><td><span class="badge badge-ferric">Ferric chloride</span></td></tr>
+                <tr class="group-header"><td colspan="4">Copper</td></tr>
+                <tr><td><strong>N</strong></td><td>110 copper (commercially pure)</td><td>Hot-compression phenolic</td><td><span class="badge badge-ferric">Ferric chloride</span></td></tr>
+                <tr><td><strong>O</strong></td><td>182 chromium copper (precipitation-hardening)</td><td>Hot-compression phenolic</td><td><span class="badge badge-ferric">Ferric chloride</span></td></tr>
+                <tr class="group-header"><td colspan="4">Titanium</td></tr>
+                <tr><td><strong>P</strong></td><td>Titanium Grade 5 (Ti-6Al-4V)</td><td>Hot-compression phenolic</td><td><span class="badge badge-kroll">Kroll's reagent</span></td></tr>
             </tbody>
         </table>
-        <p class="note">Specimen O is examined unetched so the corrosion features stay visible as-is. A very light Nital swab is optional only to reveal base-metal grain structure adjacent to the corrosion.</p>
+        <p class="note">Etch times default to a standard 5&ndash;10 second swab unless a module's instructions call for otherwise (e.g. Specimen L's leaded brass or the duplex phase boundaries in M can take a few extra seconds to resolve cleanly).</p>
     </div>
 
     <!-- ETCHANT RECIPES -->
@@ -507,34 +516,44 @@
             <div class="etch-card">
                 <div class="ec-name"><span class="badge badge-nital">Nital 2%</span></div>
                 <div class="ec-recipe">2% HNO&#8323; in ethanol</div>
-                <div class="ec-use">General-purpose steel and cast iron etchant. Used on specimens A&ndash;F, J, L, M, N.</div>
+                <div class="ec-use">General-purpose carbon steel etchant. Used on specimens A, B, C.</div>
             </div>
             <div class="etch-card">
                 <div class="ec-name"><span class="badge badge-marble">Marble's Reagent</span></div>
                 <div class="ec-recipe">10 g CuSO&#8324; + 50 mL HCl + 50 mL H&#8322;O</div>
-                <div class="ec-use">Reveals austenite grain structure and twin bands in 304 stainless steel (Specimen G).</div>
+                <div class="ec-use">Reveals austenite grain structure and twin bands in the austenitic stainless grades. Used on 304 (D) and 316 (E). Not suitable for 17-4PH &mdash; austenitic-only reagent.</div>
+            </div>
+            <div class="etch-card">
+                <div class="ec-name"><span class="badge badge-kalling">Kalling's No. 2</span></div>
+                <div class="ec-recipe">5 g CuCl&#8322; + 100 mL HCl + 100 mL ethanol</div>
+                <div class="ec-use">Reveals the martensitic matrix and precipitate distribution in precipitation-hardening stainless. Used on 17-4PH (Specimen F) only.</div>
             </div>
             <div class="etch-card">
                 <div class="ec-name"><span class="badge badge-keller">Keller's Reagent</span></div>
                 <div class="ec-recipe">2 mL HF + 3 mL HCl + 5 mL HNO&#8323; + 190 mL H&#8322;O</div>
-                <div class="ec-use">Standard aluminum etchant. Used on 6061-T6 (Specimen H) and sand-cast aluminum (Specimen K).</div>
+                <div class="ec-use">Standard aluminum etchant. Used on all four aluminum grades: 6061 (G), 6063 (H), 5052 (I), 2024 (J).</div>
             </div>
             <div class="etch-card">
                 <div class="ec-name"><span class="badge badge-ferric">Ferric Chloride</span></div>
                 <div class="ec-recipe">5 g FeCl&#8323; + 50 mL HCl + 100 mL H&#8322;O</div>
-                <div class="ec-use">Standard copper-alloy etchant. Used on 70/30 brass (Specimen I).</div>
+                <div class="ec-use">Standard copper-alloy etchant &mdash; works across both brass and pure/alloyed copper. Used on all three brasses (K, L, M) and both coppers (N, O).</div>
+            </div>
+            <div class="etch-card">
+                <div class="ec-name"><span class="badge badge-kroll">Kroll's Reagent</span></div>
+                <div class="ec-recipe">2&ndash;3 mL HF + 4&ndash;6 mL HNO&#8323; + water to 100 mL</div>
+                <div class="ec-use">Standard titanium etchant. Used on Specimen P (Ti-6Al-4V). Titanium is prone to smearing/embedding during grinding &mdash; budget extra time at final polish.</div>
             </div>
         </div>
 
         <div class="danger-box">
-            <div class="db-title">Keller's Reagent Contains Hydrofluoric Acid</div>
+            <div class="db-title">Keller's and Kroll's Reagents Contain Hydrofluoric Acid</div>
             HF is dangerously different from the other acids on this page: it can pass through skin
             with little or no immediate pain, then damage deep tissue and pull calcium out of the
             bloodstream &mdash; a large enough skin contact area can be fatal. Nitrile or neoprene
             gloves only (not latex), full face shield, and mixing/etching only in a fume hood. Keep
-            calcium gluconate gel at the station and know the emergency procedure before this etchant
-            is opened. All four etchants are corrosive acids &mdash; safety glasses, gloves, and
-            adequate ventilation apply across the board, but Keller's reagent specifically needs the
+            calcium gluconate gel at the station and know the emergency procedure before either
+            etchant is opened. All six etchants are corrosive acids &mdash; safety glasses, gloves, and
+            adequate ventilation apply across the board, but Keller's and Kroll's specifically need the
             HF protocol above.
         </div>
 
