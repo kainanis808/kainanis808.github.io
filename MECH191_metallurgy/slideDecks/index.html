@@ -54,7 +54,6 @@
             border: 1px solid #e2e8f0;
             border-radius: 10px;
             overflow: hidden;
-            text-decoration: none;
             color: #1a1a1a;
             transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
         }
@@ -71,6 +70,7 @@
             justify-content: center;
             overflow: hidden;
             border-bottom: 1px solid #e2e8f0;
+            text-decoration: none;
         }
         .deck-thumb-wrap img {
             width: 100%;
@@ -79,7 +79,7 @@
             object-position: top;
             display: block;
         }
-        .deck-info { padding: 12px 14px 14px; }
+        .deck-info { padding: 12px 14px 10px; }
         .deck-week {
             font-size: 0.72rem;
             font-weight: 700;
@@ -99,6 +99,46 @@
             color: #94a3b8;
         }
 
+        .deck-actions {
+            display: flex;
+            gap: 8px;
+            padding: 10px 14px 14px;
+            margin-top: auto;
+        }
+        .deck-action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            text-align: center;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 7px 6px;
+            border-radius: 6px;
+            text-decoration: none;
+            border: 1px solid #e2e8f0;
+            color: #475569;
+            background: #ffffff;
+            transition: border-color 0.15s, color 0.15s, background 0.15s;
+        }
+        .deck-action-btn:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+            background: #eff6ff;
+        }
+        .deck-action-btn.primary {
+            background: #3b82f6;
+            color: #ffffff;
+            border-color: #3b82f6;
+        }
+        .deck-action-btn.primary:hover {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #ffffff;
+        }
+        .deck-action-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
+
         .note-box {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -109,6 +149,7 @@
             line-height: 1.6;
             margin-bottom: 32px;
         }
+        .note-box strong { color: #1e3a5f; }
 
         .back-link {
             display: block;
@@ -130,138 +171,202 @@
 
 <main>
 
-    <p class="note-box">Each card below is a preview of the deck's title slide. Click a card to open the complete PDF in your browser, or use it to download the deck for offline viewing.</p>
+    <p class="note-box">Each card below is a preview of the deck's title slide. Click a card's thumbnail or <strong>View Slides</strong> to open the complete PDF in your browser. Click <strong>Download Notes</strong> to save a note-taking handout for that deck &mdash; one slide per page, with ruled space underneath to write &mdash; so you can print it out and bring it to class.</p>
 
     <p class="unit-heading">Weeks 1&ndash;16 &mdash; Full Semester</p>
     <div class="deck-grid">
-        <a class="deck-card" href="pdf/MECH191_Week1_Intro.pdf" target="_blank" rel="noopener">
-            <div class="deck-thumb-wrap"><img src="thumbs/MECH191_Week1_Intro.png" alt="Week 1 Introduction title slide" loading="lazy"></div>
+        <div class="deck-card">
+            <a class="deck-thumb-wrap" href="pdf/MECH191_Week1_Intro.pdf" target="_blank" rel="noopener"><img src="thumbs/MECH191_Week1_Intro.png" alt="Week 1 Introduction title slide" loading="lazy"></a>
             <div class="deck-info">
                 <p class="deck-week">Week 1 &mdash; Introduction</p>
                 <p class="deck-title">Course Introduction: Welcome &amp; Syllabus Overview</p>
                 <p class="deck-meta">PDF &middot; 10 slides</p>
             </div>
-        </a>
-        <a class="deck-card" href="pdf/MECH191_Week1_Lecture.pdf" target="_blank" rel="noopener">
-            <div class="deck-thumb-wrap"><img src="thumbs/MECH191_Week1_Lecture.png" alt="Week 1 lecture title slide" loading="lazy"></div>
+            <div class="deck-actions">
+                <a class="deck-action-btn primary" href="pdf/MECH191_Week1_Intro.pdf" target="_blank" rel="noopener">View Slides</a>
+                <a class="deck-action-btn" href="noteHandout/MECH191_Week1_Intro_NotesHandout.pdf" download="MECH191_Week1_Intro_NotesHandout.pdf">Download Notes</a>
+            </div>
+        </div>
+        <div class="deck-card">
+            <a class="deck-thumb-wrap" href="pdf/MECH191_Week1_Lecture.pdf" target="_blank" rel="noopener"><img src="thumbs/MECH191_Week1_Lecture.png" alt="Week 1 lecture title slide" loading="lazy"></a>
             <div class="deck-info">
                 <p class="deck-week">Week 1</p>
                 <p class="deck-title">Atomic Structure &amp; Bonding</p>
                 <p class="deck-meta">PDF &middot; 12 slides</p>
             </div>
-        </a>
-        <a class="deck-card" href="pdf/MECH191_Week2_Lecture.pdf" target="_blank" rel="noopener">
-            <div class="deck-thumb-wrap"><img src="thumbs/MECH191_Week2_Lecture.png" alt="Week 2 lecture title slide" loading="lazy"></div>
+            <div class="deck-actions">
+                <a class="deck-action-btn primary" href="pdf/MECH191_Week1_Lecture.pdf" target="_blank" rel="noopener">View Slides</a>
+                <a class="deck-action-btn" href="noteHandout/MECH191_Week1_Lecture_NotesHandout.pdf" download="MECH191_Week1_Lecture_NotesHandout.pdf">Download Notes</a>
+            </div>
+        </div>
+        <div class="deck-card">
+            <a class="deck-thumb-wrap" href="pdf/MECH191_Week2_Lecture.pdf" target="_blank" rel="noopener"><img src="thumbs/MECH191_Week2_Lecture.png" alt="Week 2 lecture title slide" loading="lazy"></a>
             <div class="deck-info">
                 <p class="deck-week">Week 2</p>
                 <p class="deck-title">Mechanical Properties &amp; Behavior</p>
                 <p class="deck-meta">PDF &middot; 18 slides</p>
             </div>
-        </a>
-        <a class="deck-card" href="pdf/MECH191_Week4_Lecture.pdf" target="_blank" rel="noopener">
-            <div class="deck-thumb-wrap"><img src="thumbs/MECH191_Week4_Lecture.png" alt="Week 4 lecture title slide" loading="lazy"></div>
+            <div class="deck-actions">
+                <a class="deck-action-btn primary" href="pdf/MECH191_Week2_Lecture.pdf" target="_blank" rel="noopener">View Slides</a>
+                <a class="deck-action-btn" href="noteHandout/MECH191_Week2_Lecture_NotesHandout.pdf" download="MECH191_Week2_Lecture_NotesHandout.pdf">Download Notes</a>
+            </div>
+        </div>
+        <div class="deck-card">
+            <a class="deck-thumb-wrap" href="pdf/MECH191_Week4_Lecture.pdf" target="_blank" rel="noopener"><img src="thumbs/MECH191_Week4_Lecture.png" alt="Week 4 lecture title slide" loading="lazy"></a>
             <div class="deck-info">
                 <p class="deck-week">Week 4</p>
                 <p class="deck-title">Carbon &amp; Alloy Steels</p>
                 <p class="deck-meta">PDF &middot; 20 slides</p>
             </div>
-        </a>
-        <a class="deck-card" href="pdf/MECH191_Week5_Lecture.pdf" target="_blank" rel="noopener">
-            <div class="deck-thumb-wrap"><img src="thumbs/MECH191_Week5_Lecture.png" alt="Week 5 lecture title slide" loading="lazy"></div>
+            <div class="deck-actions">
+                <a class="deck-action-btn primary" href="pdf/MECH191_Week4_Lecture.pdf" target="_blank" rel="noopener">View Slides</a>
+                <a class="deck-action-btn" href="noteHandout/MECH191_Week4_Lecture_NotesHandout.pdf" download="MECH191_Week4_Lecture_NotesHandout.pdf">Download Notes</a>
+            </div>
+        </div>
+        <div class="deck-card">
+            <a class="deck-thumb-wrap" href="pdf/MECH191_Week5_Lecture.pdf" target="_blank" rel="noopener"><img src="thumbs/MECH191_Week5_Lecture.png" alt="Week 5 lecture title slide" loading="lazy"></a>
             <div class="deck-info">
                 <p class="deck-week">Week 5</p>
                 <p class="deck-title">Stainless Steels &amp; Cast Irons</p>
                 <p class="deck-meta">PDF &middot; 18 slides</p>
             </div>
-        </a>
-        <a class="deck-card" href="pdf/MECH191_Week6_Lecture.pdf" target="_blank" rel="noopener">
-            <div class="deck-thumb-wrap"><img src="thumbs/MECH191_Week6_Lecture.png" alt="Week 6 lecture title slide" loading="lazy"></div>
+            <div class="deck-actions">
+                <a class="deck-action-btn primary" href="pdf/MECH191_Week5_Lecture.pdf" target="_blank" rel="noopener">View Slides</a>
+                <a class="deck-action-btn" href="noteHandout/MECH191_Week5_Lecture_NotesHandout.pdf" download="MECH191_Week5_Lecture_NotesHandout.pdf">Download Notes</a>
+            </div>
+        </div>
+        <div class="deck-card">
+            <a class="deck-thumb-wrap" href="pdf/MECH191_Week6_Lecture.pdf" target="_blank" rel="noopener"><img src="thumbs/MECH191_Week6_Lecture.png" alt="Week 6 lecture title slide" loading="lazy"></a>
             <div class="deck-info">
                 <p class="deck-week">Week 6</p>
                 <p class="deck-title">Nonferrous Metals &amp; Phase Diagrams</p>
                 <p class="deck-meta">PDF &middot; 15 slides</p>
             </div>
-        </a>
-        <a class="deck-card" href="pdf/MECH191_Week7_Lecture.pdf" target="_blank" rel="noopener">
-            <div class="deck-thumb-wrap"><img src="thumbs/MECH191_Week7_Lecture.png" alt="Week 7 lecture title slide" loading="lazy"></div>
+            <div class="deck-actions">
+                <a class="deck-action-btn primary" href="pdf/MECH191_Week6_Lecture.pdf" target="_blank" rel="noopener">View Slides</a>
+                <a class="deck-action-btn" href="noteHandout/MECH191_Week6_Lecture_NotesHandout.pdf" download="MECH191_Week6_Lecture_NotesHandout.pdf">Download Notes</a>
+            </div>
+        </div>
+        <div class="deck-card">
+            <a class="deck-thumb-wrap" href="pdf/MECH191_Week7_Lecture.pdf" target="_blank" rel="noopener"><img src="thumbs/MECH191_Week7_Lecture.png" alt="Week 7 lecture title slide" loading="lazy"></a>
             <div class="deck-info">
                 <p class="deck-week">Week 7</p>
                 <p class="deck-title">Mechanical Testing Methods</p>
                 <p class="deck-meta">PDF &middot; 15 slides</p>
             </div>
-        </a>
-        <a class="deck-card" href="pdf/MECH191_Week8_Lecture.pdf" target="_blank" rel="noopener">
-            <div class="deck-thumb-wrap"><img src="thumbs/MECH191_Week8_Lecture.png" alt="Week 8 lecture title slide" loading="lazy"></div>
+            <div class="deck-actions">
+                <a class="deck-action-btn primary" href="pdf/MECH191_Week7_Lecture.pdf" target="_blank" rel="noopener">View Slides</a>
+                <a class="deck-action-btn" href="noteHandout/MECH191_Week7_Lecture_NotesHandout.pdf" download="MECH191_Week7_Lecture_NotesHandout.pdf">Download Notes</a>
+            </div>
+        </div>
+        <div class="deck-card">
+            <a class="deck-thumb-wrap" href="pdf/MECH191_Week8_Lecture.pdf" target="_blank" rel="noopener"><img src="thumbs/MECH191_Week8_Lecture.png" alt="Week 8 lecture title slide" loading="lazy"></a>
             <div class="deck-info">
                 <p class="deck-week">Week 8</p>
                 <p class="deck-title">Non-Destructive Testing Methods</p>
                 <p class="deck-meta">PDF &middot; 15 slides</p>
             </div>
-        </a>
-        <a class="deck-card" href="pdf/MECH191_Week9_Lecture.pdf" target="_blank" rel="noopener">
-            <div class="deck-thumb-wrap"><img src="thumbs/MECH191_Week9_Lecture.png" alt="Week 9 lecture title slide" loading="lazy"></div>
+            <div class="deck-actions">
+                <a class="deck-action-btn primary" href="pdf/MECH191_Week8_Lecture.pdf" target="_blank" rel="noopener">View Slides</a>
+                <a class="deck-action-btn" href="noteHandout/MECH191_Week8_Lecture_NotesHandout.pdf" download="MECH191_Week8_Lecture_NotesHandout.pdf">Download Notes</a>
+            </div>
+        </div>
+        <div class="deck-card">
+            <a class="deck-thumb-wrap" href="pdf/MECH191_Week9_Lecture.pdf" target="_blank" rel="noopener"><img src="thumbs/MECH191_Week9_Lecture.png" alt="Week 9 lecture title slide" loading="lazy"></a>
             <div class="deck-info">
                 <p class="deck-week">Week 9</p>
                 <p class="deck-title">Quality Standards &amp; Inspection</p>
                 <p class="deck-meta">PDF &middot; 15 slides</p>
             </div>
-        </a>
-        <a class="deck-card" href="pdf/MECH191_Week10_Lecture.pdf" target="_blank" rel="noopener">
-            <div class="deck-thumb-wrap"><img src="thumbs/MECH191_Week10_Lecture.png" alt="Week 10 lecture title slide" loading="lazy"></div>
+            <div class="deck-actions">
+                <a class="deck-action-btn primary" href="pdf/MECH191_Week9_Lecture.pdf" target="_blank" rel="noopener">View Slides</a>
+                <a class="deck-action-btn" href="noteHandout/MECH191_Week9_Lecture_NotesHandout.pdf" download="MECH191_Week9_Lecture_NotesHandout.pdf">Download Notes</a>
+            </div>
+        </div>
+        <div class="deck-card">
+            <a class="deck-thumb-wrap" href="pdf/MECH191_Week10_Lecture.pdf" target="_blank" rel="noopener"><img src="thumbs/MECH191_Week10_Lecture.png" alt="Week 10 lecture title slide" loading="lazy"></a>
             <div class="deck-info">
                 <p class="deck-week">Week 10</p>
                 <p class="deck-title">Casting Processes &amp; Defect Recognition</p>
                 <p class="deck-meta">PDF &middot; 16 slides</p>
             </div>
-        </a>
-        <a class="deck-card" href="pdf/MECH191_Week11_Lecture.pdf" target="_blank" rel="noopener">
-            <div class="deck-thumb-wrap"><img src="thumbs/MECH191_Week11_Lecture.png" alt="Week 11 lecture title slide" loading="lazy"></div>
+            <div class="deck-actions">
+                <a class="deck-action-btn primary" href="pdf/MECH191_Week10_Lecture.pdf" target="_blank" rel="noopener">View Slides</a>
+                <a class="deck-action-btn" href="noteHandout/MECH191_Week10_Lecture_NotesHandout.pdf" download="MECH191_Week10_Lecture_NotesHandout.pdf">Download Notes</a>
+            </div>
+        </div>
+        <div class="deck-card">
+            <a class="deck-thumb-wrap" href="pdf/MECH191_Week11_Lecture.pdf" target="_blank" rel="noopener"><img src="thumbs/MECH191_Week11_Lecture.png" alt="Week 11 lecture title slide" loading="lazy"></a>
             <div class="deck-info">
                 <p class="deck-week">Week 11</p>
                 <p class="deck-title">Metal Forming Processes</p>
                 <p class="deck-meta">PDF &middot; 16 slides</p>
             </div>
-        </a>
-        <a class="deck-card" href="pdf/MECH191_Week12_Lecture.pdf" target="_blank" rel="noopener">
-            <div class="deck-thumb-wrap"><img src="thumbs/MECH191_Week12_Lecture.png" alt="Week 12 lecture title slide" loading="lazy"></div>
+            <div class="deck-actions">
+                <a class="deck-action-btn primary" href="pdf/MECH191_Week11_Lecture.pdf" target="_blank" rel="noopener">View Slides</a>
+                <a class="deck-action-btn" href="noteHandout/MECH191_Week11_Lecture_NotesHandout.pdf" download="MECH191_Week11_Lecture_NotesHandout.pdf">Download Notes</a>
+            </div>
+        </div>
+        <div class="deck-card">
+            <a class="deck-thumb-wrap" href="pdf/MECH191_Week12_Lecture.pdf" target="_blank" rel="noopener"><img src="thumbs/MECH191_Week12_Lecture.png" alt="Week 12 lecture title slide" loading="lazy"></a>
             <div class="deck-info">
                 <p class="deck-week">Week 12</p>
                 <p class="deck-title">Machining</p>
                 <p class="deck-meta">PDF &middot; 16 slides</p>
             </div>
-        </a>
-        <a class="deck-card" href="pdf/MECH191_Week13_Lecture.pdf" target="_blank" rel="noopener">
-            <div class="deck-thumb-wrap"><img src="thumbs/MECH191_Week13_Lecture.png" alt="Week 13 lecture title slide" loading="lazy"></div>
+            <div class="deck-actions">
+                <a class="deck-action-btn primary" href="pdf/MECH191_Week12_Lecture.pdf" target="_blank" rel="noopener">View Slides</a>
+                <a class="deck-action-btn" href="noteHandout/MECH191_Week12_Lecture_NotesHandout.pdf" download="MECH191_Week12_Lecture_NotesHandout.pdf">Download Notes</a>
+            </div>
+        </div>
+        <div class="deck-card">
+            <a class="deck-thumb-wrap" href="pdf/MECH191_Week13_Lecture.pdf" target="_blank" rel="noopener"><img src="thumbs/MECH191_Week13_Lecture.png" alt="Week 13 lecture title slide" loading="lazy"></a>
             <div class="deck-info">
                 <p class="deck-week">Week 13</p>
                 <p class="deck-title">Powder Metallurgy</p>
                 <p class="deck-meta">PDF &middot; 16 slides</p>
             </div>
-        </a>
-        <a class="deck-card" href="pdf/MECH191_Week14_Lecture.pdf" target="_blank" rel="noopener">
-            <div class="deck-thumb-wrap"><img src="thumbs/MECH191_Week14_Lecture.png" alt="Week 14 lecture title slide" loading="lazy"></div>
+            <div class="deck-actions">
+                <a class="deck-action-btn primary" href="pdf/MECH191_Week13_Lecture.pdf" target="_blank" rel="noopener">View Slides</a>
+                <a class="deck-action-btn" href="noteHandout/MECH191_Week13_Lecture_NotesHandout.pdf" download="MECH191_Week13_Lecture_NotesHandout.pdf">Download Notes</a>
+            </div>
+        </div>
+        <div class="deck-card">
+            <a class="deck-thumb-wrap" href="pdf/MECH191_Week14_Lecture.pdf" target="_blank" rel="noopener"><img src="thumbs/MECH191_Week14_Lecture.png" alt="Week 14 lecture title slide" loading="lazy"></a>
             <div class="deck-info">
                 <p class="deck-week">Week 14</p>
                 <p class="deck-title">Welding Processes</p>
                 <p class="deck-meta">PDF &middot; 16 slides</p>
             </div>
-        </a>
-        <a class="deck-card" href="pdf/MECH191_Week15_Lecture.pdf" target="_blank" rel="noopener">
-            <div class="deck-thumb-wrap"><img src="thumbs/MECH191_Week15_Lecture.png" alt="Week 15 lecture title slide" loading="lazy"></div>
+            <div class="deck-actions">
+                <a class="deck-action-btn primary" href="pdf/MECH191_Week14_Lecture.pdf" target="_blank" rel="noopener">View Slides</a>
+                <a class="deck-action-btn" href="noteHandout/MECH191_Week14_Lecture_NotesHandout.pdf" download="MECH191_Week14_Lecture_NotesHandout.pdf">Download Notes</a>
+            </div>
+        </div>
+        <div class="deck-card">
+            <a class="deck-thumb-wrap" href="pdf/MECH191_Week15_Lecture.pdf" target="_blank" rel="noopener"><img src="thumbs/MECH191_Week15_Lecture.png" alt="Week 15 lecture title slide" loading="lazy"></a>
             <div class="deck-info">
                 <p class="deck-week">Week 15</p>
                 <p class="deck-title">Weld Metallurgy &amp; Failure</p>
                 <p class="deck-meta">PDF &middot; 16 slides</p>
             </div>
-        </a>
-        <a class="deck-card" href="pdf/MECH191_Week16_Lecture.pdf" target="_blank" rel="noopener">
-            <div class="deck-thumb-wrap"><img src="thumbs/MECH191_Week16_Lecture.png" alt="Week 16 lecture title slide" loading="lazy"></div>
+            <div class="deck-actions">
+                <a class="deck-action-btn primary" href="pdf/MECH191_Week15_Lecture.pdf" target="_blank" rel="noopener">View Slides</a>
+                <a class="deck-action-btn" href="noteHandout/MECH191_Week15_Lecture_NotesHandout.pdf" download="MECH191_Week15_Lecture_NotesHandout.pdf">Download Notes</a>
+            </div>
+        </div>
+        <div class="deck-card">
+            <a class="deck-thumb-wrap" href="pdf/MECH191_Week16_Lecture.pdf" target="_blank" rel="noopener"><img src="thumbs/MECH191_Week16_Lecture.png" alt="Week 16 lecture title slide" loading="lazy"></a>
             <div class="deck-info">
                 <p class="deck-week">Week 16</p>
                 <p class="deck-title">Corrosion &amp; Course Wrap-up</p>
                 <p class="deck-meta">PDF &middot; 16 slides</p>
             </div>
-        </a>
+            <div class="deck-actions">
+                <a class="deck-action-btn primary" href="pdf/MECH191_Week16_Lecture.pdf" target="_blank" rel="noopener">View Slides</a>
+                <a class="deck-action-btn" href="noteHandout/MECH191_Week16_Lecture_NotesHandout.pdf" download="MECH191_Week16_Lecture_NotesHandout.pdf">Download Notes</a>
+            </div>
+        </div>
     </div>
 
     <a class="back-link" href="../index.html">← Back to Main Course Page</a>
