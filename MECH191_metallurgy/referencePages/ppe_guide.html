@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPE Reference Guide</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.2rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 30px; font-size: 1rem; }
+        .intro a { color: #0284c7; }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section h2 { font-size: 1.3rem; color: #1e3a5f; margin-bottom: 10px; }
+        .section p { color: #4b5563; line-height: 1.6; margin-bottom: 14px; font-size: 0.95rem; }
+        .section a { color: #0284c7; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            margin-top: 10px;
+        }
+        thead tr { background: #1e3a5f; color: #fff; }
+        thead th { padding: 10px 12px; text-align: left; font-weight: 600; }
+        tbody tr:nth-child(even) { background: #f1f5f9; }
+        tbody tr:hover { background: #e0f2fe; }
+        tbody td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #374151;
+            vertical-align: top;
+        }
+        .code { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #1e3a5f; }
+        .section-label { font-weight: 700; color: #1e3a5f; font-size: 0.95rem; margin: 18px 0 6px; }
+        .note { font-size: 0.85rem; color: #6b7280; font-style: italic; margin-top: 10px; }
+
+        /* Unit badges */
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            margin-right: 4px;
+            white-space: nowrap;
+        }
+        .badge-u12  { background: #dbeafe; color: #1d4ed8; }
+        .badge-u2   { background: #ede9fe; color: #6d28d9; }
+        .badge-u3   { background: #dcfce7; color: #15803d; }
+        .badge-u4   { background: #fef9c3; color: #854d0e; }
+        .badge-u5   { background: #fee2e2; color: #b91c1c; }
+        .badge-all  { background: #e2e8f0; color: #1e3a5f; }
+
+        /* PPE item cards */
+        .ppe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 14px;
+            margin: 16px 0;
+        }
+        .ppe-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px 16px;
+        }
+        .ppe-card .pc-title { font-weight: 700; color: #1e3a5f; font-size: 0.95rem; margin-bottom: 6px; }
+        .ppe-card ul { padding-left: 16px; color: #4b5563; font-size: 0.85rem; line-height: 1.6; }
+
+        .unit-block {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px 18px;
+            margin-bottom: 14px;
+            background: #fff;
+        }
+        .unit-block .ub-title { font-size: 1rem; font-weight: 700; color: #1e3a5f; margin-bottom: 8px; }
+        .unit-block p { margin-bottom: 8px; font-size: 0.9rem; }
+
+        .tip-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            margin: 14px 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .tip-box strong { color: #92400e; }
+
+        .danger-box {
+            background: #fef2f2;
+            border-left: 4px solid #dc2626;
+            border-radius: 0 8px 8px 0;
+            padding: 14px 18px;
+            margin: 16px 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .danger-box strong { color: #991b1b; }
+        .danger-box .db-title {
+            font-weight: 800;
+            color: #991b1b;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #0284c7;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>PPE Reference Guide</h1>
+    <p class="subtitle">What to wear and why, from the general shop baseline through unit-specific requirements</p>
+</header>
+<main>
+    <p class="intro">
+        Every unit in MECH191 puts students around a different hazard — hot metal, rotating spindles,
+        corrosive etchants, arc flash, fumes. There's no single PPE loadout that covers all of it, and
+        in a few places the wrong choice is actually more dangerous than none at all (gloves near a
+        lathe chuck, for one). This page starts with what's required in the shop at all times, then
+        breaks out what to add for each unit's specific activities.
+    </p>
+
+    <!-- BASELINE -->
+    <div class="section">
+        <h2>General Shop PPE — Required at All Times</h2>
+        <p>This is the floor, not the ceiling. Every activity below adds to this list; nothing on this page removes from it.</p>
+        <div class="ppe-grid">
+            <div class="ppe-card">
+                <div class="pc-title">Eyes</div>
+                <ul>
+                    <li>ANSI Z87.1-rated safety glasses, worn at all times in the shop — even when only observing</li>
+                </ul>
+            </div>
+            <div class="ppe-card">
+                <div class="pc-title">Feet</div>
+                <ul>
+                    <li>Closed-toe, closed-heel shoes — no sandals, canvas shoes, or open-back footwear</li>
+                </ul>
+            </div>
+            <div class="ppe-card">
+                <div class="pc-title">Clothing</div>
+                <ul>
+                    <li>Long pants, no loose sleeves, drawstrings, or dangling jewelry</li>
+                    <li>Long hair tied back and contained</li>
+                </ul>
+            </div>
+            <div class="ppe-card">
+                <div class="pc-title">General conduct</div>
+                <ul>
+                    <li>No headphones/earbuds that block shop announcements or machine alarms</li>
+                    <li>Know the nearest eyewash station, safety shower, and fire extinguisher before starting work</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- EYE & FACE PROTECTION TIERS -->
+    <div class="section">
+        <h2>Eye &amp; Face Protection Tiers</h2>
+        <p>Not all eye protection is interchangeable — the right tier depends on the hazard, not personal preference.</p>
+        <table>
+            <thead>
+                <tr><th>Protection</th><th>Standard / Rating</th><th>Protects Against</th><th>Required For</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Safety glasses</strong></td>
+                    <td class="code">ANSI Z87.1 (basic impact)</td>
+                    <td>Flying particles, basic impact</td>
+                    <td>Baseline — worn everywhere in the shop</td>
+                </tr>
+                <tr>
+                    <td><strong>Safety glasses, Z87+</strong></td>
+                    <td class="code">ANSI Z87+ (high impact)</td>
+                    <td>High-velocity impact (grinding, machining chips)</td>
+                    <td>Machining, grinding, abrasive cutting</td>
+                </tr>
+                <tr>
+                    <td><strong>Chemical splash goggles</strong></td>
+                    <td class="code">ANSI Z87.1 D3 splash rating</td>
+                    <td>Liquid splash — sealed frame, no gaps</td>
+                    <td>Mixing/using etchants, penetrant/developer chemicals, plating &amp; pickling baths</td>
+                </tr>
+                <tr>
+                    <td><strong>Full face shield</strong></td>
+                    <td>Worn over glasses/goggles, not alone</td>
+                    <td>Splash to the whole face, flying debris</td>
+                    <td>Kroll's reagent, molten metal pours, bench grinding</td>
+                </tr>
+                <tr>
+                    <td><strong>Welding helmet</strong></td>
+                    <td>Auto-darkening or fixed shade — see shade chart below</td>
+                    <td>Arc flash, UV/IR radiation, spatter</td>
+                    <td>Any arc welding process — worn over Z87.1 safety glasses, not instead of them</td>
+                </tr>
+                <tr>
+                    <td><strong>UV-blocking eyewear</strong></td>
+                    <td>UV-A absorbing lens</td>
+                    <td>UV-A exposure from the black light source</td>
+                    <td>Reading fluorescent liquid penetrant indications under UV-A</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="note">A face shield is always worn in addition to safety glasses or goggles, never as a replacement — it stops splash and debris from the front but leaves the sides of the eyes exposed on its own.</p>
+    </div>
+
+    <!-- HAND PROTECTION -->
+    <div class="section">
+        <h2>Hand Protection — Glove Selection</h2>
+        <p>The right glove depends entirely on the hazard. Using the wrong type is the most common PPE mistake in a metals shop — and near rotating machinery, gloves themselves are the hazard.</p>
+        <table>
+            <thead>
+                <tr><th>Glove Type</th><th>Use For</th><th>Do Not Use For</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Nitrile or neoprene, chemical-resistant</strong></td>
+                    <td>Mixing/handling etchants, penetrant &amp; developer chemicals, plating/pickling solutions</td>
+                    <td>Never latex for HF-containing etchants (Keller's, Kroll's) — latex does not reliably block HF</td>
+                </tr>
+                <tr>
+                    <td><strong>Heat-resistant (leather, Kevlar, or aluminized)</strong></td>
+                    <td>Furnace/heat-treatment handling, casting pours, hot specimen handling</td>
+                    <td>Not chemical-resistant — don't use for etchant handling</td>
+                </tr>
+                <tr>
+                    <td><strong>Leather welding gauntlets</strong></td>
+                    <td>Arc welding, oxyfuel cutting, grinding sparks</td>
+                    <td>Not rated for chemical splash</td>
+                </tr>
+                <tr>
+                    <td><strong>Cut-resistant</strong></td>
+                    <td>Handling sheared/sharp sheet metal edges, freshly cut stock</td>
+                    <td>Not for chemical or high-heat contact</td>
+                </tr>
+                <tr>
+                    <td><strong>No gloves</strong></td>
+                    <td>Operating any machine with an accessible rotating or moving part</td>
+                    <td>—</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="danger-box">
+            <div class="db-title">Never Wear Gloves Near Rotating Machinery</div>
+            Lathes, drill presses, mills, sanders, jointers, and grinders can catch a glove and pull the
+            hand in before there's time to react — documented incidents include partial finger and
+            thumb amputations from exactly this. This is the one place in the shop where removing PPE
+            is the correct safety action. Remove gloves before operating any machine with an accessible
+            rotating or moving part, full stop.
+        </div>
+    </div>
+
+    <!-- BY UNIT -->
+    <div class="section">
+        <h2>PPE by Unit &amp; Activity</h2>
+        <p>Add these to the general shop baseline above for the specific activity underway.</p>
+
+        <div class="unit-block">
+            <div class="ub-title"><span class="badge badge-u12">Units 1–2</span> Hot Work &amp; Heat Treatment</div>
+            <p>Furnace loading/unloading, quenching, temper-color work, pyrometer/heat-indicating-crayon use.</p>
+            <ul style="padding-left:20px; color:#4b5563; font-size:0.9rem; line-height:1.7;">
+                <li>Heat-resistant gloves (leather or aluminized) rated for the furnace temperature in use</li>
+                <li>Face shield or safety glasses plus a heat-resistant apron for quenching, where splash/spatter is possible</li>
+                <li>No synthetic clothing (nylon, polyester) near furnaces or open flame — it can melt onto skin</li>
+                <li>Long sleeves, natural fiber (cotton) preferred, cuffs down and buttoned</li>
+            </ul>
+        </div>
+
+        <div class="unit-block">
+            <div class="ub-title"><span class="badge badge-u2">Unit 2</span> Metallography Lab — Etchants</div>
+            <p>Mixing, swabbing, or immersion-etching any of the six lab etchants. Full etchant-by-etchant hazard detail is on the <a href="etchant_sds.html">Etchant Safety Data Sheets</a> page.</p>
+            <ul style="padding-left:20px; color:#4b5563; font-size:0.9rem; line-height:1.7;">
+                <li>Nitrile or neoprene gloves — never latex — for all six etchants</li>
+                <li>Chemical splash goggles at minimum for all six etchants; Kroll's reagent specifically calls for a full face shield in addition to goggles</li>
+                <li>Mix and etch only in a fume hood — required for HF-containing reagents and for Nital's methanol vapor</li>
+                <li>Calcium gluconate gel staged at the etching station whenever Keller's or Kroll's reagent is in use</li>
+                <li>No open flame nearby — Nital (methanol) and Kalling's No. 2 (ethanol) are both flammable</li>
+            </ul>
+        </div>
+
+        <div class="unit-block">
+            <div class="ub-title"><span class="badge badge-u3">Unit 3</span> Testing, Inspection &amp; NDT</div>
+            <p>Tensile/hardness/impact testing, liquid penetrant and magnetic particle inspection.</p>
+            <ul style="padding-left:20px; color:#4b5563; font-size:0.9rem; line-height:1.7;">
+                <li>Stay clear of pinch points and the load path on tensile, hardness, and impact (Charpy) testing machines — these store or release significant mechanical energy</li>
+                <li>Nitrile gloves for penetrant, developer, and remover chemicals</li>
+                <li>Chemical splash goggles when applying or removing penetrant/developer</li>
+                <li>UV-A blocking eyewear when reading fluorescent penetrant indications under black light — direct UV-A exposure to unprotected eyes is a real hazard, not just a discomfort</li>
+                <li>Adequate ventilation — many penetrant/remover formulations are solvent-based and flammable</li>
+            </ul>
+        </div>
+
+        <div class="unit-block">
+            <div class="ub-title"><span class="badge badge-u4">Unit 4</span> Manufacturing Processes</div>
+            <p>Casting, machining, powder metallurgy, abrasive/grinding operations.</p>
+            <ul style="padding-left:20px; color:#4b5563; font-size:0.9rem; line-height:1.7;">
+                <li><strong>Casting:</strong> face shield over safety glasses, heat-resistant gloves, and a heat-resistant apron/gaiters for any molten-metal pour</li>
+                <li><strong>Machining (lathes, mills, drill presses):</strong> Z87+ safety glasses, no gloves, no loose clothing or jewelry, hair contained — see the glove warning above</li>
+                <li><strong>Grinding/abrasive finishing:</strong> face shield over Z87+ glasses, hearing protection, and a dust mask/respirator for fine particulate</li>
+                <li><strong>Powder metallurgy:</strong> dust mask or respirator when handling loose metal powders — many are combustible in dust form</li>
+            </ul>
+        </div>
+
+        <div class="unit-block">
+            <div class="ub-title"><span class="badge badge-u5">Unit 5</span> Welding, Corrosion &amp; Modern Tech</div>
+            <p>Arc and oxyfuel welding, brazing/soldering, corrosion protection and coating work.</p>
+            <ul style="padding-left:20px; color:#4b5563; font-size:0.9rem; line-height:1.7;">
+                <li>Welding helmet with the correct shade lens for the process and amperage in use (see chart below) — worn over Z87.1 safety glasses</li>
+                <li>Leather welding gauntlets and a flame-resistant jacket or apron; no synthetic clothing under welding leathers</li>
+                <li>Fume extraction or adequate ventilation — required whenever welding, and especially critical on galvanized/coated or stainless steel (zinc oxide fume, chromium/nickel fume)</li>
+                <li>Hearing protection where grinding or air-arc gouging accompanies the welding work</li>
+                <li>Chemical-resistant gloves and goggles for corrosion protection work involving plating, pickling, or acid-cleaning solutions</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- WELDING SHADE CHART -->
+    <div class="section">
+        <h2>Welding Helmet Lens Shade Chart</h2>
+        <p>Starting points by process and amperage, per AWS guidance — adjust within range for comfort and visibility, never below the minimum shown.</p>
+        <table>
+            <thead>
+                <tr><th>Process</th><th>Amperage Range</th><th>Recommended Shade</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>SMAW (Stick)</td><td>60–160 A</td><td class="code">10–12</td></tr>
+                <tr><td>SMAW (Stick)</td><td>Above 160 A</td><td class="code">12–14</td></tr>
+                <tr><td>GMAW / FCAW (MIG / Flux-Cored)</td><td>Below 60 A</td><td class="code">7–10</td></tr>
+                <tr><td>GMAW / FCAW (MIG / Flux-Cored)</td><td>60–160 A</td><td class="code">10–12</td></tr>
+                <tr><td>GTAW (TIG)</td><td>Below 50 A</td><td class="code">8–10</td></tr>
+                <tr><td>GTAW (TIG)</td><td>50–150 A</td><td class="code">10–12</td></tr>
+                <tr><td>GTAW (TIG)</td><td>Above 150 A</td><td class="code">12–14</td></tr>
+                <tr><td>Oxyfuel Welding / Torch Brazing</td><td>—</td><td class="code">4–6</td></tr>
+                <tr><td>Plasma Cutting</td><td>Varies by intensity</td><td class="code">9–14</td></tr>
+            </tbody>
+        </table>
+        <p class="note">When in doubt, start at the darker end of the range and go lighter only if the arc isn't clearly visible — never the other way around.</p>
+    </div>
+
+    <!-- EMERGENCY / RESPONSE -->
+    <div class="section">
+        <h2>Know Before You Start: Emergency Equipment Locations</h2>
+        <p>PPE reduces risk; it doesn't eliminate it. Locate these before starting any activity on this page, not after something goes wrong.</p>
+        <div class="tip-box">
+            <strong>Confirm the location of:</strong> the nearest eyewash station and safety shower, the fire extinguisher rated for the material in use, the spill kit, and — for any session using Keller's or Kroll's reagent — the calcium gluconate gel.
+        </div>
+    </div>
+
+    <a class="back-link" href="index.html">← Back to References</a>
+</main>
+</body>
+</html>

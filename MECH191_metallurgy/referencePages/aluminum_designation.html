@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aluminum Alloy &amp; Temper Designation System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.2rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 960px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 30px; font-size: 1rem; }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section h2 {
+            font-size: 1.3rem;
+            color: #1e3a5f;
+            margin-bottom: 10px;
+        }
+        .section p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
+
+        /* Digit breakdown */
+        .digit-diagram {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin: 18px 0 8px;
+            flex-wrap: wrap;
+        }
+        .digit-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .digit-box .d {
+            width: 54px;
+            height: 54px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        .digit-box .lbl {
+            font-size: 0.72rem;
+            color: #6b7280;
+            text-align: center;
+            max-width: 70px;
+            line-height: 1.3;
+        }
+        .d1 { background: #1e3a5f; }
+        .d2 { background: #2563eb; }
+        .d3 { background: #16a34a; }
+        .d4 { background: #16a34a; }
+        .digit-sep { font-size: 1.6rem; color: #9ca3af; align-self: center; padding-bottom: 22px; }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+        thead tr {
+            background: #1e3a5f;
+            color: #fff;
+        }
+        thead th {
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        tbody tr:nth-child(even) { background: #f1f5f9; }
+        tbody tr:hover { background: #e0f2fe; }
+        tbody td {
+            padding: 9px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #374151;
+            vertical-align: top;
+        }
+        .code { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #1e3a5f; }
+        .tag {
+            display: inline-block;
+            padding: 1px 7px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-right: 4px;
+            white-space: nowrap;
+        }
+        .tag-heat    { background: #dcfce7; color: #15803d; }
+        .tag-noheat  { background: #dbeafe; color: #1d4ed8; }
+        .tag-mixed   { background: #fef9c3; color: #854d0e; }
+
+        /* Prefix / example card grid */
+        .prefix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .prefix-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+        .prefix-card .pcode {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: #1e3a5f;
+        }
+        .prefix-card .pdesc {
+            font-size: 0.85rem;
+            color: #4b5563;
+            margin-top: 3px;
+            line-height: 1.4;
+        }
+
+        .note {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #0284c7;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Aluminum Alloy &amp; Temper Designation System</h1>
+    <p class="subtitle">How to read wrought aluminum alloy numbers and temper codes</p>
+</header>
+<main>
+    <p class="intro">
+        The Aluminum Association (AA) assigns every wrought aluminum alloy a four-digit number.
+        Unlike steel, where all four digits encode composition, only the <strong>first digit</strong>
+        reliably tells you something on its own — the alloy's principal alloying element (its "series").
+        A separate letter-and-number <strong>temper code</strong> attached after the alloy number (e.g.
+        6061-<strong>T6</strong>) describes what was done to the metal after it was made — that code, not
+        the alloy number, is what tells you the strength and hardness you're actually getting.
+    </p>
+
+    <!-- HOW TO READ AN ALLOY NUMBER -->
+    <div class="section">
+        <h2>How to Read a Four-Digit Alloy Number</h2>
+        <p>
+            The first digit identifies the series (major alloying element). The second digit indicates
+            a modification of the original alloy (0 = original composition; 1–9 = a registered variant).
+            For the 1xxx series only, the last two digits give the minimum aluminum purity above 99%. For
+            all other series, the last two digits simply identify the specific alloy within that series —
+            they do not encode a percentage the way steel's carbon digits do.
+        </p>
+        <div class="digit-diagram">
+            <div class="digit-box">
+                <div class="d d1">6</div>
+                <div class="lbl">Alloy series (major element)</div>
+            </div>
+            <div class="digit-box">
+                <div class="d d2">0</div>
+                <div class="lbl">Modification (0 = original alloy)</div>
+            </div>
+            <div class="digit-sep">–</div>
+            <div class="digit-box">
+                <div class="d d3">6</div>
+                <div class="lbl" style="max-width:80px;">Specific alloy identifier (no composition meaning)</div>
+            </div>
+            <div class="digit-box">
+                <div class="d d4">1</div>
+                <div class="lbl" style="max-width:80px;"> </div>
+            </div>
+        </div>
+        <p class="note" style="text-align:center;">
+            Example: <strong>1060</strong> — 1xxx series, 99.60% min. aluminum (last 2 digits = purity above 99%)<br>
+            Example: <strong>6061</strong> — 6xxx series (Mg + Si), alloy "61" within that series — the "61" itself carries no composition meaning
+        </p>
+    </div>
+
+    <!-- SERIES TABLE -->
+    <div class="section">
+        <h2>Wrought Alloy Series (Aluminum Association)</h2>
+        <p>All eight wrought series, the element that defines each one, and whether the series responds to solution heat treatment (T tempers) or only to strain hardening (H tempers).</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Series</th>
+                    <th>Principal Alloying Element</th>
+                    <th>Heat Treatable?</th>
+                    <th>Key Characteristics &amp; Typical Uses</th>
+                    <th>Common Alloys</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="code">1xxx</td>
+                    <td>None — 99.00%+ pure aluminum</td>
+                    <td><span class="tag tag-noheat">Strain-hardened only</span></td>
+                    <td>Excellent corrosion resistance and electrical conductivity, very low strength. Chemical/food equipment, foil, electrical conductors.</td>
+                    <td>1100, 1050, 1060</td>
+                </tr>
+                <tr>
+                    <td class="code">2xxx</td>
+                    <td>Copper (Cu)</td>
+                    <td><span class="tag tag-heat">Heat treatable</span></td>
+                    <td>High strength approaching steel, but lower corrosion resistance — often clad with pure aluminum ("Alclad"). Aircraft structure, rivets.</td>
+                    <td>2024, 2014, 2219</td>
+                </tr>
+                <tr>
+                    <td class="code">3xxx</td>
+                    <td>Manganese (Mn)</td>
+                    <td><span class="tag tag-noheat">Strain-hardened only</span></td>
+                    <td>Moderate strength, good workability and corrosion resistance. Cookware, roofing, HVAC, beverage-can bodies.</td>
+                    <td>3003, 3004, 3105</td>
+                </tr>
+                <tr>
+                    <td class="code">4xxx</td>
+                    <td>Silicon (Si)</td>
+                    <td><span class="tag tag-mixed">Mostly not heat treatable</span></td>
+                    <td>Lowers melting point and improves flow — used mainly as filler metal, not structural. Welding/brazing filler wire; anodizes to a gray/black architectural finish.</td>
+                    <td>4043, 4047</td>
+                </tr>
+                <tr>
+                    <td class="code">5xxx</td>
+                    <td>Magnesium (Mg)</td>
+                    <td><span class="tag tag-noheat">Strain-hardened only</span></td>
+                    <td>Best corrosion resistance of any structural aluminum series, especially in seawater; good weldability, moderate–high strength. Marine hardware, pressure vessels, auto body panels.</td>
+                    <td>5052, 5083, 5086</td>
+                </tr>
+                <tr>
+                    <td class="code">6xxx</td>
+                    <td>Magnesium + Silicon (Mg₂Si)</td>
+                    <td><span class="tag tag-heat">Heat treatable</span></td>
+                    <td>Good formability, weldability, and corrosion resistance with medium strength — the most common general-purpose extrusion alloy family. Structural shapes, architectural extrusions, frames.</td>
+                    <td>6061, 6063</td>
+                </tr>
+                <tr>
+                    <td class="code">7xxx</td>
+                    <td>Zinc (Zn)</td>
+                    <td><span class="tag tag-heat">Heat treatable</span></td>
+                    <td>Highest-strength aluminum series, but lower corrosion resistance and weldability than 2xxx/6xxx. High-stress aerospace structure.</td>
+                    <td>7075, 7050</td>
+                </tr>
+                <tr>
+                    <td class="code">8xxx</td>
+                    <td>Other elements (Li, Fe, Sn, etc.)</td>
+                    <td><span class="tag tag-mixed">Varies by alloy</span></td>
+                    <td>Catch-all series for compositions outside the other seven — includes lithium alloys prized for low density in aerospace, and foil alloys.</td>
+                    <td>8006, 8111</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="note">Second digit = registered modification of the original alloy (0 = original). Only 2xxx, 6xxx, 7xxx, and some 4xxx/8xxx alloys are heat treatable by solution treatment and aging (T tempers); the rest gain strength only through cold working (H tempers).</p>
+    </div>
+
+    <!-- TEMPER DESIGNATIONS -->
+    <div class="section">
+        <h2>Temper Designation System</h2>
+        <p>
+            The temper suffix (attached after the alloy number with a hyphen, e.g. <strong>6061-T6</strong>)
+            describes the mechanical/thermal processing the metal received — this is what actually
+            determines the strength and hardness you'll measure, not the alloy number alone.
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Basic Temper</th>
+                    <th>Meaning</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td class="code">F</td><td>As fabricated — no special control over strain hardening or thermal treatment</td></tr>
+                <tr><td class="code">O</td><td>Annealed — softest, most ductile, fully recrystallized temper (wrought products only)</td></tr>
+                <tr><td class="code">H</td><td>Strain hardened — strength increased by cold working, applies to non-heat-treatable series</td></tr>
+                <tr><td class="code">W</td><td>Solution heat treated — an unstable temper that applies only to alloys that age spontaneously at room temperature after solution treatment; always shown with the time elapsed (e.g. W½ hr)</td></tr>
+                <tr><td class="code">T</td><td>Thermally treated to a stable condition, sometimes plus strain hardening — see T1–T10 below</td></tr>
+            </tbody>
+        </table>
+
+        <p style="margin-top:20px; margin-bottom:6px; font-weight:600; color:#1e3a5f; font-size:0.95rem;">H — Strain-Hardened Subdesignations</p>
+        <p>The first digit after H tells you <em>how</em> the alloy was hardened; the second digit (1–9) tells you <em>how much</em>.</p>
+        <table>
+            <thead>
+                <tr><th>Code</th><th>Meaning</th></tr>
+            </thead>
+            <tbody>
+                <tr><td class="code">H1x</td><td>Strain hardened only, no supplementary thermal treatment</td></tr>
+                <tr><td class="code">H2x</td><td>Strain hardened, then partially annealed to reduce strength to the desired level</td></tr>
+                <tr><td class="code">H3x</td><td>Strain hardened, then stabilized by a low-temperature thermal treatment (mainly Mg-bearing 5xxx alloys, to prevent age-softening)</td></tr>
+                <tr><td class="code">Hx2 / Hx4 / Hx6 / Hx8</td><td>Second digit = degree of strain hardening: 2 = quarter hard, 4 = half hard, 6 = three-quarter hard, 8 = full hard</td></tr>
+                <tr><td class="code">Hx9</td><td>Extra hard — beyond the standard full-hard (8) temper</td></tr>
+            </tbody>
+        </table>
+
+        <p style="margin-top:20px; margin-bottom:6px; font-weight:600; color:#1e3a5f; font-size:0.95rem;">T — Thermally Treated Subdesignations</p>
+        <table>
+            <thead>
+                <tr><th>Code</th><th>Meaning</th></tr>
+            </thead>
+            <tbody>
+                <tr><td class="code">T1</td><td>Cooled from an elevated-temperature forming process, then naturally aged</td></tr>
+                <tr><td class="code">T2</td><td>Cooled from hot working, cold worked, then naturally aged</td></tr>
+                <tr><td class="code">T3</td><td>Solution heat treated, cold worked, then naturally aged</td></tr>
+                <tr><td class="code">T4</td><td>Solution heat treated, then naturally aged</td></tr>
+                <tr><td class="code">T5</td><td>Cooled from an elevated-temperature forming process, then artificially aged</td></tr>
+                <tr><td class="code">T6</td><td>Solution heat treated, then artificially aged — the most common structural temper (peak strength)</td></tr>
+                <tr><td class="code">T7</td><td>Solution heat treated, then overaged/stabilized for dimensional stability rather than peak strength</td></tr>
+                <tr><td class="code">T8</td><td>Solution heat treated, cold worked, then artificially aged</td></tr>
+                <tr><td class="code">T9</td><td>Solution heat treated, artificially aged, then cold worked</td></tr>
+                <tr><td class="code">T10</td><td>Cooled from hot working, cold worked, then artificially aged</td></tr>
+            </tbody>
+        </table>
+        <p class="note">An extra digit is sometimes added after T6/T7 (e.g. T651) to indicate a stress-relief step — check a mill cert or spec sheet for what the full code means on a given part.</p>
+    </div>
+
+    <!-- QUICK ID EXAMPLES -->
+    <div class="section">
+        <h2>Common Alloy-Temper Combinations to Recognize</h2>
+        <p>These are the callouts a technician runs into most often in the field.</p>
+        <div class="prefix-grid">
+            <div class="prefix-card">
+                <div class="pcode">6061-T6</div>
+                <div class="pdesc">General-purpose structural aluminum — the most widely used heat-treatable alloy</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">7075-T6</div>
+                <div class="pdesc">Highest-strength common aluminum — aerospace structure</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">2024-T3</div>
+                <div class="pdesc">High-strength, fatigue-resistant — aircraft skin</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">3003-H14</div>
+                <div class="pdesc">Half-hard, non-heat-treatable — sheet metal, tanks, cookware</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">5052-H32</div>
+                <div class="pdesc">Quarter-hard, stabilized — marine and sheet-metal fabrication</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">1100-O</div>
+                <div class="pdesc">Soft, pure, highly formable — spinning, deep drawing, foil</div>
+            </div>
+        </div>
+    </div>
+
+    <a class="back-link" href="index.html">← Back to References</a>
+</main>
+</body>
+</html>

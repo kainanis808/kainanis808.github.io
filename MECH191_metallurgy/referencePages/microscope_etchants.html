@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXAMET-5-R-600-HD Microscope &amp; Etchant Reference</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.2rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 980px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 30px; font-size: 1rem; }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section h2 {
+            font-size: 1.3rem;
+            color: #1e3a5f;
+            margin-bottom: 10px;
+        }
+        .section p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 14px;
+            font-size: 0.95rem;
+        }
+
+        /* Spec cards */
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+            margin: 16px 0;
+        }
+        .spec-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+        }
+        .spec-card .sc-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-bottom: 6px;
+        }
+        .spec-card .sc-value {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+        .spec-card ul {
+            padding-left: 16px;
+            color: #4b5563;
+            font-size: 0.87rem;
+            line-height: 1.7;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            margin-top: 10px;
+        }
+        thead tr {
+            background: #1e3a5f;
+            color: #fff;
+        }
+        thead th {
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        tbody tr:nth-child(even) { background: #f1f5f9; }
+        tbody tr:hover { background: #e0f2fe; }
+        tbody td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #374151;
+            vertical-align: middle;
+        }
+        .code { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #1e3a5f; }
+        .section-label {
+            font-weight: 700;
+            color: #1e3a5f;
+            font-size: 0.95rem;
+            margin: 18px 0 6px;
+        }
+        .note {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .badge-nital     { background: #dbeafe; color: #1d4ed8; }
+        .badge-marble    { background: #dcfce7; color: #15803d; }
+        .badge-kalling   { background: #ede9fe; color: #6d28d9; }
+        .badge-keller    { background: #fce7f3; color: #9d174d; }
+        .badge-ferric    { background: #fef9c3; color: #854d0e; }
+        .badge-kroll     { background: #ffe4e6; color: #be123c; }
+        .badge-none      { background: #e5e7eb; color: #374151; }
+
+        /* Etchant recipe cards */
+        .etch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
+            margin: 16px 0;
+        }
+        .etch-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+        }
+        .etch-card .ec-name {
+            font-weight: 700;
+            color: #1e3a5f;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+        .etch-card .ec-recipe {
+            font-family: 'Courier New', Courier, monospace;
+            background: #1e3a5f;
+            color: #e2e8f0;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        .etch-card .ec-use {
+            color: #4b5563;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .tip-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            margin: 14px 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .tip-box strong { color: #92400e; }
+
+        .danger-box {
+            background: #fef2f2;
+            border-left: 4px solid #dc2626;
+            border-radius: 0 8px 8px 0;
+            padding: 14px 18px;
+            margin: 16px 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .danger-box strong { color: #991b1b; }
+        .danger-box .db-title {
+            font-weight: 800;
+            color: #991b1b;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .steps-list {
+            counter-reset: step;
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+        .steps-list li {
+            counter-increment: step;
+            position: relative;
+            padding: 8px 0 8px 40px;
+            color: #374151;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .steps-list li:last-child { border-bottom: none; }
+        .steps-list li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 26px;
+            height: 26px;
+            background: #1e3a5f;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .group-header td {
+            background: #dbeafe !important;
+            font-weight: 700;
+            color: #1e3a5f;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+        }
+        .noetch-row td { background: #f3f4f6 !important; color: #6b7280 !important; font-style: italic; }
+
+        .pdf-embed {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 16px 0;
+            background: #fff;
+        }
+        .pdf-embed iframe {
+            width: 100%;
+            height: 720px;
+            border: none;
+            display: block;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #0284c7;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>EXAMET-5-R-600-HD Microscope &amp; Etchant Reference</h1>
+    <p class="subtitle">Unitron EXAMET-5-R-600-HD — magnifications, field widths, and specimen etchants for the Metallography Lab modules</p>
+</header>
+<main>
+    <p class="intro">
+        Every weekly module in the Semester Metallography Portfolio uses the same shared class
+        microscope and a small set of etchants. This page is a single reference for both: what the
+        EXAMET-5-R-600-HD can actually do, and what each lettered specimen (A&ndash;P) needs to be
+        etched with before it goes on the stage. For the manufacturer Safety Data Sheet on each
+        etchant, see the <a href="etchant_sds.html">Etchant Safety Data Sheets (SDS)</a> page; for
+        what to wear while mixing and using them, see the <a href="ppe_guide.html">PPE Reference
+        Guide</a>.
+    </p>
+
+    <!-- MICROSCOPE -->
+    <div class="section">
+        <h2>The Microscope — Unitron EXAMET-5-R-600-HD</h2>
+        <p>
+            A trinocular, reflected-light-only metallurgical microscope. The <strong>R</strong> in
+            the model name denotes reflected illumination (no transmitted/substage light or
+            polarization); the <strong>600-HD</strong> denotes the bundled AU-600-HD digital camera.
+            It ships with a single set of four infinity-corrected objectives, giving four native
+            total magnifications with the standard 10&times; eyepiece &mdash; including 200&times;,
+            which the previous classroom scope could not produce.
+        </p>
+        <div class="spec-grid">
+            <div class="spec-card">
+                <div class="sc-title">Objectives</div>
+                <div class="sc-value">5&times; / 10&times; / 20&times; / 50&times;</div>
+                <ul>
+                    <li>Infinity LWD M Plan achromat (5&times;, 10&times;, 20&times;); semi-apo (50&times;)</li>
+                    <li>One set covers all opaque, polished/etched specimens (A&ndash;P)</li>
+                </ul>
+            </div>
+            <div class="spec-card">
+                <div class="sc-title">Eyepiece</div>
+                <div class="sc-value">WF10&times; / 23mm</div>
+                <ul>
+                    <li>Standard widefield eyepiece with eyeguards</li>
+                    <li>Single eyepiece type — no bonus/alternate eyepiece included</li>
+                </ul>
+            </div>
+            <div class="spec-card">
+                <div class="sc-title">Illumination</div>
+                <div class="sc-value">5W LED, reflected</div>
+                <ul>
+                    <li>Variable-intensity LED illuminator with field &amp; aperture diaphragm</li>
+                    <li>Reflected only — no transmitted/substage light</li>
+                </ul>
+            </div>
+        </div>
+
+        <p class="section-label">Native Total Magnifications (with 10&times; eyepiece)</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Total Magnification</th>
+                    <th>Objective Used</th>
+                    <th>Used in the Modules?</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>50&times;</strong></td>
+                    <td>5&times;</td>
+                    <td><span class="badge badge-nital">Yes — overview scan</span></td>
+                </tr>
+                <tr>
+                    <td><strong>100&times;</strong></td>
+                    <td>10&times;</td>
+                    <td><span class="badge badge-nital">Yes — primary working magnification</span></td>
+                </tr>
+                <tr>
+                    <td>200&times;</td>
+                    <td>20&times;</td>
+                    <td><span class="badge badge-none">Not used</span></td>
+                </tr>
+                <tr>
+                    <td><strong>500&times;</strong></td>
+                    <td>50&times;</td>
+                    <td><span class="badge badge-nital">Yes — fine detail</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="note">
+            200&times; is a native setting on this scope (the 20&times; objective was not part of the
+            previous classroom microscope's lineup). The modules still use only 50&times;, 100&times;,
+            and 500&times;, matching the existing lab procedures — 200&times; is available if an
+            instructor wants an intermediate step.
+        </p>
+
+        <p class="section-label">Full Specifications</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Spec</th>
+                    <th>Detail</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Model</strong></td><td>Unitron EXAMET-5-R-600-HD</td></tr>
+                <tr><td><strong>Viewing Head</strong></td><td>Trinocular, 30&deg; inclined; viewing split 100% binocular, or 50% binocular / 50% trinocular</td></tr>
+                <tr><td><strong>Illumination</strong></td><td>Reflected only — 5W variable-intensity LED illuminator with field and aperture diaphragm. No transmitted/substage light.</td></tr>
+                <tr><td><strong>Objectives</strong></td><td class="code">5&times; (NA 0.15, WD 10.8mm) &nbsp;/&nbsp; 10&times; (NA 0.30, WD 12.2mm) &nbsp;/&nbsp; 20&times; (NA 0.45, WD 4.0mm) &nbsp;/&nbsp; 50&times; (NA 0.55, WD 7.9mm) — infinity-corrected, LWD</td></tr>
+                <tr><td><strong>Eyepiece</strong></td><td>WF10&times;, field number 23mm, with eyeguards</td></tr>
+                <tr><td><strong>Stage</strong></td><td>Mechanical stage, 175mm &times; 145mm, 76mm (X) &times; 42mm (Y) travel; accommodates specimens up to 28mm tall (up to 78mm if stage is lowered 50mm)</td></tr>
+                <tr><td><strong>Diaphragm</strong></td><td>Field and aperture diaphragm on the reflected illuminator (no substage iris — reflected light only)</td></tr>
+                <tr><td><strong>Camera</strong></td><td>Bundled AU-600-HD digital camera — 6.0MP (3264&times;1836), up to 60 fps live capture (the &ldquo;-600-HD&rdquo; in the model number)</td></tr>
+                <tr><td><strong>Electrical</strong></td><td>Universal power supply, 90&ndash;240V AC. Not battery-powered.</td></tr>
+            </tbody>
+        </table>
+        <p class="note">
+            Numerical aperture (NA) sets resolving power, not the objective's marked magnification —
+            higher NA resolves finer detail. On this scope NA rises with magnification (5&times; NA
+            0.15 through 50&times; NA 0.55), so the 50&times; objective is both the highest-magnification
+            and highest-resolution option — the correct choice for fine features like precipitates and
+            martensite laths.
+        </p>
+
+        <p class="section-label">Field of View by Magnification</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Magnification</th>
+                    <th>Field Width</th>
+                    <th>Ideal For</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>50&times;</strong></td>
+                    <td>&asymp; 4.6 mm</td>
+                    <td>Full cross-section, solidification zones, gross defects</td>
+                </tr>
+                <tr>
+                    <td><strong>100&times;</strong></td>
+                    <td>&asymp; 2.3 mm</td>
+                    <td>Grain counting (ASTM E112), inclusion survey (ASTM E45), indent identification, grain aspect ratio, ferrite/pearlite ratio</td>
+                </tr>
+                <tr>
+                    <td>200&times;</td>
+                    <td>&asymp; 1.15 mm</td>
+                    <td>Intermediate detail between overview and fine-feature magnifications; not used in the current modules</td>
+                </tr>
+                <tr>
+                    <td><strong>500&times;</strong></td>
+                    <td>&asymp; 0.46 mm</td>
+                    <td>Precipitates, lamellar pearlite spacing, martensite lath detail, pore morphology, HAZ sub-zones, fracture texture, grain boundary attack</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- BROCHURE -->
+    <div class="section">
+        <h2>Manufacturer Brochure</h2>
+        <p>
+            Official Unitron product brochure for the EXAMET-5 series. It covers the full metallurgical
+            microscope line, including reflected/transmitted and polarized-light configurations &mdash;
+            this classroom's unit is the <strong>EXAMET-5-R-600-HD</strong>: reflected light only, with
+            the bundled AU-600-HD digital camera.
+        </p>
+        <div class="pdf-embed">
+            <iframe src="examet5_brochure.pdf" title="Unitron EXAMET-5 Brochure"></iframe>
+        </div>
+        <p class="note">
+            If the preview above doesn't display,
+            <a href="examet5_brochure.pdf" target="_blank" rel="noopener">open the brochure PDF directly</a>.
+        </p>
+    </div>
+
+    <!-- SOFTWARE MANUAL -->
+    <div class="section">
+        <h2>Camera Software Manual — CaptaVision+ v3.1</h2>
+        <p>
+            Instruction manual for CaptaVision+, the camera-control and imaging software used with the
+            microscope's bundled AU-600-HD camera &mdash; covers installation, live image acquisition and
+            adjustment (exposure, white balance, ROI), video record and time-lapse capture, static image
+            processing, and the measurement/analysis tools (line profile, calibration ruler, grain/particle
+            counting) used for the metallography modules.
+        </p>
+        <div class="pdf-embed">
+            <iframe src="captavision_manual.pdf" title="CaptaVision+ v3.1 Instruction Manual"></iframe>
+        </div>
+        <p class="note">
+            If the preview above doesn't display,
+            <a href="captavision_manual.pdf" target="_blank" rel="noopener">open the CaptaVision+ manual directly</a>.
+        </p>
+    </div>
+
+    <!-- HANDLING -->
+    <div class="section">
+        <h2>Specimen &amp; Microscope Handling</h2>
+        <p>The same setup sequence applies to every module:</p>
+        <ol class="steps-list">
+            <li>Clean the specimen surface with a lint-free lens tissue using a single swipe &mdash; never a circular motion.</li>
+            <li>Handle the specimen by its edges only. Fingerprints etch and will obscure the microstructure.</li>
+            <li>Place the specimen face-down on the stage. Start at 50&times; and focus with the coarse knob.</li>
+            <li>Switch objectives without moving the stage. Use fine focus only above 100&times;.</li>
+            <li>Work through magnifications in the order listed for that module, then return the specimen to the labeled tray before leaving class.</li>
+        </ol>
+        <div class="tip-box">
+            <strong>Kit rule:</strong> return all specimens before leaving class, never clean with abrasives, and notify the instructor immediately if a specimen is damaged. Safety glasses and gloves are required during all lab activities.
+        </div>
+    </div>
+
+    <!-- SPECIMEN / ETCHANT TABLE -->
+    <div class="section">
+        <h2>Etchants by Specimen</h2>
+        <p>Sixteen pre-prepared, labeled specimens (A&ndash;P) rotate through the semester &mdash; three carbon steels, three stainless grades, four aluminum grades, three brasses, two coppers, and titanium. Mounting is standardized to hot-compression phenolic across the kit.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Specimen</th>
+                    <th>Material</th>
+                    <th>Mount</th>
+                    <th>Etchant</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="group-header"><td colspan="4">Carbon Steel</td></tr>
+                <tr><td><strong>A</strong></td><td>1018 steel (normalized)</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span></td></tr>
+                <tr><td><strong>B</strong></td><td>1045 steel (normalized)</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span></td></tr>
+                <tr><td><strong>C</strong></td><td>1075 steel (normalized)</td><td>Hot-compression phenolic</td><td><span class="badge badge-nital">Nital 2%</span></td></tr>
+                <tr class="group-header"><td colspan="4">Stainless Steel</td></tr>
+                <tr><td><strong>D</strong></td><td>304 austenitic stainless steel</td><td>Hot-compression phenolic</td><td><span class="badge badge-marble">Marble's reagent</span></td></tr>
+                <tr><td><strong>E</strong></td><td>316 austenitic stainless steel</td><td>Hot-compression phenolic</td><td><span class="badge badge-marble">Marble's reagent</span></td></tr>
+                <tr><td><strong>F</strong></td><td>17-4PH precipitation-hardening stainless</td><td>Hot-compression phenolic</td><td><span class="badge badge-kalling">Kalling's No. 2</span></td></tr>
+                <tr class="group-header"><td colspan="4">Aluminum</td></tr>
+                <tr><td><strong>G</strong></td><td>6061 aluminum alloy</td><td>Hot-compression phenolic</td><td><span class="badge badge-keller">Keller's reagent</span></td></tr>
+                <tr><td><strong>H</strong></td><td>6063 aluminum alloy</td><td>Hot-compression phenolic</td><td><span class="badge badge-keller">Keller's reagent</span></td></tr>
+                <tr><td><strong>I</strong></td><td>5052 aluminum alloy</td><td>Hot-compression phenolic</td><td><span class="badge badge-keller">Keller's reagent</span></td></tr>
+                <tr><td><strong>J</strong></td><td>2024 aluminum alloy</td><td>Hot-compression phenolic</td><td><span class="badge badge-keller">Keller's reagent</span></td></tr>
+                <tr class="group-header"><td colspan="4">Brass</td></tr>
+                <tr><td><strong>K</strong></td><td>260 brass (cartridge, 70/30)</td><td>Hot-compression phenolic</td><td><span class="badge badge-ferric">Ferric chloride</span></td></tr>
+                <tr><td><strong>L</strong></td><td>360 brass (leaded, free-machining)</td><td>Hot-compression phenolic</td><td><span class="badge badge-ferric">Ferric chloride</span></td></tr>
+                <tr><td><strong>M</strong></td><td>464 brass (naval, duplex alpha-beta)</td><td>Hot-compression phenolic</td><td><span class="badge badge-ferric">Ferric chloride</span></td></tr>
+                <tr class="group-header"><td colspan="4">Copper</td></tr>
+                <tr><td><strong>N</strong></td><td>110 copper (commercially pure)</td><td>Hot-compression phenolic</td><td><span class="badge badge-ferric">Ferric chloride</span></td></tr>
+                <tr><td><strong>O</strong></td><td>182 chromium copper (precipitation-hardening)</td><td>Hot-compression phenolic</td><td><span class="badge badge-ferric">Ferric chloride</span></td></tr>
+                <tr class="group-header"><td colspan="4">Titanium</td></tr>
+                <tr><td><strong>P</strong></td><td>Titanium Grade 5 (Ti-6Al-4V)</td><td>Hot-compression phenolic</td><td><span class="badge badge-kroll">Kroll's reagent</span></td></tr>
+            </tbody>
+        </table>
+        <p class="note">Etch times default to a standard 5&ndash;10 second swab unless a module's instructions call for otherwise (e.g. Specimen L's leaded brass or the duplex phase boundaries in M can take a few extra seconds to resolve cleanly).</p>
+    </div>
+
+    <!-- ETCHANT RECIPES -->
+    <div class="section">
+        <h2>Etchant Formulas</h2>
+        <div class="etch-grid">
+            <div class="etch-card">
+                <div class="ec-name"><span class="badge badge-nital">Nital 2%</span></div>
+                <div class="ec-recipe">2&ndash;6% HNO&#8323; in methanol</div>
+                <div class="ec-use">General-purpose carbon steel etchant. Used on specimens A, B, C. The class supply is the commercial "Nital Etch" product &mdash; per its SDS, the diluent is <strong>methanol</strong>, not ethanol.</div>
+            </div>
+            <div class="etch-card">
+                <div class="ec-name"><span class="badge badge-marble">Marble's Reagent</span></div>
+                <div class="ec-recipe">10 g CuSO&#8324; + 50 mL HCl + 50 mL H&#8322;O</div>
+                <div class="ec-use">Reveals austenite grain structure and twin bands in the austenitic stainless grades. Used on 304 (D) and 316 (E). Not suitable for 17-4PH &mdash; austenitic-only reagent.</div>
+            </div>
+            <div class="etch-card">
+                <div class="ec-name"><span class="badge badge-kalling">Kalling's No. 2</span></div>
+                <div class="ec-recipe">5 g CuCl&#8322; + 100 mL HCl + 100 mL ethanol</div>
+                <div class="ec-use">Reveals the martensitic matrix and precipitate distribution in precipitation-hardening stainless. Used on 17-4PH (Specimen F) only.</div>
+            </div>
+            <div class="etch-card">
+                <div class="ec-name"><span class="badge badge-keller">Keller's Reagent</span></div>
+                <div class="ec-recipe">2 mL HF + 3 mL HCl + 5 mL HNO&#8323; + 190 mL H&#8322;O</div>
+                <div class="ec-use">Standard aluminum etchant. Used on all four aluminum grades: 6061 (G), 6063 (H), 5052 (I), 2024 (J).</div>
+            </div>
+            <div class="etch-card">
+                <div class="ec-name"><span class="badge badge-ferric">Ferric Chloride</span></div>
+                <div class="ec-recipe">5 g FeCl&#8323; + 50 mL HCl + 100 mL H&#8322;O</div>
+                <div class="ec-use">Standard copper-alloy etchant &mdash; works across both brass and pure/alloyed copper. Used on all three brasses (K, L, M) and both coppers (N, O).</div>
+            </div>
+            <div class="etch-card">
+                <div class="ec-name"><span class="badge badge-kroll">Kroll's Reagent</span></div>
+                <div class="ec-recipe">2&ndash;3 mL HF + 4&ndash;6 mL HNO&#8323; + water to 100 mL</div>
+                <div class="ec-use">Standard titanium etchant. Used on Specimen P (Ti-6Al-4V). Titanium is prone to smearing/embedding during grinding &mdash; budget extra time at final polish.</div>
+            </div>
+        </div>
+
+        <div class="danger-box">
+            <div class="db-title">Nital Contains Methanol, Not Ethanol</div>
+            The class supply's SDS lists Nital's diluent as methanol (86&ndash;91%), not ethanol.
+            Methanol is absorbed through skin, is highly flammable, and can damage the optic nerve
+            (risk of blindness) on significant exposure &mdash; treat it with the same seriousness as
+            the acids on this page. Full details on the
+            <a href="etchant_sds.html">Etchant Safety Data Sheets (SDS)</a> page.
+        </div>
+
+        <div class="danger-box">
+            <div class="db-title">Keller's and Kroll's Reagents Contain Hydrofluoric Acid</div>
+            HF is dangerously different from the other acids on this page: it can pass through skin
+            with little or no immediate pain, then damage deep tissue and pull calcium out of the
+            bloodstream &mdash; a large enough skin contact area can be fatal. Nitrile or neoprene
+            gloves only (not latex), full face shield, and mixing/etching only in a fume hood. Keep
+            calcium gluconate gel at the station and know the emergency procedure before either
+            etchant is opened. All six etchants are corrosive acids &mdash; safety glasses, gloves, and
+            adequate ventilation apply across the board, but Keller's and Kroll's specifically need the
+            HF protocol above.
+        </div>
+
+        <p class="note">Etch by swabbing the polished face with a cotton ball soaked in etchant, or brief immersion, per the times noted in the specimen table above. Rinse immediately with ethanol or water and dry with a single swipe of lens tissue.</p>
+    </div>
+
+    <a class="back-link" href="index.html">← Back to References</a>
+</main>
+</body>
+</html>

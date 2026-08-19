@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titanium Grade Designation System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.2rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 960px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 30px; font-size: 1rem; }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section h2 {
+            font-size: 1.3rem;
+            color: #1e3a5f;
+            margin-bottom: 10px;
+        }
+        .section p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+        thead tr {
+            background: #1e3a5f;
+            color: #fff;
+        }
+        thead th {
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        tbody tr:nth-child(even) { background: #f1f5f9; }
+        tbody tr:hover { background: #e0f2fe; }
+        tbody td {
+            padding: 9px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #374151;
+            vertical-align: top;
+        }
+        .code { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #1e3a5f; white-space: nowrap; }
+        .tag {
+            display: inline-block;
+            padding: 1px 7px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-right: 4px;
+            white-space: nowrap;
+        }
+        .tag-cp     { background: #dbeafe; color: #1d4ed8; }
+        .tag-alpha  { background: #dcfce7; color: #15803d; }
+        .tag-nearalpha { background: #d1fae5; color: #047857; }
+        .tag-ab     { background: #fef9c3; color: #854d0e; }
+        .tag-beta   { background: #fce7f3; color: #9d174d; }
+
+        .prefix-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .prefix-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+        .prefix-card .pcode {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #1e3a5f;
+        }
+        .prefix-card .pdesc {
+            font-size: 0.85rem;
+            color: #4b5563;
+            margin-top: 3px;
+            line-height: 1.4;
+        }
+
+        .note {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #0284c7;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Titanium Grade Designation System</h1>
+    <p class="subtitle">How ASTM grade numbers map to commercially pure and alloyed titanium</p>
+</header>
+<main>
+    <p class="intro">
+        Titanium doesn't use a decodable numbering system the way steel or aluminum do. ASTM grade
+        numbers were assigned roughly in the order each composition was standardized, so the number
+        itself carries no information about composition or properties — Grade 6 and Grade 12 are not
+        "more" of anything than Grade 2. To actually know what you're holding, you either look the
+        grade number up in a table, or — more usefully on the job — sort it into one of four
+        metallurgical families (CP/alpha, near-alpha, alpha-beta, beta), because that family is what
+        actually drives strength, weldability, and heat-treat response.
+    </p>
+
+    <!-- GRADE TABLE -->
+    <div class="section">
+        <h2>Common ASTM Grades</h2>
+        <p>UNS numbers (Rxxxxx) run in parallel with ASTM grades and appear on mill certs and specs alongside the grade number.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Grade</th>
+                    <th>UNS</th>
+                    <th>Family</th>
+                    <th>Nominal Composition</th>
+                    <th>Typical Use</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="code">1</td><td class="code">R50250</td>
+                    <td><span class="tag tag-cp">CP Titanium</span></td>
+                    <td>99.5% Ti — softest, most ductile CP grade</td>
+                    <td>Chemical processing, medical devices, deep forming</td>
+                </tr>
+                <tr>
+                    <td class="code">2</td><td class="code">R50400</td>
+                    <td><span class="tag tag-cp">CP Titanium</span></td>
+                    <td>99.2% Ti — the "workhorse" CP grade</td>
+                    <td>Marine engineering, desalination, architecture, exhaust systems</td>
+                </tr>
+                <tr>
+                    <td class="code">3</td><td class="code">R50550</td>
+                    <td><span class="tag tag-cp">CP Titanium</span></td>
+                    <td>99.1% Ti, higher Fe/O than Grade 2 for added strength</td>
+                    <td>Industrial equipment needing more strength than Grade 2</td>
+                </tr>
+                <tr>
+                    <td class="code">4</td><td class="code">R50700</td>
+                    <td><span class="tag tag-cp">CP Titanium</span></td>
+                    <td>99.0% Ti — highest-strength, highest-interstitial CP grade</td>
+                    <td>Airframe skin, surgical hardware</td>
+                </tr>
+                <tr>
+                    <td class="code">5</td><td class="code">R56400</td>
+                    <td><span class="tag tag-ab">Alpha-Beta</span></td>
+                    <td>Ti-6Al-4V — accounts for roughly half of all titanium used</td>
+                    <td>Aerospace structure and engine parts, medical implants</td>
+                </tr>
+                <tr>
+                    <td class="code">6</td><td class="code">R54520</td>
+                    <td><span class="tag tag-nearalpha">Near-Alpha</span></td>
+                    <td>Ti-5Al-2.5Sn</td>
+                    <td>Aircraft structure requiring good weldability and stable high-temp properties</td>
+                </tr>
+                <tr>
+                    <td class="code">7</td><td class="code">R52400</td>
+                    <td><span class="tag tag-alpha">Alpha</span></td>
+                    <td>Ti-0.15Pd — Grade 2 + palladium</td>
+                    <td>Chemical processing in reducing/crevice-corrosion environments</td>
+                </tr>
+                <tr>
+                    <td class="code">9</td><td class="code">R56320</td>
+                    <td><span class="tag tag-ab">Alpha-Beta</span></td>
+                    <td>Ti-3Al-2.5V — cold-workable, moderate strength</td>
+                    <td>Hydraulic tubing, bicycle frames, aerospace tubing</td>
+                </tr>
+                <tr>
+                    <td class="code">11</td><td class="code">R52250</td>
+                    <td><span class="tag tag-alpha">Alpha</span></td>
+                    <td>Ti-0.15Pd — Grade 1 + palladium</td>
+                    <td>Chemical processing needing Grade 1 formability plus corrosion resistance</td>
+                </tr>
+                <tr>
+                    <td class="code">12</td><td class="code">R53400</td>
+                    <td><span class="tag tag-nearalpha">Near-Alpha</span></td>
+                    <td>Ti-0.3Mo-0.8Ni</td>
+                    <td>Heat exchangers, pressure vessels — CP-like weldability, higher strength and elevated-temp capability</td>
+                </tr>
+                <tr>
+                    <td class="code">23</td><td class="code">R56401</td>
+                    <td><span class="tag tag-ab">Alpha-Beta (ELI)</span></td>
+                    <td>Ti-6Al-4V ELI — Extra Low Interstitial version of Grade 5</td>
+                    <td>Medical implants, cryogenic and fracture-critical aerospace parts</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="note">"ELI" grades (e.g. Grade 23) hold oxygen and other interstitial elements to a lower maximum than their standard counterpart — same nominal alloy, but with higher ductility and fracture toughness at a slight cost in strength.</p>
+    </div>
+
+    <!-- FAMILY OVERVIEW -->
+    <div class="section">
+        <h2>Alpha / Near-Alpha / Alpha-Beta / Beta at a Glance</h2>
+        <p>The family — not the grade number — is what tells you how an alloy behaves.</p>
+        <table>
+            <thead>
+                <tr><th>Family</th><th>Crystal Structure</th><th>Heat Treatable?</th><th>Key Traits</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="tag tag-cp">CP / Alpha</span></td>
+                    <td>HCP</td>
+                    <td>No (strength set by composition/interstitials only)</td>
+                    <td>Most weldable and most corrosion-resistant family; low-to-moderate strength; good toughness even at cryogenic temperatures. Grades 1–4, 7, 11, 16, 17.</td>
+                </tr>
+                <tr>
+                    <td><span class="tag tag-nearalpha">Near-Alpha</span></td>
+                    <td>Mostly HCP, small BCC fraction</td>
+                    <td>Limited</td>
+                    <td>Retains alpha's weldability while adding creep strength for elevated-temperature service. Grades 6, 12.</td>
+                </tr>
+                <tr>
+                    <td><span class="tag tag-ab">Alpha-Beta</span></td>
+                    <td>Mixed HCP + BCC</td>
+                    <td>Yes — solution treat &amp; age</td>
+                    <td>The most widely used family; heat treatable to a good balance of strength and ductility. Grades 5, 9, 23.</td>
+                </tr>
+                <tr>
+                    <td><span class="tag tag-beta">Beta</span></td>
+                    <td>BCC</td>
+                    <td>Yes — ages to very high strength</td>
+                    <td>Highest strength potential and good cold formability in the solution-treated condition, but higher density than the other families. Used for high-load aerospace fasteners and landing gear (e.g. Ti-10V-2Fe-3Al).</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- QUICK ID -->
+    <div class="section">
+        <h2>Grades a Technician Sees Most</h2>
+        <div class="prefix-grid">
+            <div class="prefix-card">
+                <div class="pcode">Grade 2</div>
+                <div class="pdesc">The default "commercially pure" titanium — if someone says "CP titanium" with no other context, assume this</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">Grade 5 (Ti-6Al-4V)</div>
+                <div class="pdesc">The default titanium <em>alloy</em> — assume this when someone just says "titanium alloy" or "6-4"</div>
+            </div>
+            <div class="prefix-card">
+                <div class="pcode">Grade 23 (Ti-6Al-4V ELI)</div>
+                <div class="pdesc">Grade 5's medical/aerospace-critical cousin — same alloy, tighter interstitial control</div>
+            </div>
+        </div>
+    </div>
+
+    <a class="back-link" href="index.html">← Back to References</a>
+</main>
+</body>
+</html>
