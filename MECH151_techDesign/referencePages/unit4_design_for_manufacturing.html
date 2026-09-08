@@ -19,12 +19,16 @@
             margin-bottom: 28px; font-size: 0.95rem; color: #713f12; line-height: 1.6; }
         .section { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px 24px; margin-bottom: 22px; }
         .section h2 { font-size: 1.25rem; color: #1e3a5f; margin-bottom: 10px; }
+        .section h3 { font-size: 1rem; color: #1e3a5f; margin: 14px 0 6px; }
         .section p { color: #4b5563; line-height: 1.65; margin-bottom: 12px; font-size: 0.95rem; }
         .section ul { padding-left: 20px; color: #4b5563; font-size: 0.93rem; line-height: 1.7; margin-bottom: 6px; }
         .section .term { font-weight: 700; color: #1e3a5f; }
         .safety { background: #fef2f2; border-left: 4px solid #dc2626; border-radius: 0 8px 8px 0; padding: 14px 18px;
             margin: 16px 0; font-size: 0.92rem; color: #4b5563; line-height: 1.6; }
         .safety strong { color: #991b1b; }
+        .standards { background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 0 8px 8px 0; padding: 14px 18px;
+            margin-bottom: 28px; font-size: 0.95rem; color: #1e3a5f; line-height: 1.65; }
+        .standards strong { color: #1d4ed8; }
         .produce { background: #f0fdf4; border-left: 4px solid #16a34a; border-radius: 0 8px 8px 0; padding: 14px 18px;
             margin: 24px 0 10px; font-size: 0.95rem; color: #374151; line-height: 1.7; }
         .produce strong { color: #15803d; }
@@ -51,6 +55,86 @@
         <strong>Goal:</strong> Close the loop from CAD model to physical part &mdash; preparing manufacturing-ready
         files, understanding what each process can and cannot make, and operating shop equipment safely to produce
         a prototype.
+    </div>
+
+    <div class="standards">
+        <strong>Once a design leaves your screen, the standard is all the maker has.</strong> In Unit 1 you saw
+        that there is no single right way to <em>model</em> a part &mdash; but there is a shared, standardized way
+        to <em>communicate</em> one. When you hand a file or drawing to a machine shop, a print farm, or a
+        classmate, they cannot ask the model what you meant. They build exactly what the documentation says.
+        Standards exist so that "what the documentation says" and "what you intended" are the same thing.
+    </div>
+
+    <div class="section">
+        <h2>Why standards carry the design intent</h2>
+        <p>
+            A manufacturer works only from what you send &mdash; the geometry, the dimensions, the tolerances, and
+            the notes. Anything you leave to interpretation, they will interpret, and often not the way you hoped.
+            Following accepted standards removes that guesswork.
+        </p>
+        <ul>
+            <li><span class="term">The maker is not the designer.</span> The person cutting the part did not sit in the design reviews. Standard drawing conventions (ASME&nbsp;Y14.5, GD&amp;T, standard thread and surface-finish callouts) are the shared language that lets them read your intent without a phone call.</li>
+            <li><span class="term">Which dimensions are critical must be stated, not assumed.</span> A tolerance callout tells the shop where to spend effort and where a loose result is fine. Without it they either over-work every feature (cost) or under-work the one that mattered (scrap).</li>
+            <li><span class="term">Standard file formats preserve meaning across systems.</span> STEP carries clean solid geometry between any CAD and CAM; a well-formed STL is watertight and correctly scaled. A non-standard or sloppy export arrives with gaps, wrong units, or lost features &mdash; and the part is made wrong before a tool is even chosen.</li>
+            <li><span class="term">Ambiguity is expensive and slow.</span> An unclear drawing comes back as an RFI (request for information), a delay, a remake, or a finished part that does not fit its assembly. On a graded prototype, it comes back as a part you cannot use and no time to redo.</li>
+            <li><span class="term">Standards make a design reviewable and repeatable.</span> A drawing done to convention can be checked by anyone, quoted by multiple shops, and re-run months later with the same result. A drawing full of personal shorthand can only be built by you, standing next to the machine.</li>
+        </ul>
+        <p>
+            The through-line from the first page of this course applies here: capture the design intent, then
+            communicate it in the form everyone downstream already knows how to read.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>Geometric dimensioning and tolerancing (GD&amp;T)</h2>
+        <p>
+            Plus/minus tolerances (Unit 2) control how big a feature is, but they say nothing about whether a
+            surface is flat, whether two holes are square to a face, or how a part locates against its neighbor.
+            <span class="term">GD&amp;T</span> is a symbolic language (ASME&nbsp;Y14.5 / ISO&nbsp;GPS) for stating
+            those functional relationships directly on the drawing &mdash; it is design intent written in symbols
+            instead of prose. This unit is an introduction: reading the common symbols and understanding what each
+            one asks the manufacturer to control.
+        </p>
+        <p>
+            <span class="term">Why it beats plain plus/minus:</span> a &plusmn; box on four hole dimensions
+            creates a small square tolerance zone and over-constrains the part; a position callout defines a round
+            zone tied to the surfaces that actually matter, allows more good parts through, and tells inspection
+            exactly how to check it.
+        </p>
+
+        <h3>The building blocks</h3>
+        <ul>
+            <li><span class="term">Feature of size:</span> a feature with an axis or centerplane &mdash; a hole, a pin, a slot, a width &mdash; the things position and orientation controls are applied to</li>
+            <li><span class="term">Datums:</span> the surfaces or features you designate as the reference for measurement, labeled A, B, C. They are chosen to match how the part actually seats in use &mdash; the mounting face, then a locating hole, then a second hole &mdash; so the drawing is measured the way the part functions</li>
+            <li><span class="term">Datum reference frame:</span> primary, secondary, and tertiary datums together lock all six degrees of freedom, giving one repeatable origin everyone measures from</li>
+            <li><span class="term">Feature control frame:</span> the boxed callout that carries the requirement &mdash; read left to right: the geometric characteristic symbol, the tolerance value (with a diameter symbol if the zone is round), then the datums it references</li>
+            <li><span class="term">Tolerance zone:</span> the geometric space the feature must lie within &mdash; a gap between two planes, a cylinder, a band around a profile</li>
+        </ul>
+
+        <h3>The characteristic symbols, by what they control</h3>
+        <ul>
+            <li><span class="term">Form</span> (no datum needed): <span class="term">flatness</span>, <span class="term">straightness</span>, <span class="term">circularity</span>, <span class="term">cylindricity</span> &mdash; how much a surface may deviate from perfect shape</li>
+            <li><span class="term">Orientation</span> (needs a datum): <span class="term">perpendicularity</span>, <span class="term">parallelism</span>, <span class="term">angularity</span> &mdash; the feature's angle relative to a datum</li>
+            <li><span class="term">Location</span> (needs datums): <span class="term">position</span> (by far the most common &mdash; locates holes and bosses), <span class="term">concentricity</span>, <span class="term">symmetry</span></li>
+            <li><span class="term">Profile</span>: <span class="term">profile of a line</span> and <span class="term">profile of a surface</span> &mdash; a single control for the form, orientation, and location of curved or irregular shapes</li>
+            <li><span class="term">Runout</span> (needs a datum axis): <span class="term">circular</span> and <span class="term">total runout</span> &mdash; how much a rotating surface wobbles</li>
+        </ul>
+
+        <h3>Material condition modifiers</h3>
+        <p>
+            <span class="term">MMC</span> (maximum material condition, &#9410;), <span class="term">LMC</span> (&#9409;),
+            and RFS (the default). When a position tolerance is called at MMC, the part earns extra
+            <span class="term">bonus tolerance</span> as the hole moves away from its worst-case size &mdash; which
+            matches how a bolted clearance-hole joint really behaves and lets more usable parts pass.
+        </p>
+
+        <div class="standards" style="margin-top:14px;">
+            <strong>What to take from this unit:</strong> you are not expected to produce a fully GD&amp;T'd
+            drawing yet. You should be able to look at a feature control frame and say what it controls, what it
+            is measured from, and why the designer chose it &mdash; and recognize when a functional requirement
+            (parts must mate, a surface must seal, a shaft must run true) calls for a geometric control instead of
+            a plain &plusmn; dimension.
+        </div>
     </div>
 
     <div class="section">

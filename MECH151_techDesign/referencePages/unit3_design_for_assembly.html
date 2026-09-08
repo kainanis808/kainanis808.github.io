@@ -92,6 +92,44 @@
     </div>
 
     <div class="section">
+        <h2>Methods of joining</h2>
+        <p>
+            How two parts are held together is a design decision with real consequences for cost, strength,
+            serviceability, and how the product is assembled. Threaded fasteners are only one option, and often
+            not the best one. Choose the joining method deliberately, then design both parts to suit it.
+        </p>
+        <ul>
+            <li><span class="term">Threaded fasteners into tapped holes:</span> the default for metal-to-metal &mdash; strong, standard, and removable. Needs enough material for thread engagement (roughly 1.5&ndash;2&times; the screw diameter) and access for a tool.</li>
+            <li><span class="term">Heat-set threaded inserts:</span> the standard way to put a durable machine thread into a plastic or 3D-printed part. A brass insert is pushed into a molded or printed boss with a soldering iron; the melted plastic flows into its knurls and locks it. Design the boss to the insert manufacturer's hole diameter and depth, add a lead-in chamfer, and keep enough wall around it. Far more reusable than screwing directly into plastic or using self-tapping screws.</li>
+            <li><span class="term">Snap-fit joints:</span> a molded or printed feature that deflects during assembly and springs back to hold &mdash; cantilever hooks, annular (ring) snaps, and torsion snaps. No hardware, no tools, fast assembly. Design for the material's allowable strain, add lead-in angles, and decide whether it should be releasable (serviceable) or permanent (higher retention angle).</li>
+            <li><span class="term">Press / interference fits:</span> holding by friction alone from a slight size mismatch &mdash; dowel pins, bushings, bearings. Cheap and precise, but hard to take apart and sensitive to tolerance.</li>
+            <li><span class="term">Compliant mechanisms:</span> parts that get their motion or retention from the flexibility of the material itself rather than from separate hinges or springs &mdash; living hinges, flexure pivots, and one-piece clips. They reduce part count to the extreme (often to one), remove assembly entirely, and have no pin joints to wear &mdash; at the cost of limited travel and fatigue life, and needing a material that tolerates repeated flexing (PP and PE for living hinges).</li>
+            <li><span class="term">Permanent joints:</span> adhesives, solvent welding, ultrasonic welding, riveting &mdash; used where the joint never needs to come apart. Commit to these only when serviceability truly is not required.</li>
+        </ul>
+        <p>
+            The DFA trade-off: hardware is universal and serviceable but adds parts, tools, and assembly time;
+            snap-fits and compliant features add almost nothing to the parts list but must be designed carefully
+            and are harder to revise once the tooling or print is dialed in.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>Using online component repositories</h2>
+        <p>
+            You should not model a part you can download. Standard hardware, bearings, motors, extrusion,
+            pneumatics, connectors, and countless other catalog items are available as ready-made CAD models from
+            online repositories &mdash; and using them is normal professional practice, not a shortcut.
+        </p>
+        <ul>
+            <li><span class="term">Where the models come from:</span> <span class="term">McMaster-Carr</span> (download a STEP or native model straight from the product page of almost any item it sells), manufacturer sites, and aggregators such as TraceParts, GrabCAD, and 3D ContentCentral</li>
+            <li><span class="term">Why it matters for DFA:</span> a downloaded model is the <em>real</em> catalog part &mdash; correct dimensions, correct thread, a real part number you can put on the BOM and actually order. Your assembly is then built around hardware that exists, at the price and lead time listed.</li>
+            <li><span class="term">It reinforces "design with standard parts":</span> if the exact fastener, bracket, or bearing is one click away, there is little reason to invent a custom one &mdash; which is the DFA principle of using standard, off-the-shelf components</li>
+            <li><span class="term">Bring them in cleanly:</span> downloaded models arrive as imported (dumb) solids with no feature history &mdash; keep them in a dedicated library folder, do not edit their geometry, and mate to them like any other component</li>
+            <li><span class="term">Check before you trust:</span> confirm units and scale on import, simplify or use a "simplified" configuration if the model is too heavy, and verify the part number matches what you intend to buy</li>
+        </ul>
+    </div>
+
+    <div class="section">
         <h2>Assembly drawings, exploded views, and BOMs</h2>
         <p>
             An assembly drawing shows how the parts go together, not how to make each one. Its job is to communicate
@@ -113,6 +151,7 @@
         </p>
         <ul>
             <li><span class="term">Minimize part count:</span> a part is a candidate for elimination unless it moves relative to its neighbors, must be a different material, or must be removable for service</li>
+            <li><span class="term">Prefer off-the-shelf parts:</span> a cataloged component &mdash; with a downloadable model and a real part number &mdash; is almost always cheaper, faster, and more reliable than a custom part you design and fabricate</li>
             <li><span class="term">Design for easy insertion:</span> chamfers and lead-ins, self-locating features, and parts that can't be installed backwards</li>
             <li><span class="term">Avoid reorientation:</span> assemble from one direction, ideally top-down, so the workpiece isn't flipped</li>
             <li><span class="term">Standardize fasteners:</span> fewer unique sizes means fewer tools and fewer mistakes</li>

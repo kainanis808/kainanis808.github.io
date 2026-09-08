@@ -45,17 +45,18 @@
 <header>
     <span class="unit-tag">Foundations &mdash; Before Unit 1</span>
     <h1>Design Fundamentals</h1>
-    <p class="subtitle">Design intent, and how a design is organized</p>
+    <p class="subtitle">Defining the problem, design intent, and how a design is organized</p>
 </header>
 <main>
     <p class="intro">
         Before the sketching, projection, and modeling of Unit 1, it helps to step back and ask what a
         CAD model is <em>for</em>. A model is not just a picture of a finished shape &mdash; it is a record of
         decisions: what the part has to do, which dimensions matter, and how the pieces of a design depend on
-        one another. This page covers three ideas that run through every later unit: the <span class="term">cyclic
-        design process</span> (why the first version is never the final one), <span class="term">design
-        intent</span> (the reasoning a model should capture), and <span class="term">design organization</span>
-        (top-down vs. bottom-up, and how to structure a design so it stays editable as it grows).
+        one another. This page covers the ideas that run through every later unit: how to <span class="term">define
+        a design problem</span> before solving it, the <span class="term">cyclic design process</span> (why the
+        first version is never the final one), <span class="term">design intent</span> (the reasoning a model
+        should capture), and <span class="term">design organization</span> (top-down vs. bottom-up, and how to
+        structure a design so it stays editable as it grows).
     </p>
 
     <div class="goal">
@@ -98,6 +99,82 @@
             If you assume you <em>will</em> revise it, you build for iteration: clean sketches, captured design
             intent, and a readable feature tree. That is what the rest of this page is about.
         </div>
+    </div>
+
+    <div class="section">
+        <h2>Define the problem before you design</h2>
+        <p>
+            The first step of the cycle &mdash; <span class="term">Define</span> &mdash; is the one students skip
+            most often, and it is the one that wastes the most time when skipped. Before any geometry exists you
+            should be able to write down, in a page or less, what the design has to accomplish and how you will
+            know whether it did. A vague goal ("make a good phone stand") cannot be designed toward and cannot be
+            graded; a well-defined one can.
+        </p>
+
+        <h3>Write goals that are SMART</h3>
+        <p>
+            A useful design goal is <span class="term">SMART</span>: <span class="term">Specific</span> (says
+            exactly what, for whom), <span class="term">Measurable</span> (has a number you can check),
+            <span class="term">Achievable</span> (possible with the time, tools, and skills you have),
+            <span class="term">Relevant</span> (actually serves the need), and <span class="term">Time-bound</span>
+            (due by a defined point). "Hold a phone at a comfortable viewing angle" is a direction; "hold a
+            600&nbsp;g phone at 55&ndash;70&deg; without tipping, printable on one bed in under 4&nbsp;hours, done
+            by Week&nbsp;12" is something you can design to and test against.
+        </p>
+
+        <h3>Requirements vs. objectives vs. constraints</h3>
+        <p>
+            These three get lumped together as "the spec," but they do different jobs and you handle each
+            differently.
+        </p>
+        <div class="compare">
+            <div>
+                <h3>Requirements</h3>
+                <p>What the design <em>must</em> do &mdash; pass/fail, non-negotiable functions.</p>
+                <ul>
+                    <li>"Supports 5&nbsp;kg without permanent deflection"</li>
+                    <li>Either met or not; a design that misses one is not a candidate</li>
+                    <li>Verified by test or inspection</li>
+                </ul>
+            </div>
+            <div>
+                <h3>Objectives</h3>
+                <p>What you are trying to <em>optimize</em> &mdash; directions of "better," used to choose between options that all meet the requirements.</p>
+                <ul>
+                    <li>"As light as possible," "minimize cost," "fewest parts"</li>
+                    <li>Not pass/fail &mdash; compared by degree</li>
+                    <li>Often trade against each other</li>
+                </ul>
+            </div>
+            <div>
+                <h3>Constraints</h3>
+                <p>Fixed limits on the <em>solution space</em> &mdash; boundaries you design inside, set by resources or rules.</p>
+                <ul>
+                    <li>"Fits a 150&nbsp;mm cube," "$25 material budget," "PLA only," "due Week&nbsp;12"</li>
+                    <li>Not about function &mdash; about what is allowed</li>
+                    <li>Violating one disqualifies the design</li>
+                </ul>
+            </div>
+        </div>
+        <div class="note">
+            <strong>Why the distinction matters:</strong> requirements and constraints filter designs to the
+            ones that are <em>acceptable</em>; objectives rank the acceptable ones to find the <em>best</em>. Mix
+            them up and you either reject a good design for missing a "nice to have," or ship one that fails a
+            real must-have.
+        </div>
+
+        <h3>Decide how you will evaluate success</h3>
+        <p>
+            Define the scorecard <em>before</em> you start designing, so the choice between concepts is made on
+            evidence instead of attachment to whatever you drew first.
+        </p>
+        <ul>
+            <li><span class="term">Turn objectives into criteria:</span> each objective becomes a measurable metric &mdash; mass in grams, cost in dollars, part count, assembly time, print time</li>
+            <li><span class="term">Weight the criteria:</span> not every objective matters equally; assign weights that reflect the need</li>
+            <li><span class="term">Score concepts against the criteria:</span> a <span class="term">decision matrix</span> (or Pugh chart, scoring each option relative to a baseline) makes the comparison explicit and repeatable</li>
+            <li><span class="term">Check requirements and constraints first:</span> screen those out as pass/fail before scoring &mdash; only rank designs that are already acceptable</li>
+            <li><span class="term">Re-use the scorecard each iteration:</span> the same criteria that pick the concept also tell you, after a prototype, whether the revision actually improved things</li>
+        </ul>
     </div>
 
     <div class="section">
@@ -203,7 +280,9 @@
     </div>
 
     <div class="produce">
-        <strong>Carry this into the units:</strong> in Unit 1 every sketch you constrain is a design-intent
+        <strong>Carry this into the units:</strong> every portfolio module has stated requirements and
+        constraints &mdash; read them as the pass/fail bar, and judge your own work against them the way this
+        page describes; in Unit 1 every sketch you constrain is a design-intent
         decision; in Unit 3 the choice between building parts first or starting from the assembly is the
         top-down / bottom-up choice, and the design-review-and-revision step is one turn of the cycle; and in
         Unit 4 your first prototype will surface something the model missed &mdash; a robust feature tree is what
