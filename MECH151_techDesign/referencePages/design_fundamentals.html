@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Fundamentals</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #1a1a1a; }
+        header { text-align: center; padding: 34px 20px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; }
+        .unit-tag { display: inline-block; padding: 3px 12px; border-radius: 5px; font-size: 0.78rem; font-weight: 700;
+            letter-spacing: 0.06em; text-transform: uppercase; background: #dbeafe; color: #1d4ed8; margin-bottom: 12px; }
+        h1 { font-size: 2.1rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 28px; font-size: 1rem; }
+        .goal { background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 0 8px 8px 0; padding: 14px 18px;
+            margin-bottom: 28px; font-size: 0.95rem; color: #1e3a5f; line-height: 1.6; }
+        .section { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px 24px; margin-bottom: 22px; }
+        .section h2 { font-size: 1.25rem; color: #1e3a5f; margin-bottom: 10px; }
+        .section h3 { font-size: 1rem; color: #1e3a5f; margin: 14px 0 6px; }
+        .section p { color: #4b5563; line-height: 1.65; margin-bottom: 12px; font-size: 0.95rem; }
+        .section ul { padding-left: 20px; color: #4b5563; font-size: 0.93rem; line-height: 1.7; margin-bottom: 6px; }
+        .section .term { font-weight: 700; color: #1e3a5f; }
+        .compare { display: flex; gap: 16px; flex-wrap: wrap; margin: 6px 0 4px; }
+        .compare > div { flex: 1 1 240px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; }
+        .compare h3 { margin-top: 0; }
+        .note { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 12px 16px;
+            margin: 14px 0 4px; font-size: 0.9rem; color: #713f12; line-height: 1.6; }
+        .produce { background: #f0fdf4; border-left: 4px solid #16a34a; border-radius: 0 8px 8px 0; padding: 14px 18px;
+            margin: 24px 0 10px; font-size: 0.95rem; color: #374151; line-height: 1.7; }
+        .produce strong { color: #15803d; }
+        .back-link { display: block; text-align: center; margin-top: 28px; color: #0284c7; text-decoration: none; font-size: 0.95rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <span class="unit-tag">Foundations &mdash; Before Unit 1</span>
+    <h1>Design Fundamentals</h1>
+    <p class="subtitle">Design intent, and how a design is organized</p>
+</header>
+<main>
+    <p class="intro">
+        Before the sketching, projection, and modeling of Unit 1, it helps to step back and ask what a
+        CAD model is <em>for</em>. A model is not just a picture of a finished shape &mdash; it is a record of
+        decisions: what the part has to do, which dimensions matter, and how the pieces of a design depend on
+        one another. This page covers two ideas that run through every later unit: <span class="term">design
+        intent</span> (the reasoning a model should capture) and <span class="term">design organization</span>
+        (top-down vs. bottom-up, and how to structure a design so it stays editable as it grows).
+    </p>
+
+    <div class="goal">
+        <strong>Goal:</strong> Understand why models are built the way they are &mdash; so that the sketches,
+        features, and assemblies you create in Units 1&ndash;4 are deliberate and robust, not just visually correct.
+    </div>
+
+    <div class="section">
+        <h2>The design process in brief</h2>
+        <p>
+            Technical design moves from a need to a working prototype in rough stages, and it loops back often:
+        </p>
+        <ul>
+            <li><span class="term">Requirements:</span> what the part or product must do, fit, withstand, and cost &mdash; stated before any geometry exists</li>
+            <li><span class="term">Concept:</span> rough options for form and arrangement, chosen against the requirements</li>
+            <li><span class="term">Detail design:</span> the parametric models and drawings that pin down every dimension and tolerance</li>
+            <li><span class="term">Prototype and test:</span> build it, measure it, find what the model missed</li>
+            <li><span class="term">Iterate:</span> revise the model and repeat &mdash; parametric CAD exists to make this cheap</li>
+        </ul>
+        <p>
+            CAD sits in the detail-design stage, but the choices you make there decide how painful iteration will be.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>Design intent</h2>
+        <p>
+            <span class="term">Design intent</span> is the reasoning behind a model &mdash; what you expect to
+            stay true when a dimension changes. A block with a hole "centered" on its face could be modeled two
+            ways: with the hole dimensioned from one edge, or with the hole tied to the center by a symmetric
+            relation. Both look identical. But widen the block, and only the second one keeps the hole centered.
+            The second model captures the intent; the first only captured a position.
+        </p>
+        <h3>How intent is captured in a parametric model</h3>
+        <ul>
+            <li><span class="term">Sketch relations:</span> symmetric, equal, concentric, collinear &mdash; these say <em>why</em> geometry is where it is, so it stays right when dimensions change</li>
+            <li><span class="term">Which dimensions you choose:</span> dimension from the reference that actually matters (a mounting face, a mating edge), not from whatever is convenient</li>
+            <li><span class="term">Feature order and references:</span> build later features off stable geometry, not off faces that may move or disappear in an edit</li>
+            <li><span class="term">Equations and linked values:</span> when two dimensions must always match or follow a rule, drive one from the other instead of typing both</li>
+        </ul>
+        <h3>Why it matters</h3>
+        <ul>
+            <li><span class="term">Editability:</span> a well-built model updates the way you intend; a poorly built one distorts or throws rebuild errors</li>
+            <li><span class="term">Communication:</span> the next person (or you, months later) can read the feature tree and see the design logic</li>
+            <li><span class="term">Downstream reuse:</span> assemblies, drawings, and manufacturing files all inherit the model's structure</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Organizing a design: top-down vs. bottom-up</h2>
+        <p>
+            When a design has more than one part, you have to decide where the controlling dimensions live.
+            There are two approaches, and most real projects mix them.
+        </p>
+
+        <div class="compare">
+            <div>
+                <h3>Bottom-up</h3>
+                <p>Design each part on its own, fully define it, then bring the finished parts together into an assembly and position them with mates.</p>
+                <ul>
+                    <li>Parts are independent &mdash; editing one does not ripple into others</li>
+                    <li>Simple to manage; easy to reuse parts across projects</li>
+                    <li>Good for well-understood parts and off-the-shelf or standard hardware</li>
+                    <li>Weak when many parts must share dimensions &mdash; you end up updating the same number in several files</li>
+                </ul>
+            </div>
+            <div>
+                <h3>Top-down</h3>
+                <p>Start from the assembly. Define the shared geometry once &mdash; often in a layout sketch or a skeleton part &mdash; and derive individual part shapes from those references.</p>
+                <ul>
+                    <li>Shared dimensions live in one place; a change propagates to every part that references it</li>
+                    <li>Keeps mating parts fitting together as the design evolves</li>
+                    <li>Good for new designs where the interfaces are still moving</li>
+                    <li>More setup, and creates dependencies &mdash; an unmanaged web of external references gets fragile</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>Tools for organizing a top-down design</h3>
+        <ul>
+            <li><span class="term">Layout sketch:</span> a single sketch that fixes the key sizes, spacings, and interfaces of the whole assembly before individual parts are modeled</li>
+            <li><span class="term">Skeleton / master model:</span> a non-manufactured part holding shared reference geometry that other parts point to</li>
+            <li><span class="term">In-context references:</span> shaping one part directly against another in the assembly &mdash; powerful, but track which parts depend on which, and rebuild in the right order</li>
+        </ul>
+
+        <div class="note">
+            <strong>Rule of thumb:</strong> use the simplest structure that captures the intent. Reach for
+            top-down only where parts genuinely must share dimensions; keep everything else bottom-up and
+            independent. Every dependency you add is something that can break later.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Practices that keep a design robust</h2>
+        <ul>
+            <li><span class="term">Fully define every sketch</span> &mdash; an under-defined sketch can drift on an unrelated edit</li>
+            <li><span class="term">Reference stable geometry</span> &mdash; the origin and default planes never move; a filleted edge might vanish</li>
+            <li><span class="term">Keep sketches simple</span> &mdash; one idea per feature; complexity goes into the feature tree, not into one crowded sketch</li>
+            <li><span class="term">Name and organize features</span> &mdash; a tree of "Extrude7, Cut12" tells the next person nothing</li>
+            <li><span class="term">Minimize dependency chains</span> &mdash; the fewer things a feature relies on, the fewer ways it breaks</li>
+            <li><span class="term">Model the design, not just the shape</span> &mdash; if a rule governs the part ("wall is always 2&nbsp;mm", "these holes match the bolt circle"), build that rule in</li>
+        </ul>
+    </div>
+
+    <div class="produce">
+        <strong>Carry this into the units:</strong> in Unit 1 every sketch you constrain is a design-intent
+        decision; in Unit 3 the choice between building parts first or starting from the assembly is the
+        top-down / bottom-up choice; and in Units 3&ndash;4 a robust feature tree is what lets you revise a
+        design after a review or a failed prototype without rebuilding it from scratch.
+    </div>
+
+    <a class="back-link" href="index.html">&larr; Back to Unit Reference Pages</a>
+</main>
+</body>
+</html>
