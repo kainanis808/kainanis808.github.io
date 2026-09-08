@@ -78,6 +78,28 @@
     </div>
 
     <div class="section">
+        <h2>Geometry of shapes: 2D construction</h2>
+        <p>
+            Before a shape is a sketch, it is a piece of plane geometry &mdash; a set of points, lines, and curves
+            in defined relationships. Knowing those relationships lets you build a shape from its geometric
+            conditions instead of nudging entities until they look right.
+        </p>
+        <ul>
+            <li><span class="term">Basic elements:</span> point, line (and line segment), circle, circular arc, ellipse, and free-form curve (spline)</li>
+            <li><span class="term">Circle and arc geometry:</span> defined by center and radius/diameter; an arc adds a start and end angle. A <span class="term">chord</span> connects two points on a circle; a <span class="term">central angle</span> subtends an arc</li>
+            <li><span class="term">Polygons:</span> regular polygons are defined by a center and either an <span class="term">inscribed</span> circle (flat-to-flat, "across flats") or a <span class="term">circumscribed</span> circle (point-to-point, "across corners") &mdash; which one matters for hex features and bolt heads</li>
+            <li><span class="term">Tangency:</span> a line or arc is tangent to a circle when it touches at exactly one point and is perpendicular to the radius there. Tangent arc-to-arc and line-to-arc transitions are how rounded shapes stay smooth</li>
+            <li><span class="term">Fillets and chamfers in a sketch:</span> a fillet is a tangent arc that replaces a sharp corner; a chamfer is a straight cut across it</li>
+            <li><span class="term">Constructions:</span> midpoint, perpendicular bisector, angle bisector, and offset (a parallel copy at a fixed distance) &mdash; the classic geometric constructions, now done by relations rather than compass and straightedge</li>
+            <li><span class="term">Symmetry and centerlines:</span> building half a shape about a construction line and mirroring it guarantees the two halves stay identical</li>
+        </ul>
+        <p>
+            The relations listed in the next section (tangent, concentric, equal, symmetric&hellip;) are the
+            vocabulary for stating these geometric conditions so the CAD system holds them for you.
+        </p>
+    </div>
+
+    <div class="section">
         <h2>Sketch constraints and relations</h2>
         <p>
             Constraints lock down where sketch geometry can move. There are two kinds: <span class="term">geometric
@@ -152,6 +174,27 @@
     </div>
 
     <div class="section">
+        <h2>Geometry of shapes: building 3D solids</h2>
+        <p>
+            A 3D shape is either a <span class="term">primitive</span> volume or a combination of them. Every
+            solid model is really a running total: start with a volume, add more, and cut some away.
+        </p>
+        <ul>
+            <li><span class="term">Primitives:</span> the block (rectangular prism), cylinder, sphere, cone, and torus &mdash; the simple volumes more complex parts are reducible to</li>
+            <li><span class="term">Profile-based features</span> turn a 2D sketch into a volume by a rule of motion:
+                <ul>
+                    <li><span class="term">Extrude</span> &mdash; push a profile straight along an axis (a prism)</li>
+                    <li><span class="term">Revolve</span> &mdash; spin a profile around an axis (anything round: shafts, bottles, wheels)</li>
+                    <li><span class="term">Sweep</span> &mdash; run a profile along a path (tubing, handles, trim)</li>
+                    <li><span class="term">Loft</span> &mdash; blend between two or more profiles (transitions, blended shapes)</li>
+                </ul>
+            </li>
+            <li><span class="term">Boolean operations</span> combine volumes: <span class="term">union / add</span> (boss), <span class="term">subtract / cut</span> (pocket, hole), and <span class="term">intersect</span> (keep only the shared volume)</li>
+            <li><span class="term">Applied (dress-up) features:</span> fillet, chamfer, shell, draft, and pattern &mdash; operations on an existing solid rather than a new sketched volume</li>
+        </ul>
+    </div>
+
+    <div class="section">
         <h2>Introduction to parametric part modeling</h2>
         <p>
             Parametric modeling builds a solid as a <span class="term">history of features</span>, each driven by
@@ -173,6 +216,21 @@
             reordering or suppressing features, fixing rebuild errors, and recognizing when a model's design intent
             was set up poorly. The skill being built is reading a feature tree and predicting what an edit will do.
         </p>
+    </div>
+
+    <div class="section">
+        <h2>Geometry of shapes: measurable properties</h2>
+        <p>
+            Every shape carries numbers that follow from its geometry, and CAD computes them from the model
+            directly. These are the values you check a design against &mdash; the measurable criteria from the
+            <a href="design_fundamentals.html">Design Fundamentals</a> page.
+        </p>
+        <ul>
+            <li><span class="term">Of a 2D profile:</span> area, perimeter, <span class="term">centroid</span> (the geometric center), <span class="term">second moment of area</span> (area moment of inertia, <em>I</em> &mdash; resistance to bending), and <span class="term">section modulus</span> (<em>I</em> divided by distance to the extreme fiber &mdash; used directly in bending-stress checks)</li>
+            <li><span class="term">Of a 3D solid:</span> volume, surface area, and &mdash; once a material is assigned &mdash; <span class="term">mass</span> (volume &times; density), <span class="term">center of mass / center of gravity</span>, and the <span class="term">mass moment of inertia</span> (resistance to angular acceleration)</li>
+            <li><span class="term">Why they matter:</span> mass drives cost and shipping and is often a hard requirement; the center of gravity decides whether a part balances, tips, or sits where you need it; area and mass moments of inertia decide how stiff a section is and how it responds to load and vibration</li>
+            <li><span class="term">Garbage in, garbage out:</span> the numbers are only right if the material density is set correctly and the model is a single watertight solid &mdash; an open or multi-body model gives a meaningless mass</li>
+        </ul>
     </div>
 
     <div class="produce">
