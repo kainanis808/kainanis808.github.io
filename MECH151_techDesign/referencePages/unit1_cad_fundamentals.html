@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 1 — CAD Fundamentals</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #1a1a1a; }
+        header { text-align: center; padding: 34px 20px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; }
+        .unit-tag { display: inline-block; padding: 3px 12px; border-radius: 5px; font-size: 0.78rem; font-weight: 700;
+            letter-spacing: 0.06em; text-transform: uppercase; background: #dbeafe; color: #1d4ed8; margin-bottom: 12px; }
+        h1 { font-size: 2.1rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 28px; font-size: 1rem; }
+        .goal { background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 0 8px 8px 0; padding: 14px 18px;
+            margin-bottom: 28px; font-size: 0.95rem; color: #1e3a5f; line-height: 1.6; }
+        .section { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px 24px; margin-bottom: 22px; }
+        .section h2 { font-size: 1.25rem; color: #1e3a5f; margin-bottom: 10px; }
+        .section p { color: #4b5563; line-height: 1.65; margin-bottom: 12px; font-size: 0.95rem; }
+        .section ul { padding-left: 20px; color: #4b5563; font-size: 0.93rem; line-height: 1.7; margin-bottom: 6px; }
+        .section .term { font-weight: 700; color: #1e3a5f; }
+        .produce { background: #f0fdf4; border-left: 4px solid #16a34a; border-radius: 0 8px 8px 0; padding: 14px 18px;
+            margin: 24px 0 10px; font-size: 0.95rem; color: #374151; line-height: 1.7; }
+        .produce strong { color: #15803d; }
+        .assess { font-size: 0.9rem; color: #6b7280; font-style: italic; margin-bottom: 24px; }
+        .back-link { display: block; text-align: center; margin-top: 28px; color: #0284c7; text-decoration: none; font-size: 0.95rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <span class="unit-tag">Unit 1 &mdash; Weeks 4&ndash;7</span>
+    <h1>CAD Fundamentals (Basic)</h1>
+    <p class="subtitle">Sketching, views, and the first parametric model</p>
+</header>
+<main>
+    <p class="intro">
+        Everything you build later in this course &mdash; detailed drawings, assemblies, manufacturing files &mdash;
+        rests on the skills in this unit. A 3D model is only as good as the sketch it grows from, and a drawing
+        is only useful if it follows the projection and dimensioning conventions everyone else reads it by.
+        Unit 1 covers how to control a sketch, how to project a part into standard views, and how to turn a
+        sketch into a parametric solid that updates when you change it.
+    </p>
+
+    <div class="goal">
+        <strong>Goal:</strong> Build the drawing and modeling foundation every later unit depends on &mdash; laying out
+        a controlled sketch, projecting a part into standard views, and creating a parametric part model.
+    </div>
+
+    <div class="section">
+        <h2>Sketching fundamentals</h2>
+        <p>
+            A sketch is a 2D profile drawn on a plane or flat face &mdash; it becomes the input to a 3D feature
+            such as an extrude or a revolve. Good sketches are simple: draw only the geometry the feature needs,
+            keep profiles closed, and put complexity into separate features rather than one crowded sketch.
+        </p>
+        <ul>
+            <li><span class="term">Sketch entities:</span> lines, arcs, circles, rectangles, slots, splines, and points</li>
+            <li><span class="term">Reference geometry:</span> the origin, the three default planes (front, top, right), and construction lines that guide geometry without becoming part of the profile</li>
+            <li><span class="term">Closed vs. open profiles:</span> a closed loop can be extruded into a solid; an open profile is used for thin features, surfaces, or paths</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Sketch constraints and relations</h2>
+        <p>
+            Constraints lock down where sketch geometry can move. There are two kinds: <span class="term">geometric
+            relations</span> (coincident, collinear, parallel, perpendicular, tangent, concentric, equal, horizontal,
+            vertical, symmetric) and <span class="term">dimensions</span> (linear, radial, diameter, angular).
+            Together they remove <span class="term">degrees of freedom</span> until the sketch is fully defined.
+        </p>
+        <ul>
+            <li><span class="term">Under-defined:</span> geometry can still be dragged &mdash; the sketch is not fully controlled</li>
+            <li><span class="term">Fully defined:</span> every entity is fixed by relations and dimensions; this is the target state before finishing a sketch</li>
+            <li><span class="term">Over-defined:</span> conflicting or redundant constraints &mdash; must be resolved, not ignored</li>
+        </ul>
+        <p>
+            Adding relations before dimensions keeps a sketch stable: relations capture the design intent
+            (this hole stays centered, these edges stay equal) so that changing one dimension updates the model
+            predictably instead of distorting it.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>Orthographic projection and multiview theory</h2>
+        <p>
+            Orthographic projection flattens a 3D object into 2D views by projecting each face straight onto a
+            viewing plane. Imagine the part inside a glass box; each face of the box catches one view. Unfolding
+            the box gives the standard arrangement of up to six principal views, though most parts need only
+            three: <span class="term">front, top, and right side</span>.
+        </p>
+        <ul>
+            <li><span class="term">Third-angle projection:</span> the U.S. standard &mdash; the top view sits above the front view, the right-side view sits to its right</li>
+            <li><span class="term">Line conventions:</span> visible edges as solid lines, hidden edges as dashed lines, and centerlines for holes and axes of symmetry</li>
+            <li><span class="term">View selection:</span> choose the front view that shows the most shape and the fewest hidden lines, then add only the views needed to describe the part fully</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Descriptive geometry basics</h2>
+        <p>
+            Descriptive geometry is the theory behind projecting views: how points, lines, and planes appear from
+            different directions, and how to construct a view that shows a feature's true size and shape. It is the
+            groundwork for the auxiliary views covered in Unit 2.
+        </p>
+        <ul>
+            <li><span class="term">True length of a line:</span> seen only when the line is parallel to the viewing plane</li>
+            <li><span class="term">Point view of a line / edge view of a plane:</span> seen when looking along the line or plane</li>
+            <li><span class="term">True shape of a plane:</span> seen only in a view projected perpendicular to that plane</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Primary and secondary views</h2>
+        <p>
+            Views are projected in sequence. A <span class="term">primary view</span> is projected directly from a
+            principal view (front, top, or side). A <span class="term">secondary view</span> is projected from a
+            primary view to reveal a feature that is still not shown true-size &mdash; for example, an inclined face
+            that is skewed in every principal view. Each step rotates the line of sight until the feature of
+            interest is seen straight on.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>Basic dimensioning standards</h2>
+        <p>
+            Dimensions tell the reader how big the part is and how precisely each feature must be made. They follow
+            accepted conventions (ASME Y14.5 in the U.S.) so that any shop reads them the same way.
+        </p>
+        <ul>
+            <li><span class="term">Anatomy:</span> extension lines, dimension lines, arrowheads, and the dimension value &mdash; kept off the part outline and out of the view</li>
+            <li><span class="term">Placement:</span> dimension to visible outlines, not hidden lines; group related dimensions; keep the smallest dimensions closest to the view</li>
+            <li><span class="term">Do not over-dimension:</span> each feature is located once &mdash; a duplicate or redundant dimension creates conflict on the shop floor</li>
+            <li><span class="term">Feature callouts:</span> diameter, radius, counterbore, countersink, and depth symbols for holes</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Introduction to parametric part modeling</h2>
+        <p>
+            Parametric modeling builds a solid as a <span class="term">history of features</span>, each driven by
+            dimensions and relations. Change a dimension and the whole model rebuilds to match. This is what makes
+            CAD editable rather than something you redraw from scratch.
+        </p>
+        <ul>
+            <li><span class="term">Base feature:</span> the first solid, usually an extrude or revolve of a fully defined sketch</li>
+            <li><span class="term">Added features:</span> extrude, cut, revolve, fillet, chamfer, hole, shell, pattern &mdash; each added in order on the feature tree</li>
+            <li><span class="term">Design intent:</span> building features and relations so the model updates the way you intend when a dimension changes</li>
+            <li><span class="term">Sketch planes and references:</span> choosing where each feature's sketch lives so edits stay stable</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Parametric modeling practice</h2>
+        <p>
+            Practice focuses on editing an existing model without breaking it: changing driving dimensions,
+            reordering or suppressing features, fixing rebuild errors, and recognizing when a model's design intent
+            was set up poorly. The skill being built is reading a feature tree and predicting what an edit will do.
+        </p>
+    </div>
+
+    <div class="produce">
+        <strong>What you'll produce:</strong> a set of fully defined sketches, a multiview orthographic drawing
+        with correct line types and dimensions, and your first fully parametric part model with a clean,
+        editable feature tree.
+    </div>
+    <p class="assess">Assessed by the Unit 1 Quiz (Week 7) and the corresponding portfolio modules.</p>
+
+    <a class="back-link" href="index.html">&larr; Back to Unit Reference Pages</a>
+</main>
+</body>
+</html>

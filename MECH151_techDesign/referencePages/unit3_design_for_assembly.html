@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 3 — Design for Assembly</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #1a1a1a; }
+        header { text-align: center; padding: 34px 20px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; }
+        .unit-tag { display: inline-block; padding: 3px 12px; border-radius: 5px; font-size: 0.78rem; font-weight: 700;
+            letter-spacing: 0.06em; text-transform: uppercase; background: #dcfce7; color: #15803d; margin-bottom: 12px; }
+        h1 { font-size: 2.1rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 28px; font-size: 1rem; }
+        .goal { background: #f0fdf4; border-left: 4px solid #22c55e; border-radius: 0 8px 8px 0; padding: 14px 18px;
+            margin-bottom: 28px; font-size: 0.95rem; color: #14532d; line-height: 1.6; }
+        .section { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px 24px; margin-bottom: 22px; }
+        .section h2 { font-size: 1.25rem; color: #1e3a5f; margin-bottom: 10px; }
+        .section p { color: #4b5563; line-height: 1.65; margin-bottom: 12px; font-size: 0.95rem; }
+        .section ul { padding-left: 20px; color: #4b5563; font-size: 0.93rem; line-height: 1.7; margin-bottom: 6px; }
+        .section .term { font-weight: 700; color: #1e3a5f; }
+        .produce { background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 0 8px 8px 0; padding: 14px 18px;
+            margin: 24px 0 10px; font-size: 0.95rem; color: #374151; line-height: 1.7; }
+        .produce strong { color: #1d4ed8; }
+        .assess { font-size: 0.9rem; color: #6b7280; font-style: italic; margin-bottom: 24px; }
+        .back-link { display: block; text-align: center; margin-top: 28px; color: #0284c7; text-decoration: none; font-size: 0.95rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <span class="unit-tag">Unit 3 &mdash; Weeks 11&ndash;13</span>
+    <h1>Design for Assembly (DFA)</h1>
+    <p class="subtitle">Building and documenting assemblies</p>
+</header>
+<main>
+    <p class="intro">
+        Most products are more than one part. This unit is about putting part models together into a working
+        assembly, documenting that assembly the way a manufacturer expects, and &mdash; just as important &mdash;
+        applying the design principles that decide whether the finished product is quick or painful to put together.
+        A design that models fine can still be a bad design if it takes twice as long to assemble as it needs to.
+    </p>
+
+    <div class="goal">
+        <strong>Goal:</strong> Combine part models into working assemblies, document them the way a manufacturer
+        expects, and apply the design principles that make an assembly easier and cheaper to put together.
+    </div>
+
+    <div class="section">
+        <h2>Assembly modeling with mates and constraints</h2>
+        <p>
+            An assembly positions components relative to one another using <span class="term">mates</span>
+            (also called constraints). Each mate removes degrees of freedom until a part is either fully located
+            or deliberately left free to move.
+        </p>
+        <ul>
+            <li><span class="term">Common mates:</span> coincident, concentric, parallel, perpendicular, distance, angle, and tangent</li>
+            <li><span class="term">First component:</span> the first part placed is fixed and becomes the ground the rest is built against</li>
+            <li><span class="term">Degrees of freedom:</span> a free rigid body has six; mates remove them one axis at a time</li>
+            <li><span class="term">Motion:</span> leaving rotational or linear freedom on purpose so a mechanism can be moved and checked</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Building assemblies from part models</h2>
+        <p>
+            The standard workflow is <span class="term">bottom-up</span>: model each part on its own, then bring the
+            finished parts into an assembly and mate them. <span class="term">Top-down</span> techniques &mdash;
+            driving part geometry from the assembly &mdash; are introduced as well.
+        </p>
+        <ul>
+            <li><span class="term">Sub-assemblies:</span> grouping components that ship or install as a unit, keeping the top-level tree manageable</li>
+            <li><span class="term">Component patterns and mirrors:</span> reusing repeated parts instead of placing each one by hand</li>
+            <li><span class="term">Managing references:</span> keeping file links intact so the assembly updates when a part changes</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Applying fasteners and threads within assemblies</h2>
+        <p>
+            Hardware is added from a standard library rather than modeled from scratch. This keeps every bolt,
+            nut, and washer consistent and correctly sized.
+        </p>
+        <ul>
+            <li><span class="term">Library hardware:</span> pulling standard fasteners from a parts library (Toolbox or equivalent)</li>
+            <li><span class="term">Hole alignment:</span> mating fasteners to holes and using hole series / hole wizard features so clearance, tap, and counterbore holes propagate through the stack</li>
+            <li><span class="term">Reusable components:</span> configuring one fastener for multiple lengths and sizes</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Assembly drawings, exploded views, and BOMs</h2>
+        <p>
+            An assembly drawing shows how the parts go together, not how to make each one. Its job is to communicate
+            sequence, orientation, and what hardware goes where.
+        </p>
+        <ul>
+            <li><span class="term">Exploded view:</span> components pulled apart along assembly paths, with explode lines showing where each goes</li>
+            <li><span class="term">Balloons:</span> numbered callouts keyed to the parts list</li>
+            <li><span class="term">Bill of materials (BOM):</span> item number, part number, description, and quantity &mdash; generated from and linked to the assembly</li>
+            <li><span class="term">Assembly vs. installation drawings:</span> what belongs on each and the level of detail expected</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>DFA design principles</h2>
+        <p>
+            Design for Assembly is a set of rules for reducing the time, cost, and error rate of putting a product
+            together. The biggest lever is part count.
+        </p>
+        <ul>
+            <li><span class="term">Minimize part count:</span> a part is a candidate for elimination unless it moves relative to its neighbors, must be a different material, or must be removable for service</li>
+            <li><span class="term">Design for easy insertion:</span> chamfers and lead-ins, self-locating features, and parts that can't be installed backwards</li>
+            <li><span class="term">Avoid reorientation:</span> assemble from one direction, ideally top-down, so the workpiece isn't flipped</li>
+            <li><span class="term">Standardize fasteners:</span> fewer unique sizes means fewer tools and fewer mistakes</li>
+            <li><span class="term">Symmetry:</span> make parts either fully symmetric so orientation doesn't matter, or clearly asymmetric so the correct orientation is obvious</li>
+            <li><span class="term">Tolerance stack-up:</span> checking that the accumulated tolerances of mating parts still allow assembly and function</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Design review and iteration</h2>
+        <p>
+            The unit ends with a workshop: present an assembly, take feedback against the DFA principles above, and
+            produce a revised version. The deliverable is not just the new model but a clear record of what changed
+            and why.
+        </p>
+    </div>
+
+    <div class="produce">
+        <strong>What you'll produce:</strong> a multi-part assembly model with correct mates, an exploded assembly
+        drawing with balloons and a linked BOM, and a documented design revision showing a measurable DFA
+        improvement.
+    </div>
+    <p class="assess">Assessed by the Unit 3 Quiz (Week 13) and the corresponding portfolio modules.</p>
+
+    <a class="back-link" href="index.html">&larr; Back to Unit Reference Pages</a>
+</main>
+</body>
+</html>

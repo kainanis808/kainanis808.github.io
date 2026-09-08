@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 2 — CAD Advanced</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #1a1a1a; }
+        header { text-align: center; padding: 34px 20px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; }
+        .unit-tag { display: inline-block; padding: 3px 12px; border-radius: 5px; font-size: 0.78rem; font-weight: 700;
+            letter-spacing: 0.06em; text-transform: uppercase; background: #ede9fe; color: #6d28d9; margin-bottom: 12px; }
+        h1 { font-size: 2.1rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 28px; font-size: 1rem; }
+        .goal { background: #f5f3ff; border-left: 4px solid #8b5cf6; border-radius: 0 8px 8px 0; padding: 14px 18px;
+            margin-bottom: 28px; font-size: 0.95rem; color: #4c1d95; line-height: 1.6; }
+        .section { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px 24px; margin-bottom: 22px; }
+        .section h2 { font-size: 1.25rem; color: #1e3a5f; margin-bottom: 10px; }
+        .section p { color: #4b5563; line-height: 1.65; margin-bottom: 12px; font-size: 0.95rem; }
+        .section ul { padding-left: 20px; color: #4b5563; font-size: 0.93rem; line-height: 1.7; margin-bottom: 6px; }
+        .section .term { font-weight: 700; color: #1e3a5f; }
+        .produce { background: #f0fdf4; border-left: 4px solid #16a34a; border-radius: 0 8px 8px 0; padding: 14px 18px;
+            margin: 24px 0 10px; font-size: 0.95rem; color: #374151; line-height: 1.7; }
+        .produce strong { color: #15803d; }
+        .assess { font-size: 0.9rem; color: #6b7280; font-style: italic; margin-bottom: 24px; }
+        .back-link { display: block; text-align: center; margin-top: 28px; color: #0284c7; text-decoration: none; font-size: 0.95rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <span class="unit-tag">Unit 2 &mdash; Weeks 7&ndash;10</span>
+    <h1>CAD Advanced</h1>
+    <p class="subtitle">Detailed views, fasteners, and production drawings</p>
+</header>
+<main>
+    <p class="intro">
+        A basic model shows the shape of a part. A production drawing tells a shop exactly how to make it &mdash;
+        including the internal features a plain outside view can't show, the threads and hardware it uses, and how
+        much each dimension is allowed to vary. Unit 2 adds the specialized views, annotation practices, and file
+        settings that turn a model into a document someone else can build from.
+    </p>
+
+    <div class="goal">
+        <strong>Goal:</strong> Move from a basic model to a documentation-ready one &mdash; the specialized views,
+        thread and fastener callouts, tolerancing, and title-block practices that make a drawing something a shop
+        can build from.
+    </div>
+
+    <div class="section">
+        <h2>Section views</h2>
+        <p>
+            A section view slices the part with an imaginary <span class="term">cutting plane</span> and shows what's
+            inside, replacing a tangle of hidden lines with a clear cut face. The cut surface is marked with
+            <span class="term">section lining (hatching)</span>.
+        </p>
+        <ul>
+            <li><span class="term">Full section:</span> the cutting plane passes entirely through the part</li>
+            <li><span class="term">Half section:</span> one quarter removed &mdash; shows inside and outside on one view, good for symmetric parts</li>
+            <li><span class="term">Offset section:</span> the cutting plane is stepped to pass through features that don't line up</li>
+            <li><span class="term">Broken-out, revolved, and removed sections:</span> local sections used where a full cut isn't needed</li>
+            <li><span class="term">Conventions:</span> ribs, webs, fasteners, shafts, and pins are not section-lined even when the plane passes through them</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Auxiliary views</h2>
+        <p>
+            When a face is inclined, it appears foreshortened in every principal view &mdash; you can't measure it or
+            see its true shape. An <span class="term">auxiliary view</span> is projected perpendicular to that face
+            so it appears true-size. This is the descriptive-geometry theory from Unit 1 put to use.
+        </p>
+        <ul>
+            <li><span class="term">Primary auxiliary:</span> projected from one principal view to show one inclined surface true-shape</li>
+            <li><span class="term">Partial auxiliary:</span> only the inclined feature is drawn &mdash; the rest is omitted to avoid distortion and clutter</li>
+            <li><span class="term">Reference-plane method:</span> measurements are transferred from a principal view along projection lines</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Threads and fastener representation</h2>
+        <p>
+            Threads are almost never drawn in full detail &mdash; a standardized representation plus a note carries
+            all the information a shop needs.
+        </p>
+        <ul>
+            <li><span class="term">Thread terms:</span> major and minor diameter, pitch, lead, external vs. internal, right- vs. left-hand, class of fit</li>
+            <li><span class="term">Representation:</span> detailed, schematic, and simplified &mdash; simplified is most common on production drawings</li>
+            <li><span class="term">Thread notes:</span> Unified inch (e.g. <span class="term">1/4-20 UNC-2A</span>) and metric (e.g. <span class="term">M6&times;1</span>), including class and length of engagement</li>
+            <li><span class="term">Fasteners:</span> bolts, screws, nuts, washers, and inserts &mdash; how they're called out and how clearance and tap-drill holes are sized</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Production and detail drawings</h2>
+        <p>
+            A detail drawing is a controlled document. Its format carries information that isn't in the geometry:
+            who made it, at what revision, to what standard, and with what default tolerances.
+        </p>
+        <ul>
+            <li><span class="term">Title block:</span> part name and number, material, scale, units, drafter, date, and sheet size</li>
+            <li><span class="term">Revision block:</span> a dated history of every change to the drawing</li>
+            <li><span class="term">Tolerance block:</span> default tolerances applied to any dimension without its own</li>
+            <li><span class="term">General notes and BOM:</span> finish, deburring, and heat-treat notes; a parts list for multi-part drawings</li>
+            <li><span class="term">Sheet formatting:</span> standard sheet sizes (A&ndash;E / A4&ndash;A0), scale callouts, and multi-sheet drawings</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Introduction to tolerancing</h2>
+        <p>
+            No part is made to an exact dimension. Tolerancing states how much variation is acceptable so that parts
+            still fit and function.
+        </p>
+        <ul>
+            <li><span class="term">Methods:</span> limit dimensions and plus/minus (bilateral or unilateral) tolerances</li>
+            <li><span class="term">Fits:</span> clearance, interference, and transition fits between mating parts &mdash; and the idea of allowance</li>
+            <li><span class="term">Standard fit designations:</span> ISO hole-basis and shaft-basis callouts such as <span class="term">H7/g6</span></li>
+            <li><span class="term">Tolerance accumulation:</span> how chained dimensions stack up, and why baseline dimensioning limits it</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>CAD software configuration</h2>
+        <p>
+            Consistent output comes from configured software, not from fixing every file by hand. This topic covers
+            setting up the environment once so every part, assembly, and drawing starts correct.
+        </p>
+        <ul>
+            <li><span class="term">Templates:</span> part, assembly, and drawing templates with the right units, drafting standard, and title block</li>
+            <li><span class="term">Document properties:</span> units, dimensioning standard (ASME / ISO), grid, and layer settings</li>
+            <li><span class="term">Custom properties:</span> file metadata that auto-populates the title block and BOM</li>
+            <li><span class="term">File management:</span> naming, folder structure, and keeping references between parts, assemblies, and drawings intact</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>CAD/CAM data translation</h2>
+        <p>
+            Moving a model between systems &mdash; CAD to CAM, or one CAD package to another &mdash; usually means
+            exporting to a neutral format. Each format keeps some information and loses the rest.
+        </p>
+        <ul>
+            <li><span class="term">Solid exchange formats:</span> STEP (AP203 / AP214 / AP242) and IGES &mdash; geometry is preserved, but the parametric feature history is not</li>
+            <li><span class="term">Kernel formats:</span> Parasolid and ACIS &mdash; used between packages that share a modeling kernel</li>
+            <li><span class="term">Mesh formats:</span> STL and 3MF &mdash; the model becomes a faceted surface with no true curves; resolution is set at export</li>
+            <li><span class="term">Translation issues:</span> lost or corrupted faces, gaps requiring geometry healing, and unit-scale errors</li>
+        </ul>
+    </div>
+
+    <div class="produce">
+        <strong>What you'll produce:</strong> a fully detailed production drawing that includes section and auxiliary
+        views, thread and fastener callouts, a complete title block, and dimensional tolerances &mdash; plus correctly
+        configured templates and a clean model export.
+    </div>
+    <p class="assess">Assessed by the Unit 2 Quiz (Week 10) and the corresponding portfolio modules.</p>
+
+    <a class="back-link" href="index.html">&larr; Back to Unit Reference Pages</a>
+</main>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 4 — Design for Manufacturing</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #1a1a1a; }
+        header { text-align: center; padding: 34px 20px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; }
+        .unit-tag { display: inline-block; padding: 3px 12px; border-radius: 5px; font-size: 0.78rem; font-weight: 700;
+            letter-spacing: 0.06em; text-transform: uppercase; background: #fef9c3; color: #854d0e; margin-bottom: 12px; }
+        h1 { font-size: 2.1rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 28px; font-size: 1rem; }
+        .goal { background: #fefce8; border-left: 4px solid #eab308; border-radius: 0 8px 8px 0; padding: 14px 18px;
+            margin-bottom: 28px; font-size: 0.95rem; color: #713f12; line-height: 1.6; }
+        .section { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px 24px; margin-bottom: 22px; }
+        .section h2 { font-size: 1.25rem; color: #1e3a5f; margin-bottom: 10px; }
+        .section p { color: #4b5563; line-height: 1.65; margin-bottom: 12px; font-size: 0.95rem; }
+        .section ul { padding-left: 20px; color: #4b5563; font-size: 0.93rem; line-height: 1.7; margin-bottom: 6px; }
+        .section .term { font-weight: 700; color: #1e3a5f; }
+        .safety { background: #fef2f2; border-left: 4px solid #dc2626; border-radius: 0 8px 8px 0; padding: 14px 18px;
+            margin: 16px 0; font-size: 0.92rem; color: #4b5563; line-height: 1.6; }
+        .safety strong { color: #991b1b; }
+        .produce { background: #f0fdf4; border-left: 4px solid #16a34a; border-radius: 0 8px 8px 0; padding: 14px 18px;
+            margin: 24px 0 10px; font-size: 0.95rem; color: #374151; line-height: 1.7; }
+        .produce strong { color: #15803d; }
+        .assess { font-size: 0.9rem; color: #6b7280; font-style: italic; margin-bottom: 24px; }
+        .back-link { display: block; text-align: center; margin-top: 28px; color: #0284c7; text-decoration: none; font-size: 0.95rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <span class="unit-tag">Unit 4 &mdash; Weeks 14&ndash;16</span>
+    <h1>Design for Manufacturing (DFM)</h1>
+    <p class="subtitle">From model to prototype</p>
+</header>
+<main>
+    <p class="intro">
+        This unit closes the loop from CAD model to physical part. That means preparing the files each process
+        actually needs, understanding what additive, subtractive, and laser processes can and cannot make, and
+        designing parts to suit the process instead of fighting it &mdash; then operating shop equipment safely to
+        produce a working prototype.
+    </p>
+
+    <div class="goal">
+        <strong>Goal:</strong> Close the loop from CAD model to physical part &mdash; preparing manufacturing-ready
+        files, understanding what each process can and cannot make, and operating shop equipment safely to produce
+        a prototype.
+    </div>
+
+    <div class="section">
+        <h2>Translating parametric models to manufacturing-ready files</h2>
+        <p>
+            Each process consumes a different file. Getting a good part starts with exporting the right one at the
+            right settings.
+        </p>
+        <ul>
+            <li><span class="term">Additive:</span> a watertight mesh (STL or 3MF) exported at a resolution fine enough to hide facets but not so fine the file is unwieldy</li>
+            <li><span class="term">Laser cutting:</span> a 2D vector profile (DXF) with cut lines and engrave lines on separate layers</li>
+            <li><span class="term">CNC machining:</span> a solid model (STEP) plus a dimensioned drawing so the machinist knows which dimensions are critical</li>
+            <li><span class="term">CAM basics:</span> stock setup, toolpath generation, simulation, and the post-processor that turns toolpaths into machine G-code</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Additive manufacturing (3D printing)</h2>
+        <p>
+            The course uses material-extrusion printing (FDM / FFF), which builds a part one deposited layer at a
+            time. Understanding how the part is built explains its strengths and its limits.
+        </p>
+        <ul>
+            <li><span class="term">Materials:</span> PLA, PETG, and ABS &mdash; printability, strength, and temperature resistance trade-offs</li>
+            <li><span class="term">Orientation:</span> layers are weakest in the build (Z) direction, so orientation is a strength decision, not just a fit-on-the-bed decision</li>
+            <li><span class="term">Supports and overhangs:</span> the roughly 45&deg; rule, bridging limits, and designing to avoid support where possible</li>
+            <li><span class="term">Settings that matter:</span> layer height, wall count, and infill density and pattern</li>
+            <li><span class="term">Tolerances:</span> holes print undersize, first layers spread &mdash; expect to allow for it or drill/ream after</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Subtractive manufacturing (CNC)</h2>
+        <p>
+            Subtractive processes start with solid stock and cut material away with a rotating tool. The design
+            constraints come from the tool and how the part is held.
+        </p>
+        <ul>
+            <li><span class="term">Machines:</span> mills, lathes, and routers &mdash; what each is shaped to produce</li>
+            <li><span class="term">Workholding:</span> vises, clamps, and fixtures &mdash; the part has to be held rigidly and the tool has to reach the feature</li>
+            <li><span class="term">Tool access and geometry:</span> internal corners carry the radius of the tool; deep narrow pockets need long thin tools that deflect and chatter</li>
+            <li><span class="term">Feeds and speeds:</span> the basic idea of matching cutting parameters to the tool and material</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Laser cutting</h2>
+        <p>
+            A laser cutter cuts flat sheet by burning or vaporizing a narrow line through it. It's fast and precise
+            in 2D, with its own material and geometry rules.
+        </p>
+        <ul>
+            <li><span class="term">Kerf:</span> the cut removes a finite width of material &mdash; it must be accounted for on tight-fitting parts</li>
+            <li><span class="term">Vector cut vs. raster engrave:</span> line color / layer determines whether the laser cuts through or marks the surface</li>
+            <li><span class="term">Material limits:</span> wood, acrylic, paper, and cloth cut well; <span class="term">PVC and other chlorinated plastics must never be cut</span> &mdash; they release chlorine gas</li>
+            <li><span class="term">Small-feature limits:</span> minimum hole size and minimum spacing relative to material thickness</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>DFM design considerations</h2>
+        <p>
+            Design for Manufacturing means shaping the part so the chosen process can make it well, at reasonable
+            cost, without special effort.
+        </p>
+        <ul>
+            <li><span class="term">Match the design to the process:</span> uniform wall thickness for printing and casting; generous internal radii for machining; flat unfolded geometry for laser and sheet work</li>
+            <li><span class="term">Minimize setups:</span> features on one face are cheaper than features that require re-fixturing the part</li>
+            <li><span class="term">Tolerance only what matters:</span> tight tolerances drive cost &mdash; apply them to mating and functional features, not everything</li>
+            <li><span class="term">Use standard stock and tooling:</span> standard material sizes, drill sizes, and tool radii cost less and arrive faster</li>
+            <li><span class="term">Design for the prototype and the product:</span> what's fine for a one-off print may not survive a production process</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Machine safety, PPE, and operation</h2>
+        <p>
+            Before running any shop equipment, students are checked out on its safe setup and operation. PPE is
+            required for lab work and is enforced.
+        </p>
+        <ul>
+            <li><span class="term">Baseline:</span> ANSI Z87.1 safety glasses, closed-toe shoes, no loose clothing, jewelry, or long unrestrained hair</li>
+            <li><span class="term">Rotating machinery:</span> never wear gloves near a spindle, chuck, or bit &mdash; a caught glove pulls the hand in</li>
+            <li><span class="term">Laser cutter:</span> never run unattended, keep a view of the cut, and know where the extraction and fire response are</li>
+            <li><span class="term">3D printers:</span> hot nozzle and bed &mdash; let them cool, and don't reach into an active machine</li>
+            <li><span class="term">Before starting:</span> know the location of the e-stop, the fire extinguisher, and the first-aid kit</li>
+        </ul>
+        <div class="safety">
+            <strong>PPE is not optional.</strong> Per the syllabus, a participant without the proper PPE during
+            machine use will be asked to leave the class for that session.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Final prototype project</h2>
+        <p>
+            The unit culminates in producing a working prototype from one or more substrates, using the design and
+            documentation skills built across all four units. The prototype and the completed design portfolio are
+            submitted at the final exam.
+        </p>
+    </div>
+
+    <div class="produce">
+        <strong>What you'll produce:</strong> correct manufacturing-ready files for at least one process, a
+        DFM-reviewed part design, and a finished physical prototype built with shop equipment you've been checked
+        out on.
+    </div>
+    <p class="assess">Assessed by the Unit 4 Quiz (Week 16), the Prototype Project, the Final Exam (December 14, 2026), and the Design Portfolio submitted at the final exam.</p>
+
+    <a class="back-link" href="index.html">&larr; Back to Unit Reference Pages</a>
+</main>
+</body>
+</html>
