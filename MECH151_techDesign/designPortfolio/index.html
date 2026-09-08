@@ -11,92 +11,69 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #ffffff;
             color: #1a1a1a;
-            min-height: 100vh;
         }
         header {
             text-align: center;
-            padding: 40px 20px 30px;
+            padding: 30px 20px;
             background: #f1f5f9;
             border-bottom: 1px solid #e2e8f0;
         }
         h1 { font-size: 2.2rem; color: #1a1a2e; }
-        .subtitle {
-            color: #475569;
-            margin-top: 10px;
-            font-size: 1rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.6;
-        }
-        main { max-width: 900px; margin: 0 auto; padding: 36px 20px; }
-        p.intro { color: #334155; line-height: 1.6; margin-bottom: 24px; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 980px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 30px; font-size: 1rem; }
 
-        .download-heading {
-            font-size: 0.78rem;
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section h2 {
+            font-size: 1.3rem;
+            color: #1e3a5f;
+            margin-bottom: 10px;
+        }
+        .section p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .section h3 {
+            font-size: 0.8rem;
             font-weight: 700;
             letter-spacing: 0.08em;
             text-transform: uppercase;
             color: #3b82f6;
-            margin-bottom: 10px;
+            margin: 18px 0 8px;
         }
-        ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
-        li a {
-            display: block;
-            background: #f8fafc;
+        .section ul { padding-left: 22px; margin-bottom: 10px; }
+        .section ul li { color: #4b5563; line-height: 1.6; margin-bottom: 6px; }
+        .section code {
+            background: #eef2f7;
             border: 1px solid #e2e8f0;
-            border-radius: 8px;
+            border-radius: 4px;
+            padding: 1px 5px;
+            font-size: 0.86em;
+        }
+
+        .downloads { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
+        .downloads a {
+            flex: 1 1 240px;
+            display: block;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
             padding: 14px 18px;
             color: #1e3a5f;
             text-decoration: none;
             line-height: 1.5;
             transition: background 0.2s, border-color 0.2s;
         }
-        li a:hover {
-            background: #e8f0fb;
-            border-color: #3b82f6;
-            color: #1a1a1a;
-        }
-        li a .lt { font-weight: 700; font-size: 0.98rem; display: block; margin-bottom: 3px; }
-        li a .ld { font-size: 0.86rem; color: #475569; }
-
-        section.info { margin-top: 34px; }
-        section.info h2 {
-            font-size: 1.15rem;
-            color: #1a1a2e;
-            margin-bottom: 10px;
-            padding-bottom: 6px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        section.info p { color: #334155; line-height: 1.65; margin-bottom: 12px; }
-        section.info ul.plain {
-            list-style: disc;
-            padding-left: 22px;
-            display: block;
-            margin-bottom: 12px;
-        }
-        section.info ul.plain li {
-            color: #334155;
-            line-height: 1.6;
-            margin-bottom: 6px;
-        }
-        section.info code {
-            background: #f1f5f9;
-            border: 1px solid #e2e8f0;
-            border-radius: 4px;
-            padding: 1px 5px;
-            font-size: 0.86em;
-        }
-        .callout {
-            background: #fff7ed;
-            border: 1px solid #fed7aa;
-            border-left: 4px solid #f59e0b;
-            border-radius: 8px;
-            padding: 16px 18px;
-            color: #7c2d12;
-            line-height: 1.65;
-        }
-        .callout strong { color: #7c2d12; }
+        .downloads a:hover { background: #e8f0fb; border-color: #3b82f6; }
+        .downloads a .lt { font-weight: 700; font-size: 0.98rem; display: block; margin-bottom: 3px; }
+        .downloads a .ld { font-size: 0.86rem; color: #6b7280; }
 
         .pdf-embed {
             border: 1px solid #e2e8f0;
@@ -111,62 +88,84 @@
             border: none;
             display: block;
         }
-        .pdf-note {
+        .note {
             font-size: 0.85rem;
             color: #6b7280;
             font-style: italic;
+            margin-top: 10px;
         }
-        .pdf-note a { color: #1e3a5f; }
+
+        .callout {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-left: 4px solid #f59e0b;
+            border-radius: 10px;
+            padding: 16px 18px;
+            color: #7c2d12;
+            line-height: 1.65;
+        }
+        .callout strong { color: #7c2d12; }
+
         .back-link {
             display: block;
             text-align: center;
-            margin-top: 36px;
-            color: #475569;
+            margin-top: 30px;
+            color: #0284c7;
             text-decoration: none;
-            font-size: 0.92rem;
+            font-size: 0.95rem;
         }
-        .back-link:hover { color: #1a1a1a; text-decoration: underline; }
+        .back-link:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
-
 <header>
     <h1>Semester Design Portfolio</h1>
-    <p class="subtitle">MECH 151: Technical Design &ndash; Prototyping &mdash; the template for your semester-long design portfolio, one module per instructional week.</p>
+    <p class="subtitle">MECH 151: Technical Design &mdash; Prototyping &middot; the template completed across the semester, one module per instructional week</p>
 </header>
-
 <main>
+    <p class="intro">
+        This is the portfolio template referenced throughout the course. It tracks your design work across all
+        four units &mdash; CAD Fundamentals, CAD Advanced, Design for Assembly, and Design for Manufacturing.
+        Each unit follows the same three-part structure: <strong>What&rsquo;s Evaluated</strong> (the skills and
+        deliverables graded for that unit), <strong>Your Design</strong> (an open-ended section where you present
+        a design of your own that demonstrates proficiency in that unit&rsquo;s topics), and
+        <strong>Designer Feedback</strong> (a running log of feedback received and how you plan to address it).
+        All four completed units are compiled and submitted together as a single portfolio package.
+    </p>
 
-    <p class="intro">Download the portfolio template in whichever format you prefer. Use the Word document to fill in your work; the PDF is a read-only reference of the same content.</p>
+    <div class="section">
+        <h2>Download the template</h2>
+        <p>Use the Word document to complete your work; the PDF is a read-only reference of the same content.</p>
+        <div class="downloads">
+            <a href="MECH151_Semester_Design_Portfolio_Template.docx" download>
+                <span class="lt">Word version (.docx)</span>
+                <span class="ld">Editable &mdash; fill in your design work here.</span>
+            </a>
+            <a href="MECH151_Semester_Design_Portfolio_Template.pdf" download>
+                <span class="lt">PDF version</span>
+                <span class="ld">Read-only reference copy.</span>
+            </a>
+        </div>
+    </div>
 
-    <p class="download-heading">Template Downloads</p>
-    <ul>
-        <li><a href="MECH151_Semester_Design_Portfolio_Template.docx" download>
-            <span class="lt">Design Portfolio Template (Word / .docx)</span>
-            <span class="ld">Editable version &mdash; fill in your design work here.</span>
-        </a></li>
-        <li><a href="MECH151_Semester_Design_Portfolio_Template.pdf" download>
-            <span class="lt">Design Portfolio Template (PDF)</span>
-            <span class="ld">Read-only reference copy of the same template.</span>
-        </a></li>
-    </ul>
-
-    <section class="info">
-        <h2>Document preview</h2>
-        <p>The full template &mdash; submission instructions, the portfolio evaluation overview, and the
-        per-unit &ldquo;What&rsquo;s Evaluated / Your Design / Designer Feedback&rdquo; sections for all four
-        units.</p>
+    <div class="section">
+        <h2>MECH151 Semester Design Portfolio</h2>
+        <p>
+            Full document: submission instructions, the portfolio evaluation overview, and the per-unit
+            &ldquo;What&rsquo;s Evaluated / Your Design / Designer Feedback&rdquo; sections for all four units.
+        </p>
         <div class="pdf-embed">
             <iframe src="MECH151_Semester_Design_Portfolio_Template.pdf" title="MECH151 Semester Design Portfolio Template"></iframe>
         </div>
-        <p class="pdf-note">
+        <p class="note">
             If the preview above doesn&rsquo;t display,
-            <a href="MECH151_Semester_Design_Portfolio_Template.pdf" target="_blank" rel="noopener">open the PDF directly</a>,
-            or <a href="MECH151_Semester_Design_Portfolio_Template.docx" download>download the editable Word version</a>.
+            <a href="MECH151_Semester_Design_Portfolio_Template.pdf" target="_blank" rel="noopener">open the portfolio PDF directly</a>.
+            Want to edit it yourself &mdash;
+            <a href="MECH151_Semester_Design_Portfolio_Template.docx" download>download the editable Word version</a>.
         </p>
-    </section>
+    </div>
 
-    <section class="info">
+    <div class="section">
         <h2>The template is a starting point, not a checklist</h2>
         <p class="callout">
             <strong>You are responsible for the content of your portfolio.</strong> The template gives you the
@@ -174,55 +173,56 @@
             The answer boxes are sized to keep the document compact, not to cap what you write. For every unit
             you must present a design of your own choosing and include whatever CAD models, drawings, screenshots,
             measured properties, and written reasoning are needed to <strong>demonstrate proficiency</strong> in
-            that unit's topics. &ldquo;Your Design&rdquo; and &ldquo;Designer Feedback&rdquo; are open-ended:
-            expand any section or add rows as far as you need. A portfolio that only fills in the blanks will not
-            show proficiency.
+            that unit&rsquo;s topics. &ldquo;Your Design&rdquo; and &ldquo;Designer Feedback&rdquo; are
+            open-ended: expand any section or add rows as far as you need. A portfolio that only fills in the
+            blanks will not show proficiency.
         </p>
-    </section>
+    </div>
 
-    <section class="info">
+    <div class="section">
         <h2>Submitting your portfolio</h2>
-        <p>Your completed portfolio &mdash; all four units together &mdash; is submitted as a single package
-        through <strong>Lamaku</strong> (the course LMS) and is worth <strong>50% of your course grade</strong>,
-        due by the date announced in class and on the syllabus.</p>
+        <p>
+            Your completed portfolio &mdash; all four units together &mdash; is submitted as a single package
+            through <strong>Lamaku</strong> (the course LMS) and is worth <strong>50% of your course grade</strong>,
+            due by the date announced in class and on the syllabus.
+        </p>
 
-        <p class="download-heading" style="margin-top:6px;">File formats to include</p>
-        <ul class="plain">
-            <li>Native CAD file(s) in your software's format (e.g. <code>.sldprt</code>, <code>.sldasm</code>,
+        <h3>File formats to include</h3>
+        <ul>
+            <li>Native CAD file(s) in your software&rsquo;s format (e.g. <code>.sldprt</code>, <code>.sldasm</code>,
             <code>.slddrw</code>) so your full parametric feature tree is preserved and can be graded.</li>
             <li>A neutral <strong>STEP</strong> copy (<code>.step</code> / <code>.stp</code>) of each part and assembly.</li>
             <li>A <strong>PDF</strong> of every drawing sheet (multiview, detail, and assembly drawings), in
             addition to the native drawing file.</li>
         </ul>
 
-        <p class="download-heading">File naming</p>
-        <ul class="plain">
+        <h3>File naming</h3>
+        <ul>
             <li>Use one consistent pattern for every file:
             <code>LastName_FirstName_UnitX_ShortPartName.ext</code> &mdash; e.g.
             <code>Santos_Kai_Unit1_BracketPart.sldprt</code>.</li>
             <li>Keep names short; use underscores instead of spaces or special characters.</li>
         </ul>
 
-        <p class="download-heading">Folder structure</p>
-        <ul class="plain">
+        <h3>Folder structure</h3>
+        <ul>
             <li>One folder per unit: <code>Unit1_CADFundamentals</code>, <code>Unit2_CADAdvanced</code>,
-            <code>Unit3_DFA</code>, <code>Unit4_DFM</code> &mdash; each holding that unit's native files,
+            <code>Unit3_DFA</code>, <code>Unit4_DFM</code> &mdash; each holding that unit&rsquo;s native files,
             STEP exports, and drawing PDFs.</li>
             <li>Keep an assembly and every part file it references together in the same folder so the assembly
             opens without missing references.</li>
         </ul>
 
-        <p class="download-heading">How and when to submit</p>
-        <ul class="plain">
+        <h3>How and when to submit</h3>
+        <ul>
             <li>Compress your complete portfolio folder (all four units) into a single <code>.zip</code> file.</li>
             <li>Upload the <code>.zip</code> through Lamaku as your Design Portfolio submission by the announced due date.</li>
             <li>Before submitting, confirm your <code>.zip</code> opens cleanly and every file is present &mdash;
             corrupted or incomplete uploads cannot be graded.</li>
         </ul>
-    </section>
+    </div>
 
-    <a class="back-link" href="../index.html">&larr; Back to Main Course Page</a>
+    <a class="back-link" href="../index.html">← Back to Main Course Page</a>
 </main>
-
 </body>
 </html>
