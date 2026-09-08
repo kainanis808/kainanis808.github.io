@@ -97,6 +97,26 @@
             line-height: 1.65;
         }
         .callout strong { color: #7c2d12; }
+
+        .pdf-embed {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 16px 0 10px;
+            background: #fff;
+        }
+        .pdf-embed iframe {
+            width: 100%;
+            height: 900px;
+            border: none;
+            display: block;
+        }
+        .pdf-note {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-style: italic;
+        }
+        .pdf-note a { color: #1e3a5f; }
         .back-link {
             display: block;
             text-align: center;
@@ -130,6 +150,21 @@
             <span class="ld">Read-only reference copy of the same template.</span>
         </a></li>
     </ul>
+
+    <section class="info">
+        <h2>Document preview</h2>
+        <p>The full template &mdash; submission instructions, the portfolio evaluation overview, and the
+        per-unit &ldquo;What&rsquo;s Evaluated / Your Design / Designer Feedback&rdquo; sections for all four
+        units.</p>
+        <div class="pdf-embed">
+            <iframe src="MECH151_Semester_Design_Portfolio_Template.pdf" title="MECH151 Semester Design Portfolio Template"></iframe>
+        </div>
+        <p class="pdf-note">
+            If the preview above doesn&rsquo;t display,
+            <a href="MECH151_Semester_Design_Portfolio_Template.pdf" target="_blank" rel="noopener">open the PDF directly</a>,
+            or <a href="MECH151_Semester_Design_Portfolio_Template.docx" download>download the editable Word version</a>.
+        </p>
+    </section>
 
     <section class="info">
         <h2>The template is a starting point, not a checklist</h2>
