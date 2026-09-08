@@ -26,6 +26,12 @@
         .compare { display: flex; gap: 16px; flex-wrap: wrap; margin: 6px 0 4px; }
         .compare > div { flex: 1 1 240px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; }
         .compare h3 { margin-top: 0; }
+        .cycle { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; justify-content: center;
+            margin: 8px 0 14px; }
+        .cycle .step { background: #ffffff; border: 1px solid #bfdbfe; border-radius: 999px; padding: 8px 16px;
+            font-size: 0.88rem; font-weight: 700; color: #1d4ed8; }
+        .cycle .arrow { color: #93c5fd; font-size: 1.1rem; }
+        .cycle .loop { flex-basis: 100%; text-align: center; color: #64748b; font-size: 0.82rem; font-style: italic; margin-top: 2px; }
         .note { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 12px 16px;
             margin: 14px 0 4px; font-size: 0.9rem; color: #713f12; line-height: 1.6; }
         .produce { background: #f0fdf4; border-left: 4px solid #16a34a; border-radius: 0 8px 8px 0; padding: 14px 18px;
@@ -46,31 +52,74 @@
         Before the sketching, projection, and modeling of Unit 1, it helps to step back and ask what a
         CAD model is <em>for</em>. A model is not just a picture of a finished shape &mdash; it is a record of
         decisions: what the part has to do, which dimensions matter, and how the pieces of a design depend on
-        one another. This page covers two ideas that run through every later unit: <span class="term">design
-        intent</span> (the reasoning a model should capture) and <span class="term">design organization</span>
+        one another. This page covers three ideas that run through every later unit: the <span class="term">cyclic
+        design process</span> (why the first version is never the final one), <span class="term">design
+        intent</span> (the reasoning a model should capture), and <span class="term">design organization</span>
         (top-down vs. bottom-up, and how to structure a design so it stays editable as it grows).
     </p>
 
     <div class="goal">
-        <strong>Goal:</strong> Understand why models are built the way they are &mdash; so that the sketches,
-        features, and assemblies you create in Units 1&ndash;4 are deliberate and robust, not just visually correct.
+        <strong>Goal:</strong> Understand why models are built the way they are, and why they get rebuilt &mdash;
+        so that the sketches, features, and assemblies you create in Units 1&ndash;4 are deliberate, robust, and
+        ready to revise, not just visually correct.
     </div>
 
     <div class="section">
-        <h2>The design process in brief</h2>
+        <h2>The design process is a cycle</h2>
         <p>
-            Technical design moves from a need to a working prototype in rough stages, and it loops back often:
+            Technical design moves from a need to a working prototype through rough stages &mdash; but it is not a
+            straight line. You do not think hard enough at the start to get it right and then simply draw it.
+            Every design goes around a loop, and each trip around teaches you something the previous version got wrong.
         </p>
         <ul>
-            <li><span class="term">Requirements:</span> what the part or product must do, fit, withstand, and cost &mdash; stated before any geometry exists</li>
-            <li><span class="term">Concept:</span> rough options for form and arrangement, chosen against the requirements</li>
-            <li><span class="term">Detail design:</span> the parametric models and drawings that pin down every dimension and tolerance</li>
-            <li><span class="term">Prototype and test:</span> build it, measure it, find what the model missed</li>
-            <li><span class="term">Iterate:</span> revise the model and repeat &mdash; parametric CAD exists to make this cheap</li>
+            <li><span class="term">Define:</span> state what the part or product must do, fit, withstand, and cost &mdash; the requirements, written before any geometry exists</li>
+            <li><span class="term">Design:</span> concept options, then the parametric models and drawings that pin down every dimension and tolerance</li>
+            <li><span class="term">Build:</span> make a prototype &mdash; a print, a machined part, a mock-up</li>
+            <li><span class="term">Test:</span> measure it, fit it to its neighbors, load it, use it the way it will really be used</li>
+            <li><span class="term">Evaluate:</span> compare what happened against the requirements &mdash; what failed, what was close, what a review or a user pointed out</li>
         </ul>
+        <div class="cycle">
+            <span class="step">Define</span><span class="arrow">&rarr;</span>
+            <span class="step">Design</span><span class="arrow">&rarr;</span>
+            <span class="step">Build</span><span class="arrow">&rarr;</span>
+            <span class="step">Test</span><span class="arrow">&rarr;</span>
+            <span class="step">Evaluate</span>
+            <span class="loop">&mdash; then back to Design (or Define), with what you learned &mdash;</span>
+        </div>
         <p>
-            CAD sits in the detail-design stage, but the choices you make there decide how painful iteration will be.
+            The first prototype is expected to be wrong in ways you could not have predicted from the model alone:
+            a part interferes, a tolerance was too tight, the thing is harder to assemble than it looked on screen,
+            a feature no one needed added cost. That is not failure &mdash; that is the process working. The goal of
+            an early iteration is to <em>learn cheaply</em>, so hold designs loosely and expect to revise.
         </p>
+        <div class="note">
+            <strong>Why this shapes how you model:</strong> if you assume the first version is final, you build a
+            model that is painful to change &mdash; hard-coded numbers, tangled dependencies, crowded sketches.
+            If you assume you <em>will</em> revise it, you build for iteration: clean sketches, captured design
+            intent, and a readable feature tree. That is what the rest of this page is about.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Knowing when to stop: the 80/20 rule</h2>
+        <p>
+            The cycle warns that the first design is not good enough. This is the opposite warning: no design is
+            ever <em>perfect</em>, and chasing perfection is its own failure mode. A rough guide is the
+            <span class="term">80/20 rule</span> &mdash; roughly 80% of a design's useful performance comes from
+            the first 20% of the effort, and squeezing out the last stretch of improvement costs far more time
+            than it returns.
+        </p>
+        <ul>
+            <li><span class="term">Move forward once the requirements are met.</span> If the design does what it must do, fits, and is safe, it is ready for the next stage &mdash; even if you can see ways it could be nicer</li>
+            <li><span class="term">The last 20% is optional.</span> Marginal gains in weight, finish, or elegance can be left alone unless a requirement or a customer actually demands them</li>
+            <li><span class="term">Perpetual designing is a cost.</span> Every extra revision delays the prototype, the test, and everything you would have learned from them &mdash; polish on paper is worth less than feedback from a real part</li>
+            <li><span class="term">"Good enough" is a decision, not a mood.</span> Judge the design against the written requirements, not against an imagined ideal; if it passes, stop and build it</li>
+        </ul>
+        <div class="note">
+            <strong>Hold both ideas at once:</strong> expect the first version to be wrong <em>and</em> resist
+            the urge to perfect it. The cycle moves forward when a design is good enough to learn from &mdash;
+            not when it is flawless, and not before it meets its requirements.
+        </div>
     </div>
 
     <div class="section">
@@ -156,8 +205,9 @@
     <div class="produce">
         <strong>Carry this into the units:</strong> in Unit 1 every sketch you constrain is a design-intent
         decision; in Unit 3 the choice between building parts first or starting from the assembly is the
-        top-down / bottom-up choice; and in Units 3&ndash;4 a robust feature tree is what lets you revise a
-        design after a review or a failed prototype without rebuilding it from scratch.
+        top-down / bottom-up choice, and the design-review-and-revision step is one turn of the cycle; and in
+        Unit 4 your first prototype will surface something the model missed &mdash; a robust feature tree is what
+        lets you go back around the loop without rebuilding from scratch.
     </div>
 
     <a class="back-link" href="index.html">&larr; Back to Unit Reference Pages</a>
