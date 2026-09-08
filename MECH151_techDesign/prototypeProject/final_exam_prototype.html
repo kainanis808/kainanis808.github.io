@@ -32,6 +32,15 @@
         .assess { font-size: 0.9rem; color: #6b7280; font-style: italic; margin-bottom: 24px; }
         .back-link { display: block; text-align: center; margin-top: 28px; color: #0284c7; text-decoration: none; font-size: 0.95rem; }
         .back-link:hover { text-decoration: underline; }
+        .tag { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;
+            text-transform: uppercase; color: #6b7280; margin: 16px 0 2px; }
+        .downloads { display: flex; flex-wrap: wrap; gap: 12px; margin: 6px 0 4px; }
+        .downloads a { flex: 1 1 200px; display: block; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px;
+            padding: 12px 16px; color: #1e3a5f; text-decoration: none; line-height: 1.4;
+            transition: background 0.2s, border-color 0.2s; }
+        .downloads a:hover { background: #e8f0fb; border-color: #3b82f6; }
+        .downloads a .lt { font-weight: 700; font-size: 0.92rem; display: block; margin-bottom: 2px; }
+        .downloads a .ld { font-size: 0.82rem; color: #6b7280; }
     </style>
 </head>
 <body>
@@ -70,6 +79,50 @@
             <li><span class="term">Work breakdown summary</span> &mdash; who on the team did what</li>
             <li><span class="term">Self reflection</span></li>
         </ul>
+    </div>
+
+    <div class="section">
+        <h2>Submission templates</h2>
+        <p>Each item below is available as an editable Word document and a read-only PDF.</p>
+
+        <span class="tag">Team submission</span>
+        <h3>Prototype Design Proposal</h3>
+        <div class="downloads">
+            <a href="Prototype_Design_Proposal_Template.docx" download>
+                <span class="lt">Word version (.docx)</span>
+                <span class="ld">Editable &mdash; fill in your team's proposal here.</span>
+            </a>
+            <a href="Prototype_Design_Proposal_Template.pdf" download>
+                <span class="lt">PDF version</span>
+                <span class="ld">Read-only reference copy.</span>
+            </a>
+        </div>
+
+        <span class="tag">Team submission</span>
+        <h3>Work Breakdown Summary</h3>
+        <div class="downloads">
+            <a href="Work_Breakdown_Summary_Template.docx" download>
+                <span class="lt">Word version (.docx)</span>
+                <span class="ld">Editable &mdash; fill in your team's task breakdown here.</span>
+            </a>
+            <a href="Work_Breakdown_Summary_Template.pdf" download>
+                <span class="lt">PDF version</span>
+                <span class="ld">Read-only reference copy.</span>
+            </a>
+        </div>
+
+        <span class="tag">Individual submission</span>
+        <h3>Self Reflection</h3>
+        <div class="downloads">
+            <a href="Self_Reflection_Template.docx" download>
+                <span class="lt">Word version (.docx)</span>
+                <span class="ld">Editable &mdash; each team member completes their own copy.</span>
+            </a>
+            <a href="Self_Reflection_Template.pdf" download>
+                <span class="lt">PDF version</span>
+                <span class="ld">Read-only reference copy.</span>
+            </a>
+        </div>
     </div>
 
     <div class="section">
