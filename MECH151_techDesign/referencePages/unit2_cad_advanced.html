@@ -29,6 +29,36 @@
             margin: 24px 0 10px; font-size: 0.95rem; color: #374151; line-height: 1.7; }
         .produce strong { color: #15803d; }
         .assess { font-size: 0.9rem; color: #6b7280; font-style: italic; margin-bottom: 24px; }
+        figure.diagram { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px;
+            padding: 16px 18px 8px; margin: 18px 0 6px; }
+        figure.diagram svg { display: block; width: 100%; height: auto; overflow: visible; }
+        figure.diagram figcaption { margin-top: 10px; font-size: 0.82rem; color: #6b7280;
+            line-height: 1.55; text-align: center; }
+        .dg-t { font: 600 13px 'Segoe UI', Tahoma, Geneva, sans-serif; fill: #1e3a5f; }
+        .dg-s { font: 400 11px 'Segoe UI', Tahoma, Geneva, sans-serif; fill: #64748b; }
+        .dg-box  { fill: #eff6ff; stroke: #bfdbfe; stroke-width: 1.5; }
+        .dg-box2 { fill: #dbeafe; stroke: #3b82f6; stroke-width: 1.5; }
+        .dg-box3 { fill: #f0fdf4; stroke: #86efac; stroke-width: 1.5; }
+        .dg-line { fill: none; stroke: #94a3b8; stroke-width: 1.6; }
+        .dg-accent { fill: none; stroke: #f59e0b; stroke-width: 1.8; }
+        .dg-fill { fill: #94a3b8; }
+        .dg-fill-a { fill: #f59e0b; }
+        .dg-part { fill: #e2e8f0; stroke: #1e3a5f; stroke-width: 1.6; }
+        .dg-hidden { fill: none; stroke: #94a3b8; stroke-width: 1.2; stroke-dasharray: 4 3; }
+        .section h3 { font-size: 1rem; color: #1e3a5f; margin: 16px 0 6px; }
+        html { overflow-x: clip; }
+        .def { position: relative; border-bottom: 1px dotted #64748b; cursor: help; }
+        .def:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
+        .def::after { content: attr(data-def); position: absolute; left: 0; bottom: calc(100% + 9px);
+            width: 240px; background: #1e293b; color: #f8fafc;
+            font: 400 0.8rem/1.5 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-style: normal;
+            text-align: left; padding: 9px 12px; border-radius: 7px; box-shadow: 0 8px 24px rgba(15,23,42,0.28);
+            opacity: 0; visibility: hidden; transition: opacity 0.12s ease; z-index: 30; pointer-events: none; }
+        .def::before { content: ""; position: absolute; left: 15px; bottom: calc(100% + 3px);
+            border: 6px solid transparent; border-top-color: #1e293b;
+            opacity: 0; visibility: hidden; transition: opacity 0.12s ease; z-index: 30; pointer-events: none; }
+        .def:hover::after, .def:focus::after, .def:hover::before, .def:focus::before { opacity: 1; visibility: visible; }
+        @media (max-width: 540px) { .def::after { width: 66vw; } }
         .back-link { display: block; text-align: center; margin-top: 28px; color: #0284c7; text-decoration: none; font-size: 0.95rem; }
         .back-link:hover { text-decoration: underline; }
     </style>
@@ -66,9 +96,10 @@
     <div class="section">
         <h2>Section views</h2>
         <p>
-            A section view slices the part with an imaginary <span class="term">cutting plane</span> and shows what's
-            inside, replacing a tangle of hidden lines with a clear cut face. The cut surface is marked with
-            <span class="term">section lining (hatching)</span>.
+            A section view slices the part with an imaginary
+            <span class="term def" tabindex="0" data-def="An imaginary flat plane passed through the part. The view is then drawn as if everything between the viewer and that plane had been removed, exposing the interior.">cutting plane</span>
+            and shows what's inside, replacing a tangle of hidden lines with a clear cut face. The cut surface is marked with
+            <span class="term def" tabindex="0" data-def="Evenly spaced thin diagonal lines drawn only on the surfaces the cutting plane actually passed through — they show where there is solid material. Also called hatching or crosshatching.">section lining (hatching)</span>.
         </p>
         <ul>
             <li><span class="term">Full section:</span> the cutting plane passes entirely through the part</li>
@@ -77,13 +108,43 @@
             <li><span class="term">Broken-out, revolved, and removed sections:</span> local sections used where a full cut isn't needed</li>
             <li><span class="term">Conventions:</span> ribs, webs, fasteners, shafts, and pins are not section-lined even when the plane passes through them</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 600 210" role="img" aria-label="A cutting plane A-A passes through a part with a bore; the resulting section view A-A replaces the hidden lines with a hatched cut face.">
+          <defs>
+            <pattern id="u2hatch" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="7" stroke="#64748b" stroke-width="0.8"/></pattern>
+            <marker id="u2sv-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+          </defs>
+          <!-- normal view with hidden bore -->
+          <rect x="40" y="46" width="110" height="110" class="dg-part"/>
+          <line x1="80" y1="46" x2="80" y2="156" class="dg-hidden"/>
+          <line x1="110" y1="46" x2="110" y2="156" class="dg-hidden"/>
+          <!-- cutting plane line -->
+          <line x1="16" y1="101" x2="174" y2="101" stroke="#1e3a5f" stroke-width="1.6" stroke-dasharray="14 3 3 3"/>
+          <path d="M16,101 L16,116" stroke="#1e3a5f" stroke-width="1.6" marker-end="url(#u2sv-ar)"/>
+          <path d="M174,101 L174,116" stroke="#1e3a5f" stroke-width="1.6" marker-end="url(#u2sv-ar)"/>
+          <text x="10" y="98" text-anchor="end" class="dg-t">A</text>
+          <text x="182" y="98" class="dg-t">A</text>
+          <text x="95" y="176" text-anchor="middle" class="dg-s">hidden bore</text>
+          <!-- arrow -->
+          <path d="M250,100 L300,100" class="dg-accent" marker-end="url(#u2sv-ar)"/>
+          <text x="275" y="90" text-anchor="middle" class="dg-s">cut &amp; look</text>
+          <!-- section view -->
+          <rect x="360" y="46" width="40" height="110" fill="url(#u2hatch)"/>
+          <rect x="440" y="46" width="40" height="110" fill="url(#u2hatch)"/>
+          <rect x="360" y="46" width="120" height="110" fill="none" stroke="#1e3a5f" stroke-width="1.6"/>
+          <line x1="400" y1="46" x2="400" y2="156" stroke="#1e3a5f" stroke-width="1.4"/>
+          <line x1="440" y1="46" x2="440" y2="156" stroke="#1e3a5f" stroke-width="1.4"/>
+          <text x="420" y="176" text-anchor="middle" class="dg-t">SECTION A&ndash;A</text>
+        </svg>
+        <figcaption>A section view slices the part with an imaginary cutting plane and shows what is inside, replacing a tangle of hidden lines with a clear, hatched cut face.</figcaption>
+        </figure>
     </div>
 
     <div class="section">
         <h2>Auxiliary views</h2>
         <p>
             When a face is inclined, it appears foreshortened in every principal view &mdash; you can't measure it or
-            see its true shape. An <span class="term">auxiliary view</span> is projected perpendicular to that face
+            see its true shape. An <span class="term def" tabindex="0" data-def="A view projected onto a plane parallel to an inclined face (perpendicular to your line of sight to it), so that face appears at true size and shape. A partial auxiliary shows only the inclined feature.">auxiliary view</span> is projected perpendicular to that face
             so it appears true-size. This is the descriptive-geometry theory from Unit 1 put to use.
         </p>
         <ul>
@@ -91,6 +152,28 @@
             <li><span class="term">Partial auxiliary:</span> only the inclined feature is drawn &mdash; the rest is omitted to avoid distortion and clutter</li>
             <li><span class="term">Reference-plane method:</span> measurements are transferred from a principal view along projection lines</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 560 220" role="img" aria-label="An inclined face appears foreshortened in the front view; projecting perpendicular to that face produces an auxiliary view showing it true size.">
+          <defs>
+            <marker id="u2av-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-a"/></marker>
+          </defs>
+          <polygon points="40,190 40,90 110,90 150,130 150,190" class="dg-part"/>
+          <line x1="110" y1="90" x2="150" y2="130" stroke="#1d4ed8" stroke-width="2.4"/>
+          <text x="60" y="78" class="dg-s">inclined face &mdash; foreshortened</text>
+          <path d="M118,86 L150,54" class="dg-line" stroke-dasharray="4 3" marker-end="url(#u2av-ar)"/>
+          <path d="M134,102 L166,70" class="dg-line" stroke-dasharray="4 3" marker-end="url(#u2av-ar)"/>
+          <path d="M150,118 L182,86" class="dg-line" stroke-dasharray="4 3" marker-end="url(#u2av-ar)"/>
+          <text x="150" y="42" class="dg-s">project &perp; to the face</text>
+          <line x1="110" y1="90" x2="214" y2="52" class="dg-hidden"/>
+          <line x1="150" y1="130" x2="256" y2="92" class="dg-hidden"/>
+          <g transform="rotate(45 262 92)">
+            <rect x="214" y="72" width="96" height="40" class="dg-part"/>
+          </g>
+          <text x="330" y="150" text-anchor="middle" class="dg-t">AUXILIARY VIEW</text>
+          <text x="330" y="166" text-anchor="middle" class="dg-s">true size &amp; shape</text>
+        </svg>
+        <figcaption>When a face is inclined it is foreshortened in every principal view. An auxiliary view is projected perpendicular to that face so it appears true-size &mdash; the descriptive-geometry theory from Unit&nbsp;1 put to use.</figcaption>
+        </figure>
     </div>
 
     <div class="section">
@@ -100,11 +183,48 @@
             all the information a shop needs.
         </p>
         <ul>
-            <li><span class="term">Thread terms:</span> major and minor diameter, pitch, lead, external vs. internal, right- vs. left-hand, class of fit</li>
+            <li><span class="term">Thread terms:</span>
+                <ul>
+                    <li><span class="term">Major / minor diameter</span> &mdash; the largest diameter of the thread, measured across the crests, and the smallest, measured across the roots</li>
+                    <li><span class="term">Pitch</span> &mdash; the distance from one thread crest to the next</li>
+                    <li><span class="term">Lead</span> &mdash; the axial distance the thread advances in one full turn; equal to the pitch on a standard single-start thread</li>
+                    <li><span class="term">External vs. internal</span> &mdash; a thread on a shaft (a bolt or screw) versus a thread inside a hole (a nut or tapped hole)</li>
+                    <li><span class="term">Right- vs. left-hand</span> &mdash; the direction you turn it to tighten; right-hand is the default</li>
+                    <li><span class="term">Class of fit</span> &mdash; a numbered grade for how tightly the internal and external threads mate (1A/2A/3A for inch, 6g/6H for metric); a higher number is a tighter fit</li>
+                </ul>
+            </li>
             <li><span class="term">Representation:</span> detailed, schematic, and simplified &mdash; simplified is most common on production drawings</li>
             <li><span class="term">Thread notes:</span> Unified inch (e.g. <span class="term">1/4-20 UNC-2A</span>) and metric (e.g. <span class="term">M6&times;1</span>), including class and length of engagement</li>
             <li><span class="term">Fasteners:</span> bolts, screws, nuts, washers, and inserts &mdash; how they're called out and how clearance and tap-drill holes are sized</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 600 128" role="img" aria-label="Three ways to represent a thread on a drawing: detailed with a drawn helix, schematic with alternating lines, and simplified with two dashed lines.">
+          <!-- detailed -->
+          <line x1="20" y1="44" x2="150" y2="44" stroke="#1e3a5f" stroke-width="1.4"/>
+          <line x1="20" y1="80" x2="150" y2="80" stroke="#1e3a5f" stroke-width="1.4"/>
+          <path d="M20,44 L32,80 L44,44 L56,80 L68,44 L80,80 L92,44 L104,80 L116,44 L128,80 L140,44 L150,62" fill="none" stroke="#64748b" stroke-width="1"/>
+          <text x="85" y="106" text-anchor="middle" class="dg-t">Detailed</text>
+          <line x1="205" y1="10" x2="205" y2="118" stroke="#e2e8f0"/>
+          <!-- schematic -->
+          <line x1="230" y1="44" x2="360" y2="44" stroke="#1e3a5f" stroke-width="1.4"/>
+          <line x1="230" y1="80" x2="360" y2="80" stroke="#1e3a5f" stroke-width="1.4"/>
+          <g stroke="#64748b" stroke-width="1">
+            <line x1="242" y1="40" x2="242" y2="84"/><line x1="258" y1="48" x2="258" y2="76"/>
+            <line x1="274" y1="40" x2="274" y2="84"/><line x1="290" y1="48" x2="290" y2="76"/>
+            <line x1="306" y1="40" x2="306" y2="84"/><line x1="322" y1="48" x2="322" y2="76"/>
+            <line x1="338" y1="40" x2="338" y2="84"/><line x1="354" y1="48" x2="354" y2="76"/>
+          </g>
+          <text x="295" y="106" text-anchor="middle" class="dg-t">Schematic</text>
+          <line x1="415" y1="10" x2="415" y2="118" stroke="#e2e8f0"/>
+          <!-- simplified -->
+          <rect x="440" y="40" width="130" height="44" fill="none" stroke="#1e3a5f" stroke-width="1.4"/>
+          <line x1="440" y1="50" x2="570" y2="50" class="dg-hidden"/>
+          <line x1="440" y1="74" x2="570" y2="74" class="dg-hidden"/>
+          <text x="505" y="106" text-anchor="middle" class="dg-t">Simplified</text>
+          <text x="505" y="120" text-anchor="middle" class="dg-s">most common on prints</text>
+        </svg>
+        <figcaption>Threads are almost never drawn in full detail &mdash; a standardized representation plus a thread note (e.g. <span style="font-weight:600">1/4-20 UNC-2A</span> or <span style="font-weight:600">M6&times;1</span>) carries everything a shop needs.</figcaption>
+        </figure>
     </div>
 
     <div class="section">
@@ -129,11 +249,34 @@
             still fit and function.
         </p>
         <ul>
-            <li><span class="term">Methods:</span> limit dimensions and plus/minus (bilateral or unilateral) tolerances</li>
-            <li><span class="term">Fits:</span> clearance, interference, and transition fits between mating parts &mdash; and the idea of allowance</li>
-            <li><span class="term">Standard fit designations:</span> ISO hole-basis and shaft-basis callouts such as <span class="term">H7/g6</span></li>
+            <li><span class="term">Methods:</span> <span class="term def" tabindex="0" data-def="Stating the largest and smallest a dimension may be, directly (e.g. 12.05 / 11.95), instead of a nominal value with a tolerance.">limit dimensions</span> and plus/minus tolerances &mdash; <span class="term def" tabindex="0" data-def="The dimension may vary in both directions (e.g. 12 &plusmn;0.05).">bilateral</span> or <span class="term def" tabindex="0" data-def="The dimension may vary in one direction only (e.g. 12 +0.05 / &minus;0).">unilateral</span></li>
+            <li><span class="term">Fits:</span> <span class="term">clearance</span> (always a gap), <span class="term">interference</span> (always an overlap &mdash; a press fit), and <span class="term">transition</span> (could be either) fits between mating parts. The <span class="term def" tabindex="0" data-def="The tightest fit the tolerances still allow — the difference between the largest shaft and the smallest hole. A positive allowance guarantees a gap; a negative allowance guarantees an interference.">allowance</span> is that tightest intended condition</li>
+            <li><span class="term">Standard fit designations:</span> ISO <span class="term def" tabindex="0" data-def="The hole is held to a standard size and the shaft is varied to set the fit (capital letter = hole, lowercase = shaft). Shaft-basis is the reverse. Hole-basis is the usual choice because drills and reamers come in fixed sizes.">hole-basis</span> and shaft-basis callouts such as <span class="term">H7/g6</span> (hole H7, shaft g6 &mdash; a close clearance fit)</li>
             <li><span class="term">Tolerance accumulation:</span> how chained dimensions stack up, and why baseline dimensioning limits it</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 600 130" role="img" aria-label="Three fit types between a shaft and a hole: clearance leaves a gap, interference forces an overlap, transition can be either.">
+          <!-- clearance -->
+          <rect x="20" y="24" width="140" height="80" class="dg-part"/>
+          <circle cx="90" cy="64" r="30" fill="#ffffff" stroke="#1e3a5f" stroke-width="1.4"/>
+          <circle cx="90" cy="64" r="21" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.4"/>
+          <text x="90" y="118" text-anchor="middle" class="dg-t">Clearance</text>
+          <text x="240" y="10" class="dg-s"></text>
+          <line x1="210" y1="12" x2="210" y2="118" stroke="#e2e8f0"/>
+          <!-- interference -->
+          <rect x="230" y="24" width="140" height="80" class="dg-part"/>
+          <circle cx="300" cy="64" r="24" fill="#ffffff" stroke="#1e3a5f" stroke-width="1.2" stroke-dasharray="4 3"/>
+          <circle cx="300" cy="64" r="30" fill="#dbeafe" fill-opacity="0.7" stroke="#3b82f6" stroke-width="1.4"/>
+          <text x="300" y="118" text-anchor="middle" class="dg-t">Interference</text>
+          <line x1="420" y1="12" x2="420" y2="118" stroke="#e2e8f0"/>
+          <!-- transition -->
+          <rect x="440" y="24" width="140" height="80" class="dg-part"/>
+          <circle cx="510" cy="64" r="27" fill="#ffffff" stroke="#1e3a5f" stroke-width="1.4"/>
+          <circle cx="510" cy="64" r="26" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.4"/>
+          <text x="510" y="118" text-anchor="middle" class="dg-t">Transition</text>
+        </svg>
+        <figcaption>A fit describes how much room is between mating parts. Clearance always leaves a gap; interference is always tight and holds by force; transition can go either way within its tolerances. Standard designations such as <span style="font-weight:600">H7/g6</span> name a fit directly.</figcaption>
+        </figure>
     </div>
 
     <div class="section">
@@ -162,6 +305,35 @@
             <li><span class="term">Mesh formats:</span> STL and 3MF &mdash; the model becomes a faceted surface with no true curves; resolution is set at export</li>
             <li><span class="term">Translation issues:</span> lost or corrupted faces, gaps requiring geometry healing, and unit-scale errors</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 620 200" role="img" aria-label="A native parametric model is exported to a neutral format to move it downstream: STEP or IGES keep solid geometry but lose feature history, kernel formats move between same-kernel packages, and mesh formats become a faceted surface.">
+          <defs>
+            <marker id="u2tr-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+          </defs>
+          <rect x="0" y="72" width="104" height="52" rx="8" class="dg-box2"/>
+          <text x="52" y="94" text-anchor="middle" class="dg-t">Native model</text>
+          <text x="52" y="110" text-anchor="middle" class="dg-s">features + history</text>
+          <path d="M104,84 C 140,84 150,34 184,32"  class="dg-line" marker-end="url(#u2tr-ar)"/>
+          <path d="M104,98 L184,98"                  class="dg-line" marker-end="url(#u2tr-ar)"/>
+          <path d="M104,112 C 140,112 150,162 184,164" class="dg-line" marker-end="url(#u2tr-ar)"/>
+          <rect x="188" y="12"  width="182" height="44" rx="7" class="dg-box"/>
+          <rect x="188" y="78"  width="182" height="44" rx="7" class="dg-box"/>
+          <rect x="188" y="144" width="182" height="44" rx="7" class="dg-box"/>
+          <text x="200" y="32"  class="dg-t">STEP / IGES</text>
+          <text x="200" y="48"  class="dg-s">solid geometry kept, history lost</text>
+          <text x="200" y="98"  class="dg-t">Parasolid / ACIS</text>
+          <text x="200" y="114" class="dg-s">between same-kernel packages</text>
+          <text x="200" y="164" class="dg-t">STL / 3MF</text>
+          <text x="200" y="180" class="dg-s">faceted mesh, resolution set on export</text>
+          <path d="M370,34  C 420,34 430,86 452,92"   class="dg-line" marker-end="url(#u2tr-ar)"/>
+          <path d="M370,100 L452,100"                  class="dg-line" marker-end="url(#u2tr-ar)"/>
+          <path d="M370,166 C 420,166 430,114 452,108" class="dg-line" marker-end="url(#u2tr-ar)"/>
+          <rect x="456" y="72" width="150" height="56" rx="8" class="dg-box3"/>
+          <text x="531" y="94" text-anchor="middle" class="dg-t">Downstream</text>
+          <text x="531" y="110" text-anchor="middle" class="dg-s">CAM &middot; other CAD &middot; printing</text>
+        </svg>
+        <figcaption>Moving a model between systems means exporting to a neutral format &mdash; each keeps some information and loses the rest. Always confirm units, scale, and closed geometry on import.</figcaption>
+        </figure>
     </div>
 
     <div class="produce">

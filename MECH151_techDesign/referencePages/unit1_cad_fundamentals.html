@@ -29,6 +29,40 @@
             margin: 24px 0 10px; font-size: 0.95rem; color: #374151; line-height: 1.7; }
         .produce strong { color: #15803d; }
         .assess { font-size: 0.9rem; color: #6b7280; font-style: italic; margin-bottom: 24px; }
+        figure.diagram { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px;
+            padding: 16px 18px 8px; margin: 18px 0 6px; }
+        figure.diagram svg { display: block; width: 100%; height: auto; overflow: visible; }
+        figure.diagram figcaption { margin-top: 10px; font-size: 0.82rem; color: #6b7280;
+            line-height: 1.55; text-align: center; }
+        .dg-t { font: 600 13px 'Segoe UI', Tahoma, Geneva, sans-serif; fill: #1e3a5f; }
+        .dg-s { font: 400 11px 'Segoe UI', Tahoma, Geneva, sans-serif; fill: #64748b; }
+        .dg-box  { fill: #eff6ff; stroke: #bfdbfe; stroke-width: 1.5; }
+        .dg-box2 { fill: #dbeafe; stroke: #3b82f6; stroke-width: 1.5; }
+        .dg-box3 { fill: #f0fdf4; stroke: #86efac; stroke-width: 1.5; }
+        .dg-line { fill: none; stroke: #94a3b8; stroke-width: 1.6; }
+        .dg-accent { fill: none; stroke: #f59e0b; stroke-width: 1.8; }
+        .dg-fill { fill: #94a3b8; }
+        .dg-fill-a { fill: #f59e0b; }
+        .dg-part { fill: #e2e8f0; stroke: #1e3a5f; stroke-width: 1.6; }
+        .dg-hidden { fill: none; stroke: #94a3b8; stroke-width: 1.2; stroke-dasharray: 4 3; }
+        .section h3 { font-size: 1rem; color: #1e3a5f; margin: 16px 0 6px; }
+        .compare { display: flex; gap: 16px; flex-wrap: wrap; margin: 8px 0 10px; }
+        .compare > div { flex: 1 1 240px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; }
+        .compare h4 { font-size: 0.97rem; color: #1e3a5f; margin-bottom: 6px; }
+        .compare ul { margin-top: 4px; }
+        html { overflow-x: clip; }
+        .def { position: relative; border-bottom: 1px dotted #64748b; cursor: help; }
+        .def:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
+        .def::after { content: attr(data-def); position: absolute; left: 0; bottom: calc(100% + 9px);
+            width: 240px; background: #1e293b; color: #f8fafc;
+            font: 400 0.8rem/1.5 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-style: normal;
+            text-align: left; padding: 9px 12px; border-radius: 7px; box-shadow: 0 8px 24px rgba(15,23,42,0.28);
+            opacity: 0; visibility: hidden; transition: opacity 0.12s ease; z-index: 30; pointer-events: none; }
+        .def::before { content: ""; position: absolute; left: 15px; bottom: calc(100% + 3px);
+            border: 6px solid transparent; border-top-color: #1e293b;
+            opacity: 0; visibility: hidden; transition: opacity 0.12s ease; z-index: 30; pointer-events: none; }
+        .def:hover::after, .def:focus::after, .def:hover::before, .def:focus::before { opacity: 1; visibility: visible; }
+        @media (max-width: 540px) { .def::after { width: 66vw; } }
         .back-link { display: block; text-align: center; margin-top: 28px; color: #0284c7; text-decoration: none; font-size: 0.95rem; }
         .back-link:hover { text-decoration: underline; }
     </style>
@@ -57,7 +91,7 @@
         <strong>There is no single "right" way to model a part.</strong> The same shape can be built from a
         different base feature, a different set of sketches, a different feature order &mdash; and there are
         effectively infinite valid combinations. What separates a good model from a poor one is not matching some
-        canonical answer; it is whether the model captures the <span class="term">design intent</span>, rebuilds
+        canonical answer; it is whether the model captures the <span class="term def" tabindex="0" data-def="The reasoning a model should hold on to: what you expect to stay true when a dimension changes — a hole staying centered, two walls staying equal — built in with relations rather than left to chance.">design intent</span>, rebuilds
         without errors, and stays easy for the next person to edit. Two classmates can hand in completely
         different feature trees and both be correct. Focus on making deliberate choices you can explain, not on
         guessing the "expected" one.
@@ -105,13 +139,44 @@
             Constraints lock down where sketch geometry can move. There are two kinds: <span class="term">geometric
             relations</span> (coincident, collinear, parallel, perpendicular, tangent, concentric, equal, horizontal,
             vertical, symmetric) and <span class="term">dimensions</span> (linear, radial, diameter, angular).
-            Together they remove <span class="term">degrees of freedom</span> until the sketch is fully defined.
+            Together they remove <span class="term def" tabindex="0" data-def="The independent ways a piece of sketch geometry can still move — slide along X, slide along Y, or rotate. Each relation or dimension removes one or more; when none are left, the sketch is fully defined.">degrees of freedom</span> until the sketch is fully defined.
         </p>
         <ul>
             <li><span class="term">Under-defined:</span> geometry can still be dragged &mdash; the sketch is not fully controlled</li>
             <li><span class="term">Fully defined:</span> every entity is fixed by relations and dimensions; this is the target state before finishing a sketch</li>
             <li><span class="term">Over-defined:</span> conflicting or redundant constraints &mdash; must be resolved, not ignored</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 600 172" role="img" aria-label="Three sketch states: under-defined geometry can still be dragged, fully defined geometry is fixed by relations and dimensions, over-defined geometry has conflicting constraints.">
+          <defs>
+            <marker id="u1dof-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+          </defs>
+          <rect x="2" y="8" width="188" height="132" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+          <rect x="206" y="8" width="188" height="132" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+          <rect x="410" y="8" width="188" height="132" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+          <text x="96" y="26" text-anchor="middle" class="dg-t">Under-defined</text>
+          <text x="300" y="26" text-anchor="middle" class="dg-t">Fully defined</text>
+          <text x="504" y="26" text-anchor="middle" class="dg-t">Over-defined</text>
+
+          <rect x="46" y="44" width="96" height="56" fill="none" stroke="#94a3b8" stroke-width="1.6"/>
+          <path d="M150,74 a10,10 0 1 1 6,-14" fill="none" stroke="#94a3b8" stroke-width="1.4" marker-end="url(#u1dof-ar)"/>
+          <circle cx="46" cy="44" r="3.5" fill="#fff" stroke="#94a3b8"/>
+          <text x="96" y="120" text-anchor="middle" class="dg-s">geometry still drags</text>
+
+          <rect x="250" y="44" width="96" height="56" fill="none" stroke="#1e3a5f" stroke-width="1.8"/>
+          <g fill="#1e3a5f"><rect x="247" y="41" width="6" height="6"/><rect x="343" y="41" width="6" height="6"/><rect x="247" y="97" width="6" height="6"/><rect x="343" y="97" width="6" height="6"/></g>
+          <line x1="250" y1="112" x2="346" y2="112" stroke="#1d4ed8" stroke-width="1"/>
+          <text x="298" y="124" text-anchor="middle" class="dg-s">48</text>
+          <line x1="360" y1="44" x2="360" y2="100" stroke="#1d4ed8" stroke-width="1"/>
+          <text x="368" y="76" class="dg-s">28</text>
+
+          <rect x="454" y="44" width="96" height="56" fill="none" stroke="#1e3a5f" stroke-width="1.8"/>
+          <text x="502" y="118" text-anchor="middle" class="dg-s" fill="#dc2626">40 &ne; 45  conflict</text>
+          <line x1="454" y1="112" x2="486" y2="112" stroke="#dc2626" stroke-width="1"/>
+          <line x1="490" y1="112" x2="550" y2="112" stroke="#dc2626" stroke-width="1"/>
+        </svg>
+        <figcaption>Relations and dimensions remove degrees of freedom until the sketch is <em>fully defined</em> &mdash; the target state before finishing. Add relations first so one dimension change updates the model predictably instead of distorting it.</figcaption>
+        </figure>
         <p>
             Adding relations before dimensions keeps a sketch stable: relations capture the design intent
             (this hole stays centered, these edges stay equal) so that changing one dimension updates the model
@@ -132,6 +197,42 @@
             <li><span class="term">Line conventions:</span> visible edges as solid lines, hidden edges as dashed lines, and centerlines for holes and axes of symmetry</li>
             <li><span class="term">View selection:</span> choose the front view that shows the most shape and the fewest hidden lines, then add only the views needed to describe the part fully</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 620 250" role="img" aria-label="A part inside a glass box, each face catching one view; unfolding the box gives the third-angle arrangement with the top view above the front view and the right-side view to its right.">
+          <defs>
+            <marker id="u1mv-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+          </defs>
+          <!-- glass box -->
+          <path d="M40,96 L150,96 L190,66 L80,66 Z" fill="#eff6ff" stroke="#93c5fd"/>
+          <path d="M150,96 L190,66 L190,168 L150,198 Z" fill="#e0f2fe" stroke="#93c5fd"/>
+          <path d="M40,96 L150,96 L150,198 L40,198 Z" fill="#f0f9ff" stroke="#93c5fd"/>
+          <!-- part inside -->
+          <path d="M62,118 L120,118 L142,100 L84,100 Z" class="dg-part"/>
+          <path d="M120,118 L142,100 L142,160 L120,178 Z" class="dg-part"/>
+          <path d="M62,118 L120,118 L120,178 L62,178 Z" class="dg-part"/>
+          <text x="115" y="222" text-anchor="middle" class="dg-s">part in a glass box &mdash; each face catches one view</text>
+          <!-- unfold arrow -->
+          <path d="M236,120 L286,120" class="dg-accent" marker-end="url(#u1mv-ar)"/>
+          <text x="261" y="110" text-anchor="middle" class="dg-s">unfold</text>
+          <!-- three-view layout -->
+          <line x1="400" y1="70" x2="400" y2="220" class="dg-hidden"/>
+          <line x1="360" y1="152" x2="560" y2="152" class="dg-hidden"/>
+          <rect x="360" y="80" width="80" height="60" class="dg-part"/>
+          <rect x="360" y="152" width="80" height="60" class="dg-part"/>
+          <rect x="452" y="152" width="52" height="60" class="dg-part"/>
+          <circle cx="400" cy="182" r="10" fill="#fff" stroke="#1e3a5f" stroke-width="1.4"/>
+          <line x1="400" y1="166" x2="400" y2="198" stroke="#1d4ed8" stroke-width="0.8"/>
+          <line x1="384" y1="182" x2="416" y2="182" stroke="#1d4ed8" stroke-width="0.8"/>
+          <line x1="392" y1="152" x2="392" y2="140" class="dg-hidden"/>
+          <line x1="408" y1="152" x2="408" y2="140" class="dg-hidden"/>
+          <text x="400" y="230" text-anchor="middle" class="dg-s">FRONT</text>
+          <text x="400" y="74" text-anchor="middle" class="dg-s">TOP</text>
+          <text x="478" y="230" text-anchor="middle" class="dg-s">RIGHT SIDE</text>
+          <text x="460" y="40" text-anchor="middle" class="dg-t">Third-angle projection</text>
+          <text x="460" y="56" text-anchor="middle" class="dg-s">top above front, right-side to the right</text>
+        </svg>
+        <figcaption>Orthographic projection flattens each face straight onto a viewing plane. Unfolding the imaginary glass box gives the standard arrangement &mdash; most parts need only front, top, and right-side.</figcaption>
+        </figure>
     </div>
 
     <div class="section">
@@ -176,7 +277,7 @@
     <div class="section">
         <h2>Geometry of shapes: building 3D solids</h2>
         <p>
-            A 3D shape is either a <span class="term">primitive</span> volume or a combination of them. Every
+            A 3D shape is either a <span class="term def" tabindex="0" data-def="A basic, ready-made solid volume — block, cylinder, sphere, cone, or torus — that more complex parts are built up from or can be broken down into.">primitive</span> volume or a combination of them. Every
             solid model is really a running total: start with a volume, add more, and cut some away.
         </p>
         <ul>
@@ -192,21 +293,192 @@
             <li><span class="term">Boolean operations</span> combine volumes: <span class="term">union / add</span> (boss), <span class="term">subtract / cut</span> (pocket, hole), and <span class="term">intersect</span> (keep only the shared volume)</li>
             <li><span class="term">Applied (dress-up) features:</span> fillet, chamfer, shell, draft, and pattern &mdash; operations on an existing solid rather than a new sketched volume</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 620 132" role="img" aria-label="Four profile-based features: extrude pushes a profile along an axis, revolve spins it around an axis, sweep runs it along a path, loft blends between profiles.">
+          <defs>
+            <marker id="u1pf-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+          </defs>
+          <!-- Extrude -->
+          <rect x="18" y="42" width="26" height="34" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+          <path d="M50,59 L86,59" class="dg-line" stroke-dasharray="4 3" marker-end="url(#u1pf-ar)"/>
+          <path d="M96,42 L122,42 L136,30 L110,30 Z" class="dg-part"/>
+          <path d="M122,42 L136,30 L136,64 L122,76 Z" class="dg-part"/>
+          <rect x="96" y="42" width="26" height="34" class="dg-part"/>
+          <text x="78" y="100" text-anchor="middle" class="dg-t">Extrude</text>
+          <text x="78" y="115" text-anchor="middle" class="dg-s">push along an axis</text>
+          <line x1="158" y1="16" x2="158" y2="118" stroke="#e2e8f0"/>
+          <!-- Revolve -->
+          <line x1="188" y1="26" x2="188" y2="90" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3"/>
+          <path d="M188,30 L210,30 L214,48 L206,60 L212,78 L188,86 Z" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+          <path d="M188,30 C 166,30 162,48 172,60 C 162,72 166,86 188,86" class="dg-part"/>
+          <ellipse cx="180" cy="30" rx="8" ry="3" class="dg-part"/>
+          <text x="234" y="100" text-anchor="middle" class="dg-t">Revolve</text>
+          <text x="234" y="115" text-anchor="middle" class="dg-s">spin around an axis</text>
+          <line x1="312" y1="16" x2="312" y2="118" stroke="#e2e8f0"/>
+          <!-- Sweep -->
+          <path d="M336,84 C 336,50 372,42 404,42" fill="none" stroke="#cbd5e1" stroke-width="13" stroke-linecap="round"/>
+          <path d="M336,84 C 336,50 372,42 404,42" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3"/>
+          <circle cx="336" cy="84" r="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="388" y="100" text-anchor="middle" class="dg-t">Sweep</text>
+          <text x="388" y="115" text-anchor="middle" class="dg-s">follow a path</text>
+          <line x1="466" y1="16" x2="466" y2="118" stroke="#e2e8f0"/>
+          <!-- Loft -->
+          <path d="M508,40 L540,40 L548,32 L516,32 Z" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+          <ellipse cx="530" cy="82" rx="26" ry="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+          <path d="M508,40 L506,80 M540,40 L555,80 M524,33 L530,74" stroke="#94a3b8" stroke-width="1"/>
+          <text x="536" y="100" text-anchor="middle" class="dg-t">Loft</text>
+          <text x="536" y="115" text-anchor="middle" class="dg-s">blend profiles</text>
+        </svg>
+        <figcaption>Profile-based features turn a 2D sketch into a volume by a rule of motion.</figcaption>
+        </figure>
+        <figure class="diagram">
+        <svg viewBox="0 0 600 128" role="img" aria-label="Boolean operations on two overlapping volumes: union keeps both, subtract removes the overlap from one, intersect keeps only the shared volume.">
+          <defs>
+            <clipPath id="u1bool-clip"><circle cx="520" cy="54" r="34"/></clipPath>
+          </defs>
+          <!-- Union -->
+          <circle cx="86" cy="54" r="34" fill="#dbeafe"/>
+          <circle cx="120" cy="54" r="34" fill="#dbeafe"/>
+          <circle cx="86" cy="54" r="34" fill="none" stroke="#3b82f6" stroke-width="1.5"/>
+          <circle cx="120" cy="54" r="34" fill="none" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="103" y="104" text-anchor="middle" class="dg-t">Union / add</text>
+          <text x="103" y="119" text-anchor="middle" class="dg-s">boss</text>
+          <line x1="200" y1="12" x2="200" y2="116" stroke="#e2e8f0"/>
+          <!-- Subtract -->
+          <circle cx="286" cy="54" r="34" fill="#dbeafe"/>
+          <circle cx="320" cy="54" r="34" fill="#ffffff"/>
+          <circle cx="286" cy="54" r="34" fill="none" stroke="#3b82f6" stroke-width="1.5"/>
+          <circle cx="320" cy="54" r="34" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4 3"/>
+          <text x="300" y="104" text-anchor="middle" class="dg-t">Subtract / cut</text>
+          <text x="300" y="119" text-anchor="middle" class="dg-s">pocket, hole</text>
+          <line x1="400" y1="12" x2="400" y2="116" stroke="#e2e8f0"/>
+          <!-- Intersect -->
+          <circle cx="486" cy="54" r="34" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4 3"/>
+          <circle cx="520" cy="54" r="34" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4 3"/>
+          <circle cx="486" cy="54" r="34" fill="#dbeafe" clip-path="url(#u1bool-clip)"/>
+          <text x="503" y="104" text-anchor="middle" class="dg-t">Intersect</text>
+          <text x="503" y="119" text-anchor="middle" class="dg-s">shared volume only</text>
+        </svg>
+        <figcaption>Every solid model is a running total: start with a volume, add more, and cut some away.</figcaption>
+        </figure>
     </div>
 
     <div class="section">
         <h2>Introduction to parametric part modeling</h2>
         <p>
-            Parametric modeling builds a solid as a <span class="term">history of features</span>, each driven by
-            dimensions and relations. Change a dimension and the whole model rebuilds to match. This is what makes
-            CAD editable rather than something you redraw from scratch.
+            <span class="term def" tabindex="0" data-def="A modeling method in which the part is stored as an ordered recipe of features. Each feature is driven by editable values (parameters) — dimensions and relations — and the model is regenerated by replaying that recipe from the top.">Parametric modeling</span>
+            (also called <em>history-based</em> modeling) records <em>how</em> a part was built. It stores the solid as a
+            <span class="term def" tabindex="0" data-def="The ordered list of every feature — sketch, extrude, cut, fillet, pattern — used to build the part. The model rebuilds by replaying it from the top. Also called the feature tree or history tree.">history of features</span>,
+            each one driven by dimensions and
+            <span class="term def" tabindex="0" data-def="Geometric rules linking sketch or model geometry — parallel, equal, concentric, symmetric, tangent — that the CAD system keeps true as dimensions change.">relations</span>.
+            Change a dimension and the whole model
+            <span class="term def" tabindex="0" data-def="Recompute the model by replaying its feature history in order after a change. Also called regenerate.">rebuilds</span>
+            to match. This is what makes CAD editable rather than something you redraw from scratch.
         </p>
+        <figure class="diagram">
+        <svg viewBox="0 0 640 148" role="img" aria-label="The parametric modeling pipeline: a 2D sketch becomes a feature, then a base solid, then added features, then a parametric part; changing a driving dimension rebuilds the whole model.">
+          <defs>
+            <marker id="u1pm-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+            <marker id="u1pm-ara" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-a"/></marker>
+          </defs>
+          <rect x="0"   y="34" width="92"  height="44" rx="8" class="dg-box2"/>
+          <rect x="116" y="26" width="112" height="60" rx="8" class="dg-box"/>
+          <rect x="252" y="34" width="92"  height="44" rx="8" class="dg-box"/>
+          <rect x="368" y="26" width="126" height="60" rx="8" class="dg-box"/>
+          <rect x="518" y="34" width="118" height="44" rx="8" class="dg-box3"/>
+          <text x="46"  y="60" text-anchor="middle" class="dg-t">2D sketch</text>
+          <text x="172" y="46" text-anchor="middle" class="dg-t">Feature</text>
+          <text x="172" y="63" text-anchor="middle" class="dg-s">extrude &middot; revolve</text>
+          <text x="172" y="77" text-anchor="middle" class="dg-s">sweep &middot; loft</text>
+          <text x="298" y="55" text-anchor="middle" class="dg-t">Base solid</text>
+          <text x="298" y="69" text-anchor="middle" class="dg-s">first feature</text>
+          <text x="431" y="46" text-anchor="middle" class="dg-t">Added features</text>
+          <text x="431" y="63" text-anchor="middle" class="dg-s">cut &middot; fillet &middot; hole</text>
+          <text x="431" y="77" text-anchor="middle" class="dg-s">chamfer &middot; pattern</text>
+          <text x="577" y="52" text-anchor="middle" class="dg-t">Parametric</text>
+          <text x="577" y="67" text-anchor="middle" class="dg-t">part</text>
+          <path d="M92,56 L114,56"  class="dg-line" marker-end="url(#u1pm-ar)"/>
+          <path d="M228,56 L250,56" class="dg-line" marker-end="url(#u1pm-ar)"/>
+          <path d="M344,56 L366,56" class="dg-line" marker-end="url(#u1pm-ar)"/>
+          <path d="M494,56 L516,56" class="dg-line" marker-end="url(#u1pm-ar)"/>
+          <path d="M577,78 L577,120 L172,120 L172,88" class="dg-accent" marker-end="url(#u1pm-ara)"/>
+          <text x="375" y="114" text-anchor="middle" class="dg-s">change a driving dimension &rarr; the whole model rebuilds to match</text>
+        </svg>
+        <figcaption>A parametric model is a history of features, each driven by dimensions and relations. This is what makes CAD editable rather than something you redraw.</figcaption>
+        </figure>
         <ul>
             <li><span class="term">Base feature:</span> the first solid, usually an extrude or revolve of a fully defined sketch</li>
             <li><span class="term">Added features:</span> extrude, cut, revolve, fillet, chamfer, hole, shell, pattern &mdash; each added in order on the feature tree</li>
             <li><span class="term">Design intent:</span> building features and relations so the model updates the way you intend when a dimension changes</li>
             <li><span class="term">Sketch planes and references:</span> choosing where each feature's sketch lives so edits stay stable</li>
         </ul>
+
+        <h3>Parametric vs. direct modeling</h3>
+        <p>
+            The opposite approach is
+            <span class="term def" tabindex="0" data-def="A modeling method with no feature history. You edit the geometry itself — push, pull, drag, rotate, or delete faces and edges directly. What you see is the whole model; there is no recipe to replay.">direct modeling</span>
+            (also called <em>explicit</em> or <em>history-free</em> modeling). There is no feature tree and no rebuild
+            step: you grab a face or an edge and push, pull, rotate, or offset it, and the geometry simply changes.
+            The model does not record how it was made.
+        </p>
+        <figure class="diagram">
+        <svg viewBox="0 0 620 182" role="img" aria-label="Parametric modeling stores an ordered feature tree that replays on every edit; direct modeling has no history, so you push and pull faces and edges directly.">
+          <defs>
+            <marker id="u1dm-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+          </defs>
+          <text x="6" y="14" class="dg-t">Parametric &mdash; history-based</text>
+          <rect x="16" y="26" width="158" height="120" rx="8" class="dg-box"/>
+          <rect x="20" y="52" width="150" height="18" fill="#fef9c3"/>
+          <text x="32" y="46"  class="dg-s">&#9656; Sketch 1</text>
+          <text x="32" y="66"  class="dg-s">&#9656; Extrude 1</text>
+          <text x="32" y="88"  class="dg-s">&#9656; Sketch 2</text>
+          <text x="32" y="110" class="dg-s">&#9656; Cut 1</text>
+          <text x="32" y="132" class="dg-s">&#9656; Fillet 1</text>
+          <path d="M188,30 L188,142" class="dg-line" marker-end="url(#u1dm-ar)"/>
+          <text x="198" y="72"  class="dg-s">edit any value,</text>
+          <text x="198" y="86"  class="dg-s">rebuild replays</text>
+          <text x="198" y="100" class="dg-s">top &rarr; bottom</text>
+          <line x1="300" y1="6" x2="300" y2="150" stroke="#e2e8f0"/>
+          <text x="330" y="14" class="dg-t">Direct &mdash; history-free</text>
+          <path d="M374,60 L454,60 L484,38 L404,38 Z" class="dg-part"/>
+          <path d="M454,60 L484,38 L484,106 L454,128 Z" class="dg-part"/>
+          <rect x="374" y="60" width="80" height="68" class="dg-part"/>
+          <path d="M422,152 L422,130" class="dg-line" marker-start="url(#u1dm-ar)" marker-end="url(#u1dm-ar)"/>
+          <path d="M356,94 L378,94" class="dg-line" marker-start="url(#u1dm-ar)" marker-end="url(#u1dm-ar)"/>
+          <path d="M472,30 L494,12" class="dg-line" marker-start="url(#u1dm-ar)" marker-end="url(#u1dm-ar)"/>
+          <text x="512" y="72" class="dg-s">grab a face,</text>
+          <text x="512" y="86" class="dg-s">push / pull</text>
+          <text x="430" y="172" text-anchor="middle" class="dg-s">no feature list &middot; no rebuild &middot; order-independent</text>
+        </svg>
+        <figcaption>Parametric modeling records <em>how</em> the part was built and replays it on every edit; direct modeling edits the geometry itself, with no history to replay.</figcaption>
+        </figure>
+        <div class="compare">
+            <div>
+                <h4>Parametric (history-based)</h4>
+                <ul>
+                    <li>Edit by changing a driving dimension or a feature, then let the model rebuild</li>
+                    <li>Captures <span class="term">design intent</span> &mdash; one change ripples everywhere it should</li>
+                    <li>Feature order matters; a bad edit can cause <span class="term def" tabindex="0" data-def="A feature that can no longer solve because an edit removed or moved geometry it depended on. The model will not rebuild until the broken reference is fixed.">rebuild errors</span></li>
+                    <li>Best for parts you will revise, and for building in rules ("wall is always 2&nbsp;mm")</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Direct (history-free)</h4>
+                <ul>
+                    <li>Edit the geometry itself &mdash; push and pull faces and edges, no rebuild</li>
+                    <li>Order-independent, no rebuild errors, and it does not matter how the model was made</li>
+                    <li>Does not capture intent &mdash; move one face and nothing else follows</li>
+                    <li>Best for quick concept changes and editing
+                        <span class="term def" tabindex="0" data-def="A solid with no feature history — just faces and edges. Imported STEP or IGES files, including downloaded catalog parts, arrive this way.">imported &ldquo;dumb&rdquo; solids</span>
+                        that have no tree to edit</li>
+                </ul>
+            </div>
+        </div>
+        <p>
+            Most current CAD systems do both, and let you use direct edits on a parametric model. In this course you
+            build parametric models &mdash; but you should recognize direct modeling when you see it, and understand
+            why an <a href="unit3_design_for_assembly.html">imported part</a> has no feature tree to open.
+        </p>
     </div>
 
     <div class="section">

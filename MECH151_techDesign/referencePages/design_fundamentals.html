@@ -26,17 +26,38 @@
         .compare { display: flex; gap: 16px; flex-wrap: wrap; margin: 6px 0 4px; }
         .compare > div { flex: 1 1 240px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; }
         .compare h3 { margin-top: 0; }
-        .cycle { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; justify-content: center;
-            margin: 8px 0 14px; }
-        .cycle .step { background: #ffffff; border: 1px solid #bfdbfe; border-radius: 999px; padding: 8px 16px;
-            font-size: 0.88rem; font-weight: 700; color: #1d4ed8; }
-        .cycle .arrow { color: #93c5fd; font-size: 1.1rem; }
-        .cycle .loop { flex-basis: 100%; text-align: center; color: #64748b; font-size: 0.82rem; font-style: italic; margin-top: 2px; }
         .note { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 12px 16px;
             margin: 14px 0 4px; font-size: 0.9rem; color: #713f12; line-height: 1.6; }
         .produce { background: #f0fdf4; border-left: 4px solid #16a34a; border-radius: 0 8px 8px 0; padding: 14px 18px;
             margin: 24px 0 10px; font-size: 0.95rem; color: #374151; line-height: 1.7; }
         .produce strong { color: #15803d; }
+        figure.diagram { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px;
+            padding: 16px 18px 8px; margin: 18px 0 6px; }
+        figure.diagram svg { display: block; width: 100%; height: auto; overflow: visible; }
+        figure.diagram figcaption { margin-top: 10px; font-size: 0.82rem; color: #6b7280;
+            line-height: 1.55; text-align: center; }
+        .dg-t { font: 600 13px 'Segoe UI', Tahoma, Geneva, sans-serif; fill: #1e3a5f; }
+        .dg-s { font: 400 11px 'Segoe UI', Tahoma, Geneva, sans-serif; fill: #64748b; }
+        .dg-box  { fill: #eff6ff; stroke: #bfdbfe; stroke-width: 1.5; }
+        .dg-box2 { fill: #dbeafe; stroke: #3b82f6; stroke-width: 1.5; }
+        .dg-box3 { fill: #f0fdf4; stroke: #86efac; stroke-width: 1.5; }
+        .dg-line { fill: none; stroke: #94a3b8; stroke-width: 1.6; }
+        .dg-accent { fill: none; stroke: #f59e0b; stroke-width: 1.8; }
+        .dg-fill { fill: #94a3b8; }
+        .dg-fill-a { fill: #f59e0b; }
+        html { overflow-x: clip; }
+        .def { position: relative; border-bottom: 1px dotted #64748b; cursor: help; }
+        .def:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
+        .def::after { content: attr(data-def); position: absolute; left: 0; bottom: calc(100% + 9px);
+            width: 240px; background: #1e293b; color: #f8fafc;
+            font: 400 0.8rem/1.5 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-style: normal;
+            text-align: left; padding: 9px 12px; border-radius: 7px; box-shadow: 0 8px 24px rgba(15,23,42,0.28);
+            opacity: 0; visibility: hidden; transition: opacity 0.12s ease; z-index: 30; pointer-events: none; }
+        .def::before { content: ""; position: absolute; left: 15px; bottom: calc(100% + 3px);
+            border: 6px solid transparent; border-top-color: #1e293b;
+            opacity: 0; visibility: hidden; transition: opacity 0.12s ease; z-index: 30; pointer-events: none; }
+        .def:hover::after, .def:focus::after, .def:hover::before, .def:focus::before { opacity: 1; visibility: visible; }
+        @media (max-width: 540px) { .def::after { width: 66vw; } }
         .back-link { display: block; text-align: center; margin-top: 28px; color: #0284c7; text-decoration: none; font-size: 0.95rem; }
         .back-link:hover { text-decoration: underline; }
     </style>
@@ -54,7 +75,7 @@
         decisions: what the part has to do, which dimensions matter, and how the pieces of a design depend on
         one another. This page covers the ideas that run through every later unit: how to <span class="term">define
         a design problem</span> before solving it, the <span class="term">cyclic design process</span> (why the
-        first version is never the final one), <span class="term">design intent</span> (the reasoning a model
+        first version is never the final one), <span class="term def" tabindex="0" data-def="The reasoning behind a model: what you expect to stay true when a dimension changes. Captured with sketch relations, deliberate dimension choices, and stable feature references — so the model updates the way you mean it to.">design intent</span> (the reasoning a model
         should capture), and <span class="term">design organization</span> (top-down vs. bottom-up, and how to
         structure a design so it stays editable as it grows).
     </p>
@@ -79,14 +100,31 @@
             <li><span class="term">Test:</span> measure it, fit it to its neighbors, load it, use it the way it will really be used</li>
             <li><span class="term">Evaluate:</span> compare what happened against the requirements &mdash; what failed, what was close, what a review or a user pointed out</li>
         </ul>
-        <div class="cycle">
-            <span class="step">Define</span><span class="arrow">&rarr;</span>
-            <span class="step">Design</span><span class="arrow">&rarr;</span>
-            <span class="step">Build</span><span class="arrow">&rarr;</span>
-            <span class="step">Test</span><span class="arrow">&rarr;</span>
-            <span class="step">Evaluate</span>
-            <span class="loop">&mdash; then back to Design (or Define), with what you learned &mdash;</span>
-        </div>
+        <figure class="diagram">
+        <svg viewBox="0 0 640 150" role="img" aria-label="The design process as a loop: Define, Design, Build, Test, Evaluate, then feed what you learned back to Design or Define.">
+          <defs>
+            <marker id="df-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+            <marker id="df-ara" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-a"/></marker>
+          </defs>
+          <rect x="0"   y="20" width="104" height="48" rx="8" class="dg-box2"/>
+          <rect x="134" y="20" width="104" height="48" rx="8" class="dg-box"/>
+          <rect x="268" y="20" width="104" height="48" rx="8" class="dg-box"/>
+          <rect x="402" y="20" width="104" height="48" rx="8" class="dg-box"/>
+          <rect x="536" y="20" width="104" height="48" rx="8" class="dg-box"/>
+          <text x="52"  y="49" text-anchor="middle" class="dg-t">Define</text>
+          <text x="186" y="49" text-anchor="middle" class="dg-t">Design</text>
+          <text x="320" y="49" text-anchor="middle" class="dg-t">Build</text>
+          <text x="454" y="49" text-anchor="middle" class="dg-t">Test</text>
+          <text x="588" y="49" text-anchor="middle" class="dg-t">Evaluate</text>
+          <path d="M104,44 L130,44" class="dg-line" marker-end="url(#df-ar)"/>
+          <path d="M238,44 L264,44" class="dg-line" marker-end="url(#df-ar)"/>
+          <path d="M372,44 L398,44" class="dg-line" marker-end="url(#df-ar)"/>
+          <path d="M506,44 L532,44" class="dg-line" marker-end="url(#df-ar)"/>
+          <path d="M588,68 L588,120 L186,120 L186,70" class="dg-accent" marker-end="url(#df-ara)"/>
+          <text x="387" y="114" text-anchor="middle" class="dg-s">feed back what you learned &mdash; return to Design (or Define)</text>
+        </svg>
+        <figcaption>The design loop. Each trip around exposes something the model alone could not predict; the goal of an early pass is to learn cheaply, not to be right the first time.</figcaption>
+        </figure>
         <p>
             The first prototype is expected to be wrong in ways you could not have predicted from the model alone:
             a part interferes, a tolerance was too tight, the thing is harder to assemble than it looked on screen,
@@ -171,10 +209,44 @@
         <ul>
             <li><span class="term">Turn objectives into criteria:</span> each objective becomes a measurable metric &mdash; mass in grams, cost in dollars, part count, assembly time, print time (Unit&nbsp;1 covers how the model reports mass, volume, and center of gravity directly)</li>
             <li><span class="term">Weight the criteria:</span> not every objective matters equally; assign weights that reflect the need</li>
-            <li><span class="term">Score concepts against the criteria:</span> a <span class="term">decision matrix</span> (or Pugh chart, scoring each option relative to a baseline) makes the comparison explicit and repeatable</li>
+            <li><span class="term">Score concepts against the criteria:</span> a <span class="term def" tabindex="0" data-def="A table that scores each concept against every weighted criterion and sums the results, so the best option is chosen on numbers rather than preference. A Pugh chart is a simple version that scores each option as better / same / worse than one baseline.">decision matrix</span> (or Pugh chart, scoring each option relative to a baseline) makes the comparison explicit and repeatable</li>
             <li><span class="term">Check requirements and constraints first:</span> screen those out as pass/fail before scoring &mdash; only rank designs that are already acceptable</li>
             <li><span class="term">Re-use the scorecard each iteration:</span> the same criteria that pick the concept also tell you, after a prototype, whether the revision actually improved things</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 600 190" role="img" aria-label="Concepts pass through a pass/fail screen of requirements and constraints, then a weighted score on objectives selects the best.">
+          <defs>
+            <marker id="fn-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+          </defs>
+          <g class="dg-box2">
+            <rect x="6" y="26" width="18" height="18" rx="3"/><rect x="6" y="50" width="18" height="18" rx="3"/>
+            <rect x="6" y="74" width="18" height="18" rx="3"/><rect x="6" y="98" width="18" height="18" rx="3"/>
+            <rect x="6" y="122" width="18" height="18" rx="3"/><rect x="6" y="146" width="18" height="18" rx="3"/>
+          </g>
+          <text x="15" y="182" text-anchor="middle" class="dg-s">all concepts</text>
+          <path d="M30,95 L60,95" class="dg-line" marker-end="url(#fn-ar)"/>
+          <rect x="66" y="26" width="104" height="138" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="118" y="80" text-anchor="middle" class="dg-t">Requirements</text>
+          <text x="118" y="98" text-anchor="middle" class="dg-t">+ Constraints</text>
+          <text x="118" y="124" text-anchor="middle" class="dg-s">pass / fail screen</text>
+          <path d="M170,95 L200,95" class="dg-line" marker-end="url(#fn-ar)"/>
+          <g class="dg-box2">
+            <rect x="206" y="50" width="18" height="18" rx="3"/><rect x="206" y="86" width="18" height="18" rx="3"/>
+            <rect x="206" y="122" width="18" height="18" rx="3"/>
+          </g>
+          <text x="215" y="182" text-anchor="middle" class="dg-s">acceptable</text>
+          <path d="M230,95 L260,95" class="dg-line" marker-end="url(#fn-ar)"/>
+          <rect x="266" y="42" width="124" height="106" rx="8" class="dg-box"/>
+          <text x="328" y="86" text-anchor="middle" class="dg-t">Objectives</text>
+          <text x="328" y="106" text-anchor="middle" class="dg-s">weighted score /</text>
+          <text x="328" y="122" text-anchor="middle" class="dg-s">decision matrix</text>
+          <path d="M390,95 L424,95" class="dg-line" marker-end="url(#fn-ar)"/>
+          <rect x="434" y="82" width="26" height="26" rx="4" class="dg-box3"/>
+          <text x="447" y="134" text-anchor="middle" class="dg-t">best</text>
+          <text x="447" y="152" text-anchor="middle" class="dg-s">chosen concept</text>
+        </svg>
+        <figcaption>Screen, then score. Requirements and constraints filter concepts to the ones that are acceptable; weighted objectives rank those to find the best &mdash; and the same scorecard later tells you whether a revision actually improved things.</figcaption>
+        </figure>
     </div>
 
     <div class="section">
@@ -186,6 +258,23 @@
             the first 20% of the effort, and squeezing out the last stretch of improvement costs far more time
             than it returns.
         </p>
+        <figure class="diagram">
+        <svg viewBox="0 0 460 220" role="img" aria-label="A curve of design performance against effort rises steeply then flattens: roughly 80 percent of performance comes from the first 20 percent of effort.">
+          <path d="M120,66 C 210,49 290,44 430,40 L430,180 L120,180 Z" fill="#fffbeb"/>
+          <line x1="50" y1="180" x2="430" y2="180" class="dg-line"/>
+          <line x1="50" y1="180" x2="50" y2="20" class="dg-line"/>
+          <path d="M50,180 C 92,72 120,60 430,40" fill="none" stroke="#1d4ed8" stroke-width="2.5"/>
+          <line x1="120" y1="180" x2="120" y2="62" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <line x1="50" y1="52" x2="120" y2="52" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <text x="120" y="196" text-anchor="middle" class="dg-s">20% of the effort</text>
+          <text x="44" y="49" text-anchor="end" class="dg-s">80%</text>
+          <text x="300" y="118" text-anchor="middle" class="dg-s">diminishing returns &mdash;</text>
+          <text x="300" y="134" text-anchor="middle" class="dg-s">most effort, little gain</text>
+          <text x="240" y="213" text-anchor="middle" class="dg-t">effort</text>
+          <text x="16" y="105" text-anchor="middle" class="dg-t" transform="rotate(-90 16 105)">design performance</text>
+        </svg>
+        <figcaption>Once the requirements are met, the design is ready for the next stage. Polishing the last stretch costs far more time than it returns &mdash; and delays the prototype, the test, and everything you would learn from them.</figcaption>
+        </figure>
         <ul>
             <li><span class="term">Move forward once the requirements are met.</span> If the design does what it must do, fits, and is safe, it is ready for the next stage &mdash; even if you can see ways it could be nicer</li>
             <li><span class="term">The last 20% is optional.</span> Marginal gains in weight, finish, or elegance can be left alone unless a requirement or a customer actually demands them</li>
@@ -252,6 +341,45 @@
                 </ul>
             </div>
         </div>
+
+        <figure class="diagram">
+        <svg viewBox="0 0 640 165" role="img" aria-label="Bottom-up builds finished parts then mates them into an assembly; top-down derives part shapes from one shared layout sketch or skeleton.">
+          <defs>
+            <marker id="tb-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+          </defs>
+          <text x="4" y="14" class="dg-t">Bottom-up</text>
+          <g class="dg-box">
+            <rect x="4" y="26" width="78" height="30" rx="6"/><rect x="4" y="64" width="78" height="30" rx="6"/><rect x="4" y="102" width="78" height="30" rx="6"/>
+          </g>
+          <text x="43" y="45" text-anchor="middle" class="dg-s">Part A</text>
+          <text x="43" y="83" text-anchor="middle" class="dg-s">Part B</text>
+          <text x="43" y="121" text-anchor="middle" class="dg-s">Part C</text>
+          <path d="M82,41 C 130,41 130,74 172,78" class="dg-line" marker-end="url(#tb-ar)"/>
+          <path d="M82,79 L172,81" class="dg-line" marker-end="url(#tb-ar)"/>
+          <path d="M82,117 C 130,117 130,86 172,83" class="dg-line" marker-end="url(#tb-ar)"/>
+          <rect x="176" y="56" width="104" height="48" rx="8" class="dg-box2"/>
+          <text x="228" y="78" text-anchor="middle" class="dg-t">Assembly</text>
+          <text x="228" y="94" text-anchor="middle" class="dg-s">parts + mates</text>
+          <text x="228" y="128" text-anchor="middle" class="dg-s">parts stay independent</text>
+          <line x1="330" y1="6" x2="330" y2="140" stroke="#e2e8f0" stroke-width="1"/>
+          <text x="352" y="14" class="dg-t">Top-down</text>
+          <rect x="352" y="54" width="110" height="48" rx="8" class="dg-box2"/>
+          <text x="407" y="76" text-anchor="middle" class="dg-t">Layout sketch</text>
+          <text x="407" y="92" text-anchor="middle" class="dg-s">/ skeleton</text>
+          <g class="dg-box">
+            <rect x="552" y="26" width="78" height="28" rx="6"/><rect x="552" y="64" width="78" height="28" rx="6"/><rect x="552" y="102" width="78" height="28" rx="6"/>
+          </g>
+          <text x="591" y="44" text-anchor="middle" class="dg-s">Part A</text>
+          <text x="591" y="82" text-anchor="middle" class="dg-s">Part B</text>
+          <text x="591" y="120" text-anchor="middle" class="dg-s">Part C</text>
+          <path d="M462,74 C 505,74 505,42 550,41" class="dg-line" marker-end="url(#tb-ar)"/>
+          <path d="M462,78 L550,78" class="dg-line" marker-end="url(#tb-ar)"/>
+          <path d="M462,82 C 505,82 505,114 550,115" class="dg-line" marker-end="url(#tb-ar)"/>
+          <text x="407" y="128" text-anchor="middle" class="dg-s">shared dims live here &mdash;</text>
+          <text x="407" y="143" text-anchor="middle" class="dg-s">a change propagates out</text>
+        </svg>
+        <figcaption>Bottom-up brings finished, independent parts together and mates them. Top-down defines the shared geometry once and derives the parts from it, so mating parts keep fitting as the design moves. Most real projects mix the two.</figcaption>
+        </figure>
 
         <h3>Tools for organizing a top-down design</h3>
         <ul>

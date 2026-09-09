@@ -33,6 +33,35 @@
             margin: 24px 0 10px; font-size: 0.95rem; color: #374151; line-height: 1.7; }
         .produce strong { color: #15803d; }
         .assess { font-size: 0.9rem; color: #6b7280; font-style: italic; margin-bottom: 24px; }
+        figure.diagram { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px;
+            padding: 16px 18px 8px; margin: 18px 0 6px; }
+        figure.diagram svg { display: block; width: 100%; height: auto; overflow: visible; }
+        figure.diagram figcaption { margin-top: 10px; font-size: 0.82rem; color: #6b7280;
+            line-height: 1.55; text-align: center; }
+        .dg-t { font: 600 13px 'Segoe UI', Tahoma, Geneva, sans-serif; fill: #1e3a5f; }
+        .dg-s { font: 400 11px 'Segoe UI', Tahoma, Geneva, sans-serif; fill: #64748b; }
+        .dg-box  { fill: #eff6ff; stroke: #bfdbfe; stroke-width: 1.5; }
+        .dg-box2 { fill: #dbeafe; stroke: #3b82f6; stroke-width: 1.5; }
+        .dg-box3 { fill: #f0fdf4; stroke: #86efac; stroke-width: 1.5; }
+        .dg-line { fill: none; stroke: #94a3b8; stroke-width: 1.6; }
+        .dg-accent { fill: none; stroke: #f59e0b; stroke-width: 1.8; }
+        .dg-fill { fill: #94a3b8; }
+        .dg-fill-a { fill: #f59e0b; }
+        .dg-part { fill: #e2e8f0; stroke: #1e3a5f; stroke-width: 1.6; }
+        .dg-hidden { fill: none; stroke: #94a3b8; stroke-width: 1.2; stroke-dasharray: 4 3; }
+        html { overflow-x: clip; }
+        .def { position: relative; border-bottom: 1px dotted #64748b; cursor: help; }
+        .def:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
+        .def::after { content: attr(data-def); position: absolute; left: 0; bottom: calc(100% + 9px);
+            width: 240px; background: #1e293b; color: #f8fafc;
+            font: 400 0.8rem/1.5 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-style: normal;
+            text-align: left; padding: 9px 12px; border-radius: 7px; box-shadow: 0 8px 24px rgba(15,23,42,0.28);
+            opacity: 0; visibility: hidden; transition: opacity 0.12s ease; z-index: 30; pointer-events: none; }
+        .def::before { content: ""; position: absolute; left: 15px; bottom: calc(100% + 3px);
+            border: 6px solid transparent; border-top-color: #1e293b;
+            opacity: 0; visibility: hidden; transition: opacity 0.12s ease; z-index: 30; pointer-events: none; }
+        .def:hover::after, .def:focus::after, .def:hover::before, .def:focus::before { opacity: 1; visibility: visible; }
+        @media (max-width: 540px) { .def::after { width: 66vw; } }
         .back-link { display: block; text-align: center; margin-top: 28px; color: #0284c7; text-decoration: none; font-size: 0.95rem; }
         .back-link:hover { text-decoration: underline; }
     </style>
@@ -90,7 +119,7 @@
         <p>
             Plus/minus tolerances (Unit 2) control how big a feature is, but they say nothing about whether a
             surface is flat, whether two holes are square to a face, or how a part locates against its neighbor.
-            <span class="term">GD&amp;T</span> is a symbolic language (ASME&nbsp;Y14.5 / ISO&nbsp;GPS) for stating
+            <span class="term def" tabindex="0" data-def="Geometric Dimensioning and Tolerancing: a standardized symbol language (ASME Y14.5 / ISO GPS) for stating how much a feature's form, orientation, location, or runout may vary, measured from designated reference surfaces (datums).">GD&amp;T</span> is a symbolic language (ASME&nbsp;Y14.5 / ISO&nbsp;GPS) for stating
             those functional relationships directly on the drawing &mdash; it is design intent written in symbols
             instead of prose. This unit is an introduction: reading the common symbols and understanding what each
             one asks the manufacturer to control.
@@ -105,7 +134,7 @@
         <h3>The building blocks</h3>
         <ul>
             <li><span class="term">Feature of size:</span> a feature with an axis or centerplane &mdash; a hole, a pin, a slot, a width &mdash; the things position and orientation controls are applied to</li>
-            <li><span class="term">Datums:</span> the surfaces or features you designate as the reference for measurement, labeled A, B, C. They are chosen to match how the part actually seats in use &mdash; the mounting face, then a locating hole, then a second hole &mdash; so the drawing is measured the way the part functions</li>
+            <li><span class="term def" tabindex="0" data-def="A surface, axis, or plane on the part designated as an origin for measurement, labeled A, B, C. Inspection sets the part against the datums in that order, so measurements are taken the way the part actually seats in use.">Datums:</span> the surfaces or features you designate as the reference for measurement, labeled A, B, C. They are chosen to match how the part actually seats in use &mdash; the mounting face, then a locating hole, then a second hole &mdash; so the drawing is measured the way the part functions</li>
             <li><span class="term">Datum reference frame:</span> primary, secondary, and tertiary datums together lock all six degrees of freedom, giving one repeatable origin everyone measures from</li>
             <li><span class="term">Feature control frame:</span> the boxed callout that carries the requirement &mdash; read left to right: the geometric characteristic symbol, the tolerance value (with a diameter symbol if the zone is round), then the datums it references</li>
             <li><span class="term">Tolerance zone:</span> the geometric space the feature must lie within &mdash; a gap between two planes, a cylinder, a band around a profile</li>
@@ -120,11 +149,46 @@
             <li><span class="term">Runout</span> (needs a datum axis): <span class="term">circular</span> and <span class="term">total runout</span> &mdash; how much a rotating surface wobbles</li>
         </ul>
 
+        <figure class="diagram">
+        <svg viewBox="0 0 580 168" role="img" aria-label="Anatomy of a feature control frame: the geometric characteristic symbol, then the tolerance value and zone shape with a material condition modifier, then the datum references, with a leader to the toleranced hole.">
+          <!-- frame -->
+          <rect x="70" y="66" width="250" height="34" fill="#eff6ff" stroke="#1e3a5f" stroke-width="1.6"/>
+          <line x1="112" y1="66" x2="112" y2="100" stroke="#1e3a5f" stroke-width="1.6"/>
+          <line x1="214" y1="66" x2="214" y2="100" stroke="#1e3a5f" stroke-width="1.6"/>
+          <line x1="250" y1="66" x2="250" y2="100" stroke="#1e3a5f" stroke-width="1.6"/>
+          <line x1="286" y1="66" x2="286" y2="100" stroke="#1e3a5f" stroke-width="1.6"/>
+          <circle cx="91" cy="83" r="9" fill="none" stroke="#1e3a5f" stroke-width="1.4"/>
+          <line x1="91" y1="70" x2="91" y2="96" stroke="#1e3a5f" stroke-width="1.4"/>
+          <line x1="78" y1="83" x2="104" y2="83" stroke="#1e3a5f" stroke-width="1.4"/>
+          <text x="163" y="88" text-anchor="middle" class="dg-t">&#8960;0.25 &#9410;</text>
+          <text x="232" y="88" text-anchor="middle" class="dg-t">A</text>
+          <text x="268" y="88" text-anchor="middle" class="dg-t">B</text>
+          <text x="303" y="88" text-anchor="middle" class="dg-t">C</text>
+          <!-- leader to hole -->
+          <path d="M320,83 L360,83 L392,116" class="dg-line"/>
+          <circle cx="404" cy="120" r="15" fill="#fff" stroke="#1e3a5f" stroke-width="1.5"/>
+          <text x="404" y="150" text-anchor="middle" class="dg-s">toleranced hole</text>
+          <!-- annotations -->
+          <line x1="91" y1="66" x2="91" y2="44" stroke="#94a3b8" stroke-width="1"/>
+          <text x="70" y="38" class="dg-s">characteristic (position)</text>
+          <line x1="150" y1="66" x2="150" y2="24" stroke="#94a3b8" stroke-width="1"/>
+          <text x="150" y="18" text-anchor="middle" class="dg-s">tolerance value &amp; zone shape (&#8960; = round)</text>
+          <line x1="180" y1="100" x2="180" y2="124" stroke="#94a3b8" stroke-width="1"/>
+          <text x="150" y="138" class="dg-s">&#9410; modifier &rarr; bonus tolerance</text>
+          <line x1="268" y1="100" x2="268" y2="118" stroke="#94a3b8" stroke-width="1"/>
+          <text x="300" y="132" text-anchor="middle" class="dg-s">datum reference frame &mdash; A, then B, then C</text>
+        </svg>
+        <figcaption>Read a feature control frame left to right: what is controlled, how tightly and in what shape of zone, and what it is measured from. GD&amp;T is design intent written in symbols instead of prose.</figcaption>
+        </figure>
+
         <h3>Material condition modifiers</h3>
         <p>
-            <span class="term">MMC</span> (maximum material condition, &#9410;), <span class="term">LMC</span> (&#9409;),
-            and RFS (the default). When a position tolerance is called at MMC, the part earns extra
-            <span class="term">bonus tolerance</span> as the hole moves away from its worst-case size &mdash; which
+            <span class="term def" tabindex="0" data-def="Maximum material condition: the feature size that leaves the most material — the largest pin or the smallest hole. Symbol Ⓜ.">MMC</span>
+            (maximum material condition, &#9410;),
+            <span class="term def" tabindex="0" data-def="Least material condition: the feature size that leaves the least material — the smallest pin or the largest hole. Symbol Ⓛ.">LMC</span> (&#9409;),
+            and <span class="term def" tabindex="0" data-def="Regardless of feature size — the default. The geometric tolerance applies in full no matter the feature's finished size; there is no bonus tolerance.">RFS</span> (the default). When a position tolerance is called at MMC, the part earns extra
+            <span class="term def" tabindex="0" data-def="Extra position tolerance a feature earns as it departs from MMC toward LMC — e.g. as a clearance hole is drilled larger, it may sit further off-center and still assemble. The looser the hole, the more the axis may shift.">bonus tolerance</span>
+            as the hole moves away from its worst-case size &mdash; which
             matches how a bolted clearance-hole joint really behaves and lets more usable parts pass.
         </p>
 
@@ -144,11 +208,43 @@
             right settings.
         </p>
         <ul>
-            <li><span class="term">Additive:</span> a watertight mesh (STL or 3MF) exported at a resolution fine enough to hide facets but not so fine the file is unwieldy</li>
+            <li><span class="term">Additive:</span> a <span class="term def" tabindex="0" data-def="A triangle mesh that forms a completely closed surface — no gaps, holes, or loose edges — so the slicer can tell solid inside from empty outside. Also called manifold.">watertight mesh</span> (STL or 3MF) exported at a resolution fine enough to hide facets but not so fine the file is unwieldy</li>
             <li><span class="term">Laser cutting:</span> a 2D vector profile (DXF) with cut lines and engrave lines on separate layers</li>
             <li><span class="term">CNC machining:</span> a solid model (STEP) plus a dimensioned drawing so the machinist knows which dimensions are critical</li>
             <li><span class="term">CAM basics:</span> stock setup, toolpath generation, simulation, and the post-processor that turns toolpaths into machine G-code</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 640 190" role="img" aria-label="One parametric model exports a different file for each process: a watertight mesh for 3D printing, a 2D vector profile for laser cutting, and a solid model plus a dimensioned drawing for CNC machining.">
+          <defs>
+            <marker id="u4mf-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+          </defs>
+          <rect x="0" y="70" width="110" height="52" rx="8" class="dg-box2"/>
+          <text x="55" y="92" text-anchor="middle" class="dg-t">Parametric</text>
+          <text x="55" y="108" text-anchor="middle" class="dg-t">model</text>
+          <path d="M110,86 C 150,86 158,30 196,28"  class="dg-line" marker-end="url(#u4mf-ar)"/>
+          <path d="M110,96 L196,96"                   class="dg-line" marker-end="url(#u4mf-ar)"/>
+          <path d="M110,106 C 150,106 158,162 196,164" class="dg-line" marker-end="url(#u4mf-ar)"/>
+          <rect x="200" y="8"   width="190" height="42" rx="7" class="dg-box"/>
+          <rect x="200" y="74"  width="190" height="42" rx="7" class="dg-box"/>
+          <rect x="200" y="142" width="190" height="42" rx="7" class="dg-box"/>
+          <text x="212" y="27" class="dg-t">STL / 3MF</text>
+          <text x="212" y="43" class="dg-s">watertight mesh, chosen resolution</text>
+          <text x="212" y="93" class="dg-t">DXF</text>
+          <text x="212" y="109" class="dg-s">2D vector, cut &amp; engrave layers</text>
+          <text x="212" y="161" class="dg-t">STEP + drawing</text>
+          <text x="212" y="177" class="dg-s">solid model + critical dimensions</text>
+          <path d="M390,29  L448,29"  class="dg-line" marker-end="url(#u4mf-ar)"/>
+          <path d="M390,95  L448,95"  class="dg-line" marker-end="url(#u4mf-ar)"/>
+          <path d="M390,163 L448,163" class="dg-line" marker-end="url(#u4mf-ar)"/>
+          <rect x="452" y="10"  width="180" height="38" rx="7" class="dg-box3"/>
+          <rect x="452" y="76"  width="180" height="38" rx="7" class="dg-box3"/>
+          <rect x="452" y="144" width="180" height="38" rx="7" class="dg-box3"/>
+          <text x="542" y="33"  text-anchor="middle" class="dg-t">3D printing (FDM)</text>
+          <text x="542" y="99"  text-anchor="middle" class="dg-t">Laser cutting</text>
+          <text x="542" y="167" text-anchor="middle" class="dg-t">CNC machining</text>
+        </svg>
+        <figcaption>Each process consumes a different file. Closing the loop from model to part starts with exporting the right one at the right settings.</figcaption>
+        </figure>
     </div>
 
     <div class="section">
@@ -164,6 +260,35 @@
             <li><span class="term">Settings that matter:</span> layer height, wall count, and infill density and pattern</li>
             <li><span class="term">Tolerances:</span> holes print undersize, first layers spread &mdash; expect to allow for it or drill/ream after</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 560 180" role="img" aria-label="A 3D print is built one deposited layer at a time, weakest in the vertical build direction; overhangs beyond about 45 degrees need support material.">
+          <defs>
+            <marker id="u4am-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+            <pattern id="u4sup" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0,6 L6,0" stroke="#f59e0b" stroke-width="0.7"/></pattern>
+          </defs>
+          <g stroke="#1e3a5f" stroke-width="1">
+            <rect x="40" y="132" width="120" height="10" fill="#dbeafe"/>
+            <rect x="40" y="120" width="120" height="10" fill="#e2e8f0"/>
+            <rect x="40" y="108" width="120" height="10" fill="#dbeafe"/>
+            <rect x="40" y="96"  width="120" height="10" fill="#e2e8f0"/>
+            <rect x="40" y="84"  width="120" height="10" fill="#dbeafe"/>
+            <rect x="40" y="72"  width="120" height="10" fill="#e2e8f0"/>
+          </g>
+          <line x1="26" y1="146" x2="26" y2="62" stroke="#1e3a5f" stroke-width="1.4" marker-end="url(#u4am-ar)"/>
+          <text x="100" y="164" text-anchor="middle" class="dg-s">deposited layers &mdash; weakest in Z (build) direction</text>
+          <line x1="300" y1="16" x2="300" y2="150" stroke="#e2e8f0"/>
+          <!-- overhang -->
+          <path d="M340,150 L340,70 L392,70 L440,120 L440,150 Z" class="dg-part"/>
+          <path d="M340,70 L316,70 L316,150 L340,150 Z" fill="url(#u4sup)" stroke="#f59e0b" stroke-width="1"/>
+          <path d="M392,70 L440,120" stroke="#16a34a" stroke-width="2.5"/>
+          <path d="M340,70 a20,20 0 0 0 -20,20" fill="none" stroke="#94a3b8" stroke-width="1"/>
+          <text x="470" y="70" class="dg-s">&gt; 45&deg; span</text>
+          <text x="470" y="84" class="dg-s">needs support</text>
+          <text x="452" y="128" fill="#16a34a" class="dg-s">&le; 45&deg; prints</text>
+          <text x="452" y="142" fill="#16a34a" class="dg-s">unsupported</text>
+        </svg>
+        <figcaption>Material-extrusion printing builds a part one layer at a time. Orientation is a strength decision, not just a fit-on-the-bed decision &mdash; and geometry past roughly 45&deg; from vertical needs support.</figcaption>
+        </figure>
     </div>
 
     <div class="section">
@@ -178,6 +303,25 @@
             <li><span class="term">Tool access and geometry:</span> internal corners carry the radius of the tool; deep narrow pockets need long thin tools that deflect and chatter</li>
             <li><span class="term">Feeds and speeds:</span> the basic idea of matching cutting parameters to the tool and material</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 560 170" role="img" aria-label="A rotating tool cuts material away from solid stock; internal corners carry the radius of the tool, and deep narrow pockets need long thin tools that deflect and chatter.">
+          <!-- pocket with corner radius -->
+          <path d="M30,50 L170,50 L170,140 L30,140 Z" class="dg-part"/>
+          <path d="M60,50 L60,100 Q60,110 70,110 L140,110 Q150,110 150,100 L150,50" fill="#ffffff" stroke="#1e3a5f" stroke-width="1.4"/>
+          <circle cx="105" cy="40" r="16" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.4"/>
+          <path d="M105,40 m-16,0 a16,4 0 1 0 32,0" fill="none" stroke="#3b82f6" stroke-width="1"/>
+          <path d="M150,100 a10,10 0 0 0 -10,10" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+          <text x="100" y="160" text-anchor="middle" class="dg-s">internal corners carry the tool radius</text>
+          <line x1="300" y1="14" x2="300" y2="150" stroke="#e2e8f0"/>
+          <!-- deep narrow pocket -->
+          <path d="M340,44 L520,44 L520,140 L340,140 Z" class="dg-part"/>
+          <path d="M420,44 L420,124 L450,124 L450,44" fill="#ffffff" stroke="#1e3a5f" stroke-width="1.4"/>
+          <rect x="430" y="8" width="10" height="112" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2"/>
+          <path d="M426,120 q-6,6 0,12 M444,120 q6,6 0,12" fill="none" stroke="#f59e0b" stroke-width="1.4"/>
+          <text x="430" y="162" text-anchor="middle" class="dg-s">deep narrow pockets &rarr; tool deflects &amp; chatters</text>
+        </svg>
+        <figcaption>Subtractive processes start with solid stock and cut material away with a rotating tool. The design constraints come from the tool geometry and how the part is held.</figcaption>
+        </figure>
     </div>
 
     <div class="section">
@@ -187,11 +331,30 @@
             in 2D, with its own material and geometry rules.
         </p>
         <ul>
-            <li><span class="term">Kerf:</span> the cut removes a finite width of material &mdash; it must be accounted for on tight-fitting parts</li>
+            <li><span class="term def" tabindex="0" data-def="The width of material the laser beam burns away along the cut line — typically around 0.1–0.3 mm. Parts come out slightly undersize and holes slightly oversize unless the cut path is offset to compensate.">Kerf:</span> the cut removes a finite width of material &mdash; it must be accounted for on tight-fitting parts</li>
             <li><span class="term">Vector cut vs. raster engrave:</span> line color / layer determines whether the laser cuts through or marks the surface</li>
             <li><span class="term">Material limits:</span> wood, acrylic, paper, and cloth cut well; <span class="term">PVC and other chlorinated plastics must never be cut</span> &mdash; they release chlorine gas</li>
             <li><span class="term">Small-feature limits:</span> minimum hole size and minimum spacing relative to material thickness</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 560 160" role="img" aria-label="The laser cut removes a finite width of material called the kerf, which must be accounted for on tight-fitting parts; line colour or layer sets whether the laser cuts through or engraves the surface.">
+          <!-- kerf -->
+          <rect x="30" y="40" width="90" height="80" class="dg-part"/>
+          <rect x="132" y="40" width="90" height="80" class="dg-part"/>
+          <line x1="120" y1="30" x2="132" y2="30" stroke="#dc2626" stroke-width="1"/>
+          <line x1="120" y1="26" x2="120" y2="34" stroke="#dc2626" stroke-width="1"/>
+          <line x1="132" y1="26" x2="132" y2="34" stroke="#dc2626" stroke-width="1"/>
+          <text x="126" y="20" text-anchor="middle" class="dg-s" fill="#dc2626">kerf</text>
+          <text x="126" y="140" text-anchor="middle" class="dg-s">the cut removes a finite width</text>
+          <line x1="290" y1="14" x2="290" y2="140" stroke="#e2e8f0"/>
+          <!-- cut vs engrave -->
+          <rect x="330" y="34" width="150" height="92" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+          <rect x="356" y="60" width="98" height="40" fill="none" stroke="#dc2626" stroke-width="1.4" stroke-dasharray="2 2"/>
+          <text x="405" y="84" text-anchor="middle" class="dg-s" fill="#dc2626">engrave</text>
+          <text x="405" y="140" text-anchor="middle" class="dg-s"><tspan fill="#2563eb">blue = cut through</tspan> &middot; <tspan fill="#dc2626">red = surface mark</tspan></text>
+        </svg>
+        <figcaption>A laser cutter cuts flat sheet by burning a narrow line through it &mdash; fast and precise in 2D, with its own material and geometry rules. Never cut PVC or other chlorinated plastics: they release chlorine gas.</figcaption>
+        </figure>
     </div>
 
     <div class="section">

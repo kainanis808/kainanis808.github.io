@@ -26,6 +26,42 @@
             margin: 24px 0 10px; font-size: 0.95rem; color: #374151; line-height: 1.7; }
         .produce strong { color: #1d4ed8; }
         .assess { font-size: 0.9rem; color: #6b7280; font-style: italic; margin-bottom: 24px; }
+        figure.diagram { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px;
+            padding: 16px 18px 8px; margin: 18px 0 6px; }
+        figure.diagram svg { display: block; width: 100%; height: auto; overflow: visible; }
+        figure.diagram figcaption { margin-top: 10px; font-size: 0.82rem; color: #6b7280;
+            line-height: 1.55; text-align: center; }
+        .dg-t { font: 600 13px 'Segoe UI', Tahoma, Geneva, sans-serif; fill: #1e3a5f; }
+        .dg-s { font: 400 11px 'Segoe UI', Tahoma, Geneva, sans-serif; fill: #64748b; }
+        .dg-box  { fill: #eff6ff; stroke: #bfdbfe; stroke-width: 1.5; }
+        .dg-box2 { fill: #dbeafe; stroke: #3b82f6; stroke-width: 1.5; }
+        .dg-box3 { fill: #f0fdf4; stroke: #86efac; stroke-width: 1.5; }
+        .dg-line { fill: none; stroke: #94a3b8; stroke-width: 1.6; }
+        .dg-accent { fill: none; stroke: #f59e0b; stroke-width: 1.8; }
+        .dg-fill { fill: #94a3b8; }
+        .dg-fill-a { fill: #f59e0b; }
+        .dg-part { fill: #e2e8f0; stroke: #1e3a5f; stroke-width: 1.6; }
+        .dg-hidden { fill: none; stroke: #94a3b8; stroke-width: 1.2; stroke-dasharray: 4 3; }
+        .section h3 { font-size: 1rem; color: #1e3a5f; margin: 16px 0 6px; }
+        .stack { border-collapse: collapse; margin: 10px 0 6px; font-size: 0.9rem; width: 100%; max-width: 460px; }
+        .stack caption { text-align: left; font-size: 0.85rem; color: #6b7280; margin-bottom: 6px; }
+        .stack th, .stack td { border: 1px solid #e2e8f0; padding: 6px 10px; text-align: left; }
+        .stack th { background: #f1f5f9; color: #1e3a5f; }
+        .stack td:last-child, .stack th:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+        .stack tr.total td { font-weight: 700; color: #1e3a5f; background: #f8fafc; }
+        html { overflow-x: clip; }
+        .def { position: relative; border-bottom: 1px dotted #64748b; cursor: help; }
+        .def:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
+        .def::after { content: attr(data-def); position: absolute; left: 0; bottom: calc(100% + 9px);
+            width: 240px; background: #1e293b; color: #f8fafc;
+            font: 400 0.8rem/1.5 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-style: normal;
+            text-align: left; padding: 9px 12px; border-radius: 7px; box-shadow: 0 8px 24px rgba(15,23,42,0.28);
+            opacity: 0; visibility: hidden; transition: opacity 0.12s ease; z-index: 30; pointer-events: none; }
+        .def::before { content: ""; position: absolute; left: 15px; bottom: calc(100% + 3px);
+            border: 6px solid transparent; border-top-color: #1e293b;
+            opacity: 0; visibility: hidden; transition: opacity 0.12s ease; z-index: 30; pointer-events: none; }
+        .def:hover::after, .def:focus::after, .def:hover::before, .def:focus::before { opacity: 1; visibility: visible; }
+        @media (max-width: 540px) { .def::after { width: 66vw; } }
         .back-link { display: block; text-align: center; margin-top: 28px; color: #0284c7; text-decoration: none; font-size: 0.95rem; }
         .back-link:hover { text-decoration: underline; }
     </style>
@@ -52,9 +88,11 @@
     <div class="section">
         <h2>Assembly modeling with mates and constraints</h2>
         <p>
-            An assembly positions components relative to one another using <span class="term">mates</span>
-            (also called constraints). Each mate removes degrees of freedom until a part is either fully located
-            or deliberately left free to move.
+            An assembly positions components relative to one another using
+            <span class="term def" tabindex="0" data-def="A geometric relationship placed between two components — coincident, concentric, distance, angle, tangent — that fixes how they sit relative to each other. Each one removes one or more degrees of freedom. Called mates in some CAD systems, constraints in others.">mates</span>
+            (also called constraints). Each mate removes
+            <span class="term def" tabindex="0" data-def="The independent ways a part can still move: three directions of translation plus three axes of rotation — six in total for a free rigid body. Mates remove them one axis at a time.">degrees of freedom</span>
+            until a part is either fully located or deliberately left free to move.
         </p>
         <ul>
             <li><span class="term">Common mates:</span> coincident, concentric, parallel, perpendicular, distance, angle, and tangent</li>
@@ -62,6 +100,30 @@
             <li><span class="term">Degrees of freedom:</span> a free rigid body has six; mates remove them one axis at a time</li>
             <li><span class="term">Motion:</span> leaving rotational or linear freedom on purpose so a mechanism can be moved and checked</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 600 168" role="img" aria-label="A free rigid body has six degrees of freedom; mates remove them one axis at a time until the part is fully located, unless freedom is left on purpose for a mechanism.">
+          <defs>
+            <marker id="u3dof-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+            <marker id="u3dof-ara" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-a"/></marker>
+          </defs>
+          <rect x="66" y="52" width="60" height="60" class="dg-part"/>
+          <line x1="30" y1="82" x2="162" y2="82" stroke="#94a3b8" stroke-width="1.4" marker-start="url(#u3dof-ar)" marker-end="url(#u3dof-ar)"/>
+          <line x1="96" y1="20" x2="96" y2="144" stroke="#94a3b8" stroke-width="1.4" marker-start="url(#u3dof-ar)" marker-end="url(#u3dof-ar)"/>
+          <line x1="52" y1="126" x2="140" y2="40" stroke="#94a3b8" stroke-width="1.4" marker-start="url(#u3dof-ar)" marker-end="url(#u3dof-ar)"/>
+          <path d="M150,140 a18,10 0 1 1 12,-8" fill="none" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#u3dof-ar)"/>
+          <text x="96" y="162" text-anchor="middle" class="dg-s">free body &mdash; 6 DOF (3 move + 3 turn)</text>
+          <path d="M210,82 L286,82" class="dg-accent" marker-end="url(#u3dof-ara)"/>
+          <text x="248" y="72" text-anchor="middle" class="dg-s">each mate</text>
+          <text x="248" y="98" text-anchor="middle" class="dg-s">removes DOF</text>
+          <path d="M360,60 L420,60 L420,120 L330,120 L330,90 L360,90 Z" fill="#f1f5f9" stroke="#94a3b8"/>
+          <rect x="360" y="60" width="42" height="30" class="dg-part"/>
+          <g fill="#1e3a5f"><rect x="357" y="57" width="5" height="5"/><rect x="399" y="57" width="5" height="5"/><rect x="357" y="87" width="5" height="5"/><rect x="399" y="87" width="5" height="5"/></g>
+          <text x="378" y="140" text-anchor="middle" class="dg-t">fully located &mdash; 0 DOF</text>
+          <text x="510" y="80" text-anchor="middle" class="dg-s">or leave one axis</text>
+          <text x="510" y="96" text-anchor="middle" class="dg-s">free for a mechanism</text>
+        </svg>
+        <figcaption>Each mate removes degrees of freedom until a part is either fully located or deliberately left free to move. The first component placed is fixed and becomes the ground the rest is built against.</figcaption>
+        </figure>
     </div>
 
     <div class="section">
@@ -76,6 +138,39 @@
             <li><span class="term">Component patterns and mirrors:</span> reusing repeated parts instead of placing each one by hand</li>
             <li><span class="term">Managing references:</span> keeping file links intact so the assembly updates when a part changes</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 620 176" role="img" aria-label="Bottom-up workflow: model each part, insert into an assembly, add mates. Top-down workflow: start from an assembly layout sketch, model parts in context.">
+          <defs>
+            <marker id="u3wf-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+          </defs>
+          <text x="0" y="14" class="dg-t">Bottom-up (standard)</text>
+          <rect x="0"   y="24" width="118" height="38" rx="7" class="dg-box"/>
+          <rect x="150" y="24" width="118" height="38" rx="7" class="dg-box"/>
+          <rect x="300" y="24" width="128" height="38" rx="7" class="dg-box2"/>
+          <rect x="460" y="24" width="118" height="38" rx="7" class="dg-box2"/>
+          <text x="59"  y="47" text-anchor="middle" class="dg-s">model each part</text>
+          <text x="209" y="47" text-anchor="middle" class="dg-s">fully define it</text>
+          <text x="364" y="42" text-anchor="middle" class="dg-s">insert into</text>
+          <text x="364" y="56" text-anchor="middle" class="dg-s">assembly</text>
+          <text x="519" y="47" text-anchor="middle" class="dg-s">add mates</text>
+          <path d="M118,43 L148,43" class="dg-line" marker-end="url(#u3wf-ar)"/>
+          <path d="M268,43 L298,43" class="dg-line" marker-end="url(#u3wf-ar)"/>
+          <path d="M428,43 L458,43" class="dg-line" marker-end="url(#u3wf-ar)"/>
+
+          <text x="0" y="104" class="dg-t">Top-down</text>
+          <rect x="0"   y="114" width="150" height="38" rx="7" class="dg-box2"/>
+          <rect x="196" y="114" width="160" height="38" rx="7" class="dg-box"/>
+          <rect x="402" y="114" width="150" height="38" rx="7" class="dg-box"/>
+          <text x="75"  y="132" text-anchor="middle" class="dg-s">start from assembly</text>
+          <text x="75"  y="146" text-anchor="middle" class="dg-s">/ layout sketch</text>
+          <text x="276" y="137" text-anchor="middle" class="dg-s">derive part shapes in context</text>
+          <text x="477" y="137" text-anchor="middle" class="dg-s">parts stay fitted as</text>
+          <text x="477" y="151" text-anchor="middle" class="dg-s">the design moves</text>
+          <path d="M150,133 L194,133" class="dg-line" marker-end="url(#u3wf-ar)"/>
+          <path d="M356,133 L400,133" class="dg-line" marker-end="url(#u3wf-ar)"/>
+        </svg>
+        <figcaption>The standard workflow is bottom-up &mdash; model parts on their own, then bring them together and mate them. Top-down drives part geometry from the assembly, useful when the interfaces are still moving.</figcaption>
+        </figure>
     </div>
 
     <div class="section">
@@ -103,9 +198,38 @@
             <li><span class="term">Heat-set threaded inserts:</span> the standard way to put a durable machine thread into a plastic or 3D-printed part. A brass insert is pushed into a molded or printed boss with a soldering iron; the melted plastic flows into its knurls and locks it. Design the boss to the insert manufacturer's hole diameter and depth, add a lead-in chamfer, and keep enough wall around it. Far more reusable than screwing directly into plastic or using self-tapping screws.</li>
             <li><span class="term">Snap-fit joints:</span> a molded or printed feature that deflects during assembly and springs back to hold &mdash; cantilever hooks, annular (ring) snaps, and torsion snaps. No hardware, no tools, fast assembly. Design for the material's allowable strain, add lead-in angles, and decide whether it should be releasable (serviceable) or permanent (higher retention angle).</li>
             <li><span class="term">Press / interference fits:</span> holding by friction alone from a slight size mismatch &mdash; dowel pins, bushings, bearings. Cheap and precise, but hard to take apart and sensitive to tolerance.</li>
-            <li><span class="term">Compliant mechanisms:</span> parts that get their motion or retention from the flexibility of the material itself rather than from separate hinges or springs &mdash; living hinges, flexure pivots, and one-piece clips. They reduce part count to the extreme (often to one), remove assembly entirely, and have no pin joints to wear &mdash; at the cost of limited travel and fatigue life, and needing a material that tolerates repeated flexing (PP and PE for living hinges).</li>
+            <li><span class="term def" tabindex="0" data-def="A part that gets its motion or holding force from the material flexing, not from a separate hinge, pin, or spring. Fewer parts (often one), no joints to wear — but limited travel and a fatigue life.">Compliant mechanisms:</span> parts that get their motion or retention from the flexibility of the material itself rather than from separate hinges or springs &mdash; <span class="term def" tabindex="0" data-def="A thin strip of material molded or printed in one piece with the two panels it joins, flexing at that strip to act as the hinge. Needs a fatigue-tolerant material — polypropylene or polyethylene.">living hinges</span>, flexure pivots, and one-piece clips. They reduce part count to the extreme (often to one), remove assembly entirely, and have no pin joints to wear &mdash; at the cost of limited travel and fatigue life, and needing a material that tolerates repeated flexing (PP and PE for living hinges).</li>
             <li><span class="term">Permanent joints:</span> adhesives, solvent welding, ultrasonic welding, riveting &mdash; used where the joint never needs to come apart. Commit to these only when serviceability truly is not required.</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 620 150" role="img" aria-label="Four ways to join parts: a heat-set threaded insert in a printed boss, a cantilever snap-fit hook, a press or interference fit, and a one-piece living hinge.">
+          <!-- heat-set insert -->
+          <rect x="26" y="60" width="18" height="52" class="dg-part"/>
+          <rect x="96" y="60" width="18" height="52" class="dg-part"/>
+          <rect x="44" y="64" width="52" height="30" fill="#fde68a" stroke="#b45309" stroke-width="1.2"/>
+          <path d="M44,66 h52 M44,72 h52 M44,78 h52 M44,84 h52 M44,90 h52" stroke="#b45309" stroke-width="0.6"/>
+          <rect x="62" y="30" width="16" height="30" fill="#cbd5e1" stroke="#475569" stroke-width="1"/>
+          <text x="70" y="132" text-anchor="middle" class="dg-t">Heat-set insert</text>
+          <line x1="150" y1="16" x2="150" y2="120" stroke="#e2e8f0"/>
+          <!-- snap-fit -->
+          <path d="M175,110 L175,60 L205,60 L205,50 L220,64 L205,78 L205,70 L188,70 L188,110 Z" class="dg-part"/>
+          <path d="M228,44 L262,44 L262,64 L238,64 L238,80 L228,80 Z" fill="#f1f5f9" stroke="#1e3a5f" stroke-width="1.4"/>
+          <text x="218" y="132" text-anchor="middle" class="dg-t">Snap-fit</text>
+          <line x1="300" y1="16" x2="300" y2="120" stroke="#e2e8f0"/>
+          <!-- press fit -->
+          <rect x="326" y="52" width="80" height="48" class="dg-part"/>
+          <rect x="358" y="46" width="90" height="16" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.4"/>
+          <line x1="358" y1="52" x2="406" y2="52" stroke="#f59e0b" stroke-width="2"/>
+          <text x="392" y="132" text-anchor="middle" class="dg-t">Press fit</text>
+          <line x1="470" y1="16" x2="470" y2="120" stroke="#e2e8f0"/>
+          <!-- living hinge -->
+          <path d="M494,58 L534,58 L534,74 L494,74 Z" class="dg-part"/>
+          <path d="M540,60 C 556,60 560,84 548,98 L560,110 C 540,112 536,86 540,74 Z" class="dg-part"/>
+          <path d="M534,66 C 538,66 540,68 540,68" fill="none" stroke="#3b82f6" stroke-width="2"/>
+          <text x="540" y="132" text-anchor="middle" class="dg-t">Living hinge</text>
+        </svg>
+        <figcaption>How two parts are held together is a design decision with real consequences for cost, strength, serviceability, and assembly. Threaded fasteners are only one option &mdash; and often not the best one.</figcaption>
+        </figure>
         <p>
             The DFA trade-off: hardware is universal and serviceable but adds parts, tools, and assembly time;
             snap-fits and compliant features add almost nothing to the parts list but must be designed carefully
@@ -141,6 +265,44 @@
             <li><span class="term">Bill of materials (BOM):</span> item number, part number, description, and quantity &mdash; generated from and linked to the assembly</li>
             <li><span class="term">Assembly vs. installation drawings:</span> what belongs on each and the level of detail expected</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 600 220" role="img" aria-label="An exploded assembly view with numbered balloons on each component, along an explode line, keyed to a bill of materials table.">
+          <line x1="90" y1="20" x2="90" y2="200" class="dg-hidden"/>
+          <rect x="55" y="30" width="70" height="24" class="dg-part"/>
+          <rect x="60" y="78" width="60" height="20" class="dg-part"/>
+          <rect x="45" y="120" width="90" height="30" class="dg-part"/>
+          <rect x="62" y="172" width="56" height="18" class="dg-part"/>
+          <g class="dg-t">
+            <circle cx="165" cy="42"  r="12" fill="#fff" stroke="#1e3a5f" stroke-width="1.3"/><text x="165" y="46" text-anchor="middle">1</text>
+            <circle cx="165" cy="88"  r="12" fill="#fff" stroke="#1e3a5f" stroke-width="1.3"/><text x="165" y="92" text-anchor="middle">2</text>
+            <circle cx="165" cy="135" r="12" fill="#fff" stroke="#1e3a5f" stroke-width="1.3"/><text x="165" y="139" text-anchor="middle">3</text>
+            <circle cx="165" cy="181" r="12" fill="#fff" stroke="#1e3a5f" stroke-width="1.3"/><text x="165" y="185" text-anchor="middle">4</text>
+          </g>
+          <line x1="125" y1="42" x2="153" y2="42" stroke="#1e3a5f" stroke-width="0.8"/>
+          <line x1="120" y1="88" x2="153" y2="88" stroke="#1e3a5f" stroke-width="0.8"/>
+          <line x1="135" y1="135" x2="153" y2="135" stroke="#1e3a5f" stroke-width="0.8"/>
+          <line x1="118" y1="181" x2="153" y2="181" stroke="#1e3a5f" stroke-width="0.8"/>
+          <text x="90" y="214" text-anchor="middle" class="dg-s">exploded view + balloons</text>
+          <path d="M195,110 L225,110" class="dg-line"/>
+          <g>
+            <rect x="235" y="34" width="330" height="150" fill="#f8fafc" stroke="#cbd5e1"/>
+            <line x1="235" y1="62" x2="565" y2="62" stroke="#cbd5e1"/>
+            <line x1="277" y1="34" x2="277" y2="184" stroke="#cbd5e1"/>
+            <line x1="470" y1="34" x2="470" y2="184" stroke="#cbd5e1"/>
+            <text x="245" y="53" class="dg-t">ITEM</text>
+            <text x="330" y="53" class="dg-t">PART</text>
+            <text x="486" y="53" class="dg-t">QTY</text>
+            <g class="dg-s">
+              <text x="252" y="83">1</text><text x="288" y="83">Top cover</text><text x="500" y="83">1</text>
+              <text x="252" y="113">2</text><text x="288" y="113">Spacer</text><text x="500" y="113">2</text>
+              <text x="252" y="143">3</text><text x="288" y="143">Base plate</text><text x="500" y="143">1</text>
+              <text x="252" y="173">4</text><text x="288" y="173">M3 &times; 10 SHCS</text><text x="500" y="173">4</text>
+            </g>
+          </g>
+          <text x="400" y="204" text-anchor="middle" class="dg-s">BOM &mdash; generated from and linked to the assembly</text>
+        </svg>
+        <figcaption>An assembly drawing shows how the parts go together, not how to make each one. Numbered balloons key each component to a bill of materials that carries item number, part number, description, and quantity.</figcaption>
+        </figure>
     </div>
 
     <div class="section">
@@ -156,8 +318,136 @@
             <li><span class="term">Avoid reorientation:</span> assemble from one direction, ideally top-down, so the workpiece isn't flipped</li>
             <li><span class="term">Standardize fasteners:</span> fewer unique sizes means fewer tools and fewer mistakes</li>
             <li><span class="term">Symmetry:</span> make parts either fully symmetric so orientation doesn't matter, or clearly asymmetric so the correct orientation is obvious</li>
-            <li><span class="term">Tolerance stack-up:</span> checking that the accumulated tolerances of mating parts still allow assembly and function</li>
+            <li><span class="term def" tabindex="0" data-def="Adding up the individual tolerances of every part and gap in a chain to find how much the overall dimension (often an assembly gap or fit) can vary. Checked so the parts still assemble and function at their worst-case sizes.">Tolerance stack-up:</span> checking that the accumulated tolerances of mating parts still allow assembly and function &mdash; worked through in the example below</li>
         </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 620 160" role="img" aria-label="The design-for-assembly review loop: present the assembly, take feedback against DFA principles, revise, and go around again, reducing part count each time.">
+          <defs>
+            <marker id="u3rv-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+            <marker id="u3rv-ara" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-a"/></marker>
+          </defs>
+          <rect x="0"   y="24" width="150" height="46" rx="8" class="dg-box"/>
+          <rect x="196" y="24" width="176" height="46" rx="8" class="dg-box"/>
+          <rect x="418" y="24" width="176" height="46" rx="8" class="dg-box2"/>
+          <text x="75"  y="45" text-anchor="middle" class="dg-t">Present assembly</text>
+          <text x="75"  y="60" text-anchor="middle" class="dg-s">state the part count</text>
+          <text x="284" y="45" text-anchor="middle" class="dg-t">Review vs. DFA principles</text>
+          <text x="284" y="60" text-anchor="middle" class="dg-s">part count &middot; insertion &middot; reorientation</text>
+          <text x="506" y="45" text-anchor="middle" class="dg-t">Revise</text>
+          <text x="506" y="60" text-anchor="middle" class="dg-s">merge parts &middot; add lead-ins &middot; standardize</text>
+          <path d="M150,47 L194,47" class="dg-line" marker-end="url(#u3rv-ar)"/>
+          <path d="M372,47 L416,47" class="dg-line" marker-end="url(#u3rv-ar)"/>
+          <path d="M506,70 L506,110 L75,110 L75,72" class="dg-accent" marker-end="url(#u3rv-ara)"/>
+          <text x="290" y="104" text-anchor="middle" class="dg-s">record what changed and why &mdash; then measure again</text>
+          <text x="290" y="140" text-anchor="middle" class="dg-t">e.g. 12 parts &rarr; 7 parts &mdash; a measurable DFA improvement</text>
+        </svg>
+        <figcaption>Design for Assembly reduces the time, cost, and error rate of putting a product together &mdash; and the biggest lever is part count. The unit ends by presenting an assembly, taking feedback, and producing a documented revision.</figcaption>
+        </figure>
+    </div>
+
+    <div class="section">
+        <h2>Worked example: a tolerance stack-up</h2>
+        <p>
+            Three spacer blocks &mdash; <span class="term">A</span>, <span class="term">B</span>, and
+            <span class="term">C</span> &mdash; drop into a milled pocket in a housing. They need a small
+            <span class="term">end gap</span> so the cover can close. The gap must <em>never</em> be negative
+            (the stack would jam and the cover would not seat) and should stay under about 1.2&nbsp;mm (any looser
+            and the stack rattles).
+        </p>
+        <figure class="diagram">
+        <svg viewBox="0 0 470 250" role="img" aria-label="Three blocks A, B and C stacked in a housing pocket. The pocket depth is 60.0 plus or minus 0.2. Block A is 20.0 plus or minus 0.1, block B is 15.0 plus or minus 0.1, block C is 24.5 plus or minus 0.15. The end gap above block A is 0.5 nominal.">
+          <defs>
+            <marker id="u3ts-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+            <pattern id="u3ts-gap" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="6" stroke="#f59e0b" stroke-width="0.8"/></pattern>
+          </defs>
+          <!-- housing pocket -->
+          <path d="M64,20 L64,212 L262,212 L262,20 L250,20 L250,200 L76,200 L76,20 Z" fill="#e2e8f0" stroke="#1e3a5f" stroke-width="1.4"/>
+          <!-- blocks -->
+          <rect x="76" y="138" width="174" height="62" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.3"/>
+          <rect x="76" y="94"  width="174" height="44" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.3"/>
+          <rect x="76" y="40"  width="174" height="54" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.3"/>
+          <rect x="76" y="24"  width="174" height="16" fill="url(#u3ts-gap)"/>
+          <text x="163" y="173" text-anchor="middle" class="dg-t">C</text>
+          <text x="163" y="121" text-anchor="middle" class="dg-t">B</text>
+          <text x="163" y="71"  text-anchor="middle" class="dg-t">A</text>
+          <!-- pocket depth dim -->
+          <line x1="44" y1="20" x2="44" y2="212" stroke="#1e3a5f" stroke-width="1" marker-start="url(#u3ts-ar)" marker-end="url(#u3ts-ar)"/>
+          <text x="20" y="120" text-anchor="middle" class="dg-s" transform="rotate(-90 20 120)">pocket 60.0 &plusmn;0.2</text>
+          <!-- block dims -->
+          <text x="278" y="70"  class="dg-s">A = 20.0 &plusmn;0.1</text>
+          <text x="278" y="120" class="dg-s">B = 15.0 &plusmn;0.1</text>
+          <text x="278" y="172" class="dg-s">C = 24.5 &plusmn;0.15</text>
+          <text x="278" y="33"  class="dg-s" fill="#b45309">end gap</text>
+          <line x1="264" y1="64" x2="330" y2="64" stroke="#cbd5e1" stroke-width="0.8"/>
+          <line x1="264" y1="114" x2="330" y2="114" stroke="#cbd5e1" stroke-width="0.8"/>
+          <line x1="264" y1="166" x2="330" y2="166" stroke="#cbd5e1" stroke-width="0.8"/>
+          <text x="235" y="245" text-anchor="middle" class="dg-s">schematic &mdash; block heights not to scale</text>
+        </svg>
+        <figcaption>The gap is what is left of the pocket depth after the three blocks are stacked in it: gap = pocket &minus; (A + B + C).</figcaption>
+        </figure>
+
+        <table class="stack">
+            <caption>Dimensions from the part drawings. The pocket <em>opens</em> the gap (+); each block <em>closes</em> it (&minus;).</caption>
+            <thead><tr><th>Feature</th><th>Effect</th><th>Nominal</th><th>Tol.</th><th>Min</th><th>Max</th></tr></thead>
+            <tbody>
+                <tr><td>Pocket depth</td><td>+</td><td>60.00</td><td>&plusmn;0.20</td><td>59.80</td><td>60.20</td></tr>
+                <tr><td>Block A</td><td>&minus;</td><td>20.00</td><td>&plusmn;0.10</td><td>19.90</td><td>20.10</td></tr>
+                <tr><td>Block B</td><td>&minus;</td><td>15.00</td><td>&plusmn;0.10</td><td>14.90</td><td>15.10</td></tr>
+                <tr><td>Block C</td><td>&minus;</td><td>24.50</td><td>&plusmn;0.15</td><td>24.35</td><td>24.65</td></tr>
+                <tr class="total"><td colspan="3">Total tolerance (sum of the &plusmn; values)</td><td colspan="3">&plusmn;0.55</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Step 1 &mdash; nominal gap</h3>
+        <p>
+            gap<sub>nom</sub> = 60.00 &minus; (20.00 + 15.00 + 24.50) = <strong>0.50&nbsp;mm</strong>. Looks fine on its own.
+        </p>
+
+        <h3>Step 2 &mdash; worst-case (arithmetic) stack</h3>
+        <p>
+            The gap is largest when the pocket is at its maximum and every block is at its minimum; smallest when
+            the pocket is at its minimum and every block is at its maximum.
+        </p>
+        <ul>
+            <li><span class="term">Largest gap</span> = 60.20 &minus; (19.90 + 14.90 + 24.35) = 60.20 &minus; 59.15 = <strong>+1.05&nbsp;mm</strong></li>
+            <li><span class="term">Smallest gap</span> = 59.80 &minus; (20.10 + 15.10 + 24.65) = 59.80 &minus; 59.85 = <strong>&minus;0.05&nbsp;mm</strong></li>
+            <li><span class="term">Shortcut:</span> gap = nominal &plusmn; total tolerance = 0.50 &plusmn; 0.55 &rarr; the same <strong>&minus;0.05 &hellip; +1.05&nbsp;mm</strong></li>
+        </ul>
+        <div style="background:#fef2f2;border-left:4px solid #dc2626;border-radius:0 8px 8px 0;padding:12px 16px;margin:14px 0 4px;font-size:0.92rem;color:#4b5563;line-height:1.6;">
+            <strong style="color:#991b1b;">Verdict:</strong> the nominal gap is fine, but the worst-case minimum is
+            <strong>&minus;0.05&nbsp;mm</strong> &mdash; a possible interference. A fraction of assemblies built from
+            in-tolerance parts would not go together. The stack fails the check.
+        </div>
+
+        <h3>Step 3 &mdash; fix it (choose one)</h3>
+        <ul>
+            <li><span class="term">Shift a nominal:</span> make Block&nbsp;C 24.30 &rarr; gap = 0.70 &plusmn; 0.55 = <strong>0.15 &hellip; 1.25&nbsp;mm</strong>. Minimum now positive.</li>
+            <li><span class="term">Tighten a tolerance:</span> hold the pocket to &plusmn;0.10 &rarr; total &plusmn;0.45, gap = 0.50 &plusmn; 0.45 = <strong>0.05 &hellip; 0.95&nbsp;mm</strong>.</li>
+            <li><span class="term">Absorb the variation:</span> add a shim or a wave washer so the stack does not depend on the tolerances lining up.</li>
+        </ul>
+
+        <h3>Step 4 &mdash; statistical (RSS) check</h3>
+        <p>
+            For a long chain, worst-case is often too conservative &mdash; every part sitting at its extreme in the
+            same direction is unlikely. <span class="term def" tabindex="0" data-def="Root-Sum-Square: combine tolerances as independent random variables by taking the square root of the sum of their squares. Predicts the likely spread of an assembly dimension rather than its absolute limit.">Root-sum-square (RSS)</span>
+            combines the tolerances as independent random variables:
+        </p>
+        <p>
+            T<sub>RSS</sub> = &radic;(0.20&sup2; + 0.10&sup2; + 0.10&sup2; + 0.15&sup2;) = &radic;0.0825 &approx; <strong>0.29&nbsp;mm</strong><br>
+            gap &approx; 0.50 &plusmn; 0.29 &rarr; <strong>0.21 &hellip; 0.79&nbsp;mm</strong> (treating each &plusmn; value as about 3&sigma;)
+        </p>
+        <p>
+            So statistically an interference is very unlikely &mdash; but RSS is a probability, not a guarantee. Use
+            <span class="term">worst-case</span> when a single jammed assembly is unacceptable (small production runs,
+            safety-critical fits); use <span class="term">RSS</span> for long stacks in volume production where a
+            small, known reject rate is acceptable.
+        </p>
+        <div class="note" style="background:#fffbeb;border-left:4px solid #f59e0b;border-radius:0 8px 8px 0;padding:12px 16px;margin:14px 0 4px;font-size:0.9rem;color:#713f12;line-height:1.6;">
+            <strong>Two rules for building the chain:</strong> only dimensions along the same line add to a stack,
+            and you must track direction &mdash; a feature that opens the gap counts&nbsp;+, one that closes it counts&nbsp;&minus;.
+            <span class="term">Baseline dimensioning</span> (measuring every feature from one datum instead of
+            chaining feature-to-feature) keeps the chain short and the stack small.
+        </div>
     </div>
 
     <div class="section">
