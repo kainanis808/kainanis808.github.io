@@ -49,6 +49,14 @@
         .dg-fill-a { fill: #f59e0b; }
         .dg-part { fill: #e2e8f0; stroke: #1e3a5f; stroke-width: 1.6; }
         .dg-hidden { fill: none; stroke: #94a3b8; stroke-width: 1.2; stroke-dasharray: 4 3; }
+        .formula { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 16px;
+            margin: 12px 0; font-family: 'Cambria Math', Cambria, Georgia, 'Times New Roman', serif;
+            color: #1e3a5f; line-height: 1.7; font-size: 1rem; overflow-x: auto; }
+        .formula .eq { font-weight: 600; }
+        .formula .where { display: block; margin-top: 5px; font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
+            font-size: 0.82rem; color: #64748b; line-height: 1.6; }
+        .formula .ex { display: block; margin-top: 7px; padding-top: 7px; border-top: 1px dashed #cbd5e1;
+            font-family: 'Segoe UI', Tahoma, Geneva, sans-serif; font-size: 0.85rem; color: #475569; line-height: 1.6; }
         html { overflow-x: clip; }
         .def { position: relative; border-bottom: 1px dotted #64748b; cursor: help; }
         .def:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
@@ -150,33 +158,38 @@
         </ul>
 
         <figure class="diagram">
-        <svg viewBox="0 0 580 168" role="img" aria-label="Anatomy of a feature control frame: the geometric characteristic symbol, then the tolerance value and zone shape with a material condition modifier, then the datum references, with a leader to the toleranced hole.">
-          <!-- frame -->
-          <rect x="70" y="66" width="250" height="34" fill="#eff6ff" stroke="#1e3a5f" stroke-width="1.6"/>
-          <line x1="112" y1="66" x2="112" y2="100" stroke="#1e3a5f" stroke-width="1.6"/>
-          <line x1="214" y1="66" x2="214" y2="100" stroke="#1e3a5f" stroke-width="1.6"/>
-          <line x1="250" y1="66" x2="250" y2="100" stroke="#1e3a5f" stroke-width="1.6"/>
-          <line x1="286" y1="66" x2="286" y2="100" stroke="#1e3a5f" stroke-width="1.6"/>
-          <circle cx="91" cy="83" r="9" fill="none" stroke="#1e3a5f" stroke-width="1.4"/>
-          <line x1="91" y1="70" x2="91" y2="96" stroke="#1e3a5f" stroke-width="1.4"/>
-          <line x1="78" y1="83" x2="104" y2="83" stroke="#1e3a5f" stroke-width="1.4"/>
-          <text x="163" y="88" text-anchor="middle" class="dg-t">&#8960;0.25 &#9410;</text>
-          <text x="232" y="88" text-anchor="middle" class="dg-t">A</text>
-          <text x="268" y="88" text-anchor="middle" class="dg-t">B</text>
-          <text x="303" y="88" text-anchor="middle" class="dg-t">C</text>
-          <!-- leader to hole -->
-          <path d="M320,83 L360,83 L392,116" class="dg-line"/>
-          <circle cx="404" cy="120" r="15" fill="#fff" stroke="#1e3a5f" stroke-width="1.5"/>
-          <text x="404" y="150" text-anchor="middle" class="dg-s">toleranced hole</text>
-          <!-- annotations -->
-          <line x1="91" y1="66" x2="91" y2="44" stroke="#94a3b8" stroke-width="1"/>
-          <text x="70" y="38" class="dg-s">characteristic (position)</text>
-          <line x1="150" y1="66" x2="150" y2="24" stroke="#94a3b8" stroke-width="1"/>
-          <text x="150" y="18" text-anchor="middle" class="dg-s">tolerance value &amp; zone shape (&#8960; = round)</text>
-          <line x1="180" y1="100" x2="180" y2="124" stroke="#94a3b8" stroke-width="1"/>
-          <text x="150" y="138" class="dg-s">&#9410; modifier &rarr; bonus tolerance</text>
-          <line x1="268" y1="100" x2="268" y2="118" stroke="#94a3b8" stroke-width="1"/>
-          <text x="300" y="132" text-anchor="middle" class="dg-s">datum reference frame &mdash; A, then B, then C</text>
+        <svg viewBox="0 0 600 206" role="img" aria-label="Anatomy of a feature control frame: the geometric characteristic symbol, then the tolerance value with zone shape and a material-condition modifier, then the datum references A, B and C, with a leader to the toleranced hole.">
+          <!-- feature control frame -->
+          <rect x="150" y="110" width="260" height="34" fill="#eff6ff" stroke="#1e3a5f" stroke-width="1.6"/>
+          <line x1="192" y1="110" x2="192" y2="144" stroke="#1e3a5f" stroke-width="1.6"/>
+          <line x1="308" y1="110" x2="308" y2="144" stroke="#1e3a5f" stroke-width="1.6"/>
+          <line x1="342" y1="110" x2="342" y2="144" stroke="#1e3a5f" stroke-width="1.6"/>
+          <line x1="376" y1="110" x2="376" y2="144" stroke="#1e3a5f" stroke-width="1.6"/>
+          <circle cx="171" cy="127" r="9" fill="none" stroke="#1e3a5f" stroke-width="1.4"/>
+          <line x1="171" y1="114" x2="171" y2="140" stroke="#1e3a5f" stroke-width="1.4"/>
+          <line x1="158" y1="127" x2="184" y2="127" stroke="#1e3a5f" stroke-width="1.4"/>
+          <text x="250" y="132" text-anchor="middle" class="dg-t">&#8960;0.25 &#9410;</text>
+          <text x="325" y="132" text-anchor="middle" class="dg-t">A</text>
+          <text x="359" y="132" text-anchor="middle" class="dg-t">B</text>
+          <text x="393" y="132" text-anchor="middle" class="dg-t">C</text>
+
+          <line x1="215" y1="58" x2="215" y2="110" stroke="#94a3b8" stroke-width="1"/>
+          <text x="215" y="50" text-anchor="middle" class="dg-s">tolerance value &amp; zone shape (&#8960; = round)</text>
+
+          <line x1="171" y1="88" x2="171" y2="110" stroke="#94a3b8" stroke-width="1"/>
+          <text x="163" y="72" text-anchor="end" class="dg-s">geometric characteristic</text>
+          <text x="163" y="86" text-anchor="end" class="dg-s">(here: position)</text>
+
+          <line x1="385" y1="82" x2="385" y2="110" stroke="#94a3b8" stroke-width="1"/>
+          <text x="398" y="68" class="dg-s">datum reference frame:</text>
+          <text x="398" y="82" class="dg-s">A, then B, then C</text>
+
+          <line x1="288" y1="144" x2="288" y2="172" stroke="#94a3b8" stroke-width="1"/>
+          <text x="250" y="186" text-anchor="middle" class="dg-s">&#9410; modifier &rarr; bonus tolerance at MMC</text>
+
+          <path d="M410,127 L448,127 L472,158" fill="none" stroke="#94a3b8" stroke-width="1.4"/>
+          <circle cx="484" cy="164" r="15" fill="#fff" stroke="#1e3a5f" stroke-width="1.5"/>
+          <text x="484" y="192" text-anchor="middle" class="dg-s">toleranced hole</text>
         </svg>
         <figcaption>Read a feature control frame left to right: what is controlled, how tightly and in what shape of zone, and what it is measured from. GD&amp;T is design intent written in symbols instead of prose.</figcaption>
         </figure>
@@ -261,34 +274,59 @@
             <li><span class="term">Tolerances:</span> holes print undersize, first layers spread &mdash; expect to allow for it or drill/ream after</li>
         </ul>
         <figure class="diagram">
-        <svg viewBox="0 0 560 180" role="img" aria-label="A 3D print is built one deposited layer at a time, weakest in the vertical build direction; overhangs beyond about 45 degrees need support material.">
+        <svg viewBox="0 0 560 190" role="img" aria-label="A 3D print is built one deposited layer at a time and is weakest in the vertical build direction. A downward-facing surface prints cleanly to about 45 degrees from vertical; a shallower or horizontal overhang needs support material beneath it.">
           <defs>
             <marker id="u4am-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
             <pattern id="u4sup" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0,6 L6,0" stroke="#f59e0b" stroke-width="0.7"/></pattern>
           </defs>
+          <line x1="290" y1="14" x2="290" y2="152" stroke="#e2e8f0"/>
+
           <g stroke="#1e3a5f" stroke-width="1">
-            <rect x="40" y="132" width="120" height="10" fill="#dbeafe"/>
-            <rect x="40" y="120" width="120" height="10" fill="#e2e8f0"/>
-            <rect x="40" y="108" width="120" height="10" fill="#dbeafe"/>
-            <rect x="40" y="96"  width="120" height="10" fill="#e2e8f0"/>
-            <rect x="40" y="84"  width="120" height="10" fill="#dbeafe"/>
-            <rect x="40" y="72"  width="120" height="10" fill="#e2e8f0"/>
+            <rect x="70" y="132" width="118" height="11" fill="#dbeafe"/>
+            <rect x="70" y="121" width="118" height="11" fill="#eff6ff"/>
+            <rect x="70" y="110" width="118" height="11" fill="#dbeafe"/>
+            <rect x="70" y="99"  width="118" height="11" fill="#eff6ff"/>
+            <rect x="70" y="88"  width="118" height="11" fill="#dbeafe"/>
+            <rect x="70" y="77"  width="118" height="11" fill="#eff6ff"/>
           </g>
-          <line x1="26" y1="146" x2="26" y2="62" stroke="#1e3a5f" stroke-width="1.4" marker-end="url(#u4am-ar)"/>
-          <text x="100" y="164" text-anchor="middle" class="dg-s">deposited layers &mdash; weakest in Z (build) direction</text>
-          <line x1="300" y1="16" x2="300" y2="150" stroke="#e2e8f0"/>
-          <!-- overhang -->
-          <path d="M340,150 L340,70 L392,70 L440,120 L440,150 Z" class="dg-part"/>
-          <path d="M340,70 L316,70 L316,150 L340,150 Z" fill="url(#u4sup)" stroke="#f59e0b" stroke-width="1"/>
-          <path d="M392,70 L440,120" stroke="#16a34a" stroke-width="2.5"/>
-          <path d="M340,70 a20,20 0 0 0 -20,20" fill="none" stroke="#94a3b8" stroke-width="1"/>
-          <text x="470" y="70" class="dg-s">&gt; 45&deg; span</text>
-          <text x="470" y="84" class="dg-s">needs support</text>
-          <text x="452" y="128" fill="#16a34a" class="dg-s">&le; 45&deg; prints</text>
-          <text x="452" y="142" fill="#16a34a" class="dg-s">unsupported</text>
+          <line x1="52" y1="147" x2="52" y2="66" stroke="#1e3a5f" stroke-width="1.4" marker-end="url(#u4am-ar)"/>
+          <text x="44" y="70" text-anchor="end" class="dg-s">Z</text>
+          <text x="145" y="164" text-anchor="middle" class="dg-s">deposited layers</text>
+          <text x="145" y="178" text-anchor="middle" class="dg-s">weakest in the Z (build) direction</text>
+
+          <line x1="300" y1="150" x2="450" y2="150" stroke="#1e3a5f" stroke-width="2"/>
+          <path d="M355,150 L385,150 L385,95 L425,95 L425,72 L320,72 L320,90 L355,125 L355,150 Z" class="dg-part"/>
+          <path d="M385,95 L425,95 L425,150 L385,150 Z" fill="url(#u4sup)" stroke="#f59e0b" stroke-width="1"/>
+          <path d="M320,90 L355,125" stroke="#16a34a" stroke-width="2.6"/>
+          <line x1="416" y1="95" x2="416" y2="58" stroke="#94a3b8" stroke-width="1"/>
+          <text x="416" y="52" text-anchor="middle" class="dg-s">horizontal underside &rarr; needs support</text>
+          <line x1="342" y1="110" x2="342" y2="170" stroke="#94a3b8" stroke-width="1"/>
+          <text x="342" y="182" text-anchor="middle" class="dg-s" fill="#16a34a">&le; 45&deg; underside &mdash; prints</text>
         </svg>
-        <figcaption>Material-extrusion printing builds a part one layer at a time. Orientation is a strength decision, not just a fit-on-the-bed decision &mdash; and geometry past roughly 45&deg; from vertical needs support.</figcaption>
+        <figcaption>Material-extrusion printing builds a part one layer at a time, so orientation is a strength decision, not just a fit-on-the-bed one. A downward-facing surface prints cleanly to about 45&deg; from vertical; shallower than that, or horizontal, it needs support material underneath.</figcaption>
         </figure>
+
+        <h3>Predicting print settings</h3>
+        <p>
+            The extruder has to push out plastic exactly as fast as the nozzle sweeps across the layer. That rate
+            is the <span class="term">volumetric flow</span>, and every hot end has a ceiling on it &mdash; which is
+            what really limits print speed.
+        </p>
+        <div class="formula">
+            <span class="eq">Q = w &times; h &times; v</span>
+            <span class="where">Q = volumetric flow (mm&sup3;/s) &nbsp;&bull;&nbsp; w = extrusion width (&asymp; 1.1&ndash;1.2 &times; nozzle &oslash;) &nbsp;&bull;&nbsp; h = layer height (mm) &nbsp;&bull;&nbsp; v = print speed (mm/s)</span>
+            <span class="ex">0.4&nbsp;mm nozzle, w = 0.45, h = 0.2, v = 60&nbsp;mm/s &rarr; Q = 0.45 &times; 0.2 &times; 60 = <strong>5.4&nbsp;mm&sup3;/s</strong> (a PLA hot end manages roughly 10&ndash;15).</span>
+        </div>
+        <div class="formula">
+            <span class="eq">v<sub>max</sub> = Q<sub>max</sub> &divide; (w &times; h)</span>
+            <span class="where">the fastest speed the hot end can feed &mdash; go past it and the extruder skips and under-extrudes</span>
+            <span class="ex">Q<sub>max</sub> = 12&nbsp;mm&sup3;/s &rarr; v<sub>max</sub> = 12 &divide; (0.45 &times; 0.2) &asymp; <strong>133&nbsp;mm/s</strong></span>
+        </div>
+        <div class="formula">
+            <span class="eq">v<sub>filament</sub> = Q &divide; (&pi;/4 &times; d<sub>f</sub>&sup2;)</span>
+            <span class="where">how fast the drive gear pulls filament in; for 1.75&nbsp;mm filament the cross-section &pi;/4 &times; d<sub>f</sub>&sup2; &asymp; 2.40&nbsp;mm&sup2;. Layer count N = part height &divide; h.</span>
+        </div>
+
     </div>
 
     <div class="section">
@@ -322,6 +360,31 @@
         </svg>
         <figcaption>Subtractive processes start with solid stock and cut material away with a rotating tool. The design constraints come from the tool geometry and how the part is held.</figcaption>
         </figure>
+
+        <h3>Predicting feeds and speeds</h3>
+        <p>
+            Two numbers come from tables &mdash; the <span class="term">cutting speed</span> V<sub>c</sub> (how fast
+            the edge should move through this material, from a tooling chart) and the <span class="term">chip
+            load</span> f<sub>z</sub> (the bite per tooth, from the tool maker). Everything else is arithmetic.
+        </p>
+        <div class="formula">
+            <span class="eq">n = (1000 &times; V<sub>c</sub>) &divide; (&pi; &times; D)</span>
+            <span class="where">n = spindle speed (rev/min) &nbsp;&bull;&nbsp; V<sub>c</sub> = cutting speed (m/min) &nbsp;&bull;&nbsp; D = tool diameter (mm). &nbsp;Imperial: n = 12 &times; V<sub>c</sub> &divide; (&pi; &times; D), with V<sub>c</sub> in surface ft/min and D in inches.</span>
+        </div>
+        <div class="formula">
+            <span class="eq">v<sub>f</sub> = n &times; f<sub>z</sub> &times; z</span>
+            <span class="where">v<sub>f</sub> = feed rate (mm/min) &nbsp;&bull;&nbsp; f<sub>z</sub> = feed per tooth (mm) &nbsp;&bull;&nbsp; z = number of flutes</span>
+        </div>
+        <div class="formula">
+            <span class="eq">MRR = a<sub>p</sub> &times; a<sub>e</sub> &times; v<sub>f</sub></span>
+            <span class="where">material removal rate (mm&sup3;/min) &mdash; a<sub>p</sub> = axial depth of cut, a<sub>e</sub> = radial width of cut</span>
+            <span class="ex">6&nbsp;mm 2-flute carbide in aluminium, V<sub>c</sub> = 200&nbsp;m/min, f<sub>z</sub> = 0.03&nbsp;mm: &nbsp;n = 1000 &times; 200 &divide; (&pi; &times; 6) &asymp; <strong>10,600&nbsp;rpm</strong>; &nbsp;v<sub>f</sub> = 10,600 &times; 0.03 &times; 2 &asymp; <strong>640&nbsp;mm/min</strong>.</span>
+        </div>
+        <p>
+            Adjust from there: drop f<sub>z</sub> for small tools, keep a<sub>e</sub> &le; D/2 when slotting, and
+            slow the feed for long thin tools &mdash; deflection grows with the cube of the stick-out length, which
+            is what makes deep narrow pockets chatter.
+        </p>
     </div>
 
     <div class="section">
@@ -355,6 +418,27 @@
         </svg>
         <figcaption>A laser cutter cuts flat sheet by burning a narrow line through it &mdash; fast and precise in 2D, with its own material and geometry rules. Never cut PVC or other chlorinated plastics: they release chlorine gas.</figcaption>
         </figure>
+
+        <h3>Predicting cut settings and kerf</h3>
+        <p>
+            Power and speed for a given material and thickness come from the machine's cut chart, but two things
+            you always work out yourself: how much to offset for <span class="term">kerf</span>, and whether the
+            cut has enough energy to get through.
+        </p>
+        <div class="formula">
+            <span class="eq">offset = k &divide; 2</span>
+            <span class="where">k = kerf width (&asymp; 0.1&ndash;0.3&nbsp;mm). Offset outside profiles outward, holes and cut-outs inward, so the parts finish on size.</span>
+            <span class="ex">Press-fit tab into a slot: draw the tab width = slot width + k &mdash; the kerf itself becomes the clearance.</span>
+        </div>
+        <div class="formula">
+            <span class="eq">E = P &divide; (v &times; t)</span>
+            <span class="where">E = line energy (J/mm&sup2;) &nbsp;&bull;&nbsp; P = power (W) &nbsp;&bull;&nbsp; v = cut speed (mm/s) &nbsp;&bull;&nbsp; t = thickness (mm)</span>
+            <span class="ex">60&nbsp;W on 6&nbsp;mm plywood at 8&nbsp;mm/s &rarr; E = 60 &divide; (8 &times; 6) = <strong>1.25&nbsp;J/mm&sup2;</strong>. Doubling thickness needs roughly double the energy &mdash; half the speed, or a second pass.</span>
+        </div>
+        <p>
+            Past a material's single-pass limit for your machine, no power setting will cut through &mdash; move to
+            multiple passes or thinner stock.
+        </p>
     </div>
 
     <div class="section">

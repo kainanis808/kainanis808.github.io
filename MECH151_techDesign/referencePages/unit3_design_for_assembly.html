@@ -321,25 +321,26 @@
             <li><span class="term def" tabindex="0" data-def="Adding up the individual tolerances of every part and gap in a chain to find how much the overall dimension (often an assembly gap or fit) can vary. Checked so the parts still assemble and function at their worst-case sizes.">Tolerance stack-up:</span> checking that the accumulated tolerances of mating parts still allow assembly and function &mdash; worked through in the example below</li>
         </ul>
         <figure class="diagram">
-        <svg viewBox="0 0 620 160" role="img" aria-label="The design-for-assembly review loop: present the assembly, take feedback against DFA principles, revise, and go around again, reducing part count each time.">
+        <svg viewBox="0 0 640 184" role="img" aria-label="The design-for-assembly review loop: present the assembly, take feedback against DFA principles, revise, and go around again, reducing part count each time.">
           <defs>
             <marker id="u3rv-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
             <marker id="u3rv-ara" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-a"/></marker>
           </defs>
-          <rect x="0"   y="24" width="150" height="46" rx="8" class="dg-box"/>
-          <rect x="196" y="24" width="176" height="46" rx="8" class="dg-box"/>
-          <rect x="418" y="24" width="176" height="46" rx="8" class="dg-box2"/>
-          <text x="75"  y="45" text-anchor="middle" class="dg-t">Present assembly</text>
-          <text x="75"  y="60" text-anchor="middle" class="dg-s">state the part count</text>
-          <text x="284" y="45" text-anchor="middle" class="dg-t">Review vs. DFA principles</text>
-          <text x="284" y="60" text-anchor="middle" class="dg-s">part count &middot; insertion &middot; reorientation</text>
-          <text x="506" y="45" text-anchor="middle" class="dg-t">Revise</text>
-          <text x="506" y="60" text-anchor="middle" class="dg-s">merge parts &middot; add lead-ins &middot; standardize</text>
-          <path d="M150,47 L194,47" class="dg-line" marker-end="url(#u3rv-ar)"/>
-          <path d="M372,47 L416,47" class="dg-line" marker-end="url(#u3rv-ar)"/>
-          <path d="M506,70 L506,110 L75,110 L75,72" class="dg-accent" marker-end="url(#u3rv-ara)"/>
-          <text x="290" y="104" text-anchor="middle" class="dg-s">record what changed and why &mdash; then measure again</text>
-          <text x="290" y="140" text-anchor="middle" class="dg-t">e.g. 12 parts &rarr; 7 parts &mdash; a measurable DFA improvement</text>
+          <rect x="0"   y="20" width="170" height="54" rx="8" class="dg-box"/>
+          <rect x="210" y="20" width="214" height="54" rx="8" class="dg-box"/>
+          <rect x="464" y="20" width="176" height="54" rx="8" class="dg-box2"/>
+          <text x="85"  y="42" text-anchor="middle" class="dg-t">Present assembly</text>
+          <text x="85"  y="59" text-anchor="middle" class="dg-s">state the part count</text>
+          <text x="317" y="42" text-anchor="middle" class="dg-t">Review vs. DFA principles</text>
+          <text x="317" y="59" text-anchor="middle" class="dg-s">part count &middot; insertion &middot; reorientation</text>
+          <text x="552" y="40" text-anchor="middle" class="dg-t">Revise</text>
+          <text x="552" y="55" text-anchor="middle" class="dg-s">merge parts &middot; add lead-ins</text>
+          <text x="552" y="68" text-anchor="middle" class="dg-s">&middot; standardize fasteners</text>
+          <path d="M170,47 L208,47" class="dg-line" marker-end="url(#u3rv-ar)"/>
+          <path d="M424,47 L462,47" class="dg-line" marker-end="url(#u3rv-ar)"/>
+          <path d="M552,74 L552,116 L85,116 L85,76" class="dg-accent" marker-end="url(#u3rv-ara)"/>
+          <text x="320" y="110" text-anchor="middle" class="dg-s">record what changed and why &mdash; then measure again</text>
+          <text x="320" y="150" text-anchor="middle" class="dg-t">e.g. 12 parts &rarr; 7 parts &mdash; a measurable DFA improvement</text>
         </svg>
         <figcaption>Design for Assembly reduces the time, cost, and error rate of putting a product together &mdash; and the biggest lever is part count. The unit ends by presenting an assembly, taking feedback, and producing a documented revision.</figcaption>
         </figure>
@@ -374,13 +375,14 @@
           <line x1="44" y1="20" x2="44" y2="212" stroke="#1e3a5f" stroke-width="1" marker-start="url(#u3ts-ar)" marker-end="url(#u3ts-ar)"/>
           <text x="20" y="120" text-anchor="middle" class="dg-s" transform="rotate(-90 20 120)">pocket 60.0 &plusmn;0.2</text>
           <!-- block dims -->
-          <text x="278" y="70"  class="dg-s">A = 20.0 &plusmn;0.1</text>
+          <line x1="250" y1="67"  x2="274" y2="67"  stroke="#94a3b8" stroke-width="0.8"/>
+          <line x1="250" y1="116" x2="274" y2="116" stroke="#94a3b8" stroke-width="0.8"/>
+          <line x1="250" y1="169" x2="274" y2="169" stroke="#94a3b8" stroke-width="0.8"/>
+          <line x1="250" y1="32"  x2="274" y2="32"  stroke="#f59e0b" stroke-width="0.8"/>
+          <text x="278" y="71"  class="dg-s">A = 20.0 &plusmn;0.1</text>
           <text x="278" y="120" class="dg-s">B = 15.0 &plusmn;0.1</text>
-          <text x="278" y="172" class="dg-s">C = 24.5 &plusmn;0.15</text>
-          <text x="278" y="33"  class="dg-s" fill="#b45309">end gap</text>
-          <line x1="264" y1="64" x2="330" y2="64" stroke="#cbd5e1" stroke-width="0.8"/>
-          <line x1="264" y1="114" x2="330" y2="114" stroke="#cbd5e1" stroke-width="0.8"/>
-          <line x1="264" y1="166" x2="330" y2="166" stroke="#cbd5e1" stroke-width="0.8"/>
+          <text x="278" y="173" class="dg-s">C = 24.5 &plusmn;0.15</text>
+          <text x="278" y="36"  class="dg-s" fill="#b45309">end gap</text>
           <text x="235" y="245" text-anchor="middle" class="dg-s">schematic &mdash; block heights not to scale</text>
         </svg>
         <figcaption>The gap is what is left of the pocket depth after the three blocks are stacked in it: gap = pocket &minus; (A + B + C).</figcaption>

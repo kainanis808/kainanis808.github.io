@@ -45,6 +45,7 @@
         .dg-fill-a { fill: #f59e0b; }
         .dg-part { fill: #e2e8f0; stroke: #1e3a5f; stroke-width: 1.6; }
         .dg-hidden { fill: none; stroke: #94a3b8; stroke-width: 1.2; stroke-dasharray: 4 3; }
+        .dg-eq { font: 500 12.5px 'Cambria Math', Cambria, Georgia, 'Times New Roman', serif; fill: #1e3a5f; }
         .section h3 { font-size: 1rem; color: #1e3a5f; margin: 16px 0 6px; }
         .compare { display: flex; gap: 16px; flex-wrap: wrap; margin: 8px 0 10px; }
         .compare > div { flex: 1 1 240px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; }
@@ -127,6 +128,202 @@
             <li><span class="term">Constructions:</span> midpoint, perpendicular bisector, angle bisector, and offset (a parallel copy at a fixed distance) &mdash; the classic geometric constructions, now done by relations rather than compass and straightedge</li>
             <li><span class="term">Symmetry and centerlines:</span> building half a shape about a construction line and mirroring it guarantees the two halves stay identical</li>
         </ul>
+
+        <figure class="diagram">
+        <svg viewBox="0 0 600 210" role="img" aria-label="Three basic elements and the values that define them: a line by two points and a slope, a circle by centre and radius, an ellipse by its two semi-axes.">
+          <line x1="200" y1="14" x2="200" y2="196" stroke="#e2e8f0"/>
+          <line x1="400" y1="14" x2="400" y2="196" stroke="#e2e8f0"/>
+
+          <text x="100" y="14" text-anchor="middle" class="dg-t">Line</text>
+          <line x1="28" y1="150" x2="178" y2="150" class="dg-line"/>
+          <line x1="40" y1="44" x2="40" y2="158" class="dg-line"/>
+          <line x1="48" y1="140" x2="168" y2="58" stroke="#3b82f6" stroke-width="2"/>
+          <path d="M68,126.3 L148,126.3 L148,71.7" fill="none" stroke="#f59e0b" stroke-width="1.3" stroke-dasharray="4 3"/>
+          <circle cx="68" cy="126.3" r="3" class="dg-fill"/>
+          <circle cx="148" cy="71.7" r="3" class="dg-fill"/>
+          <text x="108" y="140" text-anchor="middle" class="dg-s">&#916;x</text>
+          <text x="154" y="103" class="dg-s">&#916;y</text>
+          <text x="100" y="180" text-anchor="middle" class="dg-eq">y &minus; y&#8321; = m (x &minus; x&#8321;)</text>
+          <text x="100" y="196" text-anchor="middle" class="dg-s">m = &#916;y / &#916;x</text>
+
+          <text x="300" y="14" text-anchor="middle" class="dg-t">Circle</text>
+          <circle cx="300" cy="92" r="46" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.8"/>
+          <circle cx="300" cy="92" r="3" class="dg-fill"/>
+          <text x="300" y="83" text-anchor="middle" class="dg-s">(h, k)</text>
+          <line x1="300" y1="92" x2="342" y2="74" stroke="#f59e0b" stroke-width="1.6"/>
+          <text x="322" y="77" class="dg-s">r</text>
+          <text x="300" y="168" text-anchor="middle" class="dg-eq">(x &minus; h)&#178; + (y &minus; k)&#178; = r&#178;</text>
+          <text x="300" y="186" text-anchor="middle" class="dg-s">centre (h, k) &middot; radius r &middot; d = 2r</text>
+
+          <text x="500" y="14" text-anchor="middle" class="dg-t">Ellipse</text>
+          <ellipse cx="500" cy="92" rx="66" ry="40" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.8"/>
+          <circle cx="500" cy="92" r="3" class="dg-fill"/>
+          <line x1="500" y1="92" x2="566" y2="92" stroke="#f59e0b" stroke-width="1.6"/>
+          <line x1="500" y1="92" x2="500" y2="52" stroke="#f59e0b" stroke-width="1.6"/>
+          <text x="536" y="88" class="dg-s">a</text>
+          <text x="506" y="74" class="dg-s">b</text>
+          <text x="500" y="168" text-anchor="middle" class="dg-eq">x&#178; / a&#178; + y&#178; / b&#178; = 1</text>
+          <text x="500" y="186" text-anchor="middle" class="dg-s">semi-axes a, b &middot; centre at origin</text>
+        </svg>
+        <figcaption>Each basic element is fixed by a few values: a line by two points (or a point and a slope), a circle by its centre and radius, an ellipse by its two semi-axes. Points, arcs, and splines &mdash; a smooth curve through a sequence of points &mdash; follow the same idea.</figcaption>
+        </figure>
+
+        <figure class="diagram">
+        <svg viewBox="0 0 600 220" role="img" aria-label="Circle and arc geometry: centre O, radius r, diameter d equals 2r; two radii at central angle theta cut off an arc of length r theta and a chord of length 2r times sine of half theta.">
+          <line x1="290" y1="14" x2="290" y2="206" stroke="#e2e8f0"/>
+          <circle cx="155" cy="115" r="84" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.8"/>
+          <line x1="71" y1="115" x2="239" y2="115" stroke="#94a3b8" stroke-width="1.3" stroke-dasharray="5 3"/>
+          <text x="204" y="129" class="dg-s">d</text>
+          <line x1="155" y1="115" x2="155" y2="31" stroke="#f59e0b" stroke-width="1.6"/>
+          <line x1="155" y1="115" x2="232.9" y2="83.5" stroke="#f59e0b" stroke-width="1.6"/>
+          <path d="M155,31 A84,84 0 0 1 232.9,83.5" fill="none" stroke="#f59e0b" stroke-width="2.6"/>
+          <line x1="155" y1="31" x2="232.9" y2="83.5" stroke="#1e3a5f" stroke-width="1.4"/>
+          <path d="M155,91 A24,24 0 0 1 177.3,106" fill="none" stroke="#1e3a5f" stroke-width="1.4"/>
+          <circle cx="155" cy="115" r="3.5" class="dg-fill"/>
+          <text x="147" y="112" text-anchor="end" class="dg-s">O</text>
+          <text x="145" y="75" text-anchor="end" class="dg-s">r</text>
+          <text x="197" y="103" class="dg-s">r</text>
+          <text x="184" y="60" class="dg-s">c</text>
+          <text x="214" y="34" class="dg-s">s</text>
+          <text x="171" y="93" class="dg-s">&#952;</text>
+          <text x="155" y="24" text-anchor="middle" class="dg-s">A</text>
+          <text x="240" y="80" class="dg-s">B</text>
+
+          <text x="312" y="46" class="dg-eq">d = 2 r</text>
+          <text x="312" y="82" class="dg-eq">s = r &#183; &#952;</text>
+          <text x="312" y="98" class="dg-s">arc length &mdash; &#952; in radians</text>
+          <text x="312" y="134" class="dg-eq">c = 2 r &#183; sin(&#952; / 2)</text>
+          <text x="312" y="150" class="dg-s">chord length</text>
+          <text x="312" y="186" class="dg-s">The central angle &#952; subtends both the</text>
+          <text x="312" y="200" class="dg-s">arc s and the chord c.</text>
+        </svg>
+        <figcaption>A circle is set by its centre O and radius r, so its diameter is d = 2r. Two radii drawn at a central angle &#952; cut off an arc of length s = r&#952; (with &#952; in radians) and a chord of length c = 2r&#183;sin(&#952;/2).</figcaption>
+        </figure>
+
+        <figure class="diagram">
+        <svg viewBox="0 0 600 224" role="img" aria-label="A regular hexagon with its circumscribed circle through the corners and its inscribed circle touching the flats; across corners equals 2R, across flats equals 2r equals 2R times cosine of 180 over n.">
+          <line x1="298" y1="14" x2="298" y2="210" stroke="#e2e8f0"/>
+          <text x="185" y="15" text-anchor="middle" class="dg-t">Regular hexagon (n = 6)</text>
+          <polygon points="185,26 259.5,69 259.5,155 185,198 110.5,155 110.5,69" fill="#eff6ff" stroke="#1e3a5f" stroke-width="1.8"/>
+          <circle cx="185" cy="112" r="86" fill="none" stroke="#3b82f6" stroke-width="1.6"/>
+          <circle cx="185" cy="112" r="74.5" fill="none" stroke="#f59e0b" stroke-width="1.8" stroke-dasharray="6 4"/>
+          <line x1="185" y1="112" x2="259.5" y2="69" stroke="#3b82f6" stroke-width="1.6"/>
+          <line x1="185" y1="112" x2="110.5" y2="112" stroke="#f59e0b" stroke-width="1.6"/>
+          <path d="M117.5,105 L110.5,105 L110.5,112" fill="none" stroke="#94a3b8" stroke-width="1"/>
+          <circle cx="185" cy="112" r="3" class="dg-fill"/>
+          <text x="176" y="126" text-anchor="end" class="dg-s">O</text>
+          <text x="232" y="84" class="dg-s">R</text>
+          <text x="146" y="107" class="dg-s">r</text>
+
+          <text x="312" y="40" class="dg-t">Inscribed vs. circumscribed</text>
+          <line x1="312" y1="56" x2="332" y2="56" stroke="#3b82f6" stroke-width="1.6"/>
+          <text x="338" y="60" class="dg-s">circumscribed &mdash; through the corners</text>
+          <line x1="312" y1="76" x2="332" y2="76" stroke="#f59e0b" stroke-width="1.6" stroke-dasharray="5 3"/>
+          <text x="338" y="80" class="dg-s">inscribed &mdash; touches the flats</text>
+          <text x="312" y="112" class="dg-eq">across corners = 2R</text>
+          <text x="312" y="134" class="dg-eq">across flats = 2r = 2R &#183; cos(180&#176;/n)</text>
+          <text x="312" y="156" class="dg-eq">side  a = 2R &#183; sin(180&#176;/n)</text>
+          <text x="312" y="178" class="dg-eq">hex:  across flats = R&#8730;3 &#8776; 1.732 R</text>
+          <text x="312" y="198" class="dg-s">Hex heads &amp; nuts are dimensioned across</text>
+          <text x="312" y="211" class="dg-s">flats &mdash; that is the wrench size.</text>
+        </svg>
+        <figcaption>A regular polygon is set by its centre and one circle: the <strong>circumscribed</strong> circle passes through the corners (across corners = 2R), the <strong>inscribed</strong> circle touches the flats (across flats = 2r). Hex fasteners are always called out across flats.</figcaption>
+        </figure>
+
+        <figure class="diagram">
+        <svg viewBox="0 0 600 208" role="img" aria-label="Tangency, fillet and chamfer: a tangent line meets a circle at one point perpendicular to the radius; a fillet is a tangent arc of radius R replacing a corner; a chamfer is a straight cut of equal setback C.">
+          <defs>
+            <marker id="u1g4-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+          </defs>
+          <line x1="200" y1="14" x2="200" y2="192" stroke="#e2e8f0"/>
+          <line x1="400" y1="14" x2="400" y2="192" stroke="#e2e8f0"/>
+
+          <text x="100" y="15" text-anchor="middle" class="dg-t">Tangent line</text>
+          <circle cx="92" cy="92" r="42" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.8"/>
+          <line x1="134" y1="44" x2="134" y2="148" stroke="#1e3a5f" stroke-width="1.8"/>
+          <line x1="92" y1="92" x2="134" y2="92" stroke="#f59e0b" stroke-width="1.6"/>
+          <path d="M127,92 L127,85 L134,85" fill="none" stroke="#94a3b8" stroke-width="1"/>
+          <circle cx="92" cy="92" r="3" class="dg-fill"/>
+          <text x="84" y="96" text-anchor="end" class="dg-s">O</text>
+          <text x="140" y="105" class="dg-s">T</text>
+          <text x="108" y="86" class="dg-s">r</text>
+          <text x="100" y="170" text-anchor="middle" class="dg-s">touches at one point;</text>
+          <text x="100" y="184" text-anchor="middle" class="dg-s">line &#8869; radius at T</text>
+
+          <text x="300" y="15" text-anchor="middle" class="dg-t">Fillet</text>
+          <path d="M250,60 L302,60 A28,28 0 0 1 330,88 L330,150" fill="none" stroke="#1e3a5f" stroke-width="1.8"/>
+          <path d="M302,60 L330,60 L330,88" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4 3"/>
+          <path d="M302,88 L302,60 M302,88 L330,88" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 2"/>
+          <path d="M302,67 L309,67 L309,60" fill="none" stroke="#94a3b8" stroke-width="1"/>
+          <path d="M323,88 L323,95 L330,95" fill="none" stroke="#94a3b8" stroke-width="1"/>
+          <circle cx="302" cy="88" r="2.5" class="dg-fill"/>
+          <text x="311" y="80" class="dg-s">R</text>
+          <text x="300" y="170" text-anchor="middle" class="dg-s">tangent arc, radius R,</text>
+          <text x="300" y="184" text-anchor="middle" class="dg-s">replaces the sharp corner</text>
+
+          <text x="500" y="15" text-anchor="middle" class="dg-t">Chamfer</text>
+          <path d="M450,60 L497,60 L525,88 L525,150" fill="none" stroke="#1e3a5f" stroke-width="1.8"/>
+          <path d="M497,60 L525,60 L525,88" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4 3"/>
+          <line x1="497" y1="48" x2="525" y2="48" stroke="#94a3b8" stroke-width="1" marker-start="url(#u1g4-ar)" marker-end="url(#u1g4-ar)"/>
+          <line x1="539" y1="60" x2="539" y2="88" stroke="#94a3b8" stroke-width="1" marker-start="url(#u1g4-ar)" marker-end="url(#u1g4-ar)"/>
+          <text x="511" y="44" text-anchor="middle" class="dg-s">C</text>
+          <text x="545" y="77" class="dg-s">C</text>
+          <text x="500" y="170" text-anchor="middle" class="dg-s">a straight cut across the</text>
+          <text x="500" y="184" text-anchor="middle" class="dg-s">corner, equal setback C</text>
+        </svg>
+        <figcaption>Tangency keeps curves smooth: a line or arc meets a circle at a single point, perpendicular to the radius there. A sketch <strong>fillet</strong> is a tangent arc that replaces a corner; a <strong>chamfer</strong> is a straight cut across it.</figcaption>
+        </figure>
+
+        <figure class="diagram">
+        <svg viewBox="0 0 620 182" role="img" aria-label="Four geometric constructions now done as sketch relations: perpendicular bisector, angle bisector, offset at a fixed distance, and mirroring about a centreline.">
+          <defs>
+            <marker id="u1g5-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+          </defs>
+          <line x1="155" y1="14" x2="155" y2="166" stroke="#e2e8f0"/>
+          <line x1="310" y1="14" x2="310" y2="166" stroke="#e2e8f0"/>
+          <line x1="465" y1="14" x2="465" y2="166" stroke="#e2e8f0"/>
+
+          <text x="77" y="15" text-anchor="middle" class="dg-t">Perp. bisector</text>
+          <line x1="22" y1="92" x2="133" y2="92" stroke="#1e3a5f" stroke-width="1.8"/>
+          <line x1="77.5" y1="46" x2="77.5" y2="140" stroke="#f59e0b" stroke-width="1.6" stroke-dasharray="5 3"/>
+          <line x1="49" y1="87" x2="49" y2="97" stroke="#64748b" stroke-width="1.2"/>
+          <line x1="106" y1="87" x2="106" y2="97" stroke="#64748b" stroke-width="1.2"/>
+          <path d="M84,92 L84,85 L77.5,85" fill="none" stroke="#94a3b8" stroke-width="1"/>
+          <circle cx="22" cy="92" r="3" class="dg-fill"/>
+          <circle cx="133" cy="92" r="3" class="dg-fill"/>
+          <circle cx="77.5" cy="92" r="3" class="dg-fill-a"/>
+          <text x="18" y="96" text-anchor="end" class="dg-s">A</text>
+          <text x="139" y="96" class="dg-s">B</text>
+          <text x="77" y="160" text-anchor="middle" class="dg-s">equidistant from A &amp; B</text>
+
+          <text x="232" y="15" text-anchor="middle" class="dg-t">Angle bisector</text>
+          <line x1="185" y1="140" x2="300" y2="140" stroke="#1e3a5f" stroke-width="1.8"/>
+          <line x1="185" y1="140" x2="270" y2="60" stroke="#1e3a5f" stroke-width="1.8"/>
+          <line x1="185" y1="140" x2="292" y2="98" stroke="#f59e0b" stroke-width="1.6" stroke-dasharray="5 3"/>
+          <path d="M215,140 A30,30 0 0 0 212.9,128.9" fill="none" stroke="#64748b" stroke-width="1.2"/>
+          <path d="M212.9,128.9 A30,30 0 0 0 206.8,119.4" fill="none" stroke="#64748b" stroke-width="1.2"/>
+          <circle cx="185" cy="140" r="3" class="dg-fill"/>
+          <text x="232" y="160" text-anchor="middle" class="dg-s">splits the angle in two</text>
+
+          <text x="387" y="15" text-anchor="middle" class="dg-t">Offset</text>
+          <path d="M350,142 L350,80 L440,80" fill="none" stroke="#3b82f6" stroke-width="2"/>
+          <path d="M337,142 L337,67 L440,67" fill="none" stroke="#f59e0b" stroke-width="1.6" stroke-dasharray="5 3"/>
+          <line x1="351" y1="112" x2="336" y2="112" stroke="#64748b" stroke-width="1" marker-start="url(#u1g5-ar)" marker-end="url(#u1g5-ar)"/>
+          <line x1="404" y1="81" x2="404" y2="66" stroke="#64748b" stroke-width="1" marker-start="url(#u1g5-ar)" marker-end="url(#u1g5-ar)"/>
+          <text x="343" y="106" text-anchor="middle" class="dg-s">d</text>
+          <text x="410" y="76" class="dg-s">d</text>
+          <text x="387" y="160" text-anchor="middle" class="dg-s">parallel copy at distance d</text>
+
+          <text x="543" y="15" text-anchor="middle" class="dg-t">Mirror</text>
+          <line x1="543" y1="40" x2="543" y2="150" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="9 3 2 3"/>
+          <polygon points="543,55 513,70 521,110 543,126" fill="#eff6ff" stroke="#1e3a5f" stroke-width="1.6"/>
+          <polygon points="543,55 573,70 565,110 543,126" fill="#ffffff" stroke="#f59e0b" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <text x="543" y="34" text-anchor="middle" class="dg-s">CL</text>
+          <text x="543" y="160" text-anchor="middle" class="dg-s">halves stay identical</text>
+        </svg>
+        <figcaption>The classic straightedge-and-compass constructions &mdash; perpendicular bisector, angle bisector, offset at a fixed distance, and mirroring about a centreline &mdash; are now stated as sketch relations that the CAD system keeps true.</figcaption>
+        </figure>
+
         <p>
             The relations listed in the next section (tangent, concentric, equal, symmetric&hellip;) are the
             vocabulary for stating these geometric conditions so the CAD system holds them for you.
@@ -141,6 +338,144 @@
             vertical, symmetric) and <span class="term">dimensions</span> (linear, radial, diameter, angular).
             Together they remove <span class="term def" tabindex="0" data-def="The independent ways a piece of sketch geometry can still move — slide along X, slide along Y, or rotate. Each relation or dimension removes one or more; when none are left, the sketch is fully defined.">degrees of freedom</span> until the sketch is fully defined.
         </p>
+
+        <h3>Degrees of freedom</h3>
+        <p>
+            A <span class="term">degree of freedom</span> (DOF) is one independent way a piece of geometry can still
+            move while every rule you have already added stays satisfied. A flat 2D sketch allows only three kinds of
+            motion: slide along X, slide along Y, and rotate. From those:
+        </p>
+        <ul>
+            <li>a free <span class="term">point</span> has <strong>2 DOF</strong> &mdash; an X and a Y position, with nothing to rotate;</li>
+            <li>a free <span class="term">line segment</span> has <strong>4 DOF</strong> &mdash; its two endpoints, or equivalently its position (2), its angle (1), and its length (1);</li>
+            <li>a free <span class="term">circle</span> has <strong>3 DOF</strong> &mdash; centre X, centre Y, and radius.</li>
+        </ul>
+        <p>
+            Every geometric relation or dimension you apply removes one or more degrees of freedom. Count them down:
+            the sketch is <span class="term">under-defined</span> while any remain (geometry can still be dragged),
+            <span class="term">fully defined</span> the moment the total reaches zero, and
+            <span class="term">over-defined</span> if a new constraint tries to remove a degree of freedom that is
+            already gone &mdash; which is why over-defined sketches must be resolved, not ignored. Most CAD systems
+            colour geometry by this state (for example blue for under-defined, black for fully defined) and show a
+            running DOF count.
+        </p>
+        <figure class="diagram">
+        <svg viewBox="0 0 600 158" role="img" aria-label="Degrees of freedom in a 2D sketch: a free point has two (slide in x and y), a free line has four (position, angle, and length).">
+          <defs>
+            <marker id="u1dof2-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+          </defs>
+          <line x1="300" y1="12" x2="300" y2="146" stroke="#e2e8f0"/>
+
+          <text x="150" y="18" text-anchor="middle" class="dg-t">Free point &mdash; 2 DOF</text>
+          <line x1="104" y1="82" x2="196" y2="82" stroke="#64748b" stroke-width="1.3" marker-start="url(#u1dof2-ar)" marker-end="url(#u1dof2-ar)"/>
+          <line x1="150" y1="44" x2="150" y2="120" stroke="#64748b" stroke-width="1.3" marker-start="url(#u1dof2-ar)" marker-end="url(#u1dof2-ar)"/>
+          <circle cx="150" cy="82" r="4.5" class="dg-fill-a"/>
+          <text x="202" y="86" class="dg-s">x</text>
+          <text x="154" y="40" class="dg-s">y</text>
+          <text x="150" y="142" text-anchor="middle" class="dg-s">slides in x and y &mdash; nothing to rotate</text>
+
+          <text x="450" y="18" text-anchor="middle" class="dg-t">Free line &mdash; 4 DOF</text>
+          <line x1="382" y1="104" x2="516" y2="58" stroke="#1e3a5f" stroke-width="1.8"/>
+          <circle cx="382" cy="104" r="3.5" class="dg-fill"/>
+          <circle cx="516" cy="58" r="3.5" class="dg-fill"/>
+          <path d="M408,104 A26,26 0 0 0 361.5,90.5" fill="none" stroke="#64748b" stroke-width="1.3" marker-end="url(#u1dof2-ar)"/>
+          <text x="388" y="74" text-anchor="middle" class="dg-s">rotate</text>
+          <line x1="444.5" y1="67.8" x2="453.5" y2="94.2" stroke="#64748b" stroke-width="1.3" marker-start="url(#u1dof2-ar)" marker-end="url(#u1dof2-ar)"/>
+          <text x="462" y="84" class="dg-s">translate</text>
+          <line x1="503" y1="62.8" x2="533" y2="52.5" stroke="#64748b" stroke-width="1.3" marker-start="url(#u1dof2-ar)" marker-end="url(#u1dof2-ar)"/>
+          <text x="524" y="46" class="dg-s">stretch</text>
+          <text x="450" y="142" text-anchor="middle" class="dg-s">position (2) + angle (1) + length (1)</text>
+        </svg>
+        <figcaption>A degree of freedom is an independent way geometry can still move. In 2D the motions are slide-X, slide-Y and rotate; each relation or dimension removes one or more, and the sketch is fully defined when none are left.</figcaption>
+        </figure>
+
+        <h3>What each relation does</h3>
+        <p>
+            Each geometric relation states one condition between two entities (or between an entity and a reference)
+            and the CAD system holds it true as everything else changes:
+        </p>
+        <figure class="diagram">
+        <svg viewBox="0 0 620 256" role="img" aria-label="The ten common geometric relations shown as small sketches: coincident, collinear, parallel, perpendicular, equal, horizontal, vertical, tangent, concentric, and symmetric.">
+          <defs>
+            <marker id="u1rel-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+          </defs>
+          <rect x="2"   y="6"   width="120" height="116" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+          <rect x="126" y="6"   width="120" height="116" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+          <rect x="250" y="6"   width="120" height="116" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+          <rect x="374" y="6"   width="120" height="116" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+          <rect x="498" y="6"   width="120" height="116" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+          <rect x="2"   y="134" width="120" height="116" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+          <rect x="126" y="134" width="120" height="116" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+          <rect x="250" y="134" width="120" height="116" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+          <rect x="374" y="134" width="120" height="116" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+          <rect x="498" y="134" width="120" height="116" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+
+          <text x="62" y="24" text-anchor="middle" class="dg-t">Coincident</text>
+          <circle cx="46" cy="72" r="4" fill="none" stroke="#94a3b8" stroke-width="1.4"/>
+          <circle cx="78" cy="72" r="4" fill="none" stroke="#94a3b8" stroke-width="1.4"/>
+          <line x1="53" y1="72" x2="59" y2="72" stroke="#64748b" stroke-width="1.2" marker-end="url(#u1rel-ar)"/>
+          <line x1="71" y1="72" x2="65" y2="72" stroke="#64748b" stroke-width="1.2" marker-end="url(#u1rel-ar)"/>
+          <circle cx="62" cy="72" r="4.5" class="dg-fill-a"/>
+          <text x="62" y="106" text-anchor="middle" class="dg-s">two points &rarr; one</text>
+
+          <text x="186" y="24" text-anchor="middle" class="dg-t">Collinear</text>
+          <line x1="140" y1="72" x2="232" y2="72" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+          <line x1="146" y1="72" x2="178" y2="72" stroke="#1e3a5f" stroke-width="2.6"/>
+          <line x1="196" y1="72" x2="226" y2="72" stroke="#1e3a5f" stroke-width="2.6"/>
+          <text x="186" y="106" text-anchor="middle" class="dg-s">on one straight line</text>
+
+          <text x="310" y="24" text-anchor="middle" class="dg-t">Parallel</text>
+          <line x1="282" y1="60" x2="338" y2="50" stroke="#1e3a5f" stroke-width="2"/>
+          <line x1="282" y1="94" x2="338" y2="84" stroke="#1e3a5f" stroke-width="2"/>
+          <path d="M307,52 l4,3 l-4,3" fill="none" stroke="#64748b" stroke-width="1.2"/>
+          <path d="M307,86 l4,3 l-4,3" fill="none" stroke="#64748b" stroke-width="1.2"/>
+          <text x="310" y="106" text-anchor="middle" class="dg-s">same direction</text>
+
+          <text x="434" y="24" text-anchor="middle" class="dg-t">Perpendicular</text>
+          <line x1="406" y1="92" x2="462" y2="92" stroke="#1e3a5f" stroke-width="2"/>
+          <line x1="434" y1="92" x2="434" y2="46" stroke="#1e3a5f" stroke-width="2"/>
+          <path d="M426,92 L426,84 L434,84" fill="none" stroke="#94a3b8" stroke-width="1.2"/>
+          <text x="434" y="108" text-anchor="middle" class="dg-s">meet at 90&#176;</text>
+
+          <text x="558" y="24" text-anchor="middle" class="dg-t">Equal</text>
+          <line x1="534" y1="58" x2="582" y2="58" stroke="#1e3a5f" stroke-width="2"/>
+          <line x1="534" y1="88" x2="582" y2="88" stroke="#1e3a5f" stroke-width="2"/>
+          <line x1="558" y1="53" x2="558" y2="63" stroke="#64748b" stroke-width="1.2"/>
+          <line x1="558" y1="83" x2="558" y2="93" stroke="#64748b" stroke-width="1.2"/>
+          <text x="558" y="106" text-anchor="middle" class="dg-s">equal length / radius</text>
+
+          <text x="62" y="152" text-anchor="middle" class="dg-t">Horizontal</text>
+          <line x1="32" y1="196" x2="92" y2="196" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+          <line x1="38" y1="196" x2="86" y2="196" stroke="#1e3a5f" stroke-width="2.6"/>
+          <text x="62" y="230" text-anchor="middle" class="dg-s">locked to the X axis</text>
+
+          <text x="186" y="152" text-anchor="middle" class="dg-t">Vertical</text>
+          <line x1="186" y1="168" x2="186" y2="226" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+          <line x1="186" y1="170" x2="186" y2="224" stroke="#1e3a5f" stroke-width="2.6"/>
+          <text x="186" y="242" text-anchor="middle" class="dg-s">locked to the Y axis</text>
+
+          <text x="310" y="152" text-anchor="middle" class="dg-t">Tangent</text>
+          <circle cx="300" cy="196" r="20" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.6"/>
+          <line x1="270" y1="216" x2="344" y2="216" stroke="#1e3a5f" stroke-width="1.8"/>
+          <circle cx="300" cy="216" r="3" class="dg-fill-a"/>
+          <text x="310" y="240" text-anchor="middle" class="dg-s">touch at one point</text>
+
+          <text x="434" y="152" text-anchor="middle" class="dg-t">Concentric</text>
+          <circle cx="434" cy="198" r="12" fill="none" stroke="#3b82f6" stroke-width="1.6"/>
+          <circle cx="434" cy="198" r="24" fill="none" stroke="#3b82f6" stroke-width="1.6"/>
+          <circle cx="434" cy="198" r="3" class="dg-fill-a"/>
+          <text x="434" y="240" text-anchor="middle" class="dg-s">shared centre</text>
+
+          <text x="558" y="152" text-anchor="middle" class="dg-t">Symmetric</text>
+          <line x1="558" y1="166" x2="558" y2="228" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="8 3 2 3"/>
+          <line x1="540" y1="196" x2="576" y2="196" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 2"/>
+          <circle cx="540" cy="196" r="3.5" class="dg-fill"/>
+          <circle cx="576" cy="196" r="3.5" class="dg-fill"/>
+          <text x="558" y="240" text-anchor="middle" class="dg-s">mirrored about a centreline</text>
+        </svg>
+        <figcaption>The common geometric relations. <span class="term">Coincident</span> and <span class="term">collinear</span> place geometry together; <span class="term">parallel</span>, <span class="term">perpendicular</span>, <span class="term">horizontal</span> and <span class="term">vertical</span> fix direction; <span class="term">equal</span> ties sizes together; <span class="term">tangent</span> and <span class="term">concentric</span> control how curves meet; <span class="term">symmetric</span> keeps two entities mirrored about a centreline.</figcaption>
+        </figure>
+
         <ul>
             <li><span class="term">Under-defined:</span> geometry can still be dragged &mdash; the sketch is not fully controlled</li>
             <li><span class="term">Fully defined:</span> every entity is fixed by relations and dimensions; this is the target state before finishing a sketch</li>
