@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MECH151 SolidWorks Practice Problems</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+        header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.1rem; color: #1a1a2e; }
+        .subtitle {
+            color: #475569;
+            margin-top: 10px;
+            font-size: 1rem;
+            max-width: 720px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+        main { max-width: 900px; margin: 0 auto; padding: 36px 20px; }
+
+        .credit-box {
+            background: #eef6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin-bottom: 32px;
+            line-height: 1.7;
+            color: #1e3a5f;
+        }
+        .credit-box h2 { font-size: 1.05rem; color: #1a1a2e; margin-bottom: 8px; }
+        .credit-box ul { margin: 8px 0 0 20px; }
+        .credit-box li { margin-bottom: 4px; }
+
+        .level-block {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        .level-block summary {
+            cursor: pointer;
+            list-style: none;
+            padding: 14px 18px;
+            background: #f8fafc;
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .level-block summary::-webkit-details-marker { display: none; }
+        .level-block[open] summary { border-bottom: 1px solid #e2e8f0; background: #e8f0fb; }
+        .level-num {
+            font-weight: 700;
+            font-size: 0.78rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #3b82f6;
+        }
+        .level-title { font-weight: 700; font-size: 1rem; color: #1a1a1a; }
+        .level-meta { font-size: 0.85rem; color: #64748b; margin-left: auto; }
+        .prob-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+            gap: 8px;
+            padding: 16px 18px;
+        }
+        .level-desc {
+            padding: 16px 20px 20px;
+            color: #334155;
+            line-height: 1.65;
+            font-size: 0.92rem;
+        }
+        .prob {
+            display: block;
+            text-align: center;
+            padding: 8px 4px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            color: #1e3a5f;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+        .prob:hover { background: #3b82f6; border-color: #3b82f6; color: #fff; }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 36px;
+            color: #475569;
+            text-decoration: none;
+            font-size: 0.92rem;
+        }
+        .back-link:hover { color: #1a1a1a; text-decoration: underline; }
+        .attribution {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.8rem;
+            margin-top: 28px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>SolidWorks Practice Problems</h1>
+    <p class="subtitle">Eight levels of official SOLIDWORKS practice models, arranged roughly from easiest (Level 1) to most advanced (Level 8), plus a Level 9 capstone project. Use these to build modeling speed and confidence outside of class.</p>
+</header>
+
+<main>
+
+    <div class="credit-box">
+        <h2>Attendance Credit</h2>
+        <p>Work through <strong>all 9 levels</strong> to receive attendance credit: complete <strong>3 problems of your choice from each of Levels 1&ndash;8</strong> (24 problems), plus the <strong>Level 9 final project</strong> &mdash; a single actuating vice assembly.</p>
+        <ul>
+            <li>Within Levels 1&ndash;8, you choose which 3 of that level's problems to complete.</li>
+            <li>Each problem PDF gives the target dimensions, suggested tools, and (for higher levels) a design hint.</li>
+            <li>Model the part in whatever CAD program you're using for the course and check it against the given dimensions/volume or center of mass.</li>
+            <li>Email your completed models to <a href="mailto:kainanis@hawaii.edu">kainanis@hawaii.edu</a> to receive credit &mdash; either as a direct attachment, or through the <a href="https://www.hawaii.edu/filedrop/">UH FileDrop service</a> (recommended for larger CAD files) addressed to the same email.</li>
+            <li>Print or fill out the <a href="PracticeProblems_Attendance_Tracking_Sheet.pdf">attendance tracking sheet</a> (<a href="PracticeProblems_Attendance_Tracking_Sheet.docx">DOCX</a>) and include it with your email to record which 3 problems you completed from each of Levels 1&ndash;8, plus your Level 9 actuating vice submission.</li>
+        </ul>
+    </div>
+
+    <details class="level-block">
+        <summary>
+            <span class="level-num">Level 1</span>
+            <span class="level-title">Basic Sketch and Extrusion</span>
+            <span class="level-meta">20 problems &middot; Typical difficulty: Easy</span>
+        </summary>
+        <div class="prob-grid">
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_1_ENG.pdf">1</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_2_ENG.pdf">2</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_3_ENG.pdf">3</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_4_ENG.pdf">4</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_5_ENG.pdf">5</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_6_ENG.pdf">6</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_7_ENG.pdf">7</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_8_ENG.pdf">8</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_9_ENG.pdf">9</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_10_ENG.pdf">10</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_11_ENG.pdf">11</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_12_ENG.pdf">12</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_13_ENG.pdf">13</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_14_ENG.pdf">14</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_15_ENG.pdf">15</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_16_ENG.pdf">16</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_17_ENG.pdf">17</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_18_ENG.pdf">18</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_19_ENG.pdf">19</a>
+                <a class="prob" href="PracticeProblems-Level1/PracticeProblems_1_20_ENG.pdf">20</a>
+        </div>
+    </details>
+
+    <details class="level-block">
+        <summary>
+            <span class="level-num">Level 2</span>
+            <span class="level-title">Sketch Tools & End Conditions</span>
+            <span class="level-meta">20 problems &middot; Typical difficulty: Medium</span>
+        </summary>
+        <div class="prob-grid">
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_1_ENG.pdf">1</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_2_ENG.pdf">2</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_3_ENG.pdf">3</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_4_ENG.pdf">4</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_5_ENG.pdf">5</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_6_ENG.pdf">6</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_7_ENG.pdf">7</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_8_ENG.pdf">8</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_9_ENG.pdf">9</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_10_ENG.pdf">10</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_11_ENG.pdf">11</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_12_ENG.pdf">12</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_13_ENG.pdf">13</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_14_ENG.pdf">14</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_15_ENG.pdf">15</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_16_ENG.pdf">16</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_17_ENG.pdf">17</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_18_ENG.pdf">18</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_19_ENG.pdf">19</a>
+                <a class="prob" href="PracticeProblems-Level2/PracticeProblems_2_20_ENG.pdf">20</a>
+        </div>
+    </details>
+
+    <details class="level-block">
+        <summary>
+            <span class="level-num">Level 3</span>
+            <span class="level-title">Global Variables & Sketch Patterns</span>
+            <span class="level-meta">8 problems &middot; Typical difficulty: Medium</span>
+        </summary>
+        <div class="prob-grid">
+                <a class="prob" href="PracticeProblems-Level3/PracticeProblems_3_1_ENG.pdf">1</a>
+                <a class="prob" href="PracticeProblems-Level3/PracticeProblems_3_2_ENG.pdf">2</a>
+                <a class="prob" href="PracticeProblems-Level3/PracticeProblems_3_3_ENG.pdf">3</a>
+                <a class="prob" href="PracticeProblems-Level3/PracticeProblems_3_4_ENG.pdf">4</a>
+                <a class="prob" href="PracticeProblems-Level3/PracticeProblems_3_5_ENG.pdf">5</a>
+                <a class="prob" href="PracticeProblems-Level3/PracticeProblems_3_6_ENG.pdf">6</a>
+                <a class="prob" href="PracticeProblems-Level3/PracticeProblems_3_7_ENG.pdf">7</a>
+                <a class="prob" href="PracticeProblems-Level3/PracticeProblems_3_8_ENG.pdf">8</a>
+        </div>
+    </details>
+
+    <details class="level-block">
+        <summary>
+            <span class="level-num">Level 4</span>
+            <span class="level-title">Extrude Cut & Fillet/Chamfer</span>
+            <span class="level-meta">70 problems &middot; Typical difficulty: Medium</span>
+        </summary>
+        <div class="prob-grid">
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_1_ENG.pdf">1</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_2_ENG.pdf">2</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_3_ENG.pdf">3</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_4_ENG.pdf">4</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_5_ENG.pdf">5</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_6_ENG.pdf">6</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_7_ENG.pdf">7</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_8_ENG.pdf">8</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_9_ENG.pdf">9</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_10_ENG.pdf">10</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_11_ENG.pdf">11</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_12_ENG.pdf">12</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_13_ENG.pdf">13</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_14_ENG.pdf">14</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_15_ENG.pdf">15</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_16_ENG.pdf">16</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_17_ENG.pdf">17</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_18_ENG.pdf">18</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_19_ENG.pdf">19</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_20_ENG.pdf">20</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_21_ENG.pdf">21</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_22_ENG.pdf">22</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_23_ENG.pdf">23</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_24_ENG.pdf">24</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_25_ENG.pdf">25</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_26_ENG.pdf">26</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_27_ENG.pdf">27</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_28_ENG.pdf">28</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_29_ENG.pdf">29</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_30_ENG.pdf">30</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_31_ENG.pdf">31</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_32_ENG.pdf">32</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_33_ENG.pdf">33</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_34_ENG.pdf">34</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_35_ENG.pdf">35</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_36_ENG.pdf">36</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_37_ENG.pdf">37</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_38_ENG.pdf">38</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_39_ENG.pdf">39</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_40_ENG.pdf">40</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_41_ENG.pdf">41</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_42_ENG.pdf">42</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_43_ENG.pdf">43</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_44_ENG.pdf">44</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_45_ENG.pdf">45</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_46_ENG.pdf">46</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_47_ENG.pdf">47</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_48_ENG.pdf">48</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_49_ENG.pdf">49</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_50_ENG.pdf">50</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_51_ENG.pdf">51</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_52_ENG.pdf">52</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_53_ENG.pdf">53</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_54_ENG.pdf">54</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_55_ENG.pdf">55</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_56_ENG.pdf">56</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_57_ENG.pdf">57</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_58_ENG.pdf">58</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_59_ENG.pdf">59</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_60_ENG.pdf">60</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_61_ENG.pdf">61</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_62_ENG.pdf">62</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_63_ENG.pdf">63</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_64_ENG.pdf">64</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_65_ENG.pdf">65</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_66_ENG.pdf">66</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_67_ENG.pdf">67</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_68_ENG.pdf">68</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_69_ENG.pdf">69</a>
+                <a class="prob" href="PracticeProblems-Level4/PracticeProblems_4_70_ENG.pdf">70</a>
+        </div>
+    </details>
+
+    <details class="level-block">
+        <summary>
+            <span class="level-num">Level 5</span>
+            <span class="level-title">Reference Geometry</span>
+            <span class="level-meta">15 problems &middot; Typical difficulty: Medium</span>
+        </summary>
+        <div class="prob-grid">
+                <a class="prob" href="PracticeProblems-Level5/PracticeProblems_5_1_ENG.pdf">1</a>
+                <a class="prob" href="PracticeProblems-Level5/PracticeProblems_5_2_ENG.pdf">2</a>
+                <a class="prob" href="PracticeProblems-Level5/PracticeProblems_5_3_ENG.pdf">3</a>
+                <a class="prob" href="PracticeProblems-Level5/PracticeProblems_5_4_ENG.pdf">4</a>
+                <a class="prob" href="PracticeProblems-Level5/PracticeProblems_5_6_ENG.pdf">6</a>
+                <a class="prob" href="PracticeProblems-Level5/PracticeProblems_5_7_ENG.pdf">7</a>
+                <a class="prob" href="PracticeProblems-Level5/PracticeProblems_5_8_ENG.pdf">8</a>
+                <a class="prob" href="PracticeProblems-Level5/PracticeProblems_5_9_ENG.pdf">9</a>
+                <a class="prob" href="PracticeProblems-Level5/PracticeProblems_5_10_ENG.pdf">10</a>
+                <a class="prob" href="PracticeProblems-Level5/PracticeProblems_5_11_ENG.pdf">11</a>
+                <a class="prob" href="PracticeProblems-Level5/PracticeProblems_5_12_ENG.pdf">12</a>
+                <a class="prob" href="PracticeProblems-Level5/PracticeProblems_5_13_ENG.pdf">13</a>
+                <a class="prob" href="PracticeProblems-Level5/PracticeProblems_5_14_ENG.pdf">14</a>
+                <a class="prob" href="PracticeProblems-Level5/PracticeProblems_5_15_ENG.pdf">15</a>
+                <a class="prob" href="PracticeProblems-Level5/PracticeProblems_5_16_ENG.pdf">16</a>
+        </div>
+    </details>
+
+    <details class="level-block">
+        <summary>
+            <span class="level-num">Level 6</span>
+            <span class="level-title">Revolve Boss/Cut</span>
+            <span class="level-meta">20 problems &middot; Typical difficulty: Easy</span>
+        </summary>
+        <div class="prob-grid">
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_1_ENG.pdf">1</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_2_ENG.pdf">2</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_3_ENG.pdf">3</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_4_ENG.pdf">4</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_5_ENG.pdf">5</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_6_ENG.pdf">6</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_7_ENG.pdf">7</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_8_ENG.pdf">8</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_9_ENG.pdf">9</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_10_ENG.pdf">10</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_11_ENG.pdf">11</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_12_ENG.pdf">12</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_13_ENG.pdf">13</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_14_ENG.pdf">14</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_15_ENG.pdf">15</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_16_ENG.pdf">16</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_17_ENG.pdf">17</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_18_ENG.pdf">18</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_19_ENG.pdf">19</a>
+                <a class="prob" href="PracticeProblems-Level6/PracticeProblems_6_20_ENG.pdf">20</a>
+        </div>
+    </details>
+
+    <details class="level-block">
+        <summary>
+            <span class="level-num">Level 7</span>
+            <span class="level-title">Feature Patterning</span>
+            <span class="level-meta">48 problems &middot; Typical difficulty: Medium</span>
+        </summary>
+        <div class="prob-grid">
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_1_ENG.pdf">1</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_2_ENG.pdf">2</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_3_ENG.pdf">3</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_4_ENG.pdf">4</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_5_ENG.pdf">5</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_6_ENG.pdf">6</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_7_ENG.pdf">7</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_8_ENG.pdf">8</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_9_ENG.pdf">9</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_10_ENG.pdf">10</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_11_ENG.pdf">11</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_12_ENG.pdf">12</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_13_ENG.pdf">13</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_14_ENG.pdf">14</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_15_ENG.pdf">15</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_16_ENG.pdf">16</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_17_ENG.pdf">17</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_18_ENG.pdf">18</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_19_ENG.pdf">19</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_20_ENG.pdf">20</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_21_ENG.pdf">21</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_22_ENG.pdf">22</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_23_ENG.pdf">23</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_24_ENG.pdf">24</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_25_ENG.pdf">25</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_26_ENG.pdf">26</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_27_ENG.pdf">27</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_28_ENG.pdf">28</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_29_ENG.pdf">29</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_30_ENG.pdf">30</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_31_ENG.pdf">31</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_32_ENG.pdf">32</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_33_ENG.pdf">33</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_34_ENG.pdf">34</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_35_ENG.pdf">35</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_36_ENG.pdf">36</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_38_ENG.pdf">38</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_39_ENG.pdf">39</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_40_ENG.pdf">40</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_41_ENG.pdf">41</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_42_ENG.pdf">42</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_43_ENG.pdf">43</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_44_ENG.pdf">44</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_45_ENG.pdf">45</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_46_ENG.pdf">46</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_47_ENG.pdf">47</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_48_ENG.pdf">48</a>
+                <a class="prob" href="PracticeProblems-Level7/PracticeProblems_7_49_ENG.pdf">49</a>
+        </div>
+    </details>
+
+    <details class="level-block">
+        <summary>
+            <span class="level-num">Level 8</span>
+            <span class="level-title">Sweep Boss/Cut</span>
+            <span class="level-meta">14 problems &middot; Typical difficulty: Easy</span>
+        </summary>
+        <div class="prob-grid">
+                <a class="prob" href="PracticeProblems-Level8/PracticeProblems_8_1_ENG.pdf">1</a>
+                <a class="prob" href="PracticeProblems-Level8/PracticeProblems_8_2_ENG.pdf">2</a>
+                <a class="prob" href="PracticeProblems-Level8/PracticeProblems_8_3_ENG.pdf">3</a>
+                <a class="prob" href="PracticeProblems-Level8/PracticeProblems_8_4_ENG.pdf">4</a>
+                <a class="prob" href="PracticeProblems-Level8/PracticeProblems_8_5_ENG.pdf">5</a>
+                <a class="prob" href="PracticeProblems-Level8/PracticeProblems_8_6_ENG.pdf">6</a>
+                <a class="prob" href="PracticeProblems-Level8/PracticeProblems_8_7_ENG.pdf">7</a>
+                <a class="prob" href="PracticeProblems-Level8/PracticeProblems_8_8_ENG.pdf">8</a>
+                <a class="prob" href="PracticeProblems-Level8/PracticeProblems_8_9_ENG.pdf">9</a>
+                <a class="prob" href="PracticeProblems-Level8/PracticeProblems_8_10_ENG.pdf">10</a>
+                <a class="prob" href="PracticeProblems-Level8/PracticeProblems_8_11_ENG.pdf">11</a>
+                <a class="prob" href="PracticeProblems-Level8/PracticeProblems_8_12_ENG.pdf">12</a>
+                <a class="prob" href="PracticeProblems-Level8/PracticeProblems_8_13_ENG.pdf">13</a>
+                <a class="prob" href="PracticeProblems-Level8/PracticeProblems_8_14_ENG.pdf">14</a>
+        </div>
+    </details>
+
+    <details class="level-block">
+        <summary>
+            <span class="level-num">Level 9</span>
+            <span class="level-title">Final Project &mdash; Actuating Vice</span>
+            <span class="level-meta">1 problem &middot; Design + build a working actuating vice assembly</span>
+        </summary>
+        <div class="level-desc">
+            <p>Level 9 is a single capstone project instead of a bank of practice problems: design and model a fully-mated <strong>actuating vice</strong> assembly &mdash; a vice whose jaw opens and closes through an actuating mechanism (e.g. a screw, cam, or lever) rather than being tightened by hand alone.</p>
+            <p>Model every part of the assembly, mate it so the actuating mechanism moves correctly, and verify the jaws open/close through their full range of motion before submitting.</p>
+        </div>
+    </details>
+
+    <p class="attribution">Levels 1&ndash;8 practice problems &copy; Dassault Syst&egrave;mes SOLIDWORKS, for classroom teaching use only. Level 9 is an original course project.</p>
+
+    <a class="back-link" href="../index.html">&larr; Back to Main Course Page</a>
+</main>
+
+</body>
+</html>
