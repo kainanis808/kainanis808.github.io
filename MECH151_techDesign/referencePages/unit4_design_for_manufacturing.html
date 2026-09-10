@@ -57,6 +57,20 @@
             font-size: 0.82rem; color: #64748b; line-height: 1.6; }
         .formula .ex { display: block; margin-top: 7px; padding-top: 7px; border-top: 1px dashed #cbd5e1;
             font-family: 'Segoe UI', Tahoma, Geneva, sans-serif; font-size: 0.85rem; color: #475569; line-height: 1.6; }
+        pre.code { background: #1e293b; border-radius: 8px; padding: 13px 16px; margin: 12px 0; color: #e2e8f0;
+            font-family: SFMono-Regular, ui-monospace, Menlo, Consolas, 'Courier New', monospace;
+            font-size: 0.82rem; line-height: 1.75; overflow-x: auto; white-space: pre; }
+        pre.code .c { color: #7dd3fc; }
+        .section code { font-family: SFMono-Regular, ui-monospace, Menlo, Consolas, monospace; font-size: 0.86em;
+            background: #eef2f7; border: 1px solid #e2e8f0; border-radius: 4px; padding: 0.5px 4px; color: #1e3a5f; }
+        pre.code b { color: #fcd34d; font-weight: 600; }
+        table.codes { width: 100%; border-collapse: collapse; margin: 12px 0 6px; font-size: 0.9rem; }
+        table.codes th, table.codes td { text-align: left; padding: 6px 10px; border-bottom: 1px solid #e2e8f0;
+            color: #4b5563; line-height: 1.5; vertical-align: top; }
+        table.codes th { color: #1e3a5f; font-weight: 700; }
+        table.codes td:first-child { font-family: SFMono-Regular, ui-monospace, Menlo, Consolas, monospace;
+            color: #1e3a5f; font-weight: 600; white-space: nowrap; }
+        .table-wrap { overflow-x: auto; }
         html { overflow-x: clip; }
         .def { position: relative; border-bottom: 1px dotted #64748b; cursor: help; }
         .def:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
@@ -83,9 +97,9 @@
 <main>
     <p class="intro">
         This unit closes the loop from CAD model to physical part. That means preparing the files each process
-        actually needs, understanding what additive, subtractive, and laser processes can and cannot make, and
-        designing parts to suit the process instead of fighting it &mdash; then operating shop equipment safely to
-        produce a working prototype.
+        actually needs, reading the G-code that drives the machines, understanding what additive, subtractive, and
+        laser processes can and cannot make, and designing parts to suit the process instead of fighting it &mdash;
+        then operating shop equipment safely to produce a working prototype.
     </p>
 
     <div class="goal">
@@ -388,6 +402,148 @@
     </div>
 
     <div class="section">
+        <h2>An introduction to G-code</h2>
+        <p>
+            The feeds-and-speeds numbers above eventually reach the machine as <span class="term">G-code</span> &mdash;
+            a plain-text list of instructions a controller runs one line at a time. It is the common language of
+            CNC mills, routers and lathes, and the same format an FDM slicer writes for a 3D printer and many laser
+            cutters use. You will almost never type a full program from scratch: CAM software and slicers generate it
+            for you. What this course expects is that you can <em>read</em> a G-code file, understand what it tells
+            the machine to do, and make small, safe edits when one is handed to you.
+        </p>
+
+        <h3>Where G-code comes from</h3>
+        <p>
+            In a normal workflow the code is produced automatically, then adjusted only at the edges:
+        </p>
+        <ul>
+            <li><span class="term">Model &rarr; CAM:</span> import the solid, define the stock, pick tools, generate toolpaths, and simulate them</li>
+            <li><span class="term def" tabindex="0" data-def="A small translator specific to one machine and controller. It converts the CAM system's generic toolpaths into the exact G-code dialect that machine expects — its home moves, coolant codes, tool-change format, and number formatting.">Post-processor:</span> translates the toolpaths into your machine's exact G-code dialect &mdash; pick the post that matches the controller in your shop</li>
+            <li><span class="term">Controller:</span> load the file, set the part zero by touching off on the actual stock, dry-run it, then cut</li>
+        </ul>
+        <p>
+            A slicer does the same job for a 3D print: your layer height, speeds and temperatures become thousands
+            of <span class="term">G1</span> moves. You normally change those through slicer settings, not by editing
+            the file.
+        </p>
+
+        <h3>How a line is built</h3>
+        <p>
+            Each line is a <span class="term">block</span>. A block is a list of <span class="term">words</span>,
+            and each word is an <span class="term">address letter</span> followed by a number &mdash; <code>X25.0</code>
+            is the address <code>X</code> with the value <code>25.0</code>. Two letters carry most of the meaning:
+            <span class="term">G</span> words are <em>preparatory</em> (they set motion and modes) and
+            <span class="term">M</span> words are <em>miscellaneous</em> (they switch machine functions like the
+            spindle and coolant on or off).
+        </p>
+
+        <figure class="diagram">
+        <svg viewBox="0 0 600 196" role="img" aria-label="Anatomy of a G-code block: N70 is an optional line number, G01 is a G-word commanding a linear move at feed rate, X25.0 and Y10.0 are the destination coordinates, and F150 sets the feed rate in millimetres per minute. G01 and F are modal and stay active until changed.">
+          <rect x="120" y="86" width="360" height="34" fill="#eff6ff" stroke="#1e3a5f" stroke-width="1.6"/>
+          <text x="150" y="108" text-anchor="middle" class="dg-t" style="font-family:SFMono-Regular,ui-monospace,Menlo,Consolas,monospace">N70</text>
+          <text x="212" y="108" text-anchor="middle" class="dg-t" style="font-family:SFMono-Regular,ui-monospace,Menlo,Consolas,monospace">G01</text>
+          <text x="288" y="108" text-anchor="middle" class="dg-t" style="font-family:SFMono-Regular,ui-monospace,Menlo,Consolas,monospace">X25.0</text>
+          <text x="362" y="108" text-anchor="middle" class="dg-t" style="font-family:SFMono-Regular,ui-monospace,Menlo,Consolas,monospace">Y10.0</text>
+          <text x="440" y="108" text-anchor="middle" class="dg-t" style="font-family:SFMono-Regular,ui-monospace,Menlo,Consolas,monospace">F150</text>
+
+          <line x1="150" y1="86" x2="150" y2="64" stroke="#94a3b8" stroke-width="1"/>
+          <text x="150" y="55" text-anchor="middle" class="dg-s">line number &mdash; optional, a handle for editing</text>
+
+          <line x1="325" y1="86" x2="325" y2="64" stroke="#94a3b8" stroke-width="1"/>
+          <text x="360" y="42" text-anchor="middle" class="dg-s">coordinates &mdash; where the tool moves to</text>
+          <text x="360" y="55" text-anchor="middle" class="dg-s">(here: mm, absolute)</text>
+
+          <line x1="212" y1="120" x2="212" y2="146" stroke="#94a3b8" stroke-width="1"/>
+          <text x="205" y="160" text-anchor="middle" class="dg-s">G-word &mdash; linear move at feed rate</text>
+          <text x="205" y="173" text-anchor="middle" class="dg-s">modal: stays active until changed</text>
+
+          <line x1="440" y1="120" x2="440" y2="146" stroke="#94a3b8" stroke-width="1"/>
+          <text x="450" y="160" text-anchor="middle" class="dg-s">F-word &mdash; feed rate (mm/min)</text>
+          <text x="450" y="173" text-anchor="middle" class="dg-s">modal: applies to later moves too</text>
+        </svg>
+        <figcaption>A block is a list of words; each word is an address letter plus a value. Many settings are <span class="term">modal</span> &mdash; units, positioning mode, feed rate, spindle speed and the active work offset stay in effect until a later line changes them, so a value set once governs every line after it.</figcaption>
+        </figure>
+
+        <h3>Codes you will actually see</h3>
+        <div class="table-wrap">
+        <table class="codes">
+          <tr><th>Code</th><th>What it does</th></tr>
+          <tr><td>G20 / G21</td><td>Units: inch / millimetre</td></tr>
+          <tr><td>G90 / G91</td><td>Positioning: absolute (from part zero) / incremental (from here)</td></tr>
+          <tr><td>G17</td><td>Work in the XY plane &mdash; the default for milling</td></tr>
+          <tr><td>G54&ndash;G59</td><td>Select a work coordinate offset &mdash; where the part zero is</td></tr>
+          <tr><td>G00</td><td>Rapid move &mdash; fast positioning, not a cutting move</td></tr>
+          <tr><td>G01</td><td>Linear move at the programmed feed rate &mdash; the cutting move</td></tr>
+          <tr><td>G02 / G03</td><td>Clockwise / counter-clockwise arc (centre given by I, J)</td></tr>
+          <tr><td>G28</td><td>Return to machine home</td></tr>
+          <tr><td>G04</td><td>Dwell &mdash; pause in place for a set time</td></tr>
+          <tr><td>M03 / M04 / M05</td><td>Spindle on clockwise / counter-clockwise / off</td></tr>
+          <tr><td>M06</td><td>Tool change</td></tr>
+          <tr><td>M08 / M09</td><td>Coolant on / off</td></tr>
+          <tr><td>M00</td><td>Program pause &mdash; wait for the operator to press start</td></tr>
+          <tr><td>M30</td><td>End of program</td></tr>
+          <tr><td>S / F</td><td>Spindle speed (rev/min) / feed rate (mm/min or in/min)</td></tr>
+          <tr><td>T</td><td>Select a tool by number</td></tr>
+          <tr><td>N</td><td>Line number &mdash; a label only, it does not command anything</td></tr>
+          <tr><td>( &hellip; ) or ;</td><td>A comment &mdash; ignored by the machine, there for the reader</td></tr>
+        </table>
+        </div>
+
+        <h3>Reading a whole program</h3>
+        <p>
+            Almost every program has the same shape: a <span class="term">header</span> that puts the machine into
+            a known state, a <span class="term">body</span> of one section per tool, and a
+            <span class="term">footer</span> that shuts everything down. The example below is the slot from the
+            feeds-and-speeds section &mdash; a 6&nbsp;mm two-flute cutter in aluminium, run at the
+            <strong>&asymp;10,600&nbsp;rpm</strong> and <strong>&asymp;640&nbsp;mm/min</strong> worked out there.
+        </p>
+        <pre class="code"><span class="c">(SLOT - 6MM 2-FLUTE FLAT ENDMILL)</span>
+<b>G21 G90 G17</b>       <span class="c">; mm, absolute positioning, XY plane</span>
+<b>G54</b>               <span class="c">; use work offset 1 = the part zero you set</span>
+<b>G0 Z5.0</b>           <span class="c">; rapid up to a safe height</span>
+<b>M3 S10600</b>         <span class="c">; spindle on, clockwise, 10600 rpm</span>
+<b>G0 X0 Y0</b>          <span class="c">; rapid above the start of the cut</span>
+<b>G1 Z-2.0 F300</b>     <span class="c">; feed down to 2 mm depth, slowly</span>
+<b>G1 X50.0 F640</b>     <span class="c">; cut along the slot at 640 mm/min</span>
+<b>G0 Z5.0</b>           <span class="c">; retract to safe height</span>
+<b>M5</b>                <span class="c">; spindle off</span>
+<b>G0 X0 Y0</b>          <span class="c">; return near the origin</span>
+<b>M30</b>               <span class="c">; end of program</span></pre>
+        <p>
+            Read it top to bottom the way the machine does. Because feed rate is modal, the <code>F640</code> on the
+            slot line keeps applying until something changes it; because positioning is absolute (<code>G90</code>),
+            every <code>X</code> and <code>Y</code> is measured from the part zero that <code>G54</code> points at.
+        </p>
+
+        <h3>Modifying G-code you are given</h3>
+        <p>
+            Small edits at the edges of a program are routine. Editing the geometry in the middle of one is not
+            &mdash; that is CAM's job.
+        </p>
+        <h3 style="font-size:0.92rem;color:#15803d;">Safe to edit by hand</h3>
+        <ul>
+            <li><span class="term">Feed rate (F) and spindle speed (S):</span> dial the feed back if the cut chatters or the tool burns; scale every F in the file by the same percentage to slow a whole job</li>
+            <li><span class="term">Safe / clearance height:</span> raise the <code>Z</code> value in the rapid moves if a clamp is in the way &mdash; after checking nothing on the part is taller</li>
+            <li><span class="term">Work offset:</span> swap <code>G54</code> for <code>G55</code> to run the same part from a second setup</li>
+            <li><span class="term">Add a pause:</span> drop an <code>M00</code> in before a critical move so you can check the setup, or a <code>G04</code> dwell to let the spindle reach speed</li>
+            <li><span class="term">Trim the header or footer:</span> remove a coolant line (<code>M08</code>) for a machine with no coolant, or fix a home move that fouls a fixture</li>
+            <li><span class="term">Delete a tool section</span> you are not running this time &mdash; remove the whole block from its tool change to its retract</li>
+        </ul>
+        <h3 style="font-size:0.92rem;color:#991b1b;">Regenerate from CAM instead &mdash; do not hand-edit</h3>
+        <ul>
+            <li>Individual <code>X</code> / <code>Y</code> / <code>Z</code> cutting coordinates, or arc <code>I</code> / <code>J</code> centres &mdash; a wrong digit gouges the part or breaks the arc</li>
+            <li>Switching units (<code>G20</code> &harr; <code>G21</code>) partway through &mdash; every number after it is now wrong</li>
+            <li>Anything with cutter compensation (<code>G41</code> / <code>G42</code>) &mdash; the offset math is the machine's, not yours</li>
+        </ul>
+        <div class="safety">
+            <strong>After any edit, prove the file before it cuts.</strong> Re-simulate or backplot the whole
+            program, then run it once as an air pass &mdash; raise the Z origin a few millimetres or use the
+            controller's dry-run &mdash; with a hand on the feed-hold and the e-stop in reach. A G-code error is
+            found by the machine at full speed.
+        </div>
+    </div>
+
+    <div class="section">
         <h2>Laser cutting</h2>
         <p>
             A laser cutter cuts flat sheet by burning or vaporizing a narrow line through it. It's fast and precise
@@ -477,7 +633,8 @@
 
     <div class="produce">
         <strong>What you'll produce:</strong> correct manufacturing-ready files and GD&amp;T documentation for at
-        least one process, and a DFM-reviewed part design ready to hand off to a shop process.
+        least one process, the ability to read a G-code file and make a safe edit to it, and a DFM-reviewed part
+        design ready to hand off to a shop process.
     </div>
     <p class="assess">
         Assessed by the Unit 4 Quiz (Week 16). Building and presenting the physical prototype is graded separately
