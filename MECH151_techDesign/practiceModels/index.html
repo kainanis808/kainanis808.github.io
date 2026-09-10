@@ -44,6 +44,45 @@
         .credit-box ul { margin: 8px 0 0 20px; }
         .credit-box li { margin-bottom: 4px; }
 
+        .schedule-wrap {
+            margin-bottom: 32px;
+        }
+        .schedule-title {
+            font-size: 1.1rem;
+            color: #1a1a2e;
+            margin-bottom: 6px;
+        }
+        .schedule-sub {
+            color: #475569;
+            font-size: 0.9rem;
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+        .table-scroll { overflow-x: auto; }
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.86rem;
+            min-width: 640px;
+        }
+        .schedule-table th, .schedule-table td {
+            border: 1px solid #e2e8f0;
+            padding: 8px 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .schedule-table th {
+            background: #eef6ff;
+            color: #1a1a2e;
+            font-weight: 700;
+        }
+        .schedule-table tbody tr:nth-child(even) { background: #f8fafc; }
+        .schedule-footnote {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 8px;
+            font-style: italic;
+        }
         .level-block {
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -126,14 +165,43 @@
 
     <div class="credit-box">
         <h2>Attendance Credit</h2>
+        <p>These practice problems are designed to encourage further hands-on practice and build your competency in whichever CAD program you've chosen for this course &mdash; not just to satisfy an attendance requirement.</p>
         <p>Work through <strong>all 9 levels</strong> to receive attendance credit: complete <strong>3 problems of your choice from each of Levels 1&ndash;8</strong> (24 problems), plus the <strong>Level 9 final project</strong> &mdash; a single actuating vice assembly.</p>
         <ul>
             <li>Within Levels 1&ndash;8, you choose which 3 of that level's problems to complete.</li>
             <li>Each problem PDF gives the target dimensions, suggested tools, and (for higher levels) a design hint.</li>
             <li>Model the part in whatever CAD program you're using for the course and check it against the given dimensions/volume or center of mass.</li>
-            <li>Email your completed models to <a href="mailto:kainanis@hawaii.edu">kainanis@hawaii.edu</a> to receive credit &mdash; either as a direct attachment, or through the <a href="https://www.hawaii.edu/filedrop/">UH FileDrop service</a> (recommended for larger CAD files) addressed to the same email.</li>
+            <li><strong>Credit is contingent on accuracy:</strong> your model must actually capture the part's form &mdash; its features, proportions, and geometry as shown in the problem &mdash; not a placeholder or primitive shape (e.g. a plain block or cylinder) standing in for it. Submissions that don't reflect the modeled part will not receive credit.</li>
+            <li>Email your completed models to <a href="mailto:kainanis@hawaii.edu">kainanis@hawaii.edu</a> to receive credit &mdash; either as a direct attachment, or through the <a href="https://www.hawaii.edu/filedrop/">UH FileDrop service</a> (recommended for larger CAD files) addressed to the same email &mdash; by that week's deadline in the schedule below.</li>
             <li>Print or fill out the <a href="PracticeProblems_Attendance_Tracking_Sheet.pdf">attendance tracking sheet</a> (<a href="PracticeProblems_Attendance_Tracking_Sheet.docx">DOCX</a>) and include it with your email to record which 3 problems you completed from each of Levels 1&ndash;8, plus your Level 9 actuating vice submission.</li>
         </ul>
+    </div>
+
+    <div class="schedule-wrap">
+        <h2 class="schedule-title">Weekly Schedule &amp; Deadlines</h2>
+        <p class="schedule-sub">One attendance credit is earned per week by submitting that week's deliverable by the Sunday deadline. This mirrors the schedule in the course syllabus.</p>
+        <div class="table-scroll">
+        <table class="schedule-table">
+            <thead>
+                <tr><th>Week</th><th>Dates</th><th>Practice Problem Focus</th><th>Deliverable Due</th><th>Deadline</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>4</td><td>Sep 16&ndash;17</td><td>Level 1 &ndash; Basic Sketch and Extrusion</td><td>3 problems of your choice from Level 1</td><td>Sun, Sep 20</td></tr>
+                <tr><td>5</td><td>Sep 23&ndash;24</td><td>Level 2 &ndash; Sketch Tools &amp; End Conditions</td><td>3 problems from Level 2</td><td>Sun, Sep 27</td></tr>
+                <tr><td>6</td><td>Sep 30&ndash;Oct 1</td><td>Level 3 &ndash; Global Variables &amp; Sketch Patterns</td><td>3 problems from Level 3</td><td>Sun, Oct 4</td></tr>
+                <tr><td>7</td><td>Oct 7&ndash;8</td><td>Level 4 &ndash; Extrude Cut &amp; Fillet/Chamfer</td><td>3 problems from Level 4</td><td>Sun, Oct 11</td></tr>
+                <tr><td>8</td><td>Oct 14&ndash;15</td><td>Level 5 &ndash; Reference Geometry</td><td>3 problems from Level 5</td><td>Sun, Oct 18</td></tr>
+                <tr><td>9</td><td>Oct 21&ndash;22</td><td>Level 6 &ndash; Revolve Boss/Cut</td><td>3 problems from Level 6</td><td>Sun, Oct 25</td></tr>
+                <tr><td>10</td><td>Oct 28&ndash;29</td><td>Level 7 &ndash; Feature Patterning</td><td>3 problems from Level 7</td><td>Sun, Nov 1</td></tr>
+                <tr><td>11</td><td>Nov 4&ndash;5</td><td>Level 8 &ndash; Sweep Boss/Cut</td><td>3 problems from Level 8</td><td>Sun, Nov 8</td></tr>
+                <tr><td>12</td><td>Nov 11&ndash;12</td><td>Level 9 Vice &ndash; Stage 1</td><td>Mechanism concept finalized; fixed jaw/base modeled</td><td>Sun, Nov 15</td></tr>
+                <tr><td>13</td><td>Nov 18&ndash;19</td><td>Level 9 Vice &ndash; Stage 2</td><td>Moving jaw + actuator parts modeled</td><td>Sun, Nov 22</td></tr>
+                <tr><td>14</td><td>Nov 25&ndash;26*</td><td>Level 9 Vice &ndash; Stage 3</td><td>Full assembly with all parts mated</td><td>Sun, Nov 29</td></tr>
+                <tr><td>15</td><td>Dec 2&ndash;3</td><td>Level 9 Vice &ndash; Stage 4 (Final)</td><td>Full range of motion verified; final submission</td><td>Sun, Dec 6</td></tr>
+            </tbody>
+        </table>
+        </div>
+        <p class="schedule-footnote">*No class Thursday, November 26, 2026 (Thanksgiving Holiday). Tentative pacing guide &mdash; may be adjusted by the instructor during the semester.</p>
     </div>
 
     <details class="level-block">
@@ -440,6 +508,7 @@
         <div class="level-desc">
             <p>Level 9 is a single capstone project instead of a bank of practice problems: design and model a fully-mated <strong>actuating vice</strong> assembly &mdash; a vice whose jaw opens and closes through an actuating mechanism (e.g. a screw, cam, or lever) rather than being tightened by hand alone.</p>
             <p>Model every part of the assembly, mate it so the actuating mechanism moves correctly, and verify the jaws open/close through their full range of motion before submitting.</p>
+            <p><a class="prob" style="display:inline-block; width:auto; padding:8px 16px;" href="PracticeProblems-Level9/Level9_ActuatingVice_Handout.pdf">Download the project handout (PDF)</a></p>
         </div>
     </details>
 
