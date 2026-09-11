@@ -46,6 +46,15 @@
         .dg-part { fill: #e2e8f0; stroke: #1e3a5f; stroke-width: 1.6; }
         .dg-hidden { fill: none; stroke: #94a3b8; stroke-width: 1.2; stroke-dasharray: 4 3; }
         .section h3 { font-size: 1rem; color: #1e3a5f; margin: 16px 0 6px; }
+        table.fit-table { width: 100%; border-collapse: collapse; margin: 14px 0 4px; font-size: 0.88rem; }
+        table.fit-table caption { text-align: left; font-size: 0.85rem; color: #6b7280; margin-bottom: 6px; }
+        .fit-table th, .fit-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+        .fit-table th { background: #eef2f7; color: #1e3a5f; font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
+        .fit-table td.callout { font-weight: 700; color: #1e3a5f; white-space: nowrap; }
+        .fit-table tr:last-child td { border-bottom: none; }
+        .fit-table td, .fit-table th { color: #4b5563; }
+        .fit-table th { color: #1e3a5f; }
+        .section .note { font-size: 0.82rem; color: #6b7280; margin-top: 8px; line-height: 1.55; }
         html { overflow-x: clip; }
         .def { position: relative; border-bottom: 1px dotted #64748b; cursor: help; }
         .def:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
@@ -282,6 +291,74 @@
         </svg>
         <figcaption>Threads are almost never drawn in full detail &mdash; a standardized representation plus a thread note (e.g. <span style="font-weight:600">1/4-20 UNC-2A</span> or <span style="font-weight:600">M6&times;1</span>) carries everything a shop needs.</figcaption>
         </figure>
+
+        <h3>Fit callouts for threads and fastener holes</h3>
+        <p>
+            The class of fit is a code, not a dimension by itself &mdash; it tells the shop how much clearance
+            (or interference) is built into the thread tolerances, i.e. how loose or tight the mating parts will
+            actually feel when assembled.
+        </p>
+        <table class="fit-table">
+            <caption>Common thread and fastener-hole fit callouts</caption>
+            <thead>
+                <tr><th>Callout</th><th>System</th><th>What it physically represents</th><th>Typical use</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="callout">1A / 1B</td>
+                    <td>Unified (inch)</td>
+                    <td>Loosest inch class &mdash; the largest allowance between external (A) and internal (B)
+                        threads, so parts spin together with visible play even if slightly dirty or dinged.</td>
+                    <td>Rarely used commercially; rapid assembly/disassembly, ordnance-type work</td>
+                </tr>
+                <tr>
+                    <td class="callout">2A / 2B</td>
+                    <td>Unified (inch)</td>
+                    <td>Standard commercial allowance &mdash; enough clearance for easy assembly and plating
+                        without noticeable play.</td>
+                    <td>The default for most bolts, screws, and nuts</td>
+                </tr>
+                <tr>
+                    <td class="callout">3A / 3B</td>
+                    <td>Unified (inch)</td>
+                    <td>Tightest inch class &mdash; essentially zero allowance (the largest external size equals
+                        the smallest internal size).</td>
+                    <td>Precision or safety-critical fasteners where play isn't acceptable</td>
+                </tr>
+                <tr>
+                    <td class="callout">6H / 6g</td>
+                    <td>Metric (ISO)</td>
+                    <td>Standard general-purpose tolerance &mdash; roughly the metric equivalent of 2A/2B.</td>
+                    <td>The default for most metric bolts and nuts</td>
+                </tr>
+                <tr>
+                    <td class="callout">4H5H / 4g6g</td>
+                    <td>Metric (ISO)</td>
+                    <td>Tighter tolerance grade (lower number = less allowance) than 6H/6g.</td>
+                    <td>Precision assemblies that need a snugger fit</td>
+                </tr>
+                <tr>
+                    <td class="callout">7H / 8g</td>
+                    <td>Metric (ISO)</td>
+                    <td>Looser tolerance grade (higher number = more allowance), leaving extra room for coatings
+                        or rough handling.</td>
+                    <td>Plated or galvanized fasteners, easy field assembly</td>
+                </tr>
+                <tr>
+                    <td class="callout">H7/g6, H7/n6, etc.</td>
+                    <td>ISO hole-basis fit (not a thread)</td>
+                    <td>A general shaft-and-hole fit, not a thread class &mdash; capital letter = hole, lowercase
+                        letter = shaft (see <span class="term">Introduction to tolerancing</span> below).</td>
+                    <td>Dowel pins, bearings, and other mating cylindrical parts &mdash; not fastener threads</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="note">
+            <strong>Reading the letters:</strong> in Unified callouts, <strong>A</strong> always marks an external
+            thread (bolt or screw) and <strong>B</strong> an internal thread (nut or tapped hole). In metric
+            callouts, an <strong>uppercase</strong> letter (H, G) is internal and a <strong>lowercase</strong>
+            letter (g, h, e) is external; the leading number is the tolerance grade &mdash; smaller means tighter.
+        </p>
     </div>
 
     <div class="section">
