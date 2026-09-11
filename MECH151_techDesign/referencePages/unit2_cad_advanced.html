@@ -439,6 +439,29 @@
             <li><span class="term">Mesh formats:</span> STL and 3MF &mdash; the model becomes a faceted surface with no true curves; resolution is set at export</li>
             <li><span class="term">Translation issues:</span> lost or corrupted faces, gaps requiring geometry healing, and unit-scale errors</li>
         </ul>
+
+        <h3>Native formats that retain parametric history</h3>
+        <p>
+            The formats above are neutral exchange formats used to move a model between systems. A model stays
+            fully parametric &mdash; every sketch, feature, and dimension still editable &mdash; only in its native,
+            usually proprietary, file format.
+        </p>
+        <table class="fit-table">
+            <caption>Native (parametric) file formats by CAD program</caption>
+            <thead>
+                <tr><th>CAD program</th><th>Part</th><th>Assembly</th><th>Drawing</th></tr>
+            </thead>
+            <tbody>
+                <tr><td class="callout">SolidWorks</td><td>.SLDPRT</td><td>.SLDASM</td><td>.SLDDRW</td></tr>
+                <tr><td class="callout">Autodesk Inventor</td><td>.IPT</td><td>.IAM</td><td>.IDW</td></tr>
+                <tr><td class="callout">Autodesk Fusion</td><td colspan="2">.F3D (cloud-native design) / .F3Z (local archive)</td><td>&mdash;</td></tr>
+                <tr><td class="callout">PTC Creo</td><td>.PRT</td><td>.ASM</td><td>.DRW</td></tr>
+                <tr><td class="callout">Siemens NX</td><td colspan="2">.PRT (unified part/assembly file)</td><td>.PRT</td></tr>
+                <tr><td class="callout">Siemens Solid Edge</td><td>.PAR</td><td>.ASM</td><td>.DFT</td></tr>
+                <tr><td class="callout">CATIA V5/V6</td><td>.CATPart</td><td>.CATProduct</td><td>.CATDrawing</td></tr>
+                <tr><td class="callout">Onshape</td><td colspan="3">Cloud-native document, no local file &mdash; parametric history lives server-side</td></tr>
+            </tbody>
+        </table>
         <figure class="diagram">
         <svg viewBox="0 0 640 210" role="img" aria-label="A native parametric model is exported to a neutral format to move it downstream: STEP or IGES keep solid geometry but lose feature history, kernel formats move between same-kernel packages, and mesh formats become a faceted surface.">
           <defs>
