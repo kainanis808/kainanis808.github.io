@@ -110,18 +110,6 @@
             padding: 12px;
             margin: 14px 0;
         }
-        .legend-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            justify-content: center;
-            margin-top: 8px;
-            font-size: 0.82rem;
-            color: #374151;
-        }
-        .legend-item { display: flex; align-items: center; gap: 6px; }
-        .legend-swatch { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
-
         .back-link {
             display: block;
             text-align: center;
@@ -185,73 +173,69 @@
             transformation region, that microstructure forms.
         </p>
         <div class="diagram-wrap">
-            <svg viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;display:block;margin:0 auto;">
-                <rect width="720" height="460" fill="#ffffff"/>
+            <svg viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:0 auto;">
+                <rect width="800" height="520" fill="#ffffff"/>
                 <!-- axes -->
-                <line x1="90" y1="25" x2="90" y2="405" stroke="#334155" stroke-width="1.5"/>
-                <line x1="90" y1="405" x2="670" y2="405" stroke="#334155" stroke-width="1.5"/>
-                <text x="95" y="18" font-size="12" fill="#334155">Temperature</text>
-                <text x="380" y="428" font-size="12" fill="#334155" text-anchor="middle">Time (log scale) &#8594;</text>
+                <line x1="110" y1="25" x2="110" y2="430" stroke="#334155" stroke-width="1.5"/>
+                <line x1="110" y1="430" x2="760" y2="430" stroke="#334155" stroke-width="1.5"/>
+                <text x="115" y="18" font-size="12" fill="#334155">Temperature</text>
+                <text x="435" y="452" font-size="12" fill="#334155" text-anchor="middle">Time (log scale) &#8594;</text>
 
                 <!-- reference lines -->
-                <line x1="90" y1="70" x2="670" y2="70" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
-                <text x="595" y="65" font-size="11" fill="#64748b">A3 (&#8776;800&#176;C)</text>
-                <line x1="90" y1="100" x2="670" y2="100" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
-                <text x="600" y="96" font-size="11" fill="#64748b">A1 (727&#176;C)</text>
-                <line x1="90" y1="310" x2="670" y2="310" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
-                <text x="612" y="306" font-size="11" fill="#64748b">Ms (&#8776;300&#176;C)</text>
-                <line x1="90" y1="350" x2="670" y2="350" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
-                <text x="614" y="346" font-size="11" fill="#64748b">Mf</text>
+                <line x1="110" y1="65" x2="760" y2="65" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+                <text x="695" y="61" font-size="11" fill="#64748b" text-anchor="end">A3 (&#8776;800&#176;C)</text>
+                <line x1="110" y1="95" x2="760" y2="95" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+                <text x="695" y="91" font-size="11" fill="#64748b" text-anchor="end">A1 (727&#176;C)</text>
+                <line x1="110" y1="330" x2="760" y2="330" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+                <text x="695" y="326" font-size="11" fill="#64748b" text-anchor="end">Ms (&#8776;300&#176;C)</text>
+                <line x1="110" y1="365" x2="760" y2="365" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+                <text x="695" y="361" font-size="11" fill="#64748b" text-anchor="end">Mf</text>
 
                 <!-- Pearlite start/finish C-curves -->
-                <path d="M 170,102 Q 205,150 235,188 Q 268,232 330,286" fill="none" stroke="#15803d" stroke-width="2.5"/>
-                <path d="M 232,105 Q 262,155 297,198 Q 342,248 412,300" fill="none" stroke="#15803d" stroke-width="2.5" stroke-dasharray="6 4"/>
-                <text x="150" y="150" font-size="12" fill="#15803d" font-weight="700">Pearlite (P)</text>
-                <text x="150" y="164" font-size="10" fill="#15803d">Ps (solid) / Pf (dashed)</text>
-                <text x="172" y="96" font-size="10.5" fill="#15803d" font-weight="700" paint-order="stroke" stroke="#ffffff" stroke-width="3">Ps</text>
-                <text x="234" y="120" font-size="10.5" fill="#15803d" font-weight="700" paint-order="stroke" stroke="#ffffff" stroke-width="3">Pf</text>
+                <path d="M 190,98 Q 230,150 260,195 Q 290,240 350,300" fill="none" stroke="#15803d" stroke-width="2.5"/>
+                <path d="M 250,102 Q 285,160 325,205 Q 375,255 450,310" fill="none" stroke="#15803d" stroke-width="2.5" stroke-dasharray="6 4"/>
+                <text x="196" y="92" font-size="11" fill="#15803d" font-weight="700" paint-order="stroke" stroke="#ffffff" stroke-width="3">Ps</text>
+                <text x="253" y="96" font-size="11" fill="#15803d" font-weight="700" paint-order="stroke" stroke="#ffffff" stroke-width="3">Pf</text>
 
                 <!-- Bainite start/finish C-curves -->
-                <path d="M 300,205 Q 333,252 355,272 Q 380,300 430,332" fill="none" stroke="#b45309" stroke-width="2.5"/>
-                <path d="M 350,210 Q 388,262 418,288 Q 458,322 518,352" fill="none" stroke="#b45309" stroke-width="2.5" stroke-dasharray="6 4"/>
-                <text x="430" y="225" font-size="12" fill="#b45309" font-weight="700">Bainite (B)</text>
-                <text x="430" y="239" font-size="10" fill="#b45309">Bs (solid) / Bf (dashed)</text>
-                <text x="302" y="200" font-size="10.5" fill="#b45309" font-weight="700" paint-order="stroke" stroke="#ffffff" stroke-width="3">Bs</text>
-                <text x="352" y="226" font-size="10.5" fill="#b45309" font-weight="700" paint-order="stroke" stroke="#ffffff" stroke-width="3">Bf</text>
+                <path d="M 330,215 Q 365,260 385,280 Q 410,305 460,335" fill="none" stroke="#b45309" stroke-width="2.5"/>
+                <path d="M 380,220 Q 420,270 450,295 Q 490,325 555,360" fill="none" stroke="#b45309" stroke-width="2.5" stroke-dasharray="6 4"/>
+                <text x="336" y="209" font-size="11" fill="#b45309" font-weight="700" paint-order="stroke" stroke="#ffffff" stroke-width="3">Bs</text>
+                <text x="386" y="214" font-size="11" fill="#b45309" font-weight="700" paint-order="stroke" stroke="#ffffff" stroke-width="3">Bf</text>
+
+                <!-- compact legend in the open zone right of Ps/Pf, below A1 -->
+                <text x="510" y="128" font-size="10.5" fill="#15803d" font-weight="700">Pearlite:</text>
+                <text x="565" y="128" font-size="10.5" fill="#475569">solid = start, dashed = finish</text>
+                <text x="510" y="146" font-size="10.5" fill="#b45309" font-weight="700">Bainite:</text>
+                <text x="562" y="146" font-size="10.5" fill="#475569">solid = start, dashed = finish</text>
 
                 <!-- Cooling curves -->
-                <path d="M 95,32 C 100,160 120,300 150,404" fill="none" stroke="#2563eb" stroke-width="2.5"/>
-                <path d="M 95,32 C 140,140 250,300 300,404" fill="none" stroke="#d97706" stroke-width="2.5"/>
-                <path d="M 95,32 C 180,110 330,260 420,404" fill="none" stroke="#16a34a" stroke-width="2.5"/>
-                <path d="M 95,32 C 250,90 480,220 620,404" fill="none" stroke="#7c3aed" stroke-width="2.5"/>
+                <path d="M 115,32 C 120,170 130,320 140,430" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+                <path d="M 115,32 C 150,150 260,320 310,430" fill="none" stroke="#d97706" stroke-width="2.5"/>
+                <path d="M 115,32 C 190,120 350,280 460,430" fill="none" stroke="#16a34a" stroke-width="2.5"/>
+                <path d="M 115,32 C 270,95 520,240 700,430" fill="none" stroke="#7c3aed" stroke-width="2.5"/>
 
-                <!-- In-diagram cooling-curve labels (name + resulting microstructure) -->
+                <circle cx="140" cy="430" r="4" fill="#2563eb"/>
+                <circle cx="310" cy="430" r="4" fill="#d97706"/>
+                <circle cx="460" cy="430" r="4" fill="#16a34a"/>
+                <circle cx="700" cy="430" r="4" fill="#7c3aed"/>
+
+                <!-- endpoint labels sit in the clear band just above the axis -->
                 <g font-size="11" font-weight="700" paint-order="stroke" stroke="#ffffff" stroke-width="4" stroke-linejoin="round">
-                    <text x="134" y="300" fill="#2563eb">Water Quench</text>
-                    <text x="258" y="298" fill="#d97706">Oil Quench</text>
-                    <text x="348" y="280" fill="#16a34a">Air Cool (Normalize)</text>
-                    <text x="500" y="256" fill="#7c3aed">Furnace Cool (Anneal)</text>
+                    <text x="140" y="392" text-anchor="middle" fill="#2563eb">Water Quench</text>
+                    <text x="310" y="392" text-anchor="middle" fill="#d97706">Oil Quench</text>
+                    <text x="460" y="392" text-anchor="middle" fill="#16a34a">Air Cool</text>
+                    <text x="700" y="392" text-anchor="middle" fill="#7c3aed">Furnace Cool</text>
                 </g>
                 <g font-size="10" font-weight="400" fill="#475569" paint-order="stroke" stroke="#ffffff" stroke-width="4" stroke-linejoin="round">
-                    <text x="134" y="313">&#8594; 100% Martensite</text>
-                    <text x="258" y="311">&#8594; Martensite + some Bainite</text>
-                    <text x="348" y="293">&#8594; Fine Pearlite</text>
-                    <text x="500" y="269">&#8594; Coarse Pearlite</text>
+                    <text x="140" y="405" text-anchor="middle">100% Martensite</text>
+                    <text x="310" y="405" text-anchor="middle">Mart. + some Bainite</text>
+                    <text x="460" y="405" text-anchor="middle">Fine Pearlite</text>
+                    <text x="700" y="405" text-anchor="middle">Coarse Pearlite</text>
                 </g>
 
-                <circle cx="150" cy="404" r="4" fill="#2563eb"/>
-                <circle cx="300" cy="404" r="4" fill="#d97706"/>
-                <circle cx="420" cy="404" r="4" fill="#16a34a"/>
-                <circle cx="620" cy="404" r="4" fill="#7c3aed"/>
-
-                <text x="30" y="410" font-size="10" fill="#334155" transform="rotate(-90 30 410)">Room Temp</text>
+                <text x="30" y="435" font-size="10" fill="#334155" transform="rotate(-90 30 435)">Room Temp</text>
             </svg>
-            <div class="legend-row">
-                <span class="legend-item"><span class="legend-swatch" style="background:#2563eb;"></span>Water quench &#8594; martensite</span>
-                <span class="legend-item"><span class="legend-swatch" style="background:#d97706;"></span>Oil quench &#8594; martensite + some bainite</span>
-                <span class="legend-item"><span class="legend-swatch" style="background:#16a34a;"></span>Air cool (normalize) &#8594; fine pearlite</span>
-                <span class="legend-item"><span class="legend-swatch" style="background:#7c3aed;"></span>Furnace cool (anneal) &#8594; coarse pearlite</span>
-            </div>
         </div>
 
         <p class="section-label">Key Features</p>
