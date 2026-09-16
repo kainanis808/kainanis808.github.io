@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Continuous Cooling Transformation (CCT) Diagrams</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.2rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        .source-note {
+            background: #eff6ff; border-left: 4px solid #1e3a5f;
+            padding: 10px 18px; font-size: 0.82rem; color: #1e40af; line-height: 1.55;
+            max-width: 980px; margin: 18px auto 0;
+        }
+        main { max-width: 980px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 30px; font-size: 1rem; }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section h2 {
+            font-size: 1.3rem;
+            color: #1e3a5f;
+            margin-bottom: 10px;
+        }
+        .section p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 14px;
+            font-size: 0.95rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            margin-top: 10px;
+        }
+        thead tr { background: #1e3a5f; color: #fff; }
+        thead th { padding: 10px 12px; text-align: left; font-weight: 600; }
+        tbody tr:nth-child(even) { background: #f1f5f9; }
+        tbody tr:hover { background: #e0f2fe; }
+        tbody td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #374151;
+            vertical-align: middle;
+        }
+        .code { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #1e3a5f; }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .badge-water    { background: #dbeafe; color: #1d4ed8; }
+        .badge-oil      { background: #fef3c7; color: #92400e; }
+        .badge-air      { background: #dcfce7; color: #15803d; }
+        .badge-furnace  { background: #f3e8ff; color: #6b21a8; }
+
+        .note {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-style: italic;
+            margin-top: 10px;
+        }
+        .section-label {
+            font-weight: 700;
+            color: #1e3a5f;
+            font-size: 0.95rem;
+            margin: 18px 0 6px;
+        }
+
+        .tip-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            margin: 14px 0;
+            font-size: 0.9rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .tip-box strong { color: #92400e; }
+
+        .diagram-wrap {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px;
+            margin: 14px 0;
+        }
+        .legend-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 8px;
+            font-size: 0.82rem;
+            color: #374151;
+        }
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .legend-swatch { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #0284c7;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+        a { color: #1d4ed8; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Continuous Cooling Transformation (CCT) Diagrams</h1>
+    <p class="subtitle">How cooling rate turns austenite into pearlite, bainite, or martensite</p>
+</header>
+<div class="source-note">
+    Adapted from ASM International <em>Metals Handbook, Vol. 4 — Heat Treating</em>; DoITPoMS (University of Cambridge) <em>Phase Transformations &amp; TTT/CCT Diagrams</em> TLP; Moniz, <em>Metallurgy</em>, Ch. 14 (Heat Treatment of Steels). Diagram below is a schematic, generic-steel illustration — actual curve shapes, temperatures, and times vary by alloy composition and grain size and should be read from the CCT diagram for the specific steel being heat treated.
+</div>
+<main>
+    <p class="intro">
+        A <strong>continuous cooling transformation (CCT) diagram</strong> shows what microstructure a steel
+        forms as it is cooled continuously from the austenitizing temperature down to room temperature — as a
+        function of cooling rate. It answers the practical heat-treating question: <em>if I furnace-cool, air-cool,
+        oil-quench, or water-quench this part, what will I end up with?</em> This is the companion diagram to the
+        <a href="../Visualizations/iron_carbon_phase_diagram.html">iron-carbon phase diagram</a> — the phase diagram
+        tells you what phases are stable at <em>equilibrium</em> (very slow, infinite-time cooling); the CCT diagram
+        tells you what actually forms at the cooling rates used in the shop, where there usually isn't time for
+        equilibrium to be reached.
+    </p>
+
+    <!-- TTT vs CCT -->
+    <div class="section">
+        <h2>CCT vs. TTT Diagrams</h2>
+        <p>
+            Steel textbooks usually introduce transformation diagrams as <strong>TTT (time-temperature-transformation,
+            or "isothermal transformation") diagrams</strong> first, because they're simpler to construct: a small
+            sample is quenched almost instantly to a fixed sub-critical temperature and held there, and the start/finish
+            times of transformation at that one temperature are measured. A CCT diagram instead uses samples cooled
+            continuously at controlled rates, so it reflects how parts are actually processed.
+        </p>
+        <div class="tip-box">
+            <strong>Rule of thumb:</strong> for the same steel, the CCT curves sit <strong>below and to the right</strong>
+            of the equivalent TTT curves — continuous cooling takes longer to trigger transformation than an instant
+            quench to a fixed temperature. In many plain-carbon steels the pearlite reaction on a CCT diagram also
+            "cuts off" the bainite bay, which is why plain-carbon steels are hard to bainite through continuous
+            cooling alone (isothermal austempering is normally used instead) — alloy steels open the bainite bay
+            back up (see <em>Hardenability</em> below).
+        </div>
+    </div>
+
+    <!-- ANATOMY -->
+    <div class="section">
+        <h2>Anatomy of a CCT Diagram</h2>
+        <p>
+            Temperature runs down the vertical axis (starting from the austenitizing temperature) and elapsed time
+            runs along the horizontal axis on a <strong>log scale</strong> — transformations that take a fraction of
+            a second and ones that take hours have to fit on the same plot. A family of cooling curves is drawn
+            over the diagram, one for each cooling method of interest; wherever a cooling curve crosses a
+            transformation region, that microstructure forms.
+        </p>
+        <div class="diagram-wrap">
+            <svg viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;display:block;margin:0 auto;">
+                <rect width="720" height="460" fill="#ffffff"/>
+                <!-- axes -->
+                <line x1="90" y1="25" x2="90" y2="405" stroke="#334155" stroke-width="1.5"/>
+                <line x1="90" y1="405" x2="670" y2="405" stroke="#334155" stroke-width="1.5"/>
+                <text x="95" y="18" font-size="12" fill="#334155">Temperature</text>
+                <text x="380" y="428" font-size="12" fill="#334155" text-anchor="middle">Time (log scale) &#8594;</text>
+
+                <!-- reference lines -->
+                <line x1="90" y1="70" x2="670" y2="70" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+                <text x="595" y="65" font-size="11" fill="#64748b">A3 (&#8776;800&#176;C)</text>
+                <line x1="90" y1="100" x2="670" y2="100" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+                <text x="600" y="96" font-size="11" fill="#64748b">A1 (727&#176;C)</text>
+                <line x1="90" y1="310" x2="670" y2="310" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+                <text x="612" y="306" font-size="11" fill="#64748b">Ms (&#8776;300&#176;C)</text>
+                <line x1="90" y1="350" x2="670" y2="350" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+                <text x="614" y="346" font-size="11" fill="#64748b">Mf</text>
+
+                <!-- Pearlite start/finish C-curves -->
+                <path d="M 170,102 Q 205,150 235,188 Q 268,232 330,286" fill="none" stroke="#15803d" stroke-width="2.5"/>
+                <path d="M 232,105 Q 262,155 297,198 Q 342,248 412,300" fill="none" stroke="#15803d" stroke-width="2.5" stroke-dasharray="6 4"/>
+                <text x="150" y="150" font-size="12" fill="#15803d" font-weight="700">Pearlite (P)</text>
+                <text x="150" y="164" font-size="10" fill="#15803d">Ps (solid) / Pf (dashed)</text>
+
+                <!-- Bainite start/finish C-curves -->
+                <path d="M 300,205 Q 333,252 355,272 Q 380,300 430,332" fill="none" stroke="#b45309" stroke-width="2.5"/>
+                <path d="M 350,210 Q 388,262 418,288 Q 458,322 518,352" fill="none" stroke="#b45309" stroke-width="2.5" stroke-dasharray="6 4"/>
+                <text x="430" y="225" font-size="12" fill="#b45309" font-weight="700">Bainite (B)</text>
+                <text x="430" y="239" font-size="10" fill="#b45309">Bs (solid) / Bf (dashed)</text>
+
+                <!-- Cooling curves -->
+                <path d="M 95,32 C 100,160 120,300 150,404" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+                <path d="M 95,32 C 140,140 250,300 300,404" fill="none" stroke="#d97706" stroke-width="2.5"/>
+                <path d="M 95,32 C 180,110 330,260 420,404" fill="none" stroke="#16a34a" stroke-width="2.5"/>
+                <path d="M 95,32 C 250,90 480,220 620,404" fill="none" stroke="#7c3aed" stroke-width="2.5"/>
+
+                <circle cx="150" cy="404" r="4" fill="#2563eb"/>
+                <circle cx="300" cy="404" r="4" fill="#d97706"/>
+                <circle cx="420" cy="404" r="4" fill="#16a34a"/>
+                <circle cx="620" cy="404" r="4" fill="#7c3aed"/>
+
+                <text x="30" y="410" font-size="10" fill="#334155" transform="rotate(-90 30 410)">Room Temp</text>
+            </svg>
+            <div class="legend-row">
+                <span class="legend-item"><span class="legend-swatch" style="background:#2563eb;"></span>Water quench &#8594; martensite</span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#d97706;"></span>Oil quench &#8594; martensite + some bainite</span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#16a34a;"></span>Air cool (normalize) &#8594; fine pearlite</span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#7c3aed;"></span>Furnace cool (anneal) &#8594; coarse pearlite</span>
+            </div>
+        </div>
+
+        <p class="section-label">Key Features</p>
+        <table>
+            <thead><tr><th>Feature</th><th>What It Marks</th></tr></thead>
+            <tbody>
+                <tr><td class="code">A1 / A3</td><td>Lower/upper critical temperatures — above these, the steel is fully austenite; transformation on cooling cannot start above A1.</td></tr>
+                <tr><td class="code">Ps / Pf</td><td>Pearlite start / finish curves — the "nose" is the shortest time at which pearlite can begin forming, usually near 500&ndash;600&#176;C.</td></tr>
+                <tr><td class="code">Bs / Bf</td><td>Bainite start / finish curves — sit at lower temperature and (in alloy steels) longer time than the pearlite nose.</td></tr>
+                <tr><td class="code">Ms / Mf</td><td>Martensite start / finish — not curves but flat temperatures; martensite forms by a diffusionless, athermal shear transformation the instant untransformed austenite drops below Ms, regardless of how long it takes to get there.</td></tr>
+                <tr><td class="code">Critical cooling rate</td><td>The fastest cooling curve that just clears (misses) the nose of the C-curve. Any cooling rate at or above this yields 100% martensite; anything slower lets some pearlite or bainite form first.</td></tr>
+            </tbody>
+        </table>
+        <p class="note">This schematic is generic — for a real alloy, always read the nose position, Ms/Mf temperatures, and bainite bay shape from that steel's own CCT diagram (found in the ASM Atlas of CCT Diagrams or a mill's data sheet).</p>
+    </div>
+
+    <!-- COOLING METHODS -->
+    <div class="section">
+        <h2>Cooling Methods &amp; What They Produce</h2>
+        <p>The four cooling curves in the diagram above correspond to the four heat-treating operations a technician actually performs:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Cooling Method</th>
+                    <th>Relative Rate</th>
+                    <th>CCT Region Hit</th>
+                    <th>Resulting Microstructure</th>
+                    <th>Relative Hardness</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Furnace cool <span class="badge badge-furnace">Anneal</span></td>
+                    <td>Slowest</td>
+                    <td>Crosses Ps/Pf near A1 (high temperature)</td>
+                    <td>Coarse pearlite</td>
+                    <td>Lowest — softest, most machinable/ductile</td>
+                </tr>
+                <tr>
+                    <td>Air cool <span class="badge badge-air">Normalize</span></td>
+                    <td>Moderate</td>
+                    <td>Crosses Ps/Pf nearer the nose</td>
+                    <td>Fine pearlite</td>
+                    <td>Moderate — refined grain, higher strength than annealed</td>
+                </tr>
+                <tr>
+                    <td>Oil quench</td>
+                    <td>Fast</td>
+                    <td>Clips the bainite bay before reaching Ms</td>
+                    <td>Martensite + some bainite (varies with section size)</td>
+                    <td>High</td>
+                </tr>
+                <tr>
+                    <td>Water / brine quench</td>
+                    <td>Fastest</td>
+                    <td>Misses the nose entirely</td>
+                    <td>Martensite (as-quenched)</td>
+                    <td>Highest — but brittle until tempered</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="tip-box">
+            <strong>As-quenched martensite is never used in service as-is.</strong> It is hard but brittle, and carries
+            high residual stress. Parts are always <strong>tempered</strong> — reheated to an intermediate temperature
+            (e.g., ~300&ndash;600&#176;C) — after quenching to trade some hardness for toughness. Tempering doesn't
+            change which cooling curve you followed; it's a separate, subsequent diffusion step. See the
+            <a href="hardness_scales.html">hardness scales reference</a> for typical quenched-and-tempered hardness
+            values (e.g., 1045 and 4140 Q&amp;T @ 315&#176;C).
+        </div>
+    </div>
+
+    <!-- HARDENABILITY -->
+    <div class="section">
+        <h2>Hardenability: Why Alloy Steels Behave Differently</h2>
+        <p>
+            <strong>Hardenability</strong> is how deep and how easily a steel can be hardened (turned to martensite) —
+            it is not the same thing as maximum hardness (which mostly depends on carbon content). Alloying elements
+            such as manganese, chromium, molybdenum, and nickel don't make martensite any harder; they slow down the
+            diffusional pearlite/bainite reactions, which pushes the nose of the C-curve <strong>to the right</strong>
+            (longer time) on the CCT diagram.
+        </p>
+        <p>
+            That's why a plain-carbon steel like 1045 needs a severe water or brine quench to form martensite — and
+            even then, only in thin sections, because the inside of a thick part cools too slowly and the center
+            misses the narrow window. An alloy steel like 4140 or 4340 has its C-curve nose pushed far enough right
+            that a slower, less distortion-prone <strong>oil quench</strong> (or even air cooling in thin sections)
+            is enough to miss the nose and still form martensite. This is also why alloy steels are chosen for parts
+            that must harden all the way through a thick cross-section.
+        </p>
+        <p class="note">
+            Hardenability is measured directly with the Jominy end-quench test (ASTM A255): one end of a standard
+            bar is water-quenched while the rest air-cools along its length, producing a range of cooling rates in
+            a single specimen, and hardness is measured along that length. See
+            <a href="aisi_sae_codes.html">AISI/SAE steel designation codes</a> for how alloy content relates to grade.
+        </p>
+    </div>
+
+    <!-- READING PRACTICE -->
+    <div class="section">
+        <h2>Reading a Cooling Curve</h2>
+        <p>To predict the resulting microstructure for a given cooling curve:</p>
+        <table>
+            <thead><tr><th>Step</th><th>What to Check</th></tr></thead>
+            <tbody>
+                <tr><td>1</td><td>Follow the cooling curve down from the austenitizing temperature.</td></tr>
+                <tr><td>2</td><td>Does it cross the Ps curve? If yes, note the temperature/time of crossing — pearlite formation begins there.</td></tr>
+                <tr><td>3</td><td>Does it cross Pf before exiting the pearlite region? If yes, pearlite formation completes; if the curve exits first, only partial pearlite forms and the rest of the austenite is still available to transform further down.</td></tr>
+                <tr><td>4</td><td>Repeat for Bs/Bf if the curve reaches the bainite region with untransformed austenite remaining.</td></tr>
+                <tr><td>5</td><td>Any austenite still untransformed when the curve crosses Ms converts to martensite instantly; anything remaining below Mf is essentially all martensite (small amounts of retained austenite are common in higher-carbon/alloy steels).</td></tr>
+                <tr><td>6</td><td>The room-temperature microstructure is the sum of whatever formed at each stage — e.g., a curve that partially crosses Ps/Pf and then Ms yields a pearlite + martensite mixture.</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="note" style="text-align:center; margin-bottom: 10px;">
+        Related: <a href="../Visualizations/iron_carbon_phase_diagram.html">Iron-Carbon Phase Diagram</a> (equilibrium reference) &middot;
+        <a href="../Visualizations/weld_microstructure_haz.html">Weld Microstructure &amp; HAZ</a> (CCT applied to weld thermal cycles) &middot;
+        <a href="hardness_scales.html">Hardness Testing Scales</a>
+    </p>
+
+    <a class="back-link" href="index.html">&#8592; Back to References</a>
+</main>
+</body>
+</html>
