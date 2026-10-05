@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry Basics</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #1a1a1a; }
+        header { text-align: center; padding: 34px 20px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; }
+        .unit-tag { display: inline-block; padding: 3px 12px; border-radius: 5px; font-size: 0.78rem; font-weight: 700;
+            letter-spacing: 0.06em; text-transform: uppercase; background: #dbeafe; color: #1d4ed8; margin-bottom: 12px; }
+        h1 { font-size: 2.1rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 28px; font-size: 1rem; }
+        .goal { background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 0 8px 8px 0; padding: 14px 18px;
+            margin-bottom: 28px; font-size: 0.95rem; color: #1e3a5f; line-height: 1.6; }
+        .section { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px 24px; margin-bottom: 22px; }
+        .section h2 { font-size: 1.25rem; color: #1e3a5f; margin-bottom: 10px; }
+        .section h3 { font-size: 1rem; color: #1e3a5f; margin: 14px 0 6px; }
+        .section p { color: #4b5563; line-height: 1.65; margin-bottom: 12px; font-size: 0.95rem; }
+        .section ul { padding-left: 20px; color: #4b5563; font-size: 0.93rem; line-height: 1.7; margin-bottom: 6px; }
+        .section .term { font-weight: 700; color: #1e3a5f; }
+        .compare { display: flex; gap: 16px; flex-wrap: wrap; margin: 6px 0 4px; }
+        .compare > div { flex: 1 1 240px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; }
+        .compare h3 { margin-top: 0; }
+        .note { background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 12px 16px;
+            margin: 14px 0 4px; font-size: 0.9rem; color: #713f12; line-height: 1.6; }
+        .produce { background: #f0fdf4; border-left: 4px solid #16a34a; border-radius: 0 8px 8px 0; padding: 14px 18px;
+            margin: 24px 0 10px; font-size: 0.95rem; color: #374151; line-height: 1.7; }
+        .produce strong { color: #15803d; }
+        figure.diagram { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px;
+            padding: 16px 18px 8px; margin: 18px 0 6px; }
+        figure.diagram svg { display: block; width: 100%; height: auto; overflow: visible; }
+        figure.diagram figcaption { margin-top: 10px; font-size: 0.82rem; color: #6b7280;
+            line-height: 1.55; text-align: center; }
+        .dg-t { font: 600 13px 'Segoe UI', Tahoma, Geneva, sans-serif; fill: #1e3a5f; }
+        .dg-s { font: 400 11px 'Segoe UI', Tahoma, Geneva, sans-serif; fill: #64748b; }
+        .dg-box  { fill: #eff6ff; stroke: #bfdbfe; stroke-width: 1.5; }
+        .dg-box2 { fill: #dbeafe; stroke: #3b82f6; stroke-width: 1.5; }
+        .dg-box3 { fill: #f0fdf4; stroke: #86efac; stroke-width: 1.5; }
+        .dg-line { fill: none; stroke: #94a3b8; stroke-width: 1.6; }
+        .dg-accent { fill: none; stroke: #f59e0b; stroke-width: 2.4; }
+        .dg-fill { fill: #94a3b8; }
+        .dg-fill-a { fill: #f59e0b; }
+        html { overflow-x: clip; }
+        .def { position: relative; border-bottom: 1px dotted #64748b; cursor: help; }
+        .def:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
+        .def::after { content: attr(data-def); position: absolute; left: 0; bottom: calc(100% + 9px);
+            width: 240px; background: #1e293b; color: #f8fafc;
+            font: 400 0.8rem/1.5 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-style: normal;
+            text-align: left; padding: 9px 12px; border-radius: 7px; box-shadow: 0 8px 24px rgba(15,23,42,0.28);
+            opacity: 0; visibility: hidden; transition: opacity 0.12s ease; z-index: 30; pointer-events: none; }
+        .def::before { content: ""; position: absolute; left: 15px; bottom: calc(100% + 3px);
+            border: 6px solid transparent; border-top-color: #1e293b;
+            opacity: 0; visibility: hidden; transition: opacity 0.12s ease; z-index: 30; pointer-events: none; }
+        .def:hover::after, .def:focus::after, .def:hover::before, .def:focus::before { opacity: 1; visibility: visible; }
+        @media (max-width: 540px) { .def::after { width: 66vw; } }
+        .back-link { display: block; text-align: center; margin-top: 28px; color: #0284c7; text-decoration: none; font-size: 0.95rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <span class="unit-tag">Foundations &mdash; Before Unit 1</span>
+    <h1>Geometry Basics</h1>
+    <p class="subtitle">The shared vocabulary behind every sketch and solid you'll build this semester</p>
+</header>
+<main>
+    <p class="intro">
+        CAD software constantly talks to you in the language of geometry &mdash; it reports how many
+        <span class="term">faces</span>, <span class="term">edges</span>, and <span class="term">vertices</span>
+        a model has, it asks you to pick an edge to fillet or a face to sketch on, and it measures the
+        <span class="term">area</span> of a profile before it ever becomes a solid. None of that is new math;
+        it's the same handful of ideas from basic geometry, just applied to the parts you design. This page
+        collects that vocabulary in one place &mdash; the general shape families you'll sketch and model, the
+        parts a flat (2D) shape is made of, and the parts a solid (3D) shape is made of &mdash; so the terms are
+        familiar before Unit&nbsp;1 builds on them.
+    </p>
+
+    <div class="goal">
+        <strong>Goal:</strong> Know the common 2D and 3D shape families by name, and be able to point to a
+        point, edge, vertex, face, and area on an actual shape &mdash; the vocabulary CAD software, drawings,
+        and this course all assume you already have.
+    </div>
+
+    <div class="section">
+        <h2>General shapes: the families you'll sketch and model</h2>
+        <p>
+            Shapes group into families by how they're bounded. A <span class="term">polygon</span> is a flat
+            shape closed entirely by straight edges, named by how many sides it has: a <span class="term">triangle</span>
+            (3), <span class="term">quadrilateral</span> (4 &mdash; squares, rectangles, and trapezoids are all
+            quadrilaterals), <span class="term">pentagon</span> (5), <span class="term">hexagon</span> (6), and so
+            on. A polygon is <span class="term">regular</span> when all its sides and angles are equal (a bolt
+            head's hexagon), and <span class="term">irregular</span> otherwise. A <span class="term">circle</span>
+            is bounded by a single curve at a constant distance (the radius) from a center point; an
+            <span class="term">ellipse</span> is its stretched cousin, with two different radii along
+            perpendicular axes.
+        </p>
+        <figure class="diagram">
+        <svg viewBox="0 0 640 150" role="img" aria-label="Six common two-dimensional shapes: triangle, quadrilateral, pentagon, hexagon, circle, and ellipse.">
+          <polygon points="55,17 22,74 88,74" class="dg-box"/>
+          <polygon points="128,23 192,23 192,87 128,87" class="dg-box"/>
+          <polygon points="265,17 301,43 287,86 243,86 229,43" class="dg-box"/>
+          <polygon points="370,17 403,36 403,74 370,93 337,74 337,36" class="dg-box"/>
+          <circle cx="475" cy="55" r="38" class="dg-box"/>
+          <ellipse cx="580" cy="55" rx="42" ry="28" class="dg-box"/>
+          <text x="55" y="128" text-anchor="middle" class="dg-s">Triangle</text>
+          <text x="160" y="128" text-anchor="middle" class="dg-s">Quadrilateral</text>
+          <text x="265" y="128" text-anchor="middle" class="dg-s">Pentagon</text>
+          <text x="370" y="128" text-anchor="middle" class="dg-s">Hexagon</text>
+          <text x="475" y="128" text-anchor="middle" class="dg-s">Circle</text>
+          <text x="580" y="128" text-anchor="middle" class="dg-s">Ellipse</text>
+        </svg>
+        <figcaption>Common 2D shape families. Polygons are named by their number of straight sides; circles and ellipses are bounded by a single curve instead.</figcaption>
+        </figure>
+        <p>
+            In 3D, the same idea extends to solids. A <span class="term">polyhedron</span> is a solid bounded
+            entirely by flat polygon faces &mdash; a <span class="term">prism</span> (two matching end faces
+            connected by flat sides; a rectangular box is the most common one) or a <span class="term">pyramid</span>
+            (a base that narrows to a single apex point) are the two basic families. A
+            <span class="term">cylinder</span>, <span class="term">cone</span>, and <span class="term">sphere</span>
+            each include at least one curved surface &mdash; the solid versions of a circle or ellipse.
+        </p>
+        <figure class="diagram">
+        <svg viewBox="0 0 640 150" role="img" aria-label="Five common three-dimensional shapes: prism, pyramid, cylinder, cone, and sphere.">
+          <path d="M64,25 L99,45 L99,85 L64,105 L29,85 L29,45 Z" class="dg-box"/>
+          <path d="M64,25 L64,65 M64,65 L99,85 M64,65 L29,85" class="dg-line"/>
+          <polygon points="192,25 227,78 192,95" class="dg-box2"/>
+          <polygon points="192,25 192,95 157,78" class="dg-box"/>
+          <path d="M192,25 L192,61 M192,61 L227,78 M192,61 L157,78" class="dg-line"/>
+          <ellipse cx="320" cy="35" rx="38" ry="14" class="dg-box"/>
+          <path d="M282,35 L282,105 M358,35 L358,105" class="dg-line"/>
+          <ellipse cx="320" cy="105" rx="38" ry="14" class="dg-line"/>
+          <polygon points="448,25 410,105 486,105" class="dg-box2"/>
+          <ellipse cx="448" cy="105" rx="38" ry="14" class="dg-line"/>
+          <circle cx="576" cy="65" r="40" class="dg-box"/>
+          <ellipse cx="576" cy="65" rx="40" ry="11" class="dg-line"/>
+          <path d="M576,25 L576,105" class="dg-line"/>
+          <text x="64" y="128" text-anchor="middle" class="dg-s">Prism</text>
+          <text x="192" y="128" text-anchor="middle" class="dg-s">Pyramid</text>
+          <text x="320" y="128" text-anchor="middle" class="dg-s">Cylinder</text>
+          <text x="448" y="128" text-anchor="middle" class="dg-s">Cone</text>
+          <text x="576" y="128" text-anchor="middle" class="dg-s">Sphere</text>
+        </svg>
+        <figcaption>Common 3D shape families. Prisms and pyramids are bounded entirely by flat faces; cylinders, cones, and spheres include at least one curved surface.</figcaption>
+        </figure>
+        <div class="note">
+            <strong>Why this matters for CAD:</strong> most real parts are combinations of these basic families
+            &mdash; a bracket is a prism with holes cut through it; a bolt head is a hexagonal prism; a knob is a
+            cylinder blended into a sphere. Recognizing the families a part is built from is usually the fastest
+            way to decide which sketch and which feature (extrude, revolve, sweep) will create it.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Elements of 2D shapes</h2>
+        <p>
+            Every flat shape, no matter how complex, is made of the same small set of parts. Geometry builds up
+            in dimensions: a <span class="term">point</span> has no size at all (zero-dimensional) &mdash; it only
+            marks a location. A <span class="term">line</span> or <span class="term">edge</span> is one-dimensional
+            &mdash; it has length, but no width. An <span class="term">area</span> is two-dimensional &mdash; it has
+            both length and width, which is why it's measured in squared units (mm&sup2;, in&sup2;).
+        </p>
+        <ul>
+            <li><span class="term">Point:</span> an exact location with no size or shape of its own &mdash; just a position</li>
+            <li><span class="term">Edge (or side):</span> a straight or curved boundary segment connecting two points</li>
+            <li><span class="term">Vertex:</span> the point where two edges meet &mdash; what you'd call a "corner"</li>
+            <li><span class="term">Area:</span> the amount of surface enclosed by the boundary</li>
+            <li><span class="term">Perimeter:</span> the total length of the boundary all the way around</li>
+        </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 600 220" role="img" aria-label="A pentagon labeled with its elements: a point is any exact location, a vertex is where two edges meet, an edge is a boundary segment between two vertices, and the area is the enclosed region.">
+          <polygon points="220,25 301,84 270,179 170,179 139,84" class="dg-box"/>
+          <path d="M220,25 L301,84" class="dg-accent"/>
+          <circle cx="301" cy="84" r="6" fill="none" stroke="#1d4ed8" stroke-width="2.5"/>
+          <circle cx="301" cy="84" r="2.5" fill="#1d4ed8"/>
+          <circle cx="195" cy="145" r="4" fill="#1e3a5f"/>
+          <text x="205" y="118" text-anchor="middle" class="dg-t">Area</text>
+          <path d="M260,54 L420,24" class="dg-line"/>
+          <text x="424" y="20" class="dg-t">Edge</text>
+          <text x="424" y="34" class="dg-s">a boundary segment</text>
+          <text x="424" y="47" class="dg-s">between two vertices</text>
+          <path d="M307,80 L420,70" class="dg-line"/>
+          <text x="424" y="66" class="dg-t">Vertex</text>
+          <text x="424" y="80" class="dg-s">where two edges meet</text>
+          <path d="M199,145 L420,152" class="dg-line"/>
+          <text x="424" y="148" class="dg-t">Point</text>
+          <text x="424" y="162" class="dg-s">an exact location,</text>
+          <text x="424" y="174" class="dg-s">no size or shape</text>
+        </svg>
+        <figcaption>A 2D shape is bounded by edges meeting at vertices; the enclosed region is its area, and the total length around the boundary is its perimeter.</figcaption>
+        </figure>
+    </div>
+
+    <div class="section">
+        <h2>Elements of 3D shapes</h2>
+        <p>
+            Add a third dimension and the vocabulary extends by one more level: a flat (or curved) surface is
+            now a <span class="term">face</span> instead of just an outline, and it encloses a
+            <span class="term">volume</span> instead of an area. The point/edge/area relationship from 2D
+            reappears as vertex/edge/face in 3D &mdash; same idea, one dimension up.
+        </p>
+        <ul>
+            <li><span class="term">Vertex:</span> a point where edges meet &mdash; a corner of the solid</li>
+            <li><span class="term">Edge:</span> the line segment (straight or curved) where two faces meet</li>
+            <li><span class="term">Face:</span> a flat or curved surface that bounds the solid</li>
+            <li><span class="term">Volume:</span> the amount of 3D space enclosed by the faces</li>
+            <li><span class="term">Surface area:</span> the total area of all the faces added together</li>
+        </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 600 230" role="img" aria-label="A cube labeled with its elements: a face is one of its flat sides, an edge is a line where two faces meet, and a vertex is a point where edges meet.">
+          <path d="M180,40 L250,78 L250,138 L180,176 L110,138 L110,78 Z" class="dg-box"/>
+          <path d="M180,40 L180,108 M180,108 L250,138 M180,108 L110,138" class="dg-line"/>
+          <polygon points="180,40 250,78 180,108" class="dg-box2"/>
+          <path d="M250,138 L180,176" class="dg-accent"/>
+          <circle cx="180" cy="176" r="3" fill="#1e3a5f"/>
+          <circle cx="180" cy="176" r="7" fill="none" stroke="#1d4ed8" stroke-width="2"/>
+          <path d="M215,72 L376,48" class="dg-line"/>
+          <text x="380" y="44" class="dg-t">Face</text>
+          <text x="380" y="58" class="dg-s">a flat surface</text>
+          <text x="380" y="70" class="dg-s">bounding the solid</text>
+          <path d="M220,158 L376,142" class="dg-line"/>
+          <text x="380" y="138" class="dg-t">Edge</text>
+          <text x="380" y="152" class="dg-s">where two faces meet</text>
+          <path d="M188,180 L376,198" class="dg-line"/>
+          <text x="380" y="194" class="dg-t">Vertex</text>
+          <text x="380" y="208" class="dg-s">where edges meet &mdash;</text>
+          <text x="380" y="220" class="dg-s">a corner</text>
+        </svg>
+        <figcaption>A face is a flat or curved surface bounding the solid; an edge is the line where two faces meet; a vertex is the point where edges meet &mdash; the same relationship as point, edge, and area in 2D, one dimension up.</figcaption>
+        </figure>
+        <div class="note">
+            <strong>A quick check &mdash; Euler's formula:</strong> for any simple polyhedron (no holes through
+            it), vertices &minus; edges + faces always equals 2 (<span class="term">V &minus; E + F = 2</span>).
+            A cube has 8 vertices, 12 edges, and 6 faces: 8 &minus; 12 + 6 = 2. It's a handy sanity check when
+            you're counting a solid's elements by hand.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>2D and 3D vocabulary, side by side</h2>
+        <p>
+            Lining the two sets of terms up side by side makes the pattern obvious &mdash; each 3D element is the
+            2D element with one more dimension added.
+        </p>
+        <div class="compare">
+            <div>
+                <h3>2D &mdash; flat shapes</h3>
+                <ul>
+                    <li><span class="term">Point</span> &mdash; a location (0D)</li>
+                    <li><span class="term">Edge</span> &mdash; a boundary segment (1D)</li>
+                    <li><span class="term">Vertex</span> &mdash; where edges meet</li>
+                    <li><span class="term">Area</span> &mdash; the enclosed region (2D)</li>
+                    <li><span class="term">Perimeter</span> &mdash; total boundary length</li>
+                </ul>
+            </div>
+            <div>
+                <h3>3D &mdash; solid shapes</h3>
+                <ul>
+                    <li><span class="term">Vertex</span> &mdash; a location (0D)</li>
+                    <li><span class="term">Edge</span> &mdash; where two faces meet (1D)</li>
+                    <li><span class="term">Face</span> &mdash; a bounding surface (2D)</li>
+                    <li><span class="term">Volume</span> &mdash; the enclosed space (3D)</li>
+                    <li><span class="term">Surface area</span> &mdash; total area of all faces</li>
+                </ul>
+            </div>
+        </div>
+        <div class="note">
+            <strong>The dimensionality ladder:</strong> point/vertex (0D) &rarr; edge (1D) &rarr; area/face (2D)
+            &rarr; volume (3D). Each level is built by adding one more direction you can measure in &mdash; a
+            point has no size, an edge adds length, a face adds width, and a solid adds depth.
+        </div>
+    </div>
+
+    <div class="produce">
+        <strong>Carry this into Unit 1:</strong> a sketch is plane geometry &mdash; points, edges, and the area
+        they enclose &mdash; and the extrude, revolve, or sweep that turns it into a solid is exactly what adds
+        the third dimension, introducing faces, new edges, and new vertices along the way. When CAD software
+        reports a model's face, edge, and vertex count, or asks you to select an edge to fillet or a face to
+        sketch on, it's using precisely the vocabulary on this page.
+    </div>
+
+    <a class="back-link" href="index.html">&larr; Back to Unit Reference Pages</a>
+</main>
+</body>
+</html>
