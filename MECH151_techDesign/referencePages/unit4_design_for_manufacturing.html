@@ -4,7 +4,7 @@
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unit 4 — Design for Manufacturing</title>
+    <title>Unit 3 — Design for Manufacturing</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #1a1a1a; }
@@ -90,22 +90,23 @@
 </head>
 <body>
 <header>
-    <span class="unit-tag">Unit 4 &mdash; Weeks 14&ndash;16</span>
+    <span class="unit-tag">Unit 3 &mdash; Weeks 12&ndash;16</span>
     <h1>Design for Manufacturing (DFM)</h1>
-    <p class="subtitle">From model to prototype</p>
+    <p class="subtitle">Tolerancing, GD&amp;T, and from model to prototype</p>
 </header>
 <main>
     <p class="intro">
-        This unit closes the loop from CAD model to physical part. That means preparing the files each process
-        actually needs, reading the G-code that drives the machines, understanding what additive, subtractive, and
-        laser processes can and cannot make, and designing parts to suit the process instead of fighting it &mdash;
-        then operating shop equipment safely to produce a working prototype.
+        This unit closes the loop from CAD model to physical part. That means stating how much a dimension is
+        allowed to vary, preparing the files each process actually needs, reading the G-code that drives the
+        machines, understanding what additive, subtractive, and laser processes can and cannot make, and designing
+        parts to suit the process instead of fighting it &mdash; then operating shop equipment safely to produce a
+        working prototype.
     </p>
 
     <div class="goal">
-        <strong>Goal:</strong> Close the loop from CAD model to physical part &mdash; preparing manufacturing-ready
-        files, understanding what each process can and cannot make, and operating shop equipment safely to produce
-        a prototype.
+        <strong>Goal:</strong> Learn how tolerances and fits are stated and controlled, then close the loop from
+        CAD model to physical part &mdash; preparing manufacturing-ready files, understanding what each process can
+        and cannot make, and operating shop equipment safely to produce a prototype.
     </div>
 
     <div class="standards">
@@ -137,9 +138,45 @@
     </div>
 
     <div class="section">
+        <h2>Introduction to tolerancing</h2>
+        <p>
+            No part is made to an exact dimension. Tolerancing states how much variation is acceptable so that parts
+            still fit and function.
+        </p>
+        <ul>
+            <li><span class="term">Methods:</span> <span class="term def" tabindex="0" data-def="Stating the largest and smallest a dimension may be, directly (e.g. 12.05 / 11.95), instead of a nominal value with a tolerance.">limit dimensions</span> and plus/minus tolerances &mdash; <span class="term def" tabindex="0" data-def="The dimension may vary in both directions (e.g. 12 &plusmn;0.05).">bilateral</span> or <span class="term def" tabindex="0" data-def="The dimension may vary in one direction only (e.g. 12 +0.05 / &minus;0).">unilateral</span></li>
+            <li><span class="term">Fits:</span> <span class="term">clearance</span> (always a gap), <span class="term">interference</span> (always an overlap &mdash; a press fit), and <span class="term">transition</span> (could be either) fits between mating parts. The <span class="term def" tabindex="0" data-def="The tightest fit the tolerances still allow — the difference between the largest shaft and the smallest hole. A positive allowance guarantees a gap; a negative allowance guarantees an interference.">allowance</span> is that tightest intended condition</li>
+            <li><span class="term">Standard fit designations:</span> ISO <span class="term def" tabindex="0" data-def="The hole is held to a standard size and the shaft is varied to set the fit (capital letter = hole, lowercase = shaft). Shaft-basis is the reverse. Hole-basis is the usual choice because drills and reamers come in fixed sizes.">hole-basis</span> and shaft-basis callouts such as <span class="term">H7/g6</span> (hole H7, shaft g6 &mdash; a close clearance fit) &mdash; the same designations used for thread and fastener-hole fits in the <a href="unit3_design_for_assembly.html">Design for Assembly</a> unit</li>
+            <li><span class="term">Tolerance accumulation:</span> how chained dimensions stack up, and why baseline dimensioning limits it</li>
+        </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 600 130" role="img" aria-label="Three fit types between a shaft and a hole: clearance leaves a gap, interference forces an overlap, transition can be either.">
+          <!-- clearance -->
+          <rect x="20" y="24" width="140" height="80" class="dg-part"/>
+          <circle cx="90" cy="64" r="30" fill="#ffffff" stroke="#1e3a5f" stroke-width="1.4"/>
+          <circle cx="90" cy="64" r="21" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.4"/>
+          <text x="90" y="118" text-anchor="middle" class="dg-t">Clearance</text>
+          <line x1="210" y1="12" x2="210" y2="118" stroke="#e2e8f0"/>
+          <!-- interference -->
+          <rect x="230" y="24" width="140" height="80" class="dg-part"/>
+          <circle cx="300" cy="64" r="24" fill="#ffffff" stroke="#1e3a5f" stroke-width="1.2" stroke-dasharray="4 3"/>
+          <circle cx="300" cy="64" r="30" fill="#dbeafe" fill-opacity="0.7" stroke="#3b82f6" stroke-width="1.4"/>
+          <text x="300" y="118" text-anchor="middle" class="dg-t">Interference</text>
+          <line x1="420" y1="12" x2="420" y2="118" stroke="#e2e8f0"/>
+          <!-- transition -->
+          <rect x="440" y="24" width="140" height="80" class="dg-part"/>
+          <circle cx="510" cy="64" r="27" fill="#ffffff" stroke="#1e3a5f" stroke-width="1.4"/>
+          <circle cx="510" cy="64" r="26" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.4"/>
+          <text x="510" y="118" text-anchor="middle" class="dg-t">Transition</text>
+        </svg>
+        <figcaption>A fit describes how much room is between mating parts. Clearance always leaves a gap; interference is always tight and holds by force; transition can go either way within its tolerances. Standard designations such as <span style="font-weight:600">H7/g6</span> name a fit directly.</figcaption>
+        </figure>
+    </div>
+
+    <div class="section">
         <h2>Geometric dimensioning and tolerancing (GD&amp;T)</h2>
         <p>
-            Plus/minus tolerances (Unit 2) control how big a feature is, but they say nothing about whether a
+            Plus/minus tolerances (introduced above) control how big a feature is, but they say nothing about whether a
             surface is flat, whether two holes are square to a face, or how a part locates against its neighbor.
             <span class="term def" tabindex="0" data-def="Geometric Dimensioning and Tolerancing: a standardized symbol language (ASME Y14.5 / ISO GPS) for stating how much a feature's form, orientation, location, or runout may vary, measured from designated reference surfaces (datums).">GD&amp;T</span> is a symbolic language (ASME&nbsp;Y14.5 / ISO&nbsp;GPS) for stating
             those functional relationships directly on the drawing &mdash; it is design intent written in symbols
@@ -632,12 +669,12 @@
     </div>
 
     <div class="produce">
-        <strong>What you'll produce:</strong> correct manufacturing-ready files and GD&amp;T documentation for at
-        least one process, the ability to read a G-code file and make a safe edit to it, and a DFM-reviewed part
-        design ready to hand off to a shop process.
+        <strong>What you'll produce:</strong> correctly stated tolerances and fits, manufacturing-ready files and
+        GD&amp;T documentation for at least one process, the ability to read a G-code file and make a safe edit to
+        it, and a DFM-reviewed part design ready to hand off to a shop process.
     </div>
     <p class="assess">
-        Assessed by the Unit 4 Quiz (Week 16). Building and presenting the physical prototype is graded separately
+        Assessed by the Unit 3 Competency Check (Week 16). Building and presenting the physical prototype is graded separately
         as the course's Final Exam &mdash; see the
         <a href="../prototypeProject/final_exam_prototype.html">Prototype Project &amp; Final Exam page</a> for team requirements and
         logistics.

@@ -51,6 +51,14 @@
         .compare > div { flex: 1 1 240px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; }
         .compare h4 { font-size: 0.97rem; color: #1e3a5f; margin-bottom: 6px; }
         .compare ul { margin-top: 4px; }
+        table.fit-table { width: 100%; border-collapse: collapse; margin: 14px 0 4px; font-size: 0.88rem; }
+        table.fit-table caption { text-align: left; font-size: 0.85rem; color: #6b7280; margin-bottom: 6px; }
+        .fit-table th, .fit-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+        .fit-table th { background: #eef2f7; color: #1e3a5f; font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
+        .fit-table td.callout { font-weight: 700; color: #1e3a5f; white-space: nowrap; }
+        .fit-table tr:last-child td { border-bottom: none; }
+        .fit-table td, .fit-table th { color: #4b5563; }
+        .fit-table th { color: #1e3a5f; }
         html { overflow-x: clip; }
         .def { position: relative; border-bottom: 1px dotted #64748b; cursor: help; }
         .def:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
@@ -70,22 +78,23 @@
 </head>
 <body>
 <header>
-    <span class="unit-tag">Unit 1 &mdash; Weeks 4&ndash;7</span>
+    <span class="unit-tag">Unit 1 &mdash; Weeks 4&ndash;8</span>
     <h1>CAD Fundamentals (Basic)</h1>
-    <p class="subtitle">Sketching, views, and the first parametric model</p>
+    <p class="subtitle">Sketching, views, CAD setup, and the first parametric model</p>
 </header>
 <main>
     <p class="intro">
-        Everything you build later in this course &mdash; detailed drawings, assemblies, manufacturing files &mdash;
+        Everything you build later in this course &mdash; multiview drawings, manufacturing files &mdash;
         rests on the skills in this unit. A 3D model is only as good as the sketch it grows from, and a drawing
         is only useful if it follows the projection and dimensioning conventions everyone else reads it by.
-        Unit 1 covers how to control a sketch, how to project a part into standard views, and how to turn a
-        sketch into a parametric solid that updates when you change it.
+        Unit 1 covers how to control a sketch, how to project a part into standard and specialized views, how to
+        configure your CAD software, and how to turn a sketch into a parametric solid that updates when you change it.
     </p>
 
     <div class="goal">
         <strong>Goal:</strong> Build the drawing and modeling foundation every later unit depends on &mdash; laying out
-        a controlled sketch, projecting a part into standard views, and creating a parametric part model.
+        a controlled sketch, projecting a part into standard and specialized views, configuring your CAD
+        environment, and creating a parametric part model.
     </div>
 
     <div class="manyways">
@@ -575,7 +584,7 @@
         <p>
             Descriptive geometry is the theory behind projecting views: how points, lines, and planes appear from
             different directions, and how to construct a view that shows a feature's true size and shape. It is the
-            groundwork for the auxiliary views covered in Unit 2.
+            groundwork for the auxiliary views covered later in this unit.
         </p>
         <ul>
             <li><span class="term">True length of a line:</span> seen only when the line is parallel to the viewing plane</li>
@@ -591,8 +600,98 @@
             principal view (front, top, or side). A <span class="term">secondary view</span> is projected from a
             primary view to reveal a feature that is still not shown true-size &mdash; for example, an inclined face
             that is skewed in every principal view. Each step rotates the line of sight until the feature of
-            interest is seen straight on.
+            interest is seen straight on. Section views and auxiliary views, covered next, are the two specialized
+            view types built on this idea.
         </p>
+    </div>
+
+    <div class="section">
+        <h2>Section views</h2>
+        <p>
+            A section view slices the part with an imaginary
+            <span class="term def" tabindex="0" data-def="An imaginary flat plane passed through the part. The view is then drawn as if everything between the viewer and that plane had been removed, exposing the interior.">cutting plane</span>
+            and shows what's inside, replacing a tangle of hidden lines with a clear cut face. The cut surface is marked with
+            <span class="term def" tabindex="0" data-def="Evenly spaced thin diagonal lines drawn only on the surfaces the cutting plane actually passed through — they show where there is solid material. Also called hatching or crosshatching.">section lining (hatching)</span>.
+        </p>
+        <ul>
+            <li><span class="term">Full section:</span> the cutting plane passes entirely through the part</li>
+            <li><span class="term">Half section:</span> one quarter removed &mdash; shows inside and outside on one view, good for symmetric parts</li>
+            <li><span class="term">Offset section:</span> the cutting plane is stepped to pass through features that don't line up</li>
+            <li><span class="term">Broken-out, revolved, and removed sections:</span> local sections used where a full cut isn't needed</li>
+            <li><span class="term">Conventions:</span> ribs, webs, fasteners, shafts, and pins are not section-lined even when the plane passes through them</li>
+        </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 600 210" role="img" aria-label="A cutting plane A-A passes through a part with a bore; the resulting section view A-A replaces the hidden lines with a hatched cut face.">
+          <defs>
+            <pattern id="u1hatch" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="7" stroke="#64748b" stroke-width="0.8"/></pattern>
+            <marker id="u1sv-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+          </defs>
+          <!-- normal view with hidden bore -->
+          <rect x="40" y="46" width="110" height="110" class="dg-part"/>
+          <line x1="80" y1="46" x2="80" y2="156" class="dg-hidden"/>
+          <line x1="110" y1="46" x2="110" y2="156" class="dg-hidden"/>
+          <!-- cutting plane line -->
+          <line x1="16" y1="101" x2="174" y2="101" stroke="#1e3a5f" stroke-width="1.6" stroke-dasharray="14 3 3 3"/>
+          <path d="M16,101 L16,116" stroke="#1e3a5f" stroke-width="1.6" marker-end="url(#u1sv-ar)"/>
+          <path d="M174,101 L174,116" stroke="#1e3a5f" stroke-width="1.6" marker-end="url(#u1sv-ar)"/>
+          <text x="10" y="98" text-anchor="end" class="dg-t">A</text>
+          <text x="182" y="98" class="dg-t">A</text>
+          <text x="95" y="176" text-anchor="middle" class="dg-s">hidden bore</text>
+          <!-- arrow -->
+          <path d="M250,100 L300,100" class="dg-accent" marker-end="url(#u1sv-ar)"/>
+          <text x="275" y="90" text-anchor="middle" class="dg-s">cut &amp; look</text>
+          <!-- section view -->
+          <rect x="360" y="46" width="40" height="110" fill="url(#u1hatch)"/>
+          <rect x="440" y="46" width="40" height="110" fill="url(#u1hatch)"/>
+          <rect x="360" y="46" width="120" height="110" fill="none" stroke="#1e3a5f" stroke-width="1.6"/>
+          <line x1="400" y1="46" x2="400" y2="156" stroke="#1e3a5f" stroke-width="1.4"/>
+          <line x1="440" y1="46" x2="440" y2="156" stroke="#1e3a5f" stroke-width="1.4"/>
+          <text x="420" y="176" text-anchor="middle" class="dg-t">SECTION A&ndash;A</text>
+        </svg>
+        <figcaption>A section view slices the part with an imaginary cutting plane and shows what is inside, replacing a tangle of hidden lines with a clear, hatched cut face.</figcaption>
+        </figure>
+    </div>
+
+    <div class="section">
+        <h2>Auxiliary views</h2>
+        <p>
+            When a face is inclined, it appears foreshortened in every principal view &mdash; you can't measure it or
+            see its true shape. An <span class="term def" tabindex="0" data-def="A view projected onto a plane parallel to an inclined face (perpendicular to your line of sight to it), so that face appears at true size and shape. A partial auxiliary shows only the inclined feature.">auxiliary view</span> is projected perpendicular to that face
+            so it appears true-size. This is the descriptive-geometry theory covered earlier in this unit, put to use.
+        </p>
+        <ul>
+            <li><span class="term">Primary auxiliary:</span> projected from one principal view to show one inclined surface true-shape</li>
+            <li><span class="term">Partial auxiliary:</span> only the inclined feature is drawn &mdash; the rest is omitted to avoid distortion and clutter</li>
+            <li><span class="term">Reference-plane method:</span> measurements are transferred from a principal view along projection lines</li>
+        </ul>
+        <figure class="diagram">
+        <svg viewBox="0 0 472 316" role="img" aria-label="An inclined face appears foreshortened in the front view. Projection lines drawn perpendicular to that face carry its endpoints out to an auxiliary view, where the face appears at true size and shape.">
+          <defs>
+            <marker id="u1av-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-a"/></marker>
+          </defs>
+
+          <!-- front view of the part, with an inclined (chamfered) face -->
+          <polygon points="70,180 140,180 180,220 180,300 70,300" class="dg-part"/>
+          <line x1="140" y1="180" x2="180" y2="220" stroke="#1d4ed8" stroke-width="3"/>
+          <line x1="156.5" y1="203.5" x2="163.5" y2="196.5" stroke="#1d4ed8" stroke-width="1.4"/>
+          <text x="130" y="150" text-anchor="end" class="dg-s">inclined face</text>
+          <text x="130" y="165" text-anchor="end" class="dg-s">(foreshortened here)</text>
+          <path d="M133,169 L147,182" stroke="#94a3b8" stroke-width="1" fill="none"/>
+
+          <!-- projection lines, perpendicular to the inclined face -->
+          <path d="M140,180 L264,56" class="dg-line" stroke-dasharray="5 3" marker-end="url(#u1av-ar)"/>
+          <path d="M180,220 L304,96" class="dg-line" stroke-dasharray="5 3" marker-end="url(#u1av-ar)"/>
+          <text x="252" y="30" text-anchor="middle" class="dg-s">project &perp; to the face</text>
+
+          <!-- auxiliary view: the face at true size, square to the projection lines -->
+          <polygon points="221.3,98.7 261.3,138.7 286.8,113.2 246.8,73.2" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.4"/>
+          <line x1="237.8" y1="122.2" x2="244.8" y2="115.2" stroke="#1d4ed8" stroke-width="1.4"/>
+          <path d="M322,112 L285,116" stroke="#94a3b8" stroke-width="1" fill="none"/>
+          <text x="326" y="109" class="dg-t">AUXILIARY VIEW</text>
+          <text x="326" y="125" class="dg-s">true size &amp; shape</text>
+        </svg>
+        <figcaption>When a face is inclined it is foreshortened in every principal view. Projection lines drawn perpendicular to that face carry its endpoints out to an auxiliary view, where it appears true-size &mdash; the descriptive-geometry theory covered earlier in this unit, put to use. The tick marks flag the one edge that is true-length in both views.</figcaption>
+        </figure>
     </div>
 
     <div class="section">
@@ -840,12 +939,93 @@
         </ul>
     </div>
 
+    <div class="section">
+        <h2>CAD software configuration</h2>
+        <p>
+            Consistent output comes from configured software, not from fixing every file by hand. This topic covers
+            setting up the environment once so every part, assembly, and drawing starts correct.
+        </p>
+        <ul>
+            <li><span class="term">Templates:</span> part, assembly, and drawing templates with the right units, drafting standard, and title block</li>
+            <li><span class="term">Document properties:</span> units, dimensioning standard (ASME / ISO), grid, and layer settings</li>
+            <li><span class="term">Custom properties:</span> file metadata that auto-populates the title block and BOM</li>
+            <li><span class="term">File management:</span> naming, folder structure, and keeping references between parts, assemblies, and drawings intact</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>CAD/CAM data translation</h2>
+        <p>
+            Moving a model between systems &mdash; CAD to CAM, or one CAD package to another &mdash; usually means
+            exporting to a neutral format. Each format keeps some information and loses the rest.
+        </p>
+        <ul>
+            <li><span class="term">Solid exchange formats:</span> STEP (AP203 / AP214 / AP242) and IGES &mdash; geometry is preserved, but the parametric feature history is not</li>
+            <li><span class="term">Kernel formats:</span> Parasolid and ACIS &mdash; used between packages that share a modeling kernel</li>
+            <li><span class="term">Mesh formats:</span> STL and 3MF &mdash; the model becomes a faceted surface with no true curves; resolution is set at export</li>
+            <li><span class="term">Translation issues:</span> lost or corrupted faces, gaps requiring geometry healing, and unit-scale errors</li>
+        </ul>
+
+        <h3>Native formats that retain parametric history</h3>
+        <p>
+            The formats above are neutral exchange formats used to move a model between systems. A model stays
+            fully parametric &mdash; every sketch, feature, and dimension still editable &mdash; only in its native,
+            usually proprietary, file format.
+        </p>
+        <table class="fit-table">
+            <caption>Native (parametric) file formats by CAD program</caption>
+            <thead>
+                <tr><th>CAD program</th><th>Part</th><th>Assembly</th><th>Drawing</th></tr>
+            </thead>
+            <tbody>
+                <tr><td class="callout">SolidWorks</td><td>.SLDPRT</td><td>.SLDASM</td><td>.SLDDRW</td></tr>
+                <tr><td class="callout">Autodesk Inventor</td><td>.IPT</td><td>.IAM</td><td>.IDW</td></tr>
+                <tr><td class="callout">Autodesk Fusion</td><td colspan="2">.F3D (cloud-native design) / .F3Z (local archive)</td><td>&mdash;</td></tr>
+                <tr><td class="callout">PTC Creo</td><td>.PRT</td><td>.ASM</td><td>.DRW</td></tr>
+                <tr><td class="callout">Siemens NX</td><td colspan="2">.PRT (unified part/assembly file)</td><td>.PRT</td></tr>
+                <tr><td class="callout">Siemens Solid Edge</td><td>.PAR</td><td>.ASM</td><td>.DFT</td></tr>
+                <tr><td class="callout">CATIA V5/V6</td><td>.CATPart</td><td>.CATProduct</td><td>.CATDrawing</td></tr>
+                <tr><td class="callout">Onshape</td><td colspan="3">Cloud-native document, no local file &mdash; parametric history lives server-side</td></tr>
+            </tbody>
+        </table>
+        <figure class="diagram">
+        <svg viewBox="0 0 640 210" role="img" aria-label="A native parametric model is exported to a neutral format to move it downstream: STEP or IGES keep solid geometry but lose feature history, kernel formats move between same-kernel packages, and mesh formats become a faceted surface.">
+          <defs>
+            <marker id="u1tr-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
+          </defs>
+          <rect x="0" y="76" width="112" height="56" rx="8" class="dg-box2"/>
+          <text x="56" y="100" text-anchor="middle" class="dg-t">Native model</text>
+          <text x="56" y="117" text-anchor="middle" class="dg-s">features + history</text>
+          <path d="M112,92  C 148,92  156,40 188,38"   class="dg-line" marker-end="url(#u1tr-ar)"/>
+          <path d="M112,104 L188,104"                   class="dg-line" marker-end="url(#u1tr-ar)"/>
+          <path d="M112,116 C 148,116 156,168 188,170"  class="dg-line" marker-end="url(#u1tr-ar)"/>
+          <rect x="192" y="18"  width="224" height="44" rx="7" class="dg-box"/>
+          <rect x="192" y="84"  width="224" height="44" rx="7" class="dg-box"/>
+          <rect x="192" y="150" width="224" height="44" rx="7" class="dg-box"/>
+          <text x="204" y="38"  class="dg-t">STEP / IGES</text>
+          <text x="204" y="54"  class="dg-s">geometry kept, feature history lost</text>
+          <text x="204" y="104" class="dg-t">Parasolid / ACIS</text>
+          <text x="204" y="120" class="dg-s">same modeling kernel only</text>
+          <text x="204" y="170" class="dg-t">STL / 3MF</text>
+          <text x="204" y="186" class="dg-s">faceted mesh, no true curves</text>
+          <path d="M416,40  C 452,40  460,92  484,98"   class="dg-line" marker-end="url(#u1tr-ar)"/>
+          <path d="M416,106 L484,106"                    class="dg-line" marker-end="url(#u1tr-ar)"/>
+          <path d="M416,172 C 452,172 460,120 484,114"   class="dg-line" marker-end="url(#u1tr-ar)"/>
+          <rect x="488" y="78" width="152" height="56" rx="8" class="dg-box3"/>
+          <text x="564" y="102" text-anchor="middle" class="dg-t">Downstream</text>
+          <text x="564" y="119" text-anchor="middle" class="dg-s">CAM &middot; other CAD &middot; print</text>
+        </svg>
+        <figcaption>Moving a model between systems means exporting to a neutral format &mdash; each keeps some information and loses the rest. Always confirm units, scale, and closed geometry on import.</figcaption>
+        </figure>
+    </div>
+
     <div class="produce">
         <strong>What you'll produce:</strong> a set of fully defined sketches, a multiview orthographic drawing
-        with correct line types and dimensions, and your first fully parametric part model with a clean,
-        editable feature tree.
+        (with section and auxiliary views as needed) with correct line types and dimensions, your first fully
+        parametric part model with a clean, editable feature tree, plus correctly configured templates and a
+        clean model export.
     </div>
-    <p class="assess">Assessed by the Unit 1 Quiz (Week 7) and the corresponding portfolio modules.</p>
+    <p class="assess">Assessed by the Unit 1 Competency Check (Week 8) and the corresponding portfolio modules.</p>
 
     <a class="back-link" href="index.html">&larr; Back to Unit Reference Pages</a>
 </main>
