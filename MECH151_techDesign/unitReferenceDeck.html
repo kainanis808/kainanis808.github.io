@@ -84,19 +84,27 @@
             display: block;
             text-align: center;
             margin-top: 30px;
-            color: #0284c7;
+            color: #0369a1;
             text-decoration: none;
             font-size: 0.95rem;
         }
         .back-link:hover { text-decoration: underline; }
+        /* --- accessibility helpers --- */
+        .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+            clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+        .skip-link { position: absolute; left: 12px; top: -48px; z-index: 100; background: #1e3a5f; color: #ffffff;
+            padding: 8px 14px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+        .skip-link:focus { top: 12px; outline: 3px solid #93c5fd; outline-offset: 2px; }
+        a:focus-visible, summary:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
     </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to main content</a>
 <header>
     <h1>Unit Reference Slide Deck</h1>
     <p class="subtitle">MECH 151: Technical Design &mdash; Prototyping &middot; a visual reference companion to Units 1&ndash;3</p>
 </header>
-<main>
+<main id="main">
     <p class="intro">
         This slide deck illustrates the core topics from all three units &mdash; CAD Fundamentals, Design for
         Assembly, and Design for Manufacturing &mdash; with labeled diagrams and worked examples for sketch
@@ -120,7 +128,7 @@
         </div>
         <p class="note">
             If the preview above doesn&rsquo;t display,
-            <a href="slideDeck/MECH151_Unit_Reference_Deck.pdf" target="_blank" rel="noopener">open the PDF directly</a>.
+            <a href="slideDeck/MECH151_Unit_Reference_Deck.pdf" target="_blank" rel="noopener">open the PDF directly<span class="sr-only"> (PDF, opens in a new tab)</span></a>.
         </p>
     </div>
 

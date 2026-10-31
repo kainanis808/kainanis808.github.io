@@ -48,7 +48,7 @@
         html { overflow-x: clip; }
         .def { position: relative; border-bottom: 1px dotted #64748b; cursor: help; }
         .def:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
-        .def::after { content: attr(data-def); position: absolute; left: 0; bottom: calc(100% + 9px);
+        .def::after { content: attr(data-def); content: attr(data-def) / ""; position: absolute; left: 0; bottom: calc(100% + 9px);
             width: 240px; background: #1e293b; color: #f8fafc;
             font: 400 0.8rem/1.5 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-style: normal;
             text-align: left; padding: 9px 12px; border-radius: 7px; box-shadow: 0 8px 24px rgba(15,23,42,0.28);
@@ -58,24 +58,33 @@
             opacity: 0; visibility: hidden; transition: opacity 0.12s ease; z-index: 30; pointer-events: none; }
         .def:hover::after, .def:focus::after, .def:hover::before, .def:focus::before { opacity: 1; visibility: visible; }
         @media (max-width: 540px) { .def::after { width: 66vw; } }
-        .back-link { display: block; text-align: center; margin-top: 28px; color: #0284c7; text-decoration: none; font-size: 0.95rem; }
+        .back-link { display: block; text-align: center; margin-top: 28px; color: #0369a1; text-decoration: none; font-size: 0.95rem; }
         .back-link:hover { text-decoration: underline; }
+        /* --- accessibility helpers --- */
+        .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+            clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+        .skip-link { position: absolute; left: 12px; top: -48px; z-index: 100; background: #1e3a5f; color: #ffffff;
+            padding: 8px 14px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+        .skip-link:focus { top: 12px; outline: 3px solid #93c5fd; outline-offset: 2px; }
+        a:focus-visible, summary:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+        .def.def-dismissed::after, .def.def-dismissed::before { opacity: 0 !important; visibility: hidden !important; }
     </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to main content</a>
 <header>
     <span class="unit-tag">Foundations &mdash; Before Unit 1</span>
     <h1>Design Fundamentals</h1>
     <p class="subtitle">Defining the problem, design intent, and how a design is organized</p>
 </header>
-<main>
+<main id="main">
     <p class="intro">
         Before the sketching, projection, and modeling of Unit 1, it helps to step back and ask what a
         CAD model is <em>for</em>. A model is not just a picture of a finished shape &mdash; it is a record of
         decisions: what the part has to do, which dimensions matter, and how the pieces of a design depend on
         one another. This page covers the ideas that run through every later unit: how to <span class="term">define
         a design problem</span> before solving it, the <span class="term">cyclic design process</span> (why the
-        first version is never the final one), <span class="term def" tabindex="0" data-def="The reasoning behind a model: what you expect to stay true when a dimension changes. Captured with sketch relations, deliberate dimension choices, and stable feature references — so the model updates the way you mean it to.">design intent</span> (the reasoning a model
+        first version is never the final one), <span class="term def" tabindex="0" data-def="The reasoning behind a model: what you expect to stay true when a dimension changes. Captured with sketch relations, deliberate dimension choices, and stable feature references — so the model updates the way you mean it to.">design intent<span class="sr-only"> (definition: The reasoning behind a model: what you expect to stay true when a dimension changes. Captured with sketch relations, deliberate dimension choices, and stable feature references — so the model updates the way you mean it to.)</span></span> (the reasoning a model
         should capture), and <span class="term">design organization</span> (top-down vs. bottom-up, and how to
         structure a design so it stays editable as it grows).
     </p>
@@ -209,7 +218,7 @@
         <ul>
             <li><span class="term">Turn objectives into criteria:</span> each objective becomes a measurable metric &mdash; mass in grams, cost in dollars, part count, assembly time, print time (Unit&nbsp;1 covers how the model reports mass, volume, and center of gravity directly)</li>
             <li><span class="term">Weight the criteria:</span> not every objective matters equally; assign weights that reflect the need</li>
-            <li><span class="term">Score concepts against the criteria:</span> a <span class="term def" tabindex="0" data-def="A table that scores each concept against every weighted criterion and sums the results, so the best option is chosen on numbers rather than preference. A Pugh chart is a simple version that scores each option as better / same / worse than one baseline.">decision matrix</span> (or Pugh chart, scoring each option relative to a baseline) makes the comparison explicit and repeatable</li>
+            <li><span class="term">Score concepts against the criteria:</span> a <span class="term def" tabindex="0" data-def="A table that scores each concept against every weighted criterion and sums the results, so the best option is chosen on numbers rather than preference. A Pugh chart is a simple version that scores each option as better / same / worse than one baseline.">decision matrix<span class="sr-only"> (definition: A table that scores each concept against every weighted criterion and sums the results, so the best option is chosen on numbers rather than preference. A Pugh chart is a simple version that scores each option as better / same / worse than one baseline.)</span></span> (or Pugh chart, scoring each option relative to a baseline) makes the comparison explicit and repeatable</li>
             <li><span class="term">Check requirements and constraints first:</span> screen those out as pass/fail before scoring &mdash; only rank designs that are already acceptable</li>
             <li><span class="term">Re-use the scorecard each iteration:</span> the same criteria that pick the concept also tell you, after a prototype, whether the revision actually improved things</li>
         </ul>
@@ -419,5 +428,14 @@
 
     <a class="back-link" href="index.html">&larr; Back to Unit Reference Pages</a>
 </main>
+<script>
+/* Definition tooltips: Escape hides the open tooltip (WCAG 1.4.13); it returns on the next hover or focus. */
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') document.querySelectorAll('.def').forEach(function (d) { d.classList.add('def-dismissed'); });
+});
+document.querySelectorAll('.def').forEach(function (d) {
+    ['mouseleave', 'blur'].forEach(function (ev) { d.addEventListener(ev, function () { d.classList.remove('def-dismissed'); }); });
+});
+</script>
 </body>
 </html>

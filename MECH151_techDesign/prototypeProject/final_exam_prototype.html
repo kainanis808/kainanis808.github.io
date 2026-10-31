@@ -30,7 +30,7 @@
             margin: 24px 0 10px; font-size: 0.95rem; color: #374151; line-height: 1.7; }
         .produce strong { color: #15803d; }
         .assess { font-size: 0.9rem; color: #6b7280; font-style: italic; margin-bottom: 24px; }
-        .back-link { display: block; text-align: center; margin-top: 28px; color: #0284c7; text-decoration: none; font-size: 0.95rem; }
+        .back-link { display: block; text-align: center; margin-top: 28px; color: #0369a1; text-decoration: none; font-size: 0.95rem; }
         .back-link:hover { text-decoration: underline; }
         .tag { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;
             text-transform: uppercase; color: #6b7280; margin: 16px 0 2px; }
@@ -41,15 +41,23 @@
         .downloads a:hover { background: #e8f0fb; border-color: #3b82f6; }
         .downloads a .lt { font-weight: 700; font-size: 0.92rem; display: block; margin-bottom: 2px; }
         .downloads a .ld { font-size: 0.82rem; color: #6b7280; }
+        /* --- accessibility helpers --- */
+        .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+            clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+        .skip-link { position: absolute; left: 12px; top: -48px; z-index: 100; background: #1e3a5f; color: #ffffff;
+            padding: 8px 14px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+        .skip-link:focus { top: 12px; outline: 3px solid #93c5fd; outline-offset: 2px; }
+        a:focus-visible, summary:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
     </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to main content</a>
 <header>
     <span class="unit-tag">Final Exam &mdash; Week 17</span>
     <h1>Prototype Project</h1>
     <p class="subtitle">A team-built physical prototype, presented to the class</p>
 </header>
-<main>
+<main id="main">
     <p class="intro">
         MECH151 closes with a hands-on final exam: a physical prototype that your team designs, documents,
         builds, and presents. It draws on skills built across all three units &mdash; sketching and modeling,

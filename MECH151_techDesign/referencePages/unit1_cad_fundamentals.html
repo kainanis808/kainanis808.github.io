@@ -62,7 +62,7 @@
         html { overflow-x: clip; }
         .def { position: relative; border-bottom: 1px dotted #64748b; cursor: help; }
         .def:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
-        .def::after { content: attr(data-def); position: absolute; left: 0; bottom: calc(100% + 9px);
+        .def::after { content: attr(data-def); content: attr(data-def) / ""; position: absolute; left: 0; bottom: calc(100% + 9px);
             width: 240px; background: #1e293b; color: #f8fafc;
             font: 400 0.8rem/1.5 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-style: normal;
             text-align: left; padding: 9px 12px; border-radius: 7px; box-shadow: 0 8px 24px rgba(15,23,42,0.28);
@@ -72,17 +72,26 @@
             opacity: 0; visibility: hidden; transition: opacity 0.12s ease; z-index: 30; pointer-events: none; }
         .def:hover::after, .def:focus::after, .def:hover::before, .def:focus::before { opacity: 1; visibility: visible; }
         @media (max-width: 540px) { .def::after { width: 66vw; } }
-        .back-link { display: block; text-align: center; margin-top: 28px; color: #0284c7; text-decoration: none; font-size: 0.95rem; }
+        .back-link { display: block; text-align: center; margin-top: 28px; color: #0369a1; text-decoration: none; font-size: 0.95rem; }
         .back-link:hover { text-decoration: underline; }
+        /* --- accessibility helpers --- */
+        .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+            clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+        .skip-link { position: absolute; left: 12px; top: -48px; z-index: 100; background: #1e3a5f; color: #ffffff;
+            padding: 8px 14px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+        .skip-link:focus { top: 12px; outline: 3px solid #93c5fd; outline-offset: 2px; }
+        a:focus-visible, summary:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+        .def.def-dismissed::after, .def.def-dismissed::before { opacity: 0 !important; visibility: hidden !important; }
     </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to main content</a>
 <header>
     <span class="unit-tag">Unit 1 &mdash; Weeks 4&ndash;8</span>
     <h1>CAD Fundamentals (Basic)</h1>
     <p class="subtitle">Sketching, views, CAD setup, and the first parametric model</p>
 </header>
-<main>
+<main id="main">
     <p class="intro">
         Everything you build later in this course &mdash; multiview drawings, manufacturing files &mdash;
         rests on the skills in this unit. A 3D model is only as good as the sketch it grows from, and a drawing
@@ -101,7 +110,7 @@
         <strong>There is no single "right" way to model a part.</strong> The same shape can be built from a
         different base feature, a different set of sketches, a different feature order &mdash; and there are
         effectively infinite valid combinations. What separates a good model from a poor one is not matching some
-        canonical answer; it is whether the model captures the <span class="term def" tabindex="0" data-def="The reasoning a model should hold on to: what you expect to stay true when a dimension changes — a hole staying centered, two walls staying equal — built in with relations rather than left to chance.">design intent</span>, rebuilds
+        canonical answer; it is whether the model captures the <span class="term def" tabindex="0" data-def="The reasoning a model should hold on to: what you expect to stay true when a dimension changes — a hole staying centered, two walls staying equal — built in with relations rather than left to chance.">design intent<span class="sr-only"> (definition: The reasoning a model should hold on to: what you expect to stay true when a dimension changes — a hole staying centered, two walls staying equal — built in with relations rather than left to chance.)</span></span>, rebuilds
         without errors, and stays easy for the next person to edit. Two classmates can hand in completely
         different feature trees and both be correct. Focus on making deliberate choices you can explain, not on
         guessing the "expected" one.
@@ -345,7 +354,7 @@
             Constraints lock down where sketch geometry can move. There are two kinds: <span class="term">geometric
             relations</span> (coincident, collinear, parallel, perpendicular, tangent, concentric, equal, horizontal,
             vertical, symmetric) and <span class="term">dimensions</span> (linear, radial, diameter, angular).
-            Together they remove <span class="term def" tabindex="0" data-def="The independent ways a piece of sketch geometry can still move — slide along X, slide along Y, or rotate. Each relation or dimension removes one or more; when none are left, the sketch is fully defined.">degrees of freedom</span> until the sketch is fully defined.
+            Together they remove <span class="term def" tabindex="0" data-def="The independent ways a piece of sketch geometry can still move — slide along X, slide along Y, or rotate. Each relation or dimension removes one or more; when none are left, the sketch is fully defined.">degrees of freedom<span class="sr-only"> (definition: The independent ways a piece of sketch geometry can still move — slide along X, slide along Y, or rotate. Each relation or dimension removes one or more; when none are left, the sketch is fully defined.)</span></span> until the sketch is fully defined.
         </p>
 
         <h3>Degrees of freedom</h3>
@@ -609,9 +618,9 @@
         <h2>Section views</h2>
         <p>
             A section view slices the part with an imaginary
-            <span class="term def" tabindex="0" data-def="An imaginary flat plane passed through the part. The view is then drawn as if everything between the viewer and that plane had been removed, exposing the interior.">cutting plane</span>
+            <span class="term def" tabindex="0" data-def="An imaginary flat plane passed through the part. The view is then drawn as if everything between the viewer and that plane had been removed, exposing the interior.">cutting plane<span class="sr-only"> (definition: An imaginary flat plane passed through the part. The view is then drawn as if everything between the viewer and that plane had been removed, exposing the interior.)</span></span>
             and shows what's inside, replacing a tangle of hidden lines with a clear cut face. The cut surface is marked with
-            <span class="term def" tabindex="0" data-def="Evenly spaced thin diagonal lines drawn only on the surfaces the cutting plane actually passed through — they show where there is solid material. Also called hatching or crosshatching.">section lining (hatching)</span>.
+            <span class="term def" tabindex="0" data-def="Evenly spaced thin diagonal lines drawn only on the surfaces the cutting plane actually passed through — they show where there is solid material. Also called hatching or crosshatching.">section lining (hatching)<span class="sr-only"> (definition: Evenly spaced thin diagonal lines drawn only on the surfaces the cutting plane actually passed through — they show where there is solid material. Also called hatching or crosshatching.)</span></span>.
         </p>
         <ul>
             <li><span class="term">Full section:</span> the cutting plane passes entirely through the part</li>
@@ -656,7 +665,7 @@
         <h2>Auxiliary views</h2>
         <p>
             When a face is inclined, it appears foreshortened in every principal view &mdash; you can't measure it or
-            see its true shape. An <span class="term def" tabindex="0" data-def="A view projected onto a plane parallel to an inclined face (perpendicular to your line of sight to it), so that face appears at true size and shape. A partial auxiliary shows only the inclined feature.">auxiliary view</span> is projected perpendicular to that face
+            see its true shape. An <span class="term def" tabindex="0" data-def="A view projected onto a plane parallel to an inclined face (perpendicular to your line of sight to it), so that face appears at true size and shape. A partial auxiliary shows only the inclined feature.">auxiliary view<span class="sr-only"> (definition: A view projected onto a plane parallel to an inclined face (perpendicular to your line of sight to it), so that face appears at true size and shape. A partial auxiliary shows only the inclined feature.)</span></span> is projected perpendicular to that face
             so it appears true-size. This is the descriptive-geometry theory covered earlier in this unit, put to use.
         </p>
         <ul>
@@ -711,7 +720,7 @@
     <div class="section">
         <h2>Geometry of shapes: building 3D solids</h2>
         <p>
-            A 3D shape is either a <span class="term def" tabindex="0" data-def="A basic, ready-made solid volume — block, cylinder, sphere, cone, or torus — that more complex parts are built up from or can be broken down into.">primitive</span> volume or a combination of them. Every
+            A 3D shape is either a <span class="term def" tabindex="0" data-def="A basic, ready-made solid volume — block, cylinder, sphere, cone, or torus — that more complex parts are built up from or can be broken down into.">primitive<span class="sr-only"> (definition: A basic, ready-made solid volume — block, cylinder, sphere, cone, or torus — that more complex parts are built up from or can be broken down into.)</span></span> volume or a combination of them. Every
             solid model is really a running total: start with a volume, add more, and cut some away.
         </p>
         <ul>
@@ -800,13 +809,13 @@
     <div class="section">
         <h2>Introduction to parametric part modeling</h2>
         <p>
-            <span class="term def" tabindex="0" data-def="A modeling method in which the part is stored as an ordered recipe of features. Each feature is driven by editable values (parameters) — dimensions and relations — and the model is regenerated by replaying that recipe from the top.">Parametric modeling</span>
+            <span class="term def" tabindex="0" data-def="A modeling method in which the part is stored as an ordered recipe of features. Each feature is driven by editable values (parameters) — dimensions and relations — and the model is regenerated by replaying that recipe from the top.">Parametric modeling<span class="sr-only"> (definition: A modeling method in which the part is stored as an ordered recipe of features. Each feature is driven by editable values (parameters) — dimensions and relations — and the model is regenerated by replaying that recipe from the top.)</span></span>
             (also called <em>history-based</em> modeling) records <em>how</em> a part was built. It stores the solid as a
-            <span class="term def" tabindex="0" data-def="The ordered list of every feature — sketch, extrude, cut, fillet, pattern — used to build the part. The model rebuilds by replaying it from the top. Also called the feature tree or history tree.">history of features</span>,
+            <span class="term def" tabindex="0" data-def="The ordered list of every feature — sketch, extrude, cut, fillet, pattern — used to build the part. The model rebuilds by replaying it from the top. Also called the feature tree or history tree.">history of features<span class="sr-only"> (definition: The ordered list of every feature — sketch, extrude, cut, fillet, pattern — used to build the part. The model rebuilds by replaying it from the top. Also called the feature tree or history tree.)</span></span>,
             each one driven by dimensions and
-            <span class="term def" tabindex="0" data-def="Geometric rules linking sketch or model geometry — parallel, equal, concentric, symmetric, tangent — that the CAD system keeps true as dimensions change.">relations</span>.
+            <span class="term def" tabindex="0" data-def="Geometric rules linking sketch or model geometry — parallel, equal, concentric, symmetric, tangent — that the CAD system keeps true as dimensions change.">relations<span class="sr-only"> (definition: Geometric rules linking sketch or model geometry — parallel, equal, concentric, symmetric, tangent — that the CAD system keeps true as dimensions change.)</span></span>.
             Change a dimension and the whole model
-            <span class="term def" tabindex="0" data-def="Recompute the model by replaying its feature history in order after a change. Also called regenerate.">rebuilds</span>
+            <span class="term def" tabindex="0" data-def="Recompute the model by replaying its feature history in order after a change. Also called regenerate.">rebuilds<span class="sr-only"> (definition: Recompute the model by replaying its feature history in order after a change. Also called regenerate.)</span></span>
             to match. This is what makes CAD editable rather than something you redraw from scratch.
         </p>
         <figure class="diagram">
@@ -850,7 +859,7 @@
         <h3>Parametric vs. direct modeling</h3>
         <p>
             The opposite approach is
-            <span class="term def" tabindex="0" data-def="A modeling method with no feature history. You edit the geometry itself — push, pull, drag, rotate, or delete faces and edges directly. What you see is the whole model; there is no recipe to replay.">direct modeling</span>
+            <span class="term def" tabindex="0" data-def="A modeling method with no feature history. You edit the geometry itself — push, pull, drag, rotate, or delete faces and edges directly. What you see is the whole model; there is no recipe to replay.">direct modeling<span class="sr-only"> (definition: A modeling method with no feature history. You edit the geometry itself — push, pull, drag, rotate, or delete faces and edges directly. What you see is the whole model; there is no recipe to replay.)</span></span>
             (also called <em>explicit</em> or <em>history-free</em> modeling). There is no feature tree and no rebuild
             step: you grab a face or an edge and push, pull, rotate, or offset it, and the geometry simply changes.
             The model does not record how it was made.
@@ -892,7 +901,7 @@
                 <ul>
                     <li>Edit by changing a driving dimension or a feature, then let the model rebuild</li>
                     <li>Captures <span class="term">design intent</span> &mdash; one change ripples everywhere it should</li>
-                    <li>Feature order matters; a bad edit can cause <span class="term def" tabindex="0" data-def="A feature that can no longer solve because an edit removed or moved geometry it depended on. The model will not rebuild until the broken reference is fixed.">rebuild errors</span></li>
+                    <li>Feature order matters; a bad edit can cause <span class="term def" tabindex="0" data-def="A feature that can no longer solve because an edit removed or moved geometry it depended on. The model will not rebuild until the broken reference is fixed.">rebuild errors<span class="sr-only"> (definition: A feature that can no longer solve because an edit removed or moved geometry it depended on. The model will not rebuild until the broken reference is fixed.)</span></span></li>
                     <li>Best for parts you will revise, and for building in rules ("wall is always 2&nbsp;mm")</li>
                 </ul>
             </div>
@@ -903,7 +912,7 @@
                     <li>Order-independent, no rebuild errors, and it does not matter how the model was made</li>
                     <li>Does not capture intent &mdash; move one face and nothing else follows</li>
                     <li>Best for quick concept changes and editing
-                        <span class="term def" tabindex="0" data-def="A solid with no feature history — just faces and edges. Imported STEP or IGES files, including downloaded catalog parts, arrive this way.">imported &ldquo;dumb&rdquo; solids</span>
+                        <span class="term def" tabindex="0" data-def="A solid with no feature history — just faces and edges. Imported STEP or IGES files, including downloaded catalog parts, arrive this way.">imported &ldquo;dumb&rdquo; solids<span class="sr-only"> (definition: A solid with no feature history — just faces and edges. Imported STEP or IGES files, including downloaded catalog parts, arrive this way.)</span></span>
                         that have no tree to edit</li>
                 </ul>
             </div>
@@ -975,7 +984,7 @@
         <table class="fit-table">
             <caption>Native (parametric) file formats by CAD program</caption>
             <thead>
-                <tr><th>CAD program</th><th>Part</th><th>Assembly</th><th>Drawing</th></tr>
+                <tr><th scope="col">CAD program</th><th scope="col">Part</th><th scope="col">Assembly</th><th scope="col">Drawing</th></tr>
             </thead>
             <tbody>
                 <tr><td class="callout">SolidWorks</td><td>.SLDPRT</td><td>.SLDASM</td><td>.SLDDRW</td></tr>
@@ -1029,5 +1038,14 @@
 
     <a class="back-link" href="index.html">&larr; Back to Unit Reference Pages</a>
 </main>
+<script>
+/* Definition tooltips: Escape hides the open tooltip (WCAG 1.4.13); it returns on the next hover or focus. */
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') document.querySelectorAll('.def').forEach(function (d) { d.classList.add('def-dismissed'); });
+});
+document.querySelectorAll('.def').forEach(function (d) {
+    ['mouseleave', 'blur'].forEach(function (ev) { d.addEventListener(ev, function () { d.classList.remove('def-dismissed'); }); });
+});
+</script>
 </body>
 </html>

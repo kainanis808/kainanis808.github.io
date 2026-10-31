@@ -55,7 +55,7 @@
         html { overflow-x: clip; }
         .def { position: relative; border-bottom: 1px dotted #64748b; cursor: help; }
         .def:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }
-        .def::after { content: attr(data-def); position: absolute; left: 0; bottom: calc(100% + 9px);
+        .def::after { content: attr(data-def); content: attr(data-def) / ""; position: absolute; left: 0; bottom: calc(100% + 9px);
             width: 240px; background: #1e293b; color: #f8fafc;
             font: 400 0.8rem/1.5 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-style: normal;
             text-align: left; padding: 9px 12px; border-radius: 7px; box-shadow: 0 8px 24px rgba(15,23,42,0.28);
@@ -65,17 +65,26 @@
             opacity: 0; visibility: hidden; transition: opacity 0.12s ease; z-index: 30; pointer-events: none; }
         .def:hover::after, .def:focus::after, .def:hover::before, .def:focus::before { opacity: 1; visibility: visible; }
         @media (max-width: 540px) { .def::after { width: 66vw; } }
-        .back-link { display: block; text-align: center; margin-top: 28px; color: #0284c7; text-decoration: none; font-size: 0.95rem; }
+        .back-link { display: block; text-align: center; margin-top: 28px; color: #0369a1; text-decoration: none; font-size: 0.95rem; }
         .back-link:hover { text-decoration: underline; }
+        /* --- accessibility helpers --- */
+        .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+            clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+        .skip-link { position: absolute; left: 12px; top: -48px; z-index: 100; background: #1e3a5f; color: #ffffff;
+            padding: 8px 14px; border-radius: 6px; font-weight: 600; text-decoration: none; }
+        .skip-link:focus { top: 12px; outline: 3px solid #93c5fd; outline-offset: 2px; }
+        a:focus-visible, summary:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+        .def.def-dismissed::after, .def.def-dismissed::before { opacity: 0 !important; visibility: hidden !important; }
     </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to main content</a>
 <header>
     <span class="unit-tag">Unit 2 &mdash; Weeks 8&ndash;11</span>
     <h1>Design for Assembly (DFA)</h1>
     <p class="subtitle">Threads, fasteners, and documenting assemblies</p>
 </header>
-<main>
+<main id="main">
     <p class="intro">
         Most products are more than one part. This unit starts with how threads and fasteners are represented and
         called out, then moves to putting part models together into a working assembly, documenting that assembly
@@ -94,9 +103,9 @@
         <h2>Assembly modeling with mates and constraints</h2>
         <p>
             An assembly positions components relative to one another using
-            <span class="term def" tabindex="0" data-def="A geometric relationship placed between two components — coincident, concentric, distance, angle, tangent — that fixes how they sit relative to each other. Each one removes one or more degrees of freedom. Called mates in some CAD systems, constraints in others.">mates</span>
+            <span class="term def" tabindex="0" data-def="A geometric relationship placed between two components — coincident, concentric, distance, angle, tangent — that fixes how they sit relative to each other. Each one removes one or more degrees of freedom. Called mates in some CAD systems, constraints in others.">mates<span class="sr-only"> (definition: A geometric relationship placed between two components — coincident, concentric, distance, angle, tangent — that fixes how they sit relative to each other. Each one removes one or more degrees of freedom. Called mates in some CAD systems, constraints in others.)</span></span>
             (also called constraints). Each mate removes
-            <span class="term def" tabindex="0" data-def="The independent ways a part can still move: three directions of translation plus three axes of rotation — six in total for a free rigid body. Mates remove them one axis at a time.">degrees of freedom</span>
+            <span class="term def" tabindex="0" data-def="The independent ways a part can still move: three directions of translation plus three axes of rotation — six in total for a free rigid body. Mates remove them one axis at a time.">degrees of freedom<span class="sr-only"> (definition: The independent ways a part can still move: three directions of translation plus three axes of rotation — six in total for a free rigid body. Mates remove them one axis at a time.)</span></span>
             until a part is either fully located or deliberately left free to move.
         </p>
         <ul>
@@ -288,7 +297,7 @@
         <table class="fit-table">
             <caption>Common thread and fastener-hole fit callouts</caption>
             <thead>
-                <tr><th>Callout</th><th>System</th><th>What it physically represents</th><th>Typical use</th></tr>
+                <tr><th scope="col">Callout</th><th scope="col">System</th><th scope="col">What it physically represents</th><th scope="col">Typical use</th></tr>
             </thead>
             <tbody>
                 <tr>
@@ -374,7 +383,7 @@
             <li><span class="term">Heat-set threaded inserts:</span> the standard way to put a durable machine thread into a plastic or 3D-printed part. A brass insert is pushed into a molded or printed boss with a soldering iron; the melted plastic flows into its knurls and locks it. Design the boss to the insert manufacturer's hole diameter and depth, add a lead-in chamfer, and keep enough wall around it. Far more reusable than screwing directly into plastic or using self-tapping screws.</li>
             <li><span class="term">Snap-fit joints:</span> a molded or printed feature that deflects during assembly and springs back to hold &mdash; cantilever hooks, annular (ring) snaps, and torsion snaps. No hardware, no tools, fast assembly. Design for the material's allowable strain, add lead-in angles, and decide whether it should be releasable (serviceable) or permanent (higher retention angle).</li>
             <li><span class="term">Press / interference fits:</span> holding by friction alone from a slight size mismatch &mdash; dowel pins, bushings, bearings. Cheap and precise, but hard to take apart and sensitive to tolerance.</li>
-            <li><span class="term def" tabindex="0" data-def="A part that gets its motion or holding force from the material flexing, not from a separate hinge, pin, or spring. Fewer parts (often one), no joints to wear — but limited travel and a fatigue life.">Compliant mechanisms:</span> parts that get their motion or retention from the flexibility of the material itself rather than from separate hinges or springs &mdash; <span class="term def" tabindex="0" data-def="A thin strip of material molded or printed in one piece with the two panels it joins, flexing at that strip to act as the hinge. Needs a fatigue-tolerant material — polypropylene or polyethylene.">living hinges</span>, flexure pivots, and one-piece clips. They reduce part count to the extreme (often to one), remove assembly entirely, and have no pin joints to wear &mdash; at the cost of limited travel and fatigue life, and needing a material that tolerates repeated flexing (PP and PE for living hinges).</li>
+            <li><span class="term def" tabindex="0" data-def="A part that gets its motion or holding force from the material flexing, not from a separate hinge, pin, or spring. Fewer parts (often one), no joints to wear — but limited travel and a fatigue life.">Compliant mechanisms:<span class="sr-only"> (definition: A part that gets its motion or holding force from the material flexing, not from a separate hinge, pin, or spring. Fewer parts (often one), no joints to wear — but limited travel and a fatigue life.)</span></span> parts that get their motion or retention from the flexibility of the material itself rather than from separate hinges or springs &mdash; <span class="term def" tabindex="0" data-def="A thin strip of material molded or printed in one piece with the two panels it joins, flexing at that strip to act as the hinge. Needs a fatigue-tolerant material — polypropylene or polyethylene.">living hinges<span class="sr-only"> (definition: A thin strip of material molded or printed in one piece with the two panels it joins, flexing at that strip to act as the hinge. Needs a fatigue-tolerant material — polypropylene or polyethylene.)</span></span>, flexure pivots, and one-piece clips. They reduce part count to the extreme (often to one), remove assembly entirely, and have no pin joints to wear &mdash; at the cost of limited travel and fatigue life, and needing a material that tolerates repeated flexing (PP and PE for living hinges).</li>
             <li><span class="term">Permanent joints:</span> adhesives, solvent welding, ultrasonic welding, riveting &mdash; used where the joint never needs to come apart. Commit to these only when serviceability truly is not required.</li>
         </ul>
         <figure class="diagram">
@@ -486,5 +495,14 @@
 
     <a class="back-link" href="index.html">&larr; Back to Unit Reference Pages</a>
 </main>
+<script>
+/* Definition tooltips: Escape hides the open tooltip (WCAG 1.4.13); it returns on the next hover or focus. */
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') document.querySelectorAll('.def').forEach(function (d) { d.classList.add('def-dismissed'); });
+});
+document.querySelectorAll('.def').forEach(function (d) {
+    ['mouseleave', 'blur'].forEach(function (ev) { d.addEventListener(ev, function () { d.classList.remove('def-dismissed'); }); });
+});
+</script>
 </body>
 </html>
