@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solidification & Dendrite Growth</title>
     <style>
@@ -19,7 +21,7 @@
             border-bottom: 1px solid #334155;
         }
         h1 { font-size: 2.2rem; color: #f1f5f9; }
-        .subtitle { color: #94a3b8; margin-top: 8px; font-size: 1.05rem; }
+        .subtitle { color: #a3b0c2; margin-top: 8px; font-size: 1.05rem; }
         main { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
 
         .intro {
@@ -28,7 +30,7 @@
             border-radius: 12px;
             padding: 24px;
             margin-bottom: 28px;
-            color: #94a3b8;
+            color: #a3b0c2;
             line-height: 1.7;
             font-size: 0.97rem;
         }
@@ -49,7 +51,7 @@
             margin-bottom: 8px;
         }
         .section > p {
-            color: #94a3b8;
+            color: #a3b0c2;
             line-height: 1.6;
             margin-bottom: 16px;
             font-size: 0.95rem;
@@ -88,7 +90,7 @@
         }
         .ctrl-group .val-display {
             font-size: 0.82rem;
-            color: #94a3b8;
+            color: #a3b0c2;
             margin-top: 2px;
         }
         .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -105,13 +107,13 @@
         button:hover { background: #1e3a5f; }
         button.secondary {
             background: #1e293b;
-            color: #94a3b8;
+            color: #a3b0c2;
             border-color: #334155;
         }
         button.secondary:hover { background: #334155; }
         #sim-status {
             font-size: 0.85rem;
-            color: #94a3b8;
+            color: #a3b0c2;
             background: #1e293b;
             border-radius: 6px;
             padding: 8px 12px;
@@ -137,7 +139,7 @@
         .das-box figcaption {
             margin-top: 6px;
             font-size: 0.82rem;
-            color: #64748b;
+            color: #8593a7;
             font-style: italic;
         }
 
@@ -189,7 +191,7 @@
             padding: 18px;
         }
         .exp-card h3 { font-size: 1rem; color: #7dd3fc; margin-bottom: 8px; }
-        .exp-card p { font-size: 0.88rem; color: #94a3b8; line-height: 1.6; }
+        .exp-card p { font-size: 0.88rem; color: #a3b0c2; line-height: 1.6; }
 
         .formula-box {
             background: #0c2044;
@@ -260,22 +262,22 @@
     </p>
 
     <div id="sim-wrap">
-        <canvas id="dendrite-canvas" width="520" height="440"></canvas>
+        <canvas data-a11y-essential id="dendrite-canvas" width="520" height="440" role="img" aria-label="Live simulation of dendrites growing from nuclei into liquid metal, branching into tree-like crystals until they meet. Cooling rate, nucleation density, and speed are set with the sliders; press Grow to start. Status is given in text below."></canvas>
 
         <div id="sim-controls">
             <div class="ctrl-group">
                 <label>Cooling Rate</label>
-                <input type="range" id="cooling-rate" min="1" max="10" value="4" step="1">
+                <input type="range" id="cooling-rate" min="1" max="10" value="4" step="1" aria-label="Cooling Rate">
                 <div class="val-display" id="cooling-label">Moderate (4 / 10)</div>
             </div>
             <div class="ctrl-group">
                 <label>Nucleation Density</label>
-                <input type="range" id="nuc-density" min="3" max="20" value="8" step="1">
+                <input type="range" id="nuc-density" min="3" max="20" value="8" step="1" aria-label="Nucleation Density">
                 <div class="val-display" id="nuc-label">8 nuclei</div>
             </div>
             <div class="ctrl-group">
                 <label>Animation Speed</label>
-                <input type="range" id="anim-speed" min="1" max="6" value="3" step="1">
+                <input type="range" id="anim-speed" min="1" max="6" value="3" step="1" aria-label="Animation Speed">
                 <div class="val-display" id="speed-label">Normal</div>
             </div>
             <div class="btn-row">
@@ -286,7 +288,7 @@
                 Press <strong>Grow</strong> to start solidification.<br>
                 Watch dendrite arms branch and grains impinge.
             </div>
-            <div style="font-size:0.82rem;color:#6b7280;line-height:1.5;">
+            <div style="font-size:0.82rem;color:#8b919e;line-height:1.5;">
                 <strong>Color:</strong> each color = one grain (one crystallographic orientation).
                 Dark regions between grains = grain boundaries.
             </div>
@@ -311,15 +313,15 @@
 
     <div class="das-row">
         <div class="das-box">
-            <canvas id="das-slow" width="190" height="190"></canvas>
+            <canvas data-a11y-essential id="das-slow" width="190" height="190" role="img" aria-label="Cross-section of a slowly cooled sand casting: coarse dendrites with wide arm spacing, about 500 µm."></canvas>
             <figcaption>Slow cool (sand cast)<br>Coarse DAS ~500 µm</figcaption>
         </div>
         <div class="das-box">
-            <canvas id="das-medium" width="190" height="190"></canvas>
+            <canvas data-a11y-essential id="das-medium" width="190" height="190" role="img" aria-label="Cross-section of a permanent-mold casting at moderate cooling: medium dendrite arm spacing, about 150 µm."></canvas>
             <figcaption>Moderate (permanent mold)<br>DAS ~150 µm</figcaption>
         </div>
         <div class="das-box">
-            <canvas id="das-fast" width="190" height="190"></canvas>
+            <canvas data-a11y-essential id="das-fast" width="190" height="190" role="img" aria-label="Cross-section of a rapidly cooled die casting or quench: very fine dendrites, arm spacing about 30 µm."></canvas>
             <figcaption>Rapid (die cast / quench)<br>Fine DAS ~30 µm</figcaption>
         </div>
     </div>
@@ -337,12 +339,12 @@
     </p>
 
     <div id="grain-canvas-wrap">
-        <canvas id="grain-canvas" width="460" height="380"></canvas>
+        <canvas data-a11y-essential id="grain-canvas" width="460" height="380" role="img" aria-label="Grain structure development as solidification progresses (set with the slider): liquid metal, a mushy zone of solid plus liquid, grain interiors, and grain boundaries where the last liquid freezes. Percent solid is given in text."></canvas>
 
         <div id="grain-controls">
             <div class="ctrl-group">
                 <label>Solidification Progress</label>
-                <input type="range" id="solid-progress" min="0" max="100" value="0" step="1">
+                <input type="range" id="solid-progress" min="0" max="100" value="0" step="1" aria-label="Solidification Progress">
                 <div class="val-display" id="progress-label">0% solid — all liquid</div>
             </div>
 
@@ -365,7 +367,7 @@
                 </div>
             </div>
 
-            <div style="font-size:0.83rem;color:#4b5563;line-height:1.6;margin-top:4px;">
+            <div style="font-size:0.83rem;color:#8592a3;line-height:1.6;margin-top:4px;">
                 Notice how grains stop growing when they touch a neighbor.
                 The last liquid to freeze sits at triple junctions and grain boundaries —
                 this is where porosity and hot tearing tend to form.

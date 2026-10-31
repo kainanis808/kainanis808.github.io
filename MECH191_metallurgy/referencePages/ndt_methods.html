@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NDT Methods — Physics, Techniques &amp; Limitations</title>
     <style>
@@ -36,7 +38,7 @@
         .section-label { font-weight: 700; color: #1e3a5f; font-size: 0.93rem; margin: 16px 0 6px; }
 
         .method-accent { border-left: 5px solid var(--accent); padding-left: 19px; }
-        .vt-section  { --accent: #0284c7; }
+        .vt-section  { --accent: #027ab8; }
         .rt-section  { --accent: #7c3aed; }
         .ut-section  { --accent: #0891b2; }
         .mt-section  { --accent: #b45309; }
@@ -239,7 +241,7 @@
 
         .back-link {
             display: block; text-align: center; margin-top: 30px;
-            color: #0284c7; text-decoration: none; font-size: 0.95rem;
+            color: #027ab8; text-decoration: none; font-size: 0.95rem;
         }
         .back-link:hover { text-decoration: underline; }
 
@@ -270,7 +272,7 @@
             border-bottom: 1px solid #e2e8f0;
         }
         .case-header .case-title { font-weight: 700; color: #1e3a5f; font-size: 1rem; }
-        .case-header .case-industry { font-size: 0.8rem; color: #64748b; margin-top: 2px; }
+        .case-header .case-industry { font-size: 0.8rem; color: #606f85; margin-top: 2px; }
         .case-body {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -344,6 +346,7 @@
         }
         .lesson-banner strong { color: #1e3a5f; }
     </style>
+<style id="contrast-fixes">/* WCAG 1.4.3 contrast fixes */ .cd-label{color:#5b6b82 !important}</style>
 </head>
 <body>
 <header>
@@ -406,20 +409,20 @@
                     <!-- Viewing ray -->
                     <line x1="285" y1="47" x2="195" y2="110" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="4,3"/>
                     <!-- Weld surface -->
-                    <rect x="80" y="110" width="200" height="30" fill="#94a3b8" rx="2"/>
-                    <text x="180" y="130" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">WELD SURFACE</text>
+                    <rect x="80" y="110" width="200" height="30" fill="#94a3b8" rx="2" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                    <text x="180" y="130" text-anchor="middle" font-size="9" fill="#363636" font-weight="700">WELD SURFACE</text>
                     <!-- Undercut indicator -->
                     <path d="M155,110 Q160,118 165,110" stroke="#dc2626" stroke-width="2" fill="none"/>
                     <text x="155" y="107" font-size="8" fill="#dc2626" font-weight="700">Undercut</text>
                     <!-- Base metal -->
-                    <rect x="80" y="140" width="90" height="20" fill="#cbd5e1" rx="2"/>
-                    <rect x="210" y="140" width="70" height="20" fill="#cbd5e1" rx="2"/>
+                    <rect x="80" y="140" width="90" height="20" fill="#cbd5e1" rx="2" stroke="#748eaf" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                    <rect x="210" y="140" width="70" height="20" fill="#cbd5e1" rx="2" stroke="#748eaf" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <!-- Dimension arrows -->
                     <line x1="300" y1="50" x2="300" y2="108" stroke="#9ca3af" stroke-width="1" marker-end="url(#arr)"/>
                     <text x="312" y="85" font-size="8" fill="#6b7280">&le;600mm</text>
                     <!-- Angle indicator -->
                     <path d="M260,110 A40,40 0 0,0 285,75" stroke="#0284c7" stroke-width="1.2" fill="none"/>
-                    <text x="255" y="90" font-size="8" fill="#0284c7">&ge;30°</text>
+                    <text x="255" y="90" font-size="8" fill="#0277b3">&ge;30°</text>
                     <defs>
                         <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
                             <path d="M0,0 L6,3 L0,6 Z" fill="#9ca3af"/>
@@ -495,14 +498,14 @@
                     <!-- Central beam ray -->
                     <line x1="170" y1="35" x2="170" y2="145" stroke="#7c3aed" stroke-width="1.5"/>
                     <!-- Steel plate -->
-                    <rect x="60" y="80" width="220" height="60" fill="#94a3b8" rx="3"/>
-                    <text x="170" y="95" text-anchor="middle" font-size="8.5" fill="#fff" font-weight="700">STEEL WELD SECTION</text>
+                    <rect x="60" y="80" width="220" height="60" fill="#94a3b8" rx="3" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                    <text x="170" y="95" text-anchor="middle" font-size="8.5" fill="#363636" font-weight="700">STEEL WELD SECTION</text>
                     <!-- Void (porosity) -->
-                    <ellipse cx="140" cy="112" rx="12" ry="9" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+                    <ellipse cx="140" cy="112" rx="12" ry="9" fill="#e2e8f0" stroke="#3f4d5f" stroke-width="1"/>
                     <text x="140" y="116" text-anchor="middle" font-size="7" fill="#374151">void</text>
                     <!-- Slag inclusion (irregular) -->
-                    <ellipse cx="205" cy="112" rx="14" ry="7" fill="#78716c" stroke="#57534e" stroke-width="1"/>
-                    <text x="205" y="116" text-anchor="middle" font-size="7" fill="#e2e8f0">slag</text>
+                    <ellipse cx="205" cy="112" rx="14" ry="7" fill="#78716c" stroke="#4f4b47" stroke-width="1"/>
+                    <text x="205" y="116" text-anchor="middle" font-size="7" fill="#fafbfc">slag</text>
                     <!-- Dimension: OFD -->
                     <line x1="290" y1="140" x2="290" y2="200" stroke="#9ca3af" stroke-width="1"/>
                     <line x1="285" y1="140" x2="295" y2="140" stroke="#9ca3af" stroke-width="1"/>
@@ -518,8 +521,8 @@
                     <text x="90" y="222" text-anchor="middle" font-size="7.5" fill="#374151">normal density</text>
                     <text x="170" y="195" text-anchor="middle" font-size="7" fill="#6b7280" font-style="italic">FILM / DETECTOR</text>
                     <!-- IQI indicator -->
-                    <rect x="68" y="82" width="18" height="8" fill="#fbbf24" stroke="#d97706" stroke-width="1"/>
-                    <text x="77" y="89" text-anchor="middle" font-size="6.5" fill="#92400e" font-weight="700">IQI</text>
+                    <rect x="68" y="82" width="18" height="8" fill="#fbbf24" stroke="#713e03" stroke-width="1"/>
+                    <text x="77" y="89" text-anchor="middle" font-size="6.5" fill="#843a0d" font-weight="700">IQI</text>
                 </svg>
                 <figcaption>Beer-Lambert attenuation: voids transmit more radiation (darker film); high-density slag also appears darker. The IQI (source-side) verifies minimum 2% sensitivity. OFD should be minimized to reduce U<sub>g</sub>.</figcaption>
             </div>
@@ -615,48 +618,48 @@ U<sub>g</sub> = 4.0 &times; 25 / 125 = <span class="ex-fail">0.80 mm (0.031&Prim
             <div class="diagram-wrap">
                 <svg viewBox="0 0 360 260" width="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Angle beam UT geometry diagram">
                     <!-- Steel plate -->
-                    <rect x="30" y="80" width="300" height="90" fill="#94a3b8" rx="3"/>
+                    <rect x="30" y="80" width="300" height="90" fill="#94a3b8" rx="3" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <!-- Weld centerline -->
                     <line x1="180" y1="80" x2="180" y2="170" stroke="#64748b" stroke-width="1" stroke-dasharray="4,3"/>
                     <!-- Weld outline (trapezoid) -->
                     <polygon points="155,80 205,80 215,100 145,100" fill="#7f8ea0" stroke="#64748b" stroke-width="1"/>
                     <!-- Probe body -->
                     <rect x="30" y="55" width="55" height="28" fill="#0891b2" rx="4"/>
-                    <text x="57" y="74" text-anchor="middle" font-size="8.5" fill="#fff" font-weight="700">PROBE</text>
+                    <text x="57" y="74" text-anchor="middle" font-size="8.5" fill="#191919" font-weight="700">PROBE</text>
                     <!-- Wedge -->
-                    <polygon points="30,83 85,83 75,83" fill="#0284c7"/>
-                    <polygon points="30,83 85,83 30,72" fill="#0891b2" opacity="0.5"/>
+                    <polygon points="30,83 85,83 75,83" fill="#0284c7" stroke="#01527b" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                    <polygon points="30,83 85,83 30,72" fill="#0891b2" opacity="0.5" stroke="#0891b2" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <!-- θ label on wedge -->
                     <path d="M45,83 A15,15 0 0,0 42,70" stroke="#fff" stroke-width="1" fill="none"/>
-                    <text x="52" y="79" font-size="7.5" fill="#fff">&theta;</text>
+                    <text x="52" y="79" font-size="7.5" fill="#191919">&theta;</text>
                     <!-- Sound beam (angled) -->
                     <line x1="70" y1="83" x2="155" y2="150" stroke="#06b6d4" stroke-width="2"/>
                     <!-- Reflected beam back to probe -->
                     <line x1="155" y1="150" x2="70" y2="83" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.6"/>
                     <!-- Skip beam path (alternate half-skip) -->
-                    <line x1="155" y1="150" x2="200" y2="170" stroke="#0891b2" stroke-width="1.5" opacity="0.4"/>
-                    <line x1="200" y1="170" x2="238" y2="118" stroke="#0891b2" stroke-width="1.5" opacity="0.4" stroke-dasharray="4,3"/>
+                    <line x1="155" y1="150" x2="200" y2="170" stroke="#045164" stroke-width="1.5" opacity="0.4" stroke-opacity="1"/>
+                    <line x1="200" y1="170" x2="238" y2="118" stroke="#045164" stroke-width="1.5" opacity="0.4" stroke-dasharray="4,3" stroke-opacity="1"/>
                     <!-- Defect (LOF at fusion line) -->
                     <line x1="152" y1="100" x2="158" y2="155" stroke="#dc2626" stroke-width="3"/>
-                    <text x="165" y="130" font-size="8" fill="#dc2626" font-weight="700">LOF</text>
+                    <text x="165" y="130" font-size="8" fill="#6c1111" font-weight="700">LOF</text>
                     <!-- Depth label -->
                     <line x1="270" y1="83" x2="270" y2="150" stroke="#9ca3af" stroke-width="1"/>
                     <line x1="265" y1="83" x2="275" y2="83" stroke="#9ca3af" stroke-width="1"/>
                     <line x1="265" y1="150" x2="275" y2="150" stroke="#9ca3af" stroke-width="1"/>
-                    <text x="283" y="122" font-size="8" fill="#374151">depth d</text>
+                    <text x="283" y="122" font-size="8" fill="#2d3542">depth d</text>
                     <!-- Surface distance label -->
                     <line x1="70" y1="173" x2="155" y2="173" stroke="#9ca3af" stroke-width="1"/>
                     <line x1="70" y1="169" x2="70" y2="177" stroke="#9ca3af" stroke-width="1"/>
                     <line x1="155" y1="169" x2="155" y2="177" stroke="#9ca3af" stroke-width="1"/>
                     <text x="112" y="185" text-anchor="middle" font-size="8" fill="#374151">surface dist s</text>
                     <!-- Slant path label -->
-                    <text x="95" y="125" font-size="8" fill="#0891b2" transform="rotate(-33,95,125)">slant path L</text>
+                    <text x="95" y="125" font-size="8" fill="#033a47" transform="rotate(-33,95,125)">slant path L</text>
                     <!-- A-scan display -->
                     <rect x="280" y="10" width="65" height="55" fill="#0a0a0a" rx="4"/>
                     <text x="312" y="23" text-anchor="middle" font-size="7" fill="#94a3b8">A-scan</text>
                     <polyline points="285,50 295,50 300,50 305,45 310,58 315,50 325,50 330,32 335,50 340,50 342,50" stroke="#22d3ee" stroke-width="1.5" fill="none"/>
                     <text x="330" y="44" font-size="6.5" fill="#f59e0b">echo</text>
-                    <text x="295" y="63" font-size="6.5" fill="#6b7280">t (time)</text>
+                    <text x="295" y="63" font-size="6.5" fill="#727988">t (time)</text>
                 </svg>
                 <figcaption>Angle beam UT: shear waves travel at angle &theta; through the weld, reflecting from the fusion-line LOF back to the probe. The A-scan echo time gives depth and surface distance via the geometry equations above.</figcaption>
             </div>
@@ -734,32 +737,32 @@ Surface dist: s = L &times; sin(70°) = 29.9 &times; 0.940 = <span class="ex-res
             <div class="diagram-wrap">
                 <svg viewBox="0 0 360 200" width="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Magnetic flux leakage diagram">
                     <!-- Steel bar -->
-                    <rect x="30" y="70" width="300" height="70" fill="#94a3b8" rx="4"/>
-                    <text x="180" y="112" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">FERROMAGNETIC STEEL</text>
+                    <rect x="30" y="70" width="300" height="70" fill="#94a3b8" rx="4" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                    <text x="180" y="112" text-anchor="middle" font-size="9" fill="#363636" font-weight="700">FERROMAGNETIC STEEL</text>
                     <!-- Magnetic field lines inside bar (left region) -->
-                    <path d="M50,105 Q80,95 110,105" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.7"/>
-                    <path d="M50,115 Q80,107 110,115" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.7"/>
-                    <path d="M50,125 Q80,118 110,125" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.5"/>
+                    <path d="M50,105 Q80,95 110,105" stroke="#0845aa" stroke-width="1.5" fill="none" opacity="0.7" stroke-opacity="1"/>
+                    <path d="M50,115 Q80,107 110,115" stroke="#0845aa" stroke-width="1.5" fill="none" opacity="0.7" stroke-opacity="1"/>
+                    <path d="M50,125 Q80,118 110,125" stroke="#0845aa" stroke-width="1.5" fill="none" opacity="0.5" stroke-opacity="1"/>
                     <!-- Surface crack -->
-                    <path d="M155,70 L158,95 L162,120 L160,140" stroke="#dc2626" stroke-width="3" fill="none"/>
+                    <path d="M155,70 L158,95 L162,120 L160,140" stroke="#981818" stroke-width="3" fill="none"/>
                     <text x="155" y="65" font-size="9" fill="#dc2626" font-weight="700">surface crack</text>
                     <!-- Flux leakage above crack -->
                     <path d="M148,72 Q135,45 155,40 Q175,35 168,72" stroke="#3b82f6" stroke-width="1.8" fill="none" stroke-dasharray="3,2"/>
-                    <path d="M152,72 Q140,55 155,50 Q170,46 163,72" stroke="#3b82f6" stroke-width="1.5" fill="none" stroke-dasharray="3,2" opacity="0.7"/>
-                    <text x="155" y="32" text-anchor="middle" font-size="8" fill="#3b82f6">flux leakage</text>
+                    <path d="M152,72 Q140,55 155,50 Q170,46 163,72" stroke="#3b82f6" stroke-width="1.5" fill="none" stroke-dasharray="3,2" opacity="0.7" stroke-opacity="1"/>
+                    <text x="155" y="32" text-anchor="middle" font-size="8" fill="#1469f4">flux leakage</text>
                     <!-- Magnetic particles accumulating -->
                     <ellipse cx="155" cy="72" rx="12" ry="4" fill="#78350f" opacity="0.8"/>
-                    <text x="155" y="83" text-anchor="middle" font-size="7.5" fill="#92400e">MT indication</text>
+                    <text x="155" y="83" text-anchor="middle" font-size="7.5" fill="#5a2809">MT indication</text>
                     <!-- Field lines right of crack (continuing through steel) -->
-                    <path d="M175,105 Q210,97 240,105" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.7"/>
-                    <path d="M175,115 Q210,108 240,115" stroke="#3b82f6" stroke-width="1.5" fill="none" opacity="0.7"/>
+                    <path d="M175,105 Q210,97 240,105" stroke="#0845aa" stroke-width="1.5" fill="none" opacity="0.7" stroke-opacity="1"/>
+                    <path d="M175,115 Q210,108 240,115" stroke="#0845aa" stroke-width="1.5" fill="none" opacity="0.7" stroke-opacity="1"/>
                     <!-- Applied field direction arrow -->
                     <line x1="30" y1="155" x2="325" y2="155" stroke="#1d4ed8" stroke-width="2" marker-end="url(#blue-arr)"/>
                     <text x="180" y="170" text-anchor="middle" font-size="8.5" fill="#1d4ed8" font-weight="700">Applied magnetic field H (longitudinal — detects transverse cracks)</text>
                     <!-- Subsurface indication (dashed) -->
                     <path d="M230,90 L232,110" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3,2"/>
-                    <text x="245" y="105" font-size="7.5" fill="#d97706">sub-surface</text>
-                    <text x="245" y="114" font-size="7.5" fill="#d97706">crack (weaker)</text>
+                    <text x="245" y="105" font-size="7.5" fill="#4e2b02">sub-surface</text>
+                    <text x="245" y="114" font-size="7.5" fill="#4e2b02">crack (weaker)</text>
                     <defs>
                         <marker id="blue-arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
                             <path d="M0,0 L6,3 L0,6 Z" fill="#1d4ed8"/>
@@ -845,34 +848,34 @@ Move yoke in 20% overlapping passes; effective field zone extends ~25–50 mm fr
                     <text x="295" y="12" font-size="8.5" fill="#374151" font-weight="700">4. Indication</text>
 
                     <!-- Step 1: surface flooded with penetrant -->
-                    <rect x="5" y="55" width="80" height="25" fill="#94a3b8" rx="2"/>
+                    <rect x="5" y="55" width="80" height="25" fill="#94a3b8" rx="2" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <path d="M35,55 L38,70" stroke="#9f1239" stroke-width="2.5"/>
-                    <rect x="5" y="30" width="80" height="28" fill="#fca5a5" rx="2" opacity="0.6"/>
+                    <rect x="5" y="30" width="80" height="28" fill="#fca5a5" rx="2" opacity="0.6" stroke="#f95151" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <text x="45" y="44" text-anchor="middle" font-size="7.5" fill="#9f1239">red penetrant on surface</text>
-                    <text x="45" y="88" text-anchor="middle" font-size="7" fill="#fff">metal surface</text>
+                    <text x="45" y="88" text-anchor="middle" font-size="7" fill="#737373">metal surface</text>
 
                     <!-- Step 2: excess removed, penetrant in crack -->
-                    <rect x="100" y="55" width="80" height="25" fill="#94a3b8" rx="2"/>
+                    <rect x="100" y="55" width="80" height="25" fill="#94a3b8" rx="2" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <path d="M130,55 L133,75" stroke="#9f1239" stroke-width="2.5"/>
                     <rect x="100" y="30" width="80" height="26" fill="#f1f5f9" rx="2" opacity="0.9"/>
                     <text x="140" y="44" text-anchor="middle" font-size="7.5" fill="#374151">excess removed (cleaned)</text>
-                    <text x="140" y="88" text-anchor="middle" font-size="7" fill="#fff">penetrant trapped in crack</text>
+                    <text x="140" y="88" text-anchor="middle" font-size="7" fill="#737373">penetrant trapped in crack</text>
 
                     <!-- Step 3: developer applied -->
-                    <rect x="210" y="55" width="80" height="25" fill="#94a3b8" rx="2"/>
+                    <rect x="210" y="55" width="80" height="25" fill="#94a3b8" rx="2" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <path d="M240,55 L243,75" stroke="#9f1239" stroke-width="2.5"/>
-                    <rect x="210" y="30" width="80" height="26" fill="#f8fafc" rx="2" stroke="#e2e8f0" stroke-width="1"/>
+                    <rect x="210" y="30" width="80" height="26" fill="#f8fafc" rx="2" stroke="#708db5" stroke-width="1"/>
                     <text x="250" y="42" text-anchor="middle" font-size="7.5" fill="#374151">white developer</text>
                     <text x="250" y="51" text-anchor="middle" font-size="7.5" fill="#374151">coat applied</text>
-                    <text x="250" y="88" text-anchor="middle" font-size="7" fill="#fff">developer draws penetrant out</text>
+                    <text x="250" y="88" text-anchor="middle" font-size="7" fill="#737373">developer draws penetrant out</text>
 
                     <!-- Step 4: indication visible -->
-                    <rect x="295" y="55" width="60" height="25" fill="#94a3b8" rx="2"/>
+                    <rect x="295" y="55" width="60" height="25" fill="#94a3b8" rx="2" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <path d="M320,55 L323,75" stroke="#9f1239" stroke-width="2.5"/>
-                    <rect x="295" y="30" width="60" height="26" fill="#f8fafc" rx="2" stroke="#e2e8f0" stroke-width="1"/>
+                    <rect x="295" y="30" width="60" height="26" fill="#f8fafc" rx="2" stroke="#708db5" stroke-width="1"/>
                     <ellipse cx="325" cy="40" rx="12" ry="5" fill="#dc2626" opacity="0.85"/>
-                    <text x="325" y="44" text-anchor="middle" font-size="6.5" fill="#fff" font-weight="700">indication</text>
-                    <text x="325" y="88" text-anchor="middle" font-size="7" fill="#fff">indication wider than crack</text>
+                    <text x="325" y="44" text-anchor="middle" font-size="6.5" fill="#0f0f0f" font-weight="700">indication</text>
+                    <text x="325" y="88" text-anchor="middle" font-size="7" fill="#737373">indication wider than crack</text>
 
                     <!-- Arrows between steps -->
                     <text x="88" y="45" font-size="14" fill="#6b7280">&rarr;</text>
@@ -885,12 +888,12 @@ Move yoke in 20% overlapping passes; effective field zone extends ~25–50 mm fr
                     <text x="10" y="150" font-size="7.5" fill="#9f1239">Narrower crack &rarr; deeper fill</text>
 
                     <!-- Crack detail -->
-                    <path d="M130,55 Q131,63 133,72 Q134,78 133,80" stroke="#6b7280" stroke-width="1.5" fill="none"/>
+                    <path d="M130,55 Q131,63 133,72 Q134,78 133,80" stroke="#ffffff" stroke-width="1.5" fill="none"/>
                     <text x="108" y="110" font-size="7" fill="#374151">crack width d</text>
                     <line x1="130" y1="104" x2="133" y2="76" stroke="#9ca3af" stroke-width="0.8" stroke-dasharray="2,2"/>
 
                     <!-- Dwell time note -->
-                    <rect x="5" y="160" width="350" height="40" fill="#fae8ff" rx="6" stroke="#d946ef" stroke-width="0.8"/>
+                    <rect x="5" y="160" width="350" height="40" fill="#fae8ff" rx="6" stroke="#d84aff" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <text x="180" y="175" text-anchor="middle" font-size="8.5" fill="#701a75" font-weight="700">Temperature &amp; Dwell Time Requirements (ASME Section V Article 6)</text>
                     <text x="180" y="190" text-anchor="middle" font-size="8" fill="#374151">Standard range: 50–125°F (10–52°C). Below 50°F: increase dwell 1.5&times; or use low-temp penetrant. Minimum dwell: 5 min (metals). Developer contact: 7–60 min.</text>
                 </svg>
@@ -977,37 +980,37 @@ Option C &mdash; Abandon PT, use MT or UT instead:
                     <!-- Coil -->
                     <ellipse cx="140" cy="40" rx="35" ry="18" fill="none" stroke="#065f46" stroke-width="3"/>
                     <ellipse cx="140" cy="45" rx="35" ry="18" fill="none" stroke="#059669" stroke-width="2"/>
-                    <ellipse cx="140" cy="50" rx="35" ry="18" fill="none" stroke="#10b981" stroke-width="1.5"/>
-                    <text x="140" y="44" text-anchor="middle" font-size="8.5" fill="#059669" font-weight="700">AC COIL</text>
+                    <ellipse cx="140" cy="50" rx="35" ry="18" fill="none" stroke="#0ea271" stroke-width="1.5"/>
+                    <text x="140" y="44" text-anchor="middle" font-size="8.5" fill="#04825b" font-weight="700">AC COIL</text>
                     <text x="140" y="55" text-anchor="middle" font-size="7.5" fill="#374151">alternating current</text>
                     <!-- Primary field lines -->
-                    <path d="M110,50 Q90,70 95,90 Q100,115 110,120" stroke="#6ee7b7" stroke-width="1.5" fill="none" stroke-dasharray="4,2"/>
-                    <path d="M170,50 Q190,70 185,90 Q180,115 170,120" stroke="#6ee7b7" stroke-width="1.5" fill="none" stroke-dasharray="4,2"/>
-                    <text x="65" y="85" font-size="7.5" fill="#059669">primary</text>
-                    <text x="65" y="94" font-size="7.5" fill="#059669">B-field</text>
+                    <path d="M110,50 Q90,70 95,90 Q100,115 110,120" stroke="#1ba16c" stroke-width="1.5" fill="none" stroke-dasharray="4,2"/>
+                    <path d="M170,50 Q190,70 185,90 Q180,115 170,120" stroke="#1ba16c" stroke-width="1.5" fill="none" stroke-dasharray="4,2"/>
+                    <text x="65" y="85" font-size="7.5" fill="#04825b">primary</text>
+                    <text x="65" y="94" font-size="7.5" fill="#04825b">B-field</text>
                     <!-- Conductive material -->
-                    <rect x="60" y="120" width="240" height="70" fill="#94a3b8" rx="3"/>
-                    <text x="220" y="145" text-anchor="middle" font-size="8.5" fill="#fff" font-weight="700">CONDUCTIVE MATERIAL</text>
+                    <rect x="60" y="120" width="240" height="70" fill="#94a3b8" rx="3" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                    <text x="220" y="145" text-anchor="middle" font-size="8.5" fill="#363636" font-weight="700">CONDUCTIVE MATERIAL</text>
                     <!-- Eddy current loops -->
-                    <ellipse cx="140" cy="138" rx="28" ry="10" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                    <ellipse cx="140" cy="150" rx="22" ry="8" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.7"/>
-                    <ellipse cx="140" cy="160" rx="16" ry="6" fill="none" stroke="#f59e0b" stroke-width="1" opacity="0.5"/>
-                    <text x="105" y="136" font-size="7.5" fill="#f59e0b">eddy</text>
-                    <text x="105" y="145" font-size="7.5" fill="#f59e0b">currents</text>
+                    <ellipse cx="140" cy="138" rx="28" ry="10" fill="none" stroke="#684304" stroke-width="2"/>
+                    <ellipse cx="140" cy="150" rx="22" ry="8" fill="none" stroke="#684304" stroke-width="1.5" opacity="0.7" stroke-opacity="1"/>
+                    <ellipse cx="140" cy="160" rx="16" ry="6" fill="none" stroke="#684304" stroke-width="1" opacity="0.5" stroke-opacity="1"/>
+                    <text x="105" y="136" font-size="7.5" fill="#4a3003">eddy</text>
+                    <text x="105" y="145" font-size="7.5" fill="#4a3003">currents</text>
                     <!-- Crack disturbing eddy currents -->
                     <line x1="225" y1="120" x2="228" y2="150" stroke="#dc2626" stroke-width="3"/>
-                    <text x="235" y="135" font-size="8" fill="#dc2626" font-weight="700">crack</text>
+                    <text x="235" y="135" font-size="8" fill="#6c1111" font-weight="700">crack</text>
                     <!-- Eddy current distortion near crack -->
-                    <path d="M200,138 Q215,130 222,122" stroke="#f59e0b" stroke-width="1.5" fill="none" stroke-dasharray="3,2" opacity="0.8"/>
-                    <path d="M200,148 Q214,140 222,130" stroke="#f59e0b" stroke-width="1.5" fill="none" stroke-dasharray="3,2" opacity="0.6"/>
-                    <text x="235" y="165" font-size="7.5" fill="#f59e0b">distorted pattern</text>
+                    <path d="M200,138 Q215,130 222,122" stroke="#684304" stroke-width="1.5" fill="none" stroke-dasharray="3,2" opacity="0.8" stroke-opacity="1"/>
+                    <path d="M200,148 Q214,140 222,130" stroke="#684304" stroke-width="1.5" fill="none" stroke-dasharray="3,2" opacity="0.6" stroke-opacity="1"/>
+                    <text x="235" y="165" font-size="7.5" fill="#4a3003">distorted pattern</text>
                     <!-- Skin depth arrow -->
                     <line x1="30" y1="120" x2="30" y2="175" stroke="#6ee7b7" stroke-width="2"/>
                     <line x1="27" y1="120" x2="33" y2="120" stroke="#6ee7b7" stroke-width="1.5"/>
                     <line x1="27" y1="175" x2="33" y2="175" stroke="#6ee7b7" stroke-width="1.5"/>
-                    <text x="5" y="152" font-size="7" fill="#059669" font-weight="700">skin</text>
-                    <text x="5" y="161" font-size="7" fill="#059669" font-weight="700">depth</text>
-                    <text x="5" y="170" font-size="7" fill="#059669">&delta;</text>
+                    <text x="5" y="152" font-size="7" fill="#04825b" font-weight="700">skin</text>
+                    <text x="5" y="161" font-size="7" fill="#04825b" font-weight="700">depth</text>
+                    <text x="5" y="170" font-size="7" fill="#04825b">&delta;</text>
                     <!-- Impedance meter -->
                     <rect x="280" y="25" width="70" height="50" fill="#0a0a0a" rx="5"/>
                     <text x="315" y="40" text-anchor="middle" font-size="7" fill="#94a3b8">Impedance</text>
@@ -1075,16 +1078,16 @@ Conclusion:
         <p>Use this table to select the appropriate NDT method(s) for a given inspection scenario.
         No single method covers all defect types and materials — most code-required inspections specify
         multiple complementary methods.</p>
-        <table>
+        <table><caption class="sr-only">Method Comparison &amp; Selection Guide</caption>
             <thead>
                 <tr>
-                    <th>Criterion</th>
-                    <th><span style="color:#7dd3fc;">VT</span></th>
-                    <th><span style="color:#c4b5fd;">RT</span></th>
-                    <th><span style="color:#67e8f9;">UT</span></th>
-                    <th><span style="color:#fde68a;">MT</span></th>
-                    <th><span style="color:#f0abfc;">PT</span></th>
-                    <th><span style="color:#6ee7b7;">ET</span></th>
+                    <th scope="col">Criterion</th>
+                    <th scope="col"><span style="color:#7dd3fc;">VT</span></th>
+                    <th scope="col"><span style="color:#c4b5fd;">RT</span></th>
+                    <th scope="col"><span style="color:#67e8f9;">UT</span></th>
+                    <th scope="col"><span style="color:#fde68a;">MT</span></th>
+                    <th scope="col"><span style="color:#f0abfc;">PT</span></th>
+                    <th scope="col"><span style="color:#6ee7b7;">ET</span></th>
                 </tr>
             </thead>
             <tbody>
@@ -1100,20 +1103,20 @@ Conclusion:
                 <tr>
                     <td>Planar cracks (LOF, HAC)</td>
                     <td class="code" style="color:#15803d;">Good (surface)</td>
-                    <td class="code" style="color:#d97706;">Poor–Fair</td>
+                    <td class="code" style="color:#a75c05;">Poor–Fair</td>
                     <td class="code" style="color:#15803d;">Excellent</td>
                     <td class="code" style="color:#15803d;">Excellent (surface)</td>
                     <td class="code" style="color:#15803d;">Excellent (surface)</td>
-                    <td class="code" style="color:#d97706;">Fair (surface)</td>
+                    <td class="code" style="color:#a75c05;">Fair (surface)</td>
                 </tr>
                 <tr>
                     <td>Volumetric defects (porosity, slag)</td>
-                    <td class="code" style="color:#d97706;">Fair (surface pores only)</td>
+                    <td class="code" style="color:#a75c05;">Fair (surface pores only)</td>
                     <td class="code" style="color:#15803d;">Excellent</td>
-                    <td class="code" style="color:#d97706;">Fair</td>
-                    <td class="code" style="color:#9ca3af;">Poor</td>
-                    <td class="code" style="color:#d97706;">Fair (surface pores)</td>
-                    <td class="code" style="color:#9ca3af;">Poor</td>
+                    <td class="code" style="color:#a75c05;">Fair</td>
+                    <td class="code" style="color:#697281;">Poor</td>
+                    <td class="code" style="color:#a75c05;">Fair (surface pores)</td>
+                    <td class="code" style="color:#697281;">Poor</td>
                 </tr>
                 <tr>
                     <td>Requires access to both sides</td>
@@ -1234,43 +1237,43 @@ Conclusion:
                         <!-- Film base — very dark background -->
                         <rect width="320" height="170" fill="#111"/>
                         <!-- Weld region — slightly lighter band running horizontally -->
-                        <rect x="0" y="55" width="320" height="60" fill="#2a2a2a" rx="0"/>
+                        <rect x="0" y="55" width="320" height="60" fill="#2a2a2a" rx="0" stroke="#626262" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Weld cap width tapers at edges — trapezoid-ish gradient effect with overlay rects -->
                         <rect x="0" y="55" width="320" height="8" fill="#1a1a1a" opacity="0.5"/>
                         <rect x="0" y="107" width="320" height="8" fill="#1a1a1a" opacity="0.5"/>
                         <!-- Heat affected zone — slight density line at weld toes -->
-                        <line x1="0" y1="57" x2="320" y2="57" stroke="#383838" stroke-width="1.2"/>
-                        <line x1="0" y1="113" x2="320" y2="113" stroke="#383838" stroke-width="1.2"/>
+                        <line x1="0" y1="57" x2="320" y2="57" stroke="#707070" stroke-width="1.2"/>
+                        <line x1="0" y1="113" x2="320" y2="113" stroke="#707070" stroke-width="1.2"/>
                         <!-- IQI wires on left side — fine lines of increasing thickness -->
-                        <rect x="14" y="60" width="0.8" height="50" fill="#555"/>
-                        <rect x="17" y="60" width="1.1" height="50" fill="#555"/>
-                        <rect x="21" y="60" width="1.4" height="50" fill="#555"/>
-                        <rect x="26" y="60" width="1.8" height="50" fill="#555"/>
-                        <rect x="32" y="60" width="2.2" height="50" fill="#555"/>
-                        <text x="22" y="125" text-anchor="middle" font-size="7" fill="#666" font-family="monospace">IQI 10</text>
+                        <rect x="14" y="60" width="0.8" height="50" fill="#555" stroke="#7e7e7e" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <rect x="17" y="60" width="1.1" height="50" fill="#555" stroke="#7e7e7e" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <rect x="21" y="60" width="1.4" height="50" fill="#555" stroke="#6e6e6e" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <rect x="26" y="60" width="1.8" height="50" fill="#555" stroke="#7e7e7e" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <rect x="32" y="60" width="2.2" height="50" fill="#555" stroke="#6e6e6e" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <text x="22" y="125" text-anchor="middle" font-size="7" fill="#a3a3a3" font-family="monospace">IQI 10</text>
                         <!-- Weld crown outline — slightly brighter because more material = less radiation -->
-                        <rect x="0" y="63" width="320" height="44" fill="#333" rx="0"/>
+                        <rect x="0" y="63" width="320" height="44" fill="#333" rx="0" stroke="#616161" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Weld bead ripples — subtle lighter horizontal streaks -->
                         <rect x="50" y="68" width="60" height="3" fill="#3a3a3a" opacity="0.6" rx="1"/>
                         <rect x="130" y="66" width="80" height="3" fill="#3a3a3a" opacity="0.6" rx="1"/>
                         <rect x="220" y="69" width="70" height="3" fill="#3a3a3a" opacity="0.6" rx="1"/>
                         <!-- Root region — slightly different shade -->
-                        <rect x="0" y="95" width="320" height="12" fill="#2c2c2c" rx="0"/>
+                        <rect x="0" y="95" width="320" height="12" fill="#2c2c2c" rx="0" stroke="#626262" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- CLUSTER POROSITY — group of dark spots (more radiation through voids) -->
-                        <ellipse cx="110" cy="80" rx="5" ry="4" fill="#060606"/>
-                        <ellipse cx="120" cy="76" rx="4" ry="3" fill="#050505"/>
-                        <ellipse cx="128" cy="82" rx="6" ry="5" fill="#050505"/>
-                        <ellipse cx="138" cy="77" rx="4" ry="3" fill="#060606"/>
-                        <ellipse cx="122" cy="86" rx="3" ry="2.5" fill="#070707"/>
-                        <ellipse cx="133" cy="88" rx="5" ry="4" fill="#060606"/>
-                        <ellipse cx="116" cy="90" rx="3.5" ry="3" fill="#070707"/>
+                        <ellipse cx="110" cy="80" rx="5" ry="4" fill="#060606" stroke="#7e7e7e" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <ellipse cx="120" cy="76" rx="4" ry="3" fill="#050505" stroke="#7f7f7f" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <ellipse cx="128" cy="82" rx="6" ry="5" fill="#050505" stroke="#7f7f7f" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <ellipse cx="138" cy="77" rx="4" ry="3" fill="#060606" stroke="#7e7e7e" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <ellipse cx="122" cy="86" rx="3" ry="2.5" fill="#070707" stroke="#7f7f7f" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <ellipse cx="133" cy="88" rx="5" ry="4" fill="#060606" stroke="#7e7e7e" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <ellipse cx="116" cy="90" rx="3.5" ry="3" fill="#070707" stroke="#7f7f7f" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Label: porosity cluster -->
                         <line x1="124" y1="55" x2="124" y2="68" stroke="#f59e0b" stroke-width="0.8"/>
                         <text x="124" y="52" text-anchor="middle" font-size="8" fill="#f59e0b" font-weight="700">Porosity cluster</text>
                         <!-- IRP — incomplete root penetration: thin, continuous dark line at root centerline -->
-                        <line x1="200" y1="99" x2="290" y2="100" stroke="#030303" stroke-width="2.5"/>
+                        <line x1="200" y1="99" x2="290" y2="100" stroke="#7b7b7b" stroke-width="2.5"/>
                         <!-- make it slightly irregular -->
-                        <path d="M200,100 Q220,98 240,101 Q260,100 290,99" stroke="#020202" stroke-width="2" fill="none"/>
+                        <path d="M200,100 Q220,98 240,101 Q260,100 290,99" stroke="#7a7a7a" stroke-width="2" fill="none"/>
                         <!-- Label: IRP -->
                         <line x1="245" y1="115" x2="245" y2="105" stroke="#ef4444" stroke-width="0.8"/>
                         <text x="245" y="123" text-anchor="middle" font-size="8" fill="#ef4444" font-weight="700">IRP — root</text>
@@ -1278,13 +1281,13 @@ Conclusion:
                         <rect x="60" y="78" width="20" height="10" fill="#2e2e2e" rx="2" opacity="0.3"/>
                         <rect x="165" y="72" width="25" height="15" fill="#313131" rx="2" opacity="0.3"/>
                         <!-- Film density scale indicator -->
-                        <rect x="295" y="58" width="18" height="54" fill="none" stroke="#444" stroke-width="0.8"/>
-                        <rect x="295" y="58" width="18" height="12" fill="#555"/>
-                        <rect x="295" y="70" width="18" height="12" fill="#444"/>
+                        <rect x="295" y="58" width="18" height="54" fill="none" stroke="#7f7f7f" stroke-width="0.8"/>
+                        <rect x="295" y="58" width="18" height="12" fill="#555" stroke="#7e7e7e" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <rect x="295" y="70" width="18" height="12" fill="#444" stroke="#7f7f7f" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <rect x="295" y="82" width="18" height="12" fill="#333"/>
-                        <rect x="295" y="94" width="18" height="12" fill="#222"/>
+                        <rect x="295" y="94" width="18" height="12" fill="#222" stroke="#7e7e7e" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <rect x="295" y="106" width="18" height="6" fill="#111"/>
-                        <text x="304" y="125" text-anchor="middle" font-size="6.5" fill="#555" font-family="monospace">density</text>
+                        <text x="304" y="125" text-anchor="middle" font-size="6.5" fill="#a3a3a3" font-family="monospace">density</text>
                     </svg>
                     <figcaption>Simulated radiograph — dark film. Weld crown appears as the slightly lighter central band. The cluster of black spots (center-left) is porosity. The dark continuous line at the root bead (right) is incomplete root penetration (IRP). IQI wires visible at left edge confirm 2% sensitivity.</figcaption>
                 </div>
@@ -1325,33 +1328,33 @@ Conclusion:
                         <!-- Display background -->
                         <rect width="320" height="170" fill="#0a0f1a"/>
                         <!-- Grid lines (oscilloscope graticule) -->
-                        <line x1="32" y1="20" x2="32" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
-                        <line x1="64" y1="20" x2="64" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
-                        <line x1="96" y1="20" x2="96" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
-                        <line x1="128" y1="20" x2="128" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
-                        <line x1="160" y1="20" x2="160" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
-                        <line x1="192" y1="20" x2="192" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
-                        <line x1="224" y1="20" x2="224" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
-                        <line x1="256" y1="20" x2="256" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
-                        <line x1="288" y1="20" x2="288" y2="155" stroke="#1e2d40" stroke-width="0.7"/>
+                        <line x1="32" y1="20" x2="32" y2="155" stroke="#636363" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <line x1="64" y1="20" x2="64" y2="155" stroke="#636363" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <line x1="96" y1="20" x2="96" y2="155" stroke="#636363" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <line x1="128" y1="20" x2="128" y2="155" stroke="#636363" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <line x1="160" y1="20" x2="160" y2="155" stroke="#636363" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <line x1="192" y1="20" x2="192" y2="155" stroke="#636363" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <line x1="224" y1="20" x2="224" y2="155" stroke="#636363" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <line x1="256" y1="20" x2="256" y2="155" stroke="#636363" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <line x1="288" y1="20" x2="288" y2="155" stroke="#636363" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <line x1="32" y1="47" x2="310" y2="47" stroke="#1e2d40" stroke-width="0.7"/>
                         <line x1="32" y1="74" x2="310" y2="74" stroke="#1e2d40" stroke-width="0.7"/>
                         <line x1="32" y1="101" x2="310" y2="101" stroke="#1e2d40" stroke-width="0.7"/>
                         <line x1="32" y1="128" x2="310" y2="128" stroke="#1e2d40" stroke-width="0.7"/>
                         <!-- Axis labels -->
-                        <text x="170" y="165" text-anchor="middle" font-size="8" fill="#4a6a8a" font-family="monospace">Beam path (mm)  →  200 mm full scale</text>
-                        <text x="18" y="88" text-anchor="middle" font-size="8" fill="#4a6a8a" font-family="monospace" transform="rotate(-90,18,88)">Amplitude (%FSH)</text>
+                        <text x="170" y="165" text-anchor="middle" font-size="8" fill="#587ea5" font-family="monospace">Beam path (mm)  →  200 mm full scale</text>
+                        <text x="18" y="88" text-anchor="middle" font-size="8" fill="#587ea5" font-family="monospace" transform="rotate(-90,18,88)">Amplitude (%FSH)</text>
                         <!-- 100% line label -->
-                        <text x="310" y="23" font-size="7" fill="#4a6a8a" font-family="monospace">100%</text>
-                        <text x="310" y="50" font-size="7" fill="#4a6a8a" font-family="monospace">75%</text>
-                        <text x="310" y="77" font-size="7" fill="#4a6a8a" font-family="monospace">50%</text>
-                        <text x="310" y="104" font-size="7" fill="#4a6a8a" font-family="monospace">25%</text>
+                        <text x="310" y="23" font-size="7" fill="#587ea5" font-family="monospace">100%</text>
+                        <text x="310" y="50" font-size="7" fill="#587ea5" font-family="monospace">75%</text>
+                        <text x="310" y="77" font-size="7" fill="#587ea5" font-family="monospace">50%</text>
+                        <text x="310" y="104" font-size="7" fill="#587ea5" font-family="monospace">25%</text>
                         <!-- DAC curve — orange dashed line representing Distance Amplitude Correction -->
                         <path d="M32,47 Q80,52 128,58 Q180,65 224,72 Q260,78 300,84" stroke="#f97316" stroke-width="1.8" fill="none" stroke-dasharray="6,3"/>
                         <text x="245" y="69" font-size="8" fill="#f97316" font-weight="700">DAC</text>
                         <!-- 20% DAC reporting threshold line (dashed, lower) -->
-                        <path d="M32,110 Q80,115 128,120 Q180,126 224,131 Q260,135 300,139" stroke="#f97316" stroke-width="1" fill="none" stroke-dasharray="3,3" opacity="0.5"/>
-                        <text x="240" y="144" font-size="7" fill="#f97316" opacity="0.7">20% DAC</text>
+                        <path d="M32,110 Q80,115 128,120 Q180,126 224,131 Q260,135 300,139" stroke="#fcc197" stroke-width="1" fill="none" stroke-dasharray="3,3" opacity="0.5" stroke-opacity="1"/>
+                        <text x="240" y="144" font-size="7" fill="#f97316">20% DAC</text>
                         <!-- Initial pulse -->
                         <line x1="32" y1="155" x2="32" y2="21" stroke="#22d3ee" stroke-width="2.5"/>
                         <text x="32" y="17" text-anchor="middle" font-size="7" fill="#22d3ee">T</text>
@@ -1366,7 +1369,7 @@ Conclusion:
                         <text x="197" y="14" font-size="8" fill="#ef4444" font-weight="700">Defect echo</text>
                         <text x="197" y="24" font-size="7.5" fill="#ef4444">138% DAC (REJECT)</text>
                         <!-- beam path cursor line at defect -->
-                        <line x1="149" y1="21" x2="149" y2="155" stroke="#ef4444" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.5"/>
+                        <line x1="149" y1="21" x2="149" y2="155" stroke="#ef4444" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.5" stroke-opacity="1"/>
                         <!-- Back wall echo — smaller peak at ~200mm full scale -->
                         <path d="M286,155 L286,154 L287,149 L288,130 L289,100 L290,85 L291,97 L292,120 L293,145 L294,153 L295,155" stroke="#22d3ee" stroke-width="1.5" fill="none" opacity="0.7"/>
                         <text x="290" y="80" text-anchor="middle" font-size="7" fill="#6b9c7d">BW</text>
@@ -1418,8 +1421,8 @@ Conclusion:
                         <!-- Stiffener plate (vertical) -->
                         <rect x="135" y="30" width="50" height="48" fill="#111122" rx="1"/>
                         <!-- Weld ripple texture (barely visible under UV) -->
-                        <path d="M30,82 Q60,80 90,83 Q120,81 135,82" stroke="#161630" stroke-width="1" fill="none"/>
-                        <path d="M185,82 Q210,80 240,83 Q265,81 300,82" stroke="#161630" stroke-width="1" fill="none"/>
+                        <path d="M30,82 Q60,80 90,83 Q120,81 135,82" stroke="#5d5db5" stroke-width="1" fill="none"/>
+                        <path d="M185,82 Q210,80 240,83 Q265,81 300,82" stroke="#5d5db5" stroke-width="1" fill="none"/>
                         <!-- MAIN FINDING: glowing fluorescent crack indication at left weld toe -->
                         <!-- Fatigue crack — bright yellow-green fluorescent line emanating from weld toe, perpendicular/angular into base metal -->
                         <path d="M132,100 Q126,110 120,122 Q115,130 112,140" stroke="#c8ff00" stroke-width="3.5" fill="none" stroke-linecap="round"/>
@@ -1446,7 +1449,7 @@ Conclusion:
                         <line x1="132" y1="96" x2="165" y2="75" stroke="#f59e0b" stroke-width="0.8" opacity="0.8"/>
                         <text x="167" y="73" font-size="8" fill="#f59e0b">Weld toe origin</text>
                         <!-- UV wavelength note -->
-                        <text x="295" y="163" text-anchor="end" font-size="7" fill="#4a3a7a">UV-A 365 nm / 1200 μW/cm²</text>
+                        <text x="295" y="163" text-anchor="end" font-size="7" fill="#826fba">UV-A 365 nm / 1200 μW/cm²</text>
                     </svg>
                     <figcaption>Simulated fluorescent MT image under UV-A (365 nm) illumination in a darkened enclosure. The bright yellow-green indication originates at the weld toe (top) and propagates ~52 mm into the web. Glow width wider than actual crack — typical particle accumulation in the leakage field.</figcaption>
                 </div>
@@ -1487,11 +1490,11 @@ Conclusion:
                         <!-- Developer coat texture (subtle) -->
                         <rect x="20" y="20" width="280" height="130" fill="#f4f4f0" rx="4"/>
                         <!-- Weld cap outline — slight raised bead, visible as subtle off-white band -->
-                        <ellipse cx="160" cy="85" rx="115" ry="22" fill="#eeeee8" stroke="#ddd" stroke-width="0.5"/>
-                        <text x="160" y="60" text-anchor="middle" font-size="8.5" fill="#9ca3af">Weld cap</text>
+                        <ellipse cx="160" cy="85" rx="115" ry="22" fill="#eeeee8" stroke="#8a8a66" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <text x="160" y="60" text-anchor="middle" font-size="8.5" fill="#646d7c">Weld cap</text>
                         <!-- HAZ line — subtle boundary where developer is slightly different shade -->
-                        <path d="M45,65 Q90,63 160,63 Q230,63 275,65" stroke="#e5e5df" stroke-width="2" fill="none"/>
-                        <path d="M45,105 Q90,107 160,107 Q230,107 275,105" stroke="#e5e5df" stroke-width="2" fill="none"/>
+                        <path d="M45,65 Q90,63 160,63 Q230,63 275,65" stroke="#83836b" stroke-width="2" fill="none"/>
+                        <path d="M45,105 Q90,107 160,107 Q230,107 275,105" stroke="#89896f" stroke-width="2" fill="none"/>
                         <!-- MAIN FINDING: red/crimson SCC indications — branching, tight cracks bleeding penetrant -->
                         <!-- SCC pattern: multiple branching cracks typical of SCC (versus single straight fatigue crack) -->
                         <!-- Main crack branch 1 -->
@@ -1512,7 +1515,7 @@ Conclusion:
                         <path d="M108,82 Q114,85 119,90 Q123,95 121,102" stroke="#fca5a5" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.2"/>
                         <!-- HAZ boundary label -->
                         <line x1="45" y1="65" x2="40" y2="50" stroke="#9ca3af" stroke-width="0.8"/>
-                        <text x="30" y="47" font-size="7.5" fill="#9ca3af" text-anchor="middle">HAZ</text>
+                        <text x="30" y="47" font-size="7.5" fill="#646d7c" text-anchor="middle">HAZ</text>
                         <!-- Indication labels -->
                         <line x1="103" y1="88" x2="60" y2="100" stroke="#b91c1c" stroke-width="0.8"/>
                         <text x="20" y="103" font-size="8" fill="#b91c1c" font-weight="700">SCC</text>
@@ -1520,15 +1523,15 @@ Conclusion:
                         <text x="20" y="122" font-size="7.5" fill="#b91c1c">pattern</text>
                         <!-- Bleed-out label -->
                         <line x1="130" y1="84" x2="175" y2="75" stroke="#9ca3af" stroke-width="0.8"/>
-                        <text x="177" y="73" font-size="7.5" fill="#9ca3af">Bleed-out</text>
-                        <text x="177" y="82" font-size="7.5" fill="#9ca3af">(wider than crack)</text>
+                        <text x="177" y="73" font-size="7.5" fill="#626a79">Bleed-out</text>
+                        <text x="177" y="82" font-size="7.5" fill="#626a79">(wider than crack)</text>
                         <!-- Developer time stamp -->
-                        <text x="260" y="160" text-anchor="end" font-size="7" fill="#9ca3af">Developer contact 15 min | Visible dye, Type II solvent removable</text>
+                        <text x="260" y="160" text-anchor="end" font-size="7" fill="#697281">Developer contact 15 min | Visible dye, Type II solvent removable</text>
                         <!-- Scale bar -->
                         <line x1="215" y1="140" x2="265" y2="140" stroke="#6b7280" stroke-width="1"/>
                         <line x1="215" y1="137" x2="215" y2="143" stroke="#6b7280" stroke-width="1"/>
                         <line x1="265" y1="137" x2="265" y2="143" stroke="#6b7280" stroke-width="1"/>
-                        <text x="240" y="135" text-anchor="middle" font-size="8" fill="#6b7280">50 mm</text>
+                        <text x="240" y="135" text-anchor="middle" font-size="8" fill="#666d7a">50 mm</text>
                     </svg>
                     <figcaption>Simulated visible dye PT image on white developer background. The branching, tree-like red indications in the HAZ are characteristic of stress corrosion cracking — distinct from the single straight line of a fatigue crack. Bleed-out (pink halo) is wider than the physical crack width.</figcaption>
                 </div>
@@ -1567,15 +1570,15 @@ Conclusion:
                         <!-- Display background -->
                         <rect width="320" height="170" fill="#05101a"/>
                         <!-- Polar grid lines -->
-                        <circle cx="100" cy="85" r="60" fill="none" stroke="#0f2a3a" stroke-width="0.8"/>
+                        <circle cx="100" cy="85" r="60" fill="none" stroke="#266b93" stroke-width="0.8"/>
                         <circle cx="100" cy="85" r="40" fill="none" stroke="#0f2a3a" stroke-width="0.6"/>
                         <circle cx="100" cy="85" r="20" fill="none" stroke="#0f2a3a" stroke-width="0.5"/>
                         <!-- Axes -->
-                        <line x1="40" y1="85" x2="160" y2="85" stroke="#1a3a4a" stroke-width="0.8"/>
-                        <line x1="100" y1="25" x2="100" y2="145" stroke="#1a3a4a" stroke-width="0.8"/>
+                        <line x1="40" y1="85" x2="160" y2="85" stroke="#2f6986" stroke-width="0.8"/>
+                        <line x1="100" y1="25" x2="100" y2="145" stroke="#2f6986" stroke-width="0.8"/>
                         <!-- Axis labels -->
-                        <text x="165" y="88" font-size="7.5" fill="#2e6a7a" font-family="monospace">R</text>
-                        <text x="102" y="22" font-size="7.5" fill="#2e6a7a" font-family="monospace">+X</text>
+                        <text x="165" y="88" font-size="7.5" fill="#3b879b" font-family="monospace">R</text>
+                        <text x="102" y="22" font-size="7.5" fill="#3b879b" font-family="monospace">+X</text>
                         <!-- Calibration signal: OD reference notch (20% depth) -->
                         <circle cx="128" cy="57" r="4" fill="#22d3ee" opacity="0.9"/>
                         <text x="136" y="55" font-size="7.5" fill="#22d3ee">OD 20% ref</text>
@@ -1606,12 +1609,12 @@ Conclusion:
                         <path d="M100,85 A20,20 0 0,1 88,67" stroke="#a78bfa" stroke-width="1" fill="none" stroke-dasharray="3,2"/>
                         <text x="68" y="70" font-size="7" fill="#a78bfa">~130° ID</text>
                         <!-- Divider line -->
-                        <line x1="175" y1="15" x2="175" y2="155" stroke="#1a3a4a" stroke-width="0.8"/>
+                        <line x1="175" y1="15" x2="175" y2="155" stroke="#2f6986" stroke-width="0.8"/>
                         <!-- Lissajous time-domain display (right side) -->
                         <text x="248" y="25" text-anchor="middle" font-size="8" fill="#4a8a9a">Channel 1 — time base</text>
                         <!-- Time base x axis -->
-                        <line x1="185" y1="90" x2="310" y2="90" stroke="#1a3a4a" stroke-width="0.7"/>
-                        <line x1="185" y1="50" x2="185" y2="130" stroke="#1a3a4a" stroke-width="0.7"/>
+                        <line x1="185" y1="90" x2="310" y2="90" stroke="#636363" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <line x1="185" y1="50" x2="185" y2="130" stroke="#636363" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Normal signal (flat baseline) -->
                         <polyline points="185,90 200,90 205,90 210,91 215,90 220,90 225,90 230,90" stroke="#22d3ee" stroke-width="1.2" fill="none" opacity="0.5"/>
                         <!-- Support plate signal: gradual rise/fall -->

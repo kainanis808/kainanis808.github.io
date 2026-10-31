@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grain Boundaries and Types</title>
     <style>
@@ -55,7 +57,7 @@
         .diagram-box figcaption {
             margin-top: 8px;
             font-size: 0.85rem;
-            color: #64748b;
+            color: #8593a7;
             font-style: italic;
         }
         svg { display: block; margin: 0 auto; }
@@ -107,7 +109,7 @@
         <div class="diagrams-row">
             <div class="diagram-box">
                 <!-- Tilt boundary: left grain tilted slightly, right grain upright, edge dislocations on boundary -->
-                <svg width="320" height="220" viewBox="0 0 320 220">
+                <svg width="320" height="220" viewBox="0 0 320 220" role="img" aria-label="Low-angle tilt boundary: two crystal grids, grain A and grain B, tilted slightly relative to each other, joined by a vertical row of four evenly spaced edge dislocations (⊥ symbols).">
                     <!-- Left grain: rows tilted slightly CW (~5°) -->
                     <g stroke="#94a3b8" stroke-width="1" opacity="0.6">
                         <!-- atom rows, left side, tilted -->
@@ -147,7 +149,7 @@
                     <!-- Boundary line -->
                     <line x1="160" y1="5" x2="160" y2="215" stroke="#60a5fa" stroke-width="2.5" stroke-dasharray="6,3"/>
                     <!-- Edge dislocation symbols (⊥) on boundary -->
-                    <g fill="#dc2626" font-size="16" font-weight="bold" text-anchor="middle">
+                    <g fill="#f87171" font-size="16" font-weight="bold" text-anchor="middle">
                         <text x="160" y="52">⊥</text>
                         <text x="160" y="97">⊥</text>
                         <text x="160" y="142">⊥</text>
@@ -175,8 +177,8 @@
         <div class="diagrams-row">
             <div class="diagram-box">
                 <!-- Single screw dislocation: rotating 3-D helix -->
-                <canvas id="screw-canvas" width="220" height="230"
-                        style="border-radius:8px; display:block; margin:0 auto;"></canvas>
+                <canvas data-a11y-essential id="screw-canvas" width="220" height="230"
+                        style="border-radius:8px; display:block; margin:0 auto;" role="img" aria-label="Animated 3D view of a low-angle twist boundary: one grain rotates relative to the other about an axis perpendicular to the boundary plane, forming a grid of screw dislocations. Use the Pause button to stop the rotation."></canvas>
                 <div style="text-align:center; margin-top:6px;">
                     <button id="screw-play-btn">⏸ Pause</button>
                 </div>
@@ -184,7 +186,7 @@
             </div>
 
             <div class="diagram-box">
-                <svg width="280" height="295" viewBox="0 0 280 295">
+                <svg width="280" height="295" viewBox="0 0 280 295" role="img" aria-label="Face-on view of a twist boundary plane: grain A&#x27;s lattice grid overlaid with grain B&#x27;s grid rotated 20°. Green dots mark where the two grids cross; each crossing is a screw dislocation site.">
                     <defs>
                         <clipPath id="gc2">
                             <rect x="10" y="25" width="260" height="240"/>
@@ -206,13 +208,13 @@
                             <line x1="230" y1="25" x2="230" y2="265"/>
                         </g>
                         <g fill="#3b82f6">
-                            <circle cx="50"  cy="50"  r="2.5"/><circle cx="80"  cy="50"  r="2.5"/><circle cx="110" cy="50"  r="2.5"/><circle cx="140" cy="50"  r="2.5"/><circle cx="170" cy="50"  r="2.5"/><circle cx="200" cy="50"  r="2.5"/><circle cx="230" cy="50"  r="2.5"/>
-                            <circle cx="50"  cy="80"  r="2.5"/><circle cx="80"  cy="80"  r="2.5"/><circle cx="110" cy="80"  r="2.5"/><circle cx="140" cy="80"  r="2.5"/><circle cx="170" cy="80"  r="2.5"/><circle cx="200" cy="80"  r="2.5"/><circle cx="230" cy="80"  r="2.5"/>
+                            <circle cx="50"  cy="50"  r="2.5"/><circle cx="80"  cy="50"  r="2.5" stroke="#094dbd" stroke-width="1" vector-effect="non-scaling-stroke"/><circle cx="110" cy="50"  r="2.5"/><circle cx="140" cy="50"  r="2.5" stroke="#094dbd" stroke-width="1" vector-effect="non-scaling-stroke"/><circle cx="170" cy="50"  r="2.5"/><circle cx="200" cy="50"  r="2.5"/><circle cx="230" cy="50"  r="2.5"/>
+                            <circle cx="50"  cy="80"  r="2.5"/><circle cx="80"  cy="80"  r="2.5"/><circle cx="110" cy="80"  r="2.5"/><circle cx="140" cy="80"  r="2.5"/><circle cx="170" cy="80"  r="2.5"/><circle cx="200" cy="80"  r="2.5"/><circle cx="230" cy="80"  r="2.5" stroke="#094dbd" stroke-width="1" vector-effect="non-scaling-stroke"/>
                             <circle cx="50"  cy="110" r="2.5"/><circle cx="80"  cy="110" r="2.5"/><circle cx="110" cy="110" r="2.5"/><circle cx="140" cy="110" r="2.5"/><circle cx="170" cy="110" r="2.5"/><circle cx="200" cy="110" r="2.5"/><circle cx="230" cy="110" r="2.5"/>
-                            <circle cx="50"  cy="140" r="2.5"/><circle cx="80"  cy="140" r="2.5"/><circle cx="110" cy="140" r="2.5"/><circle cx="140" cy="140" r="2.5"/><circle cx="170" cy="140" r="2.5"/><circle cx="200" cy="140" r="2.5"/><circle cx="230" cy="140" r="2.5"/>
-                            <circle cx="50"  cy="170" r="2.5"/><circle cx="80"  cy="170" r="2.5"/><circle cx="110" cy="170" r="2.5"/><circle cx="140" cy="170" r="2.5"/><circle cx="170" cy="170" r="2.5"/><circle cx="200" cy="170" r="2.5"/><circle cx="230" cy="170" r="2.5"/>
-                            <circle cx="50"  cy="200" r="2.5"/><circle cx="80"  cy="200" r="2.5"/><circle cx="110" cy="200" r="2.5"/><circle cx="140" cy="200" r="2.5"/><circle cx="170" cy="200" r="2.5"/><circle cx="200" cy="200" r="2.5"/><circle cx="230" cy="200" r="2.5"/>
-                            <circle cx="50"  cy="230" r="2.5"/><circle cx="80"  cy="230" r="2.5"/><circle cx="110" cy="230" r="2.5"/><circle cx="140" cy="230" r="2.5"/><circle cx="170" cy="230" r="2.5"/><circle cx="200" cy="230" r="2.5"/><circle cx="230" cy="230" r="2.5"/>
+                            <circle cx="50"  cy="140" r="2.5" stroke="#094dbd" stroke-width="1" vector-effect="non-scaling-stroke"/><circle cx="80"  cy="140" r="2.5"/><circle cx="110" cy="140" r="2.5" stroke="#094dbd" stroke-width="1" vector-effect="non-scaling-stroke"/><circle cx="140" cy="140" r="2.5"/><circle cx="170" cy="140" r="2.5"/><circle cx="200" cy="140" r="2.5"/><circle cx="230" cy="140" r="2.5" stroke="#094dbd" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                            <circle cx="50"  cy="170" r="2.5"/><circle cx="80"  cy="170" r="2.5"/><circle cx="110" cy="170" r="2.5"/><circle cx="140" cy="170" r="2.5" stroke="#094dbd" stroke-width="1" vector-effect="non-scaling-stroke"/><circle cx="170" cy="170" r="2.5"/><circle cx="200" cy="170" r="2.5"/><circle cx="230" cy="170" r="2.5" stroke="#094dbd" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                            <circle cx="50"  cy="200" r="2.5" stroke="#094dbd" stroke-width="1" vector-effect="non-scaling-stroke"/><circle cx="80"  cy="200" r="2.5"/><circle cx="110" cy="200" r="2.5"/><circle cx="140" cy="200" r="2.5"/><circle cx="170" cy="200" r="2.5"/><circle cx="200" cy="200" r="2.5"/><circle cx="230" cy="200" r="2.5"/>
+                            <circle cx="50"  cy="230" r="2.5"/><circle cx="80"  cy="230" r="2.5"/><circle cx="110" cy="230" r="2.5" stroke="#094dbd" stroke-width="1" vector-effect="non-scaling-stroke"/><circle cx="140" cy="230" r="2.5" stroke="#094dbd" stroke-width="1" vector-effect="non-scaling-stroke"/><circle cx="170" cy="230" r="2.5"/><circle cx="200" cy="230" r="2.5" stroke="#094dbd" stroke-width="1" vector-effect="non-scaling-stroke"/><circle cx="230" cy="230" r="2.5"/>
                         </g>
                     </g>
 
@@ -230,13 +232,13 @@
                                 <line x1="230" y1="-200" x2="230" y2="480"/>
                             </g>
                             <g fill="#f97316">
-                                <circle cx="50"  cy="50"  r="2.5"/><circle cx="80"  cy="50"  r="2.5"/><circle cx="110" cy="50"  r="2.5"/><circle cx="140" cy="50"  r="2.5"/><circle cx="170" cy="50"  r="2.5"/><circle cx="200" cy="50"  r="2.5"/><circle cx="230" cy="50"  r="2.5"/>
-                                <circle cx="50"  cy="80"  r="2.5"/><circle cx="80"  cy="80"  r="2.5"/><circle cx="110" cy="80"  r="2.5"/><circle cx="140" cy="80"  r="2.5"/><circle cx="170" cy="80"  r="2.5"/><circle cx="200" cy="80"  r="2.5"/><circle cx="230" cy="80"  r="2.5"/>
-                                <circle cx="50"  cy="110" r="2.5"/><circle cx="80"  cy="110" r="2.5"/><circle cx="110" cy="110" r="2.5"/><circle cx="140" cy="110" r="2.5"/><circle cx="170" cy="110" r="2.5"/><circle cx="200" cy="110" r="2.5"/><circle cx="230" cy="110" r="2.5"/>
-                                <circle cx="50"  cy="140" r="2.5"/><circle cx="80"  cy="140" r="2.5"/><circle cx="110" cy="140" r="2.5"/><circle cx="140" cy="140" r="2.5"/><circle cx="170" cy="140" r="2.5"/><circle cx="200" cy="140" r="2.5"/><circle cx="230" cy="140" r="2.5"/>
+                                <circle cx="50"  cy="50"  r="2.5"/><circle cx="80"  cy="50"  r="2.5"/><circle cx="110" cy="50"  r="2.5" stroke="#8c3b04" stroke-width="1" vector-effect="non-scaling-stroke"/><circle cx="140" cy="50"  r="2.5"/><circle cx="170" cy="50"  r="2.5"/><circle cx="200" cy="50"  r="2.5"/><circle cx="230" cy="50"  r="2.5"/>
+                                <circle cx="50"  cy="80"  r="2.5" stroke="#8c3b04" stroke-width="1" vector-effect="non-scaling-stroke"/><circle cx="80"  cy="80"  r="2.5"/><circle cx="110" cy="80"  r="2.5"/><circle cx="140" cy="80"  r="2.5"/><circle cx="170" cy="80"  r="2.5"/><circle cx="200" cy="80"  r="2.5"/><circle cx="230" cy="80"  r="2.5"/>
+                                <circle cx="50"  cy="110" r="2.5"/><circle cx="80"  cy="110" r="2.5"/><circle cx="110" cy="110" r="2.5"/><circle cx="140" cy="110" r="2.5"/><circle cx="170" cy="110" r="2.5"/><circle cx="200" cy="110" r="2.5"/><circle cx="230" cy="110" r="2.5" stroke="#8c3b04" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                                <circle cx="50"  cy="140" r="2.5" stroke="#8c3b04" stroke-width="1" vector-effect="non-scaling-stroke"/><circle cx="80"  cy="140" r="2.5"/><circle cx="110" cy="140" r="2.5"/><circle cx="140" cy="140" r="2.5"/><circle cx="170" cy="140" r="2.5"/><circle cx="200" cy="140" r="2.5"/><circle cx="230" cy="140" r="2.5" stroke="#8c3b04" stroke-width="1" vector-effect="non-scaling-stroke"/>
                                 <circle cx="50"  cy="170" r="2.5"/><circle cx="80"  cy="170" r="2.5"/><circle cx="110" cy="170" r="2.5"/><circle cx="140" cy="170" r="2.5"/><circle cx="170" cy="170" r="2.5"/><circle cx="200" cy="170" r="2.5"/><circle cx="230" cy="170" r="2.5"/>
-                                <circle cx="50"  cy="200" r="2.5"/><circle cx="80"  cy="200" r="2.5"/><circle cx="110" cy="200" r="2.5"/><circle cx="140" cy="200" r="2.5"/><circle cx="170" cy="200" r="2.5"/><circle cx="200" cy="200" r="2.5"/><circle cx="230" cy="200" r="2.5"/>
-                                <circle cx="50"  cy="230" r="2.5"/><circle cx="80"  cy="230" r="2.5"/><circle cx="110" cy="230" r="2.5"/><circle cx="140" cy="230" r="2.5"/><circle cx="170" cy="230" r="2.5"/><circle cx="200" cy="230" r="2.5"/><circle cx="230" cy="230" r="2.5"/>
+                                <circle cx="50"  cy="200" r="2.5"/><circle cx="80"  cy="200" r="2.5"/><circle cx="110" cy="200" r="2.5"/><circle cx="140" cy="200" r="2.5"/><circle cx="170" cy="200" r="2.5" stroke="#8c3b04" stroke-width="1" vector-effect="non-scaling-stroke"/><circle cx="200" cy="200" r="2.5"/><circle cx="230" cy="200" r="2.5" stroke="#8c3b04" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                                <circle cx="50"  cy="230" r="2.5"/><circle cx="80"  cy="230" r="2.5" stroke="#8c3b04" stroke-width="1" vector-effect="non-scaling-stroke"/><circle cx="110" cy="230" r="2.5"/><circle cx="140" cy="230" r="2.5"/><circle cx="170" cy="230" r="2.5" stroke="#8c3b04" stroke-width="1" vector-effect="non-scaling-stroke"/><circle cx="200" cy="230" r="2.5"/><circle cx="230" cy="230" r="2.5"/>
                             </g>
                         </g>
                     </g>
@@ -247,7 +249,7 @@
                     <!-- 20° CW: end = (244+20·cos20°, 48+20·sin20°) = (262.8, 54.8) -->
                     <line x1="244" y1="48" x2="263" y2="55" stroke="#f97316" stroke-width="2"/>
                     <path d="M 264,48 A 20,20 0 0,1 263,55" stroke="#7c3aed" stroke-width="1.5" fill="none"/>
-                    <text x="265" y="54" font-size="10" fill="#7c3aed" font-weight="bold">20°</text>
+                    <text x="265" y="54" font-size="10" fill="#9864f1" font-weight="bold">20°</text>
 
                     <!-- Intersections of blue grid lines with orange grid lines = screw dislocation sites -->
                     <g clip-path="url(#gc2)" fill="#22c55e">
@@ -299,9 +301,9 @@
                     </g>
 
                     <!-- Legend -->
-                    <rect x="10" y="272" width="260" height="20" fill="#1e293b" rx="4" stroke="#334155" stroke-width="1"/>
+                    <rect x="10" y="272" width="260" height="20" fill="#1e293b" rx="4" stroke="#526888" stroke-width="1"/>
                     <circle cx="22" cy="282" r="3" fill="#3b82f6"/>
-                    <text x="28" y="286" font-size="9" fill="#3b82f6">Grain A</text>
+                    <text x="28" y="286" font-size="9" fill="#4f8ef7">Grain A</text>
                     <circle cx="78" cy="282" r="3" fill="#f97316"/>
                     <text x="84" y="286" font-size="9" fill="#f97316">Grain B (20°)</text>
                     <circle cx="173" cy="282" r="3" fill="#22c55e"/>
@@ -323,7 +325,7 @@
         </p>
         <div class="diagrams-row">
             <div class="diagram-box">
-                <svg width="340" height="220" viewBox="0 0 340 220">
+                <svg width="340" height="220" viewBox="0 0 340 220" role="img" aria-label="High-angle grain boundary: grain A tilted about 30° next to grain B at 0°, separated by a disordered transition zone in which individual dislocations cannot be resolved.">
                     <!-- Left grain: rows tilted ~30° -->
                     <clipPath id="leftClip">
                         <rect x="0" y="0" width="155" height="220"/>
@@ -373,19 +375,19 @@
                           fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2" opacity="0.85"/>
                     <!-- Disordered atoms inside boundary zone -->
                     <g fill="#f59e0b" opacity="0.9">
-                        <circle cx="162" cy="25"  r="3.5"/>
-                        <circle cx="175" cy="42"  r="3"/>
-                        <circle cx="165" cy="58"  r="3.5"/>
-                        <circle cx="178" cy="74"  r="3"/>
-                        <circle cx="161" cy="90"  r="3.5"/>
-                        <circle cx="174" cy="106" r="3"/>
-                        <circle cx="163" cy="122" r="3.5"/>
-                        <circle cx="176" cy="138" r="3"/>
-                        <circle cx="162" cy="154" r="3.5"/>
-                        <circle cx="175" cy="170" r="3"/>
-                        <circle cx="164" cy="186" r="3.5"/>
-                        <circle cx="170" cy="10"  r="2.5"/>
-                        <circle cx="168" cy="200" r="3"/>
+                        <circle cx="162" cy="25"  r="3.5" stroke="#9e6506" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <circle cx="175" cy="42"  r="3" stroke="#9e6506" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <circle cx="165" cy="58"  r="3.5" stroke="#9e6506" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <circle cx="178" cy="74"  r="3" stroke="#9e6506" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <circle cx="161" cy="90"  r="3.5" stroke="#9e6506" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <circle cx="174" cy="106" r="3" stroke="#9e6506" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <circle cx="163" cy="122" r="3.5" stroke="#9e6506" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <circle cx="176" cy="138" r="3" stroke="#9e6506" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <circle cx="162" cy="154" r="3.5" stroke="#9e6506" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <circle cx="175" cy="170" r="3" stroke="#9e6506" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <circle cx="164" cy="186" r="3.5" stroke="#9e6506" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <circle cx="170" cy="10"  r="2.5" stroke="#9e6506" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <circle cx="168" cy="200" r="3" stroke="#9e6506" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     </g>
 
                     <text x="77"  y="215" text-anchor="middle" font-size="11" fill="#94a3b8">Grain A (~30° tilt)</text>
@@ -408,7 +410,7 @@
         </p>
         <div class="diagrams-row">
             <div class="diagram-box">
-                <svg id="twin-svg" width="320" height="200" viewBox="0 0 320 200">
+                <svg id="twin-svg" width="320" height="200" viewBox="0 0 320 200" role="img" aria-label="Twin boundary: grain B is a mirror image of grain A across the boundary plane, with atoms on the boundary shared by both lattices. Press Play to animate the twinning shear.">
                     <!-- Draw a 2D hexagonal-like close-packed layer to show mirror symmetry -->
                     <!-- Left grain: rows slope upward left-to-right -->
                     <clipPath id="twinLeft">
@@ -477,7 +479,7 @@
 
                     <!-- Boundary line -->
                     <g id="twin-boundary-line" opacity="0">
-                        <line x1="160" y1="0" x2="160" y2="200" stroke="#60a5fa" stroke-width="2.5"/>
+                        <line x1="160" y1="0" x2="160" y2="200" stroke="#757575" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     </g>
 
                     <!-- Mirror arrows -->
@@ -605,8 +607,8 @@
                 ctx.moveTo(p.p0.sx, p.p0.sy); ctx.lineTo(p.p1.sx, p.p1.sy);
                 ctx.stroke(); ctx.setLineDash([]);
                 ctx.font = '10px Segoe UI, sans-serif';
-                ctx.fillStyle = '#1d4ed8'; ctx.textAlign = 'center';
-                ctx.fillText('core', p.p1.sx, p.p1.sy - 5);
+                ctx.fillStyle = '#1d4ed8'; ctx.textAlign = 'left';
+                ctx.fillText('core', p.p1.sx + 6, p.p1.sy - 3);
             }
         });
 

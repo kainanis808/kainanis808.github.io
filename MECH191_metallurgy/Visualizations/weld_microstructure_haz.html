@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Weld Microstructure &amp; HAZ — TWI · Lincoln Electric · DoITPoMS</title>
 <style>
@@ -96,7 +98,7 @@
   .tag.good { background: #14532d; color: #86efac; }
   .tag.warn { background: #451a03; color: #fdba74; }
 
-  .src { font-size: 0.74rem; color: #475569; margin-top: 12px; font-style: italic; }
+  .src { font-size: 0.74rem; color: #7b8ca6; margin-top: 12px; font-style: italic; }
   .back-link { text-align: center; padding: 28px; }
   .back-link a { color: #38bdf8; text-decoration: none; font-size: 0.9rem; }
   .back-link a:hover { text-decoration: underline; }
@@ -109,6 +111,7 @@
   <p>HAZ Sub-Zones &amp; Grain Growth (TWI) · Weld Metal Solidification &amp; Carbon Equivalent (Lincoln Electric) · Thermal Cycles &amp; CCT Diagrams (DoITPoMS)</p>
 </header>
 
+<main id="main-content">
 <div class="tabs">
   <button class="tab-btn active" onclick="showTab('t-haz',this)">HAZ Sub-Zones</button>
   <button class="tab-btn" onclick="showTab('t-solid',this)">Weld Solidification &amp; CE</button>
@@ -122,16 +125,16 @@
   <div class="card">
     <div class="zone-btns">
       <button class="zone-btn active" style="border-color:#f97316;color:#f97316" onclick="selectZone('fz',this)">Fusion Zone</button>
-      <button class="zone-btn" style="border-color:#dc2626;color:#dc2626" onclick="selectZone('cghaz',this)">CGHAZ</button>
+      <button class="zone-btn" style="border-color:#e55f5f;color:#e55f5f" onclick="selectZone('cghaz',this)">CGHAZ</button>
       <button class="zone-btn" style="border-color:#f59e0b;color:#f59e0b" onclick="selectZone('fghaz',this)">FGHAZ</button>
       <button class="zone-btn" style="border-color:#22c55e;color:#22c55e" onclick="selectZone('ichaz',this)">ICHAZ</button>
       <button class="zone-btn" style="border-color:#38bdf8;color:#38bdf8" onclick="selectZone('schaz',this)">SCHAZ</button>
-      <button class="zone-btn" style="border-color:#64748b;color:#64748b" onclick="selectZone('base',this)">Base Metal</button>
+      <button class="zone-btn" style="border-color:#7c8ba1;color:#7c8ba1" onclick="selectZone('base',this)">Base Metal</button>
     </div>
 
     <!-- Cross-section SVG -->
     <svg id="cross-svg" viewBox="0 0 600 268" xmlns="http://www.w3.org/2000/svg"
-         style="width:100%;max-width:600px;display:block;margin:0 auto 16px;cursor:pointer;">
+         style="width:100%;max-width:600px;display:block;margin:0 auto 16px;cursor:pointer;" role="group" aria-label="Weld cross-section showing the heat-affected zones from the fusion zone outward: fusion zone, coarse-grain HAZ, fine-grain HAZ, intercritical HAZ, and subcritical HAZ. Select a zone to read its description.">
       <defs>
         <clipPath id="plate-clip"><rect x="0" y="88" width="600" height="132"/></clipPath>
         <linearGradient id="tg" x1="0" y1="0" x2="1" y2="0">
@@ -147,51 +150,51 @@
       <rect x="0" y="88" width="600" height="132" fill="#1e293b"/>
       <!-- SCHAZ -->
       <ellipse id="z-schaz" cx="300" cy="154" rx="200" ry="140" fill="#0b2333" clip-path="url(#plate-clip)"
-        onclick="selectZone('schaz',null)" style="cursor:pointer"/>
+        onclick="selectZone('schaz',null)" style="cursor:pointer" role="button" tabindex="0" aria-label="Subcritical HAZ (SCHAZ)"/>
       <!-- ICHAZ -->
       <ellipse id="z-ichaz" cx="300" cy="154" rx="158" ry="108" fill="#0d2212" clip-path="url(#plate-clip)"
-        onclick="selectZone('ichaz',null)" style="cursor:pointer"/>
+        onclick="selectZone('ichaz',null)" style="cursor:pointer" role="button" tabindex="0" aria-label="Intercritical HAZ (ICHAZ)" stroke="#2d773f" stroke-width="1" vector-effect="non-scaling-stroke"/>
       <!-- FGHAZ -->
       <ellipse id="z-fghaz" cx="300" cy="154" rx="118" ry="78" fill="#2c1800" clip-path="url(#plate-clip)"
-        onclick="selectZone('fghaz',null)" style="cursor:pointer"/>
+        onclick="selectZone('fghaz',null)" style="cursor:pointer" role="button" tabindex="0" aria-label="Fine-grain HAZ (FGHAZ)" stroke="#a65b00" stroke-width="1" vector-effect="non-scaling-stroke"/>
       <!-- CGHAZ -->
       <ellipse id="z-cghaz" cx="300" cy="154" rx="82" ry="52" fill="#3c0808" clip-path="url(#plate-clip)"
-        onclick="selectZone('cghaz',null)" style="cursor:pointer"/>
+        onclick="selectZone('cghaz',null)" style="cursor:pointer" role="button" tabindex="0" aria-label="Coarse-grain HAZ (CGHAZ)" stroke="#d51c1c" stroke-width="1" vector-effect="non-scaling-stroke"/>
       <!-- FZ -->
       <ellipse id="z-fz" cx="300" cy="154" rx="50" ry="30" fill="#7c2d12" clip-path="url(#plate-clip)"
-        onclick="selectZone('fz',null)" style="cursor:pointer"/>
+        onclick="selectZone('fz',null)" style="cursor:pointer" role="button" tabindex="0" aria-label="Fusion zone (FZ)" stroke="#bf451c" stroke-width="1" vector-effect="non-scaling-stroke"/>
       <!-- Weld cap bead -->
       <ellipse id="z-fz-cap" cx="300" cy="88" rx="58" ry="24" fill="#7c2d12"
-        onclick="selectZone('fz',null)" style="cursor:pointer"/>
+        onclick="selectZone('fz',null)" style="cursor:pointer" aria-hidden="true" stroke="#e8815e" stroke-width="1" vector-effect="non-scaling-stroke"/>
       <!-- Plate outline -->
-      <rect x="0" y="88" width="600" height="132" fill="none" stroke="#334155" stroke-width="1.5"/>
+      <rect x="0" y="88" width="600" height="132" fill="none" stroke="#597295" stroke-width="1.5"/>
       <!-- Plate surface (outside bead) -->
-      <line x1="0" y1="88" x2="242" y2="88" stroke="#475569" stroke-width="1.5"/>
-      <line x1="358" y1="88" x2="600" y2="88" stroke="#475569" stroke-width="1.5"/>
+      <line x1="0" y1="88" x2="242" y2="88" stroke="#7587a1" stroke-width="1.5"/>
+      <line x1="358" y1="88" x2="600" y2="88" stroke="#7587a1" stroke-width="1.5"/>
       <!-- Weld centreline -->
       <line x1="300" y1="112" x2="300" y2="220" stroke="#64748b" stroke-width="0.8" stroke-dasharray="4,3"/>
 
       <!-- Labels LEFT side -->
       <text x="6"  y="104" fill="#38bdf8" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif">SCHAZ</text>
-      <line x1="48" y1="102" x2="104" y2="112" stroke="#38bdf8" stroke-width="0.9" stroke-dasharray="3,2"/>
+      <line x1="48" y1="102" x2="104" y2="112" stroke="#757575" stroke-width="1" stroke-dasharray="3,2" vector-effect="non-scaling-stroke"/>
       <text x="6"  y="126" fill="#22c55e" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif">ICHAZ</text>
-      <line x1="48" y1="124" x2="142" y2="132" stroke="#22c55e" stroke-width="0.9" stroke-dasharray="3,2"/>
+      <line x1="48" y1="124" x2="142" y2="132" stroke="#757575" stroke-width="1" stroke-dasharray="3,2" vector-effect="non-scaling-stroke"/>
       <text x="6"  y="148" fill="#f59e0b" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif">FGHAZ</text>
-      <line x1="50" y1="146" x2="182" y2="148" stroke="#f59e0b" stroke-width="0.9" stroke-dasharray="3,2"/>
-      <text x="6"  y="170" fill="#dc2626" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif">CGHAZ</text>
-      <line x1="52" y1="168" x2="220" y2="158" stroke="#dc2626" stroke-width="0.9" stroke-dasharray="3,2"/>
+      <line x1="50" y1="146" x2="182" y2="148" stroke="#757575" stroke-width="1" stroke-dasharray="3,2" vector-effect="non-scaling-stroke"/>
+      <text x="6"  y="170" fill="#e76868" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif">CGHAZ</text>
+      <line x1="52" y1="168" x2="220" y2="158" stroke="#757575" stroke-width="1" stroke-dasharray="3,2" vector-effect="non-scaling-stroke"/>
       <text x="218" y="74" fill="#f97316" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif" text-anchor="middle">Fusion Zone</text>
-      <line x1="218" y1="76" x2="264" y2="88" stroke="#f97316" stroke-width="0.9" stroke-dasharray="3,2"/>
+      <line x1="218" y1="76" x2="264" y2="88" stroke="#666666" stroke-width="1" stroke-dasharray="3,2" vector-effect="non-scaling-stroke"/>
 
       <!-- Labels RIGHT side -->
       <text x="594" y="104" fill="#38bdf8" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif" text-anchor="end">SCHAZ</text>
-      <line x1="550" y1="102" x2="496" y2="112" stroke="#38bdf8" stroke-width="0.9" stroke-dasharray="3,2"/>
+      <line x1="550" y1="102" x2="496" y2="112" stroke="#757575" stroke-width="1" stroke-dasharray="3,2" vector-effect="non-scaling-stroke"/>
       <text x="594" y="126" fill="#22c55e" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif" text-anchor="end">ICHAZ</text>
-      <line x1="550" y1="124" x2="458" y2="132" stroke="#22c55e" stroke-width="0.9" stroke-dasharray="3,2"/>
+      <line x1="550" y1="124" x2="458" y2="132" stroke="#757575" stroke-width="1" stroke-dasharray="3,2" vector-effect="non-scaling-stroke"/>
       <text x="594" y="148" fill="#f59e0b" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif" text-anchor="end">FGHAZ</text>
-      <line x1="548" y1="146" x2="418" y2="148" stroke="#f59e0b" stroke-width="0.9" stroke-dasharray="3,2"/>
-      <text x="594" y="170" fill="#dc2626" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif" text-anchor="end">CGHAZ</text>
-      <line x1="546" y1="168" x2="380" y2="158" stroke="#dc2626" stroke-width="0.9" stroke-dasharray="3,2"/>
+      <line x1="548" y1="146" x2="418" y2="148" stroke="#757575" stroke-width="1" stroke-dasharray="3,2" vector-effect="non-scaling-stroke"/>
+      <text x="594" y="170" fill="#e76868" font-size="10" font-weight="700" font-family="Segoe UI,Arial,sans-serif" text-anchor="end">CGHAZ</text>
+      <line x1="546" y1="168" x2="380" y2="158" stroke="#6b6b6b" stroke-width="1" stroke-dasharray="3,2" vector-effect="non-scaling-stroke"/>
 
       <!-- Temperature gradient bar -->
       <text x="360" y="240" fill="#94a3b8" font-size="9" font-family="Segoe UI,Arial,sans-serif">Peak temperature gradient →</text>
@@ -199,7 +202,7 @@
       <text x="360" y="260" fill="#f97316" font-size="9" font-family="Segoe UI,Arial,sans-serif">1520°C</text>
       <text x="590" y="260" fill="#38bdf8" font-size="9" font-family="Segoe UI,Arial,sans-serif" text-anchor="end">↓ Ambient</text>
 
-      <text x="300" y="260" fill="#475569" font-size="9" font-family="Segoe UI,Arial,sans-serif" text-anchor="middle">Click a zone to explore</text>
+      <text x="300" y="260" fill="#6f829d" font-size="9" font-family="Segoe UI,Arial,sans-serif" text-anchor="middle">Click a zone to explore</text>
     </svg>
 
     <!-- Zone info panel -->
@@ -212,8 +215,8 @@
           <div id="zp-tags" style="margin-top:10px"></div>
         </div>
         <div>
-          <canvas id="micro-canvas" width="182" height="144" style="background:#0a1628;border:1px solid #1e3a5c;border-radius:6px;"></canvas>
-          <div style="font-size:0.72rem;color:#475569;margin-top:4px;text-align:center;">Schematic microstructure</div>
+          <canvas id="micro-canvas" width="182" height="144" style="background:#0a1628;border:1px solid #1e3a5c;border-radius:6px;" role="img" aria-label="Schematic microstructure of the HAZ zone selected in the cross-section above: fusion zone with columnar grains, coarse-grain HAZ, fine-grain HAZ, intercritical HAZ, subcritical HAZ, or unaffected base metal."></canvas>
+          <div style="font-size:0.72rem;color:#7b8ca6;margin-top:4px;text-align:center;">Schematic microstructure</div>
         </div>
       </div>
     </div>
@@ -223,15 +226,15 @@
   <div class="card">
     <div class="slider-row">
       <label>Heat Input</label>
-      <input type="range" min="3" max="30" value="10" step="1" oninput="updateHI(this.value)">
+      <input type="range" min="3" max="30" value="10" step="1" oninput="updateHI(this.value)" aria-label="Heat Input">
       <span class="slider-val" id="hi-val">1.0 kJ/mm</span>
     </div>
     <div class="cv-wrap">
-      <canvas id="hi-canvas" width="560" height="262" style="background:#0a1628;border:1px solid #1e3a5c;max-width:100%;"></canvas>
+      <canvas id="hi-canvas" width="560" height="262" style="background:#0a1628;border:1px solid #1e3a5c;max-width:100%;" role="img" aria-label="Weld cross-section showing how the HAZ zones widen as heat input increases (set with the heat input slider): fusion zone, coarse-grain HAZ (where grain growth increases with heat input), fine-grain HAZ, intercritical HAZ, and subcritical HAZ."></canvas>
     </div>
     <div class="legend" style="margin-top:10px">
       <div class="leg-item"><div class="leg-sw" style="background:#f97316"></div>Fusion Zone</div>
-      <div class="leg-item"><div class="leg-sw" style="background:#dc2626"></div>CGHAZ (grain growth ↑ with Q)</div>
+      <div class="leg-item"><div class="leg-sw" style="background:#e55f5f"></div>CGHAZ (grain growth ↑ with Q)</div>
       <div class="leg-item"><div class="leg-sw" style="background:#f59e0b"></div>FGHAZ</div>
       <div class="leg-item"><div class="leg-sw" style="background:#22c55e"></div>ICHAZ</div>
       <div class="leg-item"><div class="leg-sw" style="background:#0ea5e9"></div>SCHAZ</div>
@@ -241,10 +244,10 @@
 
   <h2>Zone Properties Summary</h2>
   <div class="tbl-wrap">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Zone Properties Summary</caption>
       <thead>
         <tr>
-          <th>Zone</th><th>Peak Temp</th><th>Grain Size</th><th>Typical Hardness</th><th>Primary Concern</th>
+          <th scope="col">Zone</th><th scope="col">Peak Temp</th><th scope="col">Grain Size</th><th scope="col">Typical Hardness</th><th scope="col">Primary Concern</th>
         </tr>
       </thead>
       <tbody>
@@ -256,7 +259,7 @@
           <td>Hot cracking, porosity, solidification segregation</td>
         </tr>
         <tr>
-          <td style="color:#dc2626;font-weight:700">CGHAZ</td>
+          <td style="color:#e55f5f;font-weight:700">CGHAZ</td>
           <td>1100–1520°C</td>
           <td>Very coarse (d &gt; 100 µm)</td>
           <td>250–450 Hv</td>
@@ -302,7 +305,7 @@
   <h2>Weld Metal Solidification Stages</h2>
   <div class="card">
     <div class="cv-wrap">
-      <canvas id="solid-canvas" width="560" height="260" style="background:#0a1628;border:1px solid #1e3a5c;max-width:100%;border-radius:8px;"></canvas>
+      <canvas id="solid-canvas" width="560" height="260" style="background:#0a1628;border:1px solid #1e3a5c;max-width:100%;border-radius:8px;" role="img" aria-label="Step-by-step weld pool solidification: grains grow epitaxially from the fusion boundary, then columnar grains grow toward the weld centre, ending with the centreline where they meet. Use Play, Prev, Next, and Reset; each step is described in text."></canvas>
       <div class="cv-ctrls">
         <button class="cv-btn" id="solid-play-btn" onclick="solidToggle()">&#9654; Play</button>
         <button class="cv-btn" onclick="solidStep(-1)">&#8592; Prev</button>
@@ -319,8 +322,8 @@
 
   <h2>HAZ Microstructure — Critical Zones</h2>
   <div class="three-col">
-    <div class="card" style="border-color:#dc2626">
-      <h3 style="color:#dc2626">CGHAZ — Most Critical</h3>
+    <div class="card" style="border-color:#e55f5f">
+      <h3 style="color:#e55f5f">CGHAZ — Most Critical</h3>
       <p style="font-size:0.82rem;color:#94a3b8;line-height:1.55;margin-bottom:10px;">
         Rapid grain growth occurs above ~1100°C as austenite grains are unpinned (carbides dissolve). Grains can exceed 200 µm. On cooling, the coarse prior-austenite grain (PAG) structure promotes upper bainite and Widmanstätten ferrite — or martensite if cooling is rapid.
       </p>
@@ -367,27 +370,27 @@
       Enter weld metal or base metal composition (wt%). Carbon equivalent (CE) quantifies hardenability — the higher CE, the harder the HAZ and the greater the risk of hydrogen-induced cracking. Preheat is mandatory above the threshold values.
     </p>
     <div class="ce-grid">
-      <div class="ce-inp"><label>C (%)</label><input type="number" id="ce-C"  value="0.18" step="0.01" min="0" max="1.0" oninput="calcCE()"></div>
-      <div class="ce-inp"><label>Mn (%)</label><input type="number" id="ce-Mn" value="1.20" step="0.05" min="0" max="3.0" oninput="calcCE()"></div>
-      <div class="ce-inp"><label>Si (%)</label><input type="number" id="ce-Si" value="0.25" step="0.05" min="0" max="1.0" oninput="calcCE()"></div>
-      <div class="ce-inp"><label>Cr (%)</label><input type="number" id="ce-Cr" value="0.00" step="0.05" min="0" max="5.0" oninput="calcCE()"></div>
-      <div class="ce-inp"><label>Mo (%)</label><input type="number" id="ce-Mo" value="0.00" step="0.05" min="0" max="2.0" oninput="calcCE()"></div>
-      <div class="ce-inp"><label>V (%)</label><input type="number" id="ce-V"  value="0.00" step="0.01" min="0" max="0.5" oninput="calcCE()"></div>
-      <div class="ce-inp"><label>Ni (%)</label><input type="number" id="ce-Ni" value="0.00" step="0.05" min="0" max="5.0" oninput="calcCE()"></div>
-      <div class="ce-inp"><label>Cu (%)</label><input type="number" id="ce-Cu" value="0.00" step="0.05" min="0" max="1.0" oninput="calcCE()"></div>
-      <div class="ce-inp"><label>B (%)</label><input type="number" id="ce-B"  value="0.000" step="0.001" min="0" max="0.01" oninput="calcCE()"></div>
+      <div class="ce-inp"><label>C (%)</label><input type="number" id="ce-C"  value="0.18" step="0.01" min="0" max="1.0" oninput="calcCE()" aria-label="C (%)"></div>
+      <div class="ce-inp"><label>Mn (%)</label><input type="number" id="ce-Mn" value="1.20" step="0.05" min="0" max="3.0" oninput="calcCE()" aria-label="Mn (%)"></div>
+      <div class="ce-inp"><label>Si (%)</label><input type="number" id="ce-Si" value="0.25" step="0.05" min="0" max="1.0" oninput="calcCE()" aria-label="Si (%)"></div>
+      <div class="ce-inp"><label>Cr (%)</label><input type="number" id="ce-Cr" value="0.00" step="0.05" min="0" max="5.0" oninput="calcCE()" aria-label="Cr (%)"></div>
+      <div class="ce-inp"><label>Mo (%)</label><input type="number" id="ce-Mo" value="0.00" step="0.05" min="0" max="2.0" oninput="calcCE()" aria-label="Mo (%)"></div>
+      <div class="ce-inp"><label>V (%)</label><input type="number" id="ce-V"  value="0.00" step="0.01" min="0" max="0.5" oninput="calcCE()" aria-label="V (%)"></div>
+      <div class="ce-inp"><label>Ni (%)</label><input type="number" id="ce-Ni" value="0.00" step="0.05" min="0" max="5.0" oninput="calcCE()" aria-label="Ni (%)"></div>
+      <div class="ce-inp"><label>Cu (%)</label><input type="number" id="ce-Cu" value="0.00" step="0.05" min="0" max="1.0" oninput="calcCE()" aria-label="Cu (%)"></div>
+      <div class="ce-inp"><label>B (%)</label><input type="number" id="ce-B"  value="0.000" step="0.001" min="0" max="0.01" oninput="calcCE()" aria-label="B (%)"></div>
     </div>
     <div class="two-col">
       <div class="ce-out">
         <div style="font-size:0.78rem;color:#94a3b8;margin-bottom:4px;">IIW Carbon Equivalent</div>
-        <div style="font-size:0.72rem;color:#475569;margin-bottom:8px;">CE = C + Mn/6 + (Cr+Mo+V)/5 + (Ni+Cu)/15</div>
+        <div style="font-size:0.72rem;color:#7b8ca6;margin-bottom:8px;">CE = C + Mn/6 + (Cr+Mo+V)/5 + (Ni+Cu)/15</div>
         <div class="ce-val" id="ce-iiw-val" style="color:#38bdf8">0.38</div>
         <div class="ce-bar-wrap"><div class="ce-bar" id="ce-iiw-bar" style="width:38%;background:#38bdf8"></div></div>
         <div class="ce-label" id="ce-iiw-lbl">Moderate — preheat advisable for thick sections</div>
       </div>
       <div class="ce-out">
         <div style="font-size:0.78rem;color:#94a3b8;margin-bottom:4px;">Pcm (Ito-Bessyo)</div>
-        <div style="font-size:0.72rem;color:#475569;margin-bottom:8px;">Pcm = C + Si/30 + (Mn+Cu+Cr)/20 + Ni/60 + Mo/15 + V/10 + 5B</div>
+        <div style="font-size:0.72rem;color:#7b8ca6;margin-bottom:8px;">Pcm = C + Si/30 + (Mn+Cu+Cr)/20 + Ni/60 + Mo/15 + V/10 + 5B</div>
         <div class="ce-val" id="ce-pcm-val" style="color:#a78bfa">0.21</div>
         <div class="ce-bar-wrap"><div class="ce-bar" id="ce-pcm-bar" style="width:42%;background:#a78bfa"></div></div>
         <div class="ce-label" id="ce-pcm-lbl">Moderate — preheat advisable for restrained joints</div>
@@ -402,7 +405,7 @@
       <div class="ce-bar-wrap" style="height:18px">
         <div class="ce-bar" id="ce-hv-bar" style="width:42%;background:linear-gradient(90deg,#22c55e,#f59e0b,#ef4444)"></div>
       </div>
-      <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:#475569;margin-top:3px;">
+      <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:#7b8ca6;margin-top:3px;">
         <span>Soft (&lt;200 Hv)</span><span>Moderate (250 Hv)</span><span>Hard — HIC risk (&gt;350 Hv)</span>
       </div>
       <div class="ce-label" id="ce-hv-lbl" style="margin-top:8px;"></div>
@@ -420,18 +423,18 @@
       Each location in the HAZ experiences a unique thermal cycle — a rapid rise to a peak temperature followed by cooling. The peak temperature determines which zone the material falls into; the cooling rate (especially ∆t<sub>8/5</sub>) determines the resulting microstructure.
     </p>
     <div class="cv-wrap">
-      <canvas id="thermal-canvas" width="560" height="300" style="background:#0a1628;border:1px solid #1e3a5c;max-width:100%;border-radius:8px;"></canvas>
+      <canvas id="thermal-canvas" width="560" height="300" style="background:#0a1628;border:1px solid #1e3a5c;max-width:100%;border-radius:8px;" role="img" aria-label="Thermal cycle chart, temperature versus time, for points at increasing distance from the fusion line: each heats quickly to a peak then cools. Peak temperatures drop from above 1500 °C at the fusion boundary through the coarse-grain, fine-grain, intercritical, and subcritical HAZ positions."></canvas>
     </div>
     <div class="legend" style="margin-top:10px">
       <div class="leg-item"><div class="leg-sw" style="background:#f97316"></div>Fusion Zone boundary</div>
-      <div class="leg-item"><div class="leg-sw" style="background:#dc2626"></div>CGHAZ position</div>
+      <div class="leg-item"><div class="leg-sw" style="background:#e55f5f"></div>CGHAZ position</div>
       <div class="leg-item"><div class="leg-sw" style="background:#f59e0b"></div>FGHAZ position</div>
       <div class="leg-item"><div class="leg-sw" style="background:#22c55e"></div>ICHAZ position</div>
       <div class="leg-item"><div class="leg-sw" style="background:#38bdf8"></div>SCHAZ position</div>
     </div>
     <div class="slider-row" style="margin-top:14px">
       <label>Heat Input (kJ/mm)</label>
-      <input type="range" min="3" max="30" value="10" step="1" oninput="updateThermal(this.value)">
+      <input type="range" min="3" max="30" value="10" step="1" oninput="updateThermal(this.value)" aria-label="Heat Input (kJ/mm)">
       <span class="slider-val" id="therm-val">1.0 kJ/mm</span>
     </div>
     <div class="alert info" style="margin-top:12px">
@@ -446,36 +449,36 @@
       A continuous cooling transformation (CCT) diagram shows which phases form during cooling from austenite. Overlaying the HAZ thermal cycle cooling curves reveals the expected microstructure at each HAZ position. Fast cooling (CGHAZ near the fusion line) crosses into the martensite field; slower cooling enters bainite or ferrite regions.
     </p>
     <div class="cv-wrap">
-      <canvas id="cct-canvas" width="560" height="300" style="background:#0a1628;border:1px solid #1e3a5c;max-width:100%;border-radius:8px;"></canvas>
+      <canvas id="cct-canvas" width="560" height="300" style="background:#0a1628;border:1px solid #1e3a5c;max-width:100%;border-radius:8px;" role="img" aria-label="Continuous cooling transformation diagram with ferrite, pearlite, bainite, and martensite regions on temperature versus log time axes, overlaid with the cooling curve of the coarse-grain HAZ. Faster cooling crosses into bainite and martensite; slower cooling forms ferrite and pearlite."></canvas>
     </div>
     <div class="legend" style="margin-top:10px">
       <div class="leg-item"><div class="leg-sw" style="background:rgba(99,102,241,0.4)"></div>Ferrite region</div>
       <div class="leg-item"><div class="leg-sw" style="background:rgba(34,197,94,0.35)"></div>Pearlite region</div>
       <div class="leg-item"><div class="leg-sw" style="background:rgba(245,158,11,0.4)"></div>Bainite region</div>
       <div class="leg-item"><div class="leg-sw" style="background:rgba(239,68,68,0.4)"></div>Martensite region</div>
-      <div class="leg-item"><div class="leg-sw" style="background:#dc2626;border-radius:50%"></div>CGHAZ cooling curve</div>
+      <div class="leg-item"><div class="leg-sw" style="background:#e55f5f;border-radius:50%"></div>CGHAZ cooling curve</div>
     </div>
     <p class="src">DoITPoMS, University of Cambridge, <em>Phase Transformations and Complex Alloy Microstructures</em> TLP — CCT diagrams &amp; weld HAZ; schematic CCT for low-alloy structural steel (ASTM A36 / S355 equivalent).</p>
   </div>
 
   <h2>Phase Transformation Summary</h2>
   <div class="tbl-wrap">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Phase Transformation Summary</caption>
       <thead>
         <tr>
-          <th>HAZ Zone</th><th>∆t<sub>8/5</sub> Typical (s)</th><th>Cooling Rate</th><th>Resulting Phase(s)</th><th>Toughness Outcome</th>
+          <th scope="col">HAZ Zone</th><th scope="col">∆t<sub>8/5</sub> Typical (s)</th><th scope="col">Cooling Rate</th><th scope="col">Resulting Phase(s)</th><th scope="col">Toughness Outcome</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td style="color:#dc2626;font-weight:700">CGHAZ</td>
+          <td style="color:#e55f5f;font-weight:700">CGHAZ</td>
           <td>1–5 s (fast)</td>
           <td>Very fast (&gt;50°C/s at 700°C)</td>
           <td>Martensite, upper bainite, Widmanstätten ferrite</td>
           <td style="color:#fca5a5">Poor — brittle at low temp</td>
         </tr>
         <tr>
-          <td style="color:#dc2626;font-weight:700">CGHAZ</td>
+          <td style="color:#e55f5f;font-weight:700">CGHAZ</td>
           <td>10–30 s (mod.)</td>
           <td>Moderate (10–50°C/s)</td>
           <td>Upper bainite + ferrite</td>
@@ -511,6 +514,7 @@
   <p class="src">DoITPoMS <em>Weld Microstructures</em> TLP, Cambridge University; also Easterling, <em>Introduction to the Physical Metallurgy of Welding</em> (2nd ed., Butterworth).</p>
 </div><!-- end t-thermal -->
 
+</main>
 <div class="back-link"><a href="index.html">← Back to Visualizations</a></div>
 
 <script>
@@ -1013,7 +1017,7 @@ function drawHeatInput(q) {
   const totalMM = (fz_mm + cg_mm + fg_mm + ic_mm + sc_mm).toFixed(1);
   ctx.textAlign = 'left';
   ctx.fillStyle = '#64748b';
-  ctx.fillText(`Half-width: ${totalMM} mm`, CL, sbY + 25);
+  ctx.fillText(`Half-width: ${totalMM} mm`, CL + S + 14, sbY + 3);
 
   // ── right panel: CGHAZ grain size ─────────────────────────────
   const GP = 305, GPY = 8, GW = 250, GH = 246;

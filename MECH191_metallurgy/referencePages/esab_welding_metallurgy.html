@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Welding Metallurgy — ESAB Handbook</title>
 <style>
@@ -25,7 +27,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 }
 .tab-btn {
   padding: 10px 18px; font-size: 0.84rem; font-weight: 600;
-  border: none; background: none; cursor: pointer; color: #64748b;
+  border: none; background: none; cursor: pointer; color: #606f85;
   border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.15s;
   white-space: nowrap;
 }
@@ -90,7 +92,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 
 .elem-card { border-radius: 10px; padding: 14px 16px; }
 .elem-card .el-sym { font-size: 1.4rem; font-weight: 800; }
-.elem-card .el-name { font-size: 0.72rem; color: #64748b; margin-bottom: 6px; }
+.elem-card .el-name { font-size: 0.72rem; color: #606f85; margin-bottom: 6px; }
 .elem-card .el-body { font-size: 0.78rem; line-height: 1.6; }
 
 .crack-card { background: #fef2f2; border: 2px solid #fca5a5; border-radius: 10px; padding: 18px; }
@@ -122,6 +124,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
   <div class="subtitle">ESAB Welding Metallurgy Handbook — Weld Metals · HAZ Microstructure · Cracking Mechanisms · Alloying Elements &amp; Weldability</div>
 </header>
 
+<main id="main-content">
 <div class="source-note">
   <strong>Source:</strong> ESAB <em>Welding Metallurgy</em> (Sindo Kou, ESAB Knowledge Centre); supplemented by AWS Welding Handbook Vol. 1 &amp; ASM Handbook Vol. 6 where noted. All data are reference values — verify against applicable code and base-metal specification before use.
 </div>
@@ -144,8 +147,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
       <div>
         <h3>Solidification Parameters</h3>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-          <thead><tr><th>Parameter</th><th>Symbol</th><th>Effect on Microstructure</th></tr></thead>
+        <table class="ref-table"><caption class="sr-only">Solidification Parameters</caption>
+          <thead><tr><th scope="col">Parameter</th><th scope="col">Symbol</th><th scope="col">Effect on Microstructure</th></tr></thead>
           <tbody>
             <tr><td>Temperature gradient</td><td><em>G</em></td><td>High G → planar/cellular; Low G → dendritic/equiaxed</td></tr>
             <tr><td>Solidification rate</td><td><em>R</em></td><td>High R → fine dendrites; Low R → coarse</td></tr>
@@ -160,8 +163,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
       <div>
         <h3>Solidification Modes (Stainless Steels)</h3>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-          <thead><tr><th>Mode</th><th>Primary Phase</th><th>Cr<sub>eq</sub>/Ni<sub>eq</sub></th><th>Hot-Crack Risk</th></tr></thead>
+        <table class="ref-table"><caption class="sr-only">Solidification Modes (Stainless Steels)</caption>
+          <thead><tr><th scope="col">Mode</th><th scope="col">Primary Phase</th><th scope="col">Cr<sub>eq</sub>/Ni<sub>eq</sub></th><th scope="col">Hot-Crack Risk</th></tr></thead>
           <tbody>
             <tr><td><strong>A</strong> — Fully austenitic</td><td>γ</td><td>&lt; 1.25</td><td>High</td></tr>
             <tr><td><strong>AF</strong> — Austenite + some δ</td><td>γ</td><td>1.25–1.48</td><td>Moderate</td></tr>
@@ -200,8 +203,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 
     <h3 style="margin-top:18px;">Mechanical Properties vs. Microstructure — ESAB Reference Data</h3>
     <div style="overflow-x:auto;">
-    <table class="ref-table">
-      <thead><tr><th>Constituent</th><th>Tensile (MPa)</th><th>Yield (MPa)</th><th>CVN −20°C (J)</th><th>Toughness Ranking</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Mechanical Properties vs. Microstructure — ESAB Reference Data</caption>
+      <thead><tr><th scope="col">Constituent</th><th scope="col">Tensile (MPa)</th><th scope="col">Yield (MPa)</th><th scope="col">CVN −20°C (J)</th><th scope="col">Toughness Ranking</th></tr></thead>
       <tbody>
         <tr><td>Acicular ferrite (AF)</td><td>530–650</td><td>430–540</td><td>100–200+</td><td>✦✦✦✦✦ Best</td></tr>
         <tr><td>Polygonal ferrite + pearlite</td><td>420–520</td><td>280–380</td><td>40–90</td><td>✦✦✦ Moderate</td></tr>
@@ -222,8 +225,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
       <div>
         <h3>Key Inclusion Types &amp; Their Roles</h3>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-          <thead><tr><th>Inclusion Phase</th><th>Nucleation Effectiveness</th><th>Source</th></tr></thead>
+        <table class="ref-table"><caption class="sr-only">Key Inclusion Types &amp; Their Roles</caption>
+          <thead><tr><th scope="col">Inclusion Phase</th><th scope="col">Nucleation Effectiveness</th><th scope="col">Source</th></tr></thead>
           <tbody>
             <tr><td>TiO / Ti₂O₃</td><td>✦✦✦✦✦ Very high</td><td>Ti additions to wire; low O₂ affinity</td></tr>
             <tr><td>MnO–Al₂O₃ spinel</td><td>✦✦✦✦ High</td><td>Mn + Al deoxidation; most common</td></tr>
@@ -255,8 +258,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
       <div>
         <h3>SMAW Electrode Classification (AWS A5.1 / A5.5)</h3>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-          <thead><tr><th>Designation</th><th>Tensile (psi)</th><th>Position</th><th>Current / Flux Type</th></tr></thead>
+        <table class="ref-table"><caption class="sr-only">SMAW Electrode Classification (AWS A5.1 / A5.5)</caption>
+          <thead><tr><th scope="col">Designation</th><th scope="col">Tensile (psi)</th><th scope="col">Position</th><th scope="col">Current / Flux Type</th></tr></thead>
           <tbody>
             <tr><td><strong>E60XX</strong></td><td>62,000 min</td><td>—</td><td>Per suffix</td></tr>
             <tr><td><strong>E7016</strong></td><td>70,000 min</td><td>All pos.</td><td>AC or DCEP; low-H</td></tr>
@@ -271,8 +274,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
       <div>
         <h3>GMAW Wire (AWS A5.18 / A5.28) &amp; FCAW (A5.20)</h3>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-          <thead><tr><th>Class</th><th>Process</th><th>Shielding</th><th>Application</th></tr></thead>
+        <table class="ref-table"><caption class="sr-only">GMAW Wire (AWS A5.18 / A5.28) &amp; FCAW (A5.20)</caption>
+          <thead><tr><th scope="col">Class</th><th scope="col">Process</th><th scope="col">Shielding</th><th scope="col">Application</th></tr></thead>
           <tbody>
             <tr><td>ER70S-3</td><td>GMAW</td><td>CO₂ / Ar-mix</td><td>Clean mill-scale free plate</td></tr>
             <tr><td>ER70S-6</td><td>GMAW</td><td>CO₂ / Ar-mix</td><td>Rusty/oily/mill-scale plate (higher Mn, Si)</td></tr>
@@ -296,10 +299,10 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <p>The heat-affected zone (HAZ) is the region of base metal whose microstructure and properties are altered by welding heat without melting. ESAB defines four sub-zones based on peak temperature experienced during the weld thermal cycle.</p>
 
     <div style="overflow-x:auto;margin-top:14px;">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">HAZ Sub-Zone Definitions — ESAB / IIW Classification</caption>
       <thead>
         <tr>
-          <th>Sub-Zone</th><th>Peak Temp (°C)</th><th>Microstructure</th><th>Key Concern</th>
+          <th scope="col">Sub-Zone</th><th scope="col">Peak Temp (°C)</th><th scope="col">Microstructure</th><th scope="col">Key Concern</th>
         </tr>
       </thead>
       <tbody>
@@ -346,8 +349,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
         <p>For C–Mn steels without microalloy pinning, rapid coarsening occurs above 1100°C. A CGHAZ grain size of 150–400 µm is typical at 1.5–3.0 kJ/mm heat input.</p>
         <h3>Grain Coarsening — Effect of Heat Input</h3>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-          <thead><tr><th>Heat Input (kJ/mm)</th><th>Approx. CGHAZ Grain Size (µm)</th><th>Approx. t<sub>8/5</sub> (s) — 25mm plate</th></tr></thead>
+        <table class="ref-table"><caption class="sr-only">Grain Coarsening — Effect of Heat Input</caption>
+          <thead><tr><th scope="col">Heat Input (kJ/mm)</th><th scope="col">Approx. CGHAZ Grain Size (µm)</th><th scope="col">Approx. t<sub>8/5</sub> (s) — 25mm plate</th></tr></thead>
           <tbody>
             <tr><td>&lt; 1.0</td><td>80–150</td><td>&lt;5</td></tr>
             <tr><td>1.0–2.0</td><td>150–250</td><td>5–15</td></tr>
@@ -361,8 +364,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
       <div>
         <h3>Microalloying Grain Refinement Pinning Temperatures</h3>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-          <thead><tr><th>Precipitate</th><th>Dissolution Temp (°C)</th><th>Pinning Effectiveness</th></tr></thead>
+        <table class="ref-table"><caption class="sr-only">Microalloying Grain Refinement Pinning Temperatures</caption>
+          <thead><tr><th scope="col">Precipitate</th><th scope="col">Dissolution Temp (°C)</th><th scope="col">Pinning Effectiveness</th></tr></thead>
           <tbody>
             <tr><td>AlN</td><td>~1100</td><td>Moderate; dissolves at high T</td></tr>
             <tr><td>NbC / NbN</td><td>~1200–1250</td><td>Good up to 1200°C; widely used</td></tr>
@@ -398,8 +401,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
       <div>
         <h3>Transformation Products vs. t<sub>8/5</sub> — C–Mn Steel (CE ≈ 0.40)</h3>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-          <thead><tr><th>t<sub>8/5</sub> (s)</th><th>Dominant HAZ Phase</th><th>HV10 (approx.)</th><th>CVN at −20°C</th></tr></thead>
+        <table class="ref-table"><caption class="sr-only">Transformation Products vs. t 8/5 — C–Mn Steel (CE ≈ 0.40)</caption>
+          <thead><tr><th scope="col">t<sub>8/5</sub> (s)</th><th scope="col">Dominant HAZ Phase</th><th scope="col">HV10 (approx.)</th><th scope="col">CVN at −20°C</th></tr></thead>
           <tbody>
             <tr><td>&lt; 5</td><td>Martensite ± bainite</td><td>380–450</td><td>&lt; 30 J (brittle)</td></tr>
             <tr><td>5–15</td><td>Upper bainite + some martensite</td><td>280–380</td><td>40–80 J</td></tr>
@@ -472,8 +475,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
         <p>As the weld pool solidifies, a brittle temperature range (BTR) exists between the coherence temperature (where dendrites interlock) and the solidus. Within the BTR, liquid films exist between dendrite arms/grain boundaries. If welding-induced tensile strain across these films exceeds the ductility of the semi-solid, cracking initiates. ESAB notes that cracks appear at the weld centreline (centreline cracking) or at crater cracks (last point to solidify).</p>
         <h3>Susceptible Compositions</h3>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-          <thead><tr><th>Element</th><th>Role in Hot Cracking</th><th>Critical Level</th></tr></thead>
+        <table class="ref-table"><caption class="sr-only">Susceptible Compositions</caption>
+          <thead><tr><th scope="col">Element</th><th scope="col">Role in Hot Cracking</th><th scope="col">Critical Level</th></tr></thead>
           <tbody>
             <tr><td>Sulfur (S)</td><td>Forms low-melting FeS eutectic (988°C) at grain boundaries</td><td>&gt; 0.025% greatly increases risk</td></tr>
             <tr><td>Phosphorus (P)</td><td>Forms Fe₃P eutectic (1049°C); also segregates to boundaries</td><td>&gt; 0.020% risk increases</td></tr>
@@ -559,8 +562,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 
     <h3 style="margin-top:18px;">HIC Morphologies</h3>
     <div style="overflow-x:auto;">
-    <table class="ref-table">
-      <thead><tr><th>Crack Type</th><th>Location</th><th>Orientation</th><th>Detection</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">HIC Morphologies</caption>
+      <thead><tr><th scope="col">Crack Type</th><th scope="col">Location</th><th scope="col">Orientation</th><th scope="col">Detection</th></tr></thead>
       <tbody>
         <tr><td><strong>Underbead crack</strong></td><td>CGHAZ, beneath the weld bead</td><td>Parallel to fusion boundary</td><td>UT, phased-array; sectioning</td></tr>
         <tr><td><strong>Toe crack</strong></td><td>At weld toe stress concentration</td><td>Transverse or longitudinal</td><td>MT, PT, UT from surface</td></tr>
@@ -609,8 +612,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
           <li>ESAB prevention strategies:</li>
         </ul>
         <div style="overflow-x:auto;margin-top:8px;">
-        <table class="ref-table">
-          <thead><tr><th>Method</th><th>Description</th></tr></thead>
+        <table class="ref-table"><caption class="sr-only">Lamellar Tearing</caption>
+          <thead><tr><th scope="col">Method</th><th scope="col">Description</th></tr></thead>
           <tbody>
             <tr><td>Low-S steel</td><td>Specify Z-grade plate: S ≤ 0.010%, ZRA ≥ 35% (EN 10164: Z35)</td></tr>
             <tr><td>Ca-treated steel</td><td>Ca converts MnS to spherical CaS → reduces anisotropy</td></tr>
@@ -644,8 +647,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
         </div>
         <h3 style="margin-top:14px;">Preheat Guidance by CE (IIW) — ESAB Table</h3>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-          <thead><tr><th>CE<sub>IIW</sub></th><th>Preheat (°C) — 25mm plate, H ≤ 5 mL/100g</th><th>Risk Category</th></tr></thead>
+        <table class="ref-table"><caption class="sr-only">Preheat Guidance by CE (IIW) — ESAB Table</caption>
+          <thead><tr><th scope="col">CE<sub>IIW</sub></th><th scope="col">Preheat (°C) — 25mm plate, H ≤ 5 mL/100g</th><th scope="col">Risk Category</th></tr></thead>
           <tbody>
             <tr><td>&lt; 0.35</td><td>None required (clean joints)</td><td>Low</td></tr>
             <tr><td>0.35–0.40</td><td>None to 75°C</td><td>Low–Moderate</td></tr>
@@ -796,16 +799,16 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
   <div class="section">
     <h2>Element Effect Summary Table — Weldability Quick Reference</h2>
     <div style="overflow-x:auto;">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Element Effect Summary Table — Weldability Quick Reference</caption>
       <thead>
         <tr>
-          <th>Element</th>
-          <th>Hardenability</th>
-          <th>Hot-Crack Risk</th>
-          <th>Cold-Crack (HIC)</th>
-          <th>Toughness</th>
-          <th>Creep / High-T Strength</th>
-          <th>Remarks</th>
+          <th scope="col">Element</th>
+          <th scope="col">Hardenability</th>
+          <th scope="col">Hot-Crack Risk</th>
+          <th scope="col">Cold-Crack (HIC)</th>
+          <th scope="col">Toughness</th>
+          <th scope="col">Creep / High-T Strength</th>
+          <th scope="col">Remarks</th>
         </tr>
       </thead>
       <tbody>
@@ -836,8 +839,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
         <h3>Schaeffler Diagram (1949) — Composition-Phase Map</h3>
         <p>Maps Cr<sub>eq</sub> vs. Ni<sub>eq</sub> to predict weld metal phase constitution. Originally calibrated for dilution welding of dissimilar stainless steels. Regions: fully austenitic (A), austenitic + martensite (A+M), austenitic + ferrite (A+F), fully ferritic (F), martensite (M).</p>
         <div style="overflow-x:auto;">
-        <table class="ref-table" style="margin-top:8px;">
-          <thead><tr><th>Region (Schaeffler)</th><th>Cr<sub>eq</sub> (approx.)</th><th>Ni<sub>eq</sub> (approx.)</th><th>Risk</th></tr></thead>
+        <table class="ref-table" style="margin-top:8px;"><caption class="sr-only">Schaeffler Diagram (1949) — Composition-Phase Map</caption>
+          <thead><tr><th scope="col">Region (Schaeffler)</th><th scope="col">Cr<sub>eq</sub> (approx.)</th><th scope="col">Ni<sub>eq</sub> (approx.)</th><th scope="col">Risk</th></tr></thead>
           <tbody>
             <tr><td>Fully austenitic (A)</td><td>&lt;18</td><td>&gt;15</td><td>High hot-crack risk</td></tr>
             <tr><td>A + 4–8% F</td><td>19–22</td><td>11–14</td><td>Optimal for 304L/316L welds</td></tr>
@@ -866,6 +869,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
   </div>
 </div>
 
+</main>
 <div class="back">
   <a href="index.html">← Back to References</a>
 </div>

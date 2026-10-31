@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <title>Additive Manufacturing — America Makes &amp; GE Additive</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -96,11 +98,11 @@ header p { font-size: 0.8rem; opacity: 0.75; margin-top: 4px; }
     background: #fff;
     transition: box-shadow 0.15s, border-color 0.15s;
 }
-.card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-color: #94a3b8; }
+.card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-color: #627793; }
 .card.selected { border-color: #1e3a5f; box-shadow: 0 0 0 2px rgba(30,58,95,0.25); }
 .card canvas { display: block; width: 100%; height: 100px; }
 .card-body { padding: 8px 10px; }
-.card-id { font-size: 0.68rem; color: #94a3b8; font-family: monospace; }
+.card-id { font-size: 0.68rem; color: #627793; font-family: monospace; }
 .card-name { font-size: 0.82rem; font-weight: 600; margin: 2px 0; line-height: 1.3; }
 .cat-badge {
     display: inline-block;
@@ -115,7 +117,7 @@ header p { font-size: 0.8rem; opacity: 0.75; margin-top: 4px; }
 .cat-case-study { background: #fef3c7; color: #92400e; }
 
 .detail-canvas { width: 100%; height: 160px; border-radius: 6px; display: block; background: #f8fafc; }
-.detail-id   { font-size: 0.7rem; color: #94a3b8; font-family: monospace; }
+.detail-id   { font-size: 0.7rem; color: #627793; font-family: monospace; }
 .detail-name { font-size: 1.05rem; font-weight: 700; color: #1e3a5f; margin-top: 2px; }
 .detail-cat  { margin: 4px 0 6px; }
 .detail-desc { font-size: 0.81rem; line-height: 1.55; color: #374151; }
@@ -133,7 +135,7 @@ header p { font-size: 0.8rem; opacity: 0.75; margin-top: 4px; }
 .col-left li::before  { content: "✕ "; color: #b91c1c; }
 .col-right h4 { color: #15803d; }
 .col-right li::before { content: "✓ "; color: #15803d; }
-.no-results { font-size: 0.85rem; color: #94a3b8; padding: 24px; text-align: center; }
+.no-results { font-size: 0.85rem; color: #627793; padding: 24px; text-align: center; }
 </style>
 </head>
 <body>
@@ -143,14 +145,15 @@ header p { font-size: 0.8rem; opacity: 0.75; margin-top: 4px; }
     <p>America Makes (LPBF, EBM, DED, Binder Jetting) &middot; GE Additive Case Studies (LEAP, Catalyst, GE9X, T901)</p>
 </header>
 
+<main id="main-content">
 <div class="source-note">
     Sources: America Makes &mdash; <em>Additive Manufacturing Technology Roadmap</em> &amp; <em>State of the Industry Reports</em> &middot; GE Additive &mdash; <em>Customer Case Studies</em> &amp; <em>Technology White Papers</em>
 </div>
 
 <div class="compare-strip">
     <h3>Key Process Comparison &mdash; LPBF (SLM) vs. EBM</h3>
-    <table class="compare-table">
-        <thead><tr><th>Parameter</th><th>LPBF / SLM</th><th>EBM</th></tr></thead>
+    <table class="compare-table"><caption class="sr-only">Key Process Comparison — LPBF (SLM) vs. EBM</caption>
+        <thead><tr><th scope="col">Parameter</th><th scope="col">LPBF / SLM</th><th scope="col">EBM</th></tr></thead>
         <tbody>
             <tr><td>Energy Source</td><td>Fiber laser (200–1000 W)</td><td>Electron beam (50–3500 W)</td></tr>
             <tr><td>Atmosphere</td><td>Inert gas (Ar / N&thinsp;₂)</td><td>High vacuum (&lt;10&thinsp;⁻³ mbar)</td></tr>
@@ -176,7 +179,7 @@ header p { font-size: 0.8rem; opacity: 0.75; margin-top: 4px; }
         <div class="card-grid" id="cardGrid"></div>
     </div>
     <div class="detail-panel" id="detailPanel">
-        <canvas class="detail-canvas" id="detailCanvas"></canvas>
+        <canvas class="detail-canvas" id="detailCanvas" role="img" aria-label="Schematic of the additive manufacturing process selected from the cards above, such as laser powder bed fusion or electron beam melting. The process name and details are given in the text of this panel."></canvas>
         <div>
             <div class="detail-id"  id="dId"></div>
             <div class="detail-name" id="dName"></div>
@@ -1250,6 +1253,7 @@ header p { font-size: 0.8rem; opacity: 0.75; margin-top: 4px; }
 </script>
 
 
+</main>
 <p style="text-align: center; padding: 16px; font-size: 0.85rem;"><a href="index.html">← Back to References</a></p>
 
 </body>

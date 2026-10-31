@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Continuous Cooling Transformation (CCT) Diagrams</title>
     <style>
@@ -114,7 +116,7 @@
             display: block;
             text-align: center;
             margin-top: 30px;
-            color: #0284c7;
+            color: #027ab8;
             text-decoration: none;
             font-size: 0.95rem;
         }
@@ -173,7 +175,7 @@
             transformation region, that microstructure forms.
         </p>
         <div class="diagram-wrap">
-            <svg viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:0 auto;">
+            <svg viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:0 auto;" role="img" aria-label="Annotated CCT diagram: temperature on the vertical axis, log time on the horizontal axis. Horizontal lines mark A3 (about 800 °C), A1 (727 °C), Ms (about 300 °C), and Mf. C-shaped start (solid) and finish (dashed) curves bound the pearlite region (Ps, Pf) at upper right and the bainite region (Bs, Bf) below it. Four cooling curves run from upper left: water quench passes left of all curves and gives 100 percent martensite; oil quench clips the bainite nose for bainite plus martensite; air cool crosses the pearlite region; furnace cool gives coarse pearlite and ferrite.">
                 <rect width="800" height="520" fill="#ffffff"/>
                 <!-- axes -->
                 <line x1="110" y1="25" x2="110" y2="430" stroke="#334155" stroke-width="1.5"/>
@@ -217,14 +219,14 @@
 
                 <circle cx="140" cy="430" r="4" fill="#2563eb"/>
                 <circle cx="310" cy="430" r="4" fill="#d97706"/>
-                <circle cx="460" cy="430" r="4" fill="#16a34a"/>
+                <circle cx="460" cy="430" r="4" fill="#16a34a" stroke="#117b38" stroke-width="1" vector-effect="non-scaling-stroke"/>
                 <circle cx="700" cy="430" r="4" fill="#7c3aed"/>
 
                 <!-- endpoint labels sit in the clear band just above the axis -->
                 <g font-size="11" font-weight="700" paint-order="stroke" stroke="#ffffff" stroke-width="4" stroke-linejoin="round">
                     <text x="140" y="392" text-anchor="middle" fill="#2563eb">Water Quench</text>
-                    <text x="310" y="392" text-anchor="middle" fill="#d97706">Oil Quench</text>
-                    <text x="460" y="392" text-anchor="middle" fill="#16a34a">Air Cool</text>
+                    <text x="310" y="392" text-anchor="middle" fill="#ac5f05">Oil Quench</text>
+                    <text x="460" y="392" text-anchor="middle" fill="#12843c">Air Cool</text>
                     <text x="700" y="392" text-anchor="middle" fill="#7c3aed">Furnace Cool</text>
                 </g>
                 <g font-size="10" font-weight="400" fill="#475569" paint-order="stroke" stroke="#ffffff" stroke-width="4" stroke-linejoin="round">
@@ -239,8 +241,8 @@
         </div>
 
         <p class="section-label">Key Features</p>
-        <table>
-            <thead><tr><th>Feature</th><th>What It Marks</th></tr></thead>
+        <table><caption class="sr-only">Anatomy of a CCT Diagram</caption>
+            <thead><tr><th scope="col">Feature</th><th scope="col">What It Marks</th></tr></thead>
             <tbody>
                 <tr><td class="code">A1 / A3</td><td>Lower/upper critical temperatures — above these, the steel is fully austenite; transformation on cooling cannot start above A1.</td></tr>
                 <tr><td class="code">Ps / Pf</td><td>Pearlite start / finish curves — the "nose" is the shortest time at which pearlite can begin forming, usually near 500&ndash;600&#176;C.</td></tr>
@@ -256,14 +258,14 @@
     <div class="section">
         <h2>Cooling Methods &amp; What They Produce</h2>
         <p>The four cooling curves in the diagram above correspond to the four heat-treating operations a technician actually performs:</p>
-        <table>
+        <table><caption class="sr-only">Cooling Methods &amp; What They Produce</caption>
             <thead>
                 <tr>
-                    <th>Cooling Method</th>
-                    <th>Relative Rate</th>
-                    <th>CCT Region Hit</th>
-                    <th>Resulting Microstructure</th>
-                    <th>Relative Hardness</th>
+                    <th scope="col">Cooling Method</th>
+                    <th scope="col">Relative Rate</th>
+                    <th scope="col">CCT Region Hit</th>
+                    <th scope="col">Resulting Microstructure</th>
+                    <th scope="col">Relative Hardness</th>
                 </tr>
             </thead>
             <tbody>
@@ -337,8 +339,8 @@
     <div class="section">
         <h2>Reading a Cooling Curve</h2>
         <p>To predict the resulting microstructure for a given cooling curve:</p>
-        <table>
-            <thead><tr><th>Step</th><th>What to Check</th></tr></thead>
+        <table><caption class="sr-only">Reading a Cooling Curve</caption>
+            <thead><tr><th scope="col">Step</th><th scope="col">What to Check</th></tr></thead>
             <tbody>
                 <tr><td>1</td><td>Follow the cooling curve down from the austenitizing temperature.</td></tr>
                 <tr><td>2</td><td>Does it cross the Ps curve? If yes, note the temperature/time of crossing — pearlite formation begins there.</td></tr>

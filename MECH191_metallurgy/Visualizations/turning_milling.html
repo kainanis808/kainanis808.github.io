@@ -2,6 +2,8 @@
 <html lang="en"><head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <title>Turning & Milling</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -42,6 +44,7 @@ tr:hover td{background:rgba(6,182,212,.04)}
   <h1>CNC Turning &amp; Milling</h1>
   <p>Sandvik Coromant calculators &nbsp;|&nbsp; Haas Automation operation guides &nbsp;|&nbsp; Harvey Tool &amp; Helical Solutions difficult-material strategies</p>
 </header>
+<main id="main-content">
 <div class="tabs">
   <button class="tab-btn active" data-tab="turning">CNC Turning</button>
   <button class="tab-btn" data-tab="milling">CNC Milling</button>
@@ -52,7 +55,7 @@ tr:hover td{background:rgba(6,182,212,.04)}
 <!-- ===== TAB 1: TURNING ===== -->
 <div class="tab-content active" id="tab-turning">
   <h2>CNC Turning — Sandvik Coromant &amp; Haas</h2>
-  <canvas id="c-lathe" width="760" height="310" style="width:760px;height:310px;margin-bottom:16px"></canvas>
+  <canvas id="c-lathe" width="760" height="310" style="width:760px;height:310px;margin-bottom:16px" role="img" aria-label="CNC turning set-up: a rotating workpiece in the chuck with the turning insert moving along it, labelled with workpiece diameter D, spindle speed n, cutting speed Vc, feed per revolution fn, and depth of cut ap."></canvas>
 
   <div class="row">
     <div class="col">
@@ -67,8 +70,8 @@ tr:hover td{background:rgba(6,182,212,.04)}
       </div>
       <div class="card">
         <h3>Starting Parameter Ranges</h3>
-        <table>
-          <thead><tr><th>Material</th><th>Vc (m/min)</th><th>fn (mm/rev)</th><th>ap rough (mm)</th></tr></thead>
+        <table><caption class="sr-only">Starting Parameter Ranges</caption>
+          <thead><tr><th scope="col">Material</th><th scope="col">Vc (m/min)</th><th scope="col">fn (mm/rev)</th><th scope="col">ap rough (mm)</th></tr></thead>
           <tbody>
             <tr><td>Low-carbon steel</td><td>250–400</td><td>0.15–0.40</td><td>2–5</td></tr>
             <tr><td>Alloy steel HB250</td><td>150–280</td><td>0.12–0.35</td><td>2–4</td></tr>
@@ -92,8 +95,8 @@ tr:hover td{background:rgba(6,182,212,.04)}
       </div>
       <div class="card">
         <h3>Turning Operation Types</h3>
-        <table style="font-size:.76rem">
-          <thead><tr><th>Operation</th><th>Tool Motion</th><th>Key Parameter</th></tr></thead>
+        <table style="font-size:.76rem"><caption class="sr-only">Turning Operation Types</caption>
+          <thead><tr><th scope="col">Operation</th><th scope="col">Tool Motion</th><th scope="col">Key Parameter</th></tr></thead>
           <tbody>
             <tr><td>Facing</td><td>−X (OD→center)</td><td>fn controls Ra; ap = 0.2–1 mm</td></tr>
             <tr><td>OD roughing</td><td>−Z (axial)</td><td>Max ap for rigidity; high fn</td></tr>
@@ -109,7 +112,7 @@ tr:hover td{background:rgba(6,182,212,.04)}
   </div>
 
   <h2>Insert Shape &amp; Application Reference</h2>
-  <canvas id="c-insert" width="760" height="190" style="width:760px;height:190px;margin-bottom:16px"></canvas>
+  <canvas id="c-insert" width="760" height="190" style="width:760px;height:190px;margin-bottom:16px" role="img" aria-label="Common turning insert shapes from strongest to most versatile: round, square (80° and 90°), triangle, and the sharper diamond shapes (55° and 35°) used for profiling, with typical applications for each."></canvas>
   <div class="row" style="margin-top:4px">
     <div class="col card">
       <h3>Insert Grade Logic (ISO P/M/K/N/S/H)</h3>
@@ -130,7 +133,7 @@ tr:hover td{background:rgba(6,182,212,.04)}
 <div class="tab-content" id="tab-milling">
   <h2>CNC Milling — Sandvik Coromant &amp; Haas</h2>
   <div class="row">
-    <canvas id="c-millen" width="420" height="340" style="width:420px;height:340px"></canvas>
+    <canvas id="c-millen" width="420" height="340" style="width:420px;height:340px" role="img" aria-label="Milling set-up: a rotating end mill with z teeth cutting the workpiece, labelled with cutter diameter Dc, spindle speed n, feed per tooth fz, table feed vf, axial depth ap, and radial engagement ae."></canvas>
     <div style="flex:1">
       <div class="card">
         <h3>Sandvik — Milling Formulas</h3>
@@ -144,8 +147,8 @@ tr:hover td{background:rgba(6,182,212,.04)}
       </div>
       <div class="card">
         <h3>Radial &amp; Axial Engagement</h3>
-        <table style="font-size:.78rem">
-          <thead><tr><th>Cut Type</th><th>ae/Dc</th><th>ap</th><th>Strategy</th></tr></thead>
+        <table style="font-size:.78rem"><caption class="sr-only">Radial &amp; Axial Engagement</caption>
+          <thead><tr><th scope="col">Cut Type</th><th scope="col">ae/Dc</th><th scope="col">ap</th><th scope="col">Strategy</th></tr></thead>
           <tbody>
             <tr><td>Full slot</td><td>100%</td><td>0.5–1× Dc</td><td>4-flute; reduced Vc −20%</td></tr>
             <tr><td>Side milling</td><td>30–50%</td><td>1–2× Dc</td><td>Standard parameters</td></tr>
@@ -159,7 +162,7 @@ tr:hover td{background:rgba(6,182,212,.04)}
   </div>
 
   <h2>Toolpath Strategies</h2>
-  <canvas id="c-toolpath" width="760" height="200" style="width:760px;height:200px;margin-bottom:16px"></canvas>
+  <canvas id="c-toolpath" width="760" height="200" style="width:760px;height:200px;margin-bottom:16px" role="img" aria-label="Milling toolpath strategies: climb milling (cutter rotation in the same direction as feed, chip thick to thin) versus conventional milling (opposite directions, chip thin to thick), plus a trochoidal path for slots."></canvas>
 
   <div class="row">
     <div class="col card">
@@ -184,8 +187,8 @@ tr:hover td{background:rgba(6,182,212,.04)}
   <div class="row">
     <div class="col card">
       <h3>End Mill Selection</h3>
-      <table style="font-size:.76rem">
-        <thead><tr><th>Flute Count</th><th>Best For</th><th>Why</th></tr></thead>
+      <table style="font-size:.76rem"><caption class="sr-only">End Mill Selection</caption>
+        <thead><tr><th scope="col">Flute Count</th><th scope="col">Best For</th><th scope="col">Why</th></tr></thead>
         <tbody>
           <tr><td>2-flute</td><td>Aluminum, plastics, deep slots</td><td>Large chip clearance, prevents re-cutting</td></tr>
           <tr><td>3-flute</td><td>Aluminum, general purpose</td><td>Balance of chip clearance and feed rate</td></tr>
@@ -211,14 +214,14 @@ tr:hover td{background:rgba(6,182,212,.04)}
       <h3>Turning Surface Roughness</h3>
       <div class="eq">Ra (μm) ≈ fn² / (8 · rε) × 1000</div>
       <p>Theoretical Ra for a single-point turning tool with nose radius rε. Actual Ra is 1.5–2× theoretical due to vibration, BUE, and chip re-cutting. Reducing fn by half reduces Ra by 4×.</p>
-      <canvas id="c-ra-turn" width="480" height="270" style="width:480px;height:270px;margin:10px 0"></canvas>
+      <canvas id="c-ra-turn" width="480" height="270" style="width:480px;height:270px;margin:10px 0" role="img" aria-label="Chart of theoretical turning roughness Ra versus feed per revolution for several insert nose radii: roughness rises with the square of feed and falls with larger nose radius."></canvas>
     </div>
     <div style="flex:1">
       <h3>Milling Surface Roughness</h3>
       <div class="eq">Ra (μm) ≈ ae² / (8 · R) × 1000  (ball end)</div>
       <div class="eq">Ra (μm) ≈ fz² / (8 · rε) × 1000  (flat end, step-over)</div>
       <p>For a ball-end mill, <strong style="color:#67e8f9">ae</strong> (step-over) and ball radius R determine the scallop height. For a flat end mill with corner radius rε, it is the feed per tooth fz that controls Ra in the feed direction.</p>
-      <canvas id="c-ra-mill" width="340" height="270" style="width:340px;height:270px;margin:10px 0"></canvas>
+      <canvas id="c-ra-mill" width="340" height="270" style="width:340px;height:270px;margin:10px 0" role="img" aria-label="Chart of scallop-height roughness versus step-over for ball-end and corner-radius end mills: roughness rises quickly with step-over and falls with larger tool radius."></canvas>
     </div>
   </div>
 
@@ -254,8 +257,8 @@ tr:hover td{background:rgba(6,182,212,.04)}
 
   <div class="card">
     <h3>Ra Target by Application</h3>
-    <table>
-      <thead><tr><th>Ra (μm)</th><th>Finish Level</th><th>Typical Process</th><th>Application</th></tr></thead>
+    <table><caption class="sr-only">Ra Target by Application</caption>
+      <thead><tr><th scope="col">Ra (μm)</th><th scope="col">Finish Level</th><th scope="col">Typical Process</th><th scope="col">Application</th></tr></thead>
       <tbody>
         <tr><td>&gt; 6.3</td><td>Rough</td><td>Rough turning, sawing</td><td>Non-functional surfaces, weld preps</td></tr>
         <tr><td>1.6 – 6.3</td><td>Semi-finish</td><td>Finish turning, milling</td><td>Clearance surfaces, bolt faces</td></tr>
@@ -272,7 +275,7 @@ tr:hover td{background:rgba(6,182,212,.04)}
 <div class="tab-content" id="tab-difficult">
   <h2>Difficult Materials — Harvey Tool &amp; Helical Solutions</h2>
   <p>Difficult-to-machine materials require systematic parameter reduction and process changes. The chart below shows Vc and fn as a percentage of equivalent steel baseline (AISI 1045, Vc=200 m/min turning).</p>
-  <canvas id="c-matfact" width="760" height="260" style="width:760px;height:260px;margin-bottom:16px"></canvas>
+  <canvas id="c-matfact" width="760" height="260" style="width:760px;height:260px;margin-bottom:16px" role="img" aria-label="Bar chart of recommended cutting speed and feed for difficult materials, such as stainless steels, titanium alloys, nickel superalloys, and hardened steels, compared with ordinary carbon steel. Harder-to-machine materials need much lower cutting speeds."></canvas>
 
   <div class="row">
     <div class="col card">
@@ -324,6 +327,7 @@ tr:hover td{background:rgba(6,182,212,.04)}
   </div>
 </div>
 
+</main>
 <div class="back"><a href="index.html">← Back to Visualizations</a></div>
 
 <script>
@@ -580,8 +584,8 @@ function drawMillEng(){
   ctx.beginPath(); ctx.moveTo(cx-Dc2,cy-Dc2-18); ctx.lineTo(wp_left,cy-Dc2-18); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(cx-Dc2,cy-Dc2-24); ctx.lineTo(cx-Dc2,cy-Dc2-12); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(wp_left,cy-Dc2-24); ctx.lineTo(wp_left,cy-Dc2-12); ctx.stroke();
-  ctx.fillStyle='#4ade80'; ctx.font='bold 11px system-ui'; ctx.textAlign='center';
-  ctx.fillText('ae=35%Dc',cx-Dc2+(ae_px)/2,cy-Dc2-24);
+  ctx.fillStyle='#4ade80'; ctx.font='bold 11px system-ui'; ctx.textAlign='right';
+  ctx.fillText('ae=35%Dc',cx-Dc2-6,cy-Dc2-14);
 
   // Dc annotation
   ctx.strokeStyle='#38bdf8'; ctx.lineWidth=1;
@@ -616,13 +620,13 @@ function drawMillEng(){
 
   // Feed arrow
   arr(ctx,svx+svW*0.7,svy-12,svx+svW*0.3,svy-12,'#fbbf24',2);
-  ctx.fillStyle='#fbbf24'; ctx.font='10px system-ui'; ctx.fillText('vf (feed)',svx+svW*0.2,svy-8);
+  ctx.fillStyle='#fbbf24'; ctx.font='10px system-ui'; ctx.textAlign='left'; ctx.fillText('vf (feed)',svx+svW*0.7+8,svy-8);
 
   ctx.fillStyle='#06b6d4'; ctx.font='bold 12px system-ui'; ctx.textAlign='center';
   ctx.fillText('End Mill Engagement (top view + side view)',W/2,16);
   ctx.fillStyle='#94a3b8'; ctx.font='10px system-ui';
   ctx.fillText('Top view',cx,32);
-  ctx.fillText('Side view (showing ap)',W/2,svy-4);
+  ctx.textAlign='left'; ctx.fillText('Side view (showing ap)',svx,svy-24);
   ctx.textAlign='left';
 }
 
@@ -764,10 +768,10 @@ function drawRaTurn(){
       k===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
     }
     ctx.stroke();
-    // Label at fn=0.45
-    const fn_l=0.44, Ra_l=Math.min(fn_l*fn_l/(8*re)*1000,RaMax*0.95);
+    // Label where each curve crosses Ra = 0.8·RaMax, so the three labels sit apart along the rising curves
+    const Ra_l=RaMax*0.8, fn_l=Math.sqrt(Ra_l*8*re/1000);
     ctx.fillStyle=col; ctx.font='10px system-ui'; ctx.textAlign='left';
-    ctx.fillText('rε='+re,pL+cw*fn_l/fnMax+4,pT+ch-ch*Ra_l/RaMax);
+    ctx.fillText('rε='+re,pL+cw*fn_l/fnMax+6,pT+ch-ch*Ra_l/RaMax+4);
   });
 
   // Axis labels
@@ -839,7 +843,7 @@ function drawRaMill(){
   ctx.beginPath(); ctx.moveTo(scX-6,by-scH_px); ctx.lineTo(scX+6,by-scH_px); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(scX-6,by); ctx.lineTo(scX+6,by); ctx.stroke();
   ctx.fillStyle='#4ade80'; ctx.font='10px system-ui'; ctx.textAlign='left';
-  ctx.fillText('h',scX+6,by-scH_px/2+4);
+  ctx.fillText('h',scX+6,Math.max(34,by-scH_px/2+4));
 
   // ae annotation
   ctx.strokeStyle='#fbbf24'; ctx.lineWidth=1;

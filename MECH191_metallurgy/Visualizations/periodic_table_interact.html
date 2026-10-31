@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Periodic Table for Students</title>
     <style>
@@ -84,7 +86,7 @@
 
         .filter-btn {
             background: #1e293b;
-            color: #94a3b8;
+            color: #cbd2dd;
             border: 1px solid #334155;
             padding: 8px 16px;
             border-radius: 20px;
@@ -150,7 +152,7 @@
 
         .element .atomic-num {
             font-size: 0.85em;
-            color: #94a3b8;
+            color: #cbd2dd;
             font-weight: 600;
         }
 
@@ -178,7 +180,7 @@
 
         .series-label {
             font-weight: bold;
-            color: #94a3b8;
+            color: #cbd2dd;
             margin-top: 15px;
             margin-bottom: 8px;
             font-size: 0.85em;
@@ -236,7 +238,7 @@
 
         .legend-text {
             font-size: clamp(0.45em, 0.7vw, 0.75em);
-            color: #94a3b8;
+            color: #cbd2dd;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -303,7 +305,7 @@
 
         .side-panel .detail-label {
             font-weight: bold;
-            color: #94a3b8;
+            color: #cbd2dd;
             font-size: 0.9em;
         }
 
@@ -356,9 +358,10 @@
             }
         }
     </style>
+<style id="contrast-fixes">/* WCAG 1.4.3 contrast fixes */ .element.dimmed{opacity:1 !important;filter:saturate(.2) brightness(.72)}</style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" role="main" id="main-content">
         <h1>Interactive Periodic Table</h1>
             
             <div class="filters">

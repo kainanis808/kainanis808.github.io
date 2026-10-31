@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fracture Types &amp; Fracture Surface Reading</title>
 <style>
@@ -14,7 +16,7 @@ header h1 { font-size:1.75rem; font-weight:700; color:#f1f5f9; }
 header .subtitle { color:#38bdf8; margin-top:6px; font-size:0.88rem; }
 
 .tab-bar { display:flex; flex-wrap:wrap; background:#0f2040; border-bottom:2px solid #1e3a5f; padding:0 20px; position:sticky; top:0; z-index:10; }
-.tab-btn { padding:11px 18px; font-size:0.84rem; font-weight:600; border:none; background:none; cursor:pointer; color:#64748b; border-bottom:3px solid transparent; margin-bottom:-2px; transition:all 0.15s; white-space:nowrap; }
+.tab-btn { padding:11px 18px; font-size:0.84rem; font-weight:600; border:none; background:none; cursor:pointer; color:#7c8ba1; border-bottom:3px solid transparent; margin-bottom:-2px; transition:all 0.15s; white-space:nowrap; }
 .tab-btn:hover { color:#38bdf8; }
 .tab-btn.active { color:#38bdf8; border-bottom-color:#38bdf8; }
 
@@ -55,7 +57,7 @@ canvas { display:block; border-radius:8px; }
 .source-tag { display:inline-block; padding:3px 10px; background:#1e3a5f; color:#93c5fd; border-radius:6px; font-size:0.75rem; font-weight:600; margin-bottom:12px; }
 
 .zoom-row { display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 14px; }
-.zoom-btn { padding:6px 14px; background:#0f2040; border:1px solid #334155; border-radius:6px; color:#64748b; font-size:0.8rem; font-weight:600; cursor:pointer; transition:all 0.15s; }
+.zoom-btn { padding:6px 14px; background:#0f2040; border:1px solid #334155; border-radius:6px; color:#7c8ba1; font-size:0.8rem; font-weight:600; cursor:pointer; transition:all 0.15s; }
 .zoom-btn.active { border-color:#38bdf8; color:#38bdf8; }
 
 .back { text-align:center; padding:24px; font-size:0.9rem; }
@@ -70,6 +72,7 @@ canvas { display:block; border-radius:8px; }
   <div class="subtitle">ASM International · DoITPoMS (Cambridge) · Fatigue Fracture Surface Atlas · NIST Failure Investigations</div>
 </header>
 
+<main id="main-content">
 <nav class="tab-bar">
   <button class="tab-btn active" onclick="showTab('asm',this)">ASM — Fracture Types</button>
   <button class="tab-btn" onclick="showTab('mech',this)">DoITPoMS — Mechanisms</button>
@@ -88,7 +91,7 @@ canvas { display:block; border-radius:8px; }
     <div class="three-grid" style="margin-top:18px;">
       <div>
         <div class="canvas-label" style="color:#22c55e;">Ductile Fracture</div>
-        <canvas id="cv-ductile" width="300" height="290"></canvas>
+        <canvas data-a11y-essential id="cv-ductile" width="300" height="290" role="img" aria-label="Ductile fracture surface (cup-and-cone): a grey, rough fibrous zone in the centre surrounded by a 45° shear lip around the rim, with a close-up of dimples."></canvas>
         <div class="ann-list" style="margin-top:10px;">
           <div class="ann-item"><div class="ann-dot" style="background:#22c55e;"></div><div class="ann-text"><strong style="color:#22c55e;">Fibrous zone</strong> — grey, rough centre; extensive plastic deformation before fracture</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#86efac;"></div><div class="ann-text"><strong style="color:#86efac;">Shear lip</strong> — 45° angled rim; plane-stress fracture at free surface</div></div>
@@ -96,23 +99,23 @@ canvas { display:block; border-radius:8px; }
         </div>
       </div>
       <div>
-        <div class="canvas-label" style="color:#ef4444;">Brittle Fracture</div>
-        <canvas id="cv-brittle" width="300" height="290"></canvas>
+        <div class="canvas-label" style="color:#f58686;">Brittle Fracture</div>
+        <canvas data-a11y-essential id="cv-brittle" width="300" height="290" role="img" aria-label="Brittle cleavage fracture surface: flat, bright, faceted surface with chevron and river marks that converge back toward the crack origin."></canvas>
         <div class="ann-list" style="margin-top:10px;">
-          <div class="ann-item"><div class="ann-dot" style="background:#ef4444;"></div><div class="ann-text"><strong style="color:#ef4444;">River marks</strong> — fine lines converging toward origin; steps between parallel cleavage planes</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#f58686;"></div><div class="ann-text"><strong style="color:#f58686;">River marks</strong> — fine lines converging toward origin; steps between parallel cleavage planes</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#fca5a5;"></div><div class="ann-text"><strong style="color:#fca5a5;">Cleavage facets</strong> — flat, bright, faceted; crack on {001} crystallographic planes</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#f87171;"></div><div class="ann-text"><strong style="color:#f87171;">Chevron pattern</strong> — macroscopic herringbone pointing to origin; visible to naked eye</div></div>
         </div>
       </div>
       <div>
         <div class="canvas-label" style="color:#f59e0b;">Fatigue Fracture</div>
-        <canvas id="cv-fatigue" width="300" height="290"></canvas>
+        <canvas data-a11y-essential id="cv-fatigue" width="300" height="290" role="img" aria-label="Fatigue fracture surface: an initiation site at the surface, concentric beach marks spreading from it across a smooth fatigue zone, and a rough final-overload zone on the opposite side."></canvas>
         <div class="ann-list" style="margin-top:10px;">
           <div class="ann-item"><div class="ann-dot" style="background:#38bdf8;"></div><div class="ann-text"><strong style="color:#38bdf8;">Initiation site</strong> — at surface stress concentration; point of crack nucleation</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#f59e0b;"></div><div class="ann-text"><strong style="color:#f59e0b;">Beach marks</strong> — macroscopic concentric arcs; record crack arrest or load changes</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#fcd34d;"></div><div class="ann-text"><strong style="color:#fcd34d;">Ratchet marks</strong> — radial steps between adjacent initiation sites</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#fbbf24;"></div><div class="ann-text"><strong style="color:#fbbf24;">Striations</strong> (SEM) — 1 striation = 1 load cycle; spacing ∝ ΔK</div></div>
-          <div class="ann-item"><div class="ann-dot" style="background:#ef4444;"></div><div class="ann-text"><strong style="color:#ef4444;">Final fracture zone</strong> — rough overload; ductile dimples or cleavage</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#f58686;"></div><div class="ann-text"><strong style="color:#f58686;">Final fracture zone</strong> — rough overload; ductile dimples or cleavage</div></div>
         </div>
       </div>
     </div>
@@ -121,8 +124,8 @@ canvas { display:block; border-radius:8px; }
   <div class="card">
     <h2>Fractographic Feature Comparison — ASM Vol. 12</h2>
     <div style="overflow-x:auto;">
-    <table class="ref-table" style="min-width:600px;">
-      <thead><tr><th>Feature</th><th style="color:#22c55e;">Ductile</th><th style="color:#ef4444;">Brittle</th><th style="color:#f59e0b;">Fatigue</th></tr></thead>
+    <table class="ref-table" style="min-width:600px;"><caption class="sr-only">Fractographic Feature Comparison — ASM Vol. 12</caption>
+      <thead><tr><th scope="col">Feature</th><th style="color:#22c55e;" scope="col">Ductile</th><th style="color:#f58686;" scope="col">Brittle</th><th style="color:#f59e0b;" scope="col">Fatigue</th></tr></thead>
       <tbody>
         <tr><td><strong>Macroscopic appearance</strong></td><td>Grey, fibrous, rough; shear lip at 45°</td><td>Flat, bright, crystalline; no shear lip</td><td>Two zones: smooth progression + rough overload</td></tr>
         <tr><td><strong>Deformation before fracture</strong></td><td>Extensive — visible necking</td><td>None or minimal</td><td>None until final overload zone</td></tr>
@@ -146,7 +149,7 @@ canvas { display:block; border-radius:8px; }
     <p>Ductile fracture proceeds by nucleation, growth, and coalescence of microvoids at second-phase particles and inclusions. The process requires significant plastic work and produces the characteristic dimpled fracture surface seen in SEM. Higher inclusion content → shorter void spacing → lower fracture toughness.</p>
     <div class="two-grid" style="margin-top:14px;">
       <div>
-        <canvas id="cv-mvc" width="390" height="290"></canvas>
+        <canvas id="cv-mvc" width="390" height="290" role="img" aria-label="Five-step microvoid coalescence animation: 1 voids nucleate at inclusions, 2 voids grow under load, 3 voids coalesce, 4 the fracture surface forms, 5 final SEM appearance of dimples. Use Prev and Next; each step is described in text."></canvas>
         <div class="ctrl-row">
           <button class="ctrl-btn" id="mvc-prev" onclick="mvcStep(-1)" disabled>◀ Prev</button>
           <span class="step-label" id="mvc-label">Step 1 of 5</span>
@@ -171,7 +174,7 @@ canvas { display:block; border-radius:8px; }
     <p>Cleavage fracture occurs when local tensile stress exceeds the cohesive strength of specific low-index crystallographic planes — {001} in BCC iron, {0001} in HCP metals. No plastic deformation occurs at the crack tip. River marks form when the crack steps between parallel cleavage planes at grain boundaries.</p>
     <div class="two-grid" style="margin-top:14px;">
       <div>
-        <canvas id="cv-cleavage" width="390" height="290"></canvas>
+        <canvas id="cv-cleavage" width="390" height="290" role="img" aria-label="Four-step cleavage animation: 1 polycrystalline metal under tensile load, 2 crack starts at a stress concentration, 3 cleavage crack runs through grains along crystal planes, 4 resulting cleavage facets and river marks. Use Prev and Next; each step is described in text."></canvas>
         <div class="ctrl-row">
           <button class="ctrl-btn" id="cl-prev" onclick="clStep(-1)" disabled>◀ Prev</button>
           <span class="step-label" id="cl-label">Step 1 of 4</span>
@@ -183,7 +186,7 @@ canvas { display:block; border-radius:8px; }
         <p id="cl-desc">A polycrystalline BCC steel under tensile loading. Each grain has a different crystallographic orientation. The {001} cleavage plane is oriented differently in each grain. Fracture initiates in the grain where the resolved tensile stress normal to the cleavage plane is highest, often at a stress concentration or grain boundary triple point.</p>
         <div class="ann-list" id="cl-notes">
           <div class="ann-item"><div class="ann-dot" style="background:#7dd3fc;"></div><div class="ann-text">Grains with differing crystallographic orientations (colour-coded)</div></div>
-          <div class="ann-item"><div class="ann-dot" style="background:#ef4444;"></div><div class="ann-text">Dashed ticks inside grains = local {001} cleavage plane orientation</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#f58686;"></div><div class="ann-text">Dashed ticks inside grains = local {001} cleavage plane orientation</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#fbbf24;"></div><div class="ann-text">Arrows: applied tensile stress direction</div></div>
         </div>
       </div>
@@ -208,7 +211,7 @@ canvas { display:block; border-radius:8px; }
 
     <div class="two-grid">
       <div>
-        <canvas id="cv-atlas" width="430" height="350"></canvas>
+        <canvas data-a11y-essential id="cv-atlas" width="430" height="350" role="img" aria-label="Fatigue fracture atlas at four magnifications, chosen with the buttons: macro view of the full fracture face at 1×, beach mark spacing at 20×, striations becoming visible at 200×, and individual striations in the SEM at 2000×. The selected view is described in text."></canvas>
       </div>
       <div>
         <h3 id="atlas-title">Macro View — Complete Fracture Face</h3>
@@ -217,9 +220,9 @@ canvas { display:block; border-radius:8px; }
           <div class="ann-item"><div class="ann-dot" style="background:#38bdf8;"></div><div class="ann-text"><strong style="color:#38bdf8;">Initiation site</strong> — at surface; often at a stress concentration</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#f59e0b;"></div><div class="ann-text"><strong style="color:#f59e0b;">Beach marks</strong> — concentric arcs recording crack front at intervals</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#fcd34d;"></div><div class="ann-text"><strong style="color:#fcd34d;">Ratchet marks</strong> — steps between adjacent initiation sites</div></div>
-          <div class="ann-item"><div class="ann-dot" style="background:#ef4444;"></div><div class="ann-text"><strong style="color:#ef4444;">Final fracture zone</strong> — rough overload; ductile dimples or cleavage</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#f58686;"></div><div class="ann-text"><strong style="color:#f58686;">Final fracture zone</strong> — rough overload; ductile dimples or cleavage</div></div>
         </div>
-        <p id="atlas-src" style="font-size:0.78rem;color:#475569;margin-top:10px;">Source: ASM Handbook Vol. 12; Forsyth Fatigue Fractography Atlas</p>
+        <p id="atlas-src" style="font-size:0.78rem;color:#7b8ca6;margin-top:10px;">Source: ASM Handbook Vol. 12; Forsyth Fatigue Fractography Atlas</p>
       </div>
     </div>
   </div>
@@ -228,8 +231,8 @@ canvas { display:block; border-radius:8px; }
     <h2>Striation Counting — Crack Growth Rate from Fracture Surface</h2>
     <p>At high SEM magnification, individual fatigue striations correspond to one load cycle each (Forsyth-Laird model). Measuring striation spacing gives crack growth rate <em>da/dN</em> directly from the fracture surface — enabling reconstruction of loading history in failure investigations.</p>
     <div style="overflow-x:auto;">
-    <table class="ref-table" style="min-width:560px;">
-      <thead><tr><th>Magnification</th><th>Features Visible</th><th>Feature Spacing</th><th>Approximate ΔK Range</th></tr></thead>
+    <table class="ref-table" style="min-width:560px;"><caption class="sr-only">Striation Counting — Crack Growth Rate from Fracture Surface</caption>
+      <thead><tr><th scope="col">Magnification</th><th scope="col">Features Visible</th><th scope="col">Feature Spacing</th><th scope="col">Approximate ΔK Range</th></tr></thead>
       <tbody>
         <tr><td>10–50× (macro)</td><td>Beach marks, ratchet marks, initiation site, final fracture zone</td><td>Macroscopic (mm scale)</td><td>Qualitative only</td></tr>
         <tr><td>100–500× (SEM)</td><td>Individual beach marks, secondary cracks</td><td>10–100 μm per beach mark</td><td>ΔK ≈ 15–30 MPa√m</td></tr>
@@ -251,7 +254,7 @@ canvas { display:block; border-radius:8px; }
     <div class="two-grid" style="margin-top:14px;">
       <div>
         <div class="canvas-label" style="color:#38bdf8;">Case A — High-Cycle Fatigue (Shaft at Keyway)</div>
-        <canvas id="cv-nist-a" width="390" height="290"></canvas>
+        <canvas data-a11y-essential id="cv-nist-a" width="390" height="290" role="img" aria-label="Case A, 1040 steel rotating shaft: fracture face with fatigue initiation at the sharp keyway corner, beach marks spreading across most of the section, and a small final-overload zone."></canvas>
       </div>
       <div>
         <h3>Case A: Rotating Shaft — Fatigue at Keyway Corner</h3>
@@ -260,7 +263,7 @@ canvas { display:block; border-radius:8px; }
         <div class="ann-list" style="margin-top:10px;">
           <div class="ann-item"><div class="ann-dot" style="background:#38bdf8;"></div><div class="ann-text"><strong style="color:#38bdf8;">Origin:</strong> Keyway corner — surface crack initiation at Kt = 3.2</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#f59e0b;"></div><div class="ann-text"><strong style="color:#f59e0b;">Propagation:</strong> Fine beach marks (high-cycle); striation spacing 0.3–0.8 μm</div></div>
-          <div class="ann-item"><div class="ann-dot" style="background:#ef4444;"></div><div class="ann-text"><strong style="color:#ef4444;">Final fracture:</strong> Small overload zone (~15% of cross-section) — indicates low nominal stress, high-cycle regime</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#f58686;"></div><div class="ann-text"><strong style="color:#f58686;">Final fracture:</strong> Small overload zone (~15% of cross-section) — indicates low nominal stress, high-cycle regime</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#a78bfa;"></div><div class="ann-text"><strong style="color:#a78bfa;">Corrective action:</strong> Add radius ≥1mm at keyway corner + shot peen to introduce compressive residual stress</div></div>
         </div>
       </div>
@@ -268,15 +271,15 @@ canvas { display:block; border-radius:8px; }
 
     <div class="two-grid" style="margin-top:24px;">
       <div>
-        <div class="canvas-label" style="color:#ef4444;">Case B — Brittle Fracture (Pressure Vessel Nozzle)</div>
-        <canvas id="cv-nist-b" width="390" height="290"></canvas>
+        <div class="canvas-label" style="color:#f58686;">Case B — Brittle Fracture (Pressure Vessel Nozzle)</div>
+        <canvas data-a11y-essential id="cv-nist-b" width="390" height="290" role="img" aria-label="Case B, A516-70 pressure vessel nozzle weld: a flat, bright brittle fracture surface with chevron marks pointing back to the origin at a weld defect."></canvas>
       </div>
       <div>
         <h3>Case B: Pressure Vessel Nozzle — Low-Temperature Brittle Fracture</h3>
         <p><strong>Component:</strong> A516-70 nozzle weld, 25mm plate, ambient −15°C<br>
         <strong>Failure stress:</strong> Well below yield strength (&lt;40% Fy) — single pressurisation event</p>
         <div class="ann-list" style="margin-top:10px;">
-          <div class="ann-item"><div class="ann-dot" style="background:#ef4444;"></div><div class="ann-text"><strong style="color:#ef4444;">Chevron pattern:</strong> Points to origin at weld toe HAZ — pre-existing HIC underbead crack</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#f58686;"></div><div class="ann-text"><strong style="color:#f58686;">Chevron pattern:</strong> Points to origin at weld toe HAZ — pre-existing HIC underbead crack</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#fca5a5;"></div><div class="ann-text"><strong style="color:#fca5a5;">Cleavage facets:</strong> Bright, flat, crystalline — martensite in HAZ below NDT at −15°C</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#f87171;"></div><div class="ann-text"><strong style="color:#f87171;">No shear lip:</strong> Fully brittle fracture — confirms temperature was below nil-ductility transition</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#a78bfa;"></div><div class="ann-text"><strong style="color:#a78bfa;">Contributing factors:</strong> No preheat for CE 0.48 steel; HIC crack pre-existed; cold-temperature startup below NDT</div></div>
@@ -288,8 +291,8 @@ canvas { display:block; border-radius:8px; }
   <div class="card">
     <h2>NIST Systematic Fractography Protocol</h2>
     <div style="overflow-x:auto;">
-    <table class="ref-table" style="min-width:560px;">
-      <thead><tr><th>Step</th><th>Action</th><th>Evidence Sought</th><th>Tools</th></tr></thead>
+    <table class="ref-table" style="min-width:560px;"><caption class="sr-only">NIST Systematic Fractography Protocol</caption>
+      <thead><tr><th scope="col">Step</th><th scope="col">Action</th><th scope="col">Evidence Sought</th><th scope="col">Tools</th></tr></thead>
       <tbody>
         <tr><td><strong>1</strong></td><td>Macro documentation</td><td>Overall fracture geometry, plane orientation, deformation extent</td><td>Photography; stereo microscopy 1–50×</td></tr>
         <tr><td><strong>2</strong></td><td>Origin identification</td><td>Ratchet marks, river marks converging to origin; beach mark focus</td><td>Optical, SEM ×50–200</td></tr>
@@ -303,6 +306,7 @@ canvas { display:block; border-radius:8px; }
   </div>
 </div>
 
+</main>
 <div class="back"><a href="index.html">← Back to Visualizations</a></div>
 
 <script>

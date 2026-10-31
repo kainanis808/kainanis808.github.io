@@ -3,40 +3,42 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manufacturing Process Selection – Tolerance, Surface Finish & Capability</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
-        header { text-align: center; padding: 28px 20px; background: #1e293b; border-bottom: 1px solid #334155; }
+        header { text-align: center; padding: 28px 20px; background: #1e293b; border-bottom: 1px solid #6b84a6; }
         h1 { font-size: 2rem; color: #f1f5f9; }
         .subtitle { color: #94a3b8; margin-top: 6px; font-size: 1rem; }
-        .source-line { font-size: 0.76rem; color: #475569; margin-top: 8px; }
+        .source-line { font-size: 0.76rem; color: #8192aa; margin-top: 8px; }
         main { max-width: 1140px; margin: 0 auto; padding: 28px 20px; }
-        .tab-bar { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 2px solid #334155; flex-wrap: wrap; }
+        .tab-bar { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 2px solid #6b84a6; flex-wrap: wrap; }
         .tab-btn { padding: 9px 20px; background: transparent; border: none; border-bottom: 3px solid transparent; color: #94a3b8; cursor: pointer; font-size: 0.9rem; font-family: inherit; margin-bottom: -2px; transition: color 0.15s, border-color 0.15s; }
         .tab-btn.active { color: #38bdf8; border-bottom-color: #38bdf8; }
         .tab-btn:hover:not(.active) { color: #cbd5e1; }
         .tab-panel { display: none; }
         .tab-panel.active { display: block; }
-        .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .card { background: #1e293b; border: 1px solid #6b84a6; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
         .card h2 { font-size: 1.1rem; color: #7dd3fc; margin-bottom: 10px; }
         .card p { color: #94a3b8; font-size: 0.9rem; line-height: 1.65; }
 
         /* Filters */
         .filter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
-        .filter-label { font-size: 0.73rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+        .filter-label { font-size: 0.73rem; color: #8593a7; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
         .chip-row { display: flex; flex-wrap: wrap; gap: 5px; }
-        .chip { padding: 5px 12px; background: #0f172a; border: 1px solid #334155; border-radius: 20px; color: #94a3b8; cursor: pointer; font-size: 0.8rem; font-family: inherit; transition: all 0.15s; }
+        .chip { padding: 5px 12px; background: #0f172a; border: 1px solid #6b84a6; border-radius: 20px; color: #94a3b8; cursor: pointer; font-size: 0.8rem; font-family: inherit; transition: all 0.15s; }
         .chip.active { background: #1e3a5f; border-color: #38bdf8; color: #7dd3fc; }
-        .chip:hover:not(.active) { border-color: #475569; color: #cbd5e1; }
+        .chip:hover:not(.active) { border-color: #8192aa; color: #cbd5e1; }
 
         /* Results */
-        #results-count { font-size: 0.84rem; color: #64748b; margin-bottom: 10px; }
-        .result-item { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 13px 16px; margin-bottom: 8px; cursor: pointer; transition: border-color 0.15s, background 0.15s; display: flex; align-items: center; gap: 12px; }
-        .result-item:hover { border-color: #475569; background: #111827; }
+        #results-count { font-size: 0.84rem; color: #8593a7; margin-bottom: 10px; }
+        .result-item { background: #0f172a; border: 1px solid #6b84a6; border-radius: 10px; padding: 13px 16px; margin-bottom: 8px; cursor: pointer; transition: border-color 0.15s, background 0.15s; display: flex; align-items: center; gap: 12px; }
+        .result-item:hover { border-color: #8192aa; background: #111827; }
         .result-item.selected { border-color: #38bdf8; background: #0c1829; }
-        .result-rank { font-size: 1rem; font-weight: 700; color: #334155; width: 24px; text-align: right; flex-shrink: 0; }
+        .result-rank { font-size: 1rem; font-weight: 700; color: #6b84a6; width: 24px; text-align: right; flex-shrink: 0; }
         .cat-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
         .result-name { font-size: 0.93rem; color: #e2e8f0; font-weight: 600; flex: 1; min-width: 120px; }
         .result-badges { display: flex; gap: 5px; flex-wrap: wrap; }
@@ -44,21 +46,21 @@
         .match-wrap { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
         .match-bg { width: 70px; height: 7px; background: #1e293b; border-radius: 4px; overflow: hidden; }
         .match-fill { height: 100%; border-radius: 4px; }
-        .match-pct { font-size: 0.75rem; color: #64748b; width: 30px; }
+        .match-pct { font-size: 0.75rem; color: #8593a7; width: 30px; }
 
         /* Detail panel */
         #sel-detail { background: #0f172a; border: 1px solid #38bdf8; border-radius: 10px; padding: 18px; margin-top: 12px; display: none; }
         #sel-detail h3 { color: #7dd3fc; font-size: 1.05rem; margin-bottom: 8px; }
         .detail-row { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 10px; }
         .ds { flex: 1; min-width: 120px; }
-        .ds-name { font-size: 0.72rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .ds-name { font-size: 0.72rem; color: #8593a7; text-transform: uppercase; letter-spacing: 0.05em; }
         .ds-val { font-size: 0.9rem; color: #e2e8f0; margin-top: 2px; }
         .detail-notes { font-size: 0.85rem; color: #94a3b8; line-height: 1.6; margin-top: 12px; padding-top: 10px; border-top: 1px solid #1e293b; }
 
         /* eFunda table */
         .tbl-scroll { overflow-x: auto; }
         .spec-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; min-width: 820px; }
-        .spec-table th { background: #0f172a; color: #7dd3fc; padding: 9px 11px; text-align: left; border-bottom: 1px solid #334155; cursor: pointer; white-space: nowrap; user-select: none; }
+        .spec-table th { background: #0f172a; color: #7dd3fc; padding: 9px 11px; text-align: left; border-bottom: 1px solid #6b84a6; cursor: pointer; white-space: nowrap; user-select: none; }
         .spec-table th:hover { color: #bae6fd; }
         .spec-table td { padding: 8px 11px; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
         .spec-table tr:nth-child(even) td { background: #162032; }
@@ -68,11 +70,11 @@
         .good { color: #4ade80; } .mid { color: #fbbf24; } .bad { color: #f87171; }
 
         /* Kalpakjian chart */
-        #kp-canvas { display: block; border-radius: 10px; border: 1px solid #334155; width: 100%; cursor: crosshair; }
+        #kp-canvas { display: block; border-radius: 10px; border: 1px solid #6b84a6; width: 100%; cursor: crosshair; }
         .chart-controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 14px; }
         .ci-group { }
-        .ci-label { font-size: 0.73rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
-        .ci-input { background: #0f172a; border: 1px solid #334155; color: #e2e8f0; border-radius: 6px; padding: 6px 10px; font-size: 0.86rem; width: 130px; font-family: inherit; }
+        .ci-label { font-size: 0.73rem; color: #8593a7; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
+        .ci-input { background: #0f172a; border: 1px solid #6b84a6; color: #e2e8f0; border-radius: 6px; padding: 6px 10px; font-size: 0.86rem; width: 130px; font-family: inherit; }
         .ci-input:focus { outline: none; border-color: #38bdf8; }
         .ci-btn { background: #1e3a5f; border: 1px solid #38bdf8; color: #7dd3fc; border-radius: 6px; padding: 7px 14px; cursor: pointer; font-size: 0.84rem; font-family: inherit; }
         .ci-btn:hover { background: #1e4a7f; }
@@ -83,21 +85,21 @@
         .leg-item:hover { background: #1e293b; }
         .leg-item.dimmed { opacity: 0.3; }
         .leg-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
-        .kp-tooltip { position: fixed; background: #1e293b; border: 1px solid #475569; border-radius: 8px; padding: 10px 13px; font-size: 0.8rem; color: #e2e8f0; pointer-events: none; display: none; z-index: 100; max-width: 240px; }
+        .kp-tooltip { position: fixed; background: #1e293b; border: 1px solid #8192aa; border-radius: 8px; padding: 10px 13px; font-size: 0.8rem; color: #e2e8f0; pointer-events: none; display: none; z-index: 100; max-width: 240px; }
         .kp-tooltip h4 { color: #7dd3fc; margin-bottom: 4px; font-size: 0.86rem; }
         .kp-tooltip p { color: #94a3b8; line-height: 1.5; }
 
         /* Compare */
         .cmp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 7px; margin-bottom: 16px; }
-        .cmp-item { display: flex; align-items: center; gap: 7px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 8px 11px; cursor: pointer; font-size: 0.82rem; color: #94a3b8; transition: all 0.15s; }
+        .cmp-item { display: flex; align-items: center; gap: 7px; background: #0f172a; border: 1px solid #6b84a6; border-radius: 8px; padding: 8px 11px; cursor: pointer; font-size: 0.82rem; color: #94a3b8; transition: all 0.15s; }
         .cmp-item.checked { border-color: #38bdf8; color: #7dd3fc; background: #0c1829; }
         .cmp-item input { accent-color: #38bdf8; flex-shrink: 0; }
         .cmp-scroll { overflow-x: auto; }
         .cmp-table { border-collapse: collapse; font-size: 0.83rem; min-width: 500px; }
-        .cmp-table th { background: #0f172a; color: #7dd3fc; padding: 10px 14px; border-bottom: 1px solid #334155; text-align: left; white-space: nowrap; }
+        .cmp-table th { background: #0f172a; color: #7dd3fc; padding: 10px 14px; border-bottom: 1px solid #6b84a6; text-align: left; white-space: nowrap; }
         .cmp-table td { padding: 8px 14px; border-bottom: 1px solid #1e293b; color: #cbd5e1; vertical-align: top; }
         .cmp-table tr:nth-child(even) td { background: #162032; }
-        .cmp-row-label { color: #64748b !important; font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.05em; background: #111827 !important; white-space: nowrap; }
+        .cmp-row-label { color: #8593a7 !important; font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.05em; background: #111827 !important; white-space: nowrap; }
         .bar-mini { height: 8px; border-radius: 4px; margin-top: 4px; min-width: 4px; }
 
         .back-link { display: block; text-align: center; margin-top: 30px; color: #38bdf8; text-decoration: none; font-size: 0.92rem; }
@@ -202,18 +204,18 @@
         <h2>All-Process Capability Table (eFunda)</h2>
         <p style="margin-bottom:14px;">Click any column header to sort. "Best" values are the tightest achievable under ideal controlled conditions; "Typical" is normal production range.</p>
         <div class="tbl-scroll">
-            <table class="spec-table" id="ef-table">
+            <table class="spec-table" id="ef-table"><caption class="sr-only">All-Process Capability Table (eFunda)</caption>
                 <thead>
                     <tr>
-                        <th data-col="name">Process <span class="sort-ind">↕</span></th>
-                        <th data-col="cat">Category <span class="sort-ind">↕</span></th>
-                        <th data-col="tolBest">Best Tol (±mm) <span class="sort-ind">↕</span></th>
-                        <th data-col="tolTyp">Typ Tol (±mm) <span class="sort-ind">↕</span></th>
-                        <th data-col="sfBest">Best Ra (µm) <span class="sort-ind">↕</span></th>
-                        <th data-col="sfTyp">Typ Ra (µm) <span class="sort-ind">↕</span></th>
-                        <th data-col="rateLo">Rate (parts/hr) <span class="sort-ind">↕</span></th>
-                        <th data-col="toolCost">Tooling Cost <span class="sort-ind">↕</span></th>
-                        <th data-col="volLo">Min Volume <span class="sort-ind">↕</span></th>
+                        <th data-col="name" scope="col">Process <span class="sort-ind">↕</span></th>
+                        <th data-col="cat" scope="col">Category <span class="sort-ind">↕</span></th>
+                        <th data-col="tolBest" scope="col">Best Tol (±mm) <span class="sort-ind">↕</span></th>
+                        <th data-col="tolTyp" scope="col">Typ Tol (±mm) <span class="sort-ind">↕</span></th>
+                        <th data-col="sfBest" scope="col">Best Ra (µm) <span class="sort-ind">↕</span></th>
+                        <th data-col="sfTyp" scope="col">Typ Ra (µm) <span class="sort-ind">↕</span></th>
+                        <th data-col="rateLo" scope="col">Rate (parts/hr) <span class="sort-ind">↕</span></th>
+                        <th data-col="toolCost" scope="col">Tooling Cost <span class="sort-ind">↕</span></th>
+                        <th data-col="volLo" scope="col">Min Volume <span class="sort-ind">↕</span></th>
                     </tr>
                 </thead>
                 <tbody id="ef-tbody"></tbody>
@@ -230,16 +232,16 @@
         <div class="chart-controls">
             <div class="ci-group">
                 <div class="ci-label">Target Tolerance ±(mm)</div>
-                <input class="ci-input" type="number" id="tgt-tol" placeholder="e.g. 0.05" step="0.001" min="0.0001">
+                <input class="ci-input" type="number" id="tgt-tol" placeholder="e.g. 0.05" step="0.001" min="0.0001" aria-label="Target Tolerance ±(mm)">
             </div>
             <div class="ci-group">
                 <div class="ci-label">Target Surface Finish Ra (µm)</div>
-                <input class="ci-input" type="number" id="tgt-sf" placeholder="e.g. 0.8" step="0.01" min="0.001">
+                <input class="ci-input" type="number" id="tgt-sf" placeholder="e.g. 0.8" step="0.01" min="0.001" aria-label="Target Surface Finish Ra (µm)">
             </div>
             <button class="ci-btn" id="tgt-plot-btn">Plot Target</button>
             <button class="ci-btn clear" id="tgt-clear-btn">Clear</button>
         </div>
-        <canvas id="kp-canvas"></canvas>
+        <canvas id="kp-canvas" role="img" aria-label="Process selection chart of dimensional tolerance versus surface finish Ra, both on log scales. Each manufacturing process is a band showing its achievable range; bands toward the lower left (tight tolerance, fine finish) include grinding, honing, lapping, and polishing, while sand casting and forging sit toward the upper right. The comparison table below lists the same ranges as text."></canvas>
         <div class="chart-legend" id="kp-legend"></div>
     </div>
 </div>
@@ -250,8 +252,8 @@
         <h2>Select Processes to Compare (up to 5)</h2>
         <div class="cmp-grid" id="cmp-checks"></div>
         <div class="cmp-scroll">
-            <table class="cmp-table" id="cmp-table">
-                <thead><tr id="cmp-head"><th>Parameter</th></tr></thead>
+            <table class="cmp-table" id="cmp-table"><caption class="sr-only">Select Processes to Compare (up to 5)</caption>
+                <thead><tr id="cmp-head"><th scope="col">Parameter</th></tr></thead>
                 <tbody id="cmp-body"></tbody>
             </table>
         </div>
@@ -269,10 +271,10 @@
 ════════════════════════════════════════════════ */
 const CAT_CLR = {
     'Casting':    '#f59e0b',
-    'Forming':    '#3b82f6',
+    'Forming':    '#76a7f9',
     'Machining':  '#22c55e',
-    'Powder Met': '#a855f7',
-    'Polymer':    '#ec4899',
+    'Powder Met': '#be81f9',
+    'Polymer':    '#f27fb8',
     'Additive':   '#06b6d4',
 };
 
@@ -624,7 +626,7 @@ function runSelector() {
     });
 
     if (scored.length === 0) {
-        list.innerHTML = '<p style="color:#64748b;font-size:0.88rem;padding:12px 0;">No processes meet all selected requirements. Try relaxing tolerance or surface finish filters.</p>';
+        list.innerHTML = '<p style="color:#8593a7;font-size:0.88rem;padding:12px 0;">No processes meet all selected requirements. Try relaxing tolerance or surface finish filters.</p>';
     }
 }
 
@@ -752,6 +754,8 @@ function drawChart() {
     });
 
     // process rectangles
+    const placedLabels = [];   // label boxes already placed, so later labels can avoid them
+    const pendingLabels = [];  // drawn after all bands so no band covers a label
     PROCS.forEach(p => {
         if (hiddenCats.has(p.cat)) return;
         const clr = CAT_CLR[p.cat] || '#94a3b8';
@@ -774,10 +778,20 @@ function drawChart() {
         ctx.fillStyle = clr;
         ctx.font = '9px Segoe UI';
         ctx.textAlign = 'left';
-        const lx = x1 + 3;
-        const ly = y1 + 10;
-        if (rw > 20 && rh > 10) ctx.fillText(p.name, lx, ly);
+        // Place the label at the first spot inside the band that does not overlap an earlier label.
+        // Labels that cannot be placed cleanly are left off; every process is still in the table and hover text.
+        if (rw > 20 && rh > 10) {
+            const tw = ctx.measureText(p.name).width;
+            const lx = x1 + 3;
+            for (let ly = y1 + 10; ly <= y1 + rh - 2; ly += 11) {
+                const box = [lx - 1, ly - 9, lx + tw + 1, ly + 2];
+                const hit = placedLabels.some(b => box[0] < b[2] && box[2] > b[0] && box[1] < b[3] && box[3] > b[1]);
+                if (!hit) { placedLabels.push(box); pendingLabels.push([p.name, lx, ly, clr]); break; }
+            }
+        }
     });
+    ctx.font = '9px Segoe UI'; ctx.textAlign = 'left';
+    pendingLabels.forEach(([name, lx, ly, clr]) => { ctx.fillStyle = clr; ctx.fillText(name, lx, ly); });
 
     // target point
     if (targetPoint) {
@@ -935,7 +949,7 @@ function renderCompare() {
     const procs = PROCS.filter(p => selected.has(p.id));
     const head  = document.getElementById('cmp-head');
     const body  = document.getElementById('cmp-body');
-    head.innerHTML = '<th style="min-width:160px;color:#64748b;font-size:0.75rem;text-transform:uppercase;">Parameter</th>';
+    head.innerHTML = '<th style="min-width:160px;color:#8593a7;font-size:0.75rem;text-transform:uppercase;">Parameter</th>';
     procs.forEach(p => {
         const clr = CAT_CLR[p.cat]||'#94a3b8';
         head.innerHTML += `<th class="proc-header"><span style="color:${clr}">${p.cat}</span><br>${p.name}</th>`;
@@ -952,7 +966,7 @@ function renderCompare() {
         { label:'Min Wall Thickness (mm)', fn: p=>p.minWall },
         { label:'Materials', fn: p=>p.mats.map(m=>m.charAt(0).toUpperCase()+m.slice(1)).join(', ') },
         { label:'Complexity', fn: p=>p.complexity.map(c=>c.charAt(0).toUpperCase()+c.slice(1)).join(', ') },
-        { label:'Notes', fn: p=>`<span style="font-size:0.78rem;color:#64748b">${p.notes}</span>` },
+        { label:'Notes', fn: p=>`<span style="font-size:0.78rem;color:#8593a7">${p.notes}</span>` },
     ];
 
     body.innerHTML = '';

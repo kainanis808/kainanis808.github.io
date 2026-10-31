@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Defect Recognition — Weld Discontinuities &amp; Microstructural Defects</title>
     <style>
@@ -88,7 +90,7 @@
         }
         .defect-aka {
             font-size: 0.78rem;
-            color: #6b7280;
+            color: #666d7a;
             font-style: italic;
             margin-top: 2px;
         }
@@ -113,7 +115,7 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.06em;
-            color: #9ca3af;
+            color: #6b7484;
             margin-bottom: 6px;
         }
         .d-col ul {
@@ -159,8 +161,8 @@
             flex-shrink: 0;
         }
         .dot-excel { background: #16a34a; }
-        .dot-fair  { background: #d97706; }
-        .dot-poor  { background: #9ca3af; }
+        .dot-fair  { background: #a75c05; }
+        .dot-poor  { background: #6b7484; }
         .ndt-desc { color: #4b5563; font-size: 0.8rem; line-height: 1.3; }
 
         /* Tables */
@@ -181,8 +183,8 @@
         /* Detectability matrix cells */
         .det-cell { text-align: center; font-size: 0.8rem; }
         .det-e { color: #15803d; font-weight: 700; }
-        .det-f { color: #d97706; font-weight: 700; }
-        .det-p { color: #9ca3af; }
+        .det-f { color: #a75c05; font-weight: 700; }
+        .det-p { color: #6b7484; }
         .det-n { color: #e5e7eb; }
 
         /* Tip / note boxes */
@@ -198,11 +200,11 @@
         }
         .tip-box strong { color: #92400e; }
 
-        .note { font-size: 0.85rem; color: #6b7280; font-style: italic; margin-top: 10px; }
+        .note { font-size: 0.85rem; color: #666d7a; font-style: italic; margin-top: 10px; }
 
         .source-note {
             font-size: 0.8rem;
-            color: #6b7280;
+            color: #666d7a;
             border-top: 1px solid #e2e8f0;
             margin-top: 20px;
             padding-top: 10px;
@@ -213,7 +215,7 @@
             display: block;
             text-align: center;
             margin-top: 30px;
-            color: #0284c7;
+            color: #027ab8;
             text-decoration: none;
             font-size: 0.95rem;
         }
@@ -247,14 +249,14 @@
             limits; geometric defects are assessed by their effect on cross-sectional area and stress
             concentration at the weld toe.
         </p>
-        <table>
+        <table><caption class="sr-only">Defect Classification Overview</caption>
             <thead>
                 <tr>
-                    <th>Class</th>
-                    <th>Type</th>
-                    <th>Examples</th>
-                    <th>Structural Concern</th>
-                    <th>Code Treatment</th>
+                    <th scope="col">Class</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Examples</th>
+                    <th scope="col">Structural Concern</th>
+                    <th scope="col">Code Treatment</th>
                 </tr>
             </thead>
             <tbody>
@@ -760,15 +762,15 @@
         undercut and overlap are particularly significant in cyclic loading because they act as stress
         concentration notches at the weld toe — the primary fatigue crack initiation site.</p>
 
-        <table>
+        <table><caption class="sr-only">3 — Geometric / Profile Defects</caption>
             <thead>
                 <tr>
-                    <th>Defect</th>
-                    <th>Location &amp; Description</th>
-                    <th>Primary Causes</th>
-                    <th>RT Signature</th>
-                    <th>Best Detection</th>
-                    <th>Key Prevention</th>
+                    <th scope="col">Defect</th>
+                    <th scope="col">Location &amp; Description</th>
+                    <th scope="col">Primary Causes</th>
+                    <th scope="col">RT Signature</th>
+                    <th scope="col">Best Detection</th>
+                    <th scope="col">Key Prevention</th>
                 </tr>
             </thead>
             <tbody>
@@ -843,15 +845,15 @@
             condition below; the descriptions here follow ASM metallographic conventions.
         </p>
 
-        <table>
+        <table><caption class="sr-only">4 — Microstructural Defects ASM Micrograph Center</caption>
             <thead>
                 <tr>
-                    <th>Defect</th>
-                    <th>Location</th>
-                    <th>Appearance (Micrograph)</th>
-                    <th>Causes &amp; Effects</th>
-                    <th>Detection / Confirmation</th>
-                    <th>Prevention / Remedy</th>
+                    <th scope="col">Defect</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Appearance (Micrograph)</th>
+                    <th scope="col">Causes &amp; Effects</th>
+                    <th scope="col">Detection / Confirmation</th>
+                    <th scope="col">Prevention / Remedy</th>
                 </tr>
             </thead>
             <tbody>
@@ -954,22 +956,22 @@
             not laboratory best-case performance. Always consider which methods are specified by
             the governing code (D1.1 Clause 6; ASME Section V) for the joint being examined.
         </p>
-        <p style="font-size:0.85rem; color:#6b7280; margin-bottom:6px;">
+        <p style="font-size:0.85rem; color:#666d7a; margin-bottom:6px;">
             <strong style="color:#15803d;">E</strong> = Excellent &nbsp;|&nbsp;
-            <strong style="color:#d97706;">F</strong> = Fair (detects, but may miss some orientations/sizes) &nbsp;|&nbsp;
-            <strong style="color:#9ca3af;">P</strong> = Poor (usually ineffective) &nbsp;|&nbsp;
+            <strong style="color:#a75c05;">F</strong> = Fair (detects, but may miss some orientations/sizes) &nbsp;|&nbsp;
+            <strong style="color:#6b7484;">P</strong> = Poor (usually ineffective) &nbsp;|&nbsp;
             <strong style="color:#e5e7eb;">—</strong> = Not applicable
         </p>
-        <table>
+        <table><caption class="sr-only">5 — NDT Detectability Matrix</caption>
             <thead>
                 <tr>
-                    <th>Defect</th>
-                    <th style="text-align:center;">VT</th>
-                    <th style="text-align:center;">RT</th>
-                    <th style="text-align:center;">UT</th>
-                    <th style="text-align:center;">MT</th>
-                    <th style="text-align:center;">PT</th>
-                    <th>Best Method(s)</th>
+                    <th scope="col">Defect</th>
+                    <th style="text-align:center;" scope="col">VT</th>
+                    <th style="text-align:center;" scope="col">RT</th>
+                    <th style="text-align:center;" scope="col">UT</th>
+                    <th style="text-align:center;" scope="col">MT</th>
+                    <th style="text-align:center;" scope="col">PT</th>
+                    <th scope="col">Best Method(s)</th>
                 </tr>
             </thead>
             <tbody>

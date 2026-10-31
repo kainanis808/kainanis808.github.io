@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sand Casting – Process, Design &amp; Defects</title>
     <style>
@@ -120,7 +122,7 @@
         }
         .bar-range-label {
             font-size: 0.75rem;
-            color: #64748b;
+            color: #8593a7;
             margin-top: 2px;
         }
 
@@ -152,7 +154,7 @@
             font-size: 0.72rem;
             margin-bottom: 6px;
         }
-        .alloy-card p { font-size: 0.8rem; color: #64748b; line-height: 1.5; }
+        .alloy-card p { font-size: 0.8rem; color: #8593a7; line-height: 1.5; }
         #alloy-detail {
             background: #0f172a;
             border: 1px solid #38bdf8;
@@ -168,7 +170,7 @@
         #alloy-detail h3 { color: #7dd3fc; margin-bottom: 8px; font-size: 1.05rem; }
         .alloy-spec-row { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 10px; }
         .alloy-spec { flex: 1; min-width: 140px; }
-        .alloy-spec .spec-name { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .alloy-spec .spec-name { font-size: 0.75rem; color: #8593a7; text-transform: uppercase; letter-spacing: 0.05em; }
         .alloy-spec .spec-val  { font-size: 0.92rem; color: #e2e8f0; margin-top: 2px; }
 
         /* ── Design guidelines ── */
@@ -186,7 +188,7 @@
         .guide-item canvas { display: block; width: 100%; }
         .guide-body { padding: 14px; }
         .guide-body h3 { font-size: 0.95rem; color: #e2e8f0; margin-bottom: 4px; }
-        .guide-body p  { font-size: 0.82rem; color: #64748b; line-height: 1.55; }
+        .guide-body p  { font-size: 0.82rem; color: #8593a7; line-height: 1.55; }
         .badge-good { display:inline-block; background:#14532d; color:#4ade80; border-radius:4px; padding:1px 8px; font-size:0.72rem; margin-right:6px; }
         .badge-bad  { display:inline-block; background:#7f1d1d; color:#f87171; border-radius:4px; padding:1px 8px; font-size:0.72rem; margin-right:6px; }
 
@@ -208,7 +210,7 @@
             font-family: inherit;
             transition: border-color 0.15s, color 0.15s;
         }
-        .defect-btn:hover { border-color: #64748b; color: #e2e8f0; }
+        .defect-btn:hover { border-color: #8593a7; color: #e2e8f0; }
         .defect-btn.active { border-color: #f59e0b; color: #fbbf24; background: #1c1408; }
         #defect-panel {
             display: flex;
@@ -229,13 +231,13 @@
         #defect-info h3 { color: #fbbf24; font-size: 1.1rem; margin-bottom: 10px; }
         .defect-meta { display: flex; flex-direction: column; gap: 10px; }
         .defect-meta-row { }
-        .dmr-label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .dmr-label { font-size: 0.75rem; color: #8593a7; text-transform: uppercase; letter-spacing: 0.05em; }
         .dmr-val   { font-size: 0.88rem; color: #cbd5e1; line-height: 1.55; margin-top: 2px; }
 
         /* ── Sources ── */
         .source-line {
             font-size: 0.78rem;
-            color: #475569;
+            color: #8192aa;
             text-align: center;
             margin-top: 8px;
         }
@@ -252,6 +254,7 @@
 
         canvas { display: block; }
     </style>
+<style id="contrast-fixes">/* WCAG 1.4.3 contrast fixes */ .bar-fill{color:#0f172a !important;text-shadow:none !important}</style>
 </head>
 <body>
 
@@ -317,13 +320,13 @@
 
     <div class="card">
         <h2>Key Process Specifications (eFunda)</h2>
-        <table class="spec-table">
+        <table class="spec-table"><caption class="sr-only">Key Process Specifications (eFunda)</caption>
             <thead>
                 <tr>
-                    <th>Parameter</th>
-                    <th>Typical Range</th>
-                    <th>Best Achievable</th>
-                    <th>Rating vs. Other Processes</th>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Typical Range</th>
+                    <th scope="col">Best Achievable</th>
+                    <th scope="col">Rating vs. Other Processes</th>
                 </tr>
             </thead>
             <tbody>
@@ -403,8 +406,8 @@
             <em>Casting Tolerances Standard</em> (CT system, ISO 8062) assigns a tolerance grade
             based on part length and process. Sand casting typically falls in CT11–CT14.
         </p>
-        <canvas id="tol-canvas" width="680" height="260" style="border-radius:8px;border:1px solid #334155;max-width:100%;"></canvas>
-        <p style="margin-top:10px;font-size:0.8rem;color:#64748b;">
+        <canvas id="tol-canvas" width="680" height="260" style="border-radius:8px;border:1px solid #334155;max-width:100%;" role="img" aria-label="Chart of plus-or-minus tolerance versus largest part dimension for sand casting: a shaded band widens as part size increases, following the ISO 8062 casting tolerance grades."></canvas>
+        <p style="margin-top:10px;font-size:0.8rem;color:#8593a7;">
             Shaded band shows the ±tolerance for a given largest dimension. Metal patterns and controlled molding conditions
             push toward the lower bound; hand-rammed green sand is near the upper bound.
         </p>
@@ -470,7 +473,7 @@
     <div class="card">
         <div class="defect-selector" id="defect-selector"></div>
         <div id="defect-panel">
-            <canvas id="defect-canvas" width="360" height="280"></canvas>
+            <canvas id="defect-canvas" width="360" height="280" role="img" aria-label="Cross-section illustration of the casting defect chosen above: gas porosity, shrinkage porosity, cold shut, misrun, hot tear, sand inclusion, metal penetration, or warpage. The selected defect is described in text."></canvas>
             <div id="defect-info">
                 <h3 id="defect-name">Select a defect above</h3>
                 <div class="defect-meta" id="defect-meta"></div>
@@ -576,11 +579,12 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     ctx.restore();
 
     // labels for bands
-    ctx.font = '11px Segoe UI';
-    ctx.fillStyle = '#f59e0b';
-    ctx.fillText('Upper bound (green sand, CT14)', xToP(12), yToP(upperTol(12)) - 6);
-    ctx.fillStyle = '#22d3ee';
-    ctx.fillText('Lower bound (metal pattern, CT11)', xToP(12), yToP(lowerTol(12)) + 14);
+    // legend (top-left) — inline labels sat on top of each other and the axis at small sizes
+    ctx.font = '11px Segoe UI'; ctx.textAlign = 'left';
+    ctx.fillStyle = '#f59e0b'; ctx.fillRect(PAD.left + 12, PAD.top + 10, 14, 3);
+    ctx.fillText('Upper bound (green sand, CT14)', PAD.left + 32, PAD.top + 15);
+    ctx.fillStyle = '#22d3ee'; ctx.fillRect(PAD.left + 12, PAD.top + 26, 14, 3);
+    ctx.fillText('Lower bound (metal pattern, CT11)', PAD.left + 32, PAD.top + 31);
 
     // axes
     ctx.strokeStyle = '#475569';
@@ -1047,7 +1051,7 @@ const GUIDELINES = [
             ctx.fillRect(2, cy - 14, 20, 28);
             ctx.fillStyle = '#fbbf24';
             ctx.font = '9px Segoe UI';
-            ctx.fillText('core print', 12, cy - 18);
+            ctx.textAlign = 'left'; ctx.fillText('core print', 3, cy - 18); ctx.textAlign = 'center';
 
             ctx.fillStyle = '#64748b';
             ctx.font = '10px Segoe UI';

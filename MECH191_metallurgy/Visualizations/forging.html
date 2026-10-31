@@ -3,24 +3,26 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Forging – FIA Design Guidelines, Grain Flow & Process Comparison</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #0a1628; color: #e2e8f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; }
-  header { background: linear-gradient(135deg, #0f2040 0%, #1a3a5c 100%); padding: 24px 32px 20px; border-bottom: 2px solid #f97316; }
-  header h1 { font-size: 1.75rem; color: #f97316; letter-spacing: 0.5px; }
+  header { background: linear-gradient(135deg, #0f2040 0%, #1a3a5c 100%); padding: 24px 32px 20px; border-bottom: 2px solid #fa822f; }
+  header h1 { font-size: 1.75rem; color: #fa822f; letter-spacing: 0.5px; }
   header p { color: #94a3b8; font-size: 0.9rem; margin-top: 4px; }
 
   .tabs { display: flex; gap: 0; border-bottom: 2px solid #1e3a5c; background: #0d1f38; padding: 0 24px; }
   .tab-btn { padding: 14px 22px; background: none; border: none; color: #94a3b8; font-size: 0.9rem; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: color 0.2s, border-color 0.2s; white-space: nowrap; }
   .tab-btn:hover { color: #fdba74; }
-  .tab-btn.active { color: #f97316; border-bottom-color: #f97316; font-weight: 600; }
+  .tab-btn.active { color: #fa822f; border-bottom-color: #fa822f; font-weight: 600; }
 
   .tab-content { display: none; padding: 28px 32px; }
   .tab-content.active { display: block; }
 
-  h2 { font-size: 1.2rem; color: #f97316; margin-bottom: 16px; }
+  h2 { font-size: 1.2rem; color: #fa822f; margin-bottom: 16px; }
   h3 { font-size: 1rem; color: #fdba74; margin-bottom: 10px; }
 
   canvas { display: block; }
@@ -33,7 +35,7 @@
   .guideline-card p { font-size: 0.78rem; color: #94a3b8; margin-top: 8px; text-align: center; line-height: 1.4; }
 
   .tol-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 20px; }
-  .tol-table th { background: #1a3a5c; color: #f97316; padding: 8px 12px; text-align: left; border: 1px solid #1e3a5c; }
+  .tol-table th { background: #1a3a5c; color: #fa822f; padding: 8px 12px; text-align: left; border: 1px solid #1e3a5c; }
   .tol-table td { padding: 7px 12px; border: 1px solid #1e3a5c; color: #cbd5e1; }
   .tol-table tr:nth-child(even) td { background: #0f2040; }
   .tol-table tr:nth-child(odd) td { background: #0a1628; }
@@ -47,30 +49,30 @@
   /* ── Process Comparison ── */
   .compare-layout { display: grid; grid-template-columns: 420px 1fr; gap: 28px; align-items: start; }
   .compare-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 24px; }
-  .compare-table th { background: #1a3a5c; color: #f97316; padding: 8px 10px; text-align: center; border: 1px solid #1e3a5c; }
+  .compare-table th { background: #1a3a5c; color: #fa822f; padding: 8px 10px; text-align: center; border: 1px solid #1e3a5c; }
   .compare-table th:first-child { text-align: left; }
   .compare-table td { padding: 7px 10px; border: 1px solid #1e3a5c; color: #cbd5e1; text-align: center; }
   .compare-table td:first-child { text-align: left; color: #e2e8f0; font-weight: 500; }
   .compare-table tr:nth-child(even) td { background: #0f2040; }
   .compare-table tr:nth-child(odd) td { background: #0a1628; }
   .compare-table .best { color: #4ade80; font-weight: 700; }
-  .compare-table caption { color: #64748b; font-size: 0.75rem; caption-side: bottom; padding-top: 6px; text-align: left; }
+  .compare-table caption { color: #73839a; font-size: 0.75rem; caption-side: bottom; padding-top: 6px; text-align: left; }
 
   /* ── Animation ── */
   .anim-layout { display: flex; flex-direction: column; align-items: center; gap: 16px; }
   .anim-canvas-wrap { background: #0f2040; border: 1px solid #1e3a5c; border-radius: 10px; padding: 12px; }
   .anim-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; }
-  .anim-controls button { background: #1a3a5c; color: #e2e8f0; border: 1px solid #f97316; border-radius: 6px; padding: 8px 18px; font-size: 0.85rem; cursor: pointer; transition: background 0.2s; }
-  .anim-controls button:hover { background: #f97316; color: #0a1628; }
+  .anim-controls button { background: #1a3a5c; color: #e2e8f0; border: 1px solid #fa822f; border-radius: 6px; padding: 8px 18px; font-size: 0.85rem; cursor: pointer; transition: background 0.2s; }
+  .anim-controls button:hover { background: #fa822f; color: #0a1628; }
   .anim-controls button:disabled { opacity: 0.4; cursor: default; background: #1a3a5c; color: #e2e8f0; }
   #stage-label { font-size: 0.95rem; color: #fdba74; text-align: center; min-height: 22px; }
   #stage-desc  { font-size: 0.8rem; color: #94a3b8; text-align: center; max-width: 680px; min-height: 36px; line-height: 1.5; }
   .stage-dots { display: flex; gap: 8px; }
-  .stage-dot { width: 10px; height: 10px; border-radius: 50%; background: #1e3a5c; border: 1px solid #f97316; cursor: pointer; transition: background 0.2s; }
-  .stage-dot.active { background: #f97316; }
+  .stage-dot { width: 10px; height: 10px; border-radius: 50%; background: #1e3a5c; border: 1px solid #fa822f; cursor: pointer; transition: background 0.2s; }
+  .stage-dot.active { background: #fa822f; }
 
   .back-link { text-align: center; padding: 28px; }
-  .back-link a { color: #f97316; text-decoration: none; font-size: 0.9rem; }
+  .back-link a { color: #fa822f; text-decoration: none; font-size: 0.9rem; }
   .back-link a:hover { text-decoration: underline; }
 </style>
 </head>
@@ -81,6 +83,7 @@
   <p>Based on Forging Industry Association (FIA) guidelines and ASM International mechanical property data</p>
 </header>
 
+<main id="main-content">
 <div class="tabs">
   <button class="tab-btn active" data-tab="guidelines">FIA Design Guidelines</button>
   <button class="tab-btn" data-tab="grain">Grain Flow</button>
@@ -94,47 +97,47 @@
   <div class="guidelines-grid">
     <div class="guideline-card">
       <h3>Draft Angles</h3>
-      <canvas id="c-draft" width="240" height="160"></canvas>
+      <canvas id="c-draft" width="240" height="160" role="img" aria-label="Forging die section showing draft angles: 5 to 7° on external surfaces and 7 to 10° on internal surfaces and pockets, so the part releases from the die."></canvas>
       <p>External surfaces: <b>5–7°</b><br>Internal surfaces / pockets: <b>7–10°</b><br>Enables die release without ejector damage</p>
     </div>
     <div class="guideline-card">
       <h3>Fillet &amp; Corner Radii</h3>
-      <canvas id="c-fillet" width="240" height="160"></canvas>
+      <canvas id="c-fillet" width="240" height="160" role="img" aria-label="Forging cross-section labelling fillet radii of at least 3 mm on inside corners and corner radii of at least 1.5 mm on outside corners."></canvas>
       <p>Fillet r ≥ <b>3 mm</b> (inside corners)<br>Corner R ≥ <b>1.5 mm</b> (outside corners)<br>Larger radii improve flow, reduce die wear</p>
     </div>
     <div class="guideline-card">
       <h3>Parting Line Placement</h3>
-      <canvas id="c-parting" width="240" height="160"></canvas>
+      <canvas id="c-parting" width="240" height="160" role="img" aria-label="Forging die halves with the parting line placed at the part&#x27;s largest cross-section."></canvas>
       <p>Locate at maximum cross-section<br>Straight PL preferred; offset PL only when needed to minimize machining stock</p>
     </div>
     <div class="guideline-card">
       <h3>Flash Land &amp; Gutter</h3>
-      <canvas id="c-flash" width="240" height="160"></canvas>
+      <canvas id="c-flash" width="240" height="160" role="img" aria-label="Detail of the flash land and gutter at the die parting line: a narrow land restricts metal flow so the cavity fills, and excess metal escapes into the wider gutter as flash."></canvas>
       <p>Land width: <b>3–5 × stock thickness</b><br>Gutter depth: <b>2–3× land thickness</b><br>Flash restricts flow to fill cavity, then exits to gutter</p>
     </div>
     <div class="guideline-card">
       <h3>Web &amp; Rib Proportions</h3>
-      <canvas id="c-rib" width="240" height="160"></canvas>
+      <canvas id="c-rib" width="240" height="185" role="img" aria-label="Forged rib-and-web section: rib height to width at most 6 to 1, and web thickness at least 5 mm for steel or 3 mm for aluminum."></canvas>
       <p>Rib height : width ≤ <b>6 : 1</b><br>Web thickness ≥ <b>5 mm</b> (steel); ≥ <b>3 mm</b> (Al)<br>Thin webs require more forging load and increase die wear</p>
     </div>
     <div class="guideline-card">
       <h3>Material Flow &amp; Grain</h3>
-      <canvas id="c-flow" width="240" height="160"></canvas>
+      <canvas id="c-flow" width="240" height="160" role="img" aria-label="Grain flow lines in a forged part following the part contour, parallel to the main stress direction, without abrupt section changes."></canvas>
       <p>Design so grain flows parallel to principal stress direction<br>Avoid abrupt section changes that cause turbulent flow and laps</p>
     </div>
   </div>
 
   <table class="tol-table" style="margin-top:28px;">
-    <caption style="color:#64748b;font-size:0.75rem;caption-side:bottom;padding-top:6px;text-align:left;">
+    <caption style="color:#73839a;font-size:0.75rem;caption-side:bottom;padding-top:6px;text-align:left;">
       Source: Forging Industry Association Design Manual. Values for closed-die steel forgings, typical production quantities.
     </caption>
     <thead>
       <tr>
-        <th>Parameter</th>
-        <th>Steel (typical)</th>
-        <th>Aluminum (typical)</th>
-        <th>Titanium (typical)</th>
-        <th>Notes</th>
+        <th scope="col">Parameter</th>
+        <th scope="col">Steel (typical)</th>
+        <th scope="col">Aluminum (typical)</th>
+        <th scope="col">Titanium (typical)</th>
+        <th scope="col">Notes</th>
       </tr>
     </thead>
     <tbody>
@@ -159,17 +162,17 @@
   <div class="grain-row">
     <div class="grain-card">
       <h3 style="color:#4ade80;">Forged</h3>
-      <canvas id="c-grain-forged" width="300" height="260"></canvas>
+      <canvas id="c-grain-forged" width="300" height="290" role="img" aria-label="L-bracket cross-section, forged: grain flow lines bend continuously around the corner, following the part outline."></canvas>
       <p><b style="color:#4ade80;">Grain follows the part contour.</b> Continuous fiber through every cross-section. No cut fibers at critical surfaces. Best fatigue and impact resistance.</p>
     </div>
     <div class="grain-card">
       <h3 style="color:#f87171;">Machined from Bar</h3>
-      <canvas id="c-grain-bar" width="300" height="260"></canvas>
+      <canvas id="c-grain-bar" width="300" height="290" role="img" aria-label="L-bracket cross-section, machined from bar: straight, parallel grain lines that are cut off at the machined shoulder, exposing end grain."></canvas>
       <p><b style="color:#f87171;">Grain is cut at machined surfaces.</b> Bar rolling gives straight grain — machining the L-shape severs fibers at every shoulder, exposing weak end-grain at stress risers.</p>
     </div>
     <div class="grain-card">
       <h3 style="color:#fbbf24;">Cast</h3>
-      <canvas id="c-grain-cast" width="300" height="260"></canvas>
+      <canvas id="c-grain-cast" width="300" height="290" role="img" aria-label="L-bracket cross-section, cast: random dendritic grains with columnar grains growing inward from the mold walls and no directional flow."></canvas>
       <p><b style="color:#fbbf24;">Dendritic, non-directional grain.</b> Solidification produces columnar dendrites growing toward the mold walls. No preferred fiber; isotropic but lower strength than wrought products.</p>
     </div>
   </div>
@@ -184,8 +187,8 @@
   <div class="compare-layout">
     <div>
       <h3>Mechanical Properties (normalized spider chart)</h3>
-      <canvas id="c-radar" width="400" height="380"></canvas>
-      <p style="font-size:0.75rem;color:#64748b;margin-top:6px;">Forging = 100% baseline. Values for 4340 alloy steel in each process route.</p>
+      <canvas id="c-radar" width="400" height="420" role="img" aria-label="Spider chart comparing forged, machined-from-bar, and cast 4340 steel on mechanical properties, with forging as the 100 percent baseline. Forging scores highest on every axis; casting scores lowest, especially in fatigue and impact strength."></canvas>
+      <p style="font-size:0.75rem;color:#73839a;margin-top:6px;">Forging = 100% baseline. Values for 4340 alloy steel in each process route.</p>
     </div>
     <div>
       <h3>Absolute Property Values (4340 Steel)</h3>
@@ -193,11 +196,11 @@
         <caption>Sources: FIA Design Manual; ASM Handbook Vol. 14A (Metalworking: Bulk Forming); Shigley's Mechanical Engineering Design.</caption>
         <thead>
           <tr>
-            <th>Property</th>
-            <th style="color:#f97316;">Forging</th>
-            <th style="color:#fbbf24;">Invest. Cast</th>
-            <th style="color:#94a3b8;">Sand Cast</th>
-            <th style="color:#60a5fa;">Machined Bar</th>
+            <th scope="col">Property</th>
+            <th style="color:#fa822f;" scope="col">Forging</th>
+            <th style="color:#fbbf24;" scope="col">Invest. Cast</th>
+            <th style="color:#94a3b8;" scope="col">Sand Cast</th>
+            <th style="color:#60a5fa;" scope="col">Machined Bar</th>
           </tr>
         </thead>
         <tbody>
@@ -220,7 +223,7 @@
       <div style="margin-top:16px;background:#0f2040;border:1px solid #1e3a5c;border-radius:8px;padding:14px;font-size:0.8rem;color:#94a3b8;line-height:1.6;">
         <b style="color:#fdba74;">Process selection guidance:</b>
         <ul style="margin-top:6px;margin-left:16px;">
-          <li><b style="color:#f97316;">Forging</b> — best mechanical properties; preferred for safety-critical, high-stress, fatigue-loaded parts (connecting rods, crankshafts, aircraft structure, landing gear)</li>
+          <li><b style="color:#fa822f;">Forging</b> — best mechanical properties; preferred for safety-critical, high-stress, fatigue-loaded parts (connecting rods, crankshafts, aircraft structure, landing gear)</li>
           <li><b style="color:#fbbf24;">Investment casting</b> — complex geometry, good surface finish; used when forging tooling cost is prohibitive or geometry cannot be forged</li>
           <li><b style="color:#94a3b8;">Sand casting</b> — large parts, low volume; moderate properties; highest porosity risk</li>
           <li><b style="color:#60a5fa;">Machined bar</b> — low volume, high precision; grain cut at surfaces; material waste can be severe for complex shapes</li>
@@ -235,7 +238,7 @@
   <h2>Closed Die Forging – Process Animation</h2>
   <div class="anim-layout">
     <div class="anim-canvas-wrap">
-      <canvas id="c-anim" width="720" height="420"></canvas>
+      <canvas id="c-anim" width="720" height="420" role="img" aria-label="Step-by-step closed-die forging animation showing the ram, upper and lower dies, and ejectors. Stages: billet loading; initial contact and upsetting; 30 percent die fill; 60 percent die fill; flash formation begins; fully closed with complete fill; dies opening; part ejection; trim press removes the flash. The stage name and description appear in text below."></canvas>
     </div>
     <div id="stage-label">Stage 0 – Billet Loading</div>
     <div id="stage-desc">Hot billet (orange, ~1200 °C for steel) placed on lower die. Billet is slightly oversized relative to part volume to ensure complete cavity fill.</div>
@@ -263,6 +266,7 @@
   </div>
 </div>
 
+</main>
 <div class="back-link"><a href="index.html">← Back to Visualizations</a></div>
 
 <script>
@@ -573,8 +577,8 @@ function drawRibWeb() {
   ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 1; ctx.setLineDash([2,2]);
   ctx.beginPath(); ctx.moveTo(200, H-32); ctx.lineTo(200, H-48); ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = '#60a5fa'; ctx.font = '9px Arial'; ctx.textAlign = 'left';
-  ctx.fillText('Web ≥ 5mm', 204, H-36);
+  ctx.fillStyle = '#60a5fa'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
+  ctx.fillText('Web ≥ 5mm', 200, H-7);
 
   ctx.fillStyle = '#94a3b8'; ctx.font = '10px Arial'; ctx.textAlign = 'center';
   ctx.fillText('Rib Height : Width ratios', W/2, 14);
@@ -690,9 +694,9 @@ function drawGrainForged() {
     ctx.stroke();
   }
   ctx.fillStyle = '#4ade80'; ctx.font = 'bold 11px Arial'; ctx.textAlign = 'center';
-  ctx.fillText('FORGED', W/2, H-10);
+  ctx.fillText('FORGED', W/2, H-22);
   ctx.fillStyle = '#86efac'; ctx.font = '9px Arial';
-  ctx.fillText('Continuous grain flow', W/2, H-0);
+  ctx.fillText('Continuous grain flow', W/2, H-7);
 }
 
 function drawGrainBar() {
@@ -723,9 +727,9 @@ function drawGrainBar() {
     }
   }
   ctx.fillStyle = '#f87171'; ctx.font = 'bold 11px Arial'; ctx.textAlign = 'center';
-  ctx.fillText('MACHINED BAR', W/2, H-10);
+  ctx.fillText('MACHINED BAR', W/2, H-22);
   ctx.fillStyle = '#fca5a5'; ctx.font = '9px Arial';
-  ctx.fillText('Grain cut at machined surface', W/2, H-0);
+  ctx.fillText('Grain cut at machined surface', W/2, H-7);
 }
 
 function drawGrainCast() {
@@ -773,9 +777,9 @@ function drawGrainCast() {
   for (let y = 35; y < 77; y += 14) { dendrite(212, y, Math.PI, 20 + rng()*6); }
 
   ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 11px Arial'; ctx.textAlign = 'center';
-  ctx.fillText('CAST', W/2, H-10);
+  ctx.fillText('CAST', W/2, H-22);
   ctx.fillStyle = '#fde68a'; ctx.font = '9px Arial';
-  ctx.fillText('Dendritic, non-directional grain', W/2, H-0);
+  ctx.fillText('Dendritic, non-directional grain', W/2, H-7);
 }
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -858,7 +862,7 @@ function drawRadar() {
   });
 
   // Legend
-  const legendY = H - 30;
+  const legendY = H - 14;
   series.forEach((s, i) => {
     const lx = 30 + i * 130;
     ctx.fillStyle = s.color; ctx.fillRect(lx, legendY - 8, 14, 10);
@@ -1247,7 +1251,8 @@ function drawAnimStage() {
     ctx.moveTo(arrowX-6, arrowY-8); ctx.lineTo(arrowX, arrowY); ctx.lineTo(arrowX+6, arrowY-8);
     ctx.stroke();
     ctx.fillStyle = '#60a5fa'; ctx.font = '10px Arial'; ctx.textAlign = 'center';
-    ctx.fillText('RAM', arrowX, arrowY - 22);
+    ctx.textAlign = 'left';
+    ctx.fillText('RAM', arrowX + 10, Math.max(14, arrowY - 6));
   }
 
   // Ejector arrows (stage 6-7)

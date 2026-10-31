@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reading Inspection Documentation — MTRs, Weld Records, NDT Reports</title>
     <style>
@@ -137,7 +139,7 @@
             font-size: 0.69rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: #9ca3af;
+            color: #666f7f;
             margin-bottom: 3px;
         }
         .mtr-value {
@@ -324,7 +326,7 @@
             display: block;
             text-align: center;
             margin-top: 30px;
-            color: #0284c7;
+            color: #027ab8;
             text-decoration: none;
             font-size: 0.95rem;
         }
@@ -491,13 +493,13 @@
         </div>
 
         <p class="section-label">Heat (Ladle) Analysis vs. Product Analysis</p>
-        <table>
+        <table><caption class="sr-only">Material Test Reports (MTRs)</caption>
             <thead>
                 <tr>
-                    <th>Analysis Type</th>
-                    <th>When Taken</th>
-                    <th>How Reported</th>
-                    <th>What It Means</th>
+                    <th scope="col">Analysis Type</th>
+                    <th scope="col">When Taken</th>
+                    <th scope="col">How Reported</th>
+                    <th scope="col">What It Means</th>
                 </tr>
             </thead>
             <tbody>
@@ -537,13 +539,13 @@
         </div>
 
         <p class="section-label">CE Thresholds and Preheat Guidance (AWS D1.1 Annex I basis)</p>
-        <table>
+        <table><caption class="sr-only">Material Test Reports (MTRs) (table 2)</caption>
             <thead>
                 <tr>
-                    <th>CE<sub>IIW</sub> Range</th>
-                    <th>Weldability</th>
-                    <th>Typical Min. Preheat (°F / °C)</th>
-                    <th>Practical Notes</th>
+                    <th scope="col">CE<sub>IIW</sub> Range</th>
+                    <th scope="col">Weldability</th>
+                    <th scope="col">Typical Min. Preheat (°F / °C)</th>
+                    <th scope="col">Practical Notes</th>
                 </tr>
             </thead>
             <tbody>
@@ -640,12 +642,12 @@
         </div>
 
         <p class="section-label">WPS Review — Essential Variables to Verify Before Welding</p>
-        <table>
+        <table><caption class="sr-only">Welding Inspection Records (AWS CWI Documentation)</caption>
             <thead>
                 <tr>
-                    <th>Essential Variable</th>
-                    <th>What the Inspector Checks</th>
-                    <th>Why It Matters</th>
+                    <th scope="col">Essential Variable</th>
+                    <th scope="col">What the Inspector Checks</th>
+                    <th scope="col">Why It Matters</th>
                 </tr>
             </thead>
             <tbody>
@@ -704,11 +706,11 @@
         </div>
 
         <p class="section-label">Welder Qualification (WPQ / WQT) — What to Verify</p>
-        <table>
+        <table><caption class="sr-only">Welding Inspection Records (AWS CWI Documentation) (table 2)</caption>
             <thead>
                 <tr>
-                    <th>Field on the WPQ</th>
-                    <th>What to Check</th>
+                    <th scope="col">Field on the WPQ</th>
+                    <th scope="col">What to Check</th>
                 </tr>
             </thead>
             <tbody>
@@ -744,12 +746,12 @@
         </table>
 
         <p class="section-label">Fit-Up Inspection — Key Measurements</p>
-        <table>
+        <table><caption class="sr-only">Welding Inspection Records (AWS CWI Documentation) (table 3)</caption>
             <thead>
                 <tr>
-                    <th>Parameter</th>
-                    <th>What It Is</th>
-                    <th>Typical D1.1 Tolerance</th>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">What It Is</th>
+                    <th scope="col">Typical D1.1 Tolerance</th>
                 </tr>
             </thead>
             <tbody>
@@ -834,12 +836,12 @@
         </div>
 
         <p class="section-label">Key Visual Acceptance Criteria — AWS D1.1 Cl. 6.9 (Statically Loaded)</p>
-        <table>
+        <table><caption class="sr-only">Reading NDT Reports</caption>
             <thead>
                 <tr>
-                    <th>Discontinuity Type</th>
-                    <th>Rejection Criterion</th>
-                    <th>Notes</th>
+                    <th scope="col">Discontinuity Type</th>
+                    <th scope="col">Rejection Criterion</th>
+                    <th scope="col">Notes</th>
                 </tr>
             </thead>
             <tbody>
@@ -1007,13 +1009,13 @@
         </div>
 
         <p class="section-label">AWS D1.1 UT Indication Classification (Table 6.3 Summary)</p>
-        <table>
+        <table><caption class="sr-only">Reading NDT Reports (table 2)</caption>
             <thead>
                 <tr>
-                    <th>Class</th>
-                    <th>Indication Characteristics</th>
-                    <th>Typical Flaw Type</th>
-                    <th>Acceptance</th>
+                    <th scope="col">Class</th>
+                    <th scope="col">Indication Characteristics</th>
+                    <th scope="col">Typical Flaw Type</th>
+                    <th scope="col">Acceptance</th>
                 </tr>
             </thead>
             <tbody>
@@ -1066,12 +1068,12 @@
         </p>
 
         <p class="section-label">NCR Required Fields</p>
-        <table>
+        <table><caption class="sr-only">Nonconformance Reports (NCRs) and Repair Documentation</caption>
             <thead>
                 <tr>
-                    <th>Field</th>
-                    <th>Content</th>
-                    <th>Why It Is Required</th>
+                    <th scope="col">Field</th>
+                    <th scope="col">Content</th>
+                    <th scope="col">Why It Is Required</th>
                 </tr>
             </thead>
             <tbody>
@@ -1140,12 +1142,12 @@
         </ul>
 
         <p class="section-label">Complete Quality Record Package — Documents to Retain</p>
-        <table>
+        <table><caption class="sr-only">Nonconformance Reports (NCRs) and Repair Documentation (table 2)</caption>
             <thead>
                 <tr>
-                    <th>Document</th>
-                    <th>Retained By</th>
-                    <th>Minimum Retention (typical)</th>
+                    <th scope="col">Document</th>
+                    <th scope="col">Retained By</th>
+                    <th scope="col">Minimum Retention (typical)</th>
                 </tr>
             </thead>
             <tbody>

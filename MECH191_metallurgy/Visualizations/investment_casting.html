@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Investment Casting – ICI Process &amp; Design</title>
     <style>
@@ -22,7 +24,7 @@
         }
         h1 { font-size: 2rem; color: #f1f5f9; }
         .subtitle { color: #94a3b8; margin-top: 6px; font-size: 1rem; }
-        .source-line { font-size: 0.76rem; color: #475569; margin-top: 6px; }
+        .source-line { font-size: 0.76rem; color: #8192aa; margin-top: 6px; }
         main { max-width: 1060px; margin: 0 auto; padding: 26px 20px; }
 
         .tab-bar {
@@ -85,7 +87,7 @@
             margin-bottom: 8px;
         }
         .step-card h3 { font-size: 0.93rem; color: #e2e8f0; margin-bottom: 5px; }
-        .step-card p { font-size: 0.8rem; color: #64748b; line-height: 1.55; }
+        .step-card p { font-size: 0.8rem; color: #8593a7; line-height: 1.55; }
 
         /* design guideline grid */
         .guide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr)); gap: 16px; }
@@ -93,7 +95,7 @@
         .guide-item canvas { display: block; width: 100%; }
         .guide-body { padding: 13px; }
         .guide-body h3 { font-size: 0.93rem; color: #e2e8f0; margin-bottom: 4px; }
-        .guide-body p { font-size: 0.81rem; color: #64748b; line-height: 1.55; }
+        .guide-body p { font-size: 0.81rem; color: #8593a7; line-height: 1.55; }
 
         /* alloy grid */
         .alloy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px,1fr)); gap: 12px; }
@@ -101,11 +103,11 @@
         .alloy-card:hover, .alloy-card.selected { border-color: #a78bfa; background: #16102a; }
         .alloy-card h3 { font-size: 0.92rem; color: #e2e8f0; margin-bottom: 5px; }
         .alloy-card .tag { display: inline-block; background: #2e1065; color: #c4b5fd; border-radius: 4px; padding: 1px 7px; font-size: 0.72rem; margin-bottom: 6px; }
-        .alloy-card p { font-size: 0.79rem; color: #64748b; line-height: 1.5; }
+        .alloy-card p { font-size: 0.79rem; color: #8593a7; line-height: 1.5; }
         #alloy-detail { background: #0f172a; border: 1px solid #a78bfa; border-radius: 10px; padding: 18px; margin-top: 16px; display: none; }
         #alloy-detail h3 { color: #a78bfa; margin-bottom: 8px; font-size: 1.05rem; }
         .alloy-spec-row { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 10px; }
-        .alloy-spec .spec-name { font-size: 0.74rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .alloy-spec .spec-name { font-size: 0.74rem; color: #8593a7; text-transform: uppercase; letter-spacing: 0.05em; }
         .alloy-spec .spec-val  { font-size: 0.9rem; color: #e2e8f0; margin-top: 2px; }
 
         /* animation */
@@ -114,7 +116,7 @@
         #anim-canvas { border: 1px solid #334155; border-radius: 10px; background: #0f172a; flex-shrink: 0; max-width: 100%; }
         #anim-side { flex: 1; min-width: 210px; }
         .stage-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-        .stage-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #64748b; padding: 7px 11px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; transition: all 0.15s; }
+        .stage-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #8593a7; padding: 7px 11px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; transition: all 0.15s; }
         .stage-item:hover { background: #1e293b; }
         .stage-item.active { background: #1e1030; border-color: #a78bfa; color: #c4b5fd; }
         .stage-item.done { color: #4ade80; }
@@ -132,6 +134,7 @@
         .back-link:hover { text-decoration: underline; }
         canvas { display: block; }
     </style>
+<style id="contrast-fixes">/* WCAG 1.4.3 contrast fixes */ .bar-fill{color:#0f172a !important;text-shadow:none !important}</style>
 </head>
 <body>
 
@@ -183,8 +186,8 @@
 
 <div class="card">
     <h2>Key Process Specifications (ICI)</h2>
-    <table class="spec-table">
-        <thead><tr><th>Parameter</th><th>Typical Range</th><th>Best Achievable</th><th>vs. Sand Casting</th></tr></thead>
+    <table class="spec-table"><caption class="sr-only">Key Process Specifications (ICI)</caption>
+        <thead><tr><th scope="col">Parameter</th><th scope="col">Typical Range</th><th scope="col">Best Achievable</th><th scope="col">vs. Sand Casting</th></tr></thead>
         <tbody>
             <tr><td>Surface Roughness Ra</td><td>0.8–3.2 µm (32–125 µin)</td><td>0.4 µm (16 µin)</td><td class="good">4–20× smoother</td></tr>
             <tr><td>Linear Tolerance (ICI Class 2)</td><td>±0.13 mm for 25 mm</td><td>±0.08 mm (Class 3)</td><td class="good">5–10× tighter</td></tr>
@@ -205,8 +208,8 @@
 
 <div class="card">
     <h2>ICI Dimensional Tolerance Chart</h2>
-    <canvas id="tol-canvas" width="700" height="270" style="border-radius:8px;border:1px solid #334155;max-width:100%;"></canvas>
-    <p style="margin-top:8px;font-size:0.79rem;color:#64748b;">
+    <canvas id="tol-canvas" width="700" height="270" style="border-radius:8px;border:1px solid #334155;max-width:100%;" role="img" aria-label="Tolerance chart for investment casting: plus-or-minus tolerance increases with dimension for ICI Class 1 (general commercial), Class 2 (precision), and Class 3 (close tolerance) bands, with Class 3 the tightest."></canvas>
+    <p style="margin-top:8px;font-size:0.79rem;color:#8593a7;">
         ICI Classes 1–3: Class 1 = general commercial; Class 2 = precision (most common); Class 3 = close tolerance (special dies, controlled conditions). Tolerance applies to individual dimensions within one die half; across-parting-line and core dimensions carry an additional allowance.
     </p>
 </div>
@@ -241,7 +244,7 @@
     <h2>Investment Casting Process Animation</h2>
     <p style="margin-bottom:14px;">Step through all eight stages from wax injection to finished part. Based on the Hitchiner Manufacturing process sequence. Press <strong>Play</strong> for automatic advance, or click any stage in the list.</p>
     <div id="anim-outer">
-        <canvas id="anim-canvas" width="600" height="390"></canvas>
+        <canvas id="anim-canvas" width="600" height="390" role="img" aria-label="Eight-stage investment casting animation: wax injection, pattern assembly onto a tree, shell building by dipping in ceramic slurry and stucco, dewaxing, shell burnout and preheat, metal pour, shell removal (knockout), and cutoff and finishing. Use Play, Prev, Next, and Reset; the current stage is described in text."></canvas>
         <div id="anim-side">
             <div class="stage-list" id="stage-list"></div>
             <div id="anim-desc">Select a stage to begin.</div>
@@ -280,7 +283,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     const canvas = document.getElementById('tol-canvas');
     const ctx = canvas.getContext('2d');
     const W = canvas.width, H = canvas.height;
-    const PAD = { top: 22, right: 30, bottom: 52, left: 66 };
+    const PAD = { top: 22, right: 30, bottom: 52, left: 78 };
     const CW = W - PAD.left - PAD.right, CH = H - PAD.top - PAD.bottom;
 
     const xMin = 5, xMax = 400;
@@ -310,7 +313,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
     const xs = Array.from({ length: 200 }, (_, i) => xMin * Math.pow(xMax / xMin, i / 199));
 
-    classes.forEach(c => {
+    classes.forEach((c, ci) => {
         ctx.save();
         ctx.beginPath();
         ctx.moveTo(xP(xs[0]), yP(Math.min(yMax, c.hi(xs[0]))));
@@ -322,9 +325,10 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         xs.forEach((x, i) => { const py = yP(Math.min(yMax, c.hi(x))); i ? ctx.lineTo(xP(x), py) : ctx.moveTo(xP(x), py); });
         ctx.strokeStyle = c.color; ctx.lineWidth = 2; ctx.stroke();
         ctx.restore();
-        // label at right end
-        ctx.fillStyle = c.color; ctx.font = '10px Segoe UI'; ctx.textAlign = 'left';
-        ctx.fillText(c.label, xP(xs[xs.length - 1]) + 4, yP(c.hi(xs[xs.length - 1])) + 4);
+        // legend entry (top-left of the plot) so labels never run off the chart or overlap
+        ctx.fillStyle = c.color; ctx.fillRect(PAD.left + 12, PAD.top + 10 + ci * 16, 14, 3);
+        ctx.font = '11px Segoe UI'; ctx.textAlign = 'left';
+        ctx.fillText(c.label, PAD.left + 32, PAD.top + 15 + ci * 16);
     });
 
     // Sand casting reference (lower bound)
@@ -334,8 +338,9 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         i ? ctx.lineTo(xP(x), py) : ctx.moveTo(xP(x), py);
     });
     ctx.strokeStyle = '#f8717166'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 3]); ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle = '#f87171'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'left';
-    ctx.fillText('Sand cast (best)', xP(30), yP(0.38 + 30 * 0.0025) - 6);
+    ctx.fillStyle = '#f87171'; ctx.font = '11px Segoe UI'; ctx.textAlign = 'left';
+    ctx.fillRect(PAD.left + 12, PAD.top + 58, 4, 2); ctx.fillRect(PAD.left + 19, PAD.top + 58, 4, 2);
+    ctx.fillText('Sand cast (best)', PAD.left + 32, PAD.top + 63);
 
     ctx.strokeStyle = '#475569'; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(PAD.left, PAD.top); ctx.lineTo(PAD.left, PAD.top + CH); ctx.lineTo(PAD.left + CW, PAD.top + CH); ctx.stroke();
@@ -606,8 +611,10 @@ const GUIDELINES = [
                 ctx.roundRect(px2 + (side > 0 ? 0 : -44), y - 18, 44, 44, 4);
                 ctx.fill(); ctx.stroke();
                 ctx.fillStyle = '#f59e0b'; ctx.font = '8px Segoe UI'; ctx.textAlign = side > 0 ? 'left' : 'right';
-                ctx.fillText('Part', px2 + (side > 0 ? 48 : -48), y + 5);
-                ctx.fillText('Gate', px + (side > 0 ? 6 : -6), y + 16);
+                ctx.textAlign = 'center';
+                ctx.fillText('Part', px2 + (side > 0 ? 22 : -22), y + 7);
+                ctx.textAlign = side > 0 ? 'left' : 'right';
+                ctx.fillText('Gate', px + (side > 0 ? 2 : -2), y - 3);
             });
             ctx.fillStyle = '#64748b'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
             ctx.fillText('Tree = sprue + runners + parts', cx, H - 6);
@@ -1205,7 +1212,7 @@ function updateDesc() {
     });
     const s = STAGES[currentStage];
     document.getElementById('anim-desc').innerHTML =
-        `<strong style="color:#c4b5fd;">${s.name}</strong> <span style="color:#475569;font-size:0.78rem;">(${s.time})</span><br><span style="margin-top:4px;display:block;">${s.desc}</span>`;
+        `<strong style="color:#c4b5fd;">${s.name}</strong> <span style="color:#8192aa;font-size:0.78rem;">(${s.time})</span><br><span style="margin-top:4px;display:block;">${s.desc}</span>`;
 }
 
 function stopPlay() {

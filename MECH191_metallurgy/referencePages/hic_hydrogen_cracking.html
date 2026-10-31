@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hydrogen-Induced Cracking (HIC) — TWI / Lincoln Electric / IIW</title>
 <style>
@@ -25,7 +27,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 }
 .tab-btn {
   padding: 10px 18px; font-size: 0.84rem; font-weight: 600;
-  border: none; background: none; cursor: pointer; color: #64748b;
+  border: none; background: none; cursor: pointer; color: #606f85;
   border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.15s;
   white-space: nowrap;
 }
@@ -145,7 +147,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 }
 .result-block.show { display: block; }
 .result-temp { font-size: 2.4rem; font-weight: 800; font-family: 'Courier New', monospace; }
-.result-label { font-size: 0.82rem; color: #64748b; margin-top: 4px; }
+.result-label { font-size: 0.82rem; color: #606f85; margin-top: 4px; }
 .result-detail { margin-top: 12px; font-size: 0.84rem; color: #374151; line-height: 1.75; }
 
 .ph-none  { background: #f0fdf4; border-color: #22c55e !important; }
@@ -180,6 +182,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
   <div class="subtitle">TWI — Mechanisms, Three-Condition Model &amp; Case Studies &nbsp;&middot;&nbsp; Lincoln Electric — CE &amp; Preheat Guide &nbsp;&middot;&nbsp; IIW — International Standards</div>
 </header>
 
+<main id="main-content">
 <div class="source-note">
   <strong>Sources:</strong>
   <strong>TWI (The Welding Institute)</strong> — <em>HIC/Hydrogen Cracking: Mechanisms, Prevention &amp; Detection</em> &middot;
@@ -218,9 +221,9 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     </div>
 
     <div class="diagram-wrap">
-      <svg width="450" height="296" viewBox="0 0 450 296" xmlns="http://www.w3.org/2000/svg" style="border-radius:8px;background:#f0f4f8;">
+      <svg width="450" height="296" viewBox="0 0 450 296" xmlns="http://www.w3.org/2000/svg" style="border-radius:8px;background:#f0f4f8;" role="img" aria-label="Venn diagram of three overlapping circles: susceptible microstructure, diffusible hydrogen, and tensile stress. Hydrogen-induced cracking (HIC) occurs only where all three overlap; removing any one prevents it.">
         <!-- Three overlapping circles -->
-        <circle cx="170" cy="118" r="78" fill="#fb923c" fill-opacity="0.22" stroke="#f97316" stroke-width="2"/>
+        <circle cx="170" cy="118" r="78" fill="#fb923c" fill-opacity="0.22" stroke="#e05f06" stroke-width="2"/>
         <circle cx="270" cy="118" r="78" fill="#60a5fa" fill-opacity="0.22" stroke="#3b82f6" stroke-width="2"/>
         <circle cx="220" cy="186" r="78" fill="#a78bfa" fill-opacity="0.22" stroke="#8b5cf6" stroke-width="2"/>
         <!-- HIC label at triple-overlap centre -->
@@ -237,7 +240,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
         <text x="442" y="44" text-anchor="end" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#1d4ed8">Hydrogen</text>
         <!-- External label — below bottom circle: Tensile Stress -->
         <text x="220" y="285" text-anchor="middle" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#6d28d9">Tensile Stress</text>
-        <text x="6"   y="292" font-family="Segoe UI,Arial" font-size="8" fill="#94a3b8">Source: TWI HIC Guide</text>
+        <text x="6"   y="292" font-family="Segoe UI,Arial" font-size="8" fill="#5c6f8a">Source: TWI HIC Guide</text>
       </svg>
     </div>
 
@@ -249,8 +252,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <h2>Condition 1 — Susceptible HAZ Microstructure</h2>
     <p>The coarse-grained HAZ (CGHAZ) immediately adjacent to the fusion line is most susceptible. At peak temperatures above 1100°C, prior austenite grains coarsen significantly. On cooling, the transformation product — benign ferrite/bainite or brittle martensite — depends on CE and cooling rate.</p>
 
-    <table class="ref-table">
-      <thead><tr><th>Microstructure</th><th>Hardness (HV)</th><th>HIC Susceptibility</th><th>Typical CE Range</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Condition 1 — Susceptible HAZ Microstructure</caption>
+      <thead><tr><th scope="col">Microstructure</th><th scope="col">Hardness (HV)</th><th scope="col">HIC Susceptibility</th><th scope="col">Typical CE Range</th></tr></thead>
       <tbody>
         <tr><td>Polygonal ferrite + pearlite</td><td>120–200</td><td style="color:#166534;font-weight:700;">Very low</td><td>&lt;0.30</td></tr>
         <tr><td>Acicular ferrite (ideal weld metal)</td><td>180–250</td><td style="color:#166534;font-weight:700;">Low</td><td>0.30–0.40</td></tr>
@@ -265,44 +268,44 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <p>HIC initiates at stress concentrations in the HAZ. Three morphologies are most commonly observed in cross-section macrographs and NDT reports:</p>
 
     <div class="diagram-wrap">
-      <svg width="540" height="210" viewBox="0 0 540 210" xmlns="http://www.w3.org/2000/svg" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+      <svg width="540" height="210" viewBox="0 0 540 210" xmlns="http://www.w3.org/2000/svg" style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;" role="img" aria-label="Weld cross-section showing where hydrogen cracks form: an underbead crack in the HAZ parallel to the fusion line below the surface, a toe crack at the weld toe stress concentration, and a root crack in the weld or root HAZ.">
         <!-- Base plate -->
-        <rect x="30" y="112" width="480" height="68" fill="#94a3b8" rx="2"/>
+        <rect x="30" y="112" width="480" height="68" fill="#94a3b8" rx="2" stroke="#788ba6" stroke-width="1" vector-effect="non-scaling-stroke"/>
         <!-- HAZ bands -->
         <polygon points="148,112 182,112 262,52 220,52" fill="#fb923c" opacity="0.28"/>
         <polygon points="342,112 376,112 302,52 262,52" fill="#fb923c" opacity="0.28"/>
         <!-- Weld metal -->
-        <polygon points="182,112 262,52 342,112" fill="#60a5fa" opacity="0.75"/>
+        <polygon points="182,112 262,52 342,112" fill="#60a5fa" opacity="0.75" stroke="#2f89f8" stroke-width="1" vector-effect="non-scaling-stroke"/>
         <!-- Fusion line dashes -->
         <line x1="262" y1="52" x2="182" y2="112" stroke="#f97316" stroke-width="1.5" stroke-dasharray="5,3"/>
         <line x1="262" y1="52" x2="342" y2="112" stroke="#f97316" stroke-width="1.5" stroke-dasharray="5,3"/>
         <!-- Labels inside shapes -->
-        <text x="262" y="90"  text-anchor="middle" font-family="Segoe UI,Arial" font-size="11" font-weight="700" fill="#1d4ed8">Weld Metal</text>
+        <text x="262" y="90"  text-anchor="middle" font-family="Segoe UI,Arial" font-size="11" font-weight="700" fill="#163ba2">Weld Metal</text>
         <text x="157" y="102" text-anchor="middle" font-family="Segoe UI,Arial" font-size="9"  fill="#9a3412">HAZ</text>
         <text x="368" y="102" text-anchor="middle" font-family="Segoe UI,Arial" font-size="9"  fill="#9a3412">HAZ</text>
-        <text x="262" y="142" text-anchor="middle" font-family="Segoe UI,Arial" font-size="9"  fill="#fff" font-weight="600">Base Metal</text>
+        <text x="262" y="142" text-anchor="middle" font-family="Segoe UI,Arial" font-size="9"  fill="#363636" font-weight="600">Base Metal</text>
         <!-- Underbead crack -->
-        <path d="M 195 120 Q 262 115 330 120" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M 195 120 Q 262 115 330 120" fill="none" stroke="#981818" stroke-width="2.5" stroke-linecap="round"/>
         <!-- Toe crack (left) -->
         <path d="M 182 112 L 164 132" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
         <!-- Root crack -->
-        <path d="M 247 112 Q 262 120 278 112" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M 247 112 Q 262 120 278 112" fill="none" stroke="#981818" stroke-width="2.5" stroke-linecap="round"/>
         <!-- Leader lines + labels -->
         <line x1="262" y1="117" x2="262" y2="150" stroke="#dc2626" stroke-width="1"/>
-        <text x="262" y="163" text-anchor="middle" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#dc2626">Underbead Crack</text>
-        <text x="262" y="175" text-anchor="middle" font-family="Segoe UI,Arial" font-size="9" fill="#64748b">parallel to fusion line, subsurface</text>
+        <text x="262" y="163" text-anchor="middle" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#6c1111">Underbead Crack</text>
+        <text x="262" y="175" text-anchor="middle" font-family="Segoe UI,Arial" font-size="9" fill="#2f3641">parallel to fusion line, subsurface</text>
         <line x1="166" y1="128" x2="90"  y2="155" stroke="#dc2626" stroke-width="1"/>
-        <text x="72"  y="168" text-anchor="middle" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#dc2626">Toe Crack</text>
-        <text x="72"  y="180" text-anchor="middle" font-family="Segoe UI,Arial" font-size="9" fill="#64748b">at stress concentration</text>
+        <text x="72"  y="168" text-anchor="middle" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#6c1111">Toe Crack</text>
+        <text x="72"  y="180" text-anchor="middle" font-family="Segoe UI,Arial" font-size="9" fill="#2f3641">at stress concentration</text>
         <line x1="262" y1="116" x2="452" y2="155" stroke="#dc2626" stroke-width="1"/>
-        <text x="460" y="168" text-anchor="middle" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#dc2626">Root Crack</text>
-        <text x="460" y="180" text-anchor="middle" font-family="Segoe UI,Arial" font-size="9" fill="#64748b">in weld or root HAZ</text>
-        <text x="6"   y="206" font-family="Segoe UI,Arial" font-size="8" fill="#94a3b8">Source: TWI HIC Reference</text>
+        <text x="460" y="168" text-anchor="middle" font-family="Segoe UI,Arial" font-size="10" font-weight="700" fill="#6c1111">Root Crack</text>
+        <text x="460" y="180" text-anchor="middle" font-family="Segoe UI,Arial" font-size="9" fill="#2f3641">in weld or root HAZ</text>
+        <text x="6"   y="206" font-family="Segoe UI,Arial" font-size="8" fill="#5e728d">Source: TWI HIC Reference</text>
       </svg>
     </div>
 
-    <table class="ref-table" style="margin-top:12px;">
-      <thead><tr><th>Crack Type</th><th>Location</th><th>Orientation</th><th>Primary NDT Method</th></tr></thead>
+    <table class="ref-table" style="margin-top:12px;"><caption class="sr-only">HIC Crack Locations in the Weld Cross-Section</caption>
+      <thead><tr><th scope="col">Crack Type</th><th scope="col">Location</th><th scope="col">Orientation</th><th scope="col">Primary NDT Method</th></tr></thead>
       <tbody>
         <tr><td><strong>Underbead (HAZ)</strong></td><td>CGHAZ parallel to fusion line</td><td>Horizontal, subsurface</td><td>UT, PAUT, RT</td></tr>
         <tr><td><strong>Toe crack</strong></td><td>HAZ at weld toe — highest Kt</td><td>~45° into plate from toe</td><td>MPI, PT, PAUT</td></tr>
@@ -318,8 +321,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <h2>Condition 2 — Diffusible Hydrogen</h2>
     <p>At weld pool temperatures, moisture dissociates — H₂O → 2H⁺ + O²⁻ — and atomic hydrogen dissolves in molten steel. On solidification, solubility drops sharply and excess hydrogen remains as diffusible H<sub>D</sub>, migrating toward stress concentration sites and microstructural traps (prior austenite grain boundaries, martensite lath interfaces).</p>
 
-    <table class="ref-table">
-      <thead><tr><th>AWS Designator</th><th>Max H<sub>D</sub> (mL/100g)</th><th>Typical Source</th><th>Example Classifications</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Condition 2 — Diffusible Hydrogen</caption>
+      <thead><tr><th scope="col">AWS Designator</th><th scope="col">Max H<sub>D</sub> (mL/100g)</th><th scope="col">Typical Source</th><th scope="col">Example Classifications</th></tr></thead>
       <tbody>
         <tr><td><span class="badge b-h4">H4</span></td><td>&le;4</td><td>Redried basic electrodes; metal-cored wire</td><td>E7018-H4R, ER70S-3-H4, E71T-9C-H4</td></tr>
         <tr><td><span class="badge b-h8">H8</span></td><td>&le;8</td><td>Properly stored basic electrodes</td><td>E7018-H8R, E7018-1-H8, ER70S-6</td></tr>
@@ -329,8 +332,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     </table>
 
     <h3>Hydrogen Sources and Controls</h3>
-    <table class="ref-table">
-      <thead><tr><th>Source</th><th>Control Measure</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Hydrogen Sources and Controls</caption>
+      <thead><tr><th scope="col">Source</th><th scope="col">Control Measure</th></tr></thead>
       <tbody>
         <tr><td>Flux moisture (SMAW)</td><td>Bake at 300–400°C for 1 hr; store in heated quiver ≥70°C; follow AWS D1.1 Table 4.5 reconditioning requirements</td></tr>
         <tr><td>Flux moisture (SAW)</td><td>Dry at 260–320°C; seal partially-used bags; monitor per AWS A5.17</td></tr>
@@ -360,8 +363,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <div class="warn-box"><strong>Delayed cracking timing:</strong> HIC typically initiates 24–72 hours after welding as hydrogen diffuses to critical sites and the joint temperature drops below 150°C. NDT performed immediately after welding will miss delayed cracks. For CE &gt;0.45, inspect no earlier than 48 hours; for CE &gt;0.55 or Q&T steels, 72 hours minimum (EN 1011-2 Annex A).</div>
 
     <h3>Stress Mitigation</h3>
-    <table class="ref-table">
-      <thead><tr><th>Strategy</th><th>Mechanism</th><th>Code Basis</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Stress Mitigation</caption>
+      <thead><tr><th scope="col">Strategy</th><th scope="col">Mechanism</th><th scope="col">Code Basis</th></tr></thead>
       <tbody>
         <tr><td>Preheat &amp; interpass temperature</td><td>Slows cooling → reduces martensite fraction; accelerates hydrogen outgassing during welding</td><td>AWS D1.1 Table 4.4; EN 1011-2; AS/NZS 1554.1</td></tr>
         <tr><td>Post-weld heat treatment (PWHT)</td><td>Stress relief at 580–650°C; simultaneous hydrogen bake-out; may temper martensite</td><td>ASME VIII Div.1 UCS-56; AWS D1.1 Annex K</td></tr>
@@ -377,8 +380,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <h2>HIC Detection Methods</h2>
     <p>HIC cracks are often tight (no measurable opening displacement), subsurface, and delayed. A layered inspection strategy is required for susceptible joints.</p>
 
-    <table class="ref-table">
-      <thead><tr><th>Method</th><th>Best For</th><th>Limitations</th><th>Minimum Delay</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">HIC Detection Methods</caption>
+      <thead><tr><th scope="col">Method</th><th scope="col">Best For</th><th scope="col">Limitations</th><th scope="col">Minimum Delay</th></tr></thead>
       <tbody>
         <tr><td><strong>Magnetic Particle (MPI)</strong></td><td>Toe cracks, transverse weld metal cracks reaching or near surface</td><td>Only &lt;3mm depth; requires ferromagnetic material; tight cracks may not indicate well</td><td>48 hr (CE &gt;0.45)</td></tr>
         <tr><td><strong>Penetrant Testing (PT)</strong></td><td>Surface-breaking cracks only — austenitic or non-magnetic materials</td><td>No depth info; tight HIC cracks may not draw penetrant; less sensitive than MPI on steel</td><td>48 hr</td></tr>
@@ -458,8 +461,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <h2>Hydrogen Level — AWS H-Designator System</h2>
     <p>AWS filler metal specifications (A5.1, A5.18, A5.20, A5.28, A5.36) require that electrodes and wires tested per AWS A4.3 achieve the hydrogen level of their designator. The measured diffusible hydrogen per 100g of deposited weld metal must not exceed the limit.</p>
 
-    <table class="ref-table">
-      <thead><tr><th>Designator</th><th>Max H<sub>D</sub></th><th>Example Classifications</th><th>Typical Application</th><th>Storage After Opening</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Hydrogen Level — AWS H-Designator System</caption>
+      <thead><tr><th scope="col">Designator</th><th scope="col">Max H<sub>D</sub></th><th scope="col">Example Classifications</th><th scope="col">Typical Application</th><th scope="col">Storage After Opening</th></tr></thead>
       <tbody>
         <tr>
           <td><span class="badge b-h4">H4</span></td><td>≤4 mL/100g</td>
@@ -499,19 +502,19 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <div class="note-box"><strong>Note:</strong> AWS D1.1 Clause 4.2.4 — when base metal temperature is below 0°C (32°F), do not weld. When base metal is between 0°C and 10°C, preheat base metal to at least 38°C (100°F) before welding, regardless of Table 4.4 requirements.</div>
 
     <div style="overflow-x:auto;">
-    <table class="ref-table" style="min-width:600px;">
+    <table class="ref-table" style="min-width:600px;"><caption class="sr-only">AWS D1.1:2020 — Minimum Preheat &amp; Interpass Temperature (Table 4.4)</caption>
       <thead>
         <tr>
-          <th rowspan="2">Group</th>
-          <th rowspan="2">CE<sub>IIW</sub> Range</th>
-          <th rowspan="2">Example Grades</th>
-          <th colspan="4" style="text-align:center;">Minimum Preheat (°C) by Plate Thickness</th>
+          <th rowspan="2" scope="col">Group</th>
+          <th rowspan="2" scope="col">CE<sub>IIW</sub> Range</th>
+          <th rowspan="2" scope="col">Example Grades</th>
+          <th colspan="4" style="text-align:center;" scope="col">Minimum Preheat (°C) by Plate Thickness</th>
         </tr>
         <tr>
-          <th>T ≤ 19 mm</th>
-          <th>19 &lt; T ≤ 38 mm</th>
-          <th>38 &lt; T ≤ 65 mm</th>
-          <th>T &gt; 65 mm</th>
+          <th scope="col">T ≤ 19 mm</th>
+          <th scope="col">19 &lt; T ≤ 38 mm</th>
+          <th scope="col">38 &lt; T ≤ 65 mm</th>
+          <th scope="col">T &gt; 65 mm</th>
         </tr>
       </thead>
       <tbody>
@@ -542,7 +545,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
       </tbody>
     </table>
     </div>
-    <p style="font-size:0.81rem;color:#64748b;margin-top:6px;">"None" = no minimum required by Table 4.4 for that combination when ambient ≥10°C and low-hydrogen process is used.</p>
+    <p style="font-size:0.81rem;color:#606f85;margin-top:6px;">"None" = no minimum required by Table 4.4 for that combination when ambient ≥10°C and low-hydrogen process is used.</p>
   </div>
 
   <!-- CE Calculator -->
@@ -552,22 +555,22 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 
     <div class="section-label">Steel Chemistry (wt%) — from heat certificate</div>
     <div class="ce-grid">
-      <div class="ce-field"><label><span class="sym">C</span> Carbon</label><input type="number" id="iC" value="0.18" step="0.01" min="0" max="1.0"></div>
-      <div class="ce-field"><label><span class="sym">Mn</span> Manganese</label><input type="number" id="iMn" value="1.10" step="0.01" min="0" max="3.0"></div>
-      <div class="ce-field"><label><span class="sym">Si</span> Silicon</label><input type="number" id="iSi" value="0.30" step="0.01" min="0" max="1.5"></div>
-      <div class="ce-field"><label><span class="sym">Cr</span> Chromium</label><input type="number" id="iCr" value="0.55" step="0.01" min="0" max="5.0"></div>
-      <div class="ce-field"><label><span class="sym">Mo</span> Molybdenum</label><input type="number" id="iMo" value="0.00" step="0.01" min="0" max="1.0"></div>
-      <div class="ce-field"><label><span class="sym">V</span> Vanadium</label><input type="number" id="iV" value="0.065" step="0.005" min="0" max="0.30"></div>
-      <div class="ce-field"><label><span class="sym">Ni</span> Nickel</label><input type="number" id="iNi" value="0.35" step="0.01" min="0" max="10.0"></div>
-      <div class="ce-field"><label><span class="sym">Cu</span> Copper</label><input type="number" id="iCu" value="0.40" step="0.01" min="0" max="1.0"></div>
-      <div class="ce-field"><label><span class="sym">B</span> Boron (ppm)</label><input type="number" id="iB" value="0" step="1" min="0" max="60"></div>
+      <div class="ce-field"><label><span class="sym">C</span> Carbon</label><input type="number" id="iC" value="0.18" step="0.01" min="0" max="1.0" aria-label="Carbon"></div>
+      <div class="ce-field"><label><span class="sym">Mn</span> Manganese</label><input type="number" id="iMn" value="1.10" step="0.01" min="0" max="3.0" aria-label="Manganese"></div>
+      <div class="ce-field"><label><span class="sym">Si</span> Silicon</label><input type="number" id="iSi" value="0.30" step="0.01" min="0" max="1.5" aria-label="Silicon"></div>
+      <div class="ce-field"><label><span class="sym">Cr</span> Chromium</label><input type="number" id="iCr" value="0.55" step="0.01" min="0" max="5.0" aria-label="Chromium"></div>
+      <div class="ce-field"><label><span class="sym">Mo</span> Molybdenum</label><input type="number" id="iMo" value="0.00" step="0.01" min="0" max="1.0" aria-label="Molybdenum"></div>
+      <div class="ce-field"><label><span class="sym">V</span> Vanadium</label><input type="number" id="iV" value="0.065" step="0.005" min="0" max="0.30" aria-label="Vanadium"></div>
+      <div class="ce-field"><label><span class="sym">Ni</span> Nickel</label><input type="number" id="iNi" value="0.35" step="0.01" min="0" max="10.0" aria-label="Nickel"></div>
+      <div class="ce-field"><label><span class="sym">Cu</span> Copper</label><input type="number" id="iCu" value="0.40" step="0.01" min="0" max="1.0" aria-label="Copper"></div>
+      <div class="ce-field"><label><span class="sym">B</span> Boron (ppm)</label><input type="number" id="iB" value="0" step="1" min="0" max="60" aria-label="Boron (ppm)"></div>
     </div>
 
     <div class="section-label">Joint Parameters</div>
     <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;margin-bottom:14px;">
       <div>
         <label style="font-size:0.8rem;font-weight:600;color:#475569;display:block;margin-bottom:6px;">Max Plate Thickness at Joint</label>
-        <select class="thick-select" id="iThick">
+        <select class="thick-select" id="iThick" aria-label="Max Plate Thickness at Joint">
           <option value="1">≤ 19 mm</option>
           <option value="2">19 – 38 mm</option>
           <option value="3" selected>38 – 65 mm</option>
@@ -675,8 +678,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <h2>IIW — Foundational HIC Documents</h2>
     <p>The International Institute of Welding has produced the research underpinning most national HIC prevention codes since the 1950s. Key documents:</p>
 
-    <table class="ref-table">
-      <thead><tr><th>Document</th><th>Title / Scope</th><th>Key Contribution</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">IIW — Foundational HIC Documents</caption>
+      <thead><tr><th scope="col">Document</th><th scope="col">Title / Scope</th><th scope="col">Key Contribution</th></tr></thead>
       <tbody>
         <tr><td>IIW Doc. IX-535-67</td><td>Carbon Equivalent Formula — Dearden &amp; O'Neill / IIW revision</td><td>Established CE<sub>IIW</sub> as international reference formula; adopted by AWS, EN, and AS standards worldwide</td></tr>
         <tr><td>IIW Doc. IX-2113-05</td><td>Prevention of Cold Cracking — Literature Review &amp; Recommended Practice</td><td>Comprehensive mechanism review; formalises three-condition model; framework for code comparisons</td></tr>
@@ -693,14 +696,14 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <p>All major fabrication codes address HIC prevention, but differ significantly in methodology (table-based vs. formula-based), parameter scope, and conservatism.</p>
 
     <div style="overflow-x:auto;">
-    <table class="ref-table" style="min-width:700px;">
+    <table class="ref-table" style="min-width:700px;"><caption class="sr-only">International Standards Comparison — HIC Prevention</caption>
       <thead>
         <tr>
-          <th>Attribute</th>
-          <th style="background:#1e3a5f;">AWS D1.1:2020 (USA)</th>
-          <th style="background:#1e5f3a;">EN 1011-2:2001 (Europe)</th>
-          <th style="background:#3a1e5f;">BS 7910:2019 (UK)</th>
-          <th style="background:#5f3a1e;">AS/NZS 1554.1:2014 (Aus/NZ)</th>
+          <th scope="col">Attribute</th>
+          <th style="background:#1e3a5f;" scope="col">AWS D1.1:2020 (USA)</th>
+          <th style="background:#1e5f3a;" scope="col">EN 1011-2:2001 (Europe)</th>
+          <th style="background:#3a1e5f;" scope="col">BS 7910:2019 (UK)</th>
+          <th style="background:#5f3a1e;" scope="col">AS/NZS 1554.1:2014 (Aus/NZ)</th>
         </tr>
       </thead>
       <tbody>
@@ -792,8 +795,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     </div>
 
     <h3>EN 1011-2 Hydrogen Scale (vs. AWS Designators)</h3>
-    <table class="ref-table">
-      <thead><tr><th>EN Scale</th><th>H<sub>D</sub> Range (mL/100g)</th><th>AWS Approximate Equivalent</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">EN 1011-2 Hydrogen Scale (vs. AWS Designators)</caption>
+      <thead><tr><th scope="col">EN Scale</th><th scope="col">H<sub>D</sub> Range (mL/100g)</th><th scope="col">AWS Approximate Equivalent</th></tr></thead>
       <tbody>
         <tr><td>A — Very low</td><td>&lt;3</td><td>H4 (extra-low hydrogen)</td></tr>
         <tr><td>B — Low</td><td>3–5</td><td>Between H4 and H8</td></tr>
@@ -838,8 +841,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <h2>HIC Prevention — Priority Hierarchy (All Codes)</h2>
     <p>When multiple controls are stacked, they provide multiplicative protection. For high-risk joints (CE &gt;0.45, thick section, high restraint), apply as many levels as practical:</p>
 
-    <table class="ref-table">
-      <thead><tr><th>Priority</th><th>Control</th><th>Condition Eliminated</th><th>Effectiveness</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">HIC Prevention — Priority Hierarchy (All Codes)</caption>
+      <thead><tr><th scope="col">Priority</th><th scope="col">Control</th><th scope="col">Condition Eliminated</th><th scope="col">Effectiveness</th></tr></thead>
       <tbody>
         <tr><td><strong>1</strong></td><td>Specify low-CE steel (CE &lt;0.40 on actual heat cert)</td><td>Susceptible microstructure</td><td>Eliminates HIC risk at normal thicknesses — most powerful single measure at design stage</td></tr>
         <tr><td><strong>2</strong></td><td>Low-hydrogen filler (H4 or H8), properly baked and stored</td><td>Hydrogen</td><td>Reduces H<sub>D</sub> by 4–10× vs. cellulosic; single most cost-effective process control</td></tr>
@@ -854,6 +857,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 
 </div>
 
+</main>
 <div class="back">
   <a href="index.html">← Back to References</a>
 </div>
@@ -929,12 +933,12 @@ function calcCE() {
   document.getElementById('ce-result').innerHTML =
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">' +
       '<div>' +
-        '<div style="font-size:0.78rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">CE<sub>IIW</sub></div>' +
+        '<div style="font-size:0.78rem;font-weight:700;color:#606f85;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">CE<sub>IIW</sub></div>' +
         '<div class="result-temp">' + ceIIW.toFixed(3) + '</div>' +
         '<div class="result-label">AWS D1.1 <strong>Group ' + groupName + '</strong> (CE ' + groupRange + ')</div>' +
       '</div>' +
       '<div>' +
-        '<div style="font-size:0.78rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">P<sub>cm</sub></div>' +
+        '<div style="font-size:0.78rem;font-weight:700;color:#606f85;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">P<sub>cm</sub></div>' +
         '<div class="result-temp">' + pcm.toFixed(3) + '</div>' +
         '<div class="result-label">Ito-Bessyo index (pipeline / low-carbon steels)</div>' +
       '</div>' +

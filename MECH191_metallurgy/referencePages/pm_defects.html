@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PM Defects Reference — MPIF Standards &amp; TWI Defect Library</title>
     <style>
@@ -183,7 +185,7 @@
         </div>
         <div class="detail-body">
             <div class="detail-canvas-col">
-                <canvas id="detailCanvas" width="480" height="260"></canvas>
+                <canvas id="detailCanvas" width="480" height="260" role="img" aria-label="Schematic cross-section of the powder metallurgy defect selected from the cards above. The defect name, description, causes, and detection methods are given in the text of this panel."></canvas>
                 <div class="illus-note">Schematic cross-section — representative illustration</div>
             </div>
             <div class="detail-info-col">
@@ -1197,10 +1199,12 @@ function buildCards() {
         card.dataset.idx = i;
 
         var canvas = document.createElement('canvas');
-        canvas.width = 160; canvas.height = 100;
+        // Thumbnails are drawn at 2× size and scaled down by CSS so their labels fit inside the frame
+        canvas.width = 320; canvas.height = 200;
         canvas.style.width = '100%';
+        canvas.setAttribute('aria-hidden', 'true');   // decorative preview; the card text names the defect
         var ctx = canvas.getContext('2d');
-        d.draw(ctx, 160, 100);
+        d.draw(ctx, 320, 200);
 
         card.innerHTML = '<div class="defect-card-info">' +
             '<div class="card-code">' + d.code + '</div>' +

@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iron-Carbon Phase Diagram</title>
     <style>
@@ -78,7 +80,7 @@
         }
 
         .phase-placeholder {
-            color: #64748b;
+            color: #8593a7;
             font-style: italic;
             text-align: center;
             margin-top: 30px;
@@ -106,7 +108,7 @@
         }
         .prop-card .label {
             font-size: 0.72rem;
-            color: #64748b;
+            color: #8593a7;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             margin-bottom: 4px;
@@ -186,9 +188,10 @@
     <p class="subtitle">Click or hover any region to explore phases and their properties</p>
 </header>
 
+<main id="main-content">
 <div class="main-layout">
     <div class="diagram-wrapper">
-        <canvas id="diagramCanvas" width="740" height="520"></canvas>
+        <canvas id="diagramCanvas" width="740" height="520" role="img" aria-label="Iron–iron carbide phase diagram, temperature in °C (vertical) versus carbon content from 0 to 6.67 weight percent (horizontal). Liquid is at the top. δ-ferrite is a small region near 0 percent carbon between 1394 and 1538 °C, with the peritectic at 1495 °C. Austenite (γ, FCC) fills a large field from 727 to 1394 °C, dissolving up to 2.14 percent carbon at 1148 °C. The eutectic point is 4.3 percent carbon at 1148 °C, forming ledeburite. The eutectoid point is 0.76 percent carbon at 727 °C, where austenite turns into pearlite (ferrite plus cementite). Below 727 °C: α-ferrite plus pearlite for hypoeutectoid steels (under 0.76 percent C), pearlite plus cementite for hypereutectoid steels, and cementite (Fe3C) at 6.67 percent carbon. Steels are left of 2.14 percent carbon, cast irons to the right. Use the legend buttons below the diagram to read details for each phase with the keyboard."></canvas>
         <div class="tooltip" id="tooltip"></div>
         <div class="cursor-coords" id="coords"></div>
     </div>
@@ -201,6 +204,7 @@
 
 <div class="legend-row" id="legendRow"></div>
 
+</main>
 <div class="back-link">
     <a href="index.html">← Back to Visualizations</a>
 </div>
@@ -258,8 +262,8 @@ const PHASES = {
     },
     bainite: {
         name: 'Bainite (metastable)',
-        color: '#8b5cf6',
-        tag: '#8b5cf6',
+        color: '#b496f9',
+        tag: '#b496f9',
         description: 'Metastable phase formed by isothermal transformation of austenite between ~250–550 °C (below pearlite nose, above martensite start). Not shown as a region on the equilibrium diagram — it requires TTT/CCT diagrams. Finer than pearlite, tougher than martensite.',
         props: { Structure: 'Acicular α+Fe₃C', 'Transforms': '250–550 °C', Hardness: '300–500 HB', Toughness: 'High' },
         uses: ['High-strength steels', 'Springs', 'Gears', 'Austempered castings']
@@ -790,7 +794,7 @@ function showPhaseInfo(phaseId) {
         <p class="description">${data.description}</p>
         <div class="prop-grid">${propsHtml}</div>
         <div>
-            <div class="label" style="font-size:0.72rem;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Typical Applications</div>
+            <div class="label" style="font-size:0.72rem;color:#8593a7;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Typical Applications</div>
             <ul class="uses-list">${usesHtml}</ul>
         </div>
     `;

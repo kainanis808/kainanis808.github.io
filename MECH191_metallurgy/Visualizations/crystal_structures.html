@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crystal Structures Animation - FCC, BCC, HCP</title>
     <style>
@@ -128,7 +130,7 @@
             display: block;
             margin-bottom: 5px;
             font-size: 0.9rem;
-            color: #64748b;
+            color: #73839a;
         }
         .legend {
             display: flex;
@@ -165,14 +167,15 @@
         <p class="subtitle">Face-Centered Cubic (FCC) • Body-Centered Cubic (BCC) • Hexagonal Close-Packed (HCP)</p>
     </header>
     
-    <div class="controls">
+    <main id="main-content">
+<div class="controls">
         <button class="crystal-btn bcc" onclick="showCrystal('bcc')">BCC</button>
         <button class="crystal-btn fcc active" onclick="showCrystal('fcc')">FCC</button>
         <button class="crystal-btn hcp" onclick="showCrystal('hcp')">HCP</button>
     </div>
     
     <div class="canvas-container">
-        <canvas id="crystalCanvas" width="800" height="500"></canvas>
+        <canvas id="crystalCanvas" width="800" height="500" role="img" aria-label="Rotatable 3D model of a unit cell. Shows the structure selected with the FCC, BCC, or HCP buttons: FCC has atoms on the 8 corners plus the centre of each of the 6 faces; BCC has atoms on the 8 corners plus one in the cube centre; HCP is a hexagonal prism with atoms at the corners and centres of the top and bottom faces plus three atoms in the middle layer. Drag with a mouse to rotate. Details for the selected structure appear in the text panel below."></canvas>
     </div>
     
     <div class="legend" id="legend"></div>
@@ -490,7 +493,8 @@
         // Initialize
         init();
     </script>
-    <p class="back-link"><a href="index.html">← Back to Visualizations</a></p>
+    </main>
+<p class="back-link"><a href="index.html">← Back to Visualizations</a></p>
 
 </body>
 </html>

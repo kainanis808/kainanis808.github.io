@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PPE Reference Guide</title>
     <style>
@@ -22,7 +24,7 @@
         .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
         main { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
         .intro { color: #374151; line-height: 1.7; margin-bottom: 30px; font-size: 1rem; }
-        .intro a { color: #0284c7; }
+        .intro a { color: #027ab8; }
 
         .section {
             background: #f8fafc;
@@ -33,7 +35,7 @@
         }
         .section h2 { font-size: 1.3rem; color: #1e3a5f; margin-bottom: 10px; }
         .section p { color: #4b5563; line-height: 1.6; margin-bottom: 14px; font-size: 0.95rem; }
-        .section a { color: #0284c7; }
+        .section a { color: #027ab8; }
 
         table {
             width: 100%;
@@ -134,7 +136,7 @@
             display: block;
             text-align: center;
             margin-top: 30px;
-            color: #0284c7;
+            color: #027ab8;
             text-decoration: none;
             font-size: 0.95rem;
         }
@@ -193,9 +195,9 @@
     <div class="section">
         <h2>Eye &amp; Face Protection Tiers</h2>
         <p>Not all eye protection is interchangeable — the right tier depends on the hazard, not personal preference.</p>
-        <table>
+        <table><caption class="sr-only">Eye &amp; Face Protection Tiers</caption>
             <thead>
-                <tr><th>Protection</th><th>Standard / Rating</th><th>Protects Against</th><th>Required For</th></tr>
+                <tr><th scope="col">Protection</th><th scope="col">Standard / Rating</th><th scope="col">Protects Against</th><th scope="col">Required For</th></tr>
             </thead>
             <tbody>
                 <tr>
@@ -243,9 +245,9 @@
     <div class="section">
         <h2>Hand Protection — Glove Selection</h2>
         <p>The right glove depends entirely on the hazard. Using the wrong type is the most common PPE mistake in a metals shop — and near rotating machinery, gloves themselves are the hazard.</p>
-        <table>
+        <table><caption class="sr-only">Hand Protection — Glove Selection</caption>
             <thead>
-                <tr><th>Glove Type</th><th>Use For</th><th>Do Not Use For</th></tr>
+                <tr><th scope="col">Glove Type</th><th scope="col">Use For</th><th scope="col">Do Not Use For</th></tr>
             </thead>
             <tbody>
                 <tr>
@@ -353,9 +355,9 @@
     <div class="section">
         <h2>Welding Helmet Lens Shade Chart</h2>
         <p>Starting points by process and amperage, per AWS guidance — adjust within range for comfort and visibility, never below the minimum shown.</p>
-        <table>
+        <table><caption class="sr-only">Welding Helmet Lens Shade Chart</caption>
             <thead>
-                <tr><th>Process</th><th>Amperage Range</th><th>Recommended Shade</th></tr>
+                <tr><th scope="col">Process</th><th scope="col">Amperage Range</th><th scope="col">Recommended Shade</th></tr>
             </thead>
             <tbody>
                 <tr><td>SMAW (Stick)</td><td>60–160 A</td><td class="code">10–12</td></tr>

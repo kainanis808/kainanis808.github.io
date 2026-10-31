@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Corrosion – Galvanic Series, Types &amp; Electrochemical Cell</title>
 <style>
@@ -16,9 +18,9 @@ h1{text-align:center;padding:1.4rem 1rem 0.3rem;font-size:1.35rem;color:#f1f5f9;
 .tab-btn.active{color:#38bdf8;border-bottom-color:#38bdf8;background:#1e293b;font-weight:700;}
 .tab-panel{display:none;padding:1.2rem 1.4rem;}
 .tab-panel.active{display:block;}
-.source-tag{display:inline-block;background:#1e293b;border:1px solid #334155;border-radius:4px;padding:2px 8px;font-size:0.71rem;color:#64748b;margin-bottom:0.6rem;}
+.source-tag{display:inline-block;background:#1e293b;border:1px solid #334155;border-radius:4px;padding:2px 8px;font-size:0.71rem;color:#8593a7;margin-bottom:0.6rem;}
 .section-sub{font-size:0.79rem;color:#94a3b8;margin-bottom:1rem;line-height:1.5;}
-.source-note{font-size:0.74rem;color:#64748b;margin-top:0.8rem;line-height:1.5;}
+.source-note{font-size:0.74rem;color:#8593a7;margin-top:0.8rem;line-height:1.5;}
 canvas{display:block;border-radius:6px;}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
 .card{background:#1e293b;border:1px solid #334155;border-radius:8px;padding:0.9rem;}
@@ -29,7 +31,7 @@ canvas{display:block;border-radius:6px;}
 .corr-card-hdr{padding:0.55rem 0.85rem;font-size:0.83rem;font-weight:700;}
 .corr-card-body{padding:0 0.85rem 0.85rem;}
 .corr-row{display:flex;gap:0.45rem;margin-top:0.45rem;}
-.corr-lbl{font-size:0.69rem;color:#64748b;font-weight:700;min-width:88px;padding-top:2px;flex-shrink:0;}
+.corr-lbl{font-size:0.69rem;color:#8593a7;font-weight:700;min-width:88px;padding-top:2px;flex-shrink:0;}
 .corr-val{font-size:0.71rem;color:#cbd5e1;line-height:1.45;}
 .ctrl-row{display:flex;gap:0.5rem;margin-bottom:0.75rem;flex-wrap:wrap;align-items:center;}
 .ctrl-btn{padding:0.28rem 0.7rem;background:#1e293b;border:1px solid #334155;border-radius:4px;color:#94a3b8;font-size:0.74rem;cursor:pointer;transition:all 0.15s;}
@@ -43,6 +45,7 @@ canvas{display:block;border-radius:6px;}
 </head>
 <body>
 
+<main id="main-content">
 <h1>Corrosion – Galvanic Series, Types &amp; Electrochemical Cell</h1>
 <p class="subtitle">ASM International &nbsp;·&nbsp; NACE International &nbsp;·&nbsp; Fontana Corrosion Engineering</p>
 
@@ -56,7 +59,7 @@ canvas{display:block;border-radius:6px;}
 <div class="tab-panel active" id="tab-galvanic">
   <div class="source-tag">ASM International · NACE SP0176 · Fontana &amp; Greene — Seawater, 25 °C, SCE reference</div>
   <p class="section-sub">Metals listed from most active (anodic, negative potential) to most noble (cathodic, positive potential). When two metals are coupled in seawater, the more active one corrodes preferentially.</p>
-  <canvas id="cvGalvanic" width="820" height="620" style="width:100%;"></canvas>
+  <canvas id="cvGalvanic" width="820" height="620" style="width:100%;" role="img" aria-label="Galvanic series in seawater: horizontal bars show the corrosion potential of each metal versus a saturated calomel electrode, ordered from most active (anodic, e.g. magnesium, zinc, aluminum) to most noble (cathodic, e.g. titanium, graphite, gold and platinum). Dashed outlines mark the passive range of stainless steels. The farther apart two metals are, the stronger the galvanic corrosion of the more active one."></canvas>
   <p class="source-note">Half-cell potentials are approximate vs. saturated calomel electrode (SCE) in flowing seawater. Dashed outlines indicate passive range. Larger potential difference between coupled metals = greater galvanic driving force.</p>
 </div>
 
@@ -76,7 +79,7 @@ canvas{display:block;border-radius:6px;}
     <button class="ctrl-btn" id="btnAnim" onclick="toggleAnim()">▶ Animate</button>
     <button class="ctrl-btn" onclick="resetCell()">↺ Reset</button>
   </div>
-  <canvas id="cvCell" width="720" height="415" style="width:100%;"></canvas>
+  <canvas id="cvCell" width="720" height="415" style="width:100%;" role="img" aria-label="Animated Daniell cell: a zinc anode in zinc sulfate solution and a copper cathode in copper sulfate solution, joined by a wire and a salt bridge. When animated, electrons flow through the wire from zinc to copper, zinc ions dissolve from the anode, copper ions deposit on the cathode, and ions move through the salt bridge."></canvas>
   <div class="two-col" style="margin-top:1rem;">
     <div class="card">
       <h3>Anode (−) — Oxidation — Zinc</h3>
@@ -90,6 +93,7 @@ canvas{display:block;border-radius:6px;}
   <p class="source-note">In real corrosion the anode and cathode are on the same metal surface in one electrolyte; separate half-cells shown here for instructional clarity. Cations migrate toward cathode; anions migrate toward anode through solution.</p>
 </div>
 
+</main>
 <p class="back-link"><a href="index.html">← Back to Visualizations</a></p>
 
 <script>
@@ -189,8 +193,8 @@ function drawGalvanic(){
   ctx.strokeStyle='#475569';ctx.lineWidth=1.5;ctx.setLineDash([5,4]);
   ctx.beginPath();ctx.moveTo(x0,mt);ctx.lineTo(x0,mt+ah);ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle='#94a3b8';ctx.font='bold 9px Segoe UI,Arial';ctx.textAlign='center';
-  ctx.fillText('0 V',x0,mt-6);
+  ctx.fillStyle='#94a3b8';ctx.font='bold 9px Segoe UI,Arial';ctx.textAlign='left';
+  ctx.fillText('0 V',x0+4,mt+10);
 
   // rows
   const rh=ah/GAL.length;
@@ -242,7 +246,7 @@ const CORR_TYPES=[
    app:'Accelerated attack concentrated at or near dissimilar metal junction; corroded rim around anode metal',
    loc:'Interface of two metals with different electrode potentials in a common electrolyte',
    cues:'Attack within ~10–20 mm of joint; noble metal unaffected; active metal sacrificed; increases with potential difference'},
-  {name:'Pitting Corrosion',     color:'#f43f5e', draw:drawPitting,
+  {name:'Pitting Corrosion',     color:'#f7798f', draw:drawPitting,
    app:'Discrete deep hemispherical or cylindrical cavities, often with corrosion-product lid; small mouth relative to depth',
    loc:'Passive alloys (304/316 SS, aluminium, titanium) in Cl⁻-containing environments',
    cues:'Aspect ratio depth/width > 1; autocatalytic; hard to detect; Cl⁻ concentration inside pit > bulk; low pH inside'},
@@ -250,7 +254,7 @@ const CORR_TYPES=[
    app:'Localised attack inside tight gaps; outer surface intact; brown/orange deposit at crevice mouth',
    loc:'Under gaskets, washers, flanges, lap joints, O-rings, bolt heads',
    cues:'Requires gap ≤ 0.1 mm; pH drop and Cl⁻ concentration inside gap; outside surface acts as cathode'},
-  {name:'Stress Corrosion Cracking', color:'#ef4444', draw:drawSCC,
+  {name:'Stress Corrosion Cracking', color:'#f47c7c', draw:drawSCC,
    app:'Fine branching cracks (transgranular or intergranular); little macroscopic plastic deformation; minimal bulk metal loss',
    loc:'High-stress or residual-stress zones; weld HAZ; cold-worked areas',
    cues:'Requires susceptible alloy + tensile stress + specific environment simultaneously; often catastrophic and sudden'},
@@ -396,7 +400,7 @@ function drawPitting(i){
     ctx.quadraticCurveTo(p.x-p.w/3,my+p.d*0.65,p.x,my+p.d);
     ctx.quadraticCurveTo(p.x+p.w/3,my+p.d*0.65,p.x+p.w/2,my+2);
     ctx.fillStyle='#0a1628';ctx.fill();
-    ctx.strokeStyle='#f43f5e';ctx.lineWidth=1.2;ctx.stroke();
+    ctx.strokeStyle='#f7798f';ctx.lineWidth=1.2;ctx.stroke();
     // lid
     ctx.beginPath();ctx.ellipse(p.x,my+2,p.w/2+3,4,0,0,Math.PI*2);
     ctx.fillStyle='rgba(234,88,12,0.55)';ctx.fill();
@@ -407,15 +411,15 @@ function drawPitting(i){
 
   // Cl- arrows
   [55,175].forEach(x=>{
-    ctx.strokeStyle='#f43f5e';ctx.lineWidth=1;
+    ctx.strokeStyle='#f7798f';ctx.lineWidth=1;
     ctx.beginPath();ctx.moveTo(x,my-14);ctx.lineTo(x,my+1);ctx.stroke();
     ctx.beginPath();ctx.moveTo(x-3,my-3);ctx.lineTo(x,my+1);ctx.lineTo(x+3,my-3);ctx.fill();
-    ctx.fillStyle='#f43f5e';ctx.font='bold 7px Segoe UI,Arial';ctx.textAlign='center';
-    ctx.fillText('Cl⁻',x,my-16);
+    ctx.fillStyle='#f7798f';ctx.font='bold 8px Segoe UI,Arial';ctx.textAlign=x<W/2?'left':'right';
+    ctx.fillText('Cl⁻',x<W/2?x+5:x-5,my-6);
   });
 
   ctx.fillStyle='rgba(8,13,26,0.88)';ctx.fillRect(0,0,W,20);
-  ctx.fillStyle='#f43f5e';ctx.font='bold 9px Segoe UI,Arial';ctx.textAlign='left';
+  ctx.fillStyle='#f7798f';ctx.font='bold 9px Segoe UI,Arial';ctx.textAlign='left';
   ctx.fillText('Cross-Section — Pitting (deep hemispherical pits)',5,14);
   ctx.fillStyle='#22d3ee';ctx.font='8px Segoe UI,Arial';ctx.textAlign='right';
   ctx.fillText('Passive film (broken at mouth)',W-10,my-3);
@@ -473,7 +477,7 @@ function drawSCC(i){
   ctx.strokeStyle='#2d5a8e';ctx.lineWidth=1;ctx.strokeRect(8,24,W-16,105);
 
   // tensile stress arrows
-  ctx.strokeStyle='#ef4444';ctx.lineWidth=1.8;
+  ctx.strokeStyle='#f47c7c';ctx.lineWidth=1.8;
   [35,90,145,200,245].forEach(x=>{
     ctx.beginPath();ctx.moveTo(x,24);ctx.lineTo(x,9);ctx.stroke();
     ctx.beginPath();ctx.moveTo(x-3,13);ctx.lineTo(x,8);ctx.lineTo(x+3,13);ctx.fill();
@@ -487,7 +491,7 @@ function drawSCC(i){
     const len=8+rng()*7;
     const x1=x0+Math.cos(ang)*len,y1=y0+Math.sin(ang)*len;
     ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);
-    ctx.strokeStyle='#ef4444';ctx.lineWidth=Math.max(0.5,depth/7);ctx.stroke();
+    ctx.strokeStyle='#f47c7c';ctx.lineWidth=Math.max(0.5,depth/7);ctx.stroke();
     if(depth>2&&rng()>0.45){
       crack(x1,y1,ang-(0.25+rng()*0.2),depth-1);
       crack(x1,y1,ang+(0.25+rng()*0.2),depth-1);
@@ -505,10 +509,8 @@ function drawSCC(i){
   ctx.fillText('Corrosive environment (H₂S, NaCl, NaOH, etc.)',W/2,120);
 
   ctx.fillStyle='rgba(8,13,26,0.88)';ctx.fillRect(0,0,W,20);
-  ctx.fillStyle='#ef4444';ctx.font='bold 9px Segoe UI,Arial';ctx.textAlign='left';
+  ctx.fillStyle='#f47c7c';ctx.font='bold 9px Segoe UI,Arial';ctx.textAlign='left';
   ctx.fillText('Cross-Section — SCC: Branching cracks under σ_tensile',5,14);
-  ctx.fillStyle='#ef4444';ctx.font='bold 8px Segoe UI,Arial';ctx.textAlign='center';
-  ctx.fillText('σ (tensile)',W/2,7);
 }
 
 function drawIntergranular(i){
@@ -725,10 +727,10 @@ function drawCell(t){
   }
 
   // ── ANODE / CATHODE — top strip, drawn last so always on top ──
-  lbl(aX,15,'ANODE (−)','#ef4444','center',13);
+  lbl(aX,15,'ANODE (−)','#f47c7c','center',13);
   lbl(caX,15,'CATHODE (+)','#22c55e','center',13);
   // Oxidation / Reduction — between wire and electrode top
-  lbl(aX,wY+18,'Oxidation','#ef4444','center',9);
+  lbl(aX,wY+18,'Oxidation','#f47c7c','center',9);
   lbl(caX,wY+18,'Reduction','#22c55e','center',9);
 
   // ── E_cell near voltmeter ──
@@ -736,7 +738,7 @@ function drawCell(t){
 
   // ── half-reactions — below beakers ──
   const hrY=bY+bH+18;
-  lbl(aX,hrY,'Zn → Zn²⁺ + 2e⁻','#ef4444','center',10);
+  lbl(aX,hrY,'Zn → Zn²⁺ + 2e⁻','#f47c7c','center',10);
   lbl(aX,hrY+16,'E° = −0.76 V (SHE)','#64748b','center',9);
   lbl(caX,hrY,'Cu²⁺ + 2e⁻ → Cu','#22c55e','center',10);
   lbl(caX,hrY+16,'E° = +0.34 V (SHE)','#64748b','center',9);

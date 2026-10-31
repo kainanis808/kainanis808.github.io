@@ -3,23 +3,25 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Extrusion – AEC Design Guidelines, Process Animation &amp; Die Design</title>
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
   body{background:#0a1628;color:#e2e8f0;font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;}
-  header{background:linear-gradient(135deg,#0f2040 0%,#1a3a5c 100%);padding:24px 32px 20px;border-bottom:2px solid #38bdf8;}
-  header h1{font-size:1.75rem;color:#38bdf8;letter-spacing:.5px;}
+  header{background:linear-gradient(135deg,#0f2040 0%,#1a3a5c 100%);padding:24px 32px 20px;border-bottom:2px solid #47c2f9;}
+  header h1{font-size:1.75rem;color:#47c2f9;letter-spacing:.5px;}
   header p{color:#94a3b8;font-size:.9rem;margin-top:4px;}
 
   .tabs{display:flex;gap:0;border-bottom:2px solid #1e3a5c;background:#0d1f38;padding:0 24px;}
   .tab-btn{padding:14px 22px;background:none;border:none;color:#94a3b8;font-size:.9rem;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s;white-space:nowrap;}
   .tab-btn:hover{color:#7dd3fc;}
-  .tab-btn.active{color:#38bdf8;border-bottom-color:#38bdf8;font-weight:600;}
+  .tab-btn.active{color:#47c2f9;border-bottom-color:#47c2f9;font-weight:600;}
 
   .tab-content{display:none;padding:28px 32px;}
   .tab-content.active{display:block;}
-  h2{font-size:1.2rem;color:#38bdf8;margin-bottom:16px;}
+  h2{font-size:1.2rem;color:#47c2f9;margin-bottom:16px;}
   h3{font-size:1rem;color:#7dd3fc;margin-bottom:10px;}
   canvas{display:block;}
 
@@ -31,29 +33,29 @@
 
   /* tables */
   .data-table{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:16px;}
-  .data-table th{background:#1a3a5c;color:#38bdf8;padding:8px 10px;text-align:left;border:1px solid #1e3a5c;}
+  .data-table th{background:#1a3a5c;color:#47c2f9;padding:8px 10px;text-align:left;border:1px solid #1e3a5c;}
   .data-table td{padding:7px 10px;border:1px solid #1e3a5c;color:#cbd5e1;}
   .data-table tr:nth-child(even) td{background:#0f2040;}
   .data-table tr:nth-child(odd) td{background:#0a1628;}
-  .data-table caption{color:#64748b;font-size:.73rem;caption-side:bottom;padding-top:5px;text-align:left;}
+  .data-table caption{color:#73839a;font-size:.73rem;caption-side:bottom;padding-top:5px;text-align:left;}
   .best{color:#4ade80;font-weight:700;}
 
   /* animation */
   .anim-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;}
   .mode-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
   .mode-btn{background:#1a3a5c;color:#94a3b8;border:1px solid #334155;border-radius:6px;padding:7px 16px;font-size:.82rem;cursor:pointer;transition:all .2s;}
-  .mode-btn:hover{border-color:#38bdf8;color:#7dd3fc;}
-  .mode-btn.active{background:#0c4a6e;color:#38bdf8;border-color:#38bdf8;font-weight:600;}
+  .mode-btn:hover{border-color:#47c2f9;color:#7dd3fc;}
+  .mode-btn.active{background:#0c4a6e;color:#47c2f9;border-color:#47c2f9;font-weight:600;}
   .anim-canvas-wrap{background:#0f2040;border:1px solid #1e3a5c;border-radius:10px;padding:10px;}
   #stage-label{font-size:.95rem;color:#7dd3fc;text-align:center;min-height:20px;}
   #stage-desc{font-size:.78rem;color:#94a3b8;text-align:center;max-width:680px;min-height:36px;line-height:1.5;}
   .ctrl-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;}
-  .ctrl-row button{background:#1a3a5c;color:#e2e8f0;border:1px solid #38bdf8;border-radius:6px;padding:7px 16px;font-size:.82rem;cursor:pointer;transition:background .2s;}
-  .ctrl-row button:hover{background:#38bdf8;color:#0a1628;}
+  .ctrl-row button{background:#1a3a5c;color:#e2e8f0;border:1px solid #47c2f9;border-radius:6px;padding:7px 16px;font-size:.82rem;cursor:pointer;transition:background .2s;}
+  .ctrl-row button:hover{background:#47c2f9;color:#0a1628;}
   .ctrl-row button:disabled{opacity:.4;cursor:default;background:#1a3a5c;color:#e2e8f0;}
   .stage-dots{display:flex;gap:7px;}
-  .stage-dot{width:9px;height:9px;border-radius:50%;background:#1e3a5c;border:1px solid #38bdf8;cursor:pointer;transition:background .2s;}
-  .stage-dot.active{background:#38bdf8;}
+  .stage-dot{width:9px;height:9px;border-radius:50%;background:#1e3a5c;border:1px solid #47c2f9;cursor:pointer;transition:background .2s;}
+  .stage-dot.active{background:#47c2f9;}
 
   /* complexity */
   .class-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
@@ -64,7 +66,7 @@
   .alloy-layout{display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:start;}
 
   .back-link{text-align:center;padding:28px;}
-  .back-link a{color:#38bdf8;text-decoration:none;font-size:.9rem;}
+  .back-link a{color:#47c2f9;text-decoration:none;font-size:.9rem;}
   .back-link a:hover{text-decoration:underline;}
 </style>
 </head>
@@ -75,6 +77,7 @@
   <p>Based on Aluminum Extruders Council (AEC) design guidelines and process capability data</p>
 </header>
 
+<main id="main-content">
 <div class="tabs">
   <button class="tab-btn active" data-tab="guidelines">AEC Design Guidelines</button>
   <button class="tab-btn" data-tab="animation">Process Animation</button>
@@ -88,32 +91,32 @@
   <div class="guide-grid">
     <div class="guide-card">
       <h3>Minimum Wall Thickness</h3>
-      <canvas id="c-wall" width="220" height="150"></canvas>
+      <canvas id="c-wall" width="220" height="150" role="img" aria-label="Two extrusion cross-sections compared: a profile with uniform wall thickness, marked acceptable, and one with non-uniform walls, marked as a problem because thick and thin sections flow at different speeds."></canvas>
       <p>6063-T6: <b>0.8 mm</b> min (thin wall)<br>6061-T6: <b>1.8 mm</b> min<br>Max wall ratio: <b>3:1</b> thick:thin<br>Uniform walls reduce warping</p>
     </div>
     <div class="guide-card">
       <h3>Corner &amp; Fillet Radii</h3>
-      <canvas id="c-radii" width="220" height="150"></canvas>
+      <canvas id="c-radii" width="220" height="150" role="img" aria-label="Profile corner detail: inside fillet radius at least 0.8 mm and outside corner radius at least 0.4 mm."></canvas>
       <p>Outside corner: <b>R ≥ 0.4 mm</b><br>Inside fillet: <b>r ≥ 0.8 mm</b><br>Larger radii improve die life, reduce stress concentration in part</p>
     </div>
     <div class="guide-card">
       <h3>Tongue Ratio (Semi-Hollow)</h3>
-      <canvas id="c-tongue" width="220" height="150"></canvas>
+      <canvas id="c-tongue" width="220" height="150" role="img" aria-label="Tongue ratio comparison of two semi-hollow profiles: one with tongue ratio about 1.5, acceptable for a semi-hollow die, and one with tongue ratio above 3, which requires a porthole die."></canvas>
       <p>TR = A<sub>void</sub> / w<sub>opening</sub>²<br>TR ≤ <b>3.0</b> for semi-hollow die<br>TR &gt; 3.0 requires full hollow (bridge/porthole) die</p>
     </div>
     <div class="guide-card">
       <h3>Circumscribed Circle</h3>
-      <canvas id="c-ccd" width="220" height="150"></canvas>
+      <canvas id="c-ccd" width="220" height="150" role="img" aria-label="An extrusion profile enclosed by its circumscribed circle. The circle diameter (CCD) determines the press size needed."></canvas>
       <p>CCD = smallest circle enclosing the profile<br>Determines minimum press size<br>Standard CCDs: <b>5", 7", 8", 10", 12", 14"</b></p>
     </div>
     <div class="guide-card">
       <h3>Symmetry &amp; Balance</h3>
-      <canvas id="c-sym" width="220" height="150"></canvas>
+      <canvas id="c-sym" width="220" height="150" role="img" aria-label="Two profiles compared: a symmetric section, marked acceptable, and an asymmetric section marked with a twist risk."></canvas>
       <p>Symmetric sections: lower die stress, no twist<br>Asymmetric: die offset needed<br>Balance metal distribution around CG to equalize flow velocity</p>
     </div>
     <div class="guide-card">
       <h3>Draft &amp; Taper</h3>
-      <canvas id="c-draft" width="220" height="150"></canvas>
+      <canvas id="c-draft" width="220" height="150" role="img" aria-label="Side-by-side comparison: an extrusion needs 0° draft, while a forging needs 5 to 7° draft on its walls."></canvas>
       <p>Standard aluminum: <b>0° draft</b> (no taper required)<br>Deep pockets: <b>0.5°–1°</b> taper helps die fill<br>Unlike forging, extrusion requires no draft for part removal</p>
     </div>
   </div>
@@ -122,7 +125,7 @@
   <table class="data-table">
     <caption>Source: Aluminum Extruders Council "Aluminum Extrusion Design Manual." Precision tolerances require special die design and inspection.</caption>
     <thead>
-      <tr><th>Dimension</th><th>Standard</th><th>Precision</th><th>Notes</th></tr>
+      <tr><th scope="col">Dimension</th><th scope="col">Standard</th><th scope="col">Precision</th><th scope="col">Notes</th></tr>
     </thead>
     <tbody>
       <tr><td>Wall thickness ≤ 3 mm</td><td>±0.25 mm</td><td>±0.08 mm</td><td>Across die face</td></tr>
@@ -142,7 +145,7 @@
   <table class="data-table">
     <caption>Typical values for 6063-T6 and 6061-T6 aluminum extrusions, standard production conditions.</caption>
     <thead>
-      <tr><th>Parameter</th><th>6063-T6 (thin wall)</th><th>6061-T6 (structural)</th><th>Notes</th></tr>
+      <tr><th scope="col">Parameter</th><th scope="col">6063-T6 (thin wall)</th><th scope="col">6061-T6 (structural)</th><th scope="col">Notes</th></tr>
     </thead>
     <tbody>
       <tr><td>Extrusion speed</td><td>15–60 m/min</td><td>3–12 m/min</td><td>6063 flows much more easily</td></tr>
@@ -168,7 +171,7 @@
       <button class="mode-btn" onclick="setMode('pipe')">Pipe Defect Formation</button>
     </div>
     <div class="anim-canvas-wrap">
-      <canvas id="c-anim" width="720" height="360" style="width:720px;height:360px;"></canvas>
+      <canvas id="c-anim" width="720" height="360" style="width:720px;height:360px;" role="img" aria-label="Step-by-step extrusion animation. Direct extrusion: billet loading, upsetting, extrusion begins, steady-state extrusion, late stage where the pipe defect starts, pipe defect and discard, discard separation. Also indirect extrusion (die advancing into the billet) and a pipe-defect sequence showing the dead-metal zone drawing surface oxide inward. Use Prev, Play, and Next; the current stage is described in text."></canvas>
     </div>
     <div id="stage-label"></div>
     <div id="stage-desc"></div>
@@ -203,27 +206,27 @@
   <div class="class-grid">
     <div class="class-card">
       <h3 style="color:#4ade80;">Class 1 — Simple Solid</h3>
-      <canvas id="c-cls1" width="160" height="130"></canvas>
+      <canvas id="c-cls1" width="160" height="130" role="img" aria-label="Example Class 1 simple solid profiles: round rod, flat bar, and a simple angle."></canvas>
       <p style="font-size:.72rem;color:#94a3b8;margin-top:7px;line-height:1.4;">Rod, bar, flat, simple angle<br>Solid flat die<br>Highest extrusion speed<br>Best tolerance</p>
     </div>
     <div class="class-card">
       <h3 style="color:#a3e635;">Class 2 — Complex Solid</h3>
-      <canvas id="c-cls2" width="160" height="130"></canvas>
+      <canvas id="c-cls2" width="160" height="130" role="img" aria-label="Example Class 2 complex solid profiles: T, I, H, and Z sections and finned shapes."></canvas>
       <p style="font-size:.72rem;color:#94a3b8;margin-top:7px;line-height:1.4;">T, I, H, Z sections, fins<br>Solid flat die (complex)<br>Moderate speed<br>±0.25–0.38 mm</p>
     </div>
     <div class="class-card">
       <h3 style="color:#fbbf24;">Class 3 — Semi-Hollow</h3>
-      <canvas id="c-cls3" width="160" height="130"></canvas>
+      <canvas id="c-cls3" width="160" height="130" role="img" aria-label="Example Class 3 semi-hollow profiles: C, U, and hat sections that partly enclose a void."></canvas>
       <p style="font-size:.72rem;color:#94a3b8;margin-top:7px;line-height:1.4;">C, U, hat sections (TR ≤ 3)<br>Slotted or semi-hollow die<br>Lower speed<br>±0.38–0.50 mm</p>
     </div>
     <div class="class-card">
       <h3 style="color:#fb923c;">Class 4 — Simple Hollow</h3>
-      <canvas id="c-cls4" width="160" height="130"></canvas>
+      <canvas id="c-cls4" width="160" height="130" role="img" aria-label="Example Class 4 simple hollow profiles: square and round tube with a single enclosed void."></canvas>
       <p style="font-size:.72rem;color:#94a3b8;margin-top:7px;line-height:1.4;">Square/round tube, single void<br>Bridge or porthole die<br>Lower speed (weld seam)<br>±0.50 mm</p>
     </div>
     <div class="class-card">
       <h3 style="color:#f87171;">Class 5 — Complex Hollow</h3>
-      <canvas id="c-cls5" width="160" height="130"></canvas>
+      <canvas id="c-cls5" width="160" height="130" role="img" aria-label="Example Class 5 complex hollow profile: a multi-void, asymmetric section with thin walls."></canvas>
       <p style="font-size:.72rem;color:#94a3b8;margin-top:7px;line-height:1.4;">Multi-void, asymmetric, thin wall<br>Multi-port porthole die<br>Lowest speed; highest die cost<br>±0.50–0.75 mm</p>
     </div>
   </div>
@@ -232,9 +235,9 @@
     <caption>Source: AEC Aluminum Extrusion Design Manual. Data for 6063-T6 unless noted. Higher class = more complex = slower and more expensive.</caption>
     <thead>
       <tr>
-        <th>Class</th><th>Min Wall (6063)</th><th>Min Wall (6061)</th>
-        <th>Max Speed (rel.)</th><th>Die Type</th><th>Die Cost (rel.)</th>
-        <th>Std Tolerance</th><th>Typical Application</th>
+        <th scope="col">Class</th><th scope="col">Min Wall (6063)</th><th scope="col">Min Wall (6061)</th>
+        <th scope="col">Max Speed (rel.)</th><th scope="col">Die Type</th><th scope="col">Die Cost (rel.)</th>
+        <th scope="col">Std Tolerance</th><th scope="col">Typical Application</th>
       </tr>
     </thead>
     <tbody>
@@ -250,17 +253,17 @@
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:12px;">
     <div style="background:#0f2040;border:1px solid #1e3a5c;border-radius:8px;padding:14px;text-align:center;">
       <h3 style="color:#7dd3fc;font-size:.85rem;margin-bottom:8px;">Flat (Solid) Die</h3>
-      <canvas id="c-die-flat" width="200" height="160"></canvas>
+      <canvas id="c-die-flat" width="200" height="160" role="img" aria-label="Cross-section of a flat (solid) extrusion die: the die opening with its bearing land that controls metal flow and the relief angle behind it."></canvas>
       <p style="font-size:.75rem;color:#94a3b8;margin-top:8px;line-height:1.4;">Single-piece die for solid profiles. Land (bearing) controls metal flow. Relief angle behind land prevents friction on extruded surface. Used for Classes 1 &amp; 2.</p>
     </div>
     <div style="background:#0f2040;border:1px solid #1e3a5c;border-radius:8px;padding:14px;text-align:center;">
       <h3 style="color:#7dd3fc;font-size:.85rem;margin-bottom:8px;">Bridge / Porthole Die</h3>
-      <canvas id="c-die-porthole" width="200" height="160"></canvas>
+      <canvas id="c-die-porthole" width="200" height="160" role="img" aria-label="Cross-section of a bridge or porthole die: metal splits into ports around a central mandrel, re-welds in the weld chamber, and exits as a hollow profile."></canvas>
       <p style="font-size:.75rem;color:#94a3b8;margin-top:8px;line-height:1.4;">Two-piece die (cap + die) with ports split around a central mandrel. Metal welds in the weld chamber under pressure and temperature. Creates integral hollow without a seam line. Used for Classes 4 &amp; 5.</p>
     </div>
     <div style="background:#0f2040;border:1px solid #1e3a5c;border-radius:8px;padding:14px;text-align:center;">
       <h3 style="color:#7dd3fc;font-size:.85rem;margin-bottom:8px;">Spider Die</h3>
-      <canvas id="c-die-spider" width="200" height="160"></canvas>
+      <canvas id="c-die-spider" width="200" height="160" role="img" aria-label="Spider die: a central mandrel held by radial arms (spider legs), with metal flowing between the legs and welding back together around the mandrel."></canvas>
       <p style="font-size:.75rem;color:#94a3b8;margin-top:8px;line-height:1.4;">Variation of porthole die with arms (spider legs) supporting central mandrel. Used for larger hollow profiles and multi-void sections. More weld seams but better metal distribution for asymmetric sections.</p>
     </div>
   </div>
@@ -276,15 +279,15 @@
   <div class="alloy-layout">
     <div>
       <h3>Extrudability vs. Strength</h3>
-      <canvas id="c-alloy-chart" width="360" height="340"></canvas>
-      <p style="font-size:.73rem;color:#64748b;margin-top:5px;">Extrudability = ease of extrusion (speed, complexity achievable, die life). Higher extrudability → lower strength series.</p>
+      <canvas id="c-alloy-chart" width="360" height="340" role="img" aria-label="Chart of ultimate tensile strength in MPa for common aluminum extrusion alloys, with dots marking extrudability. Higher-strength alloy series have lower extrudability."></canvas>
+      <p style="font-size:.73rem;color:#73839a;margin-top:5px;">Extrudability = ease of extrusion (speed, complexity achievable, die life). Higher extrudability → lower strength series.</p>
     </div>
     <div>
       <h3>Alloy Properties (typical, heat-treated temper)</h3>
       <table class="data-table">
         <caption>Source: ASM Handbook Vol. 2 (Properties and Selection: Nonferrous Alloys); AEC Alloy Selection Guide. Properties in T5/T6 temper unless noted.</caption>
         <thead>
-          <tr><th>Alloy</th><th>Temper</th><th>UTS (MPa)</th><th>YS (MPa)</th><th>El (%)</th><th>Extrudability</th><th>Corrosion</th><th>Weldability</th><th>Applications</th></tr>
+          <tr><th scope="col">Alloy</th><th scope="col">Temper</th><th scope="col">UTS (MPa)</th><th scope="col">YS (MPa)</th><th scope="col">El (%)</th><th scope="col">Extrudability</th><th scope="col">Corrosion</th><th scope="col">Weldability</th><th scope="col">Applications</th></tr>
         </thead>
         <tbody>
           <tr><td><b>1100</b></td><td>H14</td><td>124</td><td>117</td><td>9</td><td class="best">Excellent</td><td class="best">Excellent</td><td class="best">Excellent</td><td>Decorative trim, heat exchangers</td></tr>
@@ -302,7 +305,7 @@
         <b style="color:#7dd3fc;">Series overview:</b>
         <ul style="margin-left:14px;margin-top:5px;">
           <li><b style="color:#4ade80;">1xxx</b> — Pure Al; best extrudability, corrosion resistance; low strength</li>
-          <li><b style="color:#38bdf8;">6xxx</b> — Al-Mg-Si; dominant extrusion series; heat-treatable; T5 (at press) or T6 (solution HT + age)</li>
+          <li><b style="color:#47c2f9;">6xxx</b> — Al-Mg-Si; dominant extrusion series; heat-treatable; T5 (at press) or T6 (solution HT + age)</li>
           <li><b style="color:#a78bfa;">7xxx</b> — Al-Zn-Mg; highest strength; difficult to extrude; requires quench, multi-step age</li>
           <li><b style="color:#f87171;">2xxx</b> — Al-Cu; aerospace; very difficult to extrude; not weldable; requires anodize or clad for corrosion</li>
         </ul>
@@ -311,6 +314,7 @@
   </div>
 </div>
 
+</main>
 <div class="back-link"><a href="index.html">← Back to Visualizations</a></div>
 
 <script>

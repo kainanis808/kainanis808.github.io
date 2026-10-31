@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Failure Analysis Methodology — ASM / NTSB / AAIB / TWI</title>
 <style>
@@ -25,7 +27,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 }
 .tab-btn {
   padding: 10px 18px; font-size: 0.84rem; font-weight: 600;
-  border: none; background: none; cursor: pointer; color: #64748b;
+  border: none; background: none; cursor: pointer; color: #606f85;
   border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.15s;
   white-space: nowrap;
 }
@@ -152,6 +154,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
   <div class="subtitle">ASM International — Case Studies &amp; Vol. 11 Method &nbsp;&middot;&nbsp; NTSB &amp; AAIB — Accident Investigation Reports &nbsp;&middot;&nbsp; TWI — Step-by-Step Investigation Guide</div>
 </header>
 
+<main id="main-content">
 <nav class="tab-bar">
   <button class="tab-btn active" onclick="showTab('asm',this)">ASM — Methodology &amp; Cases</button>
   <button class="tab-btn" onclick="showTab('ntsb',this)">NTSB &amp; AAIB — Accident Reports</button>
@@ -269,8 +272,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
   <div class="section">
     <h2>Fracture Mode Identification — ASM Vol. 11 / Vol. 12</h2>
     <div style="overflow-x:auto;">
-    <table class="ref-table" style="min-width:700px;">
-      <thead><tr><th>Fracture Mode</th><th>Macroscopic Features</th><th>SEM Features</th><th>Load / Condition</th><th>Example ASM Case</th></tr></thead>
+    <table class="ref-table" style="min-width:700px;"><caption class="sr-only">Fracture Mode Identification — ASM Vol. 11 / Vol. 12</caption>
+      <thead><tr><th scope="col">Fracture Mode</th><th scope="col">Macroscopic Features</th><th scope="col">SEM Features</th><th scope="col">Load / Condition</th><th scope="col">Example ASM Case</th></tr></thead>
       <tbody>
         <tr>
           <td><strong>Ductile Overload</strong></td>
@@ -411,8 +414,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 
     <div class="section-label" style="margin-top:20px;">Common Root Cause Categories — ASM Vol. 11</div>
     <div style="overflow-x:auto;">
-    <table class="ref-table" style="min-width:560px;">
-      <thead><tr><th>Category</th><th>Typical Causes</th><th>Detected By</th></tr></thead>
+    <table class="ref-table" style="min-width:560px;"><caption class="sr-only">Carbide Tool Insert Chipping — Thermal Shock + Adhesive Wear</caption>
+      <thead><tr><th scope="col">Category</th><th scope="col">Typical Causes</th><th scope="col">Detected By</th></tr></thead>
       <tbody>
         <tr><td><strong>Design deficiency</strong></td><td>Stress concentration; inadequate section; no redundancy; wrong material selection</td><td>FEA review; drawing audit; stress analysis</td></tr>
         <tr><td><strong>Material defect</strong></td><td>Inclusions; seams; laps; segregation; wrong alloy supplied</td><td>Metallography; OES chemistry; cert review</td></tr>
@@ -497,8 +500,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <div class="two-col">
       <div>
         <h3>AAIB Report Types</h3>
-        <table class="ref-table">
-          <thead><tr><th>Report Type</th><th>When Issued</th><th>Typical Length</th></tr></thead>
+        <table class="ref-table"><caption class="sr-only">AAIB Report Types</caption>
+          <thead><tr><th scope="col">Report Type</th><th scope="col">When Issued</th><th scope="col">Typical Length</th></tr></thead>
           <tbody>
             <tr><td><strong>Formal Report</strong></td><td>Major accidents; complex investigations</td><td>50–200+ pages</td></tr>
             <tr><td><strong>Special Bulletin</strong></td><td>Urgent safety issues requiring immediate action</td><td>5–15 pages</td></tr>
@@ -509,8 +512,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
       </div>
       <div>
         <h3>AAIB vs NTSB — Key Differences</h3>
-        <table class="ref-table">
-          <thead><tr><th>Attribute</th><th>AAIB</th><th>NTSB</th></tr></thead>
+        <table class="ref-table"><caption class="sr-only">AAIB vs NTSB — Key Differences</caption>
+          <thead><tr><th scope="col">Attribute</th><th scope="col">AAIB</th><th scope="col">NTSB</th></tr></thead>
           <tbody>
             <tr><td><strong>Jurisdiction</strong></td><td>Aviation only (UK)</td><td>All transport modes (USA)</td></tr>
             <tr><td><strong>Legal basis</strong></td><td>ICAO Annex 13 / EU 996/2010</td><td>Independent Safety Board Act</td></tr>
@@ -528,8 +531,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <p>Accident reports contain far more information than their executive summary. For materials-related failures, the most technically detailed content is in the appendices and working group factual reports.</p>
 
     <div class="section-label">Key Sections for Material / Structural Failures</div>
-    <table class="ref-table">
-      <thead><tr><th>Report Section</th><th>Content Relevant to Failure Analysis</th><th>Where to Find It</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">How to Read an Accident Investigation Report — Structural Failures</caption>
+      <thead><tr><th scope="col">Report Section</th><th scope="col">Content Relevant to Failure Analysis</th><th scope="col">Where to Find It</th></tr></thead>
       <tbody>
         <tr><td><strong>Factual Information</strong></td><td>Component description, material specification, service history, damage documentation</td><td>Early sections; structures factual appendix</td></tr>
         <tr><td><strong>Laboratory Examination</strong></td><td>SEM fractography, chemical analysis, hardness, microstructure — raw results</td><td>Appendices (often 30–100 pages)</td></tr>
@@ -594,8 +597,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
   <div class="section">
     <h2>Key Terminology in Accident Investigation Reports</h2>
     <div style="overflow-x:auto;">
-    <table class="ref-table" style="min-width:500px;">
-      <thead><tr><th>Term</th><th>Definition in Report Context</th></tr></thead>
+    <table class="ref-table" style="min-width:500px;"><caption class="sr-only">Key Terminology in Accident Investigation Reports</caption>
+      <thead><tr><th scope="col">Term</th><th scope="col">Definition in Report Context</th></tr></thead>
       <tbody>
         <tr><td><strong>Probable Cause</strong></td><td>The primary causal chain established by evidence. Not a legal finding of fault. NTSB uses "The probable cause of this accident was…"; AAIB uses "Causal Factor."</td></tr>
         <tr><td><strong>Contributing Factor</strong></td><td>A condition that influenced the accident but was not the primary cause. Multiple contributing factors are common.</td></tr>
@@ -627,7 +630,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
   <div class="section">
     <h2>TWI Examination Sequence — Flowchart</h2>
     <div class="diagram-wrap">
-      <svg width="520" height="680" viewBox="0 0 520 680" style="font-family:'Segoe UI',Arial,sans-serif; max-width:100%;">
+      <svg width="520" height="680" viewBox="0 0 520 680" style="font-family:'Segoe UI',Arial,sans-serif; max-width:100%;" role="img" aria-label="Flowchart of the TWI failure examination sequence, top to bottom: Stage 1 background information and evidence preservation; Stage 2 visual and macroscopic examination; Stage 3 non-destructive testing; Stage 4 stress analysis and fracture mechanics; Stage 5 destructive mechanical testing; Stage 6 destructive metallography and fractography; ending with root cause determination and the report. Each stage is described in the text that follows.">
 
         <!-- Stage boxes -->
         <!-- 1 -->
@@ -657,13 +660,13 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
         <!-- 5 -->
         <rect x="120" y="290" width="280" height="52" rx="8" fill="#c2410c"/>
         <text x="260" y="312" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">STAGE 5 — DESTRUCTIVE</text>
-        <text x="260" y="328" text-anchor="middle" fill="#fde68a" font-size="10.5">Mechanical Testing</text>
+        <text x="260" y="328" text-anchor="middle" fill="#fef0b7" font-size="10.5">Mechanical Testing</text>
         <!-- Arrow -->
         <line x1="260" y1="342" x2="260" y2="360" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
         <!-- 6 -->
         <rect x="120" y="360" width="280" height="52" rx="8" fill="#c2410c"/>
         <text x="260" y="382" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">STAGE 6 — DESTRUCTIVE</text>
-        <text x="260" y="398" text-anchor="middle" fill="#fde68a" font-size="10.5">Metallurgical &amp; Chemical Analysis</text>
+        <text x="260" y="398" text-anchor="middle" fill="#fef0b7" font-size="10.5">Metallurgical &amp; Chemical Analysis</text>
         <!-- Arrow -->
         <line x1="260" y1="412" x2="260" y2="430" stroke="#64748b" stroke-width="1.5" marker-end="url(#arr)"/>
         <!-- 7 -->
@@ -678,8 +681,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
         <text x="260" y="538" text-anchor="middle" fill="#e2e8f0" font-size="10.5">Report Writing &amp; Recommendations</text>
 
         <!-- Loop-back arrow (if evidence requires revisiting) -->
-        <path d="M 120 456 Q 60 456 60 260 Q 60 102 120 102" fill="none" stroke="#f59e0b" stroke-width="1.4" stroke-dasharray="5,3" marker-end="url(#arr-y)"/>
-        <text x="30" y="250" text-anchor="middle" fill="#f59e0b" font-size="9" transform="rotate(-90,30,250)">Iterate if needed</text>
+        <path d="M 120 456 Q 60 456 60 260 Q 60 102 120 102" fill="none" stroke="#c07c08" stroke-width="1.4" stroke-dasharray="5,3" marker-end="url(#arr-y)"/>
+        <text x="30" y="250" text-anchor="middle" fill="#996206" font-size="9" transform="rotate(-90,30,250)">Iterate if needed</text>
 
         <!-- Markers -->
         <defs>
@@ -746,8 +749,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <h2>Stage 2 — Visual &amp; Macroscopic Examination</h2>
     <p>The first examination of the component uses only the unaided eye and low-power stereo microscope (up to 50×). This stage establishes the overall failure geometry, fracture mode, and origin location before any magnification or destructive work.</p>
 
-    <table class="ref-table">
-      <thead><tr><th>Examination Point</th><th>What to Look For</th><th>Inference</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Stage 2 — Visual &amp; Macroscopic Examination</caption>
+      <thead><tr><th scope="col">Examination Point</th><th scope="col">What to Look For</th><th scope="col">Inference</th></tr></thead>
       <tbody>
         <tr><td><strong>Fracture plane orientation</strong></td><td>Angle to applied stress axis: 90° = Mode I; 45° = shear; mixed = combined loading</td><td>Loading mode identification</td></tr>
         <tr><td><strong>Fracture face texture</strong></td><td>Flat/crystalline = brittle; fibrous/grey = ductile; two-zone = fatigue</td><td>Fracture mode</td></tr>
@@ -767,8 +770,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <div class="two-col">
       <div>
         <h3>Stage 3 — NDT Method Selection</h3>
-        <table class="ref-table">
-          <thead><tr><th>Method</th><th>Defect Type</th><th>Limitations</th></tr></thead>
+        <table class="ref-table"><caption class="sr-only">Stage 3 — NDT Method Selection</caption>
+          <thead><tr><th scope="col">Method</th><th scope="col">Defect Type</th><th scope="col">Limitations</th></tr></thead>
           <tbody>
             <tr><td><strong>PT (dye penetrant)</strong></td><td>Surface-open cracks</td><td>Surface must be clean; destroys corrosion evidence if cleaned</td></tr>
             <tr><td><strong>MT (magnetic particle)</strong></td><td>Surface &amp; near-surface cracks (ferromagnetic only)</td><td>Not applicable to austenitic SS or non-ferrous</td></tr>
@@ -801,8 +804,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <div class="warn-box"><strong>Irreversible:</strong> Plan the entire sectioning strategy before making the first cut. Identify and mark all regions of interest. Cut specimens in a sequence that preserves the most critical evidence longest. Photograph each cross-section immediately after cutting.</div>
 
     <h3>Mechanical Testing — Selection by Failure Mode Hypothesis</h3>
-    <table class="ref-table">
-      <thead><tr><th>Suspected Failure Mode</th><th>Tests Required</th><th>Specimen Location</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Mechanical Testing — Selection by Failure Mode Hypothesis</caption>
+      <thead><tr><th scope="col">Suspected Failure Mode</th><th scope="col">Tests Required</th><th scope="col">Specimen Location</th></tr></thead>
       <tbody>
         <tr><td>Overload (material too weak)</td><td>Tensile (UTS, yield, %El, %RA); hardness</td><td>Away from fracture; longitudinal and transverse</td></tr>
         <tr><td>Brittle fracture at low temperature</td><td>Charpy impact series (−60 to +20°C); DBTT determination</td><td>Base metal; HAZ; weld metal if weld-related</td></tr>
@@ -855,8 +858,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <div class="two-col">
       <div>
         <h3>Root Cause vs. Contributing Factor</h3>
-        <table class="ref-table">
-          <thead><tr><th>Type</th><th>Definition</th><th>Example</th></tr></thead>
+        <table class="ref-table"><caption class="sr-only">Root Cause vs. Contributing Factor</caption>
+          <thead><tr><th scope="col">Type</th><th scope="col">Definition</th><th scope="col">Example</th></tr></thead>
           <tbody>
             <tr><td><strong>Root Cause</strong></td><td>Single underlying condition; removing it would have prevented failure</td><td>Insufficient preheat → HIC crack → brittle fracture initiation</td></tr>
             <tr><td><strong>Contributing Factor</strong></td><td>Increased susceptibility or severity; alone would not cause failure</td><td>High restraint joint geometry; wet electrodes; cold ambient</td></tr>
@@ -930,6 +933,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 
 </div>
 
+</main>
 <div class="back">
   <a href="index.html">← Back to References</a>
 </div>

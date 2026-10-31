@@ -3,25 +3,27 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SMAW – Arc Technique, Electrode Selection &amp; Low Hydrogen Control</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #0a1628; color: #e2e8f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; }
 
-  header { background: linear-gradient(135deg, #0f2040 0%, #1a3a5c 100%); padding: 24px 32px 20px; border-bottom: 2px solid #f97316; }
-  header h1 { font-size: 1.75rem; color: #f97316; letter-spacing: 0.5px; }
+  header { background: linear-gradient(135deg, #0f2040 0%, #1a3a5c 100%); padding: 24px 32px 20px; border-bottom: 2px solid #fa822f; }
+  header h1 { font-size: 1.75rem; color: #fa822f; letter-spacing: 0.5px; }
   header p  { color: #94a3b8; font-size: 0.88rem; margin-top: 5px; }
 
   .tabs { display: flex; border-bottom: 2px solid #1e3a5c; background: #0d1f38; padding: 0 24px; overflow-x: auto; }
   .tab-btn { padding: 14px 22px; background: none; border: none; color: #94a3b8; font-size: 0.9rem; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: color 0.2s, border-color 0.2s; white-space: nowrap; }
   .tab-btn:hover { color: #fdba74; }
-  .tab-btn.active { color: #f97316; border-bottom-color: #f97316; font-weight: 600; }
+  .tab-btn.active { color: #fa822f; border-bottom-color: #fa822f; font-weight: 600; }
 
   .tab-content { display: none; padding: 28px 32px; max-width: 1140px; }
   .tab-content.active { display: block; }
 
-  h2 { font-size: 1.2rem; color: #f97316; margin-bottom: 14px; margin-top: 24px; }
+  h2 { font-size: 1.2rem; color: #fa822f; margin-bottom: 14px; margin-top: 24px; }
   h2:first-child { margin-top: 0; }
   h3 { font-size: 0.95rem; color: #fdba74; margin-bottom: 8px; }
 
@@ -33,17 +35,17 @@
   .anim-wrap  { display: flex; flex-direction: column; align-items: center; gap: 12px; }
   .anim-cv    { background: #0a1628; border: 1px solid #1e3a5c; border-radius: 8px; overflow: hidden; }
   .anim-ctrls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
-  .anim-ctrls button { background: #1a3a5c; color: #e2e8f0; border: 1px solid #f97316; border-radius: 6px; padding: 7px 18px; font-size: 0.85rem; cursor: pointer; transition: background 0.18s; }
-  .anim-ctrls button:hover { background: #f97316; color: #0a1628; }
+  .anim-ctrls button { background: #1a3a5c; color: #e2e8f0; border: 1px solid #fa822f; border-radius: 6px; padding: 7px 18px; font-size: 0.85rem; cursor: pointer; transition: background 0.18s; }
+  .anim-ctrls button:hover { background: #fa822f; color: #0a1628; }
   .stage-lbl  { font-size: 0.98rem; color: #fdba74; font-weight: 600; text-align: center; min-height: 22px; }
   .stage-dsc  { font-size: 0.82rem; color: #94a3b8; text-align: center; max-width: 700px; min-height: 42px; line-height: 1.55; }
   .stage-dots { display: flex; gap: 8px; }
-  .sdot { width: 10px; height: 10px; border-radius: 50%; background: #1e3a5c; border: 1px solid #f97316; cursor: pointer; transition: background 0.15s; }
-  .sdot.active { background: #f97316; }
+  .sdot { width: 10px; height: 10px; border-radius: 50%; background: #1e3a5c; border: 1px solid #fa822f; cursor: pointer; transition: background 0.15s; }
+  .sdot.active { background: #fa822f; }
 
   /* Tables */
   .ref-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-  .ref-table th { background: #1a3a5c; color: #f97316; padding: 8px 11px; text-align: left; border: 1px solid #1e3a5c; }
+  .ref-table th { background: #1a3a5c; color: #fa822f; padding: 8px 11px; text-align: left; border: 1px solid #1e3a5c; }
   .ref-table td { padding: 7px 11px; border: 1px solid #1e3a5c; color: #cbd5e1; vertical-align: top; }
   .ref-table tr:nth-child(odd)  td { background: #0a1628; }
   .ref-table tr:nth-child(even) td { background: #0f2040; }
@@ -53,15 +55,15 @@
   /* Step cards */
   .steps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; margin-top: 14px; }
   .step-card  { background: #0f2040; border: 1px solid #1e3a5c; border-radius: 9px; padding: 15px; }
-  .step-num   { display: inline-flex; align-items: center; justify-content: center; background: #f97316; color: #0a1628; font-weight: 700; font-size: 0.82rem; width: 24px; height: 24px; border-radius: 50%; margin-bottom: 8px; }
+  .step-num   { display: inline-flex; align-items: center; justify-content: center; background: #fa822f; color: #0a1628; font-weight: 700; font-size: 0.82rem; width: 24px; height: 24px; border-radius: 50%; margin-bottom: 8px; }
   .step-title { font-size: 0.88rem; color: #fdba74; font-weight: 600; margin-bottom: 5px; }
   .step-text  { font-size: 0.79rem; color: #94a3b8; line-height: 1.5; }
 
   /* E-number decoder */
   .en-display { display: flex; justify-content: center; gap: 0; margin-bottom: 16px; flex-wrap: wrap; }
   .en-seg { padding: 12px 20px; font-size: 2.2rem; font-weight: 700; cursor: pointer; border-radius: 8px; border: 2px solid transparent; transition: border-color 0.15s, background 0.15s; user-select: none; }
-  .en-seg:hover  { border-color: #f97316; }
-  .en-seg.active { border-color: #f97316; background: #1a3a5c; }
+  .en-seg:hover  { border-color: #fa822f; }
+  .en-seg.active { border-color: #fa822f; background: #1a3a5c; }
   .seg-e        { color: #60a5fa; }
   .seg-strength { color: #4ade80; }
   .seg-pos      { color: #fbbf24; }
@@ -75,7 +77,7 @@
   .fgrp { display: flex; flex-direction: column; gap: 4px; }
   .fgrp label { font-size: 0.76rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
   .fgrp select { background: #0f2040; color: #e2e8f0; border: 1px solid #1e3a5c; border-radius: 6px; padding: 7px 12px; font-size: 0.84rem; cursor: pointer; }
-  .fgrp select:focus { outline: 1px solid #f97316; }
+  .fgrp select:focus { outline: 1px solid #fa822f; }
 
   /* Badges */
   .b-loH { display: inline-block; padding: 1px 7px; border-radius: 12px; background: #fef3c7; color: #92400e; font-size: 0.71rem; font-weight: 700; }
@@ -87,15 +89,15 @@
   .exceed { color: #f87171; font-weight: 600; }
 
   /* Alert box */
-  .alert { background: #0a1628; border: 1px solid #f97316; border-radius: 8px; padding: 14px 18px; margin-top: 16px; font-size: 0.82rem; color: #94a3b8; line-height: 1.6; }
-  .alert b { color: #f97316; }
+  .alert { background: #0a1628; border: 1px solid #fa822f; border-radius: 8px; padding: 14px 18px; margin-top: 16px; font-size: 0.82rem; color: #94a3b8; line-height: 1.6; }
+  .alert b { color: #fa822f; }
   .alert ul { margin: 8px 0 0 18px; }
 
   /* Source note */
-  .src { font-size: 0.74rem; color: #64748b; margin-top: 8px; font-style: italic; }
+  .src { font-size: 0.74rem; color: #7c8ba1; margin-top: 8px; font-style: italic; }
 
   .back-link { text-align: center; padding: 28px; }
-  .back-link a { color: #f97316; text-decoration: none; font-size: 0.9rem; }
+  .back-link a { color: #fa822f; text-decoration: none; font-size: 0.9rem; }
   .back-link a:hover { text-decoration: underline; }
 
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
@@ -109,6 +111,7 @@
   <p>Sources: Lincoln Electric — <em>Procedure Handbook of Arc Welding</em> (14th ed.) &amp; <em>Low Hydrogen Electrode Handling Guide</em> &nbsp;·&nbsp; AWS A5.1 / A5.5 &nbsp;·&nbsp; AWS D1.1:2020 Structural Welding Code</p>
 </header>
 
+<main id="main-content">
 <div class="tabs">
   <button class="tab-btn active" data-tab="technique">Arc Technique</button>
   <button class="tab-btn" data-tab="electrode">E-Number Selection</button>
@@ -120,7 +123,7 @@
 
   <h2>Arc Establishment</h2>
   <div class="card anim-wrap">
-    <div class="anim-cv"><canvas id="c-arc" width="720" height="340"></canvas></div>
+    <div class="anim-cv"><canvas id="c-arc" width="720" height="340" role="img" aria-label="Step-by-step SMAW arc start: 1 position the electrode, 2 strike the arc by scratching or tapping, 3 short arc to build up the puddle, 4 steady travel, 5 crater fill and termination. Use the step dots; the current step is described in text."></canvas></div>
     <div class="stage-lbl" id="arc-lbl">Stage 1 – Position Electrode</div>
     <div class="stage-dsc" id="arc-dsc">Hold electrode 1–2 in. above the joint start, tilted 5–15° in the direction of travel (drag angle). Verify ground clamp is secure.</div>
     <div class="anim-ctrls">
@@ -134,13 +137,13 @@
 
   <h2>Electrode Angles by Position</h2>
   <div class="card">
-    <canvas id="c-angles" width="720" height="380"></canvas>
+    <canvas id="c-angles" width="720" height="520" role="img" aria-label="Electrode angles for four positions: flat (1G/1F), horizontal fillet (2F), vertical up (3G/3F), and overhead (4G/4F), each showing the work angle from the plate and travel angle from vertical."></canvas>
     <p class="src" style="margin-top:10px;">Lincoln Electric <em>Electrode Angle Guide</em>; AWS D1.1:2020 §4.4. Work angle measured from plate surface; travel angle measured from vertical in direction of travel.</p>
   </div>
 
   <h2>Travel Speed — Bead Profile Comparison</h2>
   <div class="card">
-    <canvas id="c-speed" width="720" height="260"></canvas>
+    <canvas id="c-speed" width="720" height="260" role="img" aria-label="Three weld bead profiles compared: too fast (over 12 in/min) gives a narrow, ropey bead with undercut; correct speed (5 to 10 in/min typical) gives a smooth, even bead; too slow (under 4 in/min) gives a wide, overbuilt bead."></canvas>
     <p class="src" style="margin-top:8px;">Lincoln Electric <em>Welding Fundamentals</em>. Representative profiles for E7018 1/8 in. electrode at 120 A, DCEP.</p>
   </div>
 
@@ -203,7 +206,7 @@
     <div class="filter-row">
       <div class="fgrp">
         <label>Base Metal</label>
-        <select id="filt-metal" onchange="filterElec()">
+        <select id="filt-metal" onchange="filterElec()" aria-label="Base Metal">
           <option value="all">All</option>
           <option value="mild">Mild Steel (A36 / A572)</option>
           <option value="hsla">HSLA (A588 / A913)</option>
@@ -214,7 +217,7 @@
       </div>
       <div class="fgrp">
         <label>Position</label>
-        <select id="filt-pos" onchange="filterElec()">
+        <select id="filt-pos" onchange="filterElec()" aria-label="Position">
           <option value="all">All Positions</option>
           <option value="all4">All 4 (F/H/V/OH)</option>
           <option value="FH">Flat &amp; Horizontal only</option>
@@ -223,7 +226,7 @@
       </div>
       <div class="fgrp">
         <label>Application</label>
-        <select id="filt-app" onchange="filterElec()">
+        <select id="filt-app" onchange="filterElec()" aria-label="Application">
           <option value="all">All</option>
           <option value="root">Root Pass</option>
           <option value="struct">Structural / Code Work</option>
@@ -234,16 +237,16 @@
       </div>
     </div>
     <div class="tbl-wrap">
-      <table class="ref-table">
+      <table class="ref-table"><caption class="sr-only">Interactive Electrode Selection</caption>
         <thead>
           <tr>
-            <th>AWS Class</th>
-            <th>Min. Tensile (ksi)</th>
-            <th>Position</th>
-            <th>Current</th>
-            <th>Coating</th>
-            <th>H Class</th>
-            <th>Application Notes</th>
+            <th scope="col">AWS Class</th>
+            <th scope="col">Min. Tensile (ksi)</th>
+            <th scope="col">Position</th>
+            <th scope="col">Current</th>
+            <th scope="col">Coating</th>
+            <th scope="col">H Class</th>
+            <th scope="col">Application Notes</th>
           </tr>
         </thead>
         <tbody id="elec-tbody"></tbody>
@@ -256,8 +259,8 @@
   <div class="two-col">
     <div class="card">
       <h3>3rd Digit — Welding Position</h3>
-      <table class="ref-table">
-        <thead><tr><th>Digit</th><th>Approved Positions</th><th>Examples</th></tr></thead>
+      <table class="ref-table"><caption class="sr-only">3rd Digit — Welding Position</caption>
+        <thead><tr><th scope="col">Digit</th><th scope="col">Approved Positions</th><th scope="col">Examples</th></tr></thead>
         <tbody>
           <tr><td style="color:#fbbf24;font-weight:700;">1</td><td>All (Flat, Horizontal, Vertical, Overhead)</td><td>E6010, E6011, E7018</td></tr>
           <tr><td style="color:#fbbf24;font-weight:700;">2</td><td>Flat &amp; Horizontal only</td><td>E7024, E7028</td></tr>
@@ -269,8 +272,8 @@
     </div>
     <div class="card">
       <h3>4th Digit — Current &amp; Coating Type</h3>
-      <table class="ref-table">
-        <thead><tr><th>Digit</th><th>Current</th><th>Coating Type</th></tr></thead>
+      <table class="ref-table"><caption class="sr-only">4th Digit — Current &amp; Coating Type</caption>
+        <thead><tr><th scope="col">Digit</th><th scope="col">Current</th><th scope="col">Coating Type</th></tr></thead>
         <tbody>
           <tr><td>0</td><td>DCEP</td><td>High cellulosic, sodium</td></tr>
           <tr><td>1</td><td>AC / DCEP</td><td>High cellulosic, potassium</td></tr>
@@ -293,23 +296,23 @@
 
   <h2>Oven Temperature Reference</h2>
   <div class="card">
-    <canvas id="c-temp" width="720" height="248"></canvas>
+    <canvas id="c-temp" width="720" height="248" role="img" aria-label="Temperature reference chart for low-hydrogen electrode storage: holding oven temperatures for E70xx, E80xx, E90xx, and E100xx class electrodes compared with room temperature."></canvas>
     <p class="src" style="margin-top:8px;">Lincoln Electric <em>Low Hydrogen Electrode Handling &amp; Storage Guide</em> (Pub. E1.90); AWS D1.1:2020 §4.6 &amp; Table 4.5 footnotes.</p>
   </div>
 
   <h2>Atmospheric Exposure Time Limits</h2>
   <div class="card">
-    <p style="font-size:0.85rem;color:#94a3b8;margin-bottom:12px;">Maximum time electrodes may remain outside a storage oven without reconditioning. Exposure time begins when the hermetically sealed container is opened. Cellulosic electrodes (E6010/E6011) must <b style="color:#f97316;">never</b> be stored in a heated oven.</p>
+    <p style="font-size:0.85rem;color:#94a3b8;margin-bottom:12px;">Maximum time electrodes may remain outside a storage oven without reconditioning. Exposure time begins when the hermetically sealed container is opened. Cellulosic electrodes (E6010/E6011) must <b style="color:#fa822f;">never</b> be stored in a heated oven.</p>
     <div class="tbl-wrap">
-      <table class="ref-table">
+      <table class="ref-table"><caption class="sr-only">Atmospheric Exposure Time Limits</caption>
         <thead>
           <tr>
-            <th>Electrode Class</th>
-            <th>Min. Tensile (ksi)</th>
-            <th>Exposure ≤ 80°F (27°C)</th>
-            <th>Exposure ≤ 50°F (10°C)</th>
-            <th>Max Recondition Cycles</th>
-            <th>Discard When</th>
+            <th scope="col">Electrode Class</th>
+            <th scope="col">Min. Tensile (ksi)</th>
+            <th scope="col">Exposure ≤ 80°F (27°C)</th>
+            <th scope="col">Exposure ≤ 50°F (10°C)</th>
+            <th scope="col">Max Recondition Cycles</th>
+            <th scope="col">Discard When</th>
           </tr>
         </thead>
         <tbody>
@@ -369,7 +372,7 @@
 
   <h2>Reconditioning Procedure</h2>
   <div class="card">
-    <p style="font-size:0.85rem;color:#94a3b8;margin-bottom:16px;">Apply when low-hydrogen electrodes have exceeded exposure limits and are within the allowed reconditioning cycle count. <b style="color:#f97316;">Never recondition cellulosic (E6010/6011) or rutile (E6013) electrodes.</b></p>
+    <p style="font-size:0.85rem;color:#94a3b8;margin-bottom:16px;">Apply when low-hydrogen electrodes have exceeded exposure limits and are within the allowed reconditioning cycle count. <b style="color:#fa822f;">Never recondition cellulosic (E6010/6011) or rutile (E6013) electrodes.</b></p>
     <div class="steps-grid">
       <div class="step-card">
         <div class="step-num">1</div>
@@ -416,11 +419,12 @@
 
   <h2>Reconditioning Temperature Quick Reference</h2>
   <div class="card">
-    <canvas id="c-recon" width="720" height="280"></canvas>
+    <canvas id="c-recon" width="720" height="280" role="img" aria-label="Reconditioning (re-baking) temperature chart for low-hydrogen electrode classes E7015/16/18, E7028, E8015/16/18, E9015/16/18, and E10015/16/18. Always verify against the manufacturer&#x27;s data."></canvas>
     <p class="src" style="margin-top:8px;">Lincoln Electric Electrode Handling Guide; AWS D1.1:2020 Table 4.5 footnotes. Always verify against specific electrode manufacturer's datasheet.</p>
   </div>
 </div>
 
+</main>
 <div class="back-link"><a href="index.html">← Back to Visualizations</a></div>
 
 <script>
@@ -668,8 +672,7 @@ function drawArc() {
   ctx.beginPath();
   ctx.roundRect(-elW * 1.4, -elLen - 14, elW * 2.8, 14, 3);
   ctx.fill(); ctx.stroke();
-  ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
-  ctx.fillText('HOLDER', 0, -elLen - 4);
+  // (holder sits above the top edge of the canvas, so it is not labelled)
 
   ctx.restore();
 
@@ -748,10 +751,11 @@ function drawAngles() {
   ];
 
   const PW = W / 2, PH = H / 2;
+  const SH = PH - 74;   // scene height; the bottom 74 px of each panel holds the text block
 
   panels.forEach(p => {
     const cx = p.x + PW / 2;
-    const cy = p.y + PH / 2;
+    const cy = p.y + SH / 2;
 
     // Panel background
     ctx.strokeStyle = '#1e3a5c'; ctx.lineWidth = 1;
@@ -766,7 +770,7 @@ function drawAngles() {
 
     if (pi === 0) {
       // Flat — side view
-      const plateY = p.y + PH * 0.72;
+      const plateY = p.y + SH * 0.72;
       // Plate
       ctx.fillStyle = '#475569';
       ctx.fillRect(p.x + 20, plateY, PW - 40, 28);
@@ -801,7 +805,7 @@ function drawAngles() {
 
     } else if (pi === 1) {
       // Horizontal fillet — front view
-      const floorY = p.y + PH * 0.65;
+      const floorY = p.y + SH * 0.65;
       const wallX  = cx - 10;
       // Vertical plate (wall)
       ctx.fillStyle = '#475569';
@@ -841,11 +845,11 @@ function drawAngles() {
       const plateX = cx - 10;
       // Vertical plate
       ctx.fillStyle = '#475569';
-      ctx.fillRect(plateX, p.y + 28, 40, PH - 55);
+      ctx.fillRect(plateX, p.y + 28, 40, SH - 55);
       ctx.fillStyle = '#64748b';
-      ctx.fillRect(plateX + 36, p.y + 28, 4, PH - 55);
+      ctx.fillRect(plateX + 36, p.y + 28, 4, SH - 55);
       // Pool
-      const pool3Y = p.y + PH * 0.7;
+      const pool3Y = p.y + SH * 0.7;
       const pg3 = ctx.createRadialGradient(plateX + 40, pool3Y, 0, plateX + 40, pool3Y, 16);
       pg3.addColorStop(0, '#fde68a'); pg3.addColorStop(1, '#f97316');
       ctx.fillStyle = pg3;
@@ -869,7 +873,7 @@ function drawAngles() {
 
     } else {
       // Overhead — looking up (inverted)
-      const ceilY = p.y + PH * 0.38;
+      const ceilY = p.y + SH * 0.38;
       // Overhead plate
       ctx.fillStyle = '#475569';
       ctx.fillRect(p.x + 20, ceilY, PW - 40, 20);
@@ -897,12 +901,14 @@ function drawAngles() {
     }
 
     // Angle labels (shared)
-    ctx.fillStyle = '#fdba74'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
-    ctx.fillText(p.workLabel,   cx, p.y + PH - 40);
-    ctx.fillText(p.travelLabel, cx, p.y + PH - 28);
+    // Text block kept inside the bottom of each panel on a solid backing so it never collides with the drawing
+    const tb = 14 + 12 + p.noteLines.length * 11 + 8;
+    ctx.fillStyle = '#fdba74'; ctx.font = '10px Arial'; ctx.textAlign = 'center';
+    ctx.fillText(p.workLabel,   cx, p.y + PH - tb + 8);
+    ctx.fillText(p.travelLabel, cx, p.y + PH - tb + 20);
     p.noteLines.forEach((ln, li) => {
-      ctx.fillStyle = '#64748b'; ctx.font = '8.5px Arial';
-      ctx.fillText(ln, cx, p.y + PH - 16 + li * 11);
+      ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial';
+      ctx.fillText(ln, cx, p.y + PH - tb + 32 + li * 11);
     });
   });
 }
@@ -1074,7 +1080,7 @@ function filterElec() {
 function renderTable(rows) {
   const tbody = document.getElementById('elec-tbody');
   if (rows.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#64748b;padding:18px;">No electrodes match the selected filters.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#7c8ba1;padding:18px;">No electrodes match the selected filters.</td></tr>';
     return;
   }
   tbody.innerHTML = rows.map(e => {

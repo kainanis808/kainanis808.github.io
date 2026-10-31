@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quality Standards &amp; Codes — AWS, ASME, ASTM</title>
     <style>
@@ -46,10 +48,10 @@
         .org-banner-asme { background: #eff6ff; border: 1px solid #bfdbfe; }
         .org-banner-astm { background: #f0fdf4; border: 1px solid #bbf7d0; }
         .org-name { font-size: 1.05rem; font-weight: 700; }
-        .org-name-aws  { color: #c2410c; }
+        .org-name-aws  { color: #aa390b; }
         .org-name-asme { color: #1d4ed8; }
-        .org-name-astm { color: #15803d; }
-        .org-full { font-size: 0.85rem; color: #6b7280; margin-top: 2px; }
+        .org-name-astm { color: #147739; }
+        .org-full { font-size: 0.85rem; color: #69707d; margin-top: 2px; }
 
         .section-label {
             font-weight: 700;
@@ -76,9 +78,9 @@
             font-weight: 700;
             white-space: nowrap;
         }
-        .badge-aws  { background: #fed7aa; color: #c2410c; }
+        .badge-aws  { background: #fed7aa; color: #aa390b; }
         .badge-asme { background: #bfdbfe; color: #1d4ed8; }
-        .badge-astm { background: #bbf7d0; color: #15803d; }
+        .badge-astm { background: #bbf7d0; color: #147739; }
 
         /* Qualification doc cards */
         .card-grid {
@@ -137,15 +139,15 @@
         }
         .digit-box .lbl {
             font-size: 0.71rem;
-            color: #6b7280;
+            color: #69707d;
             text-align: center;
             max-width: 78px;
             line-height: 1.3;
         }
-        .d-prefix { background: #c2410c; }
+        .d-prefix { background: #aa390b; }
         .d-num    { background: #1e3a5f; }
         .d-year   { background: #0369a1; }
-        .d-grade  { background: #16a34a; font-size: 0.95rem; }
+        .d-grade  { background: #12843c; font-size: 0.95rem; }
         .digit-sep { font-size: 1.5rem; color: #9ca3af; align-self: center; padding-bottom: 22px; }
 
         /* Tip boxes */
@@ -163,7 +165,7 @@
 
         .note {
             font-size: 0.85rem;
-            color: #6b7280;
+            color: #69707d;
             font-style: italic;
             margin-top: 10px;
         }
@@ -177,7 +179,7 @@
             display: block;
             text-align: center;
             margin-top: 30px;
-            color: #0284c7;
+            color: #027ab8;
             text-decoration: none;
             font-size: 0.95rem;
         }
@@ -220,12 +222,12 @@
         </p>
 
         <p class="section-label">Code Structure — Major Clauses of AWS D1.1</p>
-        <table>
+        <table><caption class="sr-only">AWS D1.1 Structural Welding Code — Steel</caption>
             <thead>
                 <tr>
-                    <th>Clause</th>
-                    <th>Title</th>
-                    <th>Key Content</th>
+                    <th scope="col">Clause</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Key Content</th>
                 </tr>
             </thead>
             <tbody>
@@ -306,12 +308,12 @@
         </div>
 
         <p class="section-label">Prequalified vs. Qualified-by-Testing WPSs</p>
-        <table>
+        <table><caption class="sr-only">Welder Qualification Test</caption>
             <thead>
                 <tr>
-                    <th>Criterion</th>
-                    <th>Prequalified WPS (Clause 3)</th>
-                    <th>Qualified by Testing — requires PQR (Clause 4)</th>
+                    <th scope="col">Criterion</th>
+                    <th scope="col">Prequalified WPS (Clause 3)</th>
+                    <th scope="col">Qualified by Testing — requires PQR (Clause 4)</th>
                 </tr>
             </thead>
             <tbody>
@@ -344,13 +346,13 @@
         </table>
 
         <p class="section-label">NDT Methods Recognized by AWS D1.1 (Clause 6)</p>
-        <table>
+        <table><caption class="sr-only">Welder Qualification Test (table 2)</caption>
             <thead>
                 <tr>
-                    <th>Method</th>
-                    <th>Code</th>
-                    <th>What It Detects</th>
-                    <th>Typical Use in D1.1</th>
+                    <th scope="col">Method</th>
+                    <th scope="col">Code</th>
+                    <th scope="col">What It Detects</th>
+                    <th scope="col">Typical Use in D1.1</th>
                 </tr>
             </thead>
             <tbody>
@@ -412,13 +414,13 @@
         </p>
 
         <p class="section-label">BPVC Sections Overview</p>
-        <table>
+        <table><caption class="sr-only">ASME Boiler and Pressure Vessel Code (BPVC)</caption>
             <thead>
                 <tr>
-                    <th>Section</th>
-                    <th>Title</th>
-                    <th>Scope</th>
-                    <th>Stamp</th>
+                    <th scope="col">Section</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Scope</th>
+                    <th scope="col">Stamp</th>
                 </tr>
             </thead>
             <tbody>
@@ -505,13 +507,13 @@
             Only SA- (or SB-, SFA-) certified materials may be used in ASME Code construction; an ASTM
             mill certificate alone is not sufficient.
         </p>
-        <table>
+        <table><caption class="sr-only">ASME Boiler and Pressure Vessel Code (BPVC) (table 2)</caption>
             <thead>
                 <tr>
-                    <th>ASME Designation</th>
-                    <th>ASTM Equivalent</th>
-                    <th>Material</th>
-                    <th>Typical Application</th>
+                    <th scope="col">ASME Designation</th>
+                    <th scope="col">ASTM Equivalent</th>
+                    <th scope="col">Material</th>
+                    <th scope="col">Typical Application</th>
                 </tr>
             </thead>
             <tbody>
@@ -566,12 +568,12 @@
             procedure qualified on one material in a P-number group is generally valid for all materials
             in that group, greatly reducing the number of qualification tests a fabricator must run.
         </p>
-        <table>
+        <table><caption class="sr-only">ASME Boiler and Pressure Vessel Code (BPVC) (table 3)</caption>
             <thead>
                 <tr>
-                    <th>P-Number</th>
-                    <th>Material Family</th>
-                    <th>Typical Grades</th>
+                    <th scope="col">P-Number</th>
+                    <th scope="col">Material Family</th>
+                    <th scope="col">Typical Grades</th>
                 </tr>
             </thead>
             <tbody>
@@ -649,13 +651,13 @@
         </table>
 
         <p class="section-label">Section VIII: Pressure Vessel Division Comparison</p>
-        <table>
+        <table><caption class="sr-only">ASME Boiler and Pressure Vessel Code (BPVC) (table 4)</caption>
             <thead>
                 <tr>
-                    <th>Feature</th>
-                    <th>Division 1</th>
-                    <th>Division 2</th>
-                    <th>Division 3</th>
+                    <th scope="col">Feature</th>
+                    <th scope="col">Division 1</th>
+                    <th scope="col">Division 2</th>
+                    <th scope="col">Division 3</th>
                 </tr>
             </thead>
             <tbody>
@@ -748,12 +750,12 @@
         </p>
 
         <p class="section-label">Letter Prefix Codes</p>
-        <table>
+        <table><caption class="sr-only">ASTM Standard Numbering System</caption>
             <thead>
                 <tr>
-                    <th>Prefix</th>
-                    <th>Material Category</th>
-                    <th>Representative Examples</th>
+                    <th scope="col">Prefix</th>
+                    <th scope="col">Material Category</th>
+                    <th scope="col">Representative Examples</th>
                 </tr>
             </thead>
             <tbody>
@@ -796,13 +798,13 @@
         </table>
 
         <p class="section-label">Common ASTM Standards — Structural Steel</p>
-        <table>
+        <table><caption class="sr-only">ASTM Standard Numbering System (table 2)</caption>
             <thead>
                 <tr>
-                    <th>Standard</th>
-                    <th>Material Description</th>
-                    <th>Min. Yield</th>
-                    <th>Notes</th>
+                    <th scope="col">Standard</th>
+                    <th scope="col">Material Description</th>
+                    <th scope="col">Min. Yield</th>
+                    <th scope="col">Notes</th>
                 </tr>
             </thead>
             <tbody>
@@ -898,12 +900,12 @@
         </table>
 
         <p class="section-label">Common ASTM Test Method Standards</p>
-        <table>
+        <table><caption class="sr-only">ASTM Standard Numbering System (table 3)</caption>
             <thead>
                 <tr>
-                    <th>Standard</th>
-                    <th>Test</th>
-                    <th>What It Defines</th>
+                    <th scope="col">Standard</th>
+                    <th scope="col">Test</th>
+                    <th scope="col">What It Defines</th>
                 </tr>
             </thead>
             <tbody>
@@ -961,13 +963,13 @@
             how they reference each other is essential for reading engineering drawings, material test
             reports (MTRs), and inspection records.
         </p>
-        <table>
+        <table><caption class="sr-only">How AWS, ASME, and ASTM Work Together</caption>
             <thead>
                 <tr>
-                    <th>Activity</th>
-                    <th><span class="badge badge-astm">ASTM</span> Role</th>
-                    <th><span class="badge badge-asme">ASME</span> Role</th>
-                    <th><span class="badge badge-aws">AWS</span> Role</th>
+                    <th scope="col">Activity</th>
+                    <th scope="col"><span class="badge badge-astm">ASTM</span> Role</th>
+                    <th scope="col"><span class="badge badge-asme">ASME</span> Role</th>
+                    <th scope="col"><span class="badge badge-aws">AWS</span> Role</th>
                 </tr>
             </thead>
             <tbody>

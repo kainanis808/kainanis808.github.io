@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hot vs Cold Working &amp; Work Hardening</title>
 <style>
@@ -17,7 +19,7 @@ main{max-width:1020px;margin:0 auto;padding:24px 18px 60px;}
 .tab-bar{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid #1e3a5f;padding-bottom:0;}
 .tab-btn{
   padding:10px 20px;background:transparent;border:none;border-bottom:3px solid transparent;
-  color:#64748b;font-size:0.88rem;font-weight:600;cursor:pointer;transition:all .15s;
+  color:#7c8ba1;font-size:0.88rem;font-weight:600;cursor:pointer;transition:all .15s;
   margin-bottom:-2px;white-space:nowrap;
 }
 .tab-btn:hover{color:#34d399;}
@@ -32,7 +34,7 @@ main{max-width:1020px;margin:0 auto;padding:24px 18px 60px;}
 }
 .card-title{font-size:1rem;font-weight:700;color:#6ee7b7;margin-bottom:14px;}
 .card-sub{font-size:0.82rem;color:#94a3b8;margin-top:4px;}
-.source{font-size:0.75rem;color:#475569;margin-top:8px;}
+.source{font-size:0.75rem;color:#7b8ca6;margin-top:8px;}
 
 /* Canvases */
 canvas{display:block;max-width:100%;border-radius:8px;}
@@ -66,7 +68,7 @@ input[type=range]::-webkit-slider-thumb{
   background:#0a1628;border:1px solid #1e3a5f;border-radius:8px;
   padding:10px 16px;min-width:120px;flex:1;
 }
-.val-card .vc-label{font-size:0.7rem;color:#64748b;text-transform:uppercase;letter-spacing:.06em;}
+.val-card .vc-label{font-size:0.7rem;color:#7c8ba1;text-transform:uppercase;letter-spacing:.06em;}
 .val-card .vc-val{font-size:1.35rem;font-weight:700;margin-top:3px;}
 .vc-uts{color:#f87171;} .vc-ys{color:#fb923c;} .vc-el{color:#34d399;} .vc-ratio{color:#818cf8;}
 
@@ -74,7 +76,7 @@ input[type=range]::-webkit-slider-thumb{
 .stage-bar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
 .stage-btn{
   padding:6px 13px;border-radius:6px;border:1px solid #1e3a5f;
-  background:#0a1628;color:#64748b;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all .15s;
+  background:#0a1628;color:#7c8ba1;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all .15s;
 }
 .stage-btn.active{background:#0d2a1f;border-color:#10b981;color:#34d399;}
 .stage-desc{
@@ -88,7 +90,7 @@ input[type=range]::-webkit-slider-thumb{
 /* Comparison table */
 table{width:100%;border-collapse:collapse;font-size:0.83rem;margin-top:10px;}
 thead tr{background:#0d2240;}
-thead th{padding:10px 12px;text-align:left;font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b;}
+thead th{padding:10px 12px;text-align:left;font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:.05em;color:#7c8ba1;}
 tbody tr:nth-child(odd){background:#071428;}
 tbody tr:nth-child(even){background:#0a1832;}
 tbody td{padding:9px 12px;border-bottom:1px solid #1e3a5f;vertical-align:top;color:#cbd5e1;}
@@ -133,10 +135,10 @@ tbody td:first-child{font-weight:700;color:#94a3b8;white-space:nowrap;}
     </div>
     <div class="slider-row">
       <label>% Cold Work</label>
-      <input type="range" id="cwSlider" min="0" max="80" value="0" step="1">
+      <input type="range" id="cwSlider" min="0" max="80" value="0" step="1" aria-label="% Cold Work">
       <span class="slider-val" id="cwVal">0%</span>
     </div>
-    <canvas id="propCanvas" width="720" height="300" style="width:100%;"></canvas>
+    <canvas id="propCanvas" width="720" height="300" style="width:100%;" role="img" aria-label="Chart of tensile strength, yield strength, and elongation versus percent cold work for the selected alloy. Strength rises and ductility falls as cold work increases; a marker follows the cold-work slider, and the current values are listed in text below."></canvas>
     <div class="value-cards" id="valueCards">
       <div class="val-card"><div class="vc-label">Tensile Strength</div><div class="vc-val vc-uts" id="vcUTS">— MPa</div></div>
       <div class="val-card"><div class="vc-label">Yield Strength</div><div class="vc-val vc-ys" id="vcYS">— MPa</div></div>
@@ -150,13 +152,13 @@ tbody td:first-child{font-weight:700;color:#94a3b8;white-space:nowrap;}
     <div class="card">
       <div class="card-title">True Stress–Strain: σ = Kε<sup>n</sup></div>
       <div class="card-sub">Hollomon equation — flow stress during plastic deformation</div>
-      <canvas id="trueCanvas" width="340" height="240" style="width:100%;"></canvas>
+      <canvas id="trueCanvas" width="340" height="240" style="width:100%;" role="img" aria-label="True stress versus true strain curves following the Hollomon equation σ = K·εⁿ for the selected alloys, labelled with each alloy&#x27;s strain-hardening exponent n."></canvas>
       <div class="source" style="margin-top:8px;">K = strength coefficient, n = strain-hardening exponent (ASM Metals Handbook)</div>
     </div>
     <div class="card">
       <div class="card-title">Dislocation Density Schematic</div>
       <div class="card-sub">Dislocation density (ρ) increases with % cold work — basis of work hardening</div>
-      <canvas id="dislocCanvas" width="340" height="240" style="width:100%;"></canvas>
+      <canvas id="dislocCanvas" width="340" height="240" style="width:100%;" role="img" aria-label="Schematic of dislocations in a grain. More dislocation symbols appear as percent cold work increases; the dislocation density ρ (per cm²) is labelled for the current cold-work setting."></canvas>
     </div>
   </div>
 
@@ -170,21 +172,21 @@ tbody td:first-child{font-weight:700;color:#94a3b8;white-space:nowrap;}
   <div class="card">
     <div class="card-title">Recrystallization Temperature vs % Cold Work</div>
     <div class="card-sub">Higher cold work → lower stored energy threshold → lower recrystallization temperature (T<sub>rx</sub>)</div>
-    <canvas id="trexCanvas" width="720" height="250" style="width:100%;"></canvas>
+    <canvas id="trexCanvas" width="720" height="250" style="width:100%;" role="img" aria-label="Chart of recrystallization temperature versus percent cold work: recrystallization temperature drops as cold work increases, levelling off at high cold work. Room temperature (20 °C) is marked for reference."></canvas>
     <div class="source">Data: ASM International — approximate values, highly dependent on purity and prior processing</div>
   </div>
 
   <div class="card">
     <div class="card-title">Grain Size After Annealing vs % Cold Work</div>
     <div class="card-sub">Critical cold work (~2–5%) produces abnormally large grains; higher %CW yields finer recrystallized grains</div>
-    <canvas id="gsizeCanvas" width="720" height="220" style="width:100%;"></canvas>
+    <canvas id="gsizeCanvas" width="720" height="220" style="width:100%;" role="img" aria-label="Chart of recrystallized grain size versus percent cold work: a sharp peak at the critical cold work of about 2 to 5 percent gives abnormally large grains; higher cold work gives fine, uniform recrystallized grains."></canvas>
     <div class="source">Source: ASM International — curve shape from Callister Fig. 7.23 (Cu basis)</div>
   </div>
 
   <div class="card">
     <div class="card-title">Three-Stage Annealing of Cold-Worked Metal</div>
     <div class="card-sub">Recovery → Recrystallization → Grain Growth — Tensile Strength and Ductility vs Annealing Temperature (Cu at 60% CW)</div>
-    <canvas id="annealCanvas" width="720" height="260" style="width:100%;"></canvas>
+    <canvas id="annealCanvas" width="720" height="274" style="width:100%;" role="img" aria-label="Three-stage annealing chart for copper at 60 percent cold work, annealed one hour at each temperature: tensile strength stays high through recovery, drops sharply during recrystallization, then levels off during grain growth, while ductility does the opposite and grain size climbs in the grain-growth stage."></canvas>
     <div class="source">Source: ASM International; Callister Fig. 7.22</div>
   </div>
 
@@ -198,18 +200,18 @@ tbody td:first-child{font-weight:700;color:#94a3b8;white-space:nowrap;}
   <div class="card">
     <div class="card-title">Homologous Temperature &amp; Working Regimes</div>
     <div class="card-sub">Cold work: T &lt; 0.3 T<sub>m</sub> &nbsp;|&nbsp; Warm work: 0.3–0.6 T<sub>m</sub> &nbsp;|&nbsp; Hot work: T &gt; 0.6 T<sub>m</sub> &nbsp;(all temperatures in K)</div>
-    <canvas id="homoCanvas" width="720" height="310" style="width:100%;"></canvas>
+    <canvas id="homoCanvas" width="720" height="310" style="width:100%;" role="img" aria-label="Bar chart of working temperature regimes for common metals in kelvin: cold work below 0.3 of the melting temperature Tm, warm work from 0.3 to 0.6 Tm, and hot work above 0.6 Tm, with each metal&#x27;s Tm marked."></canvas>
     <div class="source">Working temperature regimes per ASM International — T<sub>m</sub> values from ASM Alloy Phase Diagram Database</div>
   </div>
 
   <div class="card">
     <div class="card-title">Cold vs Warm vs Hot Working — Property Comparison</div>
-    <table>
+    <table><caption class="sr-only">Cold vs Warm vs Hot Working — Property Comparison</caption>
       <thead><tr>
-        <th>Property / Feature</th>
-        <th class="td-cold">Cold Working (T &lt; 0.3T<sub>m</sub>)</th>
-        <th class="td-warm">Warm Working (0.3–0.6T<sub>m</sub>)</th>
-        <th class="td-hot">Hot Working (T &gt; 0.6T<sub>m</sub>)</th>
+        <th scope="col">Property / Feature</th>
+        <th class="td-cold" scope="col">Cold Working (T &lt; 0.3T<sub>m</sub>)</th>
+        <th class="td-warm" scope="col">Warm Working (0.3–0.6T<sub>m</sub>)</th>
+        <th class="td-hot" scope="col">Hot Working (T &gt; 0.6T<sub>m</sub>)</th>
       </tr></thead>
       <tbody>
         <tr><td>Strength change</td><td class="td-cold">Large increase</td><td class="td-warm">Moderate increase</td><td class="td-hot">Minimal (dynamic RX)</td></tr>
@@ -241,7 +243,7 @@ tbody td:first-child{font-weight:700;color:#94a3b8;white-space:nowrap;}
       <button class="stage-btn" data-stage="4">5. Recrystallization</button>
       <button class="stage-btn" data-stage="5">6. Grain Growth</button>
     </div>
-    <canvas id="microCanvas" width="720" height="320" style="width:100%;border-radius:8px;"></canvas>
+    <canvas id="microCanvas" width="720" height="320" style="width:100%;border-radius:8px;" role="img" aria-label="Schematic microstructure at the stage chosen with the buttons above: annealed equiaxed grains; 10 percent cold work with slightly elongated grains; 60 percent cold work with strongly elongated grains; recovery; new small recrystallized grains; and grain growth with larger grains. A 50 µm scale bar is shown; the stage is described in text."></canvas>
     <div class="stage-desc" id="stageDesc">Select a stage above.</div>
     <div class="stage-props" id="stageProps"></div>
   </div>
@@ -489,9 +491,9 @@ function drawTrueCanvas() {
             const px = lx(eEnd, 0, maxEps, px0, px1);
             const py = ly(sEnd, 0, maxSig, py0, py1);
             ctx.fillStyle = a.color + (key===activeAlloy ? 'ff' : '77');
-            ctx.font = `bold 9px sans-serif`; ctx.textAlign = 'left';
+            ctx.font = `bold 9px sans-serif`; ctx.textAlign = 'right';
             const shortName = key === 'copper' ? 'Cu' : key === 'steel' ? 'Fe' : 'Al';
-            ctx.fillText(`${shortName} n=${a.n}`, px+4, py);
+            ctx.fillText(`${shortName} n=${a.n}`, px-4, py-7);
         }
     });
 
@@ -617,7 +619,7 @@ function drawTrexCanvas() {
         const lastT = a.trex[a.trex.length-1];
         const lpy = ly(lastT, minT, maxT, py0, py1);
         ctx.fillStyle = a.color; ctx.font='bold 10px sans-serif'; ctx.textAlign='left';
-        ctx.fillText(a.name.split(' ')[0], px1+3, lpy+4);
+        // (curve names are shown in the legend; end-of-line labels ran off the canvas)
     });
 
     // legend
@@ -672,18 +674,16 @@ function drawGsizeCanvas() {
     ctx.moveTo(critX1,py0); ctx.lineTo(critX1,py1); ctx.stroke();
     ctx.setLineDash([]);
     ctx.fillStyle='#fb923c'; ctx.font='9px sans-serif'; ctx.textAlign='center';
-    ctx.fillText('Critical CW', (critX0+critX1)/2, py0+12);
-    ctx.fillText('(abnormal', (critX0+critX1)/2, py0+22);
-    ctx.fillText('grain growth)', (critX0+critX1)/2, py0+32);
+    ctx.fillText('Critical CW', (critX0+critX1)/2, py1-6);
 
     // grain size curve
     plotCurve(ctx, cws, gszs, 0, 80, minG, maxG, px0, py0, px1, py1, '#f59e0b', 2.5);
 
     // peak annotation
     const peakX = lx(4, 0, 80, px0, px1), peakY = ly(420, minG, maxG, py0, py1);
-    ctx.fillStyle='#f59e0b'; ctx.font='bold 10px sans-serif'; ctx.textAlign='center';
-    ctx.fillText('Abnormal', peakX+28, peakY-18);
-    ctx.fillText('grain growth', peakX+28, peakY-6);
+    ctx.fillStyle='#f59e0b'; ctx.font='bold 10px sans-serif'; ctx.textAlign='left';
+    ctx.fillText('Abnormal', critX1+10, peakY+12);
+    ctx.fillText('grain growth', critX1+10, peakY+24);
 
     // fine grain annotation
     ctx.fillStyle='#34d399'; ctx.font='10px sans-serif'; ctx.textAlign='center';
@@ -699,7 +699,7 @@ function drawAnnealCanvas() {
     const canvas = document.getElementById('annealCanvas');
     const ctx = canvas.getContext('2d');
     const W = canvas.width, H = canvas.height;
-    const M = {l:60, r:60, t:28, b:44};
+    const M = {l:60, r:60, t:28, b:58};
     const px0=M.l, px1=W-M.r, py0=M.t, py1=H-M.b;
 
     ctx.clearRect(0,0,W,H); ctx.fillStyle='#071428'; ctx.fillRect(0,0,W,H);
@@ -775,7 +775,7 @@ function drawAnnealCanvas() {
 
     // note
     ctx.fillStyle='#64748b'; ctx.font='9px sans-serif'; ctx.textAlign='center';
-    ctx.fillText('Copper at 60% cold work, annealed 1 hour at each temperature', (px0+px1)/2, py1+36);
+    ctx.fillText('Copper at 60% cold work, annealed 1 hour at each temperature', (px0+px1)/2, py1+30);
 }
 
 /* ═══════════════════════════════════════════════════════

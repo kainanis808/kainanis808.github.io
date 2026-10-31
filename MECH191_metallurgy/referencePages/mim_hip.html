@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MIM &amp; HIP — Bodycote Process Overview</title>
     <style>
@@ -124,7 +126,7 @@
             top: 50%;
             transform: translateY(-50%);
             font-size: 1.2rem;
-            color: #94a3b8;
+            color: #627793;
         }
         .step-num {
             display: inline-block;
@@ -364,15 +366,15 @@
         Representative production parameters; specific values vary by feedstock supplier and part geometry.
     </p>
     <div class="table-scroll">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Table 1 — MIM Process Parameters by Alloy Family</caption>
         <thead>
             <tr>
-                <th>Alloy / Material</th>
-                <th>Powder Size (µm)</th>
-                <th>Sintering Temp. (°C)</th>
-                <th>Sintering Atmosphere</th>
-                <th>As-sintered Density (% theoretical)</th>
-                <th>Typical Applications</th>
+                <th scope="col">Alloy / Material</th>
+                <th scope="col">Powder Size (µm)</th>
+                <th scope="col">Sintering Temp. (°C)</th>
+                <th scope="col">Sintering Atmosphere</th>
+                <th scope="col">As-sintered Density (% theoretical)</th>
+                <th scope="col">Typical Applications</th>
             </tr>
         </thead>
         <tbody>
@@ -475,15 +477,15 @@
 
     <h3>Feedstock Binder Systems</h3>
     <div class="table-scroll">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Feedstock Binder Systems</caption>
         <thead>
             <tr>
-                <th>Binder System</th>
-                <th>Primary Components</th>
-                <th>Debinding Method</th>
-                <th>Debinding Temp. / Medium</th>
-                <th>Cycle Time (typical)</th>
-                <th>Pros / Cons</th>
+                <th scope="col">Binder System</th>
+                <th scope="col">Primary Components</th>
+                <th scope="col">Debinding Method</th>
+                <th scope="col">Debinding Temp. / Medium</th>
+                <th scope="col">Cycle Time (typical)</th>
+                <th scope="col">Pros / Cons</th>
             </tr>
         </thead>
         <tbody>
@@ -600,9 +602,9 @@
             <line x1="60" y1="80"  x2="680" y2="80"  stroke="#e2e8f0" stroke-width="1"/>
 
             <!-- Temperature reference line at 1150 °C (y=50) -->
-            <line x1="60" y1="50" x2="680" y2="50" stroke="#dc2626" stroke-width="1" stroke-dasharray="6,5" opacity="0.35"/>
+            <line x1="60" y1="50" x2="680" y2="50" stroke="#d52222" stroke-width="1" stroke-dasharray="6,5" opacity="0.35" stroke-opacity="1"/>
             <!-- Pressure reference line at 150 MPa (y=100) -->
-            <line x1="60" y1="100" x2="680" y2="100" stroke="#7c3aed" stroke-width="1" stroke-dasharray="6,5" opacity="0.35"/>
+            <line x1="60" y1="100" x2="680" y2="100" stroke="#7c3aed" stroke-width="1" stroke-dasharray="6,5" opacity="0.35" stroke-opacity="1"/>
 
             <!-- Left Y-axis labels — Temperature -->
             <text x="54" y="264" text-anchor="end" font-size="10" fill="#dc2626">0</text>
@@ -665,15 +667,15 @@
 
     <h3>HIP Process Parameters</h3>
     <div class="table-scroll">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">HIP Process Parameters</caption>
         <thead>
             <tr>
-                <th>Material Class</th>
-                <th>HIP Temperature (°C)</th>
-                <th>HIP Pressure (MPa)</th>
-                <th>Dwell Time (h)</th>
-                <th>Target Density after HIP</th>
-                <th>Notes</th>
+                <th scope="col">Material Class</th>
+                <th scope="col">HIP Temperature (°C)</th>
+                <th scope="col">HIP Pressure (MPa)</th>
+                <th scope="col">Dwell Time (h)</th>
+                <th scope="col">Target Density after HIP</th>
+                <th scope="col">Notes</th>
             </tr>
         </thead>
         <tbody>
@@ -939,16 +941,16 @@
         Sources: Bodycote application data; MPIF Standard 35; ASTM F2885 (Ti-6Al-4V MIM).
     </p>
     <div class="table-scroll">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Table 2 — Mechanical Property Comparison: As-sintered vs. HIP&#x27;d</caption>
         <thead>
             <tr>
-                <th>Material</th>
-                <th>Condition</th>
-                <th>Density (% theoretical)</th>
-                <th>UTS (MPa)</th>
-                <th>0.2% YS (MPa)</th>
-                <th>Elongation (%)</th>
-                <th>Fatigue Strength (MPa @ 10⁷ cycles)</th>
+                <th scope="col">Material</th>
+                <th scope="col">Condition</th>
+                <th scope="col">Density (% theoretical)</th>
+                <th scope="col">UTS (MPa)</th>
+                <th scope="col">0.2% YS (MPa)</th>
+                <th scope="col">Elongation (%)</th>
+                <th scope="col">Fatigue Strength (MPa @ 10⁷ cycles)</th>
             </tr>
         </thead>
         <tbody>
@@ -1185,14 +1187,14 @@
 <div class="section">
     <h2>5 &nbsp;Quick Reference — MIM vs. Other Powder Metallurgy Routes</h2>
     <div class="table-scroll">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">5 Quick Reference — MIM vs. Other Powder Metallurgy Routes</caption>
         <thead>
             <tr>
-                <th>Attribute</th>
-                <th>MIM</th>
-                <th>Conventional PM (Die Compaction)</th>
-                <th>Direct HIP (PM-HIP)</th>
-                <th>Investment Casting + HIP</th>
+                <th scope="col">Attribute</th>
+                <th scope="col">MIM</th>
+                <th scope="col">Conventional PM (Die Compaction)</th>
+                <th scope="col">Direct HIP (PM-HIP)</th>
+                <th scope="col">Investment Casting + HIP</th>
             </tr>
         </thead>
         <tbody>
@@ -1258,7 +1260,7 @@
 </div>
 
 
-<p style="font-size:0.82rem;color:#94a3b8;text-align:center;margin-bottom:12px;">
+<p style="font-size:0.82rem;color:#627793;text-align:center;margin-bottom:12px;">
     Data sourced from: Bodycote HIP Process Overview (bodycote.com/hip); ASTM F2885 (Ti-6Al-4V MIM);
     AMS 2774 / AMS 2786 (HIP specifications); MPIF Standard 35 (MIM material properties);
     German, R.M., <em>Metal Injection Molding</em>, Metal Powder Industries Federation (2011);

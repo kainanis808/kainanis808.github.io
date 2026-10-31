@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sintering Reference — ASM Handbook Vol. 7</title>
     <style>
@@ -236,8 +238,8 @@
             <line x1="70" y1="57"  x2="680" y2="57"  stroke="#e2e8f0" stroke-width="1"/>
 
             <!-- Sintering-temperature reference lines -->
-            <line x1="70" y1="72" x2="680" y2="72" stroke="#2563eb" stroke-width="1" stroke-dasharray="7,5" opacity="0.35"/>
-            <line x1="70" y1="46" x2="680" y2="46" stroke="#ea580c" stroke-width="1" stroke-dasharray="7,5" opacity="0.35"/>
+            <line x1="70" y1="72" x2="680" y2="72" stroke="#2563eb" stroke-width="1" stroke-dasharray="7,5" opacity="0.35" stroke-opacity="1"/>
+            <line x1="70" y1="46" x2="680" y2="46" stroke="#e5560c" stroke-width="1" stroke-dasharray="7,5" opacity="0.35" stroke-opacity="1"/>
 
             <!-- Vertical zone-boundary lines -->
             <line x1="192" y1="20" x2="192" y2="280" stroke="#94a3b8" stroke-width="1" stroke-dasharray="5,4"/>
@@ -262,7 +264,7 @@
             <text x="64" y="61"  text-anchor="end" font-size="10" fill="#64748b">1200</text>
             <!-- Sintering temp callouts -->
             <text x="64" y="76" text-anchor="end" font-size="9" fill="#2563eb" font-weight="600">1120</text>
-            <text x="64" y="50" text-anchor="end" font-size="9" fill="#ea580c" font-weight="600">1260</text>
+            <text x="64" y="50" text-anchor="end" font-size="9" fill="#c3490a" font-weight="600">1260</text>
 
             <!-- Y-axis title (rotated) -->
             <text transform="rotate(-90)" x="-150" y="14" text-anchor="middle" font-size="11" fill="#475569">Temperature (°C)</text>
@@ -302,7 +304,7 @@
             <line x1="338" y1="36" x2="485" y2="36" stroke="#ea580c" stroke-width="1"/>
             <line x1="338" y1="32" x2="338" y2="40" stroke="#ea580c" stroke-width="1"/>
             <line x1="485" y1="32" x2="485" y2="40" stroke="#ea580c" stroke-width="1"/>
-            <text x="411" y="32" text-anchor="middle" font-size="9" fill="#ea580c">20–40 min hold</text>
+            <text x="411" y="32" text-anchor="middle" font-size="9" fill="#b9460a">20–40 min hold</text>
 
             <!-- Annotation: lubricant burnout zone -->
             <rect x="76" y="188" width="110" height="34" fill="white" fill-opacity="0.8" rx="4"/>
@@ -320,7 +322,7 @@
             <text x="566" y="241" text-anchor="middle" font-size="9" fill="#1e40af">sets final microstructure</text>
 
             <!-- Legend box -->
-            <rect x="70" y="282" width="610" height="1" fill="#e2e8f0"/>
+            <rect x="70" y="282" width="610" height="1" fill="#e2e8f0" stroke="#708db5" stroke-width="1" vector-effect="non-scaling-stroke"/>
         </svg>
     </div>
 
@@ -340,15 +342,15 @@
         Source: ASM Handbook Vol. 7, "Production Sintering Practices," Table 1; all temperatures are nominal belt-furnace set points.
     </p>
     <div class="table-scroll">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Table 1 — Typical Production Sintering Conditions by Alloy System</caption>
         <thead>
             <tr>
-                <th>Alloy / Material</th>
-                <th>Common Designations</th>
-                <th>Sintering Temp. (°C)</th>
-                <th>Temp. (°F)</th>
-                <th>Hold Time (min)</th>
-                <th>Typical Atmosphere</th>
+                <th scope="col">Alloy / Material</th>
+                <th scope="col">Common Designations</th>
+                <th scope="col">Sintering Temp. (°C)</th>
+                <th scope="col">Temp. (°F)</th>
+                <th scope="col">Hold Time (min)</th>
+                <th scope="col">Typical Atmosphere</th>
             </tr>
         </thead>
         <tbody>
@@ -501,15 +503,15 @@
         Source: ASM Handbook Vol. 7, "Sintering Atmospheres"; dew points are typical operating targets, not minimums.
     </p>
     <div class="table-scroll">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Table 2 — Sintering Atmosphere Compositions and Specifications</caption>
         <thead>
             <tr>
-                <th>Atmosphere</th>
-                <th>Nominal Composition</th>
-                <th>Dew Point (°C)</th>
-                <th>Reduction Potential</th>
-                <th>Key Applications</th>
-                <th>Notes</th>
+                <th scope="col">Atmosphere</th>
+                <th scope="col">Nominal Composition</th>
+                <th scope="col">Dew Point (°C)</th>
+                <th scope="col">Reduction Potential</th>
+                <th scope="col">Key Applications</th>
+                <th scope="col">Notes</th>
             </tr>
         </thead>
         <tbody>
@@ -598,13 +600,13 @@
 
     <h3>Table 3 — Dew Point vs. P<sub>H₂O</sub> Reference</h3>
     <div class="table-scroll">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Table 3 — Dew Point vs. P H₂O Reference</caption>
         <thead>
             <tr>
-                <th>Dew Point (°C)</th>
-                <th>Dew Point (°F)</th>
-                <th>P<sub>H₂O</sub> (torr)</th>
-                <th>Atmosphere Quality</th>
+                <th scope="col">Dew Point (°C)</th>
+                <th scope="col">Dew Point (°F)</th>
+                <th scope="col">P<sub>H₂O</sub> (torr)</th>
+                <th scope="col">Atmosphere Quality</th>
             </tr>
         </thead>
         <tbody>
@@ -657,14 +659,14 @@
                 <circle cx="58" cy="122" r="41" fill="#3b82f6" fill-opacity="0.55" stroke="#1e40af" stroke-width="1.5"/>
                 <circle cx="122" cy="122" r="40" fill="#3b82f6" fill-opacity="0.55" stroke="#1e40af" stroke-width="1.5"/>
                 <!-- Point contact indicators (very small dots) -->
-                <circle cx="93" cy="60" r="3" fill="#1e40af" opacity="0.6"/>
-                <circle cx="60" cy="92" r="3" fill="#1e40af" opacity="0.6"/>
-                <circle cx="123" cy="91" r="3" fill="#1e40af" opacity="0.6"/>
-                <circle cx="90" cy="122" r="3" fill="#1e40af" opacity="0.6"/>
+                <circle cx="93" cy="60" r="3" fill="#1e40af" opacity="0.6" stroke="#1c3ba2" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                <circle cx="60" cy="92" r="3" fill="#1e40af" opacity="0.6" stroke="#1c3ba2" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                <circle cx="123" cy="91" r="3" fill="#1e40af" opacity="0.6" stroke="#1c3ba2" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                <circle cx="90" cy="122" r="3" fill="#1e40af" opacity="0.6" stroke="#1c3ba2" stroke-width="1" vector-effect="non-scaling-stroke"/>
                 <!-- Pore label -->
-                <text x="90" y="96" text-anchor="middle" font-size="9" fill="#475569" font-style="italic">open pore</text>
+                <text x="90" y="96" text-anchor="middle" font-size="9" fill="#28303b" font-style="italic">open pore</text>
                 <!-- Contact label -->
-                <text x="93" y="53" text-anchor="middle" font-size="8" fill="#1e40af">point contact</text>
+                <text x="93" y="53" text-anchor="middle" font-size="8" fill="#1a3899">point contact</text>
             </svg>
             <dl class="micro-stats">
                 <dt>Relative density</dt>
@@ -690,15 +692,15 @@
                 <circle cx="59" cy="123" r="41" fill="#3b82f6" fill-opacity="0.55" stroke="#1e40af" stroke-width="1.5"/>
                 <circle cx="122" cy="122" r="40" fill="#3b82f6" fill-opacity="0.55" stroke="#1e40af" stroke-width="1.5"/>
                 <!-- Small necks (ellipses at contact points) -->
-                <ellipse cx="93"  cy="61"  rx="8"  ry="5"  fill="#7c3aed" opacity="0.75"/>
-                <ellipse cx="61"  cy="93"  rx="5"  ry="8"  fill="#7c3aed" opacity="0.75"/>
-                <ellipse cx="123" cy="91"  rx="5"  ry="8"  fill="#7c3aed" opacity="0.75"/>
-                <ellipse cx="91"  cy="122" rx="8"  ry="5"  fill="#7c3aed" opacity="0.75"/>
+                <ellipse cx="93"  cy="61"  rx="8"  ry="5"  fill="#7c3aed" opacity="0.75" stroke="#5312c4" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                <ellipse cx="61"  cy="93"  rx="5"  ry="8"  fill="#7c3aed" opacity="0.75" stroke="#5312c4" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                <ellipse cx="123" cy="91"  rx="5"  ry="8"  fill="#7c3aed" opacity="0.75" stroke="#5312c4" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                <ellipse cx="91"  cy="122" rx="8"  ry="5"  fill="#7c3aed" opacity="0.75" stroke="#6c23eb" stroke-width="1" vector-effect="non-scaling-stroke"/>
                 <!-- Neck labels -->
-                <text x="93" y="49" text-anchor="middle" font-size="8" fill="#7c3aed" font-weight="600">neck (x/R ≈ 0.1)</text>
+                <text x="93" y="49" text-anchor="middle" font-size="8" fill="#4f11ba" font-weight="600">neck (x/R ≈ 0.1)</text>
                 <!-- Pore label -->
-                <text x="91" y="96" text-anchor="middle" font-size="9" fill="#475569" font-style="italic">open pore</text>
-                <text x="91" y="106" text-anchor="middle" font-size="8" fill="#64748b">channels</text>
+                <text x="91" y="96" text-anchor="middle" font-size="9" fill="#28303b" font-style="italic">open pore</text>
+                <text x="91" y="106" text-anchor="middle" font-size="8" fill="#3b4553">channels</text>
             </svg>
             <dl class="micro-stats">
                 <dt>Relative density</dt>
@@ -724,20 +726,20 @@
                 <circle cx="63" cy="118" r="41" fill="#3b82f6" fill-opacity="0.55" stroke="#1e40af" stroke-width="1.5"/>
                 <circle cx="120" cy="118" r="40" fill="#3b82f6" fill-opacity="0.55" stroke="#1e40af" stroke-width="1.5"/>
                 <!-- Large necks -->
-                <ellipse cx="94"  cy="63"  rx="16" ry="10" fill="#7c3aed" opacity="0.7"/>
-                <ellipse cx="64"  cy="92"  rx="10" ry="16" fill="#7c3aed" opacity="0.7"/>
-                <ellipse cx="121" cy="90"  rx="10" ry="16" fill="#7c3aed" opacity="0.7"/>
-                <ellipse cx="92"  cy="118" rx="16" ry="10" fill="#7c3aed" opacity="0.7"/>
+                <ellipse cx="94"  cy="63"  rx="16" ry="10" fill="#7c3aed" opacity="0.7" stroke="#6c23eb" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                <ellipse cx="64"  cy="92"  rx="10" ry="16" fill="#7c3aed" opacity="0.7" stroke="#6c23eb" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                <ellipse cx="121" cy="90"  rx="10" ry="16" fill="#7c3aed" opacity="0.7" stroke="#6c23eb" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                <ellipse cx="92"  cy="118" rx="16" ry="10" fill="#7c3aed" opacity="0.7" stroke="#6c23eb" stroke-width="1" vector-effect="non-scaling-stroke"/>
                 <!-- Grain boundary dashes -->
                 <line x1="94" y1="53"  x2="94" y2="73"  stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,3"/>
                 <line x1="54" y1="92"  x2="74" y2="92"  stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,3"/>
                 <line x1="111" y1="90" x2="131" y2="90" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,3"/>
                 <line x1="92" y1="108" x2="92" y2="128" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,3"/>
                 <!-- Central rounding pore -->
-                <ellipse cx="92" cy="91" rx="13" ry="11" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" opacity="0.9"/>
+                <ellipse cx="92" cy="91" rx="13" ry="11" fill="#e2e8f0" stroke="#2f3947" stroke-width="1" opacity="0.9" stroke-opacity="1"/>
                 <text x="92" y="94" text-anchor="middle" font-size="8" fill="#475569">rounding</text>
                 <!-- Neck label -->
-                <text x="94" y="43" text-anchor="middle" font-size="8" fill="#7c3aed" font-weight="600">neck (x/R ≈ 0.3)</text>
+                <text x="94" y="43" text-anchor="middle" font-size="8" fill="#4f11ba" font-weight="600">neck (x/R ≈ 0.3)</text>
             </svg>
             <dl class="micro-stats">
                 <dt>Relative density</dt>
@@ -773,17 +775,17 @@
                 <line x1="80"  y1="88"  x2="90"  y2="160" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,4"/>
                 <line x1="112" y1="88"  x2="90"  y2="160" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,4"/>
                 <!-- Isolated spherical pores (small, inside grains) -->
-                <circle cx="44"  cy="44"  r="6"  fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2" opacity="0.9"/>
-                <circle cx="140" cy="38"  r="5"  fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2" opacity="0.9"/>
-                <circle cx="36"  cy="130" r="5"  fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2" opacity="0.9"/>
-                <circle cx="145" cy="128" r="6"  fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2" opacity="0.9"/>
-                <circle cx="93"  cy="55"  r="4"  fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2" opacity="0.9"/>
+                <circle cx="44"  cy="44"  r="6"  fill="#f1f5f9" stroke="#52637b" stroke-width="1.2" opacity="0.9" stroke-opacity="1"/>
+                <circle cx="140" cy="38"  r="5"  fill="#f1f5f9" stroke="#4e5e75" stroke-width="1.2" opacity="0.9" stroke-opacity="1"/>
+                <circle cx="36"  cy="130" r="5"  fill="#f1f5f9" stroke="#52637b" stroke-width="1.2" opacity="0.9" stroke-opacity="1"/>
+                <circle cx="145" cy="128" r="6"  fill="#f1f5f9" stroke="#4e5e75" stroke-width="1.2" opacity="0.9" stroke-opacity="1"/>
+                <circle cx="93"  cy="55"  r="4"  fill="#f1f5f9" stroke="#7589a4" stroke-width="1.2" opacity="0.9" stroke-opacity="1"/>
                 <!-- Label -->
                 <text x="90"  y="100" text-anchor="middle" font-size="8" fill="#475569" font-style="italic">isolated</text>
                 <text x="90"  y="109" text-anchor="middle" font-size="8" fill="#475569" font-style="italic">spherical pore</text>
                 <line x1="90" y1="110" x2="44" y2="50" stroke="#94a3b8" stroke-width="0.8"/>
                 <!-- Grain boundary label -->
-                <text x="120" y="90" text-anchor="start" font-size="8" fill="#64748b">GB</text>
+                <text x="120" y="90" text-anchor="start" font-size="8" fill="#3e4756">GB</text>
             </svg>
             <dl class="micro-stats">
                 <dt>Relative density</dt>
@@ -801,15 +803,15 @@
 
     <h3>Table 4 — Summary of Sintering Stages</h3>
     <div class="table-scroll">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Table 4 — Summary of Sintering Stages</caption>
         <thead>
             <tr>
-                <th>Stage</th>
-                <th>Density Range (% theoretical)</th>
-                <th>Neck Ratio x/R</th>
-                <th>Active Diffusion Mechanisms</th>
-                <th>Pore Geometry</th>
-                <th>Key Observation</th>
+                <th scope="col">Stage</th>
+                <th scope="col">Density Range (% theoretical)</th>
+                <th scope="col">Neck Ratio x/R</th>
+                <th scope="col">Active Diffusion Mechanisms</th>
+                <th scope="col">Pore Geometry</th>
+                <th scope="col">Key Observation</th>
             </tr>
         </thead>
         <tbody>
@@ -868,7 +870,7 @@
 
 </div><!-- /.section -->
 
-<p style="font-size:0.82rem;color:#94a3b8;text-align:center;margin-bottom:12px;">
+<p style="font-size:0.82rem;color:#627793;text-align:center;margin-bottom:12px;">
     Data sourced from: ASM Handbook Vol. 7, <em>Powder Metal Technologies and Applications</em> (1998).
     Specific chapters: "Production Sintering Practices" (p. 464–504);
     "Sintering Atmospheres" (p. 454–463); "Sintering Theory and Models" (p. 311–346).

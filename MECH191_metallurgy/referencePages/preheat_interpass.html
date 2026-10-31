@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Preheat &amp; Interpass Temperature — Lincoln Electric / AWS D1.1</title>
 <style>
@@ -25,7 +27,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 }
 .tab-btn {
   padding: 10px 18px; font-size: 0.84rem; font-weight: 600;
-  border: none; background: none; cursor: pointer; color: #64748b;
+  border: none; background: none; cursor: pointer; color: #606f85;
   border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.15s;
   white-space: nowrap;
 }
@@ -93,7 +95,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
   font-size: 2.4rem; font-weight: 800; color: var(--rc);
   font-family: 'Courier New', monospace; line-height: 1;
 }
-.result-label { font-size: 0.82rem; color: #64748b; margin-top: 4px; }
+.result-label { font-size: 0.82rem; color: #606f85; margin-top: 4px; }
 .result-detail { margin-top: 14px; font-size: 0.84rem; color: #374151; line-height: 1.7; }
 .result-detail strong { color: #1e3a5f; }
 
@@ -129,7 +131,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 }
 .ce-card .ce-title { font-size: 0.78rem; font-weight: 700; color: var(--cc); text-transform: uppercase; letter-spacing: 0.05em; }
 .ce-card .ce-val { font-size: 2rem; font-weight: 800; color: var(--cc); font-family: 'Courier New', monospace; margin: 4px 0; }
-.ce-card .ce-note { font-size: 0.78rem; color: #64748b; line-height: 1.5; }
+.ce-card .ce-note { font-size: 0.78rem; color: #606f85; line-height: 1.5; }
 .ce-card .ce-preheat { margin-top: 8px; font-size: 0.83rem; color: #374151; font-weight: 600; }
 
 /* ── Heat color cells ── */
@@ -174,6 +176,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
   <div class="subtitle">Lincoln Electric Preheat Calculator &middot; Carbon Equivalent Calculator &middot; AWS D1.1:2020 Tables 4.4 &amp; Annex I</div>
 </header>
 
+<main id="main-content">
 <div class="source-note">
   <strong>Sources:</strong>
   <strong>Lincoln Electric</strong> — <em>Preheat &amp; Interpass Temperature Guide</em> &amp; <em>Avoiding Hydrogen Cracking</em> &middot;
@@ -199,7 +202,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <div class="calc-grid">
       <div class="calc-field">
         <label>Steel Grade</label>
-        <select id="gradeSelect" onchange="gradeChanged()">
+        <select id="gradeSelect" onchange="gradeChanged()" aria-label="Steel Grade">
           <option value="">— Enter CE manually —</option>
           <optgroup label="Group I (Fy = 36 ksi)">
             <option value="0.40">A36 (CE ≈ 0.40 typ.)</option>
@@ -230,12 +233,12 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
       <div class="calc-field">
         <label>Carbon Equivalent (CE)</label>
         <input type="number" id="ceInput" min="0.20" max="0.90" step="0.01" value="0.40"
-               placeholder="e.g. 0.42" oninput="document.getElementById('gradeSelect').value=''">
+               placeholder="e.g. 0.42" oninput="document.getElementById('gradeSelect').value=''" aria-label="Carbon Equivalent (CE)">
       </div>
 
       <div class="calc-field">
         <label>Thickest Section at Joint</label>
-        <select id="thickSelect">
+        <select id="thickSelect" aria-label="Thickest Section at Joint">
           <option value="0.5">Up to ¾" (19 mm)</option>
           <option value="1.0" selected>¾" – 1½" (19–38 mm)</option>
           <option value="2.0">1½" – 2½" (38–64 mm)</option>
@@ -245,7 +248,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 
       <div class="calc-field">
         <label>Filler Metal Hydrogen Level</label>
-        <select id="hydrogenSelect">
+        <select id="hydrogenSelect" aria-label="Filler Metal Hydrogen Level">
           <option value="H4">H4 — ultra-low (≤ 4 mL/100g)</option>
           <option value="H8" selected>H8 — low (4–8 mL/100g)</option>
           <option value="H16">H16 — medium (8–16 mL/100g)</option>
@@ -255,7 +258,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 
       <div class="calc-field">
         <label>Welding Process</label>
-        <select id="processSelect">
+        <select id="processSelect" aria-label="Welding Process">
           <option value="gmaw">GMAW / FCAW-G</option>
           <option value="smaw" selected>SMAW</option>
           <option value="fcaws">FCAW-S</option>
@@ -291,8 +294,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
         <div class="section-label">Variable 3 — Section Thickness</div>
         <p>Thicker sections cool faster (higher heat sink), creating a harder HAZ and trapping more hydrogen. D1.1 uses the <em>thickest part at the joint</em>, not base plate thickness alone.</p>
         <div class="section-label">Result Interpretation</div>
-        <table class="ref-table">
-          <tr><th>Result Color</th><th>Range</th><th>Action</th></tr>
+        <table class="ref-table"><caption class="sr-only">How the Calculator Works</caption>
+          <tr><th scope="col">Result Color</th><th scope="col">Range</th><th scope="col">Action</th></tr>
           <tr><td class="h-none">None</td><td>32°F (0°C)</td><td>No preheat needed above ambient</td></tr>
           <tr><td class="h-light">50–100°F</td><td>10–38°C</td><td>Light preheat; verify with thermometer</td></tr>
           <tr><td class="h-medium">150–200°F</td><td>65–93°C</td><td>Preheat required; use torch or oven</td></tr>
@@ -315,43 +318,43 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <div class="ce-grid">
       <div class="ce-field">
         <label><span class="sym">C</span> — Carbon (%)</label>
-        <input type="number" id="cc_C"  value="0.20" min="0" max="1.5"  step="0.001" oninput="calcCE()">
+        <input type="number" id="cc_C"  value="0.20" min="0" max="1.5"  step="0.001" oninput="calcCE()" aria-label="Carbon (%)">
       </div>
       <div class="ce-field">
         <label><span class="sym">Mn</span> — Manganese (%)</label>
-        <input type="number" id="cc_Mn" value="1.00" min="0" max="3.0"  step="0.01"  oninput="calcCE()">
+        <input type="number" id="cc_Mn" value="1.00" min="0" max="3.0"  step="0.01"  oninput="calcCE()" aria-label="Manganese (%)">
       </div>
       <div class="ce-field">
         <label><span class="sym">Si</span> — Silicon (%)</label>
-        <input type="number" id="cc_Si" value="0.25" min="0" max="2.0"  step="0.01"  oninput="calcCE()">
+        <input type="number" id="cc_Si" value="0.25" min="0" max="2.0"  step="0.01"  oninput="calcCE()" aria-label="Silicon (%)">
       </div>
       <div class="ce-field">
         <label><span class="sym">Cr</span> — Chromium (%)</label>
-        <input type="number" id="cc_Cr" value="0.00" min="0" max="15.0" step="0.01"  oninput="calcCE()">
+        <input type="number" id="cc_Cr" value="0.00" min="0" max="15.0" step="0.01"  oninput="calcCE()" aria-label="Chromium (%)">
       </div>
       <div class="ce-field">
         <label><span class="sym">Mo</span> — Molybdenum (%)</label>
-        <input type="number" id="cc_Mo" value="0.00" min="0" max="5.0"  step="0.01"  oninput="calcCE()">
+        <input type="number" id="cc_Mo" value="0.00" min="0" max="5.0"  step="0.01"  oninput="calcCE()" aria-label="Molybdenum (%)">
       </div>
       <div class="ce-field">
         <label><span class="sym">V</span> — Vanadium (%)</label>
-        <input type="number" id="cc_V"  value="0.00" min="0" max="1.0"  step="0.001" oninput="calcCE()">
+        <input type="number" id="cc_V"  value="0.00" min="0" max="1.0"  step="0.001" oninput="calcCE()" aria-label="Vanadium (%)">
       </div>
       <div class="ce-field">
         <label><span class="sym">Ni</span> — Nickel (%)</label>
-        <input type="number" id="cc_Ni" value="0.00" min="0" max="10.0" step="0.01"  oninput="calcCE()">
+        <input type="number" id="cc_Ni" value="0.00" min="0" max="10.0" step="0.01"  oninput="calcCE()" aria-label="Nickel (%)">
       </div>
       <div class="ce-field">
         <label><span class="sym">Cu</span> — Copper (%)</label>
-        <input type="number" id="cc_Cu" value="0.00" min="0" max="3.0"  step="0.01"  oninput="calcCE()">
+        <input type="number" id="cc_Cu" value="0.00" min="0" max="3.0"  step="0.01"  oninput="calcCE()" aria-label="Copper (%)">
       </div>
       <div class="ce-field">
         <label><span class="sym">P</span> — Phosphorus (%)</label>
-        <input type="number" id="cc_P"  value="0.012" min="0" max="0.1" step="0.001" oninput="calcCE()">
+        <input type="number" id="cc_P"  value="0.012" min="0" max="0.1" step="0.001" oninput="calcCE()" aria-label="Phosphorus (%)">
       </div>
       <div class="ce-field">
         <label><span class="sym">B</span> — Boron (%)</label>
-        <input type="number" id="cc_B"  value="0.000" min="0" max="0.01" step="0.0001" oninput="calcCE()">
+        <input type="number" id="cc_B"  value="0.000" min="0" max="0.01" step="0.0001" oninput="calcCE()" aria-label="Boron (%)">
       </div>
     </div>
 
@@ -374,10 +377,10 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
   <div class="section">
     <h2>Common Steel Grade Chemistry Reference</h2>
     <p>Click a row to load its typical composition into the calculator.</p>
-    <table class="ref-table" id="gradeChemTable">
+    <table class="ref-table" id="gradeChemTable"><caption class="sr-only">Common Steel Grade Chemistry Reference</caption>
       <tr>
-        <th>Grade</th><th>C max</th><th>Mn</th><th>Si</th><th>Cr</th><th>Mo</th><th>V</th><th>Ni</th><th>Cu</th>
-        <th>Typ. CE</th><th>Pcm</th>
+        <th scope="col">Grade</th><th scope="col">C max</th><th scope="col">Mn</th><th scope="col">Si</th><th scope="col">Cr</th><th scope="col">Mo</th><th scope="col">V</th><th scope="col">Ni</th><th scope="col">Cu</th>
+        <th scope="col">Typ. CE</th><th scope="col">Pcm</th>
       </tr>
       <tr onclick="loadGrade(0.18,0.90,0.25,0,0,0,0,0)" style="cursor:pointer;">
         <td><strong>A36</strong></td><td>0.25</td><td>0.80–1.20</td><td>0.15–0.40</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>~0.40</td><td>~0.31</td>
@@ -411,8 +414,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 
   <div class="section">
     <h2>CE vs Pcm — When to Use Each</h2>
-    <table class="ref-table">
-      <tr><th>Index</th><th>Best For</th><th>Carbon Range</th><th>Standard</th></tr>
+    <table class="ref-table"><caption class="sr-only">CE vs Pcm — When to Use Each</caption>
+      <tr><th scope="col">Index</th><th scope="col">Best For</th><th scope="col">Carbon Range</th><th scope="col">Standard</th></tr>
       <tr>
         <td><strong>CE (IIW)</strong></td>
         <td>Carbon and carbon-manganese steels, mild structural steel (A36, A572)</td>
@@ -441,14 +444,14 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <p>These temperatures apply to all pre-qualified WPS. Once preheat is applied, interpass temperature must not fall below the minimum preheat value during welding. Maximum interpass temperature for A514/A517 is <strong>400°F (205°C)</strong>.</p>
 
     <h3>Groups I &amp; II — A36, A572 Gr.50, A588, A709 Gr.50/50W, A500, A529</h3>
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Groups I &amp; II — A36, A572 Gr.50, A588, A709 Gr.50/50W, A500, A529</caption>
       <tr>
-        <th>Thickness of Thickest Part at Joint</th>
-        <th><span class="badge b-h4">H4</span> / <span class="badge b-h8">H8</span> SMAW (LH)</th>
-        <th><span class="badge b-h16">H16</span> SMAW (non-LH)</th>
-        <th>GMAW / FCAW-G</th>
-        <th>FCAW-S</th>
-        <th>SAW</th>
+        <th scope="col">Thickness of Thickest Part at Joint</th>
+        <th scope="col"><span class="badge b-h4">H4</span> / <span class="badge b-h8">H8</span> SMAW (LH)</th>
+        <th scope="col"><span class="badge b-h16">H16</span> SMAW (non-LH)</th>
+        <th scope="col">GMAW / FCAW-G</th>
+        <th scope="col">FCAW-S</th>
+        <th scope="col">SAW</th>
       </tr>
       <tr>
         <td>Up to ¾" (19 mm)</td>
@@ -488,11 +491,11 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
     <div class="warn-box">
       Non-low-hydrogen electrodes (E6010, E6011, E6013, cellulosic) are <strong>not permitted</strong> for Group III base metals. Only H8 or lower (H4 recommended) are allowed.
     </div>
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Group III — A514, A517, A709 Gr.100/100W (Quenched &amp; Tempered)</caption>
       <tr>
-        <th>Thickness of Thickest Part</th>
-        <th>All Low-H Processes (H8 or lower)</th>
-        <th>Max Interpass Temp</th>
+        <th scope="col">Thickness of Thickest Part</th>
+        <th scope="col">All Low-H Processes (H8 or lower)</th>
+        <th scope="col">Max Interpass Temp</th>
       </tr>
       <tr>
         <td>Up to ¾" (19 mm)</td>
@@ -515,8 +518,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 
   <div class="section">
     <h2>D1.1 Special Preheat Conditions (Clause 4.2)</h2>
-    <table class="ref-table">
-      <tr><th>Condition</th><th>D1.1 Requirement</th></tr>
+    <table class="ref-table"><caption class="sr-only">D1.1 Special Preheat Conditions (Clause 4.2)</caption>
+      <tr><th scope="col">Condition</th><th scope="col">D1.1 Requirement</th></tr>
       <tr>
         <td>Base metal temperature below 32°F (0°C)</td>
         <td>Preheat to minimum 70°F (21°C) regardless of Table 4.4 values</td>
@@ -547,8 +550,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
   <div class="section">
     <h2>Interpass Temperature Guidance</h2>
     <p>Interpass temperature is the temperature of the weld zone immediately before the next pass is deposited. Key rules:</p>
-    <table class="ref-table">
-      <tr><th>Rule</th><th>Basis</th></tr>
+    <table class="ref-table"><caption class="sr-only">Interpass Temperature Guidance</caption>
+      <tr><th scope="col">Rule</th><th scope="col">Basis</th></tr>
       <tr>
         <td><strong>Minimum = preheat temperature.</strong> Do not let the joint cool below preheat between passes.</td>
         <td>Prevents hydrogen cracking in the HAZ of completed passes</td>
@@ -576,13 +579,13 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
   <div class="section">
     <h2>Quick Preheat Reference — Common Structural Steels</h2>
     <p>Recommended minimum preheat for single-pass and multi-pass groove welds with <span class="badge b-h8">H8</span> low-hydrogen filler metal. Based on D1.1 Table 4.4 and Lincoln Electric guidance.</p>
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Quick Preheat Reference — Common Structural Steels</caption>
       <tr>
-        <th>Steel Grade</th>
-        <th>Up to ¾" (19 mm)</th>
-        <th>¾"–1½" (19–38 mm)</th>
-        <th>1½"–2½" (38–64 mm)</th>
-        <th>Over 2½" (64 mm)</th>
+        <th scope="col">Steel Grade</th>
+        <th scope="col">Up to ¾" (19 mm)</th>
+        <th scope="col">¾"–1½" (19–38 mm)</th>
+        <th scope="col">1½"–2½" (38–64 mm)</th>
+        <th scope="col">Over 2½" (64 mm)</th>
       </tr>
       <tr>
         <td><strong>A36</strong> (CE ≈ 0.40)</td>
@@ -654,12 +657,12 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
   <div class="section">
     <h2>Preheat Benefit by Hydrogen Level</h2>
     <p>The filler metal hydrogen level is the most powerful lever for reducing required preheat. Switching from non-LH to H4 can eliminate preheat requirements entirely on Group I/II steels up to 1½" thick.</p>
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Preheat Benefit by Hydrogen Level</caption>
       <tr>
-        <th>Hydrogen Level</th>
-        <th>Max H₂ (mL/100g)</th>
-        <th>Typical Filler Examples</th>
-        <th>Preheat Benefit vs Non-LH</th>
+        <th scope="col">Hydrogen Level</th>
+        <th scope="col">Max H₂ (mL/100g)</th>
+        <th scope="col">Typical Filler Examples</th>
+        <th scope="col">Preheat Benefit vs Non-LH</th>
       </tr>
       <tr>
         <td><span class="badge b-h4">H4</span></td>
@@ -690,8 +693,8 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 
   <div class="section">
     <h2>Temperature Measurement Methods</h2>
-    <table class="ref-table">
-      <tr><th>Method</th><th>Range</th><th>Accuracy</th><th>Notes</th></tr>
+    <table class="ref-table"><caption class="sr-only">Temperature Measurement Methods</caption>
+      <tr><th scope="col">Method</th><th scope="col">Range</th><th scope="col">Accuracy</th><th scope="col">Notes</th></tr>
       <tr><td><strong>Temperature-indicating crayons (Tempilstik)</strong></td><td>100–1000°F</td><td>±1%</td><td>Most common; mark melts at rated temperature; multiple crayons for range confirmation</td></tr>
       <tr><td><strong>Contact pyrometer / thermocouple</strong></td><td>32–2000°F</td><td>±0.5%</td><td>Digital readout; best for continuous monitoring; verify calibration per D1.1 Clause 6</td></tr>
       <tr><td><strong>Infrared thermometer</strong></td><td>−50 to 2200°F</td><td>±1–2%</td><td>Non-contact; fast; emissivity setting critical for mill-scale vs bare metal surfaces</td></tr>
@@ -704,6 +707,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 
 </div>
 
+</main>
 <div class="back"><a href="index.html">← Back to References</a></div>
 
 <script>

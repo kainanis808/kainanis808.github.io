@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GMAW / MIG Welding — Transfer Modes, Wire, Gas &amp; Parameters</title>
 <style>
@@ -26,7 +28,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 }
 .tab-btn {
     padding: 10px 18px; font-size: 0.84rem; font-weight: 600;
-    border: none; background: none; cursor: pointer; color: #64748b;
+    border: none; background: none; cursor: pointer; color: #606f85;
     border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.15s;
 }
 .tab-btn:hover { color: #1e3a5f; }
@@ -71,7 +73,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 .mode-card-body strong { color: #1e3a5f; }
 .m-sc  { --mc: #0369a1; }
 .m-gl  { --mc: #dc2626; }
-.m-sp  { --mc: #059669; }
+.m-sp  { --mc: #04825b; }
 .m-ps  { --mc: #7c3aed; }
 
 /* ─── Gas comparison cards ─── */
@@ -84,13 +86,13 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 .gas-card .gc-comp { font-size: 0.78rem; color: #6b7280; margin-bottom: 8px; }
 .gas-card ul { list-style: none; font-size: 0.8rem; }
 .gas-card li { padding: 2px 0; color: #374151; }
-.gas-card li::before { content: "• "; color: #94a3b8; }
+.gas-card li::before { content: "• "; color: #627793; }
 .g-co2   { --gc: #dc2626; }
 .g-c25   { --gc: #1d4ed8; }
-.g-c10   { --gc: #0891b2; }
-.g-aro2  { --gc: #059669; }
+.g-c10   { --gc: #077d9a; }
+.g-aro2  { --gc: #04825b; }
 .g-he    { --gc: #7c3aed; }
-.g-tri   { --gc: #d97706; }
+.g-tri   { --gc: #ac5f05; }
 
 /* ─── Rating bars ─── */
 .rating-row { display: flex; align-items: center; gap: 8px; margin: 3px 0; font-size: 0.78rem; }
@@ -145,7 +147,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.93rem; }
 .cause-col { color: #374151; }
 .fix-col { color: #065f46; font-weight: 600; }
 
-footer { text-align: center; padding: 18px; font-size: 0.8rem; color: #94a3b8; border-top: 1px solid #e2e8f0; }
+footer { text-align: center; padding: 18px; font-size: 0.8rem; color: #627793; border-top: 1px solid #e2e8f0; }
 footer a { color: #1e3a5f; }
 </style>
 </head>
@@ -156,6 +158,7 @@ footer a { color: #1e3a5f; }
     <div class="subtitle">Miller Electric &middot; Airgas Welding Gas Selection Guide &middot; Linde Gas Technology &middot; AWS A5.18</div>
 </header>
 
+<main id="main-content">
 <div class="source-note">
     Sources: <strong>Miller Electric</strong> — <em>MIG Welding Guide</em> &amp; <em>Owner's Manual Parameter Charts</em> &middot;
     <strong>Airgas</strong> — <em>Welding Gas Selection Guide</em> &amp; <em>Arc Characteristics Reference</em> &middot;
@@ -239,13 +242,13 @@ footer a { color: #1e3a5f; }
         <div class="section-label">Transition Current by Wire Diameter (Miller Electric)</div>
         <p style="font-size:0.83rem;color:#6b7280;margin-bottom:8px;">Below transition current → short-circuit or globular; above → spray. Values shown for 75%Ar/25%CO₂ (C25). Transition current rises with increasing CO₂.</p>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
+        <table class="ref-table"><caption class="sr-only">Metal Transfer Modes in GMAW</caption>
             <tr>
-                <th>Wire Diameter</th>
-                <th>Transition Current (C25)</th>
-                <th>Transition Current (C10)</th>
-                <th>Transition Current (100% CO₂)</th>
-                <th>Typical spray WFS range</th>
+                <th scope="col">Wire Diameter</th>
+                <th scope="col">Transition Current (C25)</th>
+                <th scope="col">Transition Current (C10)</th>
+                <th scope="col">Transition Current (100% CO₂)</th>
+                <th scope="col">Typical spray WFS range</th>
             </tr>
             <tr><td>0.023 in (0.6 mm)</td><td>~95 A</td><td>~90 A</td><td>Spray not achievable</td><td>300–600 ipm</td></tr>
             <tr><td>0.030 in (0.8 mm)</td><td>~130 A</td><td>~120 A</td><td>Spray not achievable</td><td>250–500 ipm</td></tr>
@@ -261,22 +264,22 @@ footer a { color: #1e3a5f; }
 
         <div class="section-label">Transfer Mode — Schematic Cross-Sections (Arc Column View)</div>
         <div class="diagram-wrap">
-        <svg width="780" height="260" viewBox="0 0 780 260" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" font-size="11">
+        <svg width="780" height="260" viewBox="0 0 780 260" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" font-size="11" role="img" aria-label="Four GMAW metal transfer modes side by side: short-circuit, 50 to 175 A and 15 to 22 V, all positions, wire touches the pool; globular, 150 to 250 A and 22 to 28 V, flat and horizontal only, large irregular drops; spray, 200 to 500 A and 26 to 36 V, flat and horizontal only with at least 80 percent argon, fine stream of droplets; pulsed spray, one drop per pulse with alternating peak and background current, usable in all positions.">
 
             <!-- ── Short-Circuit ── -->
             <text x="97" y="18" text-anchor="middle" font-weight="700" fill="#0369a1" font-size="12">Short-Circuit</text>
             <!-- base plate -->
-            <rect x="30" y="190" width="134" height="28" rx="3" fill="#94a3b8"/>
-            <rect x="30" y="190" width="134" height="6" rx="2" fill="#cbd5e1"/>
+            <rect x="30" y="190" width="134" height="28" rx="3" fill="#94a3b8" stroke="#788ba6" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <rect x="30" y="190" width="134" height="6" rx="2" fill="#cbd5e1" stroke="#708cad" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- pool -->
-            <ellipse cx="97" cy="190" rx="35" ry="11" fill="#fb923c" opacity="0.9"/>
+            <ellipse cx="97" cy="190" rx="35" ry="11" fill="#fb923c" opacity="0.9" stroke="#b45304" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- wire -->
             <rect x="91" y="50" width="12" height="138" rx="3" fill="#b45309"/>
             <rect x="93" y="52" width="8" height="80" rx="2" fill="#fbbf24"/>
             <!-- wire tip touching pool -->
-            <ellipse cx="97" cy="188" rx="6" ry="5" fill="#fb923c"/>
+            <ellipse cx="97" cy="188" rx="6" ry="5" fill="#fb923c" stroke="#914303" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- droplet forming -->
-            <ellipse cx="97" cy="178" rx="7" ry="7" fill="#f97316" opacity="0.8"/>
+            <ellipse cx="97" cy="178" rx="7" ry="7" fill="#f97316" opacity="0.8" stroke="#e56106" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- label: wire -->
             <text x="115" y="60" fill="#92400e">Wire</text>
             <line x1="113" y1="63" x2="103" y2="80" stroke="#92400e" stroke-width="1" stroke-dasharray="3,2"/>
@@ -289,35 +292,35 @@ footer a { color: #1e3a5f; }
 
             <!-- ── Globular ── -->
             <text x="277" y="18" text-anchor="middle" font-weight="700" fill="#dc2626" font-size="12">Globular</text>
-            <rect x="210" y="190" width="134" height="28" rx="3" fill="#94a3b8"/>
-            <rect x="210" y="190" width="134" height="6" rx="2" fill="#cbd5e1"/>
-            <ellipse cx="277" cy="190" rx="38" ry="12" fill="#fb923c" opacity="0.9"/>
+            <rect x="210" y="190" width="134" height="28" rx="3" fill="#94a3b8" stroke="#788ba6" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <rect x="210" y="190" width="134" height="6" rx="2" fill="#cbd5e1" stroke="#708cad" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <ellipse cx="277" cy="190" rx="38" ry="12" fill="#fb923c" opacity="0.9" stroke="#b45304" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <rect x="271" y="50" width="12" height="105" rx="3" fill="#b45309"/>
             <rect x="273" y="52" width="8" height="70" rx="2" fill="#fbbf24"/>
             <!-- large globule -->
-            <ellipse cx="277" cy="164" rx="16" ry="16" fill="#f97316" opacity="0.85"/>
+            <ellipse cx="277" cy="164" rx="16" ry="16" fill="#f97316" opacity="0.85" stroke="#e56106" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- spatter drops -->
-            <circle cx="245" cy="175" r="4" fill="#f97316" opacity="0.6"/>
-            <circle cx="312" cy="168" r="3" fill="#f97316" opacity="0.5"/>
-            <circle cx="235" cy="162" r="3" fill="#f97316" opacity="0.4"/>
-            <circle cx="320" cy="178" r="2.5" fill="#f97316" opacity="0.4"/>
+            <circle cx="245" cy="175" r="4" fill="#f97316" opacity="0.6" stroke="#e56106" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <circle cx="312" cy="168" r="3" fill="#f97316" opacity="0.5" stroke="#e56106" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <circle cx="235" cy="162" r="3" fill="#f97316" opacity="0.4" stroke="#e56106" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <circle cx="320" cy="178" r="2.5" fill="#f97316" opacity="0.4" stroke="#e56106" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <text x="277" y="242" text-anchor="middle" fill="#374151" font-size="10">150–250 A · 22–28 V</text>
             <text x="277" y="254" text-anchor="middle" fill="#6b7280" font-size="9">Flat/horizontal only</text>
 
             <!-- ── Spray ── -->
-            <text x="457" y="18" text-anchor="middle" font-weight="700" fill="#059669" font-size="12">Spray</text>
-            <rect x="390" y="190" width="134" height="28" rx="3" fill="#94a3b8"/>
-            <rect x="390" y="190" width="134" height="6" rx="2" fill="#cbd5e1"/>
-            <ellipse cx="457" cy="190" rx="42" ry="14" fill="#fb923c" opacity="0.9"/>
-            <ellipse cx="457" cy="188" rx="28" ry="9" fill="#fde68a"/>
+            <text x="457" y="18" text-anchor="middle" font-weight="700" fill="#047d58" font-size="12">Spray</text>
+            <rect x="390" y="190" width="134" height="28" rx="3" fill="#94a3b8" stroke="#788ba6" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <rect x="390" y="190" width="134" height="6" rx="2" fill="#cbd5e1" stroke="#708cad" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <ellipse cx="457" cy="190" rx="42" ry="14" fill="#fb923c" opacity="0.9" stroke="#b45304" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <ellipse cx="457" cy="188" rx="28" ry="9" fill="#fde68a" stroke="#6d5702" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <rect x="451" y="50" width="12" height="100" rx="3" fill="#b45309"/>
             <rect x="453" y="52" width="8" height="65" rx="2" fill="#fbbf24"/>
             <!-- fine droplet stream -->
-            <circle cx="457" cy="162" r="3.5" fill="#f97316"/>
-            <circle cx="456" cy="152" r="3" fill="#f97316" opacity="0.85"/>
-            <circle cx="458" cy="142" r="2.5" fill="#f97316" opacity="0.7"/>
-            <circle cx="457" cy="133" r="2" fill="#f97316" opacity="0.55"/>
-            <circle cx="456" cy="125" r="1.5" fill="#f97316" opacity="0.4"/>
+            <circle cx="457" cy="162" r="3.5" fill="#f97316" stroke="#e56106" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <circle cx="456" cy="152" r="3" fill="#f97316" opacity="0.85" stroke="#e56106" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <circle cx="458" cy="142" r="2.5" fill="#f97316" opacity="0.7" stroke="#fcc197" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <circle cx="457" cy="133" r="2" fill="#f97316" opacity="0.55" stroke="#fcc197" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <circle cx="456" cy="125" r="1.5" fill="#f97316" opacity="0.4" stroke="#fcc197" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- cone -->
             <path d="M451 150 L430 190" stroke="#059669" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
             <path d="M463 150 L484 190" stroke="#059669" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
@@ -326,14 +329,14 @@ footer a { color: #1e3a5f; }
 
             <!-- ── Pulsed ── -->
             <text x="637" y="18" text-anchor="middle" font-weight="700" fill="#7c3aed" font-size="12">Pulsed Spray</text>
-            <rect x="570" y="190" width="134" height="28" rx="3" fill="#94a3b8"/>
-            <rect x="570" y="190" width="134" height="6" rx="2" fill="#cbd5e1"/>
-            <ellipse cx="637" cy="190" rx="36" ry="12" fill="#fb923c" opacity="0.9"/>
-            <ellipse cx="637" cy="189" rx="24" ry="8" fill="#fde68a"/>
+            <rect x="570" y="190" width="134" height="28" rx="3" fill="#94a3b8" stroke="#788ba6" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <rect x="570" y="190" width="134" height="6" rx="2" fill="#cbd5e1" stroke="#708cad" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <ellipse cx="637" cy="190" rx="36" ry="12" fill="#fb923c" opacity="0.9" stroke="#b45304" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <ellipse cx="637" cy="189" rx="24" ry="8" fill="#fde68a" stroke="#6d5702" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <rect x="631" y="50" width="12" height="108" rx="3" fill="#b45309"/>
             <rect x="633" y="52" width="8" height="72" rx="2" fill="#fbbf24"/>
             <!-- one large droplet per pulse -->
-            <circle cx="637" cy="164" r="8" fill="#a78bfa" opacity="0.9"/>
+            <circle cx="637" cy="164" r="8" fill="#a78bfa" opacity="0.9" stroke="#9473f9" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <text x="648" y="162" fill="#7c3aed" font-size="9">1 drop/pulse</text>
             <!-- pulse waveform mini -->
             <polyline points="575,90 575,78 583,78 583,90 591,90 591,78 599,78 599,90 607,90" fill="none" stroke="#7c3aed" stroke-width="1.5"/>
@@ -347,15 +350,15 @@ footer a { color: #1e3a5f; }
     <div class="section">
         <h2>Transfer Mode Selection Guide (Miller Electric)</h2>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
+        <table class="ref-table"><caption class="sr-only">Transfer Mode Selection Guide (Miller Electric)</caption>
             <tr>
-                <th>Transfer Mode</th>
-                <th>Material Thickness</th>
-                <th>Welding Positions</th>
-                <th>Shielding Gas</th>
-                <th>Deposition Rate</th>
-                <th>Spatter</th>
-                <th>Best Applications</th>
+                <th scope="col">Transfer Mode</th>
+                <th scope="col">Material Thickness</th>
+                <th scope="col">Welding Positions</th>
+                <th scope="col">Shielding Gas</th>
+                <th scope="col">Deposition Rate</th>
+                <th scope="col">Spatter</th>
+                <th scope="col">Best Applications</th>
             </tr>
             <tr>
                 <td><strong>Short-Circuit</strong></td>
@@ -407,15 +410,15 @@ footer a { color: #1e3a5f; }
 
         <div class="section-label">Carbon Steel — AWS A5.18 Classification (Miller Electric)</div>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
+        <table class="ref-table"><caption class="sr-only">Carbon Steel Wire Electrodes (AWS A5.18)</caption>
             <tr>
-                <th>AWS Class</th>
-                <th>Min. Tensile (ksi)</th>
-                <th>Si Content</th>
-                <th>Mn Content</th>
-                <th>Deoxidizers</th>
-                <th>Shielding Gas Compatibility</th>
-                <th>Best Application</th>
+                <th scope="col">AWS Class</th>
+                <th scope="col">Min. Tensile (ksi)</th>
+                <th scope="col">Si Content</th>
+                <th scope="col">Mn Content</th>
+                <th scope="col">Deoxidizers</th>
+                <th scope="col">Shielding Gas Compatibility</th>
+                <th scope="col">Best Application</th>
             </tr>
             <tr>
                 <td><span class="wire-badge wb-cs">ER70S-2</span></td>
@@ -462,15 +465,15 @@ footer a { color: #1e3a5f; }
 
         <div class="section-label">Wire Diameter Selection (Miller Electric)</div>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
+        <table class="ref-table"><caption class="sr-only">Carbon Steel Wire Electrodes (AWS A5.18) (table 2)</caption>
             <tr>
-                <th>Wire Diameter</th>
-                <th>Metric</th>
-                <th>Transfer Mode</th>
-                <th>Plate Thickness Range</th>
-                <th>Amperage Range</th>
-                <th>Deposition Rate</th>
-                <th>Typical Application</th>
+                <th scope="col">Wire Diameter</th>
+                <th scope="col">Metric</th>
+                <th scope="col">Transfer Mode</th>
+                <th scope="col">Plate Thickness Range</th>
+                <th scope="col">Amperage Range</th>
+                <th scope="col">Deposition Rate</th>
+                <th scope="col">Typical Application</th>
             </tr>
             <tr><td>0.023 in</td><td>0.6 mm</td><td>Short-circuit only</td><td>22 ga – 1/8 in</td><td>30–90 A</td><td>1–3 lb/hr</td><td>Auto body, thin sheet, galvanized</td></tr>
             <tr><td>0.030 in</td><td>0.8 mm</td><td>Short-circuit</td><td>1/16 – 3/16 in</td><td>60–150 A</td><td>2–6 lb/hr</td><td>Light fabrication, general sheet</td></tr>
@@ -486,16 +489,16 @@ footer a { color: #1e3a5f; }
         <h2>Stainless Steel Wire Electrodes (AWS A5.9)</h2>
         <p>Stainless GMAW wire is classified by weld metal composition. <strong>L-grade</strong> (low carbon, ≤0.03% C) is preferred to minimize carbide precipitation (sensitization) in the HAZ of austenitic stainless steels.</p>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
+        <table class="ref-table"><caption class="sr-only">Stainless Steel Wire Electrodes (AWS A5.9)</caption>
             <tr>
-                <th>AWS Class</th>
-                <th>Base Metal Match</th>
-                <th>Carbon</th>
-                <th>Ni</th>
-                <th>Cr</th>
-                <th>Mo</th>
-                <th>Shielding Gas</th>
-                <th>Application</th>
+                <th scope="col">AWS Class</th>
+                <th scope="col">Base Metal Match</th>
+                <th scope="col">Carbon</th>
+                <th scope="col">Ni</th>
+                <th scope="col">Cr</th>
+                <th scope="col">Mo</th>
+                <th scope="col">Shielding Gas</th>
+                <th scope="col">Application</th>
             </tr>
             <tr>
                 <td><span class="wire-badge wb-ss">ER308L</span></td>
@@ -558,14 +561,14 @@ footer a { color: #1e3a5f; }
         <h2>Aluminum Wire Electrodes (AWS A5.10)</h2>
         <p>Aluminum GMAW uses two main filler alloy families. Choice depends on base metal alloy, required strength, and whether parts will be anodized after welding.</p>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
+        <table class="ref-table"><caption class="sr-only">Aluminum Wire Electrodes (AWS A5.10)</caption>
             <tr>
-                <th>AWS Class</th>
-                <th>Alloy Type</th>
-                <th>Min. Tensile (ksi)</th>
-                <th>Base Metal Match</th>
-                <th>Shielding Gas</th>
-                <th>Characteristics &amp; Application</th>
+                <th scope="col">AWS Class</th>
+                <th scope="col">Alloy Type</th>
+                <th scope="col">Min. Tensile (ksi)</th>
+                <th scope="col">Base Metal Match</th>
+                <th scope="col">Shielding Gas</th>
+                <th scope="col">Characteristics &amp; Application</th>
             </tr>
             <tr>
                 <td><span class="wire-badge wb-al">ER4043</span></td>
@@ -686,19 +689,19 @@ footer a { color: #1e3a5f; }
         <div class="pen-row">
             <!-- 100% CO2 -->
             <div class="pen-box">
-                <svg width="130" height="140" viewBox="0 0 130 140" xmlns="http://www.w3.org/2000/svg">
+                <svg width="130" height="140" viewBox="0 0 130 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Weld cross-section with 100 percent CO2 shielding: deep, finger-like, narrow penetration and high spatter.">
                     <!-- base plate -->
-                    <rect x="5" y="65" width="120" height="60" rx="3" fill="#94a3b8"/>
+                    <rect x="5" y="65" width="120" height="60" rx="3" fill="#94a3b8" stroke="#788ba6" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <!-- penetration finger -->
-                    <ellipse cx="65" cy="65" rx="28" ry="8" fill="#f97316"/>
+                    <ellipse cx="65" cy="65" rx="28" ry="8" fill="#f97316" stroke="#7d3503" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <rect x="57" y="65" width="16" height="45" rx="8" fill="#f97316"/>
-                    <ellipse cx="65" cy="110" rx="8" ry="10" fill="#f97316"/>
+                    <ellipse cx="65" cy="110" rx="8" ry="10" fill="#f97316" stroke="#7d3503" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <!-- HAZ halo -->
-                    <ellipse cx="65" cy="65" rx="38" ry="11" fill="none" stroke="#fde68a" stroke-width="1.5" stroke-dasharray="3,2"/>
-                    <rect x="58" y="65" width="14" height="44" rx="7" fill="none" stroke="#fde68a" stroke-width="1.5" stroke-dasharray="3,2"/>
-                    <ellipse cx="65" cy="108" rx="10" ry="11" fill="none" stroke="#fde68a" stroke-width="1.5" stroke-dasharray="3,2"/>
+                    <ellipse cx="65" cy="65" rx="38" ry="11" fill="none" stroke="#5e4b02" stroke-width="1.5" stroke-dasharray="3,2"/>
+                    <rect x="58" y="65" width="14" height="44" rx="7" fill="none" stroke="#5e4b02" stroke-width="1.5" stroke-dasharray="3,2"/>
+                    <ellipse cx="65" cy="108" rx="10" ry="11" fill="none" stroke="#5e4b02" stroke-width="1.5" stroke-dasharray="3,2"/>
                     <!-- bead cap -->
-                    <ellipse cx="65" cy="60" rx="28" ry="10" fill="#fb923c"/>
+                    <ellipse cx="65" cy="60" rx="28" ry="10" fill="#fb923c" stroke="#e16805" stroke-width="1" vector-effect="non-scaling-stroke"/>
                 </svg>
                 <div class="pen-label">100% CO₂</div>
                 <div class="pen-sub">Deep finger · Narrow · High spatter</div>
@@ -706,14 +709,14 @@ footer a { color: #1e3a5f; }
 
             <!-- C25 -->
             <div class="pen-box">
-                <svg width="130" height="140" viewBox="0 0 130 140" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="5" y="65" width="120" height="60" rx="3" fill="#94a3b8"/>
+                <svg width="130" height="140" viewBox="0 0 130 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Weld cross-section with 75 percent argon, 25 percent CO2 (C25): moderate, balanced penetration.">
+                    <rect x="5" y="65" width="120" height="60" rx="3" fill="#94a3b8" stroke="#788ba6" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <!-- moderate penetration -->
-                    <ellipse cx="65" cy="65" rx="34" ry="8" fill="#1d4ed8" opacity="0.85"/>
-                    <rect x="58" y="65" width="14" height="30" rx="7" fill="#1d4ed8" opacity="0.85"/>
-                    <ellipse cx="65" cy="94" rx="10" ry="8" fill="#1d4ed8" opacity="0.85"/>
+                    <ellipse cx="65" cy="65" rx="34" ry="8" fill="#1d4ed8" opacity="0.85" stroke="#1841b4" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                    <rect x="58" y="65" width="14" height="30" rx="7" fill="#1d4ed8" opacity="0.85" stroke="#1841b4" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                    <ellipse cx="65" cy="94" rx="10" ry="8" fill="#1d4ed8" opacity="0.85" stroke="#1841b4" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <!-- HAZ -->
-                    <ellipse cx="65" cy="65" rx="44" ry="12" fill="none" stroke="#93c5fd" stroke-width="1.5" stroke-dasharray="3,2"/>
+                    <ellipse cx="65" cy="65" rx="44" ry="12" fill="none" stroke="#02346b" stroke-width="1.5" stroke-dasharray="3,2"/>
                     <!-- bead -->
                     <ellipse cx="65" cy="58" rx="34" ry="12" fill="#3b82f6"/>
                 </svg>
@@ -723,16 +726,16 @@ footer a { color: #1e3a5f; }
 
             <!-- C10 -->
             <div class="pen-box">
-                <svg width="130" height="140" viewBox="0 0 130 140" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="5" y="65" width="120" height="60" rx="3" fill="#94a3b8"/>
+                <svg width="130" height="140" viewBox="0 0 130 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Weld cross-section with 90 percent argon, 10 percent CO2 (C10): wider, shallower penetration with low spatter.">
+                    <rect x="5" y="65" width="120" height="60" rx="3" fill="#94a3b8" stroke="#788ba6" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <!-- wider, shallower -->
-                    <ellipse cx="65" cy="65" rx="40" ry="8" fill="#0891b2" opacity="0.85"/>
-                    <rect x="59" y="65" width="12" height="20" rx="6" fill="#0891b2" opacity="0.85"/>
-                    <ellipse cx="65" cy="83" rx="10" ry="7" fill="#0891b2" opacity="0.85"/>
+                    <ellipse cx="65" cy="65" rx="40" ry="8" fill="#0891b2" opacity="0.85" stroke="#045164" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                    <rect x="59" y="65" width="12" height="20" rx="6" fill="#0891b2" opacity="0.85" stroke="#045164" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                    <ellipse cx="65" cy="83" rx="10" ry="7" fill="#0891b2" opacity="0.85" stroke="#045164" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <!-- HAZ -->
-                    <ellipse cx="65" cy="65" rx="50" ry="12" fill="none" stroke="#a5f3fc" stroke-width="1.5" stroke-dasharray="3,2"/>
+                    <ellipse cx="65" cy="65" rx="50" ry="12" fill="none" stroke="#03535d" stroke-width="1.5" stroke-dasharray="3,2"/>
                     <!-- bead -->
-                    <ellipse cx="65" cy="56" rx="40" ry="13" fill="#06b6d4"/>
+                    <ellipse cx="65" cy="56" rx="40" ry="13" fill="#06b6d4" stroke="#0598b1" stroke-width="1" vector-effect="non-scaling-stroke"/>
                 </svg>
                 <div class="pen-label">90Ar/10CO₂ (C10)</div>
                 <div class="pen-sub">Wider · Shallower · Low spatter</div>
@@ -740,16 +743,16 @@ footer a { color: #1e3a5f; }
 
             <!-- 98Ar/2O2 spray -->
             <div class="pen-box">
-                <svg width="130" height="140" viewBox="0 0 130 140" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="5" y="65" width="120" height="60" rx="3" fill="#94a3b8"/>
+                <svg width="130" height="140" viewBox="0 0 130 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Weld cross-section with 98 percent argon, 2 percent oxygen (spray): the widest, shallowest penetration with a very flat bead.">
+                    <rect x="5" y="65" width="120" height="60" rx="3" fill="#94a3b8" stroke="#788ba6" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <!-- broadest, uniform -->
-                    <ellipse cx="65" cy="65" rx="46" ry="9" fill="#059669" opacity="0.85"/>
-                    <rect x="60" y="65" width="10" height="15" rx="5" fill="#059669" opacity="0.85"/>
-                    <ellipse cx="65" cy="79" rx="10" ry="7" fill="#059669" opacity="0.85"/>
+                    <ellipse cx="65" cy="65" rx="46" ry="9" fill="#059669" opacity="0.85" stroke="#03563c" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                    <rect x="60" y="65" width="10" height="15" rx="5" fill="#059669" opacity="0.85" stroke="#03563c" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                    <ellipse cx="65" cy="79" rx="10" ry="7" fill="#059669" opacity="0.85" stroke="#03563c" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     <!-- HAZ -->
-                    <ellipse cx="65" cy="65" rx="55" ry="13" fill="none" stroke="#6ee7b7" stroke-width="1.5" stroke-dasharray="3,2"/>
+                    <ellipse cx="65" cy="65" rx="55" ry="13" fill="none" stroke="#0e573a" stroke-width="1.5" stroke-dasharray="3,2"/>
                     <!-- bead — flatter -->
-                    <ellipse cx="65" cy="57" rx="46" ry="11" fill="#10b981"/>
+                    <ellipse cx="65" cy="57" rx="46" ry="11" fill="#10b981" stroke="#0e9d6d" stroke-width="1" vector-effect="non-scaling-stroke"/>
                 </svg>
                 <div class="pen-label">98Ar/2O₂ (Spray)</div>
                 <div class="pen-sub">Widest · Shallowest · Very flat bead</div>
@@ -758,12 +761,12 @@ footer a { color: #1e3a5f; }
 
         <div class="section-label">Carbon Steel Gas Selection by Application (Airgas Welding Gas Guide)</div>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
+        <table class="ref-table"><caption class="sr-only">Carbon Steel Shielding Gas Selection (Miller Electric + Airgas)</caption>
             <tr>
-                <th>Application</th>
-                <th>Recommended Gas</th>
-                <th>Transfer Mode</th>
-                <th>Why This Gas</th>
+                <th scope="col">Application</th>
+                <th scope="col">Recommended Gas</th>
+                <th scope="col">Transfer Mode</th>
+                <th scope="col">Why This Gas</th>
             </tr>
             <tr><td>Economy structural / code work</td><td>C25 (75Ar/25CO₂)</td><td>SC, Spray</td><td>Industry standard for AWS D1.1; balances cost, penetration, and arc stability</td></tr>
             <tr><td>Thin-gauge auto body / sheet (≤12 ga)</td><td>C10 or C15 (90–85Ar/CO₂)</td><td>Short-circuit</td><td>Lower spatter, better bead appearance, reduced burn-through risk on thin material</td></tr>
@@ -785,14 +788,14 @@ footer a { color: #1e3a5f; }
         <p>Stainless steel is highly sensitive to oxidation — CO₂ content must be kept very low (&lt;5%) to prevent carbide precipitation (sensitization) and maintain corrosion resistance. Oxygen additions (&lt;2%) improve wetting and bead shape without significantly affecting chemistry.</p>
 
         <div style="overflow-x:auto;">
-        <table class="ref-table">
+        <table class="ref-table"><caption class="sr-only">Stainless Steel Shielding Gas Selection (Airgas / Linde)</caption>
             <tr>
-                <th>Gas Mixture</th>
-                <th>Composition</th>
-                <th>Transfer Mode</th>
-                <th>Arc Characteristics</th>
-                <th>Bead Appearance</th>
-                <th>Best For</th>
+                <th scope="col">Gas Mixture</th>
+                <th scope="col">Composition</th>
+                <th scope="col">Transfer Mode</th>
+                <th scope="col">Arc Characteristics</th>
+                <th scope="col">Bead Appearance</th>
+                <th scope="col">Best For</th>
             </tr>
             <tr>
                 <td><strong>98Ar/2O₂</strong></td>
@@ -835,8 +838,8 @@ footer a { color: #1e3a5f; }
 
         <div class="section-label">Gas Torch Angle and Flow Rate for Stainless (Airgas)</div>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-            <tr><th>Parameter</th><th>Recommendation</th><th>Reason</th></tr>
+        <table class="ref-table"><caption class="sr-only">Stainless Steel Shielding Gas Selection (Airgas / Linde) (table 2)</caption>
+            <tr><th scope="col">Parameter</th><th scope="col">Recommendation</th><th scope="col">Reason</th></tr>
             <tr><td>Gas flow rate</td><td>25–40 cfh (cup size 5/8 in or larger)</td><td>Higher flow than CS — prevents atmospheric contamination of sensitive SS weld metal</td></tr>
             <tr><td>Nozzle type</td><td>Large cup (3/4–7/8 in), gas lens preferred</td><td>Laminar flow prevents turbulence and air entrainment</td></tr>
             <tr><td>Post-flow time</td><td>5–10 sec after arc stop</td><td>Prevents oxidation of hot weld crater and HAZ</td></tr>
@@ -850,7 +853,7 @@ footer a { color: #1e3a5f; }
         <p>Aluminum GMAW always requires Ar-based shielding. CO₂ cannot be used — it reacts with aluminum and produces aluminum oxide porosity. Helium additions increase heat input and travel speed, useful for thick plate and conductive alloys.</p>
 
         <div class="gas-grid">
-            <div class="gas-card g-aro2" style="--gc:#d97706;">
+            <div class="gas-card g-aro2" style="--gc:#ac5f05;">
                 <div class="gc-name">100% Argon</div>
                 <div class="gc-comp">Aluminum standard</div>
                 <div class="rating-row"><span class="rating-label">Heat Input</span><div class="rating-bar"><div class="rating-fill" style="width:42%"></div></div></div>
@@ -880,13 +883,13 @@ footer a { color: #1e3a5f; }
         </div>
 
         <div style="overflow-x:auto;">
-        <table class="ref-table">
+        <table class="ref-table"><caption class="sr-only">Aluminum Shielding Gas Selection (Miller Electric / Airgas)</caption>
             <tr>
-                <th>Al Plate Thickness</th>
-                <th>Recommended Gas</th>
-                <th>Transfer Mode</th>
-                <th>Wire</th>
-                <th>Notes</th>
+                <th scope="col">Al Plate Thickness</th>
+                <th scope="col">Recommended Gas</th>
+                <th scope="col">Transfer Mode</th>
+                <th scope="col">Wire</th>
+                <th scope="col">Notes</th>
             </tr>
             <tr><td>&lt;1/8 in (thin sheet)</td><td>100% Ar</td><td>Pulsed spray</td><td>ER4043 0.030–0.035 in</td><td>Pulsed avoids burn-through; use push technique (10–15° lead angle)</td></tr>
             <tr><td>1/8 – 3/8 in</td><td>100% Ar</td><td>Spray</td><td>ER4043 or ER5356 0.035–0.045 in</td><td>Standard spray; maintain clean base metal (acetone wipe + stainless wire brush)</td></tr>
@@ -909,14 +912,14 @@ footer a { color: #1e3a5f; }
         <p>Each gas component plays a distinct role in shaping the arc physics. Understanding these effects allows you to choose the gas that meets your priority — whether that is cost, spatter control, toughness, penetration depth, or bead appearance.</p>
 
         <div style="overflow-x:auto;">
-        <table class="ref-table">
+        <table class="ref-table"><caption class="sr-only">How Gas Composition Affects Arc Characteristics (Airgas / Linde)</caption>
             <tr>
-                <th>Gas Component</th>
-                <th>Ionization Potential</th>
-                <th>Effect on Arc Stability</th>
-                <th>Effect on Arc Temperature</th>
-                <th>Effect on Transfer Mode</th>
-                <th>Effect on Oxidation</th>
+                <th scope="col">Gas Component</th>
+                <th scope="col">Ionization Potential</th>
+                <th scope="col">Effect on Arc Stability</th>
+                <th scope="col">Effect on Arc Temperature</th>
+                <th scope="col">Effect on Transfer Mode</th>
+                <th scope="col">Effect on Oxidation</th>
             </tr>
             <tr>
                 <td><strong>Argon (Ar)</strong></td>
@@ -958,13 +961,13 @@ footer a { color: #1e3a5f; }
         <h2>Gas Composition vs. Penetration Profile (Airgas / Linde)</h2>
         <p>Penetration profile (the cross-sectional shape of fusion into the base metal) changes significantly with CO₂ content. Higher CO₂ concentrates arc energy at the root, creating deep narrow penetration. Higher Ar distributes arc energy more broadly.</p>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
+        <table class="ref-table"><caption class="sr-only">Gas Composition vs. Penetration Profile (Airgas / Linde)</caption>
             <tr>
-                <th>Gas Mixture</th>
-                <th>Penetration Depth (relative)</th>
-                <th>Penetration Width (relative)</th>
-                <th>Bead Profile</th>
-                <th>Fusion Zone Shape</th>
+                <th scope="col">Gas Mixture</th>
+                <th scope="col">Penetration Depth (relative)</th>
+                <th scope="col">Penetration Width (relative)</th>
+                <th scope="col">Bead Profile</th>
+                <th scope="col">Fusion Zone Shape</th>
             </tr>
             <tr><td>100% CO₂</td><td>Deepest (100%)</td><td>Narrowest</td><td>Convex / humped</td><td>Narrow finger; high HAZ at root</td></tr>
             <tr><td>75Ar/25CO₂ (C25)</td><td>High (~80%)</td><td>Moderate</td><td>Slightly convex</td><td>Moderate finger; balanced HAZ</td></tr>
@@ -980,12 +983,12 @@ footer a { color: #1e3a5f; }
     <div class="section">
         <h2>Gas Composition vs. Spatter Level (Airgas / Linde)</h2>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
+        <table class="ref-table"><caption class="sr-only">Gas Composition vs. Spatter Level (Airgas / Linde)</caption>
             <tr>
-                <th>Gas Mixture</th>
-                <th>Relative Spatter Level</th>
-                <th>Primary Mechanism</th>
-                <th>Spatter Control Strategy</th>
+                <th scope="col">Gas Mixture</th>
+                <th scope="col">Relative Spatter Level</th>
+                <th scope="col">Primary Mechanism</th>
+                <th scope="col">Spatter Control Strategy</th>
             </tr>
             <tr><td>100% CO₂</td><td>Very High</td><td>CO₂ dissociation creates violent plasma, preventing stable spray; large globules explode on contact</td><td>Reduce voltage 1–2V below optimum; use RMD/STT process; apply anti-spatter</td></tr>
             <tr><td>75Ar/25CO₂ (C25)</td><td>Moderate</td><td>Partial suppression of spray transfer; globular zone between SC and spray is wide</td><td>Stay in short-circuit range OR go above transition into spray; avoid the 175–200A globular zone</td></tr>
@@ -1001,15 +1004,15 @@ footer a { color: #1e3a5f; }
         <p>Oxidizing components (CO₂, O₂) react with the weld pool and burn off deoxidizing elements (Mn, Si), reducing their content in the solidified weld metal. This affects tensile strength, ductility, and especially Charpy V-notch (CVN) impact toughness.</p>
 
         <div style="overflow-x:auto;">
-        <table class="ref-table">
+        <table class="ref-table"><caption class="sr-only">Gas Composition vs. Mechanical Properties (Airgas / Linde — Carbon Steel, ER70S-6)</caption>
             <tr>
-                <th>Shielding Gas</th>
-                <th>Min. UTS (ksi)</th>
-                <th>Min. Yield (ksi)</th>
-                <th>Elongation (%)</th>
-                <th>CVN Impact @ 0°F (ft-lb)</th>
-                <th>Mn+Si Recovery (%)</th>
-                <th>Notes</th>
+                <th scope="col">Shielding Gas</th>
+                <th scope="col">Min. UTS (ksi)</th>
+                <th scope="col">Min. Yield (ksi)</th>
+                <th scope="col">Elongation (%)</th>
+                <th scope="col">CVN Impact @ 0°F (ft-lb)</th>
+                <th scope="col">Mn+Si Recovery (%)</th>
+                <th scope="col">Notes</th>
             </tr>
             <tr>
                 <td>100% CO₂</td>
@@ -1070,14 +1073,14 @@ footer a { color: #1e3a5f; }
         <div class="section-label">WFS → Amperage Approximations (Miller Electric, ER70S-6)</div>
         <p style="font-size:0.83rem;color:#6b7280;margin-bottom:8px;">Amperage is a function of WFS and wire diameter. Rule of thumb: ~1 A per 1 ipm for 0.035 in wire. Larger wire requires less ipm for same amperage.</p>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
+        <table class="ref-table"><caption class="sr-only">Setting GMAW Parameters — Miller Electric Approach</caption>
             <tr>
-                <th>WFS (ipm)</th>
-                <th>0.023 in wire (A)</th>
-                <th>0.030 in wire (A)</th>
-                <th>0.035 in wire (A)</th>
-                <th>0.045 in wire (A)</th>
-                <th>Typical Mode (0.035 + C25)</th>
+                <th scope="col">WFS (ipm)</th>
+                <th scope="col">0.023 in wire (A)</th>
+                <th scope="col">0.030 in wire (A)</th>
+                <th scope="col">0.035 in wire (A)</th>
+                <th scope="col">0.045 in wire (A)</th>
+                <th scope="col">Typical Mode (0.035 + C25)</th>
             </tr>
             <tr><td>50</td><td>30–40</td><td>40–55</td><td>50–65</td><td>70–90</td><td>Short-circuit</td></tr>
             <tr><td>100</td><td>55–70</td><td>70–90</td><td>90–110</td><td>110–140</td><td>Short-circuit</td></tr>
@@ -1091,8 +1094,8 @@ footer a { color: #1e3a5f; }
 
         <div class="section-label">CTWD (Contact-Tip-to-Work Distance) Guide (Miller Electric)</div>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-            <tr><th>Transfer Mode</th><th>CTWD Range</th><th>Effect of Too Long</th><th>Effect of Too Short</th></tr>
+        <table class="ref-table"><caption class="sr-only">Setting GMAW Parameters — Miller Electric Approach (table 2)</caption>
+            <tr><th scope="col">Transfer Mode</th><th scope="col">CTWD Range</th><th scope="col">Effect of Too Long</th><th scope="col">Effect of Too Short</th></tr>
             <tr><td>Short-circuit</td><td>1/4 – 1/2 in (6–13 mm)</td><td>Increased resistive preheating → less actual amperage → cold weld, LOF risk</td><td>Spatter in nozzle; tip burnback; erratic arc</td></tr>
             <tr><td>Spray / Globular</td><td>5/8 – 1 in (16–25 mm)</td><td>Unstable arc; wide, flat bead; reduced penetration</td><td>Arc too short; spatter; nozzle clogging</td></tr>
             <tr><td>Pulsed</td><td>1/2 – 3/4 in (13–19 mm)</td><td>Reduced average current; incomplete fusion</td><td>Tip burnback; arc instability</td></tr>
@@ -1101,8 +1104,8 @@ footer a { color: #1e3a5f; }
 
         <div class="section-label">Travel Speed, Angle, and Position (Miller Electric)</div>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-            <tr><th>Parameter</th><th>Typical Range</th><th>Effect of Increasing</th><th>Effect of Decreasing</th></tr>
+        <table class="ref-table"><caption class="sr-only">Setting GMAW Parameters — Miller Electric Approach (table 3)</caption>
+            <tr><th scope="col">Parameter</th><th scope="col">Typical Range</th><th scope="col">Effect of Increasing</th><th scope="col">Effect of Decreasing</th></tr>
             <tr><td>Travel speed</td><td>10–30 ipm (4–12 mm/s)</td><td>Narrower bead, less reinforcement, less heat input; risk of undercut</td><td>Wider bead, more reinforcement; risk of overlap, excessive heat input</td></tr>
             <tr><td>Work angle (CS, butt)</td><td>0–15° from perpendicular</td><td>Tilting too far → poor toes on one side</td><td>Perpendicular = symmetric bead profile</td></tr>
             <tr><td>Travel angle (drag/push)</td><td>5–15° drag (steel); 5–15° push (Al)</td><td>More drag → deeper penetration, convex bead</td><td>More push → shallower, cleaner; required for Al (oxide cleaning)</td></tr>
@@ -1112,8 +1115,8 @@ footer a { color: #1e3a5f; }
 
         <div class="section-label">Voltage Effects on Bead Shape (Miller Electric)</div>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-            <tr><th>Voltage Setting</th><th>Arc Length</th><th>Bead Width</th><th>Reinforcement</th><th>Penetration</th><th>Arc Sound</th></tr>
+        <table class="ref-table"><caption class="sr-only">Setting GMAW Parameters — Miller Electric Approach (table 4)</caption>
+            <tr><th scope="col">Voltage Setting</th><th scope="col">Arc Length</th><th scope="col">Bead Width</th><th scope="col">Reinforcement</th><th scope="col">Penetration</th><th scope="col">Arc Sound</th></tr>
             <tr><td>Too low (–3V)</td><td>Very short / stubbing</td><td>Narrow, convex</td><td>High (ropy bead)</td><td>Less</td><td>Irregular pops / sticking</td></tr>
             <tr><td>Optimal</td><td>Controlled, consistent</td><td>Flat, smooth toes</td><td>Flush to slight crown</td><td>Correct for mode</td><td>Steady frying/hissing</td></tr>
             <tr><td>Too high (+3V)</td><td>Long, wandering</td><td>Wide, flat / undercut</td><td>Low (flat or concave)</td><td>Less / erratic</td><td>Spitting, arc wandering</td></tr>
@@ -1126,8 +1129,8 @@ footer a { color: #1e3a5f; }
 
         <div class="section-label">Carbon Steel — Short-Circuit (C25, ER70S-6)</div>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-            <tr><th>Material Thickness</th><th>Wire Diam.</th><th>WFS (ipm)</th><th>Voltage (V)</th><th>Current (A)</th><th>Gas Flow (cfh)</th></tr>
+        <table class="ref-table"><caption class="sr-only">Parameter Charts by Material &amp; Thickness (Miller Electric)</caption>
+            <tr><th scope="col">Material Thickness</th><th scope="col">Wire Diam.</th><th scope="col">WFS (ipm)</th><th scope="col">Voltage (V)</th><th scope="col">Current (A)</th><th scope="col">Gas Flow (cfh)</th></tr>
             <tr><td>22 gauge (0.030 in)</td><td>0.023 in</td><td>60–90</td><td>13–15</td><td>35–55</td><td>25</td></tr>
             <tr><td>18 gauge (0.048 in)</td><td>0.023 in</td><td>80–130</td><td>14–17</td><td>50–80</td><td>25</td></tr>
             <tr><td>16 gauge (0.060 in)</td><td>0.030 in</td><td>100–150</td><td>15–18</td><td>65–100</td><td>25</td></tr>
@@ -1138,8 +1141,8 @@ footer a { color: #1e3a5f; }
 
         <div class="section-label">Carbon Steel — Spray (C25 or C10, ER70S-6, flat/horiz)</div>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-            <tr><th>Material Thickness</th><th>Wire Diam.</th><th>WFS (ipm)</th><th>Voltage (V)</th><th>Current (A)</th><th>Gas Flow (cfh)</th></tr>
+        <table class="ref-table"><caption class="sr-only">Parameter Charts by Material &amp; Thickness (Miller Electric) (table 2)</caption>
+            <tr><th scope="col">Material Thickness</th><th scope="col">Wire Diam.</th><th scope="col">WFS (ipm)</th><th scope="col">Voltage (V)</th><th scope="col">Current (A)</th><th scope="col">Gas Flow (cfh)</th></tr>
             <tr><td>3/16 in</td><td>0.035 in</td><td>210–250</td><td>26–28</td><td>175–210</td><td>30–35</td></tr>
             <tr><td>1/4 in</td><td>0.035–0.045 in</td><td>240–300</td><td>27–30</td><td>200–260</td><td>30–35</td></tr>
             <tr><td>3/8 in</td><td>0.045 in</td><td>200–280</td><td>28–32</td><td>220–300</td><td>30–35</td></tr>
@@ -1157,8 +1160,8 @@ footer a { color: #1e3a5f; }
         <h2>GMAW Troubleshooting Guide (Miller Electric MIG Guide)</h2>
 
         <div class="section-label">Arc &amp; Process Problems</div>
-        <table class="trouble-table">
-            <tr><th>Problem</th><th>Likely Causes</th><th>Corrective Action</th></tr>
+        <table class="trouble-table"><caption class="sr-only">GMAW Troubleshooting Guide (Miller Electric MIG Guide)</caption>
+            <tr><th scope="col">Problem</th><th scope="col">Likely Causes</th><th scope="col">Corrective Action</th></tr>
             <tr>
                 <td class="defect-tag">Excessive spatter</td>
                 <td class="cause-col">Voltage too high or too low; wrong gas (too much CO₂); CTWD too long; contaminated wire; working in globular transition zone</td>
@@ -1182,8 +1185,8 @@ footer a { color: #1e3a5f; }
         </table>
 
         <div class="section-label">Weld Defects</div>
-        <table class="trouble-table">
-            <tr><th>Defect</th><th>Likely Causes</th><th>Corrective Action</th></tr>
+        <table class="trouble-table"><caption class="sr-only">GMAW Troubleshooting Guide (Miller Electric MIG Guide) (table 2)</caption>
+            <tr><th scope="col">Defect</th><th scope="col">Likely Causes</th><th scope="col">Corrective Action</th></tr>
             <tr>
                 <td class="defect-tag">Porosity</td>
                 <td class="cause-col">Gas coverage loss (low flow, leak, wind); contaminated base metal (oil, moisture, paint, zinc); CTWD too long; gas nozzle clogged with spatter</td>
@@ -1227,8 +1230,8 @@ footer a { color: #1e3a5f; }
         </table>
 
         <div class="section-label">Gas-Specific Issues (Airgas)</div>
-        <table class="trouble-table">
-            <tr><th>Symptom</th><th>Gas-Related Cause</th><th>Solution</th></tr>
+        <table class="trouble-table"><caption class="sr-only">GMAW Troubleshooting Guide (Miller Electric MIG Guide) (table 3)</caption>
+            <tr><th scope="col">Symptom</th><th scope="col">Gas-Related Cause</th><th scope="col">Solution</th></tr>
             <tr>
                 <td class="defect-tag">Porosity on Al</td>
                 <td class="cause-col">Moisture in Ar; CO₂ or CO₂-blend used on Al; base metal not cleaned of Al oxide</td>
@@ -1253,6 +1256,7 @@ footer a { color: #1e3a5f; }
     </div>
 </div>
 
+</main>
 <footer>
     <p>
         Based on: <strong>Miller Electric</strong> — <em>MIG Welding Guide (ITW)</em> &middot;

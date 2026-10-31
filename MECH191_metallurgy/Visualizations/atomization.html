@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atomization &amp; Powder Production – Water, Gas &amp; Characterization</title>
     <style>
@@ -72,7 +74,7 @@
             align-items:center; margin-bottom:16px;
         }
         .ctrl-group { display:flex; flex-direction:column; gap:4px; min-width:160px; }
-        .ctrl-label { font-size:0.78rem; color:#64748b; text-transform:uppercase; letter-spacing:.05em; }
+        .ctrl-label { font-size:0.78rem; color:#8593a7; text-transform:uppercase; letter-spacing:.05em; }
         .ctrl-val   { font-size:0.9rem; color:#e2e8f0; margin-top:2px; }
         input[type=range] {
             -webkit-appearance:none; width:100%; height:6px;
@@ -126,7 +128,7 @@
             border-radius:8px; padding:16px; margin-top:14px;
         }
         .info-box h3 { color:#7dd3fc; font-size:1rem; margin-bottom:8px; }
-        .ir-label { font-size:0.73rem; color:#64748b; text-transform:uppercase; letter-spacing:.05em; }
+        .ir-label { font-size:0.73rem; color:#8593a7; text-transform:uppercase; letter-spacing:.05em; }
         .ir-val   { font-size:0.88rem; color:#cbd5e1; line-height:1.55; margin-top:2px; margin-bottom:10px; }
 
         /* Design guideline grid */
@@ -139,9 +141,9 @@
         .guide-item canvas { display:block; width:100%; }
         .guide-body { padding:14px; }
         .guide-body h3 { font-size:0.95rem; color:#e2e8f0; margin-bottom:4px; }
-        .guide-body p  { font-size:0.82rem; color:#64748b; line-height:1.55; }
+        .guide-body p  { font-size:0.82rem; color:#8593a7; line-height:1.55; }
 
-        .source-line { font-size:.78rem; color:#475569; text-align:center; margin-top:8px; }
+        .source-line { font-size:.78rem; color:#8192aa; text-align:center; margin-top:8px; }
         .back-link {
             display:block; text-align:center; margin-top:30px;
             color:#38bdf8; text-decoration:none; font-size:.92rem;
@@ -194,12 +196,12 @@
             <button class="play-btn" id="proc-play">▶ Animate</button>
             <div class="ctrl-group">
                 <span class="ctrl-label">Melt Flow Rate</span>
-                <input type="range" id="flow-slider" min="1" max="10" value="5" step="1">
+                <input type="range" id="flow-slider" min="1" max="10" value="5" step="1" aria-label="Melt Flow Rate">
                 <span class="ctrl-val" id="flow-val">Medium</span>
             </div>
         </div>
         <div class="canvas-wrap">
-            <canvas id="proc-canvas"></canvas>
+            <canvas id="proc-canvas" role="img" aria-label="Animated cross-section of an atomization tower: a stream of molten metal falls from a tundish nozzle and is broken into droplets by high-velocity jets (water or gas, chosen with the toggle buttons). Droplets solidify as they fall and collect as powder at the bottom. Water jets give irregular particles; gas jets give spherical particles. The flow-rate slider changes the melt stream."></canvas>
         </div>
         <div class="info-box" id="proc-info" style="margin-top:14px;">
             <div style="display:flex;gap:20px;flex-wrap:wrap;">
@@ -225,9 +227,9 @@
 
     <div class="card">
         <h2>Process Comparison: Water vs. Gas Atomization</h2>
-        <table class="spec-table">
+        <table class="spec-table"><caption class="sr-only">Process Comparison: Water vs. Gas Atomization</caption>
             <thead>
-                <tr><th>Parameter</th><th>Water Atomization</th><th>Gas Atomization</th></tr>
+                <tr><th scope="col">Parameter</th><th scope="col">Water Atomization</th><th scope="col">Gas Atomization</th></tr>
             </thead>
             <tbody>
                 <tr><td>Atomizing Medium</td><td>High-pressure water</td><td>Inert gas (N₂, Ar, He)</td></tr>
@@ -270,7 +272,7 @@
         <div class="controls" style="margin-bottom:14px;">
             <div class="ctrl-group">
                 <span class="ctrl-label">Magnification</span>
-                <input type="range" id="mag-slider" min="0" max="2" value="1" step="1">
+                <input type="range" id="mag-slider" min="0" max="2" value="1" step="1" aria-label="Magnification">
                 <span class="ctrl-val" id="mag-val">×200</span>
             </div>
             <div class="ctrl-group">
@@ -285,13 +287,13 @@
                 <div class="sem-label" style="color:#60a5fa;border-bottom-color:#1d4ed8;">
                     Water-Atomized Iron — Höganäs ASC 100.29
                 </div>
-                <canvas id="sem-water"></canvas>
+                <canvas data-a11y-essential id="sem-water" role="img" aria-label="Simulated SEM image of water-atomized iron powder: irregular, angular particles with rough, spongy surfaces and small satellite fines attached."></canvas>
             </div>
             <div class="sem-panel">
                 <div class="sem-label" style="color:#4ade80;border-bottom-color:#065f46;">
                     Gas-Atomized Iron — Höganäs AM Fe
                 </div>
-                <canvas id="sem-gas"></canvas>
+                <canvas data-a11y-essential id="sem-gas" role="img" aria-label="Simulated SEM image of gas-atomized iron powder: smooth, nearly spherical particles of more uniform size."></canvas>
             </div>
         </div>
         <div style="display:flex;gap:16px;margin-top:14px;flex-wrap:wrap;">
@@ -337,9 +339,9 @@
     <div class="card">
         <h2>Particle Size Distribution — Water vs. Gas Atomized Iron</h2>
         <div class="canvas-wrap">
-            <canvas id="psd-canvas"></canvas>
+            <canvas id="psd-canvas" role="img" aria-label="Particle size distribution chart, volume percent versus particle size in micrometres, comparing two powders. Water-atomized Höganäs ASC 100.29: broad curve with D10 about 40, D50 about 100, D90 about 200 µm. Gas-atomized Höganäs AM Fe: narrower curve shifted finer, D10 about 15, D50 about 35, D90 about 65 µm."></canvas>
         </div>
-        <p style="margin-top:10px;font-size:0.82rem;color:#64748b;">
+        <p style="margin-top:10px;font-size:0.82rem;color:#8593a7;">
             Volume-weighted PSD (q₃) from laser diffraction. Water-atomized (Höganäs ASC 100.29):
             D10 ≈ 40 µm, D50 ≈ 100 µm, D90 ≈ 200 µm. Gas-atomized (Höganäs AM Fe):
             D10 ≈ 15 µm, D50 ≈ 35 µm, D90 ≈ 65 µm. Narrower PSD and finer size in gas-atomized
@@ -349,13 +351,13 @@
 
     <div class="card">
         <h2>Key Powder Properties — Höganäs Grade Data</h2>
-        <table class="spec-table">
+        <table class="spec-table"><caption class="sr-only">Key Powder Properties — Höganäs Grade Data</caption>
             <thead>
                 <tr>
-                    <th>Property (Test Method)</th>
-                    <th>ASC 100.29 (Water-At.)</th>
-                    <th>ABC 100.30 (Water-At. + anneal)</th>
-                    <th>AM Fe (Gas-At.)</th>
+                    <th scope="col">Property (Test Method)</th>
+                    <th scope="col">ASC 100.29 (Water-At.)</th>
+                    <th scope="col">ABC 100.30 (Water-At. + anneal)</th>
+                    <th scope="col">AM Fe (Gas-At.)</th>
                 </tr>
             </thead>
             <tbody>
@@ -377,9 +379,9 @@
     <div class="card">
         <h2>Compressibility Curve — Green Density vs. Compaction Pressure</h2>
         <div class="canvas-wrap">
-            <canvas id="compress-canvas"></canvas>
+            <canvas id="compress-canvas" role="img" aria-label="Compressibility chart: green density (g/cm³) rises with compaction pressure (MPa) for both powders. The water-atomized curve lies above the gas-atomized curve at every pressure, because irregular particles deform and interlock."></canvas>
         </div>
-        <p style="margin-top:10px;font-size:0.82rem;color:#64748b;">
+        <p style="margin-top:10px;font-size:0.82rem;color:#8593a7;">
             Compressibility is the most important die-pressing characteristic. Irregular water-atomized particles
             achieve higher green density at all pressures because they deform plastically and interlock.
             Spherical gas-atomized powder springs back elastically (Bauschinger effect), limiting green density.
@@ -921,7 +923,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
     (function drawPSD() {
         const W = PSD_W, H = PSD_H;
-        const PAD = { top: 28, right: 140, bottom: 52, left: 60 };
+        const PAD = { top: 28, right: 172, bottom: 52, left: 60 };
         const CW = W - PAD.left - PAD.right, CH = H - PAD.top - PAD.bottom;
 
         ctxP.fillStyle = '#0f172a'; ctxP.fillRect(0, 0, W, H);
@@ -1019,7 +1021,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
     (function drawCompressibility() {
         const W = CMP_W, H = CMP_H;
-        const PAD = { top: 28, right: 140, bottom: 52, left: 60 };
+        const PAD = { top: 28, right: 172, bottom: 52, left: 60 };
         const CW = W - PAD.left - PAD.right, CH = H - PAD.top - PAD.bottom;
 
         ctxC.fillStyle = '#0f172a'; ctxC.fillRect(0, 0, W, H);
@@ -1234,7 +1236,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
                 ctx.fillStyle = '#7f1d1d'; ctx.fillRect(25, b - 140, 90, 30);
                 ctx.fillStyle = '#ef4444'; ctx.fillRect(60, b - 170, 18, 30); // thin tall
                 ctx.fillStyle = '#f87171'; ctx.font = '9px Segoe UI';
-                ctx.fillText('H/D > 3', 69, b - 180); ctx.fillText('⚠ fragile', 69, b - 156);
+                ctx.fillText('H/D > 3', 69, b - 96); ctx.fillText('⚠ fragile', 69, b - 83);
                 ctx.fillStyle = '#f87171'; ctx.font = '11px Segoe UI';
                 ctx.fillText('Avoid', 70, b - 8);
                 // GOOD: squat boss
@@ -1242,7 +1244,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
                 ctx.fillStyle = '#14532d'; ctx.fillRect(ox, b - 100, 90, 30);
                 ctx.fillStyle = '#4ade80'; ctx.fillRect(ox + 28, b - 125, 34, 25);
                 ctx.fillStyle = '#86efac'; ctx.font = '9px Segoe UI';
-                ctx.fillText('H/D ≤ 2.5', ox + 45, b - 130); ctx.fillText('✓ robust', ox + 45, b - 108);
+                ctx.fillText('H/D ≤ 2.5', ox + 45, b - 56); ctx.fillText('✓ robust', ox + 45, b - 43);
                 ctx.fillStyle = '#4ade80'; ctx.font = '11px Segoe UI';
                 ctx.fillText('Preferred', ox + 45, b - 8);
             }

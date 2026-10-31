@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Powder Metallurgy – Process, Design &amp; Sintering Fundamentals</title>
     <style>
@@ -120,7 +122,7 @@
         #step-info { flex: 1; min-width: 240px; }
         #step-info h3 { color: #7dd3fc; font-size: 1.05rem; margin-bottom: 10px; }
         .step-meta { display: flex; flex-direction: column; gap: 8px; }
-        .smr-label { font-size: 0.73rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .smr-label { font-size: 0.73rem; color: #8593a7; text-transform: uppercase; letter-spacing: 0.05em; }
         .smr-val { font-size: 0.88rem; color: #cbd5e1; line-height: 1.55; margin-top: 2px; }
 
         /* Material grid */
@@ -145,7 +147,7 @@
             border-radius: 4px; padding: 1px 7px;
             font-size: 0.72rem; margin-bottom: 6px;
         }
-        .mat-card p { font-size: 0.8rem; color: #64748b; line-height: 1.5; }
+        .mat-card p { font-size: 0.8rem; color: #8593a7; line-height: 1.5; }
         #mat-detail {
             background: #0f172a;
             border: 1px solid #38bdf8;
@@ -160,7 +162,7 @@
         #mat-detail h3 { color: #7dd3fc; margin-bottom: 8px; font-size: 1.05rem; }
         .mat-spec-row { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
         .mat-spec { flex: 1; min-width: 130px; }
-        .mat-spec .spec-name { font-size: 0.73rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .mat-spec .spec-name { font-size: 0.73rem; color: #8593a7; text-transform: uppercase; letter-spacing: 0.05em; }
         .mat-spec .spec-val  { font-size: 0.9rem; color: #e2e8f0; margin-top: 2px; }
 
         /* Design guidelines */
@@ -178,7 +180,7 @@
         .guide-item canvas { display: block; width: 100%; }
         .guide-body { padding: 14px; }
         .guide-body h3 { font-size: 0.95rem; color: #e2e8f0; margin-bottom: 4px; }
-        .guide-body p  { font-size: 0.82rem; color: #64748b; line-height: 1.55; }
+        .guide-body p  { font-size: 0.82rem; color: #8593a7; line-height: 1.55; }
 
         /* Sintering selector */
         .sinter-selector {
@@ -195,7 +197,7 @@
             font-family: inherit;
             transition: border-color 0.15s, color 0.15s;
         }
-        .sinter-btn:hover { border-color: #64748b; color: #e2e8f0; }
+        .sinter-btn:hover { border-color: #8593a7; color: #e2e8f0; }
         .sinter-btn.active { border-color: #a78bfa; color: #c4b5fd; background: #1a0f2e; }
         #sinter-panel {
             display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;
@@ -207,7 +209,7 @@
         #sinter-info { flex: 1; min-width: 220px; }
         #sinter-info h3 { color: #a78bfa; font-size: 1.1rem; margin-bottom: 10px; }
         .sinter-meta { display: flex; flex-direction: column; gap: 10px; }
-        .snr-label { font-size: 0.73rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .snr-label { font-size: 0.73rem; color: #8593a7; text-transform: uppercase; letter-spacing: 0.05em; }
         .snr-val   { font-size: 0.88rem; color: #cbd5e1; line-height: 1.55; margin-top: 2px; }
 
         /* Case study cards */
@@ -224,7 +226,7 @@
             cursor: pointer;
             transition: border-color 0.15s;
         }
-        .case-card:hover { border-color: #64748b; }
+        .case-card:hover { border-color: #8593a7; }
         .case-card.selected { border-color: #f59e0b; }
         .case-tag {
             display: inline-block;
@@ -234,7 +236,7 @@
         .tag-pm   { background: #1e3a5f; color: #93c5fd; }
         .tag-am   { background: #2d1e5f; color: #c4b5fd; }
         .case-card h3 { font-size: 0.95rem; color: #e2e8f0; margin-bottom: 6px; }
-        .case-card p  { font-size: 0.82rem; color: #64748b; line-height: 1.5; }
+        .case-card p  { font-size: 0.82rem; color: #8593a7; line-height: 1.5; }
         #case-detail {
             background: #0f172a;
             border: 1px solid #f59e0b;
@@ -247,11 +249,11 @@
         .case-body { color: #cbd5e1; font-size: 0.9rem; line-height: 1.65; }
         .case-specs { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; }
         .case-spec { flex: 1; min-width: 130px; }
-        .case-spec .cs-label { font-size: 0.72rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .case-spec .cs-label { font-size: 0.72rem; color: #8593a7; text-transform: uppercase; letter-spacing: 0.05em; }
         .case-spec .cs-val   { font-size: 0.88rem; color: #e2e8f0; margin-top: 2px; }
 
         .source-line {
-            font-size: 0.78rem; color: #475569;
+            font-size: 0.78rem; color: #8192aa;
             text-align: center; margin-top: 8px;
         }
         .back-link {
@@ -314,7 +316,7 @@
         <h2>Four-Stage PM Process — Click Each Stage</h2>
         <div class="process-steps" id="process-steps"></div>
         <div id="step-detail">
-            <canvas id="step-canvas" width="300" height="220"></canvas>
+            <canvas id="step-canvas" width="300" height="220" role="img" aria-label="Illustration of the powder metallurgy stage chosen with the buttons above: powder production by gas or water atomization; mixing and blending iron powder with graphite and lubricant; compaction between upper and lower punches in a die, with density gradients; sintering in a continuous mesh-belt furnace (preheat burn-off, sintering zone in nitrogen–hydrogen atmosphere, cooling); and optional secondary operations such as sizing, oil impregnation, steam treatment, and heat treatment. The selected stage is described in text."></canvas>
             <div id="step-info">
                 <h3 id="step-title">Select a stage above</h3>
                 <div class="step-meta" id="step-meta"></div>
@@ -324,13 +326,13 @@
 
     <div class="card">
         <h2>Process Capability (MPIF Standards)</h2>
-        <table class="spec-table">
+        <table class="spec-table"><caption class="sr-only">Process Capability (MPIF Standards)</caption>
             <thead>
                 <tr>
-                    <th>Parameter</th>
-                    <th>Typical Range</th>
-                    <th>Best Achievable</th>
-                    <th>Rating</th>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Typical Range</th>
+                    <th scope="col">Best Achievable</th>
+                    <th scope="col">Rating</th>
                 </tr>
             </thead>
             <tbody>
@@ -407,7 +409,7 @@
         </p>
         <div class="density-bar-wrap">
             <div class="density-label">Loose Powder (tap density)</div>
-            <div class="density-track"><div class="density-fill" style="width:60%;background:linear-gradient(90deg,#475569,#64748b);">55–65%</div></div>
+            <div class="density-track"><div class="density-fill" style="width:60%;background:linear-gradient(90deg,#334155,#475569);">55–65%</div></div>
         </div>
         <div class="density-bar-wrap">
             <div class="density-label">Green Compact (after uniaxial pressing at 400–600 MPa)</div>
@@ -467,8 +469,8 @@
 
     <div class="card">
         <h2>Property Comparison: PM vs. Wrought vs. Cast</h2>
-        <canvas id="prop-canvas" width="680" height="300" style="border-radius:8px;border:1px solid #334155;max-width:100%;"></canvas>
-        <p style="margin-top:8px;font-size:0.8rem;color:#64748b;">
+        <canvas id="prop-canvas" width="680" height="300" style="border-radius:8px;border:1px solid #334155;max-width:100%;" role="img" aria-label="Bar chart of tensile strength in MPa for iron-based parts made by PM at different densities, by wrought processing, and by casting. PM strength rises with density and approaches wrought values at full density."></canvas>
+        <p style="margin-top:8px;font-size:0.8rem;color:#8593a7;">
             Tensile strength comparison for iron-based materials across manufacturing routes. PM properties improve
             significantly with increased density (via warm compaction, HIP, or alloying).
         </p>
@@ -495,7 +497,7 @@
     <div class="card">
         <div class="sinter-selector" id="sinter-selector"></div>
         <div id="sinter-panel">
-            <canvas id="sinter-canvas" width="340" height="280"></canvas>
+            <canvas id="sinter-canvas" width="340" height="280" role="img" aria-label="Two touching powder particles showing the sintering mechanism chosen above: surface diffusion moves atoms along the surface into the neck without shrinkage, while grain-boundary and lattice diffusion move atoms from the bulk into the neck, pulling particle centres together for true shrinkage and densification."></canvas>
             <div id="sinter-info">
                 <h3 id="sinter-name">Select a mechanism above</h3>
                 <div class="sinter-meta" id="sinter-meta"></div>
@@ -505,8 +507,8 @@
 
     <div class="card">
         <h2>Sintering Stages &amp; Densification</h2>
-        <canvas id="sinter-curve" width="680" height="260" style="border-radius:8px;border:1px solid #334155;max-width:100%;"></canvas>
-        <p style="margin-top:8px;font-size:0.8rem;color:#64748b;">
+        <canvas id="sinter-curve" width="680" height="260" style="border-radius:8px;border:1px solid #334155;max-width:100%;" role="img" aria-label="Densification curve for iron powder sintered at 1120 °C: relative density in percent versus time, rising quickly in the initial neck-growth stage, more slowly in the intermediate stage as pores shrink, and levelling off in the final stage as isolated pores close."></canvas>
+        <p style="margin-top:8px;font-size:0.8rem;color:#8593a7;">
             Typical densification curve for iron powder sintered at 1120 °C. Three stages: initial neck formation
             (rapid surface area reduction, little shrinkage), intermediate (pore channels close, grain growth begins),
             and final (isolated pores shrink slowly, grain coarsening).
@@ -1451,7 +1453,7 @@ const SINTER_MECHS = [
     ctx.scale(dpr, dpr);
 
     const W=cssW, H=cssH;
-    const PAD={top:20,right:130,bottom:50,left:66};
+    const PAD={top:20,right:156,bottom:50,left:66};
     const CW=W-PAD.left-PAD.right, CH=H-PAD.top-PAD.bottom;
 
     ctx.fillStyle='#0f172a'; ctx.fillRect(0,0,W,H);

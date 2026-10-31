@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Weld Cracking Types</title>
 <style>
@@ -14,7 +16,7 @@ header h1 { font-size:1.75rem; font-weight:700; color:#f1f5f9; }
 header .subtitle { color:#38bdf8; margin-top:6px; font-size:0.88rem; }
 
 .tab-bar { display:flex; flex-wrap:wrap; background:#0f2040; border-bottom:2px solid #1e3a5f; padding:0 20px; position:sticky; top:0; z-index:10; }
-.tab-btn { padding:11px 18px; font-size:0.84rem; font-weight:600; border:none; background:none; cursor:pointer; color:#64748b; border-bottom:3px solid transparent; margin-bottom:-2px; transition:all 0.15s; white-space:nowrap; }
+.tab-btn { padding:11px 18px; font-size:0.84rem; font-weight:600; border:none; background:none; cursor:pointer; color:#7c8ba1; border-bottom:3px solid transparent; margin-bottom:-2px; transition:all 0.15s; white-space:nowrap; }
 .tab-btn:hover { color:#38bdf8; }
 .tab-btn.active { color:#38bdf8; border-bottom-color:#38bdf8; }
 
@@ -62,6 +64,7 @@ canvas { display:block; border-radius:8px; }
   <div class="subtitle">Lincoln Electric — Hot / Cold / Lamellar Tearing &nbsp;&middot;&nbsp; AWS — Visual Crack Morphology Reference &nbsp;&middot;&nbsp; TWI — Lamellar Tearing Mechanism &amp; Stepped Morphology</div>
 </header>
 
+<main id="main-content">
 <nav class="tab-bar">
   <button class="tab-btn active" onclick="showTab('lincoln',this)">Lincoln Electric — Crack Types</button>
   <button class="tab-btn" onclick="showTab('aws',this)">AWS — Visual Comparison</button>
@@ -76,17 +79,17 @@ canvas { display:block; border-radius:8px; }
     <p>Weld cracking can occur during solidification (hot cracking), after cooling (cold cracking), or through the base metal thickness under through-thickness weld stress (lamellar tearing). Each has a distinct mechanism, location, temperature range, and set of causes. Correct identification drives the right prevention strategy.</p>
     <div class="three-grid" style="margin-top:16px;">
       <div>
-        <div class="canvas-label" style="color:#f97316;">Hot Cracking — Solidification</div>
-        <canvas id="cv-hot" width="300" height="290"></canvas>
+        <div class="canvas-label" style="color:#fa8534;">Hot Cracking — Solidification</div>
+        <canvas id="cv-hot" width="300" height="290" role="img" aria-label="Weld cross-section showing a hot (solidification) crack running down the weld centreline where columnar dendrites from both sides meet and the last liquid tears apart."></canvas>
         <div class="ann-list" style="margin-top:10px;">
-          <div class="ann-item"><div class="ann-dot" style="background:#ef4444;"></div><div class="ann-text"><strong style="color:#ef4444;">Solidification crack</strong> — centerline of weld; forms as dendrites solidify and inter-dendritic liquid film tears under shrinkage stress</div></div>
-          <div class="ann-item"><div class="ann-dot" style="background:#f97316;"></div><div class="ann-text"><strong style="color:#f97316;">HAZ liquation crack</strong> — at fusion line; grain boundary liquation in HAZ during high heat input</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#f05252;"></div><div class="ann-text"><strong style="color:#f05252;">Solidification crack</strong> — centerline of weld; forms as dendrites solidify and inter-dendritic liquid film tears under shrinkage stress</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#fa8534;"></div><div class="ann-text"><strong style="color:#fa8534;">HAZ liquation crack</strong> — at fusion line; grain boundary liquation in HAZ during high heat input</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#fbbf24;"></div><div class="ann-text"><strong style="color:#fbbf24;">Temperature range</strong> — occurs at solidification temp (~1400°C for carbon steel); crack is open at high temperature</div></div>
         </div>
       </div>
       <div>
         <div class="canvas-label" style="color:#38bdf8;">Cold Cracking — HIC / Hydrogen-Induced</div>
-        <canvas id="cv-cold" width="300" height="290"></canvas>
+        <canvas id="cv-cold" width="300" height="290" role="img" aria-label="Weld cross-section showing cold (hydrogen-induced) cracks in the heat-affected zone: an underbead crack parallel to the fusion line and a toe crack starting at the weld toe."></canvas>
         <div class="ann-list" style="margin-top:10px;">
           <div class="ann-item"><div class="ann-dot" style="background:#38bdf8;"></div><div class="ann-text"><strong style="color:#38bdf8;">Underbead crack</strong> — in HAZ parallel to fusion line; most common HIC location in susceptible microstructure</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#7dd3fc;"></div><div class="ann-text"><strong style="color:#7dd3fc;">Toe crack</strong> — initiates at weld toe stress concentration; propagates into plate under residual stress</div></div>
@@ -94,10 +97,10 @@ canvas { display:block; border-radius:8px; }
         </div>
       </div>
       <div>
-        <div class="canvas-label" style="color:#a78bfa;">Lamellar Tearing — Z-Direction</div>
-        <canvas id="cv-lamellar" width="300" height="290"></canvas>
+        <div class="canvas-label" style="color:#ae95fa;">Lamellar Tearing — Z-Direction</div>
+        <canvas id="cv-lamellar" width="300" height="290" role="img" aria-label="Lamellar tearing beneath a T-joint weld: a stepped, staircase-shaped crack in the plate below the fusion line, with flat terraces along manganese sulfide inclusion stringers joined by vertical risers."></canvas>
         <div class="ann-list" style="margin-top:10px;">
-          <div class="ann-item"><div class="ann-dot" style="background:#a78bfa;"></div><div class="ann-text"><strong style="color:#a78bfa;">Stepped crack</strong> — staircase morphology below fusion line; terraces along MnS stringers, risers through ferrite</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#ae95fa;"></div><div class="ann-text"><strong style="color:#ae95fa;">Stepped crack</strong> — staircase morphology below fusion line; terraces along MnS stringers, risers through ferrite</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#c4b5fd;"></div><div class="ann-text"><strong style="color:#c4b5fd;">MnS inclusions</strong> — elongated parallel to rolling direction; low through-thickness ductility (%RA<sub>Z</sub>)</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#ddd6fe;"></div><div class="ann-text"><strong style="color:#ddd6fe;">Through-thickness stress</strong> — weld shrinkage forces act in Z-direction (through plate); worst in T-joints and corner joints</div></div>
         </div>
@@ -108,8 +111,8 @@ canvas { display:block; border-radius:8px; }
   <div class="card">
     <h2>Comparison — Causes, Detection &amp; Prevention</h2>
     <div style="overflow-x:auto;">
-    <table class="ref-table" style="min-width:700px;">
-      <thead><tr><th>Attribute</th><th style="color:#f97316;">Hot Cracking</th><th style="color:#38bdf8;">Cold Cracking (HIC)</th><th style="color:#a78bfa;">Lamellar Tearing</th></tr></thead>
+    <table class="ref-table" style="min-width:700px;"><caption class="sr-only">Comparison — Causes, Detection &amp; Prevention</caption>
+      <thead><tr><th scope="col">Attribute</th><th style="color:#fa8534;" scope="col">Hot Cracking</th><th style="color:#38bdf8;" scope="col">Cold Cracking (HIC)</th><th style="color:#ae95fa;" scope="col">Lamellar Tearing</th></tr></thead>
       <tbody>
         <tr><td><strong>Temperature range</strong></td><td>At solidification; ~1200–1400°C</td><td>&lt;150°C; hours–days after welding</td><td>Near ambient; during or after welding</td></tr>
         <tr><td><strong>Location</strong></td><td>Weld metal centreline; HAZ fusion line</td><td>HAZ (underbead, toe, root); occasionally weld metal</td><td>Base metal below HAZ; parallel to plate surface</td></tr>
@@ -134,34 +137,34 @@ canvas { display:block; border-radius:8px; }
     <p>AWS D1.1, AWS B4.0, and the AWS Welding Inspection Handbook categorise weld cracks by location and orientation. Understanding where each crack appears in a cross-section — and how it looks — guides both non-destructive testing method selection and root cause analysis.</p>
     <div class="six-grid" style="margin-top:16px;">
       <div>
-        <div class="canvas-label" style="color:#ef4444;">Centreline Crack</div>
-        <canvas id="cv-aws-1" width="240" height="188"></canvas>
-        <p style="font-size:0.78rem; color:#64748b; margin-top:6px;">Cross-section view. Crack splits weld bead down the centre. Hot cracking mechanism. High S/P; concave bead; high restraint.</p>
+        <div class="canvas-label" style="color:#f05252;">Centreline Crack</div>
+        <canvas id="cv-aws-1" width="240" height="188" role="img" aria-label="Centerline crack: cross-section with a crack splitting the weld bead down the middle."></canvas>
+        <p style="font-size:0.78rem; color:#7c8ba1; margin-top:6px;">Cross-section view. Crack splits weld bead down the centre. Hot cracking mechanism. High S/P; concave bead; high restraint.</p>
       </div>
       <div>
-        <div class="canvas-label" style="color:#f97316;">Crater Crack</div>
-        <canvas id="cv-aws-2" width="240" height="188"></canvas>
-        <p style="font-size:0.78rem; color:#64748b; margin-top:6px;">Plan view (top). Star crack at weld end crater. Hot cracking; insufficient crater fill at arc stop. Prevent: backfill crater before stopping arc.</p>
+        <div class="canvas-label" style="color:#fa8534;">Crater Crack</div>
+        <canvas id="cv-aws-2" width="240" height="188" role="img" aria-label="Crater crack: top view of the end of a weld with a star-shaped crack in the unfilled crater."></canvas>
+        <p style="font-size:0.78rem; color:#7c8ba1; margin-top:6px;">Plan view (top). Star crack at weld end crater. Hot cracking; insufficient crater fill at arc stop. Prevent: backfill crater before stopping arc.</p>
       </div>
       <div>
         <div class="canvas-label" style="color:#fbbf24;">Transverse Crack</div>
-        <canvas id="cv-aws-3" width="240" height="188"></canvas>
-        <p style="font-size:0.78rem; color:#64748b; margin-top:6px;">Longitudinal section (side view). Crack perpendicular to weld axis. Hot or cold; high restraint transverse to weld; high-strength weld metal.</p>
+        <canvas id="cv-aws-3" width="240" height="188" role="img" aria-label="Transverse crack: side view along the weld with cracks running across the weld, perpendicular to its axis."></canvas>
+        <p style="font-size:0.78rem; color:#7c8ba1; margin-top:6px;">Longitudinal section (side view). Crack perpendicular to weld axis. Hot or cold; high restraint transverse to weld; high-strength weld metal.</p>
       </div>
       <div>
         <div class="canvas-label" style="color:#38bdf8;">Underbead Crack</div>
-        <canvas id="cv-aws-4" width="240" height="188"></canvas>
-        <p style="font-size:0.78rem; color:#64748b; margin-top:6px;">Cross-section view. HAZ crack parallel to fusion line. Cold cracking (HIC); requires hydrogen + susceptible martensite + tensile stress. Most common HIC form.</p>
+        <canvas id="cv-aws-4" width="240" height="188" role="img" aria-label="Underbead crack: cross-section with a crack in the heat-affected zone just below and parallel to the fusion line."></canvas>
+        <p style="font-size:0.78rem; color:#7c8ba1; margin-top:6px;">Cross-section view. HAZ crack parallel to fusion line. Cold cracking (HIC); requires hydrogen + susceptible martensite + tensile stress. Most common HIC form.</p>
       </div>
       <div>
         <div class="canvas-label" style="color:#7dd3fc;">Toe Crack</div>
-        <canvas id="cv-aws-5" width="240" height="188"></canvas>
-        <p style="font-size:0.78rem; color:#64748b; margin-top:6px;">Cross-section view. Initiates at weld toe stress concentration (Kt ≈ 2–4). Cold cracking; propagates diagonally into plate under residual stress. Surface-breaking — detectable by MT/PT.</p>
+        <canvas id="cv-aws-5" width="240" height="188" role="img" aria-label="Toe crack: cross-section with a crack starting at the weld toe and running diagonally into the base plate."></canvas>
+        <p style="font-size:0.78rem; color:#7c8ba1; margin-top:6px;">Cross-section view. Initiates at weld toe stress concentration (Kt ≈ 2–4). Cold cracking; propagates diagonally into plate under residual stress. Surface-breaking — detectable by MT/PT.</p>
       </div>
       <div>
-        <div class="canvas-label" style="color:#a78bfa;">Root Crack</div>
-        <canvas id="cv-aws-6" width="240" height="188"></canvas>
-        <p style="font-size:0.78rem; color:#64748b; margin-top:6px;">Cross-section view. At weld root — highest restraint location and often smallest cross-section. Cold or hot. Groove welds: insufficient root opening or penetration. Fillet welds: lack of fusion at root.</p>
+        <div class="canvas-label" style="color:#ae95fa;">Root Crack</div>
+        <canvas id="cv-aws-6" width="240" height="188" role="img" aria-label="Root crack: cross-section of a groove weld with a crack at the weld root."></canvas>
+        <p style="font-size:0.78rem; color:#7c8ba1; margin-top:6px;">Cross-section view. At weld root — highest restraint location and often smallest cross-section. Cold or hot. Groove welds: insufficient root opening or penetration. Fillet welds: lack of fusion at root.</p>
       </div>
     </div>
   </div>
@@ -169,8 +172,8 @@ canvas { display:block; border-radius:8px; }
   <div class="card">
     <h2>AWS Classification Summary</h2>
     <div style="overflow-x:auto;">
-    <table class="ref-table" style="min-width:620px;">
-      <thead><tr><th>Crack Type</th><th>AWS Category</th><th>Typical Size</th><th>Primary NDT Method</th><th>AWS D1.1 Reference</th></tr></thead>
+    <table class="ref-table" style="min-width:620px;"><caption class="sr-only">AWS Classification Summary</caption>
+      <thead><tr><th scope="col">Crack Type</th><th scope="col">AWS Category</th><th scope="col">Typical Size</th><th scope="col">Primary NDT Method</th><th scope="col">AWS D1.1 Reference</th></tr></thead>
       <tbody>
         <tr><td><strong>Centreline</strong></td><td>Hot crack — solidification</td><td>Full weld length; mm–cm depth</td><td>RT (if buried); PT/MT if surface-open</td><td>Clause 6.8.1 — visual; Annex B cracks</td></tr>
         <tr><td><strong>Crater</strong></td><td>Hot crack — solidification</td><td>2–15 mm diameter star pattern</td><td>Visual + PT/MT (surface)</td><td>Clause 6.8.1; prohibited in all welds</td></tr>
@@ -191,13 +194,13 @@ canvas { display:block; border-radius:8px; }
     <div class="source-tag">TWI — The Welding Institute — Lamellar Tearing Guide</div>
     <h2>Lamellar Tearing — Mechanism, Stepped Morphology &amp; Inclusion Role</h2>
     <p>TWI's research on lamellar tearing established the role of elongated MnS inclusions as the primary material factor. Weld shrinkage loads act through the plate thickness (Z-direction). Where inclusions provide planes of weakness parallel to the plate surface, cracks propagate along inclusions (terraces) and jump between bands (risers), creating the characteristic stepped or staircase fracture path below the HAZ.</p>
-    <canvas id="cv-twi" width="540" height="340" style="margin:16px auto; display:block;"></canvas>
+    <canvas id="cv-twi" width="540" height="340" style="margin:16px auto; display:block;" role="img" aria-label="Lamellar tearing mechanism: a T-joint where weld shrinkage pulls through the plate thickness, opening elongated manganese sulfide inclusions into a stepped crack."></canvas>
 
     <div class="two-grid" style="margin-top:18px;">
       <div>
         <h3>Three Conditions for Lamellar Tearing (TWI)</h3>
         <div class="ann-list">
-          <div class="ann-item"><div class="ann-dot" style="background:#a78bfa;"></div><div class="ann-text"><strong style="color:#a78bfa;">Through-thickness stress</strong> — weld shrinkage loading acting in Z-direction; worst in T-joints, corner joints, cruciform joints where the plate is loaded through its thickness</div></div>
+          <div class="ann-item"><div class="ann-dot" style="background:#ae95fa;"></div><div class="ann-text"><strong style="color:#ae95fa;">Through-thickness stress</strong> — weld shrinkage loading acting in Z-direction; worst in T-joints, corner joints, cruciform joints where the plate is loaded through its thickness</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#c4b5fd;"></div><div class="ann-text"><strong style="color:#c4b5fd;">Low Z-direction ductility</strong> — %RA<sub>Z</sub> &lt;20% (measured by Z-test, BS 6443 / ISO 7778); caused by elongated MnS, oxide, or silicate inclusions parallel to plate rolling surface</div></div>
           <div class="ann-item"><div class="ann-dot" style="background:#ddd6fe;"></div><div class="ann-text"><strong style="color:#ddd6fe;">Location below HAZ</strong> — crack initiates just below the fusion line in the base metal; HAZ thermal cycle reduces inclusion–matrix bond strength further</div></div>
         </div>
@@ -216,8 +219,8 @@ canvas { display:block; border-radius:8px; }
   <div class="card">
     <h2>Susceptibility Assessment &amp; Prevention — TWI / BS 7910 / AWS D1.1</h2>
     <div style="overflow-x:auto;">
-    <table class="ref-table" style="min-width:600px;">
-      <thead><tr><th>Factor</th><th>Low Risk</th><th>Moderate Risk</th><th>High Risk</th><th>Prevention Action</th></tr></thead>
+    <table class="ref-table" style="min-width:600px;"><caption class="sr-only">Susceptibility Assessment &amp; Prevention — TWI / BS 7910 / AWS D1.1</caption>
+      <thead><tr><th scope="col">Factor</th><th scope="col">Low Risk</th><th scope="col">Moderate Risk</th><th scope="col">High Risk</th><th scope="col">Prevention Action</th></tr></thead>
       <tbody>
         <tr><td><strong>Z-direction ductility (%RA<sub>Z</sub>)</strong></td><td>&gt;35%</td><td>20–35%</td><td>&lt;20%</td><td>Specify Z25 (≥25%) or Z35 (≥35%) to BS EN 10164 / ASTM A770</td></tr>
         <tr><td><strong>Plate thickness</strong></td><td>&lt;20 mm</td><td>20–40 mm</td><td>&gt;40 mm</td><td>Design for reduced through-thickness restraint; use thinner plates where possible</td></tr>
@@ -231,8 +234,8 @@ canvas { display:block; border-radius:8px; }
 
     <h3 style="margin-top:16px;">Joint Redesign Strategies (TWI)</h3>
     <div style="overflow-x:auto;">
-    <table class="ref-table" style="min-width:560px;">
-      <thead><tr><th>Strategy</th><th>How It Works</th><th>Typical Application</th></tr></thead>
+    <table class="ref-table" style="min-width:560px;"><caption class="sr-only">Joint Redesign Strategies (TWI)</caption>
+      <thead><tr><th scope="col">Strategy</th><th scope="col">How It Works</th><th scope="col">Typical Application</th></tr></thead>
       <tbody>
         <tr><td><strong>Buttering</strong></td><td>Apply 1–3 ductile weld runs to the susceptible plate face before assembly; crack-prone base metal is no longer at the fusion line — only ductile weld butter layer is</td><td>Very susceptible plates; retrofit; high-restraint corner joints</td></tr>
         <tr><td><strong>Balanced welding sequence</strong></td><td>Deposit weld passes alternately on each side to balance shrinkage stresses; reduces net Z-direction residual stress build-up</td><td>Both sides of T-joint or cruciform; symmetric joints</td></tr>
@@ -245,6 +248,7 @@ canvas { display:block; border-radius:8px; }
   </div>
 </div>
 
+</main>
 <div class="back"><a href="index.html">← Back to Visualizations</a></div>
 
 <script>
@@ -399,13 +403,9 @@ function drawColdCracking() {
   const CX = g.CX;
 
   // Hydrogen H symbols scattered in weld metal
-  const rngH = seeded(222);
-  ctx.fillStyle = 'rgba(147,197,253,0.45)'; ctx.font = 'bold 9px Segoe UI,Arial'; ctx.textAlign = 'center';
-  for (let i = 0; i < 12; i++) {
-    const hx = CX + (rngH() - 0.5) * 80;
-    const hy = g.pY + 12 + rngH() * 80;
-    ctx.fillText('H', hx, hy);
-  }
+  // Fixed positions (instead of random scatter) so the H symbols never pile onto each other or the labels
+  ctx.fillStyle = 'rgba(147,197,253,0.9)'; ctx.font = 'bold 9px Segoe UI,Arial'; ctx.textAlign = 'center';
+  [[-26,12],[0,20],[26,12],[-16,32],[-10,46],[-24,58]].forEach(([dx, dy]) => ctx.fillText('H', CX + dx, g.pY + dy));
 
   // Underbead crack — in left HAZ, parallel to and just below fusion line
   const rngU = seeded(77);

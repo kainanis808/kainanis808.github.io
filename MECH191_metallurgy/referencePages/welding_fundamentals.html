@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Welding Fundamentals &amp; Joint Design</title>
 <style>
@@ -26,7 +28,7 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.95rem; }
 }
 .tab-btn {
     padding: 10px 18px; font-size: 0.84rem; font-weight: 600;
-    border: none; background: none; cursor: pointer; color: #64748b;
+    border: none; background: none; cursor: pointer; color: #606f85;
     border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.15s;
 }
 .tab-btn:hover { color: #1e3a5f; }
@@ -103,14 +105,14 @@ header .subtitle { color: #93c5fd; margin-top: 6px; font-size: 0.95rem; }
 .compare-card h3 { font-size: 0.88rem; font-weight: 700; color: #1e3a5f; margin-bottom: 8px; }
 .compare-card ul { list-style: none; font-size: 0.8rem; }
 .compare-card li { padding: 2px 0; color: #374151; }
-.compare-card li::before { content: "• "; color: #94a3b8; }
+.compare-card li::before { content: "• "; color: #627793; }
 
 .note-box {
     background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px;
     padding: 12px 16px; font-size: 0.83rem; color: #78350f; margin: 12px 0; line-height: 1.55;
 }
 
-footer { text-align: center; padding: 18px; font-size: 0.8rem; color: #94a3b8; border-top: 1px solid #e2e8f0; }
+footer { text-align: center; padding: 18px; font-size: 0.8rem; color: #627793; border-top: 1px solid #e2e8f0; }
 footer a { color: #1e3a5f; }
 </style>
 </head>
@@ -121,6 +123,7 @@ footer a { color: #1e3a5f; }
     <div class="subtitle">Lincoln Electric &middot; AWS Welding Handbook &middot; Miller Electric &middot; AWS A2.4 Symbols</div>
 </header>
 
+<main id="main-content">
 <div class="source-note">
     Sources: <strong>Lincoln Electric</strong> — <em>The Procedure Handbook of Arc Welding</em> (14th ed.) &amp; <em>Welding Fundamentals</em> &middot;
     <strong>AWS Welding Handbook Vol. 1 &amp; 2</strong> (9th ed.) &middot;
@@ -145,13 +148,13 @@ footer a { color: #1e3a5f; }
         <h2>Four Major Arc Welding Processes — At a Glance</h2>
         <p>All four processes use an electric arc to melt the base metal. They differ in electrode type, shielding method, and control of the weld pool. Use this table to select the right process for your application.</p>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
+        <table class="ref-table"><caption class="sr-only">Four Major Arc Welding Processes — At a Glance</caption>
             <tr>
-                <th>Attribute</th>
-                <th>SMAW (Stick)</th>
-                <th>GMAW (MIG)</th>
-                <th>GTAW (TIG)</th>
-                <th>FCAW (Flux-Core)</th>
+                <th scope="col">Attribute</th>
+                <th scope="col">SMAW (Stick)</th>
+                <th scope="col">GMAW (MIG)</th>
+                <th scope="col">GTAW (TIG)</th>
+                <th scope="col">FCAW (Flux-Core)</th>
             </tr>
             <tr><td>AWS Process No.</td><td>PAW 111</td><td>135 / 136</td><td>141</td><td>114 / 136</td></tr>
             <tr><td>Electrode</td><td>Consumable coated stick</td><td>Bare solid wire spool</td><td>Non-consumable tungsten</td><td>Flux-filled tubular wire</td></tr>
@@ -171,8 +174,8 @@ footer a { color: #1e3a5f; }
     <div class="section">
         <h2>Typical Current &amp; Voltage Ranges</h2>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-            <tr><th>Process</th><th>Current range (A)</th><th>Voltage range (V)</th><th>Wire/Electrode diam. (in)</th><th>Heat input note</th></tr>
+        <table class="ref-table"><caption class="sr-only">Typical Current &amp; Voltage Ranges</caption>
+            <tr><th scope="col">Process</th><th scope="col">Current range (A)</th><th scope="col">Voltage range (V)</th><th scope="col">Wire/Electrode diam. (in)</th><th scope="col">Heat input note</th></tr>
             <tr><td>SMAW</td><td>50–300</td><td>20–36</td><td>3/32 – 5/16 (stick)</td><td>HI = (V×A×60)/(1000×travel speed in./min)</td></tr>
             <tr><td>GMAW (short-circuit)</td><td>60–200</td><td>15–22</td><td>0.023–0.045</td><td>Low spatter; thin metal</td></tr>
             <tr><td>GMAW (spray)</td><td>200–500</td><td>26–40</td><td>0.035–0.062</td><td>High deposition; flat/1F</td></tr>
@@ -201,20 +204,20 @@ footer a { color: #1e3a5f; }
         <!-- Process diagram -->
         <div class="section-label">Process Diagram</div>
         <div class="diagram-wrap">
-        <svg width="680" height="220" viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif">
+        <svg width="680" height="220" viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" role="img" aria-label="SMAW process cross-section: a flux-coated electrode with arc (about 6000 °F, 3300 °C), molten weld pool, slag covering the solidified bead behind it, base metal, heat-affected zone, and direction of travel to the left.">
             <!-- Base metal plates -->
-            <rect x="40" y="148" width="600" height="40" rx="3" fill="#94a3b8"/>
-            <rect x="40" y="148" width="600" height="8" rx="2" fill="#cbd5e1"/>
+            <rect x="40" y="148" width="600" height="40" rx="3" fill="#94a3b8" stroke="#788ba6" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <rect x="40" y="148" width="600" height="8" rx="2" fill="#cbd5e1" stroke="#708cad" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- Weld pool -->
-            <ellipse cx="320" cy="148" rx="60" ry="18" fill="#fb923c" opacity="0.85"/>
+            <ellipse cx="320" cy="148" rx="60" ry="18" fill="#fb923c" opacity="0.85" stroke="#e16805" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <ellipse cx="320" cy="148" rx="40" ry="12" fill="#fde68a"/>
             <!-- Slag layer -->
-            <ellipse cx="280" cy="148" rx="55" ry="12" fill="#78716c" opacity="0.7"/>
+            <ellipse cx="280" cy="148" rx="55" ry="12" fill="#78716c" opacity="0.7" stroke="#484441" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- Electrode holder / stick -->
             <rect x="290" y="20" width="18" height="110" rx="4" fill="#b45309" transform="rotate(-15 299 75)"/>
-            <rect x="294" y="22" width="10" height="70" rx="2" fill="#fbbf24" transform="rotate(-15 299 75)"/>
+            <rect x="294" y="22" width="10" height="70" rx="2" fill="#fbbf24" transform="rotate(-15 299 75)" stroke="#b18003" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- Arc -->
-            <path d="M295 118 Q305 130 315 140" stroke="#facc15" stroke-width="3" fill="none" stroke-dasharray="4,3" opacity="0.9"/>
+            <path d="M295 118 Q305 130 315 140" stroke="#a58504" stroke-width="3" fill="none" stroke-dasharray="4,3" opacity="0.9" stroke-opacity="1"/>
             <!-- Electrode label -->
             <text x="360" y="45" font-size="11" fill="#92400e" font-weight="700">Coated electrode (EXX)</text>
             <line x1="350" y1="48" x2="315" y2="72" stroke="#92400e" stroke-width="1" stroke-dasharray="3,2"/>
@@ -222,27 +225,27 @@ footer a { color: #1e3a5f; }
             <text x="360" y="70" font-size="10" fill="#6b7280">Flux coating</text>
             <line x1="350" y1="72" x2="308" y2="82" stroke="#6b7280" stroke-width="1" stroke-dasharray="3,2"/>
             <!-- Arc label -->
-            <text x="198" y="125" font-size="10" fill="#ca8a04">Arc (~6000°F / 3300°C)</text>
+            <text x="198" y="125" font-size="10" fill="#986803">Arc (~6000°F / 3300°C)</text>
             <!-- Weld pool label -->
-            <text x="350" y="155" font-size="10" fill="#c2410c" font-weight="700">Weld pool</text>
+            <text x="350" y="155" font-size="10" fill="#4a1904" font-weight="700">Weld pool</text>
             <!-- Slag label -->
-            <text x="174" y="148" font-size="10" fill="#57534e">Slag</text>
+            <text x="174" y="148" font-size="10" fill="#3c3936">Slag</text>
             <!-- Shielding gas arrow -->
-            <text x="40" y="188" font-size="10" fill="#374151">← Direction of travel</text>
+            <text x="40" y="188" font-size="10" fill="#2d3542">← Direction of travel</text>
             <!-- Base metal label -->
-            <text x="560" y="172" font-size="10" fill="#475569">Base metal</text>
+            <text x="560" y="172" font-size="10" fill="#2c3541">Base metal</text>
             <!-- HAZ -->
             <rect x="380" y="140" width="60" height="20" rx="2" fill="#fde68a" opacity="0.5"/>
             <text x="385" y="152" font-size="9" fill="#92400e">HAZ</text>
             <!-- Solidified weld -->
-            <ellipse cx="190" cy="150" rx="80" ry="10" fill="#64748b" opacity="0.6"/>
-            <text x="145" y="162" font-size="9" fill="#334155">Solidified weld bead</text>
+            <ellipse cx="190" cy="150" rx="80" ry="10" fill="#64748b" opacity="0.6" stroke="#64748b" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <text x="145" y="162" font-size="9" fill="#293545">Solidified weld bead</text>
         </svg>
         </div>
 
         <div class="section-label">Electrode Selection Guide (Lincoln Electric)</div>
-        <table class="ref-table">
-            <tr><th>AWS Class</th><th>Min. tensile (ksi)</th><th>Position</th><th>Current</th><th>Coating type</th><th>Application</th></tr>
+        <table class="ref-table"><caption class="sr-only">SMAW — Shielded Metal Arc Welding Stick / EXX</caption>
+            <tr><th scope="col">AWS Class</th><th scope="col">Min. tensile (ksi)</th><th scope="col">Position</th><th scope="col">Current</th><th scope="col">Coating type</th><th scope="col">Application</th></tr>
             <tr><td>E6010</td><td>62</td><td>All</td><td>DCEP</td><td>Cellulosic (high-H₂)</td><td>Pipeline root; dirty/rusty steel</td></tr>
             <tr><td>E6011</td><td>62</td><td>All</td><td>AC or DCEP</td><td>Cellulosic</td><td>AC machines; galvanized</td></tr>
             <tr><td>E6013</td><td>62</td><td>All</td><td>AC or DC±</td><td>Rutile</td><td>Light fabrication; beginners</td></tr>
@@ -254,8 +257,8 @@ footer a { color: #1e3a5f; }
         <p style="font-size:0.78rem;color:#6b7280;margin-top:4px;">AWS electrode code: E[tensile ×1 ksi][position][current/coating]. Low-H electrodes (18, 28, 48, 68, 78) must be stored ≤10°F dew point or rebaked per AWS D1.1 Table 4.5.</p>
 
         <div class="section-label">Parameter Guide</div>
-        <table class="ref-table">
-            <tr><th>Electrode diam.</th><th>Current range (A)</th><th>Plate thickness</th><th>Arc length</th><th>Travel speed</th></tr>
+        <table class="ref-table"><caption class="sr-only">SMAW — Shielded Metal Arc Welding Stick / EXX (table 2)</caption>
+            <tr><th scope="col">Electrode diam.</th><th scope="col">Current range (A)</th><th scope="col">Plate thickness</th><th scope="col">Arc length</th><th scope="col">Travel speed</th></tr>
             <tr><td>3/32 in (2.4 mm)</td><td>60–90</td><td>1/16 – 3/16 in</td><td>~= electrode diam.</td><td>5–8 in/min</td></tr>
             <tr><td>1/8 in (3.2 mm)</td><td>80–140</td><td>3/16 – 3/8 in</td><td>~= electrode diam.</td><td>5–8 in/min</td></tr>
             <tr><td>5/32 in (4.0 mm)</td><td>110–190</td><td>1/4 – 5/8 in</td><td>~= electrode diam.</td><td>6–10 in/min</td></tr>
@@ -264,8 +267,8 @@ footer a { color: #1e3a5f; }
         </table>
 
         <div class="section-label">Troubleshooting (Lincoln Electric &amp; AWS)</div>
-        <table class="trouble-table">
-            <tr><th>Defect</th><th>Likely Causes</th><th>Corrective Action</th></tr>
+        <table class="trouble-table"><caption class="sr-only">SMAW — Shielded Metal Arc Welding Stick / EXX (table 3)</caption>
+            <tr><th scope="col">Defect</th><th scope="col">Likely Causes</th><th scope="col">Corrective Action</th></tr>
             <tr><td class="defect-tag">Porosity</td><td class="cause-col">Damp electrode; contaminated surface; arc too long</td><td class="fix-col">Rebake low-H rods; clean base metal; shorten arc</td></tr>
             <tr><td class="defect-tag">Undercut</td><td class="cause-col">Current too high; arc too long; wrong angle</td><td class="fix-col">Reduce amperage 10–15%; shorten arc; correct work angle</td></tr>
             <tr><td class="defect-tag">Slag inclusion</td><td class="cause-col">Incomplete slag removal; undercut trapping; fast travel</td><td class="fix-col">Wire brush between passes; reduce travel speed; correct angle</td></tr>
@@ -285,43 +288,43 @@ footer a { color: #1e3a5f; }
 
         <div class="section-label">Process Diagram</div>
         <div class="diagram-wrap">
-        <svg width="700" height="230" viewBox="0 0 700 230" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif">
+        <svg width="700" height="230" viewBox="0 0 700 230" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" role="img" aria-label="GMAW process cross-section: welding gun feeding a continuous solid wire, shielding gas (argon, CO2, or blend) around the arc, weld pool with no slag, clean solidified bead, heat-affected zone, and direction of travel to the left.">
             <!-- Base metal -->
-            <rect x="40" y="158" width="620" height="42" rx="3" fill="#94a3b8"/>
-            <rect x="40" y="158" width="620" height="7" rx="2" fill="#cbd5e1"/>
+            <rect x="40" y="158" width="620" height="42" rx="3" fill="#94a3b8" stroke="#788ba6" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <rect x="40" y="158" width="620" height="7" rx="2" fill="#cbd5e1" stroke="#708cad" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- Weld pool -->
-            <ellipse cx="340" cy="158" rx="55" ry="16" fill="#fb923c" opacity="0.85"/>
-            <ellipse cx="340" cy="158" rx="35" ry="10" fill="#fde68a"/>
+            <ellipse cx="340" cy="158" rx="55" ry="16" fill="#fb923c" opacity="0.85" stroke="#7d3a03" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <ellipse cx="340" cy="158" rx="35" ry="10" fill="#fde68a" stroke="#725b02" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- HAZ -->
             <rect x="400" y="150" width="55" height="18" rx="2" fill="#fde68a" opacity="0.5"/>
             <text x="405" y="162" font-size="9" fill="#92400e">HAZ</text>
             <!-- Solidified bead -->
-            <ellipse cx="205" cy="160" rx="80" ry="9" fill="#64748b" opacity="0.55"/>
+            <ellipse cx="205" cy="160" rx="80" ry="9" fill="#64748b" opacity="0.55" stroke="#64748b" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- Gun nozzle -->
             <rect x="316" y="30" width="36" height="100" rx="6" fill="#374151" transform="rotate(-10 334 80)"/>
             <rect x="322" y="35" width="24" height="60" rx="4" fill="#4b5563" transform="rotate(-10 334 80)"/>
             <!-- Wire -->
             <line x1="334" y1="38" x2="334" y2="130" stroke="#fbbf24" stroke-width="3" transform="rotate(-10 334 80)"/>
             <!-- Shielding gas cone -->
-            <path d="M310 110 Q285 135 290 158 Q340 180 390 158 Q395 135 370 110 Z" fill="#a5f3fc" opacity="0.2" stroke="#0891b2" stroke-width="1" stroke-dasharray="3,2"/>
+            <path d="M310 110 Q285 135 290 158 Q340 180 390 158 Q395 135 370 110 Z" fill="#a5f3fc" opacity="0.2" stroke="#0696a7" stroke-width="1" stroke-dasharray="3,2" vector-effect="non-scaling-stroke"/>
             <!-- Arc -->
-            <path d="M330 128 Q338 140 340 153" stroke="#facc15" stroke-width="3" fill="none" stroke-dasharray="4,3"/>
+            <path d="M330 128 Q338 140 340 153" stroke="#a58504" stroke-width="3" fill="none" stroke-dasharray="4,3"/>
             <!-- Labels -->
             <text x="380" y="55" font-size="11" fill="#1d4ed8" font-weight="700">GMAW Gun / Torch</text>
             <line x1="372" y1="58" x2="345" y2="72" stroke="#1d4ed8" stroke-width="1" stroke-dasharray="3,2"/>
             <text x="380" y="78" font-size="10" fill="#4b5563">Continuous wire electrode</text>
-            <text x="380" y="96" font-size="10" fill="#0891b2">Shielding gas (Ar/CO₂/blend)</text>
-            <text x="380" y="114" font-size="10" fill="#ca8a04">Arc</text>
-            <text x="380" y="165" font-size="10" fill="#c2410c" font-weight="700">Weld pool (no slag)</text>
-            <text x="100" y="175" font-size="9" fill="#334155">Solidified bead (clean)</text>
-            <text x="42" y="200" font-size="10" fill="#374151">← Direction of travel</text>
-            <text x="590" y="180" font-size="10" fill="#475569">Base metal</text>
+            <text x="380" y="96" font-size="10" fill="#077995">Shielding gas (Ar/CO₂/blend)</text>
+            <text x="380" y="114" font-size="10" fill="#986803">Arc</text>
+            <text x="380" y="165" font-size="10" fill="#aa390b" font-weight="700">Weld pool (no slag)</text>
+            <text x="100" y="175" font-size="9" fill="#293545">Solidified bead (clean)</text>
+            <text x="42" y="200" font-size="10" fill="#2d3542">← Direction of travel</text>
+            <text x="590" y="180" font-size="10" fill="#2c3541">Base metal</text>
         </svg>
         </div>
 
         <div class="section-label">Transfer Modes (Miller Electric)</div>
-        <table class="ref-table">
-            <tr><th>Mode</th><th>Voltage</th><th>Wire diam.</th><th>Shielding gas</th><th>Best for</th><th>Spatter</th></tr>
+        <table class="ref-table"><caption class="sr-only">GMAW — Gas Metal Arc Welding MIG / Wire Feed</caption>
+            <tr><th scope="col">Mode</th><th scope="col">Voltage</th><th scope="col">Wire diam.</th><th scope="col">Shielding gas</th><th scope="col">Best for</th><th scope="col">Spatter</th></tr>
             <tr><td><strong>Short-circuit</strong></td><td>15–22 V</td><td>0.023–0.035 in</td><td>75% Ar / 25% CO₂</td><td>Thin sheet, all positions, root passes</td><td>Moderate</td></tr>
             <tr><td><strong>Globular</strong></td><td>22–28 V</td><td>0.035–0.045 in</td><td>CO₂ or Ar/CO₂</td><td>Flat/horizontal; not code-critical</td><td>High</td></tr>
             <tr><td><strong>Spray</strong></td><td>26–40 V</td><td>0.035–0.062 in</td><td>≥80% Ar blend</td><td>Flat/1F; thick plate; high deposition</td><td>Very low</td></tr>
@@ -329,8 +332,8 @@ footer a { color: #1e3a5f; }
         </table>
 
         <div class="section-label">Parameter Guide — Carbon Steel (ER70S-6, 75/25 Ar/CO₂)</div>
-        <table class="ref-table">
-            <tr><th>Wire diam.</th><th>Plate thickness</th><th>WFS (in/min)</th><th>Voltage (V)</th><th>Current (A approx.)</th><th>Travel speed</th></tr>
+        <table class="ref-table"><caption class="sr-only">GMAW — Gas Metal Arc Welding MIG / Wire Feed (table 2)</caption>
+            <tr><th scope="col">Wire diam.</th><th scope="col">Plate thickness</th><th scope="col">WFS (in/min)</th><th scope="col">Voltage (V)</th><th scope="col">Current (A approx.)</th><th scope="col">Travel speed</th></tr>
             <tr><td>0.023 in</td><td>22–18 ga</td><td>100–200</td><td>15–18</td><td>40–90</td><td>16–22 in/min</td></tr>
             <tr><td>0.030 in</td><td>18 ga – 3/16 in</td><td>150–350</td><td>17–22</td><td>75–175</td><td>16–24 in/min</td></tr>
             <tr><td>0.035 in</td><td>3/16 – 1/2 in</td><td>180–400</td><td>18–26</td><td>100–250</td><td>16–26 in/min</td></tr>
@@ -338,8 +341,8 @@ footer a { color: #1e3a5f; }
         </table>
 
         <div class="section-label">Shielding Gas Selection</div>
-        <table class="ref-table">
-            <tr><th>Gas / Blend</th><th>Metal</th><th>Mode</th><th>Bead profile</th><th>Notes</th></tr>
+        <table class="ref-table"><caption class="sr-only">GMAW — Gas Metal Arc Welding MIG / Wire Feed (table 3)</caption>
+            <tr><th scope="col">Gas / Blend</th><th scope="col">Metal</th><th scope="col">Mode</th><th scope="col">Bead profile</th><th scope="col">Notes</th></tr>
             <tr><td>100% CO₂</td><td>Carbon steel</td><td>Short-circuit, globular</td><td>Wide, flat</td><td>Lowest cost; high spatter; deep penetration</td></tr>
             <tr><td>75% Ar / 25% CO₂ (C25)</td><td>Carbon steel</td><td>Short-circuit, spray</td><td>Smooth</td><td>Most common blend; low spatter</td></tr>
             <tr><td>90% Ar / 10% CO₂</td><td>Carbon steel, LAS</td><td>Spray, pulse</td><td>Smooth, narrow</td><td>Better for pulsed; lower oxidation</td></tr>
@@ -349,8 +352,8 @@ footer a { color: #1e3a5f; }
         </table>
 
         <div class="section-label">Troubleshooting (Lincoln Electric / Miller)</div>
-        <table class="trouble-table">
-            <tr><th>Defect / Issue</th><th>Likely Causes</th><th>Corrective Action</th></tr>
+        <table class="trouble-table"><caption class="sr-only">GMAW — Gas Metal Arc Welding MIG / Wire Feed (table 4)</caption>
+            <tr><th scope="col">Defect / Issue</th><th scope="col">Likely Causes</th><th scope="col">Corrective Action</th></tr>
             <tr><td class="defect-tag">Porosity</td><td class="cause-col">Contamination; low gas flow; leaking hose; drafty area</td><td class="fix-col">Clean metal; 25–35 CFH flow; check connections; windscreen</td></tr>
             <tr><td class="defect-tag">Excessive spatter</td><td class="cause-col">Voltage too low or high; inductance wrong; wrong gas</td><td class="fix-col">Adjust voltage to match WFS; tune inductance; use C25 blend</td></tr>
             <tr><td class="defect-tag">Burn-through</td><td class="cause-col">Too slow; too much current; contact tip too close</td><td class="fix-col">Increase travel speed; lower WFS/voltage; extend CTWD</td></tr>
@@ -370,58 +373,58 @@ footer a { color: #1e3a5f; }
 
         <div class="section-label">Process Diagram</div>
         <div class="diagram-wrap">
-        <svg width="700" height="240" viewBox="0 0 700 240" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif">
+        <svg width="700" height="240" viewBox="0 0 700 240" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" role="img" aria-label="GTAW process cross-section: torch with a non-consumable tungsten electrode, argon or helium shielding gas, a separate filler rod fed by hand into the weld pool, no slag, heat-affected zone, and direction of travel to the left.">
             <!-- Base plates -->
-            <rect x="40" y="165" width="620" height="44" rx="3" fill="#94a3b8"/>
-            <rect x="40" y="165" width="620" height="7" rx="2" fill="#cbd5e1"/>
+            <rect x="40" y="165" width="620" height="44" rx="3" fill="#94a3b8" stroke="#788ba6" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <rect x="40" y="165" width="620" height="7" rx="2" fill="#cbd5e1" stroke="#708cad" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- Weld pool -->
-            <ellipse cx="335" cy="165" rx="48" ry="14" fill="#fb923c" opacity="0.85"/>
-            <ellipse cx="335" cy="165" rx="30" ry="9" fill="#fde68a"/>
+            <ellipse cx="335" cy="165" rx="48" ry="14" fill="#fb923c" opacity="0.85" stroke="#b95504" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <ellipse cx="335" cy="165" rx="30" ry="9" fill="#fde68a" stroke="#6d5702" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- Solidified bead -->
-            <ellipse cx="190" cy="167" rx="80" ry="8" fill="#64748b" opacity="0.55"/>
+            <ellipse cx="190" cy="167" rx="80" ry="8" fill="#64748b" opacity="0.55" stroke="#627288" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- Torch body -->
             <rect x="312" y="22" width="30" height="90" rx="8" fill="#374151" transform="rotate(-8 327 67)"/>
             <!-- Tungsten electrode -->
             <line x1="327" y1="35" x2="323" y2="145" stroke="#e5e7eb" stroke-width="4" transform="rotate(-8 327 80)"/>
             <!-- Tungsten tip -->
-            <polygon points="322,138 326,138 324,158" fill="#9ca3af" transform="rotate(-8 327 80)"/>
+            <polygon points="322,138 326,138 324,158" fill="#9ca3af" transform="rotate(-8 327 80)" stroke="#6d7787" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- Gas cup (nozzle) -->
-            <path d="M310 95 L298 160 L352 160 L340 95 Z" fill="#94a3b8" opacity="0.35" stroke="#64748b" stroke-width="1"/>
+            <path d="M310 95 L298 160 L352 160 L340 95 Z" fill="#94a3b8" opacity="0.35" stroke="#5e6d82" stroke-width="1" stroke-opacity="1"/>
             <!-- Shielding gas -->
-            <path d="M300 118 Q278 140 280 165 Q335 188 390 165 Q392 140 370 118 Z" fill="#a5f3fc" opacity="0.18" stroke="#0891b2" stroke-width="1" stroke-dasharray="3,2"/>
+            <path d="M300 118 Q278 140 280 165 Q335 188 390 165 Q392 140 370 118 Z" fill="#a5f3fc" opacity="0.18" stroke="#0696a7" stroke-width="1" stroke-dasharray="3,2" vector-effect="non-scaling-stroke"/>
             <!-- Filler rod -->
             <line x1="260" y1="80" x2="325" y2="158" stroke="#fbbf24" stroke-width="4"/>
-            <circle cx="258" cy="78" r="4" fill="#fbbf24"/>
+            <circle cx="258" cy="78" r="4" fill="#fbbf24" stroke="#b18003" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- Arc -->
-            <path d="M323 148 Q328 155 332 162" stroke="#facc15" stroke-width="3" fill="none" stroke-dasharray="4,3"/>
+            <path d="M323 148 Q328 155 332 162" stroke="#8c7103" stroke-width="3" fill="none" stroke-dasharray="4,3"/>
             <!-- HAZ -->
-            <rect x="388" y="157" width="52" height="16" rx="2" fill="#fde68a" opacity="0.5"/>
+            <rect x="388" y="157" width="52" height="16" rx="2" fill="#fde68a" opacity="0.5" stroke="#5e4b02" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <text x="393" y="168" font-size="9" fill="#92400e">HAZ</text>
             <!-- Labels -->
             <text x="390" y="44" font-size="11" fill="#065f46" font-weight="700">GTAW Torch</text>
             <line x1="382" y1="47" x2="340" y2="65" stroke="#065f46" stroke-width="1" stroke-dasharray="3,2"/>
             <text x="390" y="66" font-size="10" fill="#e5e7eb" style="fill:#374151">Tungsten electrode (non-consumable)</text>
-            <text x="390" y="84" font-size="10" fill="#0891b2">Shielding gas (Ar or He)</text>
+            <text x="390" y="84" font-size="10" fill="#077995">Shielding gas (Ar or He)</text>
             <text x="390" y="102" font-size="10" fill="#92400e">Filler rod (separate)</text>
             <line x1="384" y1="100" x2="295" y2="118" stroke="#92400e" stroke-width="1" stroke-dasharray="3,2"/>
-            <text x="390" y="170" font-size="10" fill="#c2410c" font-weight="700">Weld pool (no slag)</text>
-            <text x="42" y="210" font-size="10" fill="#374151">← Direction of travel</text>
+            <text x="390" y="170" font-size="10" fill="#aa390b" font-weight="700">Weld pool (no slag)</text>
+            <text x="42" y="210" font-size="10" fill="#2d3542">← Direction of travel</text>
         </svg>
         </div>
 
         <div class="section-label">Tungsten Electrode Selection (AWS EWP / Lincoln Electric)</div>
-        <table class="ref-table">
-            <tr><th>Color code</th><th>Type</th><th>AWS</th><th>Polarity</th><th>Metal</th><th>Notes</th></tr>
-            <tr><td><span style="background:#10b981;color:#fff;padding:1px 8px;border-radius:4px;font-size:0.78rem;">Green</span></td><td>Pure W</td><td>EWP</td><td>AC</td><td>Aluminum, Mg</td><td>Forms balled tip on AC; limited ampacity</td></tr>
-            <tr><td><span style="background:#d97706;color:#fff;padding:1px 8px;border-radius:4px;font-size:0.78rem;">Gold/Orange</span></td><td>1.5% La₂O₃</td><td>EWLa-1.5</td><td>DC or AC</td><td>All metals</td><td>Best overall; replaces thoriated in most apps</td></tr>
+        <table class="ref-table"><caption class="sr-only">GTAW — Gas Tungsten Arc Welding TIG / Heliarc</caption>
+            <tr><th scope="col">Color code</th><th scope="col">Type</th><th scope="col">AWS</th><th scope="col">Polarity</th><th scope="col">Metal</th><th scope="col">Notes</th></tr>
+            <tr><td><span style="background:#0c855d;color:#fff;padding:1px 8px;border-radius:4px;font-size:0.78rem;">Green</span></td><td>Pure W</td><td>EWP</td><td>AC</td><td>Aluminum, Mg</td><td>Forms balled tip on AC; limited ampacity</td></tr>
+            <tr><td><span style="background:#ac5f05;color:#fff;padding:1px 8px;border-radius:4px;font-size:0.78rem;">Gold/Orange</span></td><td>1.5% La₂O₃</td><td>EWLa-1.5</td><td>DC or AC</td><td>All metals</td><td>Best overall; replaces thoriated in most apps</td></tr>
             <tr><td><span style="background:#6b7280;color:#fff;padding:1px 8px;border-radius:4px;font-size:0.78rem;">Gray</span></td><td>2% CeO₂</td><td>EWCe-2</td><td>DC or AC</td><td>All metals</td><td>Good low-amperage start; versatile</td></tr>
             <tr><td><span style="background:#dc2626;color:#fff;padding:1px 8px;border-radius:4px;font-size:0.78rem;">Red</span></td><td>2% ThO₂</td><td>EWTh-2</td><td>DCEN</td><td>Carbon &amp; low-alloy steel, Ti</td><td>Traditional; slightly radioactive — handle with care</td></tr>
             <tr><td><span style="background:#7c3aed;color:#fff;padding:1px 8px;border-radius:4px;font-size:0.78rem;">Purple</span></td><td>3.2% La₂O₃</td><td>EWLa-3</td><td>DC or AC</td><td>Stainless, Al</td><td>High-current AC; modern preference for Al</td></tr>
         </table>
 
         <div class="section-label">Parameter Guide — DCEN (Steel &amp; Stainless)</div>
-        <table class="ref-table">
-            <tr><th>Tungsten diam.</th><th>Current (A)</th><th>Filler diam.</th><th>Ar flow (CFH)</th><th>Cup size</th><th>Typical application</th></tr>
+        <table class="ref-table"><caption class="sr-only">GTAW — Gas Tungsten Arc Welding TIG / Heliarc (table 2)</caption>
+            <tr><th scope="col">Tungsten diam.</th><th scope="col">Current (A)</th><th scope="col">Filler diam.</th><th scope="col">Ar flow (CFH)</th><th scope="col">Cup size</th><th scope="col">Typical application</th></tr>
             <tr><td>1/16 in (1.6 mm)</td><td>10–80</td><td>1/16 in</td><td>8–12</td><td>#4–#5</td><td>Sheet metal 1/16 – 3/32 in</td></tr>
             <tr><td>3/32 in (2.4 mm)</td><td>60–150</td><td>1/16 – 3/32 in</td><td>12–15</td><td>#5–#6</td><td>3/32 – 3/16 in plate</td></tr>
             <tr><td>1/8 in (3.2 mm)</td><td>100–250</td><td>3/32 – 1/8 in</td><td>14–18</td><td>#6–#7</td><td>3/16 – 1/2 in plate; pipe</td></tr>
@@ -429,8 +432,8 @@ footer a { color: #1e3a5f; }
         </table>
 
         <div class="section-label">AC Parameters — Aluminum</div>
-        <table class="ref-table">
-            <tr><th>Material thickness</th><th>Tungsten diam.</th><th>Current AC (A)</th><th>Filler diam.</th><th>Ar flow (CFH)</th></tr>
+        <table class="ref-table"><caption class="sr-only">GTAW — Gas Tungsten Arc Welding TIG / Heliarc (table 3)</caption>
+            <tr><th scope="col">Material thickness</th><th scope="col">Tungsten diam.</th><th scope="col">Current AC (A)</th><th scope="col">Filler diam.</th><th scope="col">Ar flow (CFH)</th></tr>
             <tr><td>1/16 in</td><td>1/16 in EWP/EWLa</td><td>50–80</td><td>1/16 in ER4043</td><td>10–14</td></tr>
             <tr><td>1/8 in</td><td>3/32 in</td><td>90–130</td><td>3/32 in</td><td>12–16</td></tr>
             <tr><td>3/16 in</td><td>1/8 in</td><td>130–180</td><td>1/8 in</td><td>15–20</td></tr>
@@ -438,8 +441,8 @@ footer a { color: #1e3a5f; }
         </table>
 
         <div class="section-label">Troubleshooting</div>
-        <table class="trouble-table">
-            <tr><th>Issue</th><th>Likely Causes</th><th>Corrective Action</th></tr>
+        <table class="trouble-table"><caption class="sr-only">GTAW — Gas Tungsten Arc Welding TIG / Heliarc (table 4)</caption>
+            <tr><th scope="col">Issue</th><th scope="col">Likely Causes</th><th scope="col">Corrective Action</th></tr>
             <tr><td class="defect-tag">Tungsten contamination</td><td class="cause-col">Dipping tungsten into pool; wrong polarity; low gas flow</td><td class="fix-col">Re-grind/break off contaminated tip; verify DCEN; pre-flow 2–3 s</td></tr>
             <tr><td class="defect-tag">Porosity in aluminum</td><td class="cause-col">Oxide layer; moisture; too-short gas post-flow</td><td class="fix-col">Wire brush with SS brush before welding; extend post-flow to 5–10 s</td></tr>
             <tr><td class="defect-tag">Lack of fusion</td><td class="cause-col">Arc too long; angle off; insufficient current</td><td class="fix-col">Hold arc tight (1 × electrode diam.); increase current 10%</td></tr>
@@ -458,17 +461,17 @@ footer a { color: #1e3a5f; }
 
         <div class="section-label">Process Diagram (FCAW-G)</div>
         <div class="diagram-wrap">
-        <svg width="700" height="230" viewBox="0 0 700 230" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif">
+        <svg width="700" height="230" viewBox="0 0 700 230" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" role="img" aria-label="FCAW process cross-section: gun feeding a tubular wire with a flux core, optional external shielding gas (FCAW-G only), weld pool, slag that must be chipped off, heat-affected zone, and direction of travel to the left.">
             <!-- Base metal -->
-            <rect x="40" y="162" width="620" height="42" rx="3" fill="#94a3b8"/>
-            <rect x="40" y="162" width="620" height="7" rx="2" fill="#cbd5e1"/>
+            <rect x="40" y="162" width="620" height="42" rx="3" fill="#94a3b8" stroke="#788ba6" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <rect x="40" y="162" width="620" height="7" rx="2" fill="#cbd5e1" stroke="#708cad" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- Weld pool -->
-            <ellipse cx="335" cy="162" rx="60" ry="17" fill="#fb923c" opacity="0.85"/>
-            <ellipse cx="335" cy="162" rx="40" ry="11" fill="#fde68a"/>
+            <ellipse cx="335" cy="162" rx="60" ry="17" fill="#fb923c" opacity="0.85" stroke="#7d3a03" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <ellipse cx="335" cy="162" rx="40" ry="11" fill="#fde68a" stroke="#544301" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- Slag -->
-            <ellipse cx="285" cy="163" rx="60" ry="12" fill="#78716c" opacity="0.65"/>
+            <ellipse cx="285" cy="163" rx="60" ry="12" fill="#78716c" opacity="0.65" stroke="#78716c" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- Solidified bead -->
-            <ellipse cx="175" cy="164" rx="75" ry="8" fill="#64748b" opacity="0.55"/>
+            <ellipse cx="175" cy="164" rx="75" ry="8" fill="#64748b" opacity="0.55" stroke="#64748b" stroke-width="1" vector-effect="non-scaling-stroke"/>
             <!-- Gun nozzle -->
             <rect x="314" y="26" width="38" height="108" rx="6" fill="#374151" transform="rotate(-10 333 80)"/>
             <rect x="320" y="32" width="26" height="65" rx="4" fill="#4b5563" transform="rotate(-10 333 80)"/>
@@ -476,7 +479,7 @@ footer a { color: #1e3a5f; }
             <line x1="333" y1="36" x2="333" y2="138" stroke="#7c3aed" stroke-width="5" transform="rotate(-10 333 80)"/>
             <line x1="333" y1="36" x2="333" y2="138" stroke="#fde68a" stroke-width="2" transform="rotate(-10 333 80)" stroke-dasharray="5,3"/>
             <!-- Shielding gas cone -->
-            <path d="M308 115 Q286 138 290 162 Q335 182 382 162 Q386 138 364 115 Z" fill="#a5f3fc" opacity="0.2" stroke="#0891b2" stroke-width="1" stroke-dasharray="3,2"/>
+            <path d="M308 115 Q286 138 290 162 Q335 182 382 162 Q386 138 364 115 Z" fill="#a5f3fc" opacity="0.2" stroke="#0696a7" stroke-width="1" stroke-dasharray="3,2" vector-effect="non-scaling-stroke"/>
             <!-- Arc -->
             <path d="M328 132 Q334 145 335 158" stroke="#facc15" stroke-width="3" fill="none" stroke-dasharray="4,3"/>
             <!-- HAZ -->
@@ -486,10 +489,10 @@ footer a { color: #1e3a5f; }
             <text x="390" y="46" font-size="11" fill="#5b21b6" font-weight="700">FCAW Gun</text>
             <line x1="382" y1="49" x2="352" y2="67" stroke="#5b21b6" stroke-width="1" stroke-dasharray="3,2"/>
             <text x="390" y="68" font-size="10" fill="#374151">Tubular wire (flux core shown yellow dashes)</text>
-            <text x="390" y="86" font-size="10" fill="#0891b2">Ext. shielding gas (FCAW-G only)</text>
-            <text x="390" y="172" font-size="10" fill="#c2410c" font-weight="700">Weld pool</text>
-            <text x="200" y="178" font-size="9" fill="#57534e">Slag (must be chipped)</text>
-            <text x="42" y="205" font-size="10" fill="#374151">← Direction of travel</text>
+            <text x="390" y="86" font-size="10" fill="#077995">Ext. shielding gas (FCAW-G only)</text>
+            <text x="390" y="172" font-size="10" fill="#4a1904" font-weight="700">Weld pool</text>
+            <text x="200" y="178" font-size="9" fill="#373431">Slag (must be chipped)</text>
+            <text x="42" y="205" font-size="10" fill="#2d3542">← Direction of travel</text>
         </svg>
         </div>
 
@@ -520,8 +523,8 @@ footer a { color: #1e3a5f; }
         </div>
 
         <div class="section-label">Parameter Guide — E71T-1C (CO₂, Flat &amp; Horizontal)</div>
-        <table class="ref-table">
-            <tr><th>Wire diam.</th><th>Plate thickness</th><th>WFS (in/min)</th><th>Voltage (V)</th><th>Current (A)</th><th>Gas flow (CFH)</th></tr>
+        <table class="ref-table"><caption class="sr-only">FCAW-S (Self-Shielded)</caption>
+            <tr><th scope="col">Wire diam.</th><th scope="col">Plate thickness</th><th scope="col">WFS (in/min)</th><th scope="col">Voltage (V)</th><th scope="col">Current (A)</th><th scope="col">Gas flow (CFH)</th></tr>
             <tr><td>0.035 in</td><td>3/16 – 3/8 in</td><td>200–350</td><td>23–28</td><td>130–220</td><td>35–45</td></tr>
             <tr><td>0.045 in</td><td>1/4 – 3/4 in</td><td>150–300</td><td>24–30</td><td>175–300</td><td>35–45</td></tr>
             <tr><td>1/16 in</td><td>3/8 in and up</td><td>100–200</td><td>26–34</td><td>250–450</td><td>40–50</td></tr>
@@ -529,8 +532,8 @@ footer a { color: #1e3a5f; }
         </table>
 
         <div class="section-label">Troubleshooting</div>
-        <table class="trouble-table">
-            <tr><th>Defect</th><th>Likely Causes</th><th>Corrective Action</th></tr>
+        <table class="trouble-table"><caption class="sr-only">FCAW-S (Self-Shielded) (table 2)</caption>
+            <tr><th scope="col">Defect</th><th scope="col">Likely Causes</th><th scope="col">Corrective Action</th></tr>
             <tr><td class="defect-tag">Porosity</td><td class="cause-col">Low gas flow (FCAW-G); wind; moisture in wire</td><td class="fix-col">Increase flow to 40+ CFH; add windscreen; store wire dry</td></tr>
             <tr><td class="defect-tag">Slag inclusions</td><td class="cause-col">Fast travel; convex bead trapping slag; poor interpass cleaning</td><td class="fix-col">Slow travel; reduce current; chip &amp; brush each pass</td></tr>
             <tr><td class="defect-tag">Undercut</td><td class="cause-col">Voltage too high; wrong electrode angle; fast travel</td><td class="fix-col">Reduce voltage 1–2 V; correct drag angle to 5–15°; slow down</td></tr>
@@ -554,9 +557,9 @@ footer a { color: #1e3a5f; }
             <div class="joint-card">
                 <div class="joint-card-head">Butt Joint</div>
                 <div class="joint-card-body">
-                    <svg width="170" height="90" viewBox="0 0 170 90">
-                        <rect x="20" y="20" width="130" height="28" rx="3" fill="#94a3b8"/>
-                        <rect x="20" y="52" width="130" height="28" rx="3" fill="#94a3b8"/>
+                    <svg width="170" height="90" viewBox="0 0 170 90" role="img" aria-label="Butt joint: two pieces in the same plane, edge to edge.">
+                        <rect x="20" y="20" width="130" height="28" rx="3" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <rect x="20" y="52" width="130" height="28" rx="3" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <rect x="70" y="44" width="30" height="12" rx="2" fill="#fb923c"/>
                         <text x="85" y="88" font-size="9" text-anchor="middle" fill="#374151">Two pieces in the same plane</text>
                     </svg>
@@ -568,10 +571,10 @@ footer a { color: #1e3a5f; }
             <div class="joint-card">
                 <div class="joint-card-head">T-Joint</div>
                 <div class="joint-card-body">
-                    <svg width="170" height="90" viewBox="0 0 170 90">
-                        <rect x="20" y="52" width="130" height="22" rx="3" fill="#94a3b8"/>
-                        <rect x="72" y="15" width="26" height="40" rx="3" fill="#94a3b8"/>
-                        <polygon points="68,56 85,52 102,56 102,44 68,44" fill="#fb923c"/>
+                    <svg width="170" height="90" viewBox="0 0 170 90" role="img" aria-label="T-joint: a web perpendicular to a flange, forming a T.">
+                        <rect x="20" y="52" width="130" height="22" rx="3" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <rect x="72" y="15" width="26" height="40" rx="3" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <polygon points="68,56 85,52 102,56 102,44 68,44" fill="#fb923c" stroke="#e16805" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <text x="85" y="88" font-size="9" text-anchor="middle" fill="#374151">Web perpendicular to flange</text>
                     </svg>
                     <div class="joint-dim"><span>Load:</span> Shear along weld axis<br><span>Weld:</span> Fillet or PJP groove</div>
@@ -582,11 +585,11 @@ footer a { color: #1e3a5f; }
             <div class="joint-card">
                 <div class="joint-card-head">Corner Joint</div>
                 <div class="joint-card-body">
-                    <svg width="170" height="90" viewBox="0 0 170 90">
-                        <rect x="20" y="15" width="65" height="22" rx="3" fill="#94a3b8"/>
-                        <rect x="82" y="15" width="22" height="65" rx="3" fill="#94a3b8"/>
+                    <svg width="170" height="90" viewBox="0 0 170 90" role="img" aria-label="Corner joint: two pieces meeting at about 90 degrees at their edges.">
+                        <rect x="20" y="15" width="65" height="22" rx="3" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <rect x="82" y="15" width="22" height="65" rx="3" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <polygon points="20,37 82,37 82,15 85,15 85,37 85,82" fill="none" stroke="#fb923c" stroke-width="0"/>
-                        <polygon points="82,37 85,37 85,15 82,15" fill="#fb923c"/>
+                        <polygon points="82,37 85,37 85,15 82,15" fill="#fb923c" stroke="#7d3a03" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <text x="85" y="88" font-size="9" text-anchor="middle" fill="#374151">Two pieces at ~90°</text>
                     </svg>
                     <div class="joint-dim"><span>Load:</span> Tension, bending<br><span>Weld:</span> Fillet (inside or outside)</div>
@@ -597,11 +600,11 @@ footer a { color: #1e3a5f; }
             <div class="joint-card">
                 <div class="joint-card-head">Lap Joint</div>
                 <div class="joint-card-body">
-                    <svg width="170" height="90" viewBox="0 0 170 90">
-                        <rect x="20" y="25" width="100" height="22" rx="3" fill="#94a3b8"/>
-                        <rect x="55" y="47" width="100" height="22" rx="3" fill="#7f9bb0"/>
-                        <polygon points="120,47 122,47 122,25 120,25" fill="#fb923c"/>
-                        <polygon points="55,69 57,69 57,47 55,47" fill="#fb923c"/>
+                    <svg width="170" height="90" viewBox="0 0 170 90" role="img" aria-label="Lap joint: two overlapping pieces joined with fillet welds.">
+                        <rect x="20" y="25" width="100" height="22" rx="3" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <rect x="55" y="47" width="100" height="22" rx="3" fill="#7f9bb0" stroke="#7291a8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <polygon points="120,47 122,47 122,25 120,25" fill="#fb923c" stroke="#e16805" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <polygon points="55,69 57,69 57,47 55,47" fill="#fb923c" stroke="#e16805" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <text x="85" y="88" font-size="9" text-anchor="middle" fill="#374151">Overlapping pieces; fillet welds</text>
                     </svg>
                     <div class="joint-dim"><span>Load:</span> Shear (eccentric)<br><span>Weld:</span> Fillet both sides</div>
@@ -612,10 +615,10 @@ footer a { color: #1e3a5f; }
             <div class="joint-card">
                 <div class="joint-card-head">Edge Joint</div>
                 <div class="joint-card-body">
-                    <svg width="170" height="90" viewBox="0 0 170 90">
-                        <rect x="55" y="15" width="22" height="65" rx="3" fill="#94a3b8"/>
-                        <rect x="80" y="15" width="22" height="65" rx="3" fill="#7f9bb0"/>
-                        <rect x="77" y="15" width="6" height="65" rx="2" fill="#fb923c"/>
+                    <svg width="170" height="90" viewBox="0 0 170 90" role="img" aria-label="Edge joint: edges of two parallel sheets joined together.">
+                        <rect x="55" y="15" width="22" height="65" rx="3" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <rect x="80" y="15" width="22" height="65" rx="3" fill="#7f9bb0" stroke="#7291a8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <rect x="77" y="15" width="6" height="65" rx="2" fill="#fb923c" stroke="#e16805" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <text x="85" y="88" font-size="9" text-anchor="middle" fill="#374151">Edges of sheet joined parallel</text>
                     </svg>
                     <div class="joint-dim"><span>Load:</span> Low-stress only<br><span>Weld:</span> Edge, flange weld</div>
@@ -632,13 +635,13 @@ footer a { color: #1e3a5f; }
             <div class="joint-card">
                 <div class="joint-card-head">Square Groove Butt</div>
                 <div class="joint-card-body">
-                    <svg width="200" height="110" viewBox="0 0 200 110">
+                    <svg width="200" height="110" viewBox="0 0 200 110" role="img" aria-label="Square groove butt joint: plate edges with no bevel and a root opening R of 0 to 3/16 inch.">
                         <!-- Left plate -->
-                        <rect x="20" y="20" width="72" height="70" rx="2" fill="#94a3b8"/>
+                        <rect x="20" y="20" width="72" height="70" rx="2" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Right plate -->
-                        <rect x="108" y="20" width="72" height="70" rx="2" fill="#7f9bb0"/>
+                        <rect x="108" y="20" width="72" height="70" rx="2" fill="#7f9bb0" stroke="#7291a8" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Root gap -->
-                        <rect x="92" y="20" width="16" height="70" rx="1" fill="#fb923c" opacity="0.7"/>
+                        <rect x="92" y="20" width="16" height="70" rx="1" fill="#fb923c" opacity="0.7" stroke="#e16805" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Weld fill -->
                         <rect x="92" y="15" width="16" height="15" rx="2" fill="#f97316"/>
                         <!-- Dimension lines -->
@@ -660,20 +663,20 @@ footer a { color: #1e3a5f; }
             <div class="joint-card">
                 <div class="joint-card-head">Single-V Groove</div>
                 <div class="joint-card-body">
-                    <svg width="200" height="110" viewBox="0 0 200 110">
+                    <svg width="200" height="110" viewBox="0 0 200 110" role="img" aria-label="Single-V groove: both plates beveled to form a V with groove angle α and root gap R.">
                         <!-- Left plate with bevel -->
-                        <polygon points="20,20 92,20 92,90 92,90 75,90 20,90" fill="#94a3b8"/>
-                        <polygon points="75,90 92,20 92,90" fill="#b0bec5"/>
+                        <polygon points="20,20 92,20 92,90 92,90 75,90 20,90" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <polygon points="75,90 92,20 92,90" fill="#b0bec5" stroke="#78909c" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Right plate with bevel -->
-                        <polygon points="108,20 180,20 180,90 125,90 108,90" fill="#7f9bb0"/>
-                        <polygon points="108,20 125,90 108,90" fill="#94a3b8"/>
+                        <polygon points="108,20 180,20 180,90 125,90 108,90" fill="#7f9bb0" stroke="#7291a8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <polygon points="108,20 125,90 108,90" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Groove fill -->
-                        <polygon points="75,90 100,10 125,90" fill="#fb923c" opacity="0.8"/>
+                        <polygon points="75,90 100,10 125,90" fill="#fb923c" opacity="0.8" stroke="#e16805" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Root gap / land -->
-                        <rect x="92" y="84" width="16" height="6" fill="#f97316"/>
+                        <rect x="92" y="84" width="16" height="6" fill="#f97316" stroke="#8c3b04" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Angle arc -->
                         <path d="M 78,82 A 18,18 0 0,1 122,82" stroke="#1e3a5f" stroke-width="1.5" fill="none"/>
-                        <text x="100" y="78" font-size="9" text-anchor="middle" fill="#1e3a5f">α</text>
+                        <text x="100" y="78" font-size="9" text-anchor="middle" fill="#1c3557">α</text>
                         <!-- Labels -->
                         <text x="100" y="108" font-size="9" text-anchor="middle" fill="#1e3a5f">R (root gap)</text>
                     </svg>
@@ -691,21 +694,21 @@ footer a { color: #1e3a5f; }
             <div class="joint-card">
                 <div class="joint-card-head">Double-V Groove (X)</div>
                 <div class="joint-card-body">
-                    <svg width="200" height="110" viewBox="0 0 200 110">
+                    <svg width="200" height="110" viewBox="0 0 200 110" role="img" aria-label="Double-V groove: both plates beveled from both sides, forming an X shape.">
                         <!-- Left plate -->
-                        <polygon points="20,5 80,55 80,55 80,55 20,105" fill="#94a3b8"/>
-                        <polygon points="80,55 95,5 20,5" fill="#b0bec5"/>
-                        <polygon points="80,55 95,105 20,105" fill="#b0bec5"/>
+                        <polygon points="20,5 80,55 80,55 80,55 20,105" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <polygon points="80,55 95,5 20,5" fill="#b0bec5" stroke="#78909c" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <polygon points="80,55 95,105 20,105" fill="#b0bec5" stroke="#78909c" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Right plate -->
-                        <polygon points="180,5 120,55 180,105" fill="#7f9bb0"/>
-                        <polygon points="120,55 105,5 180,5" fill="#94a3b8"/>
-                        <polygon points="120,55 105,105 180,105" fill="#94a3b8"/>
+                        <polygon points="180,5 120,55 180,105" fill="#7f9bb0" stroke="#7291a8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <polygon points="120,55 105,5 180,5" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <polygon points="120,55 105,105 180,105" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Weld fill top -->
-                        <polygon points="80,55 100,10 120,55" fill="#fb923c" opacity="0.8"/>
+                        <polygon points="80,55 100,10 120,55" fill="#fb923c" opacity="0.8" stroke="#9b4703" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Weld fill bottom -->
-                        <polygon points="80,55 100,100 120,55" fill="#f97316" opacity="0.8"/>
+                        <polygon points="80,55 100,100 120,55" fill="#f97316" opacity="0.8" stroke="#7d3503" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Root -->
-                        <ellipse cx="100" cy="55" rx="10" ry="5" fill="#fde68a"/>
+                        <ellipse cx="100" cy="55" rx="10" ry="5" fill="#fde68a" stroke="#634f02" stroke-width="1" vector-effect="non-scaling-stroke"/>
                     </svg>
                     <div class="joint-dim">
                         <span>α:</span> 60° each side (30° each bevel)<br>
@@ -721,17 +724,17 @@ footer a { color: #1e3a5f; }
             <div class="joint-card">
                 <div class="joint-card-head">Single-Bevel Groove</div>
                 <div class="joint-card-body">
-                    <svg width="200" height="110" viewBox="0 0 200 110">
+                    <svg width="200" height="110" viewBox="0 0 200 110" role="img" aria-label="Single-bevel groove: only one member beveled at angle α; used for T-joints or butt joints.">
                         <!-- Left plate (square edge) -->
-                        <rect x="20" y="20" width="72" height="70" rx="2" fill="#94a3b8"/>
+                        <rect x="20" y="20" width="72" height="70" rx="2" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Right plate (beveled) -->
-                        <polygon points="108,20 180,20 180,90 108,90" fill="#7f9bb0"/>
-                        <polygon points="92,90 108,20 108,90" fill="#94a3b8"/>
+                        <polygon points="108,20 180,20 180,90 108,90" fill="#7f9bb0" stroke="#7291a8" stroke-width="1" vector-effect="non-scaling-stroke"/>
+                        <polygon points="92,90 108,20 108,90" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Groove weld fill -->
-                        <polygon points="92,90 108,20 92,20" fill="#fb923c" opacity="0.8"/>
+                        <polygon points="92,90 108,20 92,20" fill="#fb923c" opacity="0.8" stroke="#e16805" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Angle arc -->
                         <path d="M 94,80 A 14,14 0 0,1 108,66" stroke="#1e3a5f" stroke-width="1.5" fill="none"/>
-                        <text x="102" y="76" font-size="9" fill="#1e3a5f">α</text>
+                        <text x="102" y="76" font-size="9" fill="#1c3557">α</text>
                         <text x="100" y="108" font-size="9" text-anchor="middle" fill="#1e3a5f">T-joint or butt</text>
                     </svg>
                     <div class="joint-dim">
@@ -748,13 +751,13 @@ footer a { color: #1e3a5f; }
             <div class="joint-card">
                 <div class="joint-card-head">Single-J Groove</div>
                 <div class="joint-card-body">
-                    <svg width="200" height="110" viewBox="0 0 200 110">
+                    <svg width="200" height="110" viewBox="0 0 200 110" role="img" aria-label="Single-J groove: one member with a machined radius at the root and a small bevel angle.">
                         <!-- Left plate square -->
-                        <rect x="20" y="20" width="70" height="70" rx="2" fill="#94a3b8"/>
+                        <rect x="20" y="20" width="70" height="70" rx="2" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Right plate J-profile -->
-                        <path d="M108,20 L180,20 L180,90 L108,90 Q92,90 92,72 L92,20 Z" fill="#7f9bb0"/>
+                        <path d="M108,20 L180,20 L180,90 L108,90 Q92,90 92,72 L92,20 Z" fill="#7f9bb0" stroke="#7291a8" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- J groove fill -->
-                        <path d="M90,20 L108,20 L108,90 Q92,90 90,72 Z" fill="#fb923c" opacity="0.75"/>
+                        <path d="M90,20 L108,20 L108,90 Q92,90 90,72 Z" fill="#fb923c" opacity="0.75" stroke="#e16805" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <text x="100" y="108" font-size="9" text-anchor="middle" fill="#1e3a5f">Machined radius at root</text>
                     </svg>
                     <div class="joint-dim">
@@ -771,17 +774,17 @@ footer a { color: #1e3a5f; }
             <div class="joint-card">
                 <div class="joint-card-head">Fillet Weld (T or Lap)</div>
                 <div class="joint-card-body">
-                    <svg width="200" height="110" viewBox="0 0 200 110">
+                    <svg width="200" height="110" viewBox="0 0 200 110" role="img" aria-label="Fillet weld geometry: a 45° fillet with equal legs w; the throat, the shortest distance from root to face, equals 0.707 times the leg.">
                         <!-- Base plate -->
-                        <rect x="20" y="60" width="160" height="30" rx="3" fill="#94a3b8"/>
+                        <rect x="20" y="60" width="160" height="30" rx="3" fill="#94a3b8" stroke="#7b8ea8" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Web plate -->
-                        <rect x="80" y="10" width="30" height="52" rx="3" fill="#7f9bb0"/>
+                        <rect x="80" y="10" width="30" height="52" rx="3" fill="#7f9bb0" stroke="#7291a8" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Fillet triangle -->
-                        <polygon points="80,60 110,60 80,30" fill="#fb923c" opacity="0.9"/>
+                        <polygon points="80,60 110,60 80,30" fill="#fb923c" opacity="0.9" stroke="#e16805" stroke-width="1" vector-effect="non-scaling-stroke"/>
                         <!-- Size dimension -->
                         <line x1="80" y1="65" x2="110" y2="65" stroke="#1e3a5f" stroke-width="1"/>
                         <line x1="75" y1="30" x2="75" y2="60" stroke="#1e3a5f" stroke-width="1"/>
-                        <text x="95" y="76" font-size="9" text-anchor="middle" fill="#1e3a5f">Leg (w)</text>
+                        <text x="95" y="76" font-size="9" text-anchor="middle" fill="#1c3557">Leg (w)</text>
                         <text x="68" y="47" font-size="9" text-anchor="middle" fill="#1e3a5f">Leg</text>
                         <text x="100" y="108" font-size="9" text-anchor="middle" fill="#1e3a5f">Throat = 0.707 × w</text>
                     </svg>
@@ -800,8 +803,8 @@ footer a { color: #1e3a5f; }
 
         <div class="section-label">Standard Groove Preparation Dimensions Summary (AWS B2.1 / Miller Electric)</div>
         <div style="overflow-x:auto;">
-        <table class="ref-table">
-            <tr><th>Prep type</th><th>Groove angle α</th><th>Root opening R</th><th>Root face f</th><th>Process</th><th>Plate range</th></tr>
+        <table class="ref-table"><caption class="sr-only">Joint Types — AWS B2.1 &amp; Miller Electric Joint Design Guide</caption>
+            <tr><th scope="col">Prep type</th><th scope="col">Groove angle α</th><th scope="col">Root opening R</th><th scope="col">Root face f</th><th scope="col">Process</th><th scope="col">Plate range</th></tr>
             <tr><td>Square butt</td><td>0°</td><td>0–3/16 in</td><td>Full</td><td>GMAW/GTAW</td><td>Up to 3/16 in</td></tr>
             <tr><td>Single-V (60°)</td><td>60° included</td><td>1/8 in</td><td>1/16 in</td><td>SMAW/FCAW</td><td>3/16 – 3/4 in</td></tr>
             <tr><td>Single-V (45°)</td><td>45° included</td><td>3/32 in</td><td>3/32 in</td><td>GMAW/GTAW</td><td>3/16 – 3/4 in</td></tr>
@@ -830,7 +833,7 @@ footer a { color: #1e3a5f; }
 
         <div class="section-label">Anatomy of a Welding Symbol</div>
         <div class="diagram-wrap">
-        <svg width="640" height="260" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif">
+        <svg width="640" height="260" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" role="img" aria-label="Anatomy of an AWS A2.4 welding symbol: the arrow points to the joint; the horizontal reference line has the arrow-side weld symbol below and the other-side symbol above. Weld size (3/8 leg) is left of the weld symbol and length-pitch (6-12 inches) to the right. A contour and finish symbol (C) sits over the weld symbol, a field weld flag and weld-all-around circle are at the arrow junction, and the tail at the right end holds the specification or process.">
             <!-- Reference line -->
             <line x1="80" y1="120" x2="520" y2="120" stroke="#1e3a5f" stroke-width="2.5"/>
             <!-- Arrow line -->
@@ -891,7 +894,7 @@ footer a { color: #1e3a5f; }
         <div class="sym-grid">
 
             <div class="sym-card">
-                <svg width="80" height="48" viewBox="0 0 80 48">
+                <svg width="80" height="48" viewBox="0 0 80 48" role="img" aria-label="Fillet weld symbol.">
                     <line x1="5" y1="30" x2="75" y2="30" stroke="#1e3a5f" stroke-width="2"/>
                     <polygon points="25,30 45,30 25,46" fill="#1e3a5f"/>
                 </svg>
@@ -900,7 +903,7 @@ footer a { color: #1e3a5f; }
             </div>
 
             <div class="sym-card">
-                <svg width="80" height="48" viewBox="0 0 80 48">
+                <svg width="80" height="48" viewBox="0 0 80 48" role="img" aria-label="Single-V groove weld symbol.">
                     <line x1="5" y1="30" x2="75" y2="30" stroke="#1e3a5f" stroke-width="2"/>
                     <polygon points="20,30 60,30 40,10" fill="none" stroke="#1e3a5f" stroke-width="2"/>
                 </svg>
@@ -909,7 +912,7 @@ footer a { color: #1e3a5f; }
             </div>
 
             <div class="sym-card">
-                <svg width="80" height="48" viewBox="0 0 80 48">
+                <svg width="80" height="48" viewBox="0 0 80 48" role="img" aria-label="Double-V groove weld symbol.">
                     <line x1="5" y1="24" x2="75" y2="24" stroke="#1e3a5f" stroke-width="2"/>
                     <polygon points="20,24 60,24 40,10" fill="none" stroke="#1e3a5f" stroke-width="2"/>
                     <polygon points="20,24 60,24 40,38" fill="none" stroke="#1e3a5f" stroke-width="2"/>
@@ -919,7 +922,7 @@ footer a { color: #1e3a5f; }
             </div>
 
             <div class="sym-card">
-                <svg width="80" height="48" viewBox="0 0 80 48">
+                <svg width="80" height="48" viewBox="0 0 80 48" role="img" aria-label="Single-bevel groove weld symbol.">
                     <line x1="5" y1="30" x2="75" y2="30" stroke="#1e3a5f" stroke-width="2"/>
                     <polygon points="40,30 60,30 40,12" fill="none" stroke="#1e3a5f" stroke-width="2"/>
                 </svg>
@@ -928,7 +931,7 @@ footer a { color: #1e3a5f; }
             </div>
 
             <div class="sym-card">
-                <svg width="80" height="48" viewBox="0 0 80 48">
+                <svg width="80" height="48" viewBox="0 0 80 48" role="img" aria-label="Single-U groove weld symbol.">
                     <line x1="5" y1="30" x2="75" y2="30" stroke="#1e3a5f" stroke-width="2"/>
                     <path d="M20,30 Q20,12 40,10 L60,10 L60,30" fill="none" stroke="#1e3a5f" stroke-width="2"/>
                 </svg>
@@ -937,7 +940,7 @@ footer a { color: #1e3a5f; }
             </div>
 
             <div class="sym-card">
-                <svg width="80" height="48" viewBox="0 0 80 48">
+                <svg width="80" height="48" viewBox="0 0 80 48" role="img" aria-label="Single-J groove weld symbol.">
                     <line x1="5" y1="30" x2="75" y2="30" stroke="#1e3a5f" stroke-width="2"/>
                     <path d="M50,30 Q50,12 40,10 L40,10 L60,10 L60,30" fill="none" stroke="#1e3a5f" stroke-width="2"/>
                 </svg>
@@ -946,7 +949,7 @@ footer a { color: #1e3a5f; }
             </div>
 
             <div class="sym-card">
-                <svg width="80" height="48" viewBox="0 0 80 48">
+                <svg width="80" height="48" viewBox="0 0 80 48" role="img" aria-label="Square groove weld symbol.">
                     <line x1="5" y1="30" x2="75" y2="30" stroke="#1e3a5f" stroke-width="2"/>
                     <rect x="25" y="10" width="30" height="20" fill="none" stroke="#1e3a5f" stroke-width="2"/>
                 </svg>
@@ -955,7 +958,7 @@ footer a { color: #1e3a5f; }
             </div>
 
             <div class="sym-card">
-                <svg width="80" height="48" viewBox="0 0 80 48">
+                <svg width="80" height="48" viewBox="0 0 80 48" role="img" aria-label="Plug or slot weld symbol.">
                     <line x1="5" y1="24" x2="75" y2="24" stroke="#1e3a5f" stroke-width="2"/>
                     <circle cx="40" cy="24" r="10" fill="none" stroke="#1e3a5f" stroke-width="2"/>
                 </svg>
@@ -964,7 +967,7 @@ footer a { color: #1e3a5f; }
             </div>
 
             <div class="sym-card">
-                <svg width="80" height="48" viewBox="0 0 80 48">
+                <svg width="80" height="48" viewBox="0 0 80 48" role="img" aria-label="Back or backing weld symbol.">
                     <line x1="5" y1="24" x2="75" y2="24" stroke="#1e3a5f" stroke-width="2"/>
                     <line x1="20" y1="16" x2="60" y2="32" stroke="#1e3a5f" stroke-width="2.5"/>
                     <line x1="20" y1="32" x2="60" y2="16" stroke="#1e3a5f" stroke-width="2.5"/>
@@ -974,7 +977,7 @@ footer a { color: #1e3a5f; }
             </div>
 
             <div class="sym-card">
-                <svg width="80" height="48" viewBox="0 0 80 48">
+                <svg width="80" height="48" viewBox="0 0 80 48" role="img" aria-label="Surfacing weld symbol.">
                     <line x1="5" y1="24" x2="75" y2="24" stroke="#1e3a5f" stroke-width="2"/>
                     <path d="M25,14 Q40,32 55,14" fill="none" stroke="#1e3a5f" stroke-width="2"/>
                 </svg>
@@ -983,7 +986,7 @@ footer a { color: #1e3a5f; }
             </div>
 
             <div class="sym-card">
-                <svg width="80" height="48" viewBox="0 0 80 48">
+                <svg width="80" height="48" viewBox="0 0 80 48" role="img" aria-label="Seam and spot weld symbol.">
                     <line x1="5" y1="24" x2="75" y2="24" stroke="#1e3a5f" stroke-width="2"/>
                     <polygon points="25,14 55,14 55,34 25,34" fill="none" stroke="#1e3a5f" stroke-width="2"/>
                 </svg>
@@ -993,8 +996,8 @@ footer a { color: #1e3a5f; }
         </div>
 
         <div class="section-label">Supplementary Symbol Elements</div>
-        <table class="ref-table">
-            <tr><th>Symbol / Element</th><th>Location</th><th>Meaning</th></tr>
+        <table class="ref-table"><caption class="sr-only">Welding Symbols — AWS A2.4 Standard</caption>
+            <tr><th scope="col">Symbol / Element</th><th scope="col">Location</th><th scope="col">Meaning</th></tr>
             <tr><td>Weld-all-around circle</td><td>Junction of arrow &amp; reference line</td><td>Weld completely around joint perimeter</td></tr>
             <tr><td>Field weld flag</td><td>Junction of arrow &amp; reference line (flag)</td><td>Weld to be made in field, not shop</td></tr>
             <tr><td>Contour symbol (F, G, C)</td><td>Above weld symbol</td><td>F=flush, G=convex, C=concave — desired bead profile</td></tr>
@@ -1008,7 +1011,7 @@ footer a { color: #1e3a5f; }
         <div class="section-label">Reading a Complete Welding Symbol — Example</div>
         <div style="background:#f8fafc;border-radius:10px;padding:16px 20px;margin:10px 0;">
             <div class="diagram-wrap">
-            <svg width="600" height="175" viewBox="0 0 600 175" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif">
+            <svg width="600" height="175" viewBox="0 0 600 175" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,sans-serif" role="img" aria-label="Worked welding symbol example. Arrow side, below the line: 5/16 inch fillet weld, 4 inches long spaced 10 inches apart (4-10), field weld, SMAW process in the tail. Other side, above the line: 1/2 inch single-V groove with 1/8 inch root opening, flush contour, G (grind) finish.">
                 <!-- Reference line -->
                 <line x1="100" y1="80" x2="440" y2="80" stroke="#1e3a5f" stroke-width="2.5"/>
                 <!-- Arrow -->
@@ -1048,8 +1051,8 @@ footer a { color: #1e3a5f; }
         </div>
 
         <div class="section-label">Position Designations (AWS A3.0)</div>
-        <table class="ref-table">
-            <tr><th>Position</th><th>Groove designation</th><th>Fillet designation</th><th>Description</th></tr>
+        <table class="ref-table"><caption class="sr-only">Welding Symbols — AWS A2.4 Standard (table 2)</caption>
+            <tr><th scope="col">Position</th><th scope="col">Groove designation</th><th scope="col">Fillet designation</th><th scope="col">Description</th></tr>
             <tr><td>Flat</td><td>1G</td><td>1F</td><td>Weld axis horizontal; welding from above</td></tr>
             <tr><td>Horizontal</td><td>2G</td><td>2F</td><td>Weld axis horizontal; joint face vertical</td></tr>
             <tr><td>Vertical</td><td>3G</td><td>3F</td><td>Weld axis vertical; uphill or downhill</td></tr>
@@ -1060,6 +1063,7 @@ footer a { color: #1e3a5f; }
     </div>
 </div>
 
+</main>
 <footer>
     <a href="index.html">← Back to References</a><br>
     <span style="margin-top:6px;display:inline-block;">Sources: Lincoln Electric Procedure Handbook (14th ed.) &middot; AWS Welding Handbook Vol. 1–2 (9th ed.) &middot; Miller Electric Joint Design Guide &middot; AWS A2.4 &middot; AWS D1.1 Structural Welding Code</span>

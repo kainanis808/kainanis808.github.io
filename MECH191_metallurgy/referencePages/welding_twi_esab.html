@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Welding Process Guide — TWI &amp; ESAB</title>
 <style>
@@ -13,7 +15,7 @@ header h1{font-size:1.85rem;font-weight:700;}
 header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
 .source-note{background:#eff6ff;border-left:4px solid #1e3a5f;padding:10px 18px;font-size:0.82rem;color:#1e40af;line-height:1.55;}
 .tab-bar{display:flex;flex-wrap:wrap;background:#f1f5f9;border-bottom:2px solid #e2e8f0;padding:0 20px;position:sticky;top:0;z-index:10;}
-.tab-btn{padding:10px 18px;font-size:0.84rem;font-weight:600;border:none;background:none;cursor:pointer;color:#64748b;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all 0.15s;white-space:nowrap;}
+.tab-btn{padding:10px 18px;font-size:0.84rem;font-weight:600;border:none;background:none;cursor:pointer;color:#606f85;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all 0.15s;white-space:nowrap;}
 .tab-btn:hover{color:#1e3a5f;}
 .tab-btn.active{color:#1e3a5f;border-bottom-color:#1e3a5f;}
 .panel{display:none;max-width:1100px;margin:0 auto;padding:28px 20px 60px;}
@@ -40,11 +42,11 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
 .proc-card ul{font-size:0.82rem;color:#4b5563;padding-left:18px;line-height:1.7;}
 .proc-specs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
 .spec-item{background:#f8fafc;border-radius:6px;padding:7px 10px;}
-.spec-label{font-size:0.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.03em;}
+.spec-label{font-size:0.72rem;font-weight:700;color:#606f85;text-transform:uppercase;letter-spacing:0.03em;}
 .spec-value{font-size:0.82rem;color:#1e293b;margin-top:2px;}
 /* process selector buttons */
 .proc-sel{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
-.proc-sel-btn{padding:8px 20px;border:2px solid #e2e8f0;border-radius:8px;font-size:0.84rem;font-weight:600;cursor:pointer;background:#fff;color:#64748b;transition:all 0.15s;}
+.proc-sel-btn{padding:8px 20px;border:2px solid #e2e8f0;border-radius:8px;font-size:0.84rem;font-weight:600;cursor:pointer;background:#fff;color:#606f85;transition:all 0.15s;}
 .proc-sel-btn:hover{border-color:#1e3a5f;color:#1e3a5f;}
 .proc-sel-btn.active{background:#1e3a5f;color:#fff;border-color:#1e3a5f;}
 .proc-section{display:none;}
@@ -68,7 +70,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
   .proc-grid,.case-grid{grid-template-columns:1fr;}
   .proc-specs{grid-template-columns:1fr 1fr;}
 }
-.back-link{display:block;text-align:center;margin-top:30px;color:#0284c7;text-decoration:none;font-size:0.95rem;}
+.back-link{display:block;text-align:center;margin-top:30px;color:#027ab8;text-decoration:none;font-size:0.95rem;}
 .back-link:hover{text-decoration:underline;}
 </style>
 </head>
@@ -78,6 +80,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
   <h1>Welding Process Guide</h1>
   <div class="subtitle">The Welding Institute (TWI) &nbsp;&middot;&nbsp; ESAB Welding &amp; Cutting</div>
 </header>
+<main id="main-content">
 <div class="source-note">
   Sources: <strong>TWI (The Welding Institute)</strong> — Process Knowledge, FAQ Library &amp; Defect Guides &nbsp;&middot;&nbsp;
   <strong>ESAB Welding &amp; Cutting</strong> — Process Guide, Consumable Selection &amp; Application Case Studies
@@ -205,8 +208,8 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
 
   <div class="section" style="margin-top:26px;">
     <h2>Process Selection Summary</h2>
-    <table class="ref-table">
-      <thead><tr><th>Factor</th><th>SMAW</th><th>GMAW</th><th>GTAW</th><th>FCAW</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Process Selection Summary</caption>
+      <thead><tr><th scope="col">Factor</th><th scope="col">SMAW</th><th scope="col">GMAW</th><th scope="col">GTAW</th><th scope="col">FCAW</th></tr></thead>
       <tbody>
         <tr><td><strong>Portability</strong></td><td>Excellent — simple equipment</td><td>Good — gas cylinder needed</td><td>Good — gas cylinder needed</td><td>Good — cylinder if FCAW-G</td></tr>
         <tr><td><strong>Outdoor / wind</strong></td><td>Excellent</td><td>Poor — gas blown away</td><td>Poor — gas blown away</td><td>Excellent (FCAW-S) / Poor (FCAW-G)</td></tr>
@@ -230,8 +233,8 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
   <div class="section">
     <h2>SMAW — Parameter Guidance (TWI)</h2>
     <p>SMAW parameters depend primarily on electrode classification, diameter, and position. Current is the primary control variable — voltage is self-regulating through arc length.</p>
-    <table class="ref-table">
-      <thead><tr><th>Electrode Class</th><th>Diameter</th><th>Current (A)</th><th>Polarity</th><th>Position</th><th>Notes</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">SMAW — Parameter Guidance (TWI)</caption>
+      <thead><tr><th scope="col">Electrode Class</th><th scope="col">Diameter</th><th scope="col">Current (A)</th><th scope="col">Polarity</th><th scope="col">Position</th><th scope="col">Notes</th></tr></thead>
       <tbody>
         <tr><td>E6010</td><td>3/32" (2.4mm)</td><td>60–90</td><td>DCEP</td><td>All</td><td>Cellulosic; deep penetration; pipeline root pass</td></tr>
         <tr><td>E6010</td><td>1/8" (3.2mm)</td><td>75–125</td><td>DCEP</td><td>All</td><td>Forceful arc; fast-freeze slag; vertical down capable</td></tr>
@@ -246,8 +249,8 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
     </table>
     <div class="note-box"><strong>Arc length rule (SMAW):</strong> Maintain arc length approximately equal to electrode diameter. Short arcing increases penetration and narrows the bead; long arcing promotes spatter, porosity, and undercut.</div>
     <h3>Travel Speed &amp; Bead Width Guidelines</h3>
-    <table class="ref-table">
-      <thead><tr><th>Condition</th><th>Travel Speed</th><th>Bead Width</th><th>Effect</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Travel Speed &amp; Bead Width Guidelines</caption>
+      <thead><tr><th scope="col">Condition</th><th scope="col">Travel Speed</th><th scope="col">Bead Width</th><th scope="col">Effect</th></tr></thead>
       <tbody>
         <tr><td>Normal</td><td>4–8 in/min</td><td>2–3× electrode dia.</td><td>Balanced penetration and reinforcement</td></tr>
         <tr><td>Too slow</td><td>&lt;4 in/min</td><td>Wide, high crown</td><td>Excess reinforcement; burn-through risk on thin material</td></tr>
@@ -261,8 +264,8 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
   <div class="section">
     <h2>GMAW — Parameter Guidance (TWI)</h2>
     <p>GMAW uses constant voltage (CV) power. Voltage and wire feed speed (WFS) are the primary settings; amperage is self-adjusting. Transfer mode is determined by the combination of voltage and wire diameter.</p>
-    <table class="ref-table">
-      <thead><tr><th>Transfer Mode</th><th>Wire Dia.</th><th>Voltage (V)</th><th>WFS (in/min)</th><th>Current (A)</th><th>Gas</th><th>Position</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">GMAW — Parameter Guidance (TWI)</caption>
+      <thead><tr><th scope="col">Transfer Mode</th><th scope="col">Wire Dia.</th><th scope="col">Voltage (V)</th><th scope="col">WFS (in/min)</th><th scope="col">Current (A)</th><th scope="col">Gas</th><th scope="col">Position</th></tr></thead>
       <tbody>
         <tr><td><strong>Short-Circuit</strong></td><td>0.023"–0.035"</td><td>14–21</td><td>100–300</td><td>60–160</td><td>75Ar/25CO₂ or CO₂</td><td>All</td></tr>
         <tr><td><strong>Globular</strong></td><td>0.035"–0.045"</td><td>21–25</td><td>150–300</td><td>150–250</td><td>CO₂</td><td>F only</td></tr>
@@ -271,8 +274,8 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
       </tbody>
     </table>
     <h3>Contact-Tip-to-Work Distance (CTWD) &amp; Gas Flow</h3>
-    <table class="ref-table">
-      <thead><tr><th>Parameter</th><th>Short-Circuit</th><th>Spray / Pulse</th><th>Effect of Deviation</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Contact-Tip-to-Work Distance (CTWD) &amp; Gas Flow</caption>
+      <thead><tr><th scope="col">Parameter</th><th scope="col">Short-Circuit</th><th scope="col">Spray / Pulse</th><th scope="col">Effect of Deviation</th></tr></thead>
       <tbody>
         <tr><td>CTWD</td><td>3/8"–5/8" (10–16mm)</td><td>5/8"–1" (16–25mm)</td><td>Too long → high resistance, voltage drop, porosity. Too short → burnback.</td></tr>
         <tr><td>Gas flow</td><td>25–35 CFH</td><td>35–50 CFH</td><td>Too low → porosity. Too high → turbulence, atmospheric pickup.</td></tr>
@@ -287,8 +290,8 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
     <h2>GTAW — Parameter Guidance (TWI)</h2>
     <p>GTAW uses constant current (CC). Amperage is set on the machine; the welder controls heat input by arc length and travel speed. Tungsten selection and preparation are critical for arc stability and weld quality.</p>
     <h3>Tungsten Electrode Selection</h3>
-    <table class="ref-table">
-      <thead><tr><th>Tungsten Type</th><th>Color Band</th><th>Polarity / Material</th><th>Notes</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Tungsten Electrode Selection</caption>
+      <thead><tr><th scope="col">Tungsten Type</th><th scope="col">Color Band</th><th scope="col">Polarity / Material</th><th scope="col">Notes</th></tr></thead>
       <tbody>
         <tr><td>Pure (EWP)</td><td>Green</td><td>AC — aluminum, magnesium</td><td>Forms balled tip on AC; good arc stability for AC Al welding</td></tr>
         <tr><td>2% Ceriated (EWCe-2)</td><td>Grey</td><td>DCEN — steel, SS, Ti; AC</td><td>Best general-purpose; easy arc starting; long tip life; replaces thoriated for most use</td></tr>
@@ -298,8 +301,8 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
       </tbody>
     </table>
     <h3>Current &amp; Shielding Gas by Material</h3>
-    <table class="ref-table">
-      <thead><tr><th>Base Metal</th><th>Polarity</th><th>Current Range (A)</th><th>Tungsten Dia.</th><th>Shielding Gas</th><th>Filler</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Current &amp; Shielding Gas by Material</caption>
+      <thead><tr><th scope="col">Base Metal</th><th scope="col">Polarity</th><th scope="col">Current Range (A)</th><th scope="col">Tungsten Dia.</th><th scope="col">Shielding Gas</th><th scope="col">Filler</th></tr></thead>
       <tbody>
         <tr><td>Carbon steel</td><td>DCEN</td><td>50–200</td><td>3/32"–1/8"</td><td>100% Ar, 15–25 CFH</td><td>ER70S-2 or ER70S-6</td></tr>
         <tr><td>304/304L Stainless</td><td>DCEN</td><td>50–180</td><td>1/16"–3/32"</td><td>100% Ar, 15–20 CFH</td><td>ER308L</td></tr>
@@ -317,8 +320,8 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
   <div class="section">
     <h2>FCAW — Parameter Guidance (TWI)</h2>
     <p>FCAW uses CV power like GMAW. The larger wire diameters and higher deposition rates require careful attention to CTWD and interpass temperature to avoid excessive heat input and slag entrapment between passes.</p>
-    <table class="ref-table">
-      <thead><tr><th>Wire Classification</th><th>Wire Dia.</th><th>Voltage (V)</th><th>WFS (in/min)</th><th>Approx. Current (A)</th><th>Gas</th><th>Polarity</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">FCAW — Parameter Guidance (TWI)</caption>
+      <thead><tr><th scope="col">Wire Classification</th><th scope="col">Wire Dia.</th><th scope="col">Voltage (V)</th><th scope="col">WFS (in/min)</th><th scope="col">Approx. Current (A)</th><th scope="col">Gas</th><th scope="col">Polarity</th></tr></thead>
       <tbody>
         <tr><td>E71T-1 (FCAW-G)</td><td>0.045"</td><td>22–28</td><td>200–450</td><td>150–280</td><td>75Ar/25CO₂ or CO₂</td><td>DCEP</td></tr>
         <tr><td>E71T-1 (FCAW-G)</td><td>1/16"</td><td>24–30</td><td>150–350</td><td>200–350</td><td>75Ar/25CO₂ or CO₂</td><td>DCEP</td></tr>
@@ -329,8 +332,8 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
       </tbody>
     </table>
     <h3>CTWD, Gas Flow &amp; Interpass Guidance</h3>
-    <table class="ref-table">
-      <thead><tr><th>Parameter</th><th>FCAW-G</th><th>FCAW-S</th><th>Notes</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">CTWD, Gas Flow &amp; Interpass Guidance</caption>
+      <thead><tr><th scope="col">Parameter</th><th scope="col">FCAW-G</th><th scope="col">FCAW-S</th><th scope="col">Notes</th></tr></thead>
       <tbody>
         <tr><td>CTWD</td><td>3/4"–1" (19–25mm)</td><td>1"–2" (25–50mm)</td><td>FCAW-S requires longer CTWD for flux preheating in the tube</td></tr>
         <tr><td>Gas flow rate</td><td>35–50 CFH</td><td>N/A</td><td>Increase to 50+ CFH for drafty conditions; never exceed 60 CFH (turbulence)</td></tr>
@@ -360,8 +363,8 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
 
   <!-- SMAW defects -->
   <div id="dSMAW" class="proc-section active">
-    <table class="ref-table">
-      <thead><tr><th width="160">Defect</th><th>Probable Causes</th><th>Corrective Actions</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Process-Specific Defect Troubleshooting (TWI)</caption>
+      <thead><tr><th width="160" scope="col">Defect</th><th scope="col">Probable Causes</th><th scope="col">Corrective Actions</th></tr></thead>
       <tbody>
         <tr>
           <td><strong>Porosity</strong></td>
@@ -414,8 +417,8 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
 
   <!-- GMAW defects -->
   <div id="dGMAW" class="proc-section">
-    <table class="ref-table">
-      <thead><tr><th width="160">Defect</th><th>Probable Causes</th><th>Corrective Actions</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Process-Specific Defect Troubleshooting (TWI) (table 2)</caption>
+      <thead><tr><th width="160" scope="col">Defect</th><th scope="col">Probable Causes</th><th scope="col">Corrective Actions</th></tr></thead>
       <tbody>
         <tr>
           <td><strong>Porosity</strong></td>
@@ -463,8 +466,8 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
 
   <!-- GTAW defects -->
   <div id="dGTAW" class="proc-section">
-    <table class="ref-table">
-      <thead><tr><th width="160">Defect</th><th>Probable Causes</th><th>Corrective Actions</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Process-Specific Defect Troubleshooting (TWI) (table 3)</caption>
+      <thead><tr><th width="160" scope="col">Defect</th><th scope="col">Probable Causes</th><th scope="col">Corrective Actions</th></tr></thead>
       <tbody>
         <tr>
           <td><strong>Tungsten Inclusion</strong></td>
@@ -512,8 +515,8 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
 
   <!-- FCAW defects -->
   <div id="dFCAW" class="proc-section">
-    <table class="ref-table">
-      <thead><tr><th width="160">Defect</th><th>Probable Causes</th><th>Corrective Actions</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Process-Specific Defect Troubleshooting (TWI) (table 4)</caption>
+      <thead><tr><th width="160" scope="col">Defect</th><th scope="col">Probable Causes</th><th scope="col">Corrective Actions</th></tr></thead>
       <tbody>
         <tr>
           <td><strong>Porosity</strong></td>
@@ -569,10 +572,10 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
     <h2>ESAB Electrode &amp; Wire Selection Chart</h2>
     <p>ESAB is one of the world's leading manufacturers of welding consumables and equipment. The chart below covers the primary AWS-classified consumables organized by process, base material, and typical application — reflecting ESAB's product guidance for process and material selection.</p>
 
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">ESAB Electrode &amp; Wire Selection Chart</caption>
       <thead>
         <tr>
-          <th>Process</th><th>AWS Class</th><th>Base Material</th><th>Position</th><th>Application</th><th>Key Characteristics</th>
+          <th scope="col">Process</th><th scope="col">AWS Class</th><th scope="col">Base Material</th><th scope="col">Position</th><th scope="col">Application</th><th scope="col">Key Characteristics</th>
         </tr>
       </thead>
       <tbody>
@@ -710,8 +713,8 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
 
   <div class="section">
     <h2>ESAB Process Comparison — Quick Reference</h2>
-    <table class="ref-table">
-      <thead><tr><th>Criterion</th><th>SMAW</th><th>GMAW</th><th>GTAW</th><th>FCAW-G</th><th>FCAW-S</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">ESAB Process Comparison — Quick Reference</caption>
+      <thead><tr><th scope="col">Criterion</th><th scope="col">SMAW</th><th scope="col">GMAW</th><th scope="col">GTAW</th><th scope="col">FCAW-G</th><th scope="col">FCAW-S</th></tr></thead>
       <tbody>
         <tr><td><strong>Equipment cost</strong></td><td>Lowest</td><td>Moderate</td><td>Moderate–high</td><td>Moderate</td><td>Moderate</td></tr>
         <tr><td><strong>Consumable cost</strong></td><td>Low–moderate</td><td>Low</td><td>Low (filler); moderate (tungsten)</td><td>Moderate</td><td>Moderate–high</td></tr>
@@ -744,6 +747,7 @@ function showProc(id, btn) {
   if (btn) btn.classList.add('active');
 }
 </script>
+</main>
 <a class="back-link" href="index.html">← Back to References</a>
 </body>
 </html>

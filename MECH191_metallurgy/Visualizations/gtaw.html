@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GTAW – TIG Welding Guidance, Root Pass &amp; AWS Filler Classification</title>
 <style>
@@ -101,7 +103,7 @@
   .tag.bad  { background: #450a0a; color: #fca5a5; }
   .tag.warn { background: #451a03; color: #fdba74; }
 
-  .src { font-size: 0.74rem; color: #64748b; margin-top: 8px; font-style: italic; }
+  .src { font-size: 0.74rem; color: #7c8ba1; margin-top: 8px; font-style: italic; }
   .back-link { text-align: center; padding: 28px; }
   .back-link a { color: #38bdf8; text-decoration: none; font-size: 0.9rem; }
   .back-link a:hover { text-decoration: underline; }
@@ -114,6 +116,7 @@
   <p>Tungsten Electrode Selection · AC vs DCEN · Shielding Gas · Filler Selection · Root Pass Pipe Technique · AWS ER Filler Classification — Miller Electric &amp; AWS</p>
 </header>
 
+<main id="main-content">
 <div class="tabs">
   <button class="tab-btn active" onclick="showTab('tig-guidance')">TIG Welding Guidance</button>
   <button class="tab-btn" onclick="showTab('ac-cleaning')">AC &amp; Cathodic Cleaning</button>
@@ -218,10 +221,10 @@
   <!-- Tungsten Electrode Selection -->
   <h2>Tungsten Electrode Selection</h2>
   <div class="tbl-wrap">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Tungsten Electrode Selection</caption>
       <thead>
         <tr>
-          <th>Color Code</th><th>Type</th><th>Composition</th><th>Best Polarity</th><th>Primary Applications</th><th>Tip Prep</th>
+          <th scope="col">Color Code</th><th scope="col">Type</th><th scope="col">Composition</th><th scope="col">Best Polarity</th><th scope="col">Primary Applications</th><th scope="col">Tip Prep</th>
         </tr>
       </thead>
       <tbody>
@@ -281,9 +284,9 @@
   <!-- Shielding Gas -->
   <h2>Shielding Gas Selection</h2>
   <div class="tbl-wrap">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Shielding Gas Selection</caption>
       <thead>
-        <tr><th>Gas</th><th>Composition</th><th>Ionization Potential</th><th>Thermal Conductivity</th><th>Arc Characteristics</th><th>Applications</th></tr>
+        <tr><th scope="col">Gas</th><th scope="col">Composition</th><th scope="col">Ionization Potential</th><th scope="col">Thermal Conductivity</th><th scope="col">Arc Characteristics</th><th scope="col">Applications</th></tr>
       </thead>
       <tbody>
         <tr>
@@ -358,7 +361,7 @@
   <!-- Canvas animation: GTAW setup cross-section -->
   <h2>GTAW Setup — Animated Cross-Section</h2>
   <div class="anim-wrap">
-    <canvas id="gtawSetupCv" class="anim-cv" width="760" height="380"></canvas>
+    <canvas id="gtawSetupCv" class="anim-cv" width="760" height="380" role="img" aria-label="Step-by-step animated cross-section of a GTAW (TIG) set-up: torch with tungsten electrode and gas cup, shielding gas flow, arc, weld pool, and hand-fed filler rod. Use Prev and Next; each step is described in text."></canvas>
     <div class="anim-ctrls">
       <button onclick="prevSetupStage()">◀ Prev</button>
       <div class="stage-dots" id="setupDots"></div>
@@ -408,7 +411,7 @@
   <!-- AC Cleaning animation -->
   <h2>AC Cathodic Cleaning — Animated Cycle</h2>
   <div class="anim-wrap">
-    <canvas id="acCleanCv" class="anim-cv" width="760" height="420"></canvas>
+    <canvas id="acCleanCv" class="anim-cv" width="760" height="420" role="img" aria-label="Animated AC GTAW cycle: during the electrode-negative half-cycle electrons flow from the tungsten into the work and heat it for penetration; during the electrode-positive half-cycle the current reverses and breaks up the surface oxide (cathodic cleaning) on aluminum. Use Play/Pause and Reset."></canvas>
     <div class="anim-ctrls">
       <button onclick="toggleAcAnim()">▶ / ■ Play/Pause</button>
       <button onclick="resetAcAnim()">↺ Reset</button>
@@ -425,9 +428,9 @@
       The default is typically 70–75% EN / 25–30% EP. This ratio is the primary control for balancing cleaning action against electrode life and penetration.
     </p>
     <div class="tbl-wrap">
-      <table class="ref-table">
+      <table class="ref-table"><caption class="sr-only">AC Balance Control</caption>
         <thead>
-          <tr><th>EN% Setting</th><th>EP% Setting</th><th>Cleaning Width</th><th>Penetration</th><th>Electrode Heat</th><th>Use When…</th></tr>
+          <tr><th scope="col">EN% Setting</th><th scope="col">EP% Setting</th><th scope="col">Cleaning Width</th><th scope="col">Penetration</th><th scope="col">Electrode Heat</th><th scope="col">Use When…</th></tr>
         </thead>
         <tbody>
           <tr><td>60%</td><td>40%</td><td>Very wide</td><td>Shallow</td><td>Very high (large ball)</td><td>Heavy oxide contamination; very dirty metal</td></tr>
@@ -460,9 +463,9 @@
 
   <h2>Aluminum TIG — Key Parameters (Miller Reference)</h2>
   <div class="tbl-wrap">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Aluminum TIG — Key Parameters (Miller Reference)</caption>
       <thead>
-        <tr><th>Thickness</th><th>Tungsten Dia.</th><th>Filler Dia.</th><th>Amperage (AC)</th><th>Shielding Gas</th><th>Flow Rate</th></tr>
+        <tr><th scope="col">Thickness</th><th scope="col">Tungsten Dia.</th><th scope="col">Filler Dia.</th><th scope="col">Amperage (AC)</th><th scope="col">Shielding Gas</th><th scope="col">Flow Rate</th></tr>
       </thead>
       <tbody>
         <tr><td>0.063" (1.6 mm)</td><td>1/16" (1.6 mm)</td><td>1/16"</td><td>60–90 A</td><td>100% Ar</td><td>12–15 CFH</td></tr>
@@ -570,7 +573,7 @@
   <!-- Keyhole canvas animation -->
   <h2>Keyhole Root Pass — Animated View</h2>
   <div class="anim-wrap">
-    <canvas id="keyholeCV" class="anim-cv" width="760" height="300"></canvas>
+    <canvas id="keyholeCV" class="anim-cv" width="760" height="300" role="img" aria-label="Step-by-step view of a keyhole root pass on pipe: a very short arc melts through the root opening to form a small keyhole, filler is added at the leading edge, and the keyhole is carried around the joint to fuse both root faces. Use Prev and Next; each step is described in text."></canvas>
     <div class="anim-ctrls">
       <button onclick="prevKH()">◀ Prev</button>
       <div class="stage-dots" id="khDots"></div>
@@ -608,16 +611,16 @@
   <!-- Purge color chart -->
   <h2>Stainless Steel — Inside Bead Color Guide</h2>
   <div class="tbl-wrap">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Stainless Steel — Inside Bead Color Guide</caption>
       <thead>
-        <tr><th>Color</th><th>O₂ Level</th><th>Oxide Layer</th><th>Interpretation</th></tr>
+        <tr><th scope="col">Color</th><th scope="col">O₂ Level</th><th scope="col">Oxide Layer</th><th scope="col">Interpretation</th></tr>
       </thead>
       <tbody>
         <tr><td><span style="color:#e2e8f0;font-weight:700;">Bright Silver</span></td><td>&lt;20 ppm</td><td>None</td><td><span class="tag good">Ideal — full Cr₂O₃ passive layer intact</span></td></tr>
         <tr><td><span style="color:#fbbf24;font-weight:700;">Light Gold / Straw</span></td><td>20–50 ppm</td><td>Thin TiO₂-like</td><td><span class="tag good">Acceptable for most applications</span></td></tr>
         <tr><td><span style="color:#d97706;font-weight:700;">Dark Gold / Bronze</span></td><td>50–100 ppm</td><td>Thicker oxide</td><td><span class="tag warn">Marginal — improve purge; acceptable for non-critical</span></td></tr>
-        <tr><td><span style="color:#dc2626;font-weight:700;">Dark Blue</span></td><td>100–300 ppm</td><td>Fe₂O₃ / Cr₂O₃ mixed</td><td><span class="tag bad">Reject — significant Cr depletion in sensitized zone</span></td></tr>
-        <tr><td><span style="color:#6b7280;font-weight:700;">Grey / Black ("Sugaring")</span></td><td>&gt;500 ppm</td><td>Heavy FeO/Fe₂O₃</td><td><span class="tag bad">Reject — severe oxidation; must be removed and re-welded</span></td></tr>
+        <tr><td><span style="color:#e55f5f;font-weight:700;">Dark Blue</span></td><td>100–300 ppm</td><td>Fe₂O₃ / Cr₂O₃ mixed</td><td><span class="tag bad">Reject — significant Cr depletion in sensitized zone</span></td></tr>
+        <tr><td><span style="color:#7a8190;font-weight:700;">Grey / Black ("Sugaring")</span></td><td>&gt;500 ppm</td><td>Heavy FeO/Fe₂O₃</td><td><span class="tag bad">Reject — severe oxidation; must be removed and re-welded</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -683,9 +686,9 @@
     </div>
 
     <div class="tbl-wrap">
-      <table class="ref-table">
+      <table class="ref-table"><caption class="sr-only">ER — Electrode/Rod</caption>
         <thead>
-          <tr><th>Classification</th><th>Min. Tensile (psi)</th><th>Si %</th><th>Mn %</th><th>Deoxidizer Level</th><th>Best Applications</th></tr>
+          <tr><th scope="col">Classification</th><th scope="col">Min. Tensile (psi)</th><th scope="col">Si %</th><th scope="col">Mn %</th><th scope="col">Deoxidizer Level</th><th scope="col">Best Applications</th></tr>
         </thead>
         <tbody>
           <tr><td>ER70S-2</td><td>70,000</td><td>0.40–0.70</td><td>0.90–1.40</td><td>Triple-deox (Ti, Zr, Al added)</td><td>Pipe root passes; killed/semi-killed steels; excellent wetting</td></tr>
@@ -715,9 +718,9 @@
     </div>
 
     <div class="tbl-wrap">
-      <table class="ref-table">
+      <table class="ref-table"><caption class="sr-only">ER — Electrode/Rod (table 2)</caption>
         <thead>
-          <tr><th>Classification</th><th>Base Metal Match</th><th>C % Max</th><th>Notes</th><th>Typical Applications</th></tr>
+          <tr><th scope="col">Classification</th><th scope="col">Base Metal Match</th><th scope="col">C % Max</th><th scope="col">Notes</th><th scope="col">Typical Applications</th></tr>
         </thead>
         <tbody>
           <tr><td>ER308/308L</td><td>304, 304L</td><td>0.03 (L)</td><td>Most common SS filler; L grade reduces sensitization risk</td><td>Food processing, dairy, chemical equipment</td></tr>
@@ -753,9 +756,9 @@
     </div>
 
     <div class="tbl-wrap">
-      <table class="ref-table">
+      <table class="ref-table"><caption class="sr-only">ER — Electrode/Rod (table 3)</caption>
         <thead>
-          <tr><th>Classification</th><th>Primary Alloying</th><th>Matching Base Metal</th><th>Crack Sensitivity</th><th>Anodizing</th><th>Notes</th></tr>
+          <tr><th scope="col">Classification</th><th scope="col">Primary Alloying</th><th scope="col">Matching Base Metal</th><th scope="col">Crack Sensitivity</th><th scope="col">Anodizing</th><th scope="col">Notes</th></tr>
         </thead>
         <tbody>
           <tr><td>ER1100</td><td>Pure Al (99.0%+)</td><td>1xxx series</td><td>Very low</td><td>Bright silver</td><td>Food equipment; electrical; highest conductivity</td></tr>
@@ -795,9 +798,9 @@
   <!-- Sensitization note -->
   <h2>Cross-Material Filler Summary</h2>
   <div class="tbl-wrap">
-    <table class="ref-table">
+    <table class="ref-table"><caption class="sr-only">Cross-Material Filler Summary</caption>
       <thead>
-        <tr><th>Base Metal</th><th>Recommended TIG Filler</th><th>AWS Spec</th><th>Key Notes</th></tr>
+        <tr><th scope="col">Base Metal</th><th scope="col">Recommended TIG Filler</th><th scope="col">AWS Spec</th><th scope="col">Key Notes</th></tr>
       </thead>
       <tbody>
         <tr><td>A36 / A572 Carbon Steel</td><td>ER70S-2 or ER70S-6</td><td>A5.18</td><td>S-2 for root passes; S-6 for fill/cap on dirty base metal</td></tr>
@@ -814,6 +817,7 @@
 
 </div><!-- end tab 4 -->
 
+</main>
 <div class="back-link">
   <a href="index.html">← Back to Visualizations</a>
 </div>

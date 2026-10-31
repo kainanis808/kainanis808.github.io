@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Weld Symbols — AWS A2.4 Reference &amp; Trainer</title>
 <style>
@@ -13,7 +15,7 @@ header h1{font-size:1.85rem;font-weight:700;}
 header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
 .source-note{background:#eff6ff;border-left:4px solid #1e3a5f;padding:10px 18px;font-size:0.82rem;color:#1e40af;line-height:1.55;}
 .tab-bar{display:flex;flex-wrap:wrap;background:#f1f5f9;border-bottom:2px solid #e2e8f0;padding:0 20px;position:sticky;top:0;z-index:10;}
-.tab-btn{padding:10px 18px;font-size:0.84rem;font-weight:600;border:none;background:none;cursor:pointer;color:#64748b;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all 0.15s;white-space:nowrap;}
+.tab-btn{padding:10px 18px;font-size:0.84rem;font-weight:600;border:none;background:none;cursor:pointer;color:#606f85;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all 0.15s;white-space:nowrap;}
 .tab-btn:hover{color:#1e3a5f;}
 .tab-btn.active{color:#1e3a5f;border-bottom-color:#1e3a5f;}
 .panel{display:none;max-width:1100px;margin:0 auto;padding:28px 20px 60px;}
@@ -34,7 +36,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
 .sym-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px 12px;text-align:center;}
 .sym-card svg{display:block;margin:0 auto 8px;}
 .sym-card .sym-name{font-size:0.8rem;font-weight:700;color:#1e3a5f;}
-.sym-card .sym-desc{font-size:0.73rem;color:#64748b;margin-top:3px;line-height:1.4;}
+.sym-card .sym-desc{font-size:0.73rem;color:#606f85;margin-top:3px;line-height:1.4;}
 /* anatomy */
 .anatomy-wrap{overflow-x:auto;}
 .anatomy-wrap svg{max-width:100%;display:block;margin:0 auto;}
@@ -58,7 +60,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
 .quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;}
 .quiz-nav-btn{padding:9px 22px;background:#1e3a5f;color:#fff;border:none;border-radius:8px;font-size:0.88rem;font-weight:600;cursor:pointer;}
 .quiz-nav-btn:hover{background:#1e40af;}
-.quiz-score{font-size:0.84rem;color:#64748b;}
+.quiz-score{font-size:0.84rem;color:#606f85;}
 .restart-btn{display:inline-block;padding:10px 28px;background:#1e3a5f;color:#fff;border:none;border-radius:8px;font-size:0.9rem;font-weight:600;cursor:pointer;margin-top:10px;}
 .restart-btn:hover{background:#1e40af;}
 /* gdt */
@@ -67,7 +69,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
   .two-col,.gdt-grid,.quiz-choices{grid-template-columns:1fr;}
   .sym-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
 }
-.back-link{display:block;text-align:center;margin-top:30px;color:#0284c7;text-decoration:none;font-size:0.95rem;}
+.back-link{display:block;text-align:center;margin-top:30px;color:#027ab8;text-decoration:none;font-size:0.95rem;}
 .back-link:hover{text-decoration:underline;}
 </style>
 </head>
@@ -77,6 +79,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
   <h1>Weld Symbols</h1>
   <div class="subtitle">AWS A2.4 Quick Reference &nbsp;&middot;&nbsp; Callout Anatomy &nbsp;&middot;&nbsp; Interactive Trainer &nbsp;&middot;&nbsp; GD&amp;T Integration</div>
 </header>
+<main id="main-content">
 <div class="source-note">
   Sources: <strong>AWS A2.4:2012</strong> Standard Symbols for Welding, Brazing &amp; Nondestructive Examination &nbsp;&middot;&nbsp;
   <strong>Swagelok</strong> Welding Resources &nbsp;&middot;&nbsp;
@@ -103,7 +106,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
     <div class="sym-grid">
 
       <div class="sym-card">
-        <svg viewBox="0 0 72 38" width="72" height="38">
+        <svg viewBox="0 0 72 38" width="72" height="38" role="img" aria-label="Square groove weld symbol. Its shape is described in the caption.">
           <line x1="4" y1="19" x2="68" y2="19" stroke="#1e3a5f" stroke-width="1.5"/>
           <line x1="24" y1="19" x2="24" y2="32" stroke="#dc2626" stroke-width="2"/>
           <line x1="48" y1="19" x2="48" y2="32" stroke="#dc2626" stroke-width="2"/>
@@ -113,7 +116,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
       </div>
 
       <div class="sym-card">
-        <svg viewBox="0 0 72 38" width="72" height="38">
+        <svg viewBox="0 0 72 38" width="72" height="38" role="img" aria-label="V-groove weld symbol. Its shape is described in the caption.">
           <line x1="4" y1="19" x2="68" y2="19" stroke="#1e3a5f" stroke-width="1.5"/>
           <polyline points="20,19 36,32 52,19" fill="none" stroke="#dc2626" stroke-width="2"/>
         </svg>
@@ -122,7 +125,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
       </div>
 
       <div class="sym-card">
-        <svg viewBox="0 0 72 38" width="72" height="38">
+        <svg viewBox="0 0 72 38" width="72" height="38" role="img" aria-label="Bevel groove weld symbol. Its shape is described in the caption.">
           <line x1="4" y1="19" x2="68" y2="19" stroke="#1e3a5f" stroke-width="1.5"/>
           <line x1="22" y1="19" x2="22" y2="32" stroke="#dc2626" stroke-width="2"/>
           <line x1="22" y1="32" x2="50" y2="19" stroke="#dc2626" stroke-width="2"/>
@@ -132,7 +135,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
       </div>
 
       <div class="sym-card">
-        <svg viewBox="0 0 72 38" width="72" height="38">
+        <svg viewBox="0 0 72 38" width="72" height="38" role="img" aria-label="U-groove weld symbol. Its shape is described in the caption.">
           <line x1="4" y1="19" x2="68" y2="19" stroke="#1e3a5f" stroke-width="1.5"/>
           <path d="M22,19 L22,27 Q36,35 50,27 L50,19" fill="none" stroke="#dc2626" stroke-width="2"/>
         </svg>
@@ -141,7 +144,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
       </div>
 
       <div class="sym-card">
-        <svg viewBox="0 0 72 38" width="72" height="38">
+        <svg viewBox="0 0 72 38" width="72" height="38" role="img" aria-label="J-groove weld symbol. Its shape is described in the caption.">
           <line x1="4" y1="19" x2="68" y2="19" stroke="#1e3a5f" stroke-width="1.5"/>
           <line x1="22" y1="19" x2="22" y2="29" stroke="#dc2626" stroke-width="2"/>
           <path d="M22,29 Q36,35 50,27 L50,19" fill="none" stroke="#dc2626" stroke-width="2"/>
@@ -151,7 +154,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
       </div>
 
       <div class="sym-card">
-        <svg viewBox="0 0 72 38" width="72" height="38">
+        <svg viewBox="0 0 72 38" width="72" height="38" role="img" aria-label="Flare-V groove weld symbol. Its shape is described in the caption.">
           <line x1="4" y1="19" x2="68" y2="19" stroke="#1e3a5f" stroke-width="1.5"/>
           <path d="M22,19 Q22,32 36,32 Q50,32 50,19" fill="none" stroke="#dc2626" stroke-width="2"/>
         </svg>
@@ -160,7 +163,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
       </div>
 
       <div class="sym-card">
-        <svg viewBox="0 0 72 38" width="72" height="38">
+        <svg viewBox="0 0 72 38" width="72" height="38" role="img" aria-label="Flare-bevel groove weld symbol. Its shape is described in the caption.">
           <line x1="4" y1="19" x2="68" y2="19" stroke="#1e3a5f" stroke-width="1.5"/>
           <line x1="22" y1="19" x2="22" y2="32" stroke="#dc2626" stroke-width="2"/>
           <path d="M22,32 Q36,32 50,19" fill="none" stroke="#dc2626" stroke-width="2"/>
@@ -175,7 +178,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
     <div class="sym-grid">
 
       <div class="sym-card">
-        <svg viewBox="0 0 72 38" width="72" height="38">
+        <svg viewBox="0 0 72 38" width="72" height="38" role="img" aria-label="Fillet weld symbol. Its shape is described in the caption.">
           <line x1="4" y1="19" x2="68" y2="19" stroke="#1e3a5f" stroke-width="1.5"/>
           <polygon points="18,19 18,33 34,19" fill="none" stroke="#dc2626" stroke-width="2"/>
         </svg>
@@ -184,7 +187,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
       </div>
 
       <div class="sym-card">
-        <svg viewBox="0 0 72 38" width="72" height="38">
+        <svg viewBox="0 0 72 38" width="72" height="38" role="img" aria-label="Plug or slot weld symbol. Its shape is described in the caption.">
           <line x1="4" y1="19" x2="68" y2="19" stroke="#1e3a5f" stroke-width="1.5"/>
           <rect x="26" y="19" width="20" height="13" fill="none" stroke="#dc2626" stroke-width="2"/>
         </svg>
@@ -193,7 +196,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
       </div>
 
       <div class="sym-card">
-        <svg viewBox="0 0 72 38" width="72" height="38">
+        <svg viewBox="0 0 72 38" width="72" height="38" role="img" aria-label="Spot weld symbol. Its shape is described in the caption.">
           <line x1="4" y1="19" x2="68" y2="19" stroke="#1e3a5f" stroke-width="1.5"/>
           <circle cx="36" cy="27" r="7" fill="none" stroke="#dc2626" stroke-width="2"/>
         </svg>
@@ -202,7 +205,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
       </div>
 
       <div class="sym-card">
-        <svg viewBox="0 0 72 38" width="72" height="38">
+        <svg viewBox="0 0 72 38" width="72" height="38" role="img" aria-label="Seam weld symbol. Its shape is described in the caption.">
           <line x1="4" y1="19" x2="68" y2="19" stroke="#1e3a5f" stroke-width="1.5"/>
           <ellipse cx="36" cy="27" rx="16" ry="8" fill="none" stroke="#dc2626" stroke-width="2"/>
         </svg>
@@ -211,19 +214,19 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
       </div>
 
       <div class="sym-card">
-        <svg viewBox="0 0 72 38" width="72" height="38">
+        <svg viewBox="0 0 72 38" width="72" height="38" role="img" aria-label="Back or backing weld symbol. Its shape is described in the caption.">
           <line x1="4" y1="19" x2="68" y2="19" stroke="#1e3a5f" stroke-width="1.5"/>
           <!-- V-groove on arrow side (below) -->
           <polyline points="20,19 36,29 52,19" fill="none" stroke="#dc2626" stroke-width="1.5"/>
           <!-- Back weld other side (above) = semicircle -->
-          <path d="M28,19 Q36,10 44,19" fill="none" stroke="#0ea5e9" stroke-width="1.5"/>
+          <path d="M28,19 Q36,10 44,19" fill="none" stroke="#0d94d1" stroke-width="1.5"/>
         </svg>
         <div class="sym-name">Back / Backing</div>
         <div class="sym-desc">Semicircle opposite groove symbol; back weld = deposited last; backing = first</div>
       </div>
 
       <div class="sym-card">
-        <svg viewBox="0 0 72 38" width="72" height="38">
+        <svg viewBox="0 0 72 38" width="72" height="38" role="img" aria-label="Surfacing or buildup weld symbol. Its shape is described in the caption.">
           <line x1="4" y1="19" x2="68" y2="19" stroke="#1e3a5f" stroke-width="1.5"/>
           <line x1="16" y1="23" x2="56" y2="23" stroke="#dc2626" stroke-width="2"/>
           <line x1="16" y1="28" x2="56" y2="28" stroke="#dc2626" stroke-width="2"/>
@@ -234,7 +237,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
       </div>
 
       <div class="sym-card">
-        <svg viewBox="0 0 72 38" width="72" height="38">
+        <svg viewBox="0 0 72 38" width="72" height="38" role="img" aria-label="Edge weld symbol. Its shape is described in the caption.">
           <line x1="4" y1="19" x2="68" y2="19" stroke="#1e3a5f" stroke-width="1.5"/>
           <line x1="22" y1="19" x2="22" y2="33" stroke="#dc2626" stroke-width="2"/>
           <line x1="22" y1="33" x2="50" y2="33" stroke="#dc2626" stroke-width="2"/>
@@ -250,41 +253,41 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
   <!-- Supplementary symbols -->
   <div class="section">
     <h2>Supplementary Symbols</h2>
-    <table class="ref-table">
-      <thead><tr><th width="80">Symbol</th><th>Name</th><th>Location</th><th>Meaning</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Supplementary Symbols</caption>
+      <thead><tr><th width="80" scope="col">Symbol</th><th scope="col">Name</th><th scope="col">Location</th><th scope="col">Meaning</th></tr></thead>
       <tbody>
         <tr>
-          <td><svg viewBox="0 0 50 28" width="50" height="28"><line x1="2" y1="14" x2="48" y2="14" stroke="#1e3a5f" stroke-width="1.5"/><circle cx="14" cy="14" r="6" fill="none" stroke="#dc2626" stroke-width="1.5"/></svg></td>
+          <td><svg viewBox="0 0 50 28" width="50" height="28" role="img" aria-label="Weld all around weld symbol. Its shape is described in the caption."><line x1="2" y1="14" x2="48" y2="14" stroke="#1e3a5f" stroke-width="1.5"/><circle cx="14" cy="14" r="6" fill="none" stroke="#dc2626" stroke-width="1.5"/></svg></td>
           <td><strong>Weld All Around</strong></td>
           <td>Circle at reference line / arrow junction</td>
           <td>Weld extends completely around the joint perimeter — no gaps</td>
         </tr>
         <tr>
-          <td><svg viewBox="0 0 50 28" width="50" height="28"><line x1="2" y1="14" x2="48" y2="14" stroke="#1e3a5f" stroke-width="1.5"/><polygon points="14,14 14,4 26,9" fill="#dc2626"/></svg></td>
+          <td><svg viewBox="0 0 50 28" width="50" height="28" role="img" aria-label="Field weld weld symbol. Its shape is described in the caption."><line x1="2" y1="14" x2="48" y2="14" stroke="#1e3a5f" stroke-width="1.5"/><polygon points="14,14 14,4 26,9" fill="#dc2626"/></svg></td>
           <td><strong>Field Weld</strong></td>
           <td>Solid flag at reference line / arrow junction</td>
           <td>Weld to be made at the erection site, not in the fabrication shop</td>
         </tr>
         <tr>
-          <td><svg viewBox="0 0 50 28" width="50" height="28"><line x1="2" y1="16" x2="48" y2="16" stroke="#1e3a5f" stroke-width="1.5"/><polygon points="10,16 10,26 24,16" fill="none" stroke="#dc2626" stroke-width="1.5"/><line x1="10" y1="16" x2="24" y2="16" stroke="#dc2626" stroke-width="1.5"/></svg></td>
+          <td><svg viewBox="0 0 50 28" width="50" height="28" role="img" aria-label="Flush contour weld symbol. Its shape is described in the caption."><line x1="2" y1="16" x2="48" y2="16" stroke="#1e3a5f" stroke-width="1.5"/><polygon points="10,16 10,26 24,16" fill="none" stroke="#dc2626" stroke-width="1.5"/><line x1="10" y1="16" x2="24" y2="16" stroke="#dc2626" stroke-width="1.5"/></svg></td>
           <td><strong>Flush Contour</strong></td>
           <td>Straight line on top of weld symbol</td>
           <td>Finish the weld face flush (flat) with the base metal surface</td>
         </tr>
         <tr>
-          <td><svg viewBox="0 0 50 28" width="50" height="28"><line x1="2" y1="16" x2="48" y2="16" stroke="#1e3a5f" stroke-width="1.5"/><polygon points="10,16 10,26 24,16" fill="none" stroke="#dc2626" stroke-width="1.5"/><path d="M10,16 Q17,10 24,16" fill="none" stroke="#dc2626" stroke-width="1.5"/></svg></td>
+          <td><svg viewBox="0 0 50 28" width="50" height="28" role="img" aria-label="Convex contour weld symbol. Its shape is described in the caption."><line x1="2" y1="16" x2="48" y2="16" stroke="#1e3a5f" stroke-width="1.5"/><polygon points="10,16 10,26 24,16" fill="none" stroke="#dc2626" stroke-width="1.5"/><path d="M10,16 Q17,10 24,16" fill="none" stroke="#dc2626" stroke-width="1.5"/></svg></td>
           <td><strong>Convex Contour</strong></td>
           <td>Convex arc on top of weld symbol</td>
           <td>Finish weld face with a convex (crowned) profile</td>
         </tr>
         <tr>
-          <td><svg viewBox="0 0 50 28" width="50" height="28"><line x1="2" y1="16" x2="48" y2="16" stroke="#1e3a5f" stroke-width="1.5"/><polygon points="10,16 10,26 24,16" fill="none" stroke="#dc2626" stroke-width="1.5"/><path d="M10,16 Q17,20 24,16" fill="none" stroke="#dc2626" stroke-width="1.5"/></svg></td>
+          <td><svg viewBox="0 0 50 28" width="50" height="28" role="img" aria-label="Concave contour weld symbol. Its shape is described in the caption."><line x1="2" y1="16" x2="48" y2="16" stroke="#1e3a5f" stroke-width="1.5"/><polygon points="10,16 10,26 24,16" fill="none" stroke="#dc2626" stroke-width="1.5"/><path d="M10,16 Q17,20 24,16" fill="none" stroke="#dc2626" stroke-width="1.5"/></svg></td>
           <td><strong>Concave Contour</strong></td>
           <td>Concave arc on top of weld symbol</td>
           <td>Finish weld face with a concave (hollow) profile; common on fillet welds</td>
         </tr>
         <tr>
-          <td><svg viewBox="0 0 50 28" width="50" height="28"><line x1="2" y1="14" x2="48" y2="14" stroke="#1e3a5f" stroke-width="1.5"/><rect x="10" y="7" width="16" height="7" fill="none" stroke="#dc2626" stroke-width="1.5"/></svg></td>
+          <td><svg viewBox="0 0 50 28" width="50" height="28" role="img" aria-label="Backing or spacer weld symbol. Its shape is described in the caption."><line x1="2" y1="14" x2="48" y2="14" stroke="#1e3a5f" stroke-width="1.5"/><rect x="10" y="7" width="16" height="7" fill="none" stroke="#dc2626" stroke-width="1.5"/></svg></td>
           <td><strong>Backing / Spacer</strong></td>
           <td>Rectangle near groove symbol; R = backing, S = spacer</td>
           <td>Steel backing bar (R) holds root open; spacer (S) sets root opening gap</td>
@@ -308,8 +311,8 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
   <!-- Dimension placement -->
   <div class="section">
     <h2>Dimension Placement Rules (AWS A2.4)</h2>
-    <table class="ref-table">
-      <thead><tr><th>Position on Callout</th><th>Information</th><th>Example</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Dimension Placement Rules (AWS A2.4)</caption>
+      <thead><tr><th scope="col">Position on Callout</th><th scope="col">Information</th><th scope="col">Example</th></tr></thead>
       <tbody>
         <tr><td>Left of symbol</td><td>Weld size — leg size for fillet; depth of prep for groove</td><td><code>3/8</code> left of fillet = 3/8" leg</td></tr>
         <tr><td>In parentheses, left of symbol</td><td>Depth of groove preparation when different from weld size</td><td><code>(5/8)3/4</code> = 5/8" prep depth, 3/4" weld size</td></tr>
@@ -336,7 +339,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
     <p>Every weld callout is assembled from the same set of elements, each occupying a defined position on the reference line. Understanding this layout is the foundation for reading any welding drawing.</p>
 
     <div class="anatomy-wrap" style="margin:18px 0;">
-      <svg viewBox="0 0 720 282" style="max-width:720px;width:100%;display:block;margin:0 auto;" font-family="Segoe UI,sans-serif" font-size="11">
+      <svg viewBox="0 0 720 282" style="max-width:720px;width:100%;display:block;margin:0 auto;" font-family="Segoe UI,sans-serif" font-size="11" role="img" aria-label="Annotated weld symbol callout. The arrow on the left points to the joint; the horizontal reference line runs right to the tail, which holds GMAW, WPS-01, and ER70S-6 (process, procedure, and filler reference, omitted if not needed). Arrow side, symbol below the line: 3/8 inch fillet, flush contour with G (grind), weld length 6 to the right of the symbol. Other side, symbol above the line: 1/2 inch V-groove at 60° with a 1/4 inch root opening shown inside the symbol. A weld-all-around circle and a field weld flag sit at the junction of the arrow and reference line.">
 
         <!-- background -->
         <rect width="720" height="282" fill="#f8fafc" rx="10"/>
@@ -353,7 +356,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
         <line x1="490" y1="148" x2="518" y2="163" stroke="#1e293b" stroke-width="2"/>
         <!-- Tail text -->
         <text x="522" y="137" font-size="10" fill="#374151" font-weight="600">GMAW</text>
-        <text x="522" y="151" font-size="9" fill="#64748b">WPS-01</text>
+        <text x="522" y="151" font-size="9" fill="#627288">WPS-01</text>
         <text x="522" y="163" font-size="10" fill="#374151" font-weight="600">ER70S-6</text>
 
         <!-- Weld-all-around circle at arrow/refline junction -->
@@ -371,14 +374,14 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
         <text x="287" y="167" fill="#dc2626" font-weight="700" font-size="11" text-anchor="end">3/8</text>
 
         <!-- Other-side V-groove symbol (above ref line) -->
-        <polyline points="340,148 362,128 384,148" fill="none" stroke="#0ea5e9" stroke-width="2.5"/>
+        <polyline points="340,148 362,128 384,148" fill="none" stroke="#0d94d1" stroke-width="2.5"/>
         <!-- Other-side size -->
-        <text x="334" y="125" fill="#0ea5e9" font-weight="700" font-size="11" text-anchor="end">1/2</text>
+        <text x="334" y="125" fill="#0a79aa" font-weight="700" font-size="11" text-anchor="end">1/2</text>
         <!-- Groove angle -->
         <text x="388" y="125" fill="#374151" font-size="10">60°</text>
 
         <!-- Root opening inside V -->
-        <text x="362" y="143" fill="#16a34a" font-weight="700" font-size="9" text-anchor="middle">1/4</text>
+        <text x="362" y="143" fill="#117f3a" font-weight="700" font-size="9" text-anchor="middle">1/4</text>
 
         <!-- Weld length right of symbols -->
         <text x="420" y="168" fill="#374151" font-weight="700" font-size="11">6</text>
@@ -388,38 +391,38 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
         <!-- Arrow -->
         <line x1="100" y1="228" x2="181" y2="206" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,3"/>
         <text x="8" y="224" fill="#374151" font-weight="700">Arrow</text>
-        <text x="8" y="236" fill="#64748b" font-size="9.5">Points to joint</text>
+        <text x="8" y="236" fill="#627288" font-size="9.5">Points to joint</text>
 
         <!-- Reference line -->
         <line x1="295" y1="252" x2="295" y2="150" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,3"/>
         <text x="295" y="262" fill="#374151" font-weight="700" text-anchor="middle">Reference Line</text>
-        <text x="295" y="274" fill="#64748b" font-size="9.5" text-anchor="middle">Always horizontal</text>
+        <text x="295" y="274" fill="#627288" font-size="9.5" text-anchor="middle">Always horizontal</text>
 
         <!-- Tail -->
         <line x1="585" y1="148" x2="522" y2="148" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,3"/>
         <text x="588" y="140" fill="#374151" font-weight="700">Tail</text>
-        <text x="588" y="152" fill="#64748b" font-size="9.5">Process / WPS /</text>
-        <text x="588" y="163" fill="#64748b" font-size="9.5">filler ref. Omit if</text>
-        <text x="588" y="174" fill="#64748b" font-size="9.5">not needed.</text>
+        <text x="588" y="152" fill="#627288" font-size="9.5">Process / WPS /</text>
+        <text x="588" y="163" fill="#627288" font-size="9.5">filler ref. Omit if</text>
+        <text x="588" y="174" fill="#627288" font-size="9.5">not needed.</text>
 
         <!-- Arrow side label -->
         <line x1="120" y1="170" x2="290" y2="162" stroke="#dc2626" stroke-width="1" stroke-dasharray="4,3"/>
         <text x="8" y="158" fill="#dc2626" font-weight="700">Arrow Side</text>
-        <text x="8" y="170" fill="#64748b" font-size="9.5">Symbol BELOW</text>
-        <text x="8" y="181" fill="#64748b" font-size="9.5">ref. line</text>
-        <text x="8" y="192" fill="#64748b" font-size="9.5">3/8" fillet, flush+G</text>
+        <text x="8" y="170" fill="#627288" font-size="9.5">Symbol BELOW</text>
+        <text x="8" y="181" fill="#627288" font-size="9.5">ref. line</text>
+        <text x="8" y="192" fill="#627288" font-size="9.5">3/8" fillet, flush+G</text>
 
         <!-- Other side label -->
         <line x1="120" y1="107" x2="336" y2="132" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="4,3"/>
-        <text x="8" y="80" fill="#0ea5e9" font-weight="700">Other Side</text>
-        <text x="8" y="92" fill="#64748b" font-size="9.5">Symbol ABOVE</text>
-        <text x="8" y="103" fill="#64748b" font-size="9.5">ref. line</text>
-        <text x="8" y="113" fill="#64748b" font-size="9.5">1/2" V-groove, 60°</text>
+        <text x="8" y="80" fill="#0a79aa" font-weight="700">Other Side</text>
+        <text x="8" y="92" fill="#627288" font-size="9.5">Symbol ABOVE</text>
+        <text x="8" y="103" fill="#627288" font-size="9.5">ref. line</text>
+        <text x="8" y="113" fill="#627288" font-size="9.5">1/2" V-groove, 60°</text>
 
         <!-- Root opening annotation -->
         <line x1="362" y1="95" x2="362" y2="138" stroke="#16a34a" stroke-width="1" stroke-dasharray="4,3"/>
-        <text x="362" y="90" fill="#16a34a" font-weight="700" text-anchor="middle">Root opening</text>
-        <text x="362" y="101" fill="#64748b" font-size="9.5" text-anchor="middle">Inside symbol</text>
+        <text x="362" y="90" fill="#117f3a" font-weight="700" text-anchor="middle">Root opening</text>
+        <text x="362" y="101" fill="#627288" font-size="9.5" text-anchor="middle">Inside symbol</text>
 
         <!-- Weld-all-around annotation -->
         <line x1="240" y1="208" x2="263" y2="157" stroke="#7c3aed" stroke-width="1" stroke-dasharray="4,3"/>
@@ -432,12 +435,12 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
         <!-- Contour annotation -->
         <line x1="460" y1="115" x2="310" y2="146" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,3"/>
         <text x="462" y="110" fill="#374151" font-weight="700">Flush contour + G</text>
-        <text x="462" y="122" fill="#64748b" font-size="9.5">(grind to flush)</text>
+        <text x="462" y="122" fill="#627288" font-size="9.5">(grind to flush)</text>
 
         <!-- Length annotation -->
         <line x1="460" y1="182" x2="426" y2="168" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,3"/>
         <text x="462" y="180" fill="#374151" font-weight="700">Weld length</text>
-        <text x="462" y="192" fill="#64748b" font-size="9.5">right of symbol</text>
+        <text x="462" y="192" fill="#627288" font-size="9.5">right of symbol</text>
 
       </svg>
     </div>
@@ -456,11 +459,11 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
 
       <div class="card">
         <div class="card-title" style="color:#dc2626;">Fillet — Arrow Side Only</div>
-        <svg viewBox="0 0 200 105" width="100%" style="max-width:200px;display:block;margin:0 auto 10px;">
+        <svg viewBox="0 0 200 105" width="100%" style="max-width:200px;display:block;margin:0 auto 10px;" role="img" aria-label="Fillet weld on the arrow side only: a 3/8 fillet symbol below the reference line and the matching T-joint showing the fillet on the near face of the web.">
           <!-- base plate -->
-          <rect x="50" y="68" width="100" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1"/>
+          <rect x="50" y="68" width="100" height="22" fill="#cbd5e1" stroke="#5c6f8a" stroke-width="1"/>
           <!-- web -->
-          <rect x="85" y="28" width="18" height="40" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1"/>
+          <rect x="85" y="28" width="18" height="40" fill="#cbd5e1" stroke="#47566c" stroke-width="1"/>
           <!-- arrow-side fillet only -->
           <polygon points="85,68 72,68 85,55" fill="#fca5a5" stroke="#dc2626" stroke-width="1"/>
           <!-- callout -->
@@ -475,12 +478,12 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
 
       <div class="card">
         <div class="card-title" style="color:#1e3a5f;">Fillet — Both Sides</div>
-        <svg viewBox="0 0 200 105" width="100%" style="max-width:200px;display:block;margin:0 auto 10px;">
-          <rect x="50" y="68" width="100" height="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1"/>
-          <rect x="85" y="28" width="18" height="40" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1"/>
+        <svg viewBox="0 0 200 105" width="100%" style="max-width:200px;display:block;margin:0 auto 10px;" role="img" aria-label="Fillet welds on both sides: 3/8 fillet symbols above and below the reference line and the T-joint with fillets on both faces of the web.">
+          <rect x="50" y="68" width="100" height="22" fill="#cbd5e1" stroke="#5c6f8a" stroke-width="1"/>
+          <rect x="85" y="28" width="18" height="40" fill="#cbd5e1" stroke="#47566c" stroke-width="1"/>
           <!-- both side fillets -->
           <polygon points="85,68 72,68 85,55" fill="#fca5a5" stroke="#dc2626" stroke-width="1"/>
-          <polygon points="103,68 116,68 103,55" fill="#bfdbfe" stroke="#0ea5e9" stroke-width="1"/>
+          <polygon points="103,68 116,68 103,55" fill="#bfdbfe" stroke="#0a79aa" stroke-width="1"/>
           <!-- callout -->
           <line x1="42" y1="62" x2="82" y2="65" stroke="#1e293b" stroke-width="1.2"/>
           <polygon points="42,62 50,58 50,65" fill="#1e293b"/>
@@ -488,9 +491,9 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
           <!-- arrow-side symbol below -->
           <polygon points="22,62 22,70 34,62" fill="none" stroke="#dc2626" stroke-width="1.4"/>
           <!-- other-side symbol above -->
-          <polygon points="22,62 22,54 34,62" fill="none" stroke="#0ea5e9" stroke-width="1.4"/>
+          <polygon points="22,62 22,54 34,62" fill="none" stroke="#04354a" stroke-width="1.4"/>
           <text x="18" y="58" font-size="8" fill="#dc2626" font-family="Segoe UI,sans-serif">3/8</text>
-          <text x="18" y="51" font-size="8" fill="#0ea5e9" font-family="Segoe UI,sans-serif">3/8</text>
+          <text x="18" y="51" font-size="8" fill="#0a79aa" font-family="Segoe UI,sans-serif">3/8</text>
         </svg>
         <p style="font-size:0.79rem;color:#4b5563;">Symbol <strong>both above and below</strong> reference line → fillet welds on both sides of the web. Different leg sizes on each side are permitted.</p>
       </div>
@@ -507,8 +510,8 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
   <!-- Joint type table -->
   <div class="section">
     <h2>Common Joint Types &amp; Typical Weld Symbols</h2>
-    <table class="ref-table">
-      <thead><tr><th>Joint Type</th><th>Typical Weld Symbol</th><th>Side Convention</th><th>Engineering Notes</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Common Joint Types &amp; Typical Weld Symbols</caption>
+      <thead><tr><th scope="col">Joint Type</th><th scope="col">Typical Weld Symbol</th><th scope="col">Side Convention</th><th scope="col">Engineering Notes</th></tr></thead>
       <tbody>
         <tr>
           <td><strong>Butt</strong></td>
@@ -586,7 +589,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
 
     <h3>Surface Texture Symbol Anatomy</h3>
     <div class="anatomy-wrap" style="margin:14px 0;">
-      <svg viewBox="0 0 620 202" style="max-width:620px;width:100%;display:block;margin:0 auto 14px;" font-family="Segoe UI,sans-serif" font-size="11">
+      <svg viewBox="0 0 620 202" style="max-width:620px;width:100%;display:block;margin:0 auto 14px;" font-family="Segoe UI,sans-serif" font-size="11" role="img" aria-label="Surface texture symbol anatomy: roughness average Ra 125 microinches placed top-centre; waviness height 0.002 inch at upper left; waviness width 0.030 inch after the slash at upper right; lay symbol (equals sign, lay parallel to the edge); roughness cutoff or sampling length 0.030 inch; minimum roughness 32 microinches below Ra if specified. The symbol is applied by a leader or directly on the surface line.">
         <rect width="620" height="202" fill="#f8fafc" rx="8"/>
 
         <!-- Surface texture symbol body: check-mark shape -->
@@ -599,13 +602,13 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
         <text x="228" y="92" font-size="13" fill="#dc2626" font-weight="700" text-anchor="middle">125</text>
 
         <!-- Waviness height — upper left -->
-        <text x="162" y="82" font-size="10" fill="#0ea5e9" font-weight="700" text-anchor="end">0.002</text>
+        <text x="162" y="82" font-size="10" fill="#0a79aa" font-weight="700" text-anchor="end">0.002</text>
 
         <!-- Waviness width — upper right -->
         <text x="290" y="82" font-size="10" fill="#7c3aed" font-weight="700">0.030</text>
 
         <!-- Lay symbol — inside check, upper area -->
-        <text x="222" y="112" font-size="13" fill="#16a34a" font-weight="700">=</text>
+        <text x="222" y="112" font-size="13" fill="#117f3a" font-weight="700">=</text>
 
         <!-- Roughness cutoff — left of left leg at y=112 (leg sits at x≈184) -->
         <text x="172" y="112" font-size="10" fill="#92400e" font-weight="700" text-anchor="end">0.030</text>
@@ -620,44 +623,44 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
         <!-- Ra: leader from left edge of text block → "125" in symbol (centered x=228) -->
         <line x1="370" y1="89" x2="244" y2="90" stroke="#dc2626" stroke-width="1" stroke-dasharray="3,2"/>
         <text x="374" y="86" fill="#dc2626" font-weight="700">Ra — max roughness (µin.)</text>
-        <text x="374" y="97" fill="#64748b" font-size="9.5">Placed top-center of symbol</text>
+        <text x="374" y="97" fill="#627288" font-size="9.5">Placed top-center of symbol</text>
 
         <!-- Waviness height -->
         <line x1="80" y1="80" x2="140" y2="84" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="3,2"/>
-        <text x="8" y="74" fill="#0ea5e9" font-weight="700">Waviness</text>
-        <text x="8" y="85" fill="#64748b" font-size="9.5">height (in.)</text>
-        <text x="8" y="95" fill="#64748b" font-size="9.5">upper-left</text>
+        <text x="8" y="74" fill="#0a79aa" font-weight="700">Waviness</text>
+        <text x="8" y="85" fill="#627288" font-size="9.5">height (in.)</text>
+        <text x="8" y="95" fill="#627288" font-size="9.5">upper-left</text>
 
         <!-- Waviness width: leader from left edge of text block → "/0.030" in symbol (x=290,y=82) -->
         <line x1="370" y1="112" x2="307" y2="84" stroke="#7c3aed" stroke-width="1" stroke-dasharray="3,2"/>
         <text x="374" y="114" fill="#7c3aed" font-weight="700">Waviness width (in.)</text>
-        <text x="374" y="126" fill="#64748b" font-size="9.5">after slash, upper-right</text>
+        <text x="374" y="126" fill="#627288" font-size="9.5">after slash, upper-right</text>
 
         <!-- Lay -->
         <line x1="80" y1="114" x2="218" y2="112" stroke="#16a34a" stroke-width="1" stroke-dasharray="3,2"/>
-        <text x="8" y="108" fill="#16a34a" font-weight="700">Lay symbol</text>
-        <text x="8" y="119" fill="#64748b" font-size="9.5">= parallel to edge</text>
+        <text x="8" y="108" fill="#117f3a" font-weight="700">Lay symbol</text>
+        <text x="8" y="119" fill="#627288" font-size="9.5">= parallel to edge</text>
 
         <!-- Roughness cutoff -->
         <line x1="80" y1="130" x2="160" y2="116" stroke="#92400e" stroke-width="1" stroke-dasharray="3,2"/>
         <text x="8" y="142" fill="#92400e" font-weight="700">Roughness cutoff</text>
-        <text x="8" y="153" fill="#64748b" font-size="9.5">sampling length (in.)</text>
+        <text x="8" y="153" fill="#627288" font-size="9.5">sampling length (in.)</text>
 
         <!-- Min roughness -->
         <line x1="374" y1="145" x2="248" y2="126" stroke="#64748b" stroke-width="1" stroke-dasharray="3,2"/>
-        <text x="374" y="142" fill="#64748b" font-weight="700">Min. roughness</text>
-        <text x="374" y="153" fill="#64748b" font-size="9.5">below Ra, if specified</text>
+        <text x="374" y="142" fill="#627288" font-weight="700">Min. roughness</text>
+        <text x="374" y="153" fill="#627288" font-size="9.5">below Ra, if specified</text>
 
         <!-- Applied surface -->
         <line x1="80" y1="176" x2="205" y2="140" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
         <text x="8" y="174" fill="#374151" font-weight="700">Applied surface</text>
-        <text x="8" y="186" fill="#64748b" font-size="9.5">leader or direct on line</text>
+        <text x="8" y="186" fill="#627288" font-size="9.5">leader or direct on line</text>
       </svg>
     </div>
 
     <h3>Common Ra Values for Welded &amp; Post-Weld Surfaces</h3>
-    <table class="ref-table">
-      <thead><tr><th>Ra (µin.)</th><th>Ra (µm)</th><th>Condition / Application</th><th>Achieving Process</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Common Ra Values for Welded &amp; Post-Weld Surfaces</caption>
+      <thead><tr><th scope="col">Ra (µin.)</th><th scope="col">Ra (µm)</th><th scope="col">Condition / Application</th><th scope="col">Achieving Process</th></tr></thead>
       <tbody>
         <tr><td>2000</td><td>50.0</td><td>As-welded — rough SMAW or FCAW</td><td>No post-weld finishing</td></tr>
         <tr><td>500</td><td>12.5</td><td>As-welded — smooth GMAW or GTAW bead</td><td>Good technique; no finishing</td></tr>
@@ -678,7 +681,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
     <div class="gdt-grid">
       <div class="card">
         <div class="card-title" style="color:#1e3a5f;">Flush + Grind (G) to Ra 125</div>
-        <svg viewBox="0 0 200 90" width="100%" style="max-width:200px;display:block;margin:0 auto 10px;">
+        <svg viewBox="0 0 200 90" width="100%" style="max-width:200px;display:block;margin:0 auto 10px;" role="img" aria-label="Fillet weld with flush contour and G (grind) finish, size 3/8, combined with a surface texture symbol of Ra 125 microinches.">
           <line x1="30" y1="44" x2="160" y2="44" stroke="#1e293b" stroke-width="1.5"/>
           <line x1="30" y1="44" x2="10" y2="66" stroke="#1e293b" stroke-width="1.5"/>
           <polygon points="10,66 16,59 18,66" fill="#1e293b"/>
@@ -699,7 +702,7 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
 
       <div class="card">
         <div class="card-title" style="color:#1e3a5f;">V-Groove + Convex Contour + Machine (M)</div>
-        <svg viewBox="0 0 200 90" width="100%" style="max-width:200px;display:block;margin:0 auto 10px;">
+        <svg viewBox="0 0 200 90" width="100%" style="max-width:200px;display:block;margin:0 auto 10px;" role="img" aria-label="V-groove weld with 60° groove angle, convex contour, and M (machine) finish.">
           <line x1="30" y1="44" x2="160" y2="44" stroke="#1e293b" stroke-width="1.5"/>
           <line x1="30" y1="44" x2="10" y2="66" stroke="#1e293b" stroke-width="1.5"/>
           <polygon points="10,66 16,59 18,66" fill="#1e293b"/>
@@ -715,8 +718,8 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
     </div>
 
     <h3>Lay Direction Symbols (ASME Y14.36)</h3>
-    <table class="ref-table" style="margin-top:10px;">
-      <thead><tr><th width="60">Symbol</th><th>Meaning</th><th>Typical Post-Weld Application</th></tr></thead>
+    <table class="ref-table" style="margin-top:10px;"><caption class="sr-only">Lay Direction Symbols (ASME Y14.36)</caption>
+      <thead><tr><th width="60" scope="col">Symbol</th><th scope="col">Meaning</th><th scope="col">Typical Post-Weld Application</th></tr></thead>
       <tbody>
         <tr><td style="font-size:1.2rem;font-weight:700;text-align:center;">=</td><td>Lay parallel to the projection line of the surface</td><td>Grinding weld bead along its travel direction</td></tr>
         <tr><td style="font-size:1.2rem;font-weight:700;text-align:center;">&#x22A5;</td><td>Lay perpendicular to the projection line</td><td>Cross-grinding the weld crown to remove ripple</td></tr>
@@ -737,16 +740,16 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
     <p>A structural T-joint with a fillet weld, post-weld machined seating surface, and a flatness tolerance on the base plate. This shows how welding and GD&amp;T callouts coexist on a fabrication drawing.</p>
 
     <div class="anatomy-wrap" style="margin:16px 0;">
-      <svg viewBox="0 0 620 210" style="max-width:620px;width:100%;display:block;margin:0 auto 14px;" font-family="Segoe UI,sans-serif" font-size="10">
+      <svg viewBox="0 0 620 210" style="max-width:620px;width:100%;display:block;margin:0 auto 14px;" font-family="Segoe UI,sans-serif" font-size="10" role="img" aria-label="Full drawing example: a T-joint with a 3/8 inch fillet weld on both sides of the web (arrow side and other side). The seating surface left of the stiffener is machined after welding to Ra 63 microinches with parallel lay and machine finish (M), and carries a GD&amp;T flatness tolerance of 0.010 inch relative to datum A.">
         <rect width="620" height="210" fill="#f8fafc" rx="8"/>
 
         <!-- Base plate -->
-        <rect x="70" y="128" width="320" height="30" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1.5"/>
+        <rect x="70" y="128" width="320" height="30" fill="#cbd5e1" stroke="#0e1116" stroke-width="1.5"/>
         <!-- Web / stiffener -->
-        <rect x="192" y="66" width="20" height="62" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1.5"/>
+        <rect x="192" y="66" width="20" height="62" fill="#cbd5e1" stroke="#788ba6" stroke-width="1.5"/>
         <!-- Fillet welds both sides -->
-        <polygon points="192,128 178,128 192,114" fill="#fca5a5" stroke="#dc2626" stroke-width="0.8"/>
-        <polygon points="212,128 226,128 212,114" fill="#bfdbfe" stroke="#0ea5e9" stroke-width="0.8"/>
+        <polygon points="192,128 178,128 192,114" fill="#fca5a5" stroke="#e20808" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <polygon points="212,128 226,128 212,114" fill="#bfdbfe" stroke="#046ced" stroke-width="1" vector-effect="non-scaling-stroke"/>
 
         <!-- Machined seating surface band (left of stiffener on top of base plate) -->
         <line x1="70" y1="128" x2="190" y2="128" stroke="#7c3aed" stroke-width="2.5"/>
@@ -788,17 +791,17 @@ header .subtitle{color:#93c5fd;margin-top:6px;font-size:0.93rem;}
 
         <!-- Annotation labels -->
         <text x="430" y="148" fill="#374151" font-weight="700" font-size="9">Flatness 0.010" rel. to A</text>
-        <text x="430" y="159" fill="#64748b" font-size="8.5">Post-weld &amp; machine</text>
+        <text x="430" y="159" fill="#627288" font-size="8.5">Post-weld &amp; machine</text>
 
         <text x="70" y="172" fill="#7c3aed" font-weight="700" font-size="9">Ra 63 µin, = lay, machine finish</text>
-        <text x="70" y="183" fill="#64748b" font-size="8.5">seating surface left of stiffener</text>
+        <text x="70" y="183" fill="#627288" font-size="8.5">seating surface left of stiffener</text>
 
         <text x="70" y="197" fill="#dc2626" font-size="9">3/8" fillet both sides of web (arrow side + other side)</text>
       </svg>
     </div>
 
-    <table class="ref-table">
-      <thead><tr><th>Callout Element</th><th>Standard</th><th>Meaning</th></tr></thead>
+    <table class="ref-table"><caption class="sr-only">Full Drawing Example — Weld + GD&amp;T Annotation</caption>
+      <thead><tr><th scope="col">Callout Element</th><th scope="col">Standard</th><th scope="col">Meaning</th></tr></thead>
       <tbody>
         <tr><td>3/8 fillet, both sides of web</td><td>AWS A2.4</td><td>3/8" leg fillet welds on both sides of the stiffener web to the base plate</td></tr>
         <tr><td>Ra 63 µin, = lay, M</td><td>ASME Y14.36</td><td>Machine-finish the seating surface left of the stiffener to 63 µin. roughness, lay parallel to long edge</td></tr>
@@ -950,7 +953,7 @@ const QUIZ = [
       <polyline points="80,40 106,58 132,40" fill="none" stroke="#dc2626" stroke-width="2"/>
       <text x="76" y="36" font-size="9" fill="#374151" text-anchor="end">(5/8)</text>
       <text x="76" y="46" font-size="10" fill="#374151" text-anchor="end">3/4</text>
-      <text x="106" y="55" font-size="9" fill="#16a34a" text-anchor="middle">1/4</text>
+      <text x="106" y="55" font-size="9" fill="#117f3a" text-anchor="middle">1/4</text>
       <text x="138" y="57" font-size="10" fill="#374151">6</text>
     </svg>`,
     q: "In this V-groove callout, what does the value in parentheses — (5/8) — represent?",
@@ -1041,6 +1044,7 @@ function resetQuiz() {
 
 renderQ();
 </script>
+</main>
 <a class="back-link" href="index.html">← Back to References</a>
 </body>
 </html>

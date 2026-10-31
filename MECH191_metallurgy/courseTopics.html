@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="a11y.css">
+    <script src="a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Course Topics — MECH 191</title>
     <style>
@@ -14,7 +16,7 @@
         .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
         main { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
         .intro { color: #374151; line-height: 1.7; margin-bottom: 20px; font-size: 1rem; }
-        .intro a { color: #0284c7; }
+        .intro a { color: #0277b3; }
         .legend { display: flex; flex-wrap: wrap; gap: 10px 18px; font-size: 0.85rem; color: #475569; margin-bottom: 22px; align-items: center; }
 
         .toolbar { position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,0.97); border-bottom: 1px solid #e2e8f0; padding: 10px 0; margin-bottom: 24px; }
@@ -24,7 +26,7 @@
         .toolbar a.nav-unit { font-weight: 700; color: #1e3a5f; }
         .search { display: flex; gap: 10px; align-items: center; }
         .search input { flex: 1; font: inherit; font-size: 0.92rem; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; }
-        .search input:focus { outline: 2px solid #93c5fd; border-color: #3b82f6; }
+        .search input:focus { outline: 2px solid #93c5fd; border-color: #1469f4; }
         .search .count { font-size: 0.8rem; color: #64748b; white-space: nowrap; }
 
         .unit { margin-bottom: 36px; }
@@ -36,8 +38,8 @@
         .week { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px 22px; margin-bottom: 20px; }
         .week-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
         .week-head h3 { font-size: 1.15rem; color: #1a1a2e; }
-        .wk { color: #3b82f6; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-right: 6px; }
-        .deck { font-size: 0.82rem; color: #0284c7; text-decoration: none; }
+        .wk { color: #1469f4; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-right: 6px; }
+        .deck { font-size: 0.82rem; color: #0277b3; text-decoration: none; }
         .deck:hover { text-decoration: underline; }
 
         .topics { display: grid; gap: 12px; }
@@ -69,18 +71,18 @@
         .term { font-size: 0.8rem; color: #365314; background: #f7fee7; border: 1px solid #d9f99d; border-radius: 999px; padding: 3px 10px; text-decoration: none; }
         .term::before { content: "⌕ "; color: #65a30d; }
         .term:hover { background: #ecfccb; border-color: #a3e635; }
-        .anim-desc { color: #6b7280; font-size: 0.82rem; }
+        .anim-desc { color: #69707d; font-size: 0.82rem; }
         .figs { display: grid; gap: 12px; }
         .figs-2 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
         figure { margin: 0; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px; }
         figure img { display: block; width: 100%; height: auto; max-height: 460px; object-fit: contain; border-radius: 4px; background: #fff; }
         figcaption { font-size: 0.78rem; color: #64748b; line-height: 1.45; margin-top: 6px; }
-        figcaption a { color: #0284c7; white-space: nowrap; }
+        figcaption a { color: #0277b3; white-space: nowrap; }
 
         .overview { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px 24px; margin-bottom: 26px; }
         .overview h2 { font-size: 1.3rem; color: #1e3a5f; margin-bottom: 8px; }
         .ov-intro { font-size: 0.92rem; color: #475569; line-height: 1.6; margin-bottom: 16px; }
-        .ov-intro a { color: #0284c7; }
+        .ov-intro a { color: #0277b3; }
         .ov-list { list-style: none; display: grid; gap: 12px; }
         .ov-card { background: #fff; border: 1px solid #e2e8f0; border-left: 4px solid #1e3a5f; border-radius: 10px; padding: 14px 16px; }
         .ov-card > a { text-decoration: none; display: block; }
@@ -97,14 +99,14 @@
         .wrap-box p { font-size: 0.9rem; line-height: 1.65; color: #374151; margin-bottom: 10px; }
         .wrap-box p:last-child { margin-bottom: 0; background: #fff; border-radius: 8px; padding: 10px 12px; }
         .bridge { text-align: center; max-width: 760px; margin: 0 auto 36px; padding: 16px 20px; border-top: 2px solid #1e3a5f; border-bottom: 2px solid #1e3a5f; }
-        .bridge-lbl { display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #3b82f6; margin-bottom: 6px; }
+        .bridge-lbl { display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #1469f4; margin-bottom: 6px; }
         .bridge p { font-size: 1rem; color: #1e3a5f; line-height: 1.6; font-style: italic; }
 
         .break { text-align: center; color: #64748b; font-size: 0.9rem; font-style: italic; padding: 10px; margin: -16px 0 30px; border: 1px dashed #cbd5e1; border-radius: 8px; }
         .hidden { display: none !important; }
         .no-results { text-align: center; color: #64748b; padding: 30px; }
 
-        .back-link { display: block; text-align: center; margin-top: 30px; color: #0284c7; text-decoration: none; font-size: 0.95rem; }
+        .back-link { display: block; text-align: center; margin-top: 30px; color: #0277b3; text-decoration: none; font-size: 0.95rem; }
         .back-link:hover { text-decoration: underline; }
 
         @media (max-width: 640px) {

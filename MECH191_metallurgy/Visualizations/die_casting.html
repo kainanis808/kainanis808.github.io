@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Die Casting – NADCA Process &amp; Design</title>
     <style>
@@ -22,7 +24,7 @@
         }
         h1 { font-size: 2rem; color: #f1f5f9; }
         .subtitle { color: #94a3b8; margin-top: 6px; font-size: 1rem; }
-        .source-line { font-size: 0.76rem; color: #475569; margin-top: 6px; }
+        .source-line { font-size: 0.76rem; color: #8192aa; margin-top: 6px; }
         main { max-width: 1060px; margin: 0 auto; padding: 26px 20px; }
 
         .tab-bar {
@@ -70,12 +72,12 @@
         .alloy-card:hover, .alloy-card.selected { border-color: #38bdf8; background: #162032; }
         .alloy-card h3 { font-size: 0.93rem; color: #e2e8f0; margin-bottom: 6px; }
         .alloy-card .tag { display: inline-block; background: #1e3a5f; color: #93c5fd; border-radius: 4px; padding: 1px 7px; font-size: 0.72rem; margin-bottom: 6px; }
-        .alloy-card p { font-size: 0.79rem; color: #64748b; line-height: 1.5; }
+        .alloy-card p { font-size: 0.79rem; color: #8593a7; line-height: 1.5; }
         #alloy-detail { background: #0f172a; border: 1px solid #38bdf8; border-radius: 10px; padding: 18px; margin-top: 16px; display: none; color: #cbd5e1; font-size: 0.89rem; line-height: 1.65; }
         #alloy-detail h3 { color: #7dd3fc; margin-bottom: 8px; font-size: 1.05rem; }
         .alloy-spec-row { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
         .alloy-spec { flex: 1; min-width: 130px; }
-        .alloy-spec .spec-name { font-size: 0.74rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .alloy-spec .spec-name { font-size: 0.74rem; color: #8593a7; text-transform: uppercase; letter-spacing: 0.05em; }
         .alloy-spec .spec-val  { font-size: 0.9rem; color: #e2e8f0; margin-top: 2px; }
 
         /* radar chart */
@@ -92,7 +94,7 @@
         .guide-item canvas { display: block; width: 100%; }
         .guide-body { padding: 13px; }
         .guide-body h3 { font-size: 0.93rem; color: #e2e8f0; margin-bottom: 4px; }
-        .guide-body p { font-size: 0.81rem; color: #64748b; line-height: 1.55; }
+        .guide-body p { font-size: 0.81rem; color: #8593a7; line-height: 1.55; }
 
         /* animation tab */
         .anim-selector { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
@@ -102,7 +104,7 @@
         #anim-canvas { border: 1px solid #334155; border-radius: 10px; background: #0f172a; flex-shrink: 0; max-width: 100%; }
         #anim-side { flex: 1; min-width: 200px; }
         .stage-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-        .stage-item { display: flex; align-items: center; gap: 10px; font-size: 0.86rem; color: #64748b; padding: 8px 12px; border-radius: 8px; border: 1px solid transparent; transition: all 0.2s; }
+        .stage-item { display: flex; align-items: center; gap: 10px; font-size: 0.86rem; color: #8593a7; padding: 8px 12px; border-radius: 8px; border: 1px solid transparent; transition: all 0.2s; }
         .stage-item.active { background: #1e293b; border-color: #f59e0b; color: #fbbf24; }
         .stage-dot { width: 10px; height: 10px; border-radius: 50%; background: #334155; flex-shrink: 0; }
         .stage-item.active .stage-dot { background: #f59e0b; }
@@ -119,6 +121,7 @@
         .back-link:hover { text-decoration: underline; }
         canvas { display: block; }
     </style>
+<style id="contrast-fixes">/* WCAG 1.4.3 contrast fixes */ .bar-fill{color:#0f172a !important;text-shadow:none !important}</style>
 </head>
 <body>
 
@@ -151,13 +154,13 @@
     <div class="bar-wrap"><div class="bar-label">Permanent Mold</div><div class="bar-track"><div class="bar-fill" style="width:30%;background:#22d3ee;">63–250 µin Ra</div></div></div>
     <div class="bar-wrap"><div class="bar-label">Investment Casting</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:#a78bfa;">32–125 µin Ra</div></div></div>
     <div class="bar-wrap"><div class="bar-label">Sand Casting</div><div class="bar-track"><div class="bar-fill" style="width:70%;background:#ef4444;">125–500 µin Ra</div></div></div>
-    <p style="margin-top:10px;font-size:0.8rem;color:#64748b;">NADCA Std 516-2020: Surface discontinuity limits defined separately by class (A = cosmetic, B = structural, C = general).</p>
+    <p style="margin-top:10px;font-size:0.8rem;color:#8593a7;">NADCA Std 516-2020: Surface discontinuity limits defined separately by class (A = cosmetic, B = structural, C = general).</p>
 </div>
 
 <div class="card">
     <h2>NADCA Key Process Specifications</h2>
-    <table class="spec-table">
-        <thead><tr><th>Parameter</th><th>Hot Chamber</th><th>Cold Chamber</th><th>vs. Sand Casting</th></tr></thead>
+    <table class="spec-table"><caption class="sr-only">NADCA Key Process Specifications</caption>
+        <thead><tr><th scope="col">Parameter</th><th scope="col">Hot Chamber</th><th scope="col">Cold Chamber</th><th scope="col">vs. Sand Casting</th></tr></thead>
         <tbody>
             <tr><td>Applicable Alloys</td><td>Zn, Mg, Pb, Sn</td><td>Al, Mg, Cu, Zn (large)</td><td class="good">Much narrower alloy range</td></tr>
             <tr><td>Injection Pressure</td><td>7–35 MPa</td><td>35–200 MPa</td><td class="good">Far higher → denser casting</td></tr>
@@ -179,8 +182,8 @@
 
 <div class="card">
     <h2>NADCA Dimensional Tolerance Chart</h2>
-    <canvas id="tol-canvas" width="700" height="260" style="border-radius:8px;border:1px solid #334155;max-width:100%;"></canvas>
-    <p style="margin-top:8px;font-size:0.79rem;color:#64748b;">
+    <canvas id="tol-canvas" width="700" height="260" style="border-radius:8px;border:1px solid #334155;max-width:100%;" role="img" aria-label="Line chart of plus-or-minus tolerance in millimetres versus nominal dimension in millimetres on a log scale. Die casting tolerance rises gradually with part size and stays far tighter than sand casting, which is drawn for comparison at one-tenth scale."></canvas>
+    <p style="margin-top:8px;font-size:0.79rem;color:#8593a7;">
         NADCA "basic" tolerance = ±0.001 in per inch of dimension for aluminum; additional ±0.001 in across the parting line or any moving die component.
         Die casting tolerances tighten further with precision CNC die machining and controlled shot parameters.
     </p>
@@ -202,7 +205,7 @@
     <h2>Alloy Property Radar Comparison</h2>
     <p style="margin-bottom:12px;">Click alloy rows to overlay on radar chart. Properties normalized 0–10.</p>
     <div id="radar-wrap">
-        <canvas id="radar-canvas" width="340" height="310"></canvas>
+        <canvas id="radar-canvas" width="340" height="310" role="img" aria-label="Radar chart comparing die casting alloys (such as aluminum A380 and A360, zinc Zamak 3 and ZA-8, magnesium AZ91D, and copper alloy 858) on properties normalized 0 to 10. Choose rows in the alloy table to overlay them; the table lists the same property values as text."></canvas>
         <div id="radar-legend"></div>
     </div>
 </div>
@@ -231,7 +234,7 @@
     </div>
 
     <div id="anim-outer">
-        <canvas id="anim-canvas" width="580" height="380"></canvas>
+        <canvas id="anim-canvas" width="580" height="380" role="img" aria-label="Step-by-step die casting animation. Hot-chamber sequence: die closed; port opens and metal enters the gooseneck; plunger strokes down to inject; die filling and intensification; solidification; die opens and part is ejected. Cold-chamber sequence: die closed and locked; metal ladled into the shot sleeve; slow shot; fast shot fills the cavity; intensification and solidification; die opens, part ejected, sleeve cleared. The current step name and description are given in text below."></canvas>
         <div id="anim-side">
             <div class="stage-list" id="stage-list"></div>
             <div id="anim-desc">Select a process and press Play.</div>
@@ -273,7 +276,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const W = canvas.width, H = canvas.height;
-    const PAD = { top:20, right:30, bottom:50, left:65 };
+    const PAD = { top:20, right:30, bottom:50, left:78 };
     const CW = W-PAD.left-PAD.right, CH = H-PAD.top-PAD.bottom;
 
     const xMin=10, xMax=500, yMin=0, yMax=1.6;
@@ -292,7 +295,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     function znLow(L){ return 0.013 + L*0.0006; }
     function znHigh(L){ return 0.025 + L*0.001; }
 
-    function drawBand(fnLo, fnHi, fillCol, strokeLo, strokeHi, label) {
+    function drawBand(fnLo, fnHi, fillCol, strokeLo, strokeHi, label, row) {
         const xs = Array.from({length:150},(_,i)=>xMin*(xMax/xMin)**(i/149));
         ctx.save();
         ctx.beginPath();
@@ -304,12 +307,14 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         ctx.beginPath(); xs.forEach((x,i)=>{ const py=yP(Math.min(yMax,fnHi(x))); i?ctx.lineTo(xP(x),py):ctx.moveTo(xP(x),py); }); ctx.strokeStyle=strokeHi; ctx.lineWidth=2; ctx.stroke();
         ctx.beginPath(); xs.forEach((x,i)=>{ const py=yP(fnLo(x)); i?ctx.lineTo(xP(x),py):ctx.moveTo(xP(x),py); }); ctx.strokeStyle=strokeLo; ctx.lineWidth=1.5; ctx.stroke();
         ctx.restore();
-        ctx.fillStyle=strokeHi; ctx.font='10px Segoe UI'; ctx.textAlign='left';
-        ctx.fillText(label, xP(xMin)+4, yP(fnHi(xMin))-5);
+        // legend entry (top-left of the plot) instead of an inline label, so the labels never overlap
+        ctx.fillStyle=strokeHi; ctx.fillRect(xP(xMin)+10, yP(yMax)+10+row*16, 14, 3);
+        ctx.font='11px Segoe UI'; ctx.textAlign='left';
+        ctx.fillText(label, xP(xMin)+30, yP(yMax)+15+row*16);
     }
 
-    drawBand(znLow, znHigh, 'rgba(74,222,128,0.15)', '#4ade80', '#86efac', 'Zn hot chamber (NADCA)');
-    drawBand(alLow, alHigh, 'rgba(56,189,248,0.15)', '#38bdf8', '#7dd3fc', 'Al cold chamber (NADCA)');
+    drawBand(znLow, znHigh, 'rgba(74,222,128,0.15)', '#4ade80', '#86efac', 'Zn hot chamber (NADCA)', 0);
+    drawBand(alLow, alHigh, 'rgba(56,189,248,0.15)', '#38bdf8', '#7dd3fc', 'Al cold chamber (NADCA)', 1);
 
     // Sand casting line for comparison
     function sandTol(L){ return 0.76+0.004*L; }
@@ -317,8 +322,9 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     const sxs=Array.from({length:150},(_,i)=>xMin*(xMax/xMin)**(i/149));
     sxs.forEach((x,i)=>{ const py=yP(Math.min(yMax,sandTol(x)/10)); i?ctx.lineTo(xP(x),py):ctx.moveTo(xP(x),py); });
     ctx.strokeStyle='#f87171'; ctx.lineWidth=1.5; ctx.setLineDash([5,3]); ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle='#f87171'; ctx.font='10px Segoe UI';
-    ctx.fillText('Sand casting (lower bound ÷10 for scale)', xP(12), yP(sandTol(12)/10)-5);
+    ctx.fillStyle='#f87171'; ctx.font='11px Segoe UI'; ctx.textAlign='left';
+    ctx.setLineDash([5,3]); ctx.strokeRect(xP(xMin)+10, yP(yMax)+43, 14, 0.5); ctx.setLineDash([]);
+    ctx.fillText('Sand casting (lower bound ÷10 for scale)', xP(xMin)+30, yP(yMax)+47);
 
     // axes
     ctx.strokeStyle='#475569'; ctx.lineWidth=1;
@@ -410,7 +416,7 @@ function buildRadarLegend() {
         leg.appendChild(row);
     });
     const note=document.createElement('p');
-    note.style.cssText='font-size:0.76rem;color:#475569;margin-top:12px;line-height:1.5;';
+    note.style.cssText='font-size:0.76rem;color:#8192aa;margin-top:12px;line-height:1.5;';
     note.textContent='Click to toggle alloys. Properties normalized 0–10. Axes: NADCA relative ratings.';
     leg.appendChild(note);
 }
@@ -575,7 +581,7 @@ const GUIDELINES = [
         ctx.fillStyle='#78350f'; ctx.strokeStyle='#f59e0b'; ctx.lineWidth=1.5;
         ctx.fillRect(cx-10,145,20,40);
         ctx.strokeRect(cx-10,145,20,40);
-        ctx.fillStyle='#f59e0b'; ctx.fillText('Runner',cx,200);
+        ctx.fillStyle='#f59e0b'; ctx.textAlign='right'; ctx.fillText('Runner',cx-14,170); ctx.textAlign='center';
 
         // fan gate
         ctx.fillStyle='#92400e'; ctx.strokeStyle='#fbbf24'; ctx.lineWidth=1;

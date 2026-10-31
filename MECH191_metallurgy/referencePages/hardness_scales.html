@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hardness Testing Scales — Rockwell, Brinell, Vickers</title>
     <style>
@@ -207,7 +209,7 @@
             display: block;
             text-align: center;
             margin-top: 30px;
-            color: #0284c7;
+            color: #027ab8;
             text-decoration: none;
             font-size: 0.95rem;
         }
@@ -284,15 +286,15 @@
         </div>
 
         <p class="section-label">Common Rockwell Scales</p>
-        <table>
+        <table><caption class="sr-only">Rockwell Hardness (HR)</caption>
             <thead>
                 <tr>
-                    <th>Scale</th>
-                    <th>Symbol</th>
-                    <th>Indenter</th>
-                    <th>Major Load (kgf)</th>
-                    <th>Range</th>
-                    <th>Typical Applications</th>
+                    <th scope="col">Scale</th>
+                    <th scope="col">Symbol</th>
+                    <th scope="col">Indenter</th>
+                    <th scope="col">Major Load (kgf)</th>
+                    <th scope="col">Range</th>
+                    <th scope="col">Typical Applications</th>
                 </tr>
             </thead>
             <tbody>
@@ -405,14 +407,14 @@
         </p>
 
         <p class="section-label">Standard Brinell Test Conditions</p>
-        <table>
+        <table><caption class="sr-only">Brinell Hardness (HB)</caption>
             <thead>
                 <tr>
-                    <th>Material Class</th>
-                    <th>Load F (kgf)</th>
-                    <th>F/D² Ratio</th>
-                    <th>Ball Diameter D (mm)</th>
-                    <th>Typical HB Range</th>
+                    <th scope="col">Material Class</th>
+                    <th scope="col">Load F (kgf)</th>
+                    <th scope="col">F/D² Ratio</th>
+                    <th scope="col">Ball Diameter D (mm)</th>
+                    <th scope="col">Typical HB Range</th>
                 </tr>
             </thead>
             <tbody>
@@ -482,13 +484,13 @@
         </div>
 
         <p class="section-label">Load Ranges</p>
-        <table>
+        <table><caption class="sr-only">Vickers Hardness (HV)</caption>
             <thead>
                 <tr>
-                    <th>Category</th>
-                    <th>Load Range (gf)</th>
-                    <th>Designation Example</th>
-                    <th>Typical Use</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Load Range (gf)</th>
+                    <th scope="col">Designation Example</th>
+                    <th scope="col">Typical Use</th>
                 </tr>
             </thead>
             <tbody>
@@ -530,16 +532,16 @@
             <strong>material-dependent</strong>. The table below applies to <em>carbon and low-alloy steels only</em>.
             Do not use these values for stainless steels, aluminum, copper, or other non-ferrous alloys.
         </p>
-        <table>
+        <table><caption class="sr-only">Approximate Hardness Scale Conversions</caption>
             <thead>
                 <tr>
-                    <th>HRC</th>
-                    <th>HRB</th>
-                    <th>HRA</th>
-                    <th>HB (3000 kgf)</th>
-                    <th>HV</th>
-                    <th>Approx. UTS (MPa)</th>
-                    <th>General Description</th>
+                    <th scope="col">HRC</th>
+                    <th scope="col">HRB</th>
+                    <th scope="col">HRA</th>
+                    <th scope="col">HB (3000 kgf)</th>
+                    <th scope="col">HV</th>
+                    <th scope="col">Approx. UTS (MPa)</th>
+                    <th scope="col">General Description</th>
                 </tr>
             </thead>
             <tbody>
@@ -687,14 +689,14 @@
     <div class="section">
         <h2>Typical Hardness Values for Common Engineering Materials</h2>
         <p>Representative values — actual hardness depends on heat treatment, cold work, and alloy composition.</p>
-        <table>
+        <table><caption class="sr-only">Typical Hardness Values for Common Engineering Materials</caption>
             <thead>
                 <tr>
-                    <th>Material / Condition</th>
-                    <th>HRC</th>
-                    <th>HRB</th>
-                    <th>HB</th>
-                    <th>HV</th>
+                    <th scope="col">Material / Condition</th>
+                    <th scope="col">HRC</th>
+                    <th scope="col">HRB</th>
+                    <th scope="col">HB</th>
+                    <th scope="col">HV</th>
                 </tr>
             </thead>
             <tbody>
@@ -868,12 +870,12 @@
     <!-- CHOOSING A SCALE -->
     <div class="section">
         <h2>Choosing the Right Scale</h2>
-        <table>
+        <table><caption class="sr-only">Choosing the Right Scale</caption>
             <thead>
                 <tr>
-                    <th>Situation</th>
-                    <th>Recommended Scale</th>
-                    <th>Reason</th>
+                    <th scope="col">Situation</th>
+                    <th scope="col">Recommended Scale</th>
+                    <th scope="col">Reason</th>
                 </tr>
             </thead>
             <tbody>

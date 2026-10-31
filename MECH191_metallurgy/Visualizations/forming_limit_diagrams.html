@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Forming Limit Diagrams (FLD) – Deep Draw Sheet Metal</title>
 <style>
@@ -38,7 +40,7 @@
   .data-table td{padding:7px 10px;border:1px solid #1e3a5c;color:#cbd5e1;}
   .data-table tr:nth-child(even) td{background:#0f2040;}
   .data-table tr:nth-child(odd) td{background:#0a1628;}
-  .data-table caption{color:#64748b;font-size:.73rem;caption-side:bottom;padding-top:5px;text-align:left;}
+  .data-table caption{color:#73839a;font-size:.73rem;caption-side:bottom;padding-top:5px;text-align:left;}
 
   .zone-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;}
   .zone-item{display:flex;align-items:center;gap:6px;font-size:.8rem;color:#94a3b8;}
@@ -61,6 +63,7 @@
   <p>Deep draw forming limits for common sheet metal alloys — graphically showing how strain state determines success or failure</p>
 </header>
 
+<main id="main-content">
 <div class="tabs">
   <button class="tab-btn active" data-tab="theory">FLD Theory</button>
   <button class="tab-btn" data-tab="interactive">Interactive FLD</button>
@@ -73,7 +76,7 @@
   <h2>Forming Limit Diagram – Theory</h2>
   <div class="layout-2col">
     <div>
-      <canvas id="c-theory" width="480" height="420" style="width:480px;height:420px;"></canvas>
+      <canvas id="c-theory" width="480" height="420" style="width:480px;height:420px;" role="img" aria-label="Forming limit diagram: major strain ε1 on the vertical axis, minor strain ε2 on the horizontal axis. A V-shaped forming limit curve has its lowest point, FLC0, at plane strain (ε2 = 0). Below the curve is the safe zone, a band just above it is the marginal zone, above that is the failure (fracture) zone, and the region of large negative minor strain is the wrinkling zone."></canvas>
       <div class="zone-legend" style="margin-top:12px;">
         <div class="zone-item"><div class="zone-swatch" style="background:#14532d88;border:1px solid #4ade80;"></div>Safe zone</div>
         <div class="zone-item"><div class="zone-swatch" style="background:#78350f88;border:1px solid #fbbf24;"></div>Marginal zone (~10% above FLC)</div>
@@ -92,7 +95,7 @@
         <b>Forming Limit Curve (FLC):</b><br>
         The FLC is the boundary between safe (no neck/fracture) and failure. Points <b>below</b> the FLC: safe. Points <b>above</b>: through-thickness necking → fracture.<br><br>
         <b>FLC₀</b> = FLC value at plane strain (ε₂ = 0) — the minimum of the curve and the critical limit for most stamping operations. A useful empirical estimate:<br>
-        <span style="color:#c4b5fd;">FLC₀ ≈ (23.3 + 360·t) · n / 0.21</span><br>
+        <span style="color:#c4b5fd;">FLC₀ (%) ≈ (23.3 + 14.13·t) · n / 0.21 &nbsp;(t in mm)</span><br>
         where t = sheet thickness (mm), n = strain hardening exponent.
       </div>
       <div class="info-box" style="margin-bottom:12px;">
@@ -122,8 +125,8 @@
         <button class="check-btn" data-alloy="SS304" style="color:#e879f9;border-color:#e879f9;">304 Stainless</button>
         <button class="check-btn" data-alloy="Brass" style="color:#f97316;border-color:#f97316;">Brass (C26000)</button>
       </div>
-      <canvas id="c-fld" width="500" height="440" style="width:500px;height:440px;"></canvas>
-      <p style="font-size:.72rem;color:#64748b;margin-top:6px;">Toggle alloys above. Click on the FLD to read strain values.</p>
+      <canvas id="c-fld" width="500" height="440" style="width:500px;height:440px;" role="img" aria-label="Interactive forming limit diagram comparing the forming limit curves of the alloys toggled on with the buttons above. Each curve is lowest near plane strain and rises toward both uniaxial tension (left) and equal biaxial stretch (right). Higher curves mean more formable sheet. Clicking the chart reads strain values (mouse only); the alloy data tab gives the same information as text."></canvas>
+      <p style="font-size:.72rem;color:#73839a;margin-top:6px;">Toggle alloys above. Click on the FLD to read strain values.</p>
     </div>
     <div>
       <h3>Clicked Point</h3>
@@ -131,7 +134,7 @@
       <h3 style="margin-top:16px;">Alloy Properties</h3>
       <table class="data-table">
         <caption>Sources: ASM Handbook Vol. 14B; Numisheet benchmark data; Keeler-Goodwin-Brazier model (t=1mm).</caption>
-        <thead><tr><th>Alloy</th><th>n-value</th><th>r̄ (anisotropy)</th><th>FLC₀ (t=1mm)</th><th>Key advantage</th></tr></thead>
+        <thead><tr><th scope="col">Alloy</th><th scope="col">n-value</th><th scope="col">r̄ (anisotropy)</th><th scope="col">FLC₀ (t=1mm)</th><th scope="col">Key advantage</th></tr></thead>
         <tbody>
           <tr><td style="color:#4ade80;font-weight:700;">IF Steel (DC04)</td><td>0.23</td><td>1.8</td><td>0.42</td><td>Excellent deep drawing (high r̄)</td></tr>
           <tr><td style="color:#60a5fa;font-weight:700;">DP600</td><td>0.17</td><td>0.9</td><td>0.36</td><td>High UTS; springback management</td></tr>
@@ -156,7 +159,7 @@
   <h2>Strain Paths for Common Forming Operations</h2>
   <div style="display:grid;grid-template-columns:500px 1fr;gap:24px;align-items:start;">
     <div>
-      <canvas id="c-paths" width="480" height="420" style="width:480px;height:420px;"></canvas>
+      <canvas id="c-paths" width="480" height="420" style="width:480px;height:420px;" role="img" aria-label="Forming limit diagram with straight strain paths from the origin for common operations: deep drawing toward the left (minor strain about minus half the major strain), plane strain straight up, and biaxial stretching toward the right."></canvas>
     </div>
     <div>
       <div class="layout-3col" style="gap:12px;">
@@ -198,13 +201,13 @@
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
     <div>
       <h3>Keeler–Goodwin–Brazier Model (FLC₀)</h3>
-      <canvas id="c-flc0" width="420" height="300" style="width:420px;height:300px;"></canvas>
-      <p style="font-size:.73rem;color:#64748b;margin-top:6px;">FLC₀ vs. sheet thickness for different n-values. Thicker sheets and higher n → higher FLC₀.</p>
+      <canvas id="c-flc0" width="420" height="300" style="width:420px;height:300px;" role="img" aria-label="Chart of FLC0 versus sheet thickness t in millimetres for several strain-hardening exponents n, from the Keeler–Brazier equation FLC0 (%) = (23.3 + 14.13t)·n / 0.21 with t in mm. FLC0 rises with both thickness and n; the legend lists each curve."></canvas>
+      <p style="font-size:.73rem;color:#73839a;margin-top:6px;">FLC₀ vs. sheet thickness for different n-values. Thicker sheets and higher n → higher FLC₀.</p>
     </div>
     <div>
       <h3>Effect of n-Value on FLC Shape</h3>
-      <canvas id="c-nval" width="420" height="300" style="width:420px;height:300px;"></canvas>
-      <p style="font-size:.73rem;color:#64748b;margin-top:6px;">Full FLC curves for three n-values at t=1.5mm. Increasing n raises and widens the forming window.</p>
+      <canvas id="c-nval" width="420" height="300" style="width:420px;height:300px;" role="img" aria-label="Three full forming limit curves for n = 0.15, 0.23 and 0.50 at 1.5 mm thickness (FLC0 about 0.32, 0.49 and 1.06). Higher n moves the whole curve up and widens the safe forming window."></canvas>
+      <p style="font-size:.73rem;color:#73839a;margin-top:6px;">Full FLC curves for three n-values at t=1.5mm. Increasing n raises and widens the forming window.</p>
     </div>
   </div>
 
@@ -212,7 +215,7 @@
   <table class="data-table">
     <caption>FLC₀ values and full-curve parameters. FLC₀ at t=1mm unless noted. Left-slope: FLC for ε₂ &lt; 0 (dε₁/dε₂ ≈ −0.5 typical). Right-slope: FLC for ε₂ &gt; 0 (dε₁/dε₂ ≈ +1.0 typical). Source: ASM Handbook Vol. 14B; Forming Technologies / AutoForm material cards.</caption>
     <thead>
-      <tr><th>Material</th><th>Thickness (mm)</th><th>n-value</th><th>r̄</th><th>FLC₀</th><th>ε₁ at ε₂=−0.3</th><th>ε₁ at ε₂=+0.3</th><th>Forming grade</th></tr>
+      <tr><th scope="col">Material</th><th scope="col">Thickness (mm)</th><th scope="col">n-value</th><th scope="col">r̄</th><th scope="col">FLC₀</th><th scope="col">ε₁ at ε₂=−0.3</th><th scope="col">ε₁ at ε₂=+0.3</th><th scope="col">Forming grade</th></tr>
     </thead>
     <tbody>
       <tr><td>IF steel (DC04)</td><td>0.7–2.0</td><td>0.22–0.25</td><td>1.6–2.1</td><td>0.40–0.48</td><td>0.56</td><td>0.72</td><td>Excellent (DDQ)</td></tr>
@@ -240,6 +243,7 @@
   </div>
 </div>
 
+</main>
 <div class="back-link"><a href="index.html">← Back to Visualizations</a></div>
 
 <script>
@@ -410,10 +414,10 @@ function drawTheoryFLD() {
 
   // Labeled strain path lines from origin
   const paths = [
-    {e2_slope:-0.5, label:'Uniaxial tension\n(deep draw flange)', col:'#60a5fa'},
-    {e2_slope:0,    label:'Plane strain\n(bending, ironing)', col:'#fbbf24'},
-    {e2_slope:1.0,  label:'Equal biaxial\n(bulge, dome)', col:'#f87171'},
-    {e2_slope:-0.15, label:'Pure draw', col:'#a78bfa'},
+    {e2_slope:-0.5, label:'Uniaxial tension\n(deep draw flange)', col:'#60a5fa', align:'right', dy:0},
+    {e2_slope:0,    label:'Plane strain\n(bending, ironing)', col:'#fbbf24', align:'left', dy:-14},
+    {e2_slope:1.0,  label:'Equal biaxial\n(bulge, dome)', col:'#f87171', align:'left', dy:0},
+    {e2_slope:-0.15, label:'Pure draw', col:'#a78bfa', align:'right', dy:28},
   ];
   paths.forEach(p => {
     const e1_max = flcPoint(al, 0) * 0.7;
@@ -422,9 +426,10 @@ function drawTheoryFLD() {
     ctx.beginPath(); ctx.moveTo(px(0), py(0));
     ctx.lineTo(px(e2_end), py(e1_max));
     ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle = p.col; ctx.font = '9px Arial'; ctx.textAlign = 'left';
+    ctx.fillStyle = p.col; ctx.font = '9px Arial'; ctx.textAlign = p.align;
     const lines = p.label.split('\n');
-    lines.forEach((l, i) => ctx.fillText(l, px(e2_end)+4, py(e1_max)-(lines.length-1-i)*11));
+    const lx = px(e2_end) + (p.align === 'right' ? -4 : 4);
+    lines.forEach((l, i) => ctx.fillText(l, lx, py(e1_max)+p.dy-(lines.length-1-i)*11));
   });
 
   // FLC₀ annotation
@@ -459,8 +464,9 @@ function drawFLD() {
   const e2s = [];
   for (let e2 = E2_MIN; e2 <= E2_MAX; e2 += 0.01) e2s.push(e2);
 
+  let ai = -1;
   activeAlloys.forEach(key => {
-    const al = ALLOYS[key];
+    const al = ALLOYS[key]; ai++;
     // Failure region fill (subtle per alloy)
     ctx.fillStyle = al.color + '18';
     ctx.beginPath();
@@ -476,9 +482,10 @@ function drawFLD() {
     e2s.forEach((e2, i) => { i===0 ? ctx.moveTo(px(e2), py(flcPoint(al,e2))) : ctx.lineTo(px(e2), py(flcPoint(al,e2))); });
     ctx.stroke();
 
-    // Label on right end
-    ctx.fillStyle = al.color; ctx.font = '9px Arial'; ctx.textAlign = 'left';
-    ctx.fillText(al.name, px(E2_MAX)+2, py(flcPoint(al, E2_MAX))+3);
+    // Legend near the top centre (labels at the right edge were cut off)
+    ctx.fillStyle = al.color; ctx.fillRect(px(-0.28), padT+10+ai*14, 14, 3);
+    ctx.font = '10px Arial'; ctx.textAlign = 'left';
+    ctx.fillText(al.name, px(-0.28)+20, padT+15+ai*14);
   });
 
   // Click handler
@@ -559,7 +566,7 @@ function drawPathsFLD() {
     {label:'Plane strain\n(bend/iron)', e2s_arr: () => 0,               maxE1:0.36, col:'#fbbf24',  e1End:0.36},
     {label:'Stretch forming',           e2s_arr: (e1) => e1*0.5,        maxE1:0.30, col:'#f87171',  e1End:0.30},
     {label:'Equi-biaxial\n(bulge)',     e2s_arr: (e1) => e1,            maxE1:0.40, col:'#e879f9',  e1End:0.40},
-    {label:'Hole expansion',            e2s_arr: (e1) => -e1*0.1,       maxE1:0.28, col:'#60a5fa',  e1End:0.28},
+    {label:'Hole expansion',            e2s_arr: (e1) => -e1*0.1,       maxE1:0.28, col:'#60a5fa',  e1End:0.28, align:'left', dy:16},
     {label:'Ironing',                   e2s_arr: (e1) => -e1*0.85,      maxE1:0.22, col:'#fb923c',  e1End:0.22},
   ];
 
@@ -589,9 +596,10 @@ function drawPathsFLD() {
     ctx.font = '9px Arial';
     const lines = sp.label.split('\n');
     lines.forEach((ln, li) => {
-      const lx = px(e2f) + (e2f < 0 ? -4 : 4);
-      ctx.textAlign = e2f < 0 ? 'right' : 'left';
-      ctx.fillText(ln, lx, py(e1f) - (lines.length-1-li)*11);
+      const al2 = sp.align || (e2f < 0 ? 'right' : 'left');
+      const lx = px(e2f) + (al2 === 'right' ? -4 : 4);
+      ctx.textAlign = al2;
+      ctx.fillText(ln, lx, py(e1f) + (sp.dy || 0) - (lines.length-1-li)*11);
     });
   });
 
@@ -599,7 +607,7 @@ function drawPathsFLD() {
   ctx.fillStyle = '#fff';
   ctx.beginPath(); ctx.arc(px(0), py(0), 4, 0, Math.PI*2); ctx.fill();
   ctx.fillStyle = '#fff'; ctx.font = '9px Arial'; ctx.textAlign = 'left';
-  ctx.fillText('Start\n(undeformed)', px(0.02), py(0)+12);
+  ctx.fillText('Start (undeformed)', px(0.02), py(0)-8);
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -611,53 +619,53 @@ function drawFLC0Chart() {
   const padL=50, padR=18, padT=24, padB=40;
   const cw = W-padL-padR, ch = H-padT-padB;
 
-  const tMin=0.5, tMax=3.0, flc0Min=0, flc0Max=0.80;
+  const tMin=0.5, tMax=3.0, flc0Min=0, flc0Max=1.60;
   const px = t => padL + (t-tMin)/(tMax-tMin)*cw;
   const py = f => padT + ch - (f-flc0Min)/(flc0Max-flc0Min)*ch;
 
   // Grid
   ctx.strokeStyle = '#1e3a5c'; ctx.lineWidth = 0.8;
   [0.5,1,1.5,2,2.5,3].forEach(t => { ctx.beginPath(); ctx.moveTo(px(t),padT); ctx.lineTo(px(t),padT+ch); ctx.stroke(); });
-  [0,0.2,0.4,0.6,0.8].forEach(f => { ctx.beginPath(); ctx.moveTo(padL,py(f)); ctx.lineTo(padL+cw,py(f)); ctx.stroke(); });
+  [0,0.4,0.8,1.2,1.6].forEach(f => { ctx.beginPath(); ctx.moveTo(padL,py(f)); ctx.lineTo(padL+cw,py(f)); ctx.stroke(); });
 
   // Axes
   ctx.strokeStyle = '#64748b'; ctx.lineWidth = 1.5;
   ctx.beginPath(); ctx.moveTo(padL,padT); ctx.lineTo(padL,padT+ch); ctx.lineTo(padL+cw,padT+ch); ctx.stroke();
 
-  // FLC₀ = (23.3 + 360t) * n / 0.21
+  // Keeler–Brazier: FLC₀ (%) = (23.3 + 14.13·t) · n / 0.21, with t in mm
   const nVals = [
     {n:0.17, col:'#60a5fa', label:'n=0.17 (DP600)'},
     {n:0.23, col:'#4ade80', label:'n=0.23 (IF)'},
     {n:0.38, col:'#f97316', label:'n=0.38 (Brass)'},
     {n:0.50, col:'#e879f9', label:'n=0.50 (304 SS)'},
   ];
-  nVals.forEach(nv => {
+  nVals.forEach((nv, ni) => {
     ctx.strokeStyle = nv.col; ctx.lineWidth = 2;
     ctx.beginPath();
     for (let t = tMin; t <= tMax; t += 0.05) {
-      const f0 = (23.3 + 360*t) * nv.n / 0.21 / 100; // convert from % to fraction
+      const f0 = (23.3 + 14.13*t) * nv.n / 0.21 / 100; // convert from % to fraction
       if (t === tMin) ctx.moveTo(px(t), py(Math.min(f0, flc0Max)));
       else ctx.lineTo(px(t), py(Math.min(f0, flc0Max)));
     }
     ctx.stroke();
-    const t_label = 2.8;
-    const f0_label = (23.3 + 360*t_label) * nv.n / 0.21 / 100;
-    ctx.fillStyle = nv.col; ctx.font = '9px Arial'; ctx.textAlign = 'left';
-    ctx.fillText(nv.label, px(t_label)+3, py(Math.min(f0_label, flc0Max))+3);
+    // legend (top-left) rather than labels at the line ends, which overlapped
+    ctx.fillStyle = nv.col; ctx.fillRect(padL+10, padT+28+ni*14, 14, 3);
+    ctx.font = '10px Arial'; ctx.textAlign = 'left';
+    ctx.fillText(nv.label, padL+30, padT+33+ni*14);
   });
 
   // Axis tick labels
   ctx.fillStyle = '#94a3b8'; ctx.font = '10px Arial'; ctx.textAlign = 'center';
   [0.5,1,1.5,2,2.5,3].forEach(t => ctx.fillText(t.toFixed(1), px(t), padT+ch+14));
   ctx.textAlign = 'right';
-  [0,0.2,0.4,0.6,0.8].forEach(f => ctx.fillText(f.toFixed(1), padL-4, py(f)+3));
+  [0,0.4,0.8,1.2,1.6].forEach(f => ctx.fillText(f.toFixed(1), padL-4, py(f)+3));
 
   ctx.fillStyle = '#a78bfa'; ctx.font = 'bold 10px Arial'; ctx.textAlign = 'center';
   ctx.fillText('Sheet Thickness t (mm)', padL+cw/2, H-4);
   ctx.save(); ctx.translate(12, padT+ch/2); ctx.rotate(-Math.PI/2);
   ctx.fillText('FLC₀', 0, 0); ctx.restore();
   ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial'; ctx.textAlign = 'center';
-  ctx.fillText('Keeler–Goodwin–Brazier: FLC₀ = (23.3 + 360t)·n / 0.21', padL+cw/2, padT+14);
+  ctx.fillText('Keeler–Brazier: FLC₀ (%) = (23.3 + 14.13t)·n / 0.21   (t in mm)', padL+cw/2, padT+14);
 }
 
 function drawNvalChart() {
@@ -675,16 +683,17 @@ function drawNvalChart() {
   const e2s = [];
   for (let e2 = E2_MIN; e2 <= E2_MAX; e2 += 0.01) e2s.push(e2);
 
-  nCurves.forEach(nc => {
+  nCurves.forEach((nc, ni) => {
     // FLC₀ from Keeler model
-    const f0 = (23.3 + 360*t) * nc.n / 0.21 / 100;
+    const f0 = (23.3 + 14.13*t) * nc.n / 0.21 / 100;
     const flcN = (e2) => e2 <= 0 ? f0 + Math.abs(e2)*0.55 : f0 + e2;
     ctx.strokeStyle = nc.col; ctx.lineWidth = 2.5;
     ctx.beginPath();
     e2s.forEach((e2, i) => { i===0 ? ctx.moveTo(px(e2), py(Math.min(flcN(e2), E1_MAX))) : ctx.lineTo(px(e2), py(Math.min(flcN(e2), E1_MAX))); });
     ctx.stroke();
-    ctx.fillStyle = nc.col; ctx.font = '9px Arial'; ctx.textAlign = 'right';
-    ctx.fillText(nc.label, px(0)-5, py(f0)-5);
+    ctx.fillStyle = nc.col; ctx.fillRect(padL+10, padT+28+ni*14, 14, 3);
+    ctx.font = '10px Arial'; ctx.textAlign = 'left';
+    ctx.fillText(nc.label + '  (FLC₀ ≈ ' + f0.toFixed(2) + ')', padL+30, padT+33+ni*14);
   });
 
   ctx.fillStyle = '#94a3b8'; ctx.font = '9px Arial'; ctx.textAlign = 'center';

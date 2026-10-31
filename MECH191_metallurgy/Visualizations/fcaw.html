@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
   <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FCAW – Flux-Cored Arc Welding</title>
   <style>
@@ -40,7 +42,7 @@
     .selector-group select { width: 100%; background: #0f172a; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px; padding: 8px 10px; font-size: 0.88rem; }
     .cls-seg { background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; min-width: 38px; text-align: center; }
     .cls-seg .val { font-size: 1.1rem; font-weight: 700; color: #a78bfa; }
-    .cls-seg .lbl { font-size: 0.68rem; color: #64748b; margin-top: 2px; }
+    .cls-seg .lbl { font-size: 0.68rem; color: #73839a; margin-top: 2px; }
     .classifier { display: flex; gap: 4px; flex-wrap: wrap; margin: 12px 0; }
     .cls-input { background: #0f172a; color: #e2e8f0; border: 1px solid #475569; border-radius: 6px; padding: 8px 12px; font-size: 1rem; width: 180px; letter-spacing: 2px; }
     .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.78rem; font-weight: 600; }
@@ -62,6 +64,7 @@
   <p>Self-Shielded vs Gas-Shielded Process · Wire Selection · Parameter Setting · Slag Removal · FCAW-S vs FCAW-G Comparison (Lincoln Electric &amp; AWS A5.20/A5.36)</p>
 </div>
 
+<main id="main-content">
 <div class="tabs">
   <div class="tab active"  onclick="showTab('process',this)">Process Overview</div>
   <div class="tab"         onclick="showTab('wire',this)">Wire Selection</div>
@@ -81,14 +84,14 @@
     <div class="step-lbl" id="procLbl"></div>
     <div class="step-dsc" id="procDsc"></div>
     <div class="canvas-wrap" style="margin-top:12px;">
-      <canvas id="processCv"></canvas>
+      <canvas id="processCv" role="img" aria-label="Animated cross-section comparing FCAW-S and FCAW-G. Both feed a tubular flux-cored wire through the gun and leave a slag layer on the bead; the gas-shielded version adds an external shielding gas flow from the nozzle, while the self-shielded version relies on the flux core alone. The comparison table below gives full details."></canvas>
     </div>
   </div>
 
   <div class="card">
     <h2>FCAW-S vs FCAW-G – Comparison Table</h2>
-    <table>
-      <tr><th>Property</th><th>FCAW-S (Self-Shielded)</th><th>FCAW-G (Gas-Shielded)</th></tr>
+    <table><caption class="sr-only">FCAW-S vs FCAW-G – Comparison Table</caption>
+      <tr><th scope="col">Property</th><th scope="col">FCAW-S (Self-Shielded)</th><th scope="col">FCAW-G (Gas-Shielded)</th></tr>
       <tr><td>Shielding Source</td><td>Flux core only — no gas cylinder needed</td><td>External 75Ar/25CO₂ or 100% CO₂ at 35–50 CFH</td></tr>
       <tr><td>Wind Resistance</td><td>Excellent — suitable outdoors &gt;35 mph winds</td><td>Poor — drafts disrupt gas coverage; use windscreen</td></tr>
       <tr><td>Weld Quality</td><td>Good; higher inclusion risk; more spatter</td><td>Better appearance; low spatter; cleaner bead</td></tr>
@@ -110,7 +113,7 @@
     <div class="selector-row">
       <div class="selector-group">
         <label>Shielding Type</label>
-        <select id="selShield" onchange="updateWireTable()">
+        <select id="selShield" onchange="updateWireTable()" aria-label="Shielding Type">
           <option value="both">Both (FCAW-S &amp; FCAW-G)</option>
           <option value="s">FCAW-S (Self-Shielded only)</option>
           <option value="g">FCAW-G (Gas-Shielded only)</option>
@@ -118,14 +121,14 @@
       </div>
       <div class="selector-group">
         <label>Welding Position</label>
-        <select id="selPos" onchange="updateWireTable()">
+        <select id="selPos" onchange="updateWireTable()" aria-label="Welding Position">
           <option value="all">All Positions</option>
           <option value="fh">Flat / Horizontal Only</option>
         </select>
       </div>
       <div class="selector-group">
         <label>Priority</label>
-        <select id="selPriority" onchange="updateWireTable()">
+        <select id="selPriority" onchange="updateWireTable()" aria-label="Priority">
           <option value="any">Any</option>
           <option value="toughness">Notch Toughness</option>
           <option value="speed">Deposition Rate</option>
@@ -139,7 +142,7 @@
   <div class="card">
     <h2>AWS A5.20 / A5.36 Classification Decoder</h2>
     <p style="color:#94a3b8;font-size:0.85rem;margin-bottom:12px;">Type a wire designation (e.g. E71T-1C, E70T-8, E71T-11) to decode each segment.</p>
-    <input class="cls-input" id="clsInput" value="E71T-1C" oninput="decodeWire()" maxlength="14" placeholder="e.g. E71T-1C">
+    <input class="cls-input" id="clsInput" value="E71T-1C" oninput="decodeWire()" maxlength="14" placeholder="e.g. E71T-1C" aria-label="Wire designation, for example E71T-1C">
     <div class="classifier" id="clsDisplay" style="margin-top:14px;"></div>
     <div id="clsDesc" style="margin-top:12px;font-size:0.84rem;color:#cbd5e1;line-height:1.8;"></div>
   </div>
@@ -152,7 +155,7 @@
     <div class="selector-row">
       <div class="selector-group">
         <label>Wire Type &amp; Diameter</label>
-        <select id="paramWire" onchange="renderParamChart()">
+        <select id="paramWire" onchange="renderParamChart()" aria-label="Wire Type &amp; Diameter">
           <option value="e71t1_035">E71T-1 (G) · 0.035"</option>
           <option value="e71t1_045" selected>E71T-1 (G) · 0.045"</option>
           <option value="e71t1_052">E71T-1 (G) · 0.052"</option>
@@ -163,7 +166,7 @@
       </div>
       <div class="selector-group">
         <label>Welding Position</label>
-        <select id="paramPos" onchange="renderParamChart()">
+        <select id="paramPos" onchange="renderParamChart()" aria-label="Welding Position">
           <option value="flat">Flat (1F / 1G)</option>
           <option value="horiz">Horizontal (2F / 2G)</option>
           <option value="vup">Vertical Up (3F / 3G)</option>
@@ -172,7 +175,7 @@
       </div>
     </div>
     <div class="canvas-wrap">
-      <canvas id="paramCv"></canvas>
+      <canvas id="paramCv" role="img" aria-label="Operating window chart for FCAW: welding current versus voltage, showing the acceptable parameter range for the selected wire type and diameter. Settings outside the window lead to poor arc stability or defects."></canvas>
     </div>
     <div id="paramInfo" class="info-box"></div>
   </div>
@@ -182,8 +185,8 @@
     <div class="two-col">
       <div>
         <h3>Contact-Tip-to-Work Distance (CTWD)</h3>
-        <table>
-          <tr><th>Wire Dia.</th><th>FCAW-G CTWD</th><th>FCAW-S CTWD</th></tr>
+        <table><caption class="sr-only">Contact-Tip-to-Work Distance (CTWD)</caption>
+          <tr><th scope="col">Wire Dia.</th><th scope="col">FCAW-G CTWD</th><th scope="col">FCAW-S CTWD</th></tr>
           <tr><td>0.035"</td><td>½"–¾"</td><td>¾"–1"</td></tr>
           <tr><td>0.045"</td><td>¾"–1"</td><td>1"–1¼"</td></tr>
           <tr><td>0.052"</td><td>¾"–1"</td><td>1"–1½"</td></tr>
@@ -193,8 +196,8 @@
       </div>
       <div>
         <h3>Polarity by Wire Classification</h3>
-        <table>
-          <tr><th>Wire</th><th>Polarity</th></tr>
+        <table><caption class="sr-only">Polarity by Wire Classification</caption>
+          <tr><th scope="col">Wire</th><th scope="col">Polarity</th></tr>
           <tr><td>E70T-1, E71T-1 (FCAW-G)</td><td>DCEP</td></tr>
           <tr><td>E70T-5 (FCAW-G)</td><td>DCEP</td></tr>
           <tr><td>E71T-8 (FCAW-S)</td><td>DCEN</td></tr>
@@ -202,8 +205,8 @@
           <tr><td>E70T-7 (FCAW-S)</td><td>DCEN</td></tr>
         </table>
         <h3 style="margin-top:14px;">Shielding Gas Flow (FCAW-G only)</h3>
-        <table>
-          <tr><th>Condition</th><th>Flow Rate</th></tr>
+        <table><caption class="sr-only">Shielding Gas Flow (FCAW-G only)</caption>
+          <tr><th scope="col">Condition</th><th scope="col">Flow Rate</th></tr>
           <tr><td>Indoor / calm</td><td>35–40 CFH</td></tr>
           <tr><td>Light air movement</td><td>40–45 CFH</td></tr>
           <tr><td>Use windscreen</td><td>35–40 CFH</td></tr>
@@ -225,14 +228,14 @@
     <div class="step-lbl" id="slagLbl"></div>
     <div class="step-dsc" id="slagDsc"></div>
     <div class="canvas-wrap" style="margin-top:12px;">
-      <canvas id="slagCv"></canvas>
+      <canvas id="slagCv" role="img" aria-label="Slag removal technique: a chipping hammer and wire brush removing the slag layer from a completed flux-cored weld bead before the next pass."></canvas>
     </div>
   </div>
 
   <div class="card">
     <h2>Common FCAW Defects &amp; Prevention</h2>
-    <table>
-      <tr><th>Defect</th><th>Cause</th><th>Prevention</th></tr>
+    <table><caption class="sr-only">Common FCAW Defects &amp; Prevention</caption>
+      <tr><th scope="col">Defect</th><th scope="col">Cause</th><th scope="col">Prevention</th></tr>
       <tr><td>Porosity</td><td>CTWD too long (FCAW-S); gas loss or draft (FCAW-G); moisture in flux</td><td>Correct CTWD; verify gas flow; store wire sealed and dry</td></tr>
       <tr><td>Slag Inclusion</td><td>Incomplete slag removal between passes; undercut traps slag</td><td>Chip and wire-brush every pass; correct undercut first</td></tr>
       <tr><td>Undercut</td><td>Travel speed too fast; voltage too high; improper torch angle</td><td>Slow travel speed; reduce voltage 1–2 V; maintain 5°–15° drag</td></tr>
@@ -269,6 +272,7 @@
   </div>
 </div>
 
+</main>
 <div class="back"><a href="index.html">← Back to Visualizations</a></div>
 
 <script>
@@ -572,7 +576,7 @@ function updateWireTable() {
   </tr>`).join('');
   document.getElementById('wireTableWrap').innerHTML = `<table>
     <tr><th>Designation</th><th>Type</th><th>Position</th><th>Toughness</th><th>Dep. Rate</th><th>Notes</th></tr>
-    ${rows || '<tr><td colspan="6" style="color:#64748b;text-align:center;padding:16px;">No wires match selected criteria.</td></tr>'}
+    ${rows || '<tr><td colspan="6" style="color:#73839a;text-align:center;padding:16px;">No wires match selected criteria.</td></tr>'}
   </table>`;
 }
 

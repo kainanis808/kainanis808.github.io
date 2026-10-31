@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casting Defects Reference — TWI Defect Library</title>
     <style>
@@ -148,7 +150,7 @@
         </div>
         <div class="detail-body">
             <div class="detail-canvas-col">
-                <canvas id="detailCanvas" width="480" height="240"></canvas>
+                <canvas id="detailCanvas" width="480" height="240" role="img" aria-label="Schematic cross-section of the casting defect selected from the cards above. The defect name, description, causes, and prevention are given in the text of this panel."></canvas>
                 <div class="illus-note">Schematic cross-section — representative illustration</div>
             </div>
             <div class="detail-info-col">
@@ -807,7 +809,7 @@ const DEFECTS = [
         ctx.beginPath(); ctx.moveTo(0, h*0.44); ctx.lineTo(w, h*0.44); ctx.stroke();
         ctx.fillStyle = '#1e3a5f'; ctx.font = `${Math.max(8,h*0.065)}px sans-serif`;
         ctx.fillText('Casting', w*0.04, h*0.38);
-        ctx.fillText('Sand mold', w*0.04, h*0.94);
+        ctx.fillText('Sand mold', w*0.04, h*0.84);
         ctx.fillStyle = '#991b1b'; ctx.fillText('Metal fingers', w*0.55, h*0.65);
         label(ctx,'Cross-section at mold surface', w*0.03, h*0.97, Math.max(9,h*0.074));
     }
@@ -899,7 +901,7 @@ const DEFECTS = [
         ctx.fillStyle = mg; ctx.fill();
         ctx.strokeStyle = '#6b7280'; ctx.lineWidth = 1.5; ctx.stroke();
         ctx.fillStyle = '#991b1b'; ctx.font = `bold ${Math.max(8,h*0.068)}px sans-serif`;
-        ctx.fillText('Swell bulge', w*0.33, h*0.91);
+        ctx.fillText('Swell bulge', w*0.33, h*0.84);
         label(ctx,'Lower mold face — excess metal', w*0.03, h*0.97, Math.max(9,h*0.074));
     }
 },
@@ -1188,10 +1190,12 @@ function buildCards() {
         card.dataset.idx = i;
 
         const canvas = document.createElement('canvas');
-        canvas.width = 160; canvas.height = 100;
+        // Thumbnails are drawn at 2× size and scaled down by CSS so their labels fit inside the frame
+        canvas.width = 320; canvas.height = 200;
         canvas.style.width = '100%';
+        canvas.setAttribute('aria-hidden', 'true');   // decorative preview; the card text names the defect
         const ctx = canvas.getContext('2d');
-        d.draw(ctx, 160, 100);
+        d.draw(ctx, 320, 200);
 
         card.innerHTML = `
             <div class="defect-card-info">

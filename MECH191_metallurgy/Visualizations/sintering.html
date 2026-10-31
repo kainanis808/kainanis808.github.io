@@ -3,6 +3,8 @@
 <head>
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sintering – Neck Formation, Diffusion, Pore Closure &amp; Densification</title>
     <style>
@@ -50,7 +52,7 @@
             align-items:center; margin-bottom:18px;
         }
         .ctrl-group { display:flex; flex-direction:column; gap:4px; min-width:180px; }
-        .ctrl-label { font-size:0.78rem; color:#64748b; text-transform:uppercase; letter-spacing:.05em; }
+        .ctrl-label { font-size:0.78rem; color:#8593a7; text-transform:uppercase; letter-spacing:.05em; }
         .ctrl-val   { font-size:0.9rem;  color:#e2e8f0; margin-top:2px; }
         input[type=range] {
             -webkit-appearance:none; width:100%; height:6px;
@@ -87,7 +89,7 @@
             transition:border-color .15s,color .15s;
         }
         .mech-btn.active { border-color:#a78bfa; color:#c4b5fd; background:#1a0f2e; }
-        .mech-btn:hover:not(.active) { border-color:#64748b; color:#e2e8f0; }
+        .mech-btn:hover:not(.active) { border-color:#8593a7; color:#e2e8f0; }
 
         /* Info box below canvas */
         .info-box {
@@ -96,7 +98,7 @@
         }
         .info-box h3 { color:#a78bfa; font-size:1rem; margin-bottom:8px; }
         .info-row { margin-bottom:8px; }
-        .ir-label { font-size:0.73rem; color:#64748b; text-transform:uppercase; letter-spacing:.05em; }
+        .ir-label { font-size:0.73rem; color:#8593a7; text-transform:uppercase; letter-spacing:.05em; }
         .ir-val   { font-size:0.88rem; color:#cbd5e1; line-height:1.55; margin-top:2px; }
 
         /* Stage stepper for densification */
@@ -113,7 +115,7 @@
         .stage-btn.active { background:#14532d; color:#4ade80; border-color:#4ade80; z-index:1; }
         .stage-btn:hover:not(.active) { background:#1e293b; color:#e2e8f0; }
 
-        .source-line { font-size:.78rem; color:#475569; text-align:center; margin-top:8px; }
+        .source-line { font-size:.78rem; color:#8192aa; text-align:center; margin-top:8px; }
         .back-link {
             display:block; text-align:center; margin-top:30px;
             color:#38bdf8; text-decoration:none; font-size:.92rem;
@@ -160,7 +162,7 @@
         <div class="controls">
             <div class="ctrl-group">
                 <span class="ctrl-label">Sintering Progress (x/R)</span>
-                <input type="range" id="neck-slider" min="0" max="100" value="0">
+                <input type="range" id="neck-slider" min="0" max="100" value="0" aria-label="Sintering Progress (x/R)">
                 <span class="ctrl-val" id="neck-val">x/R = 0.00</span>
             </div>
             <button class="play-btn" id="neck-play">▶ Animate</button>
@@ -172,7 +174,7 @@
             </div>
         </div>
         <div class="canvas-wrap">
-            <canvas id="neck-canvas"></canvas>
+            <canvas id="neck-canvas" role="img" aria-label="Two spherical powder particles with a growing neck between them. The slider or Animate button increases the neck ratio x/R; the current ratio and stage are given in text beside the diagram."></canvas>
         </div>
         <div class="info-box" style="margin-top:14px;">
             <div style="display:flex;gap:24px;flex-wrap:wrap;">
@@ -213,7 +215,7 @@
     <div class="card">
         <div class="mech-selector" id="mech-selector"></div>
         <div class="canvas-wrap">
-            <canvas id="diff-canvas"></canvas>
+            <canvas id="diff-canvas" role="img" aria-label="Two sintering particles with arrows for the five mass-transport paths: surface diffusion, evaporation–condensation, lattice diffusion from the surface, lattice diffusion from the grain boundary, and grain-boundary diffusion. Only the last two (and lattice diffusion from the boundary) cause densification. The table below describes each path."></canvas>
         </div>
         <div class="info-box" id="diff-info">
             <h3 id="diff-title">—</h3>
@@ -258,13 +260,13 @@
         <div class="controls">
             <div class="ctrl-group">
                 <span class="ctrl-label">Relative Density</span>
-                <input type="range" id="pore-slider" min="60" max="100" value="60">
+                <input type="range" id="pore-slider" min="60" max="100" value="60" aria-label="Relative Density">
                 <span class="ctrl-val" id="pore-val">60%</span>
             </div>
             <button class="play-btn" id="pore-play">▶ Animate</button>
         </div>
         <div class="canvas-wrap">
-            <canvas id="pore-canvas"></canvas>
+            <canvas id="pore-canvas" role="img" aria-label="Microstructure of a sintering compact at the relative density set by the slider: at low density pores form an interconnected open network; as density rises they pinch off into isolated, rounded closed pores. The current stage, porosity, and pore geometry are given in text."></canvas>
         </div>
         <div class="info-box" style="margin-top:14px;">
             <div style="display:flex;gap:24px;flex-wrap:wrap;">
@@ -303,10 +305,10 @@
         <div class="stage-bar" id="stage-bar"></div>
         <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;">
             <div class="canvas-wrap" style="flex:2;min-width:300px;">
-                <canvas id="dens-curve-canvas"></canvas>
+                <canvas id="dens-curve-canvas" role="img" aria-label="Densification curve, relative density versus sintering time, divided into initial, intermediate, and final stages; the stage chosen with the buttons is highlighted."></canvas>
             </div>
             <div class="canvas-wrap" style="flex:1;min-width:200px;">
-                <canvas id="dens-micro-canvas"></canvas>
+                <canvas id="dens-micro-canvas" role="img" aria-label="Microstructure sketch for the selected sintering stage: initial stage with small necks between particles, intermediate stage with a connected pore network along grain edges, final stage with isolated pores at grain corners."></canvas>
             </div>
         </div>
         <div class="info-box" style="margin-top:14px;" id="stage-info">
@@ -1237,7 +1239,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
     function drawCurve(highlightStage) {
         const W = CURVE_W, H = CURVE_H;
-        const PAD = { top:28, right:18, bottom:54, left:62 };
+        const PAD = { top:28, right:30, bottom:54, left:62 };
         const CW = W - PAD.left - PAD.right;
         const CH = H - PAD.top - PAD.bottom;
 
