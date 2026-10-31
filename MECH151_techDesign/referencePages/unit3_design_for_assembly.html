@@ -43,12 +43,6 @@
         .dg-part { fill: #e2e8f0; stroke: #1e3a5f; stroke-width: 1.6; }
         .dg-hidden { fill: none; stroke: #94a3b8; stroke-width: 1.2; stroke-dasharray: 4 3; }
         .section h3 { font-size: 1rem; color: #1e3a5f; margin: 16px 0 6px; }
-        .stack { border-collapse: collapse; margin: 10px 0 6px; font-size: 0.9rem; width: 100%; max-width: 460px; }
-        .stack caption { text-align: left; font-size: 0.85rem; color: #6b7280; margin-bottom: 6px; }
-        .stack th, .stack td { border: 1px solid #e2e8f0; padding: 6px 10px; text-align: left; }
-        .stack th { background: #f1f5f9; color: #1e3a5f; }
-        .stack td:last-child, .stack th:last-child { text-align: right; font-variant-numeric: tabular-nums; }
-        .stack tr.total td { font-weight: 700; color: #1e3a5f; background: #f8fafc; }
         table.fit-table { width: 100%; border-collapse: collapse; margin: 14px 0 4px; font-size: 0.88rem; }
         table.fit-table caption { text-align: left; font-size: 0.85rem; color: #6b7280; margin-bottom: 6px; }
         .fit-table th, .fit-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
@@ -448,7 +442,6 @@
             <li><span class="term">Avoid reorientation:</span> assemble from one direction, ideally top-down, so the workpiece isn't flipped</li>
             <li><span class="term">Standardize fasteners:</span> fewer unique sizes means fewer tools and fewer mistakes</li>
             <li><span class="term">Symmetry:</span> make parts either fully symmetric so orientation doesn't matter, or clearly asymmetric so the correct orientation is obvious</li>
-            <li><span class="term def" tabindex="0" data-def="Adding up the individual tolerances of every part and gap in a chain to find how much the overall dimension (often an assembly gap or fit) can vary. Checked so the parts still assemble and function at their worst-case sizes.">Tolerance stack-up:</span> checking that the accumulated tolerances of mating parts still allow assembly and function &mdash; worked through in the example below</li>
         </ul>
         <figure class="diagram">
         <svg viewBox="0 0 640 184" role="img" aria-label="The design-for-assembly review loop: present the assembly, take feedback against DFA principles, revise, and go around again, reducing part count each time.">
@@ -474,112 +467,6 @@
         </svg>
         <figcaption>Design for Assembly reduces the time, cost, and error rate of putting a product together &mdash; and the biggest lever is part count. The unit ends by presenting an assembly, taking feedback, and producing a documented revision.</figcaption>
         </figure>
-    </div>
-
-    <div class="section">
-        <h2>Worked example: a tolerance stack-up</h2>
-        <p>
-            Three spacer blocks &mdash; <span class="term">A</span>, <span class="term">B</span>, and
-            <span class="term">C</span> &mdash; drop into a milled pocket in a housing. They need a small
-            <span class="term">end gap</span> so the cover can close. The gap must <em>never</em> be negative
-            (the stack would jam and the cover would not seat) and should stay under about 1.2&nbsp;mm (any looser
-            and the stack rattles).
-        </p>
-        <figure class="diagram">
-        <svg viewBox="0 0 470 250" role="img" aria-label="Three blocks A, B and C stacked in a housing pocket. The pocket depth is 60.0 plus or minus 0.2. Block A is 20.0 plus or minus 0.1, block B is 15.0 plus or minus 0.1, block C is 24.5 plus or minus 0.15. The end gap above block A is 0.5 nominal.">
-          <defs>
-            <marker id="u3ts-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill"/></marker>
-            <pattern id="u3ts-gap" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="6" stroke="#f59e0b" stroke-width="0.8"/></pattern>
-          </defs>
-          <!-- housing pocket -->
-          <path d="M64,20 L64,212 L262,212 L262,20 L250,20 L250,200 L76,200 L76,20 Z" fill="#e2e8f0" stroke="#1e3a5f" stroke-width="1.4"/>
-          <!-- blocks -->
-          <rect x="76" y="138" width="174" height="62" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.3"/>
-          <rect x="76" y="94"  width="174" height="44" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.3"/>
-          <rect x="76" y="40"  width="174" height="54" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.3"/>
-          <rect x="76" y="24"  width="174" height="16" fill="url(#u3ts-gap)"/>
-          <text x="163" y="173" text-anchor="middle" class="dg-t">C</text>
-          <text x="163" y="121" text-anchor="middle" class="dg-t">B</text>
-          <text x="163" y="71"  text-anchor="middle" class="dg-t">A</text>
-          <!-- pocket depth dim -->
-          <line x1="44" y1="20" x2="44" y2="212" stroke="#1e3a5f" stroke-width="1" marker-start="url(#u3ts-ar)" marker-end="url(#u3ts-ar)"/>
-          <text x="20" y="120" text-anchor="middle" class="dg-s" transform="rotate(-90 20 120)">pocket 60.0 &plusmn;0.2</text>
-          <!-- block dims -->
-          <line x1="250" y1="67"  x2="274" y2="67"  stroke="#94a3b8" stroke-width="0.8"/>
-          <line x1="250" y1="116" x2="274" y2="116" stroke="#94a3b8" stroke-width="0.8"/>
-          <line x1="250" y1="169" x2="274" y2="169" stroke="#94a3b8" stroke-width="0.8"/>
-          <line x1="250" y1="32"  x2="274" y2="32"  stroke="#f59e0b" stroke-width="0.8"/>
-          <text x="278" y="71"  class="dg-s">A = 20.0 &plusmn;0.1</text>
-          <text x="278" y="120" class="dg-s">B = 15.0 &plusmn;0.1</text>
-          <text x="278" y="173" class="dg-s">C = 24.5 &plusmn;0.15</text>
-          <text x="278" y="36"  class="dg-s" fill="#b45309">end gap</text>
-          <text x="235" y="245" text-anchor="middle" class="dg-s">schematic &mdash; block heights not to scale</text>
-        </svg>
-        <figcaption>The gap is what is left of the pocket depth after the three blocks are stacked in it: gap = pocket &minus; (A + B + C).</figcaption>
-        </figure>
-
-        <table class="stack">
-            <caption>Dimensions from the part drawings. The pocket <em>opens</em> the gap (+); each block <em>closes</em> it (&minus;).</caption>
-            <thead><tr><th>Feature</th><th>Effect</th><th>Nominal</th><th>Tol.</th><th>Min</th><th>Max</th></tr></thead>
-            <tbody>
-                <tr><td>Pocket depth</td><td>+</td><td>60.00</td><td>&plusmn;0.20</td><td>59.80</td><td>60.20</td></tr>
-                <tr><td>Block A</td><td>&minus;</td><td>20.00</td><td>&plusmn;0.10</td><td>19.90</td><td>20.10</td></tr>
-                <tr><td>Block B</td><td>&minus;</td><td>15.00</td><td>&plusmn;0.10</td><td>14.90</td><td>15.10</td></tr>
-                <tr><td>Block C</td><td>&minus;</td><td>24.50</td><td>&plusmn;0.15</td><td>24.35</td><td>24.65</td></tr>
-                <tr class="total"><td colspan="3">Total tolerance (sum of the &plusmn; values)</td><td colspan="3">&plusmn;0.55</td></tr>
-            </tbody>
-        </table>
-
-        <h3>Step 1 &mdash; nominal gap</h3>
-        <p>
-            gap<sub>nom</sub> = 60.00 &minus; (20.00 + 15.00 + 24.50) = <strong>0.50&nbsp;mm</strong>. Looks fine on its own.
-        </p>
-
-        <h3>Step 2 &mdash; worst-case (arithmetic) stack</h3>
-        <p>
-            The gap is largest when the pocket is at its maximum and every block is at its minimum; smallest when
-            the pocket is at its minimum and every block is at its maximum.
-        </p>
-        <ul>
-            <li><span class="term">Largest gap</span> = 60.20 &minus; (19.90 + 14.90 + 24.35) = 60.20 &minus; 59.15 = <strong>+1.05&nbsp;mm</strong></li>
-            <li><span class="term">Smallest gap</span> = 59.80 &minus; (20.10 + 15.10 + 24.65) = 59.80 &minus; 59.85 = <strong>&minus;0.05&nbsp;mm</strong></li>
-            <li><span class="term">Shortcut:</span> gap = nominal &plusmn; total tolerance = 0.50 &plusmn; 0.55 &rarr; the same <strong>&minus;0.05 &hellip; +1.05&nbsp;mm</strong></li>
-        </ul>
-        <div style="background:#fef2f2;border-left:4px solid #dc2626;border-radius:0 8px 8px 0;padding:12px 16px;margin:14px 0 4px;font-size:0.92rem;color:#4b5563;line-height:1.6;">
-            <strong style="color:#991b1b;">Verdict:</strong> the nominal gap is fine, but the worst-case minimum is
-            <strong>&minus;0.05&nbsp;mm</strong> &mdash; a possible interference. A fraction of assemblies built from
-            in-tolerance parts would not go together. The stack fails the check.
-        </div>
-
-        <h3>Step 3 &mdash; fix it (choose one)</h3>
-        <ul>
-            <li><span class="term">Shift a nominal:</span> make Block&nbsp;C 24.30 &rarr; gap = 0.70 &plusmn; 0.55 = <strong>0.15 &hellip; 1.25&nbsp;mm</strong>. Minimum now positive.</li>
-            <li><span class="term">Tighten a tolerance:</span> hold the pocket to &plusmn;0.10 &rarr; total &plusmn;0.45, gap = 0.50 &plusmn; 0.45 = <strong>0.05 &hellip; 0.95&nbsp;mm</strong>.</li>
-            <li><span class="term">Absorb the variation:</span> add a shim or a wave washer so the stack does not depend on the tolerances lining up.</li>
-        </ul>
-
-        <h3>Step 4 &mdash; statistical (RSS) check</h3>
-        <p>
-            For a long chain, worst-case is often too conservative &mdash; every part sitting at its extreme in the
-            same direction is unlikely. <span class="term def" tabindex="0" data-def="Root-Sum-Square: combine tolerances as independent random variables by taking the square root of the sum of their squares. Predicts the likely spread of an assembly dimension rather than its absolute limit.">Root-sum-square (RSS)</span>
-            combines the tolerances as independent random variables:
-        </p>
-        <p>
-            T<sub>RSS</sub> = &radic;(0.20&sup2; + 0.10&sup2; + 0.10&sup2; + 0.15&sup2;) = &radic;0.0825 &approx; <strong>0.29&nbsp;mm</strong><br>
-            gap &approx; 0.50 &plusmn; 0.29 &rarr; <strong>0.21 &hellip; 0.79&nbsp;mm</strong> (treating each &plusmn; value as about 3&sigma;)
-        </p>
-        <p>
-            So statistically an interference is very unlikely &mdash; but RSS is a probability, not a guarantee. Use
-            <span class="term">worst-case</span> when a single jammed assembly is unacceptable (small production runs,
-            safety-critical fits); use <span class="term">RSS</span> for long stacks in volume production where a
-            small, known reject rate is acceptable.
-        </p>
-        <div class="note" style="background:#fffbeb;border-left:4px solid #f59e0b;border-radius:0 8px 8px 0;padding:12px 16px;margin:14px 0 4px;font-size:0.9rem;color:#713f12;line-height:1.6;">
-            <strong>Two rules for building the chain:</strong> only dimensions along the same line add to a stack,
-            and you must track direction &mdash; a feature that opens the gap counts&nbsp;+, one that closes it counts&nbsp;&minus;.
-            <span class="term">Baseline dimensioning</span> (measuring every feature from one datum instead of
-            chaining feature-to-feature) keeps the chain short and the stack small.
-        </div>
     </div>
 
     <div class="section">
