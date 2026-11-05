@@ -41,6 +41,17 @@
         .downloads a:hover { background: #e8f0fb; border-color: #3b82f6; }
         .downloads a .lt { font-weight: 700; font-size: 0.92rem; display: block; margin-bottom: 2px; }
         .downloads a .ld { font-size: 0.82rem; color: #6b7280; }
+        table.timeline { width: 100%; border-collapse: collapse; margin: 8px 0 6px; font-size: 0.9rem; }
+        table.timeline th, table.timeline td { text-align: left; padding: 7px 10px; border-bottom: 1px solid #e2e8f0;
+            vertical-align: top; color: #4b5563; }
+        table.timeline th { color: #1e3a5f; font-weight: 700; background: #f1f5f9; }
+        table.timeline td:first-child, table.timeline td:nth-child(2) { white-space: nowrap; }
+        table.timeline tr.milestone td { background: #fefce8; color: #713f12; font-weight: 600; }
+        table.timeline tr.noclass td { color: #9ca3af; font-style: italic; }
+        .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .note { font-size: 0.85rem; color: #6b7280; font-style: italic; }
+        ol.clo { padding-left: 22px; color: #4b5563; font-size: 0.93rem; line-height: 1.7; }
+        ol.clo li { margin-bottom: 6px; }
         /* --- accessibility helpers --- */
         .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
             clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
@@ -72,6 +83,21 @@
     </div>
 
     <div class="section">
+        <h2>Course learning objectives this exam assesses</h2>
+        <p>
+            The prototype is where the last two course learning objectives are demonstrated, and it relies on
+            the first three, which you have practiced through Units 1 and 2:
+        </p>
+        <ol class="clo">
+            <li><span class="term">Demonstrate basic part modeling using 3D CAD software</span> &mdash; every component of your prototype starts as a parametric part model.</li>
+            <li><span class="term">Demonstrate basic assembly modeling using 3D CAD software</span> &mdash; your parts are mated into an assembly before anything is built.</li>
+            <li><span class="term">Simulate a complete assembly model using components</span> &mdash; check fit, motion, and your joining method in CAD so problems are caught before they cost material.</li>
+            <li><span class="term">Produce a component utilizing CAM software</span> &mdash; at least one part is taken from model to manufacturing-ready file (toolpath, sliced print, or cut file) and made on shop equipment.</li>
+            <li><span class="term">Produce a prototype from multiple substrates</span> &mdash; the finished prototype integrates at least 2 different bulk material types, joined by at least 1 joining method.</li>
+        </ol>
+    </div>
+
+    <div class="section">
         <h2>Team structure</h2>
         <p>
             You may complete the Final Exam individually or in a team of up to 3 students. Teams design, build,
@@ -85,8 +111,43 @@
             <li><span class="term">Prototype design proposal</span> &mdash; team members, what design is being made, and how it will integrate at least 2 different types of bulk material (e.g., thermoplastic + raw/processed stock) and demonstrate at least 1 joining method between 2 parts (e.g., heat insert, snap fit)</li>
             <li><span class="term">Manufacturing documentation</span> &mdash; all pertinent drawings, with the views and GD&amp;T callouts needed to build the part</li>
             <li><span class="term">Work breakdown summary</span> &mdash; who on the team did what</li>
-            <li><span class="term">Self reflection</span></li>
+            <li><span class="term">Self reflection</span> &mdash; completed individually by each team member</li>
+            <li><span class="term">Presentation</span> &mdash; your team presents and defends its design to the class during the Final Exam</li>
         </ul>
+    </div>
+
+    <div class="section">
+        <h2>Timeline to the Final Exam</h2>
+        <p>
+            Dates follow the <a href="../syllabusMECH151.pdf">course schedule in the syllabus</a>. Unit 3 topics in
+            Weeks 12&ndash;13 give you the tolerancing, file-preparation, and shop-safety knowledge you need
+            before you build, so plan your proposal&rsquo;s build timeline around the prototype work sessions below.
+        </p>
+        <div class="table-wrap">
+        <table class="timeline">
+            <thead>
+                <tr><th scope="col">Week</th><th scope="col">Date</th><th scope="col">Session &amp; what it means for your prototype</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>8</td><td>Wed, Oct 14</td><td>Unit 1 Competency Check; <strong>prototype groups form</strong></td></tr>
+                <tr><td>10</td><td>Thu, Oct 29</td><td><strong>Design Proposal</strong> &mdash; draft your team&rsquo;s proposal with the template below</td></tr>
+                <tr><td>11</td><td>Wed, Nov 4</td><td>Design review/iteration workshop &mdash; feedback on submitted proposals; revise if asked</td></tr>
+                <tr><td>11</td><td>Thu, Nov 5</td><td>Unit 2 Competency Check</td></tr>
+                <tr><td>12</td><td>Wed, Nov 11</td><td>Introduction to tolerancing &mdash; apply tolerances and fits to your mating parts</td></tr>
+                <tr><td>12</td><td>Thu, Nov 12</td><td>Translating parametric models to manufacturing-ready files &mdash; prepare your build files</td></tr>
+                <tr><td>13</td><td>Wed, Nov 18</td><td>Manufacturing methods survey (additive, subtractive, DFM) and <strong>machine safety, PPE, and operation</strong> &mdash; required before you use shop equipment</td></tr>
+                <tr><td>13</td><td>Thu, Nov 19</td><td>Prototype work time</td></tr>
+                <tr><td>14</td><td>Wed, Nov 25</td><td>Prototype work time</td></tr>
+                <tr class="noclass"><td>14</td><td>Thu, Nov 26</td><td>No class &mdash; Thanksgiving Holiday</td></tr>
+                <tr><td>15</td><td>Wed, Dec 2</td><td>Prototype work time</td></tr>
+                <tr><td>15</td><td>Thu, Dec 3</td><td>Prototype work time</td></tr>
+                <tr><td>16</td><td>Wed, Dec 9</td><td>Prototype work time &mdash; last in-class build session</td></tr>
+                <tr><td>16</td><td>Thu, Dec 10</td><td>Unit 3 Competency Check</td></tr>
+                <tr class="milestone"><td>17</td><td>Wed, Dec 16</td><td>Final Exam, CE405, 4:00&ndash;6:30&nbsp;PM &mdash; present your prototype and submit everything by 6:30&nbsp;PM</td></tr>
+            </tbody>
+        </table>
+        </div>
+        <p class="note">The schedule is tentative and may change during the semester; the instructor will announce any updates.</p>
     </div>
 
     <div class="section">
@@ -141,6 +202,12 @@
             submitted to the instructor by 6:30&nbsp;PM to be considered for grading &mdash; work submitted after
             the end time automatically scores zero.
         </div>
+        <p>
+            Bring to the exam: your finished prototype, your manufacturing documentation (drawings with pertinent
+            views and GD&amp;T callouts), your team&rsquo;s Work Breakdown Summary, and each member&rsquo;s Self
+            Reflection. Your Prototype Design Proposal &mdash; including any revisions from the Week 11 design review &mdash; is part of the evaluation as well.
+        </p>
+    </div>
     </div>
 
     <div class="produce">
