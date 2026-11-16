@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../a11y.css">
+    <script src="../a11y.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MECH191 Printable Handouts</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h1 { font-size: 2.2rem; color: #1a1a2e; }
+        .subtitle { color: #475569; margin-top: 8px; font-size: 1.05rem; }
+        main { max-width: 980px; margin: 0 auto; padding: 30px 20px; }
+        .intro { color: #374151; line-height: 1.7; margin-bottom: 20px; font-size: 1rem; }
+
+        nav.unit-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+        nav.unit-nav a {
+            padding: 6px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 999px;
+            color: #1e3a5f;
+            text-decoration: none;
+            font-size: 0.9rem;
+            background: #f8fafc;
+        }
+        nav.unit-nav a:hover { background: #e2e8f0; }
+
+        .section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+        .section h2 { font-size: 1.3rem; color: #1e3a5f; margin-bottom: 14px; }
+
+        ul.handouts { list-style: none; display: grid; gap: 10px; }
+        ul.handouts li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px 16px;
+        }
+        .handout-title { font-weight: 600; color: #1f2937; }
+        .handout-meta { font-size: 0.82rem; color: #6b7280; margin-top: 2px; }
+        .actions { display: flex; gap: 8px; }
+        .actions a {
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            border: 1px solid #027ab8;
+            color: #027ab8;
+            white-space: nowrap;
+        }
+        .actions a.primary { background: #027ab8; color: #ffffff; }
+        .actions a:hover { text-decoration: underline; }
+
+        .empty { color: #6b7280; font-style: italic; }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: #027ab8;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Printable Handouts</h1>
+    <p class="subtitle">MECH191: Metallurgy &mdash; charts, diagrams, and reference sheets for each unit</p>
+</header>
+<main id="main-content">
+    <p class="intro">
+        These are the printable handouts used in class, organized by unit. Select <strong>Open</strong> to view a
+        handout in your browser, or <strong>Download</strong> to save a copy for printing.
+    </p>
+
+    <nav class="unit-nav" aria-label="Jump to unit">
+        <a href="#unit-1">Unit 1</a>
+        <a href="#unit-2">Unit 2</a>
+        <a href="#unit-3">Unit 3</a>
+        <a href="#unit-4">Unit 4</a>
+        <a href="#unit-5">Unit 5</a>
+    </nav>
+
+    <!--
+      To add a handout: drop the PDF into the matching Unit_N folder, then copy one <li> block
+      below and update the file name, title, description, and size.
+    -->
+
+    <section class="section" id="unit-1" aria-labelledby="unit-1-h">
+        <h2 id="unit-1-h">Unit 1 &mdash; Foundations: What Metals Are and How They're Built</h2>
+        <ul class="handouts">
+            <li>
+                <div>
+                    <div class="handout-title">Simple Periodic Table</div>
+                    <div class="handout-meta">PDF &middot; 565 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_1/simplePeriodicTable.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> Simple Periodic Table (opens in new tab)</span></a>
+                    <a href="Unit_1/simplePeriodicTable.pdf" download>Download<span class="sr-only"> Simple Periodic Table</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">Periodic Table &amp; Crystal Structures</div>
+                    <div class="handout-meta">PDF &middot; 61 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_1/periodicTable-CrystalStructure.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> Periodic Table and Crystal Structures (opens in new tab)</span></a>
+                    <a href="Unit_1/periodicTable-CrystalStructure.pdf" download>Download<span class="sr-only"> Periodic Table and Crystal Structures</span></a>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+    <section class="section" id="unit-2" aria-labelledby="unit-2-h">
+        <h2 id="unit-2-h">Unit 2 &mdash; Metal Families: Knowing What You're Working With</h2>
+        <ul class="handouts">
+            <li>
+                <div>
+                    <div class="handout-title">Stress&ndash;Strain Curve</div>
+                    <div class="handout-meta">PDF &middot; 58 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_2/Stress-strain-curve.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> Stress-Strain Curve (opens in new tab)</span></a>
+                    <a href="Unit_2/Stress-strain-curve.pdf" download>Download<span class="sr-only"> Stress-Strain Curve</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">ASTM E8 Tension Test Specimens (Flat &amp; Round)</div>
+                    <div class="handout-meta">PDF &middot; 463 KB &middot; 2 pages</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_2/astmE8_tensileSpecimens.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> ASTM E8 Tension Test Specimens (opens in new tab)</span></a>
+                    <a href="Unit_2/astmE8_tensileSpecimens.pdf" download>Download<span class="sr-only"> ASTM E8 Tension Test Specimens</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">Blank Stress&ndash;Strain Graph</div>
+                    <div class="handout-meta">PDF &middot; 20 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_2/blankStressStrain.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> Blank Stress-Strain Graph (opens in new tab)</span></a>
+                    <a href="Unit_2/blankStressStrain.pdf" download>Download<span class="sr-only"> Blank Stress-Strain Graph</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">Iron&ndash;Carbon (Steel) Phase Diagram</div>
+                    <div class="handout-meta">PDF &middot; 288 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_2/phaseDiagram_steel.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> Iron-Carbon Steel Phase Diagram (opens in new tab)</span></a>
+                    <a href="Unit_2/phaseDiagram_steel.pdf" download>Download<span class="sr-only"> Iron-Carbon Steel Phase Diagram</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">Steel CCT Diagram</div>
+                    <div class="handout-meta">PDF &middot; 1.8 MB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_2/steelCCT.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> Steel CCT Diagram (opens in new tab)</span></a>
+                    <a href="Unit_2/steelCCT.pdf" download>Download<span class="sr-only"> Steel CCT Diagram</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">Galvanic Corrosion Chart</div>
+                    <div class="handout-meta">PDF &middot; 268 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_2/galvanicCorrosionChart.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> Galvanic Corrosion Chart (opens in new tab)</span></a>
+                    <a href="Unit_2/galvanicCorrosionChart.pdf" download>Download<span class="sr-only"> Galvanic Corrosion Chart</span></a>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+    <section class="section" id="unit-3" aria-labelledby="unit-3-h">
+        <h2 id="unit-3-h">Unit 3 &mdash; Testing, Inspection, and Quality: The Technician's Core Skills</h2>
+        <ul class="handouts">
+            <li>
+                <div>
+                    <div class="handout-title">Hardness Test Indenters</div>
+                    <div class="handout-meta">PDF &middot; 63 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_3/hardnessTestIndenters.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> Hardness Test Indenters (opens in new tab)</span></a>
+                    <a href="Unit_3/hardnessTestIndenters.pdf" download>Download<span class="sr-only"> Hardness Test Indenters</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">Hardness Test Curve</div>
+                    <div class="handout-meta">PDF &middot; 73 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_3/hardnessTestCurve.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> Hardness Test Curve (opens in new tab)</span></a>
+                    <a href="Unit_3/hardnessTestCurve.pdf" download>Download<span class="sr-only"> Hardness Test Curve</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">Impact Test Setup</div>
+                    <div class="handout-meta">PDF &middot; 35 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_3/impactTestSetup.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> Impact Test Setup (opens in new tab)</span></a>
+                    <a href="Unit_3/impactTestSetup.pdf" download>Download<span class="sr-only"> Impact Test Setup</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">Impact Test Specimens</div>
+                    <div class="handout-meta">PDF &middot; 189 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_3/impactSpecimens.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> Impact Test Specimens (opens in new tab)</span></a>
+                    <a href="Unit_3/impactSpecimens.pdf" download>Download<span class="sr-only"> Impact Test Specimens</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">Impact Test S-Curve (Ductile-to-Brittle Transition)</div>
+                    <div class="handout-meta">PDF &middot; 39 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_3/impactSCurve.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> Impact Test S-Curve (opens in new tab)</span></a>
+                    <a href="Unit_3/impactSCurve.pdf" download>Download<span class="sr-only"> Impact Test S-Curve</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">Fatigue Loading</div>
+                    <div class="handout-meta">PDF &middot; 47 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_3/fatigueLoading.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> Fatigue Loading (opens in new tab)</span></a>
+                    <a href="Unit_3/fatigueLoading.pdf" download>Download<span class="sr-only"> Fatigue Loading</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">Fatigue Plots</div>
+                    <div class="handout-meta">PDF &middot; 139 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_3/fatiguePlots.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> Fatigue Plots (opens in new tab)</span></a>
+                    <a href="Unit_3/fatiguePlots.pdf" download>Download<span class="sr-only"> Fatigue Plots</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">S-N Curves by Material</div>
+                    <div class="handout-meta">PDF &middot; 64 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_3/S-N-curve_materials.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> S-N Curves by Material (opens in new tab)</span></a>
+                    <a href="Unit_3/S-N-curve_materials.pdf" download>Download<span class="sr-only"> S-N Curves by Material</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">Fatigue&ndash;Creep Relationship</div>
+                    <div class="handout-meta">PDF &middot; 60 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_3/fatigueCreepRelation.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> Fatigue-Creep Relationship (opens in new tab)</span></a>
+                    <a href="Unit_3/fatigueCreepRelation.pdf" download>Download<span class="sr-only"> Fatigue-Creep Relationship</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">NDT Methods Overview</div>
+                    <div class="handout-meta">PDF &middot; 330 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_3/ndt_bubbles.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> NDT Methods Overview (opens in new tab)</span></a>
+                    <a href="Unit_3/ndt_bubbles.pdf" download>Download<span class="sr-only"> NDT Methods Overview</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">NDT Visuals</div>
+                    <div class="handout-meta">PDF &middot; 146 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_3/ndtVisuals.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> NDT Visuals (opens in new tab)</span></a>
+                    <a href="Unit_3/ndtVisuals.pdf" download>Download<span class="sr-only"> NDT Visuals</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">NDT: Eddy Current Testing (ET)</div>
+                    <div class="handout-meta">PDF &middot; 275 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_3/ndt-ET.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> Eddy Current Testing (opens in new tab)</span></a>
+                    <a href="Unit_3/ndt-ET.pdf" download>Download<span class="sr-only"> Eddy Current Testing</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">Certified Mill Test Report (CMTR) &mdash; Example 1</div>
+                    <div class="handout-meta">PDF &middot; 296 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_3/cmtr_1.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> CMTR Example 1 (opens in new tab)</span></a>
+                    <a href="Unit_3/cmtr_1.pdf" download>Download<span class="sr-only"> CMTR Example 1</span></a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <div class="handout-title">Certified Mill Test Report (CMTR) &mdash; Example 2</div>
+                    <div class="handout-meta">PDF &middot; 106 KB</div>
+                </div>
+                <div class="actions">
+                    <a class="primary" href="Unit_3/cmtr_2.pdf" target="_blank" rel="noopener">Open<span class="sr-only"> CMTR Example 2 (opens in new tab)</span></a>
+                    <a href="Unit_3/cmtr_2.pdf" download>Download<span class="sr-only"> CMTR Example 2</span></a>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+    <section class="section" id="unit-4" aria-labelledby="unit-4-h">
+        <h2 id="unit-4-h">Unit 4 &mdash; Manufacturing Processes: How Parts Are Made and What to Check</h2>
+        <p class="empty">Handouts for this unit will be posted soon.</p>
+    </section>
+
+    <section class="section" id="unit-5" aria-labelledby="unit-5-h">
+        <h2 id="unit-5-h">Unit 5 &mdash; Keeping Metal in Service: Welding, Failure, Corrosion, and Modern Tech</h2>
+        <p class="empty">Handouts for this unit will be posted soon.</p>
+    </section>
+
+    <a class="back-link" href="../index.html">← Back to Main Course Page</a>
+</main>
+</body>
+</html>
